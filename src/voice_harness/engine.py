@@ -98,6 +98,7 @@ class Engine:
             "proposals": {},
             "payments": {
                 "payment_001": {
+                    "payee_id": "payee_001",
                     "amount_minor": 1000,
                     "currency": "GBP",
                     "status": "pending",
@@ -499,6 +500,7 @@ class Engine:
             expected_proposal = {
                 "payment_id": args["payment_id"],
                 "action": "cancel",
+                "payee_id": payment.get("payee_id"),
                 "amount_minor": payment["amount_minor"],
                 "currency": payment["currency"],
                 "account_id": state["account_id"],
@@ -551,6 +553,7 @@ class Engine:
             proposal = {
                 "payment_id": payment_id,
                 "action": "cancel",
+                "payee_id": payment.get("payee_id"),
                 "amount_minor": payment["amount_minor"],
                 "currency": payment["currency"],
                 "account_id": tx.state["account_id"],
@@ -581,7 +584,7 @@ class Engine:
                     "proposal_hash": digest(proposal),
                     "action": "cancel",
                     "account_id": tx.state["account_id"],
-                    "payee_id": None,
+                    "payee_id": payment.get("payee_id"),
                     "amount_minor": payment["amount_minor"],
                     "currency": "GBP",
                     "session_id": tx.state["session_id"],

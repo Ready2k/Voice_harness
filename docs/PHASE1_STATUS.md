@@ -18,7 +18,7 @@ The deterministic core runs in Docker with PostgreSQL, FastAPI, stdio MCP, a moc
 | AC-08 | Unsigned manifest roots, offline verification, event/artifact/suffix tampering and declared missing audio |
 | AC-13 | Twelve PostgreSQL component benchmark profiles, 1,000 observations each, stage timings and fault dispositions |
 | AC-14 | Pending/approved/scheduled/observed revisions, token invalidation and unsafe/unassessable post-release dispositions |
-| AC-15 | Simulator mechanics: exact presented proposal accepted once; ambiguity, replay, expiry, proposal-hash mismatch and changed-amount rejection; one-time transactional consumption. Explicit unsolicited and cross-session confirmation cases, and direct changed-payee coverage, remain to be demonstrated. |
+| AC-15 | Exact presented proposal accepted once; ambiguity, replay, expiry, proposal-hash mismatch, changed amount rejected; explicit tests for unsolicited (unknown and superseded request), cross-session (foreign context, foreign run, foreign confirmation id) and changed-payee invalidation (payee now part of the proposal hash). One-time transactional consumption. |
 | AC-16 | Scripted branch replay and closed simulator context rejecting hidden oracle fields |
 | AC-17 | Run-wide hold/purge serialization, expiry/release grace and tombstones |
 | AC-18 | Fail precedence, disagreement/review, missing/partial/error evidence, no scope and all-pass truth table |
@@ -54,7 +54,6 @@ The whole Phase 1 release is not yet formally complete:
 - Real-browser and physical-device playback verification remains: Node playback tests and Python WebSocket clients are not evidence of physical audibility or browser/DAC latency.
 - The reference client is not a complete operator review UI.
 - A final requirement-by-requirement conformance audit is still needed for exhaustive record metadata/examples, retention lifecycle, queue accounting and finding-scoped preservation dependency closure.
-- AC-15 needs explicit evidence for unsolicited and cross-session confirmation rejection and direct changed-payee invalidation, rather than inferring coverage from related binding tests.
 - Confirmation and semantic safety checks use labelled scripted fixtures, not live voice recognition or independently calibrated judges.
 
 ## Phase 2 adapter prerequisite

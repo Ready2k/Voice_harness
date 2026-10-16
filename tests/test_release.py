@@ -649,6 +649,77 @@ os.kill(os.getpid(), signal.SIGKILL)
             self.database.get(self.run)["payments"]["payment_001"]["status"], "pending"
         )
 
+    def test_AC15_unsolicited_confirmation_rejected(self):
+        """A confirmation with no presented proposal (unknown or never-presented request) never yields consent."""
+        self.verified()
+        before = len(self.database.get(self.run)["confirmations"])
+        unknown = self.engine.confirm(
+            self.run, self.context, "confirmation_request_unsolicited", "u1", "x" * 64, "affirm"
+        )
+        self.assertEqual(unknown["reason_code"], "NO_ACTIVE_REQUEST")
+        request, sha = self.engine.present_cancellation(self.run, "payment_001")
+        # a stale, superseded presentation is also unsolicited relative to the live proposal
+        self.engine.present_cancellation(self.run, "payment_001")
+        stale = self.engine.confirm(self.run, self.context, request, "u2", sha, "affirm")
+        self.assertEqual(stale["reason_code"], "NO_ACTIVE_REQUEST")
+        state = self.database.get(self.run)
+        self.assertEqual(len(state["confirmations"]), before)
+        self.assertEqual(state["payments"]["payment_001"]["status"], "pending")
+
+    def test_AC15_cross_session_confirmation_rejected(self):
+        """Another run's context, or its request id, cannot confirm this run's proposal."""
+        self.verified()
+        request, sha = self.engine.present_cancellation(self.run, "payment_001")
+        other = self.engine.create(RunConfig().model_dump())
+        other_context = self.engine.context(other)
+        wrong_context = self.engine.confirm(self.run, other_context, request, "x1", sha, "affirm")
+        self.assertEqual(wrong_context["reason_code"], "SESSION_MISMATCH")
+        # the other run is not verified/has no such request: this run's request id is unknown there
+        wrong_run = self.engine.confirm(other, other_context, request, "x2", sha, "affirm")
+        self.assertFalse(wrong_run["accepted"])
+        self.assertEqual(wrong_run["reason_code"], "NO_ACTIVE_REQUEST")
+        self.assertEqual(self.database.get(other)["confirmations"], {})
+        self.assertEqual(self.database.get(self.run)["confirmations"], {})
+        # a confirmation id minted in this run is useless in the other run
+        accepted = self.engine.confirm(self.run, self.context, request, "ok", sha, "affirm")
+        self.assertTrue(accepted["accepted"])
+        self.engine.tool(
+            other, other_context, "verify", "verify_identity",
+            {"challenge_id": "challenge_001", "answer": "blue"},
+        )
+        denied = self.engine.tool(
+            other, other_context, "xs", "cancel_payment",
+            {"payment_id": "payment_001", "confirmation_id": accepted["confirmation_id"]},
+        )
+        self.assertEqual(denied["error_code"], "CONFIRMATION_REQUIRED")
+        self.assertEqual(self.database.get(other)["payments"]["payment_001"]["status"], "pending")
+
+    def test_AC15_changed_payee_invalidates_consent(self):
+        self.verified()
+        request, sha = self.engine.present_cancellation(self.run, "payment_001")
+        proposal = self.database.get(self.run)["proposals"][request]["proposal"]
+        self.assertEqual(proposal["payee_id"], "payee_001")
+        accepted = self.engine.confirm(self.run, self.context, request, "p1", sha, "affirm")
+        self.assertTrue(accepted["accepted"])
+        with self.database.transaction(self.run) as tx:
+            tx.state["payments"]["payment_001"]["payee_id"] = "payee_999"
+        denied = self.engine.tool(
+            self.run, self.context, "changed-payee", "cancel_payment",
+            {"payment_id": "payment_001", "confirmation_id": accepted["confirmation_id"]},
+        )
+        self.assertEqual(denied["error_code"], "CONFIRMATION_REQUIRED")
+        self.assertEqual(self.database.get(self.run)["payments"]["payment_001"]["status"], "pending")
+        # a payee change after presentation but before confirming is also rejected as a changed proposal
+        request2, sha2 = self.engine.present_cancellation(self.run, "payment_001")
+        with self.database.transaction(self.run) as tx:
+            tx.state["payments"]["payment_001"]["payee_id"] = "payee_001"
+        reconfirm = self.engine.tool(
+            self.run, self.context, "changed-back", "cancel_payment",
+            {"payment_id": "payment_001",
+             "confirmation_id": self.engine.confirm(self.run, self.context, request2, "p2", sha2, "affirm")["confirmation_id"]},
+        )
+        self.assertEqual(reconfirm["error_code"], "CONFIRMATION_REQUIRED")
+
     def test_AC04_cancel_prepared_dispatch_has_zero_mutation(self):
         self.engine.prepare_tool(
             self.run,
