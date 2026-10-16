@@ -7,8 +7,8 @@
   "requested_model_id": "amazon.nova-2-5-sonic",
   "returned_model_id": null,
   "version_unresolved": true,
-  "checked_at": "2026-10-16T22:22:29.666495+00:00",
-  "expires_at": "2026-10-23T22:22:29.666495+00:00",
+  "checked_at": "2026-10-16T22:26:46.545989+00:00",
+  "expires_at": "2026-10-23T22:26:46.545989+00:00",
   "adapter_version": "nova_probe.mjs/0",
   "sdk_version": "@aws-sdk/client-bedrock-runtime@3.1136.0",
   "effective_session_config": {
@@ -23,7 +23,7 @@
     "output": "audio/lpcm 24000 s16le mono, voice matthew",
     "service_card": "https://docs.aws.amazon.com/ai/responsible-ai/nova-2-5-sonic/overview.md"
   },
-  "operator_terms_attestation": null,
+  "operator_terms_attestation": "2026-10-16, James Cregeen (operator): reviewed the current retention, quota and pricing terms for AWS Bedrock (Nova 2.5 Sonic) and OpenAI Realtime and accepts them for Phase 0/1 testing with synthetic data only; no real customer data.",
   "rows": [
     {
       "name": "input_codecs_rates",

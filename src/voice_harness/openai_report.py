@@ -31,7 +31,7 @@ _RULES = {
 }
 
 
-def build_report(obs: dict, report_id: str) -> CapabilityReport:
+def build_report(obs: dict, report_id: str, attestation: str | None = None) -> CapabilityReport:
     now = datetime.now(UTC)
     ev, notes = obs["evidence"], obs.get("notes", {})
     rows = []
@@ -71,7 +71,7 @@ def build_report(obs: dict, report_id: str) -> CapabilityReport:
             "turn_detection": None,
             "model_doc": MODEL_DOC,
         },
-        operator_terms_attestation=None,
+        operator_terms_attestation=attestation,
         rows=tuple(rows),
         limitations=(
             "Returned model equals the requested ID; docs list a single snapshot, no alias resolution observed",
@@ -82,6 +82,6 @@ def build_report(obs: dict, report_id: str) -> CapabilityReport:
     )
 
 
-def load(path: str, report_id: str) -> CapabilityReport:
+def load(path: str, report_id: str, attestation: str | None = None) -> CapabilityReport:
     with open(path) as f:
-        return build_report(json.load(f), report_id)
+        return build_report(json.load(f), report_id, attestation)

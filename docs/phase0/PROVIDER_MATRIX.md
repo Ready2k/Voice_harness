@@ -20,3 +20,23 @@ Cells move to `verified` only with documentation evidence AND a passing account/
 
 Open items needing the user: provider accounts/keys, target regions, Gemini Developer API vs Vertex AI.
 Coverage state for all four families stays `not_implemented` (`coverage.py`) until Phase 2.
+
+## Proposed update after live probes (2026-10-16): PENDING RE-APPROVAL
+The approved table above is unchanged. Proposed state, from `artifacts/phase0/*-capability-report.json`:
+
+| Row | OpenAI `gpt-realtime-2.1` | Amazon `amazon.nova-2-5-sonic` (us-east-1) | xAI | Google |
+|---|---|---|---|---|
+| Account access / model discovery | verified | verified (alias, `version_unresolved`) | unknown (no API key) | unknown (no API key) |
+| Input / output codecs | observed (24 kHz PCM) | observed (16 kHz in, 24 kHz out) | unknown | unknown |
+| Audio in / out | verified | verified | unknown | unknown |
+| Tool args and results | verified (native; MCP bridged = `gateway_bridge`) | verified (native) | unknown | unknown |
+| Transcript finality | verified | observed | unknown | unknown |
+| Audio alignment | unknown | unknown | unknown | unknown |
+| Turn signalling | verified (manual turns) | observed | unknown | unknown |
+| Cancel / truncate | observed (cancel; truncate ack not seen) | unknown (barge-in untested) | unknown | unknown |
+| Usage granularity | verified | verified | unknown | unknown |
+| Reconnect / resume | unknown | unknown | unknown | unknown |
+| Direct MCP | unknown | unknown | unknown | unknown |
+| Terms attestation | recorded 2026-10-16 (synthetic data only) | recorded 2026-10-16 (synthetic data only) | none | none |
+
+xAI and Google: operator has no API access yet, so no probe is possible. Coverage stays `not_implemented` and documentation-only evidence applies (`DOC_EVIDENCE.md`). Reports expire 2026-10-23 and must be re-probed after that.

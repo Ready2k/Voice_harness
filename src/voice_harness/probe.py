@@ -8,7 +8,7 @@ import argparse
 import json
 import sys
 
-from .capability_report import CapabilityReport, unknown_report
+from .capability_report import OPERATOR_ATTESTATION, CapabilityReport, unknown_report
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -23,9 +23,11 @@ def main(argv: list[str] | None = None) -> int:
     o = sub.add_parser("from-nova-observations", help="build a report from nova_probe.mjs output")
     o.add_argument("path")
     o.add_argument("--report-id", required=True)
+    o.add_argument("--attest", action="store_true", help="record the operator terms attestation")
     oa = sub.add_parser("from-openai-observations", help="build a report from openai_probe.mjs output")
     oa.add_argument("path")
     oa.add_argument("--report-id", required=True)
+    oa.add_argument("--attest", action="store_true", help="record the operator terms attestation")
     sub.add_parser("schema", help="print the JSON Schema")
     a = ap.parse_args(argv)
 
@@ -39,12 +41,12 @@ def main(argv: list[str] | None = None) -> int:
     if a.cmd == "from-nova-observations":
         from .nova_report import load
 
-        print(load(a.path, a.report_id).model_dump_json(indent=2))
+        print(load(a.path, a.report_id, OPERATOR_ATTESTATION if a.attest else None).model_dump_json(indent=2))
         return 0
     if a.cmd == "from-openai-observations":
         from .openai_report import load as load_openai
 
-        print(load_openai(a.path, a.report_id).model_dump_json(indent=2))
+        print(load_openai(a.path, a.report_id, OPERATOR_ATTESTATION if a.attest else None).model_dump_json(indent=2))
         return 0
     with open(a.path) as f:
         report = CapabilityReport.model_validate_json(f.read())

@@ -11,6 +11,13 @@ Identifier = Annotated[str, Field(min_length=1, max_length=200)]
 
 DEFAULT_EXPIRY = timedelta(days=7)
 
+# Recorded verbatim from the operator's 2026-10-16 attestation (scope chosen by the operator).
+OPERATOR_ATTESTATION = (
+    "2026-10-16, James Cregeen (operator): reviewed the current retention, quota and pricing "
+    "terms for AWS Bedrock (Nova 2.5 Sonic) and OpenAI Realtime and accepts them for Phase 0/1 "
+    "testing with synthetic data only; no real customer data."
+)
+
 # Spec section 3 "Required capability rows".
 REQUIRED_ROWS = (
     "input_codecs_rates",

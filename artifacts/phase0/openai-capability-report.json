@@ -7,8 +7,8 @@
   "requested_model_id": "gpt-realtime-2.1",
   "returned_model_id": "gpt-realtime-2.1",
   "version_unresolved": false,
-  "checked_at": "2026-10-16T22:25:18.227781+00:00",
-  "expires_at": "2026-10-23T22:25:18.227781+00:00",
+  "checked_at": "2026-10-16T22:26:46.610524+00:00",
+  "expires_at": "2026-10-23T22:26:46.610524+00:00",
   "adapter_version": "openai_probe.mjs/0",
   "sdk_version": "ws@8.18.3 node v24.9.0",
   "effective_session_config": {
@@ -17,7 +17,7 @@
     "turn_detection": null,
     "model_doc": "https://developers.openai.com/api/docs/models/gpt-realtime-2.1"
   },
-  "operator_terms_attestation": null,
+  "operator_terms_attestation": "2026-10-16, James Cregeen (operator): reviewed the current retention, quota and pricing terms for AWS Bedrock (Nova 2.5 Sonic) and OpenAI Realtime and accepts them for Phase 0/1 testing with synthetic data only; no real customer data.",
   "rows": [
     {
       "name": "input_codecs_rates",

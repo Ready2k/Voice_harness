@@ -32,7 +32,9 @@ _RULES = {
 _ROW_EVIDENCE = {"input_codecs_rates": "audio_in", "output_codecs_rates": "audio_out"}
 
 
-def build_report(obs: dict, report_id: str, log_file: str) -> CapabilityReport:
+def build_report(
+    obs: dict, report_id: str, log_file: str, attestation: str | None = None
+) -> CapabilityReport:
     now = datetime.now(UTC)
     ev = obs["evidence"]
     notes = obs.get("notes", {})
@@ -77,7 +79,7 @@ def build_report(obs: dict, report_id: str, log_file: str) -> CapabilityReport:
             "output": "audio/lpcm 24000 s16le mono, voice matthew",
             "service_card": CARD,
         },
-        operator_terms_attestation=None,
+        operator_terms_attestation=attestation,
         rows=tuple(rows),
         limitations=(
             "No returned model version in stream; alias treated as version_unresolved",
@@ -89,7 +91,7 @@ def build_report(obs: dict, report_id: str, log_file: str) -> CapabilityReport:
     )
 
 
-def load(path: str, report_id: str) -> CapabilityReport:
+def load(path: str, report_id: str, attestation: str | None = None) -> CapabilityReport:
     with open(path) as f:
         obs = json.load(f)
-    return build_report(obs, report_id, obs.get("log_file", "see artifacts/phase0/"))
+    return build_report(obs, report_id, obs.get("log_file", "see artifacts/phase0/"), attestation)
