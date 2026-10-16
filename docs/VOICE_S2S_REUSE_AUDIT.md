@@ -36,3 +36,14 @@ The existing `AntiGravity_projects/Voice_S2S` code is useful as a source of prov
 3. Port `VoiceTiming` into the measurement harness with clock-domain labels and reconnect invalidation.
 4. Convert the banking tool definitions into JSON Schemas with `additionalProperties: false`.
 5. Wrap the source's simulation prompt principles in a branch-recording customer simulator; never mix oracle state into assistant context.
+
+## Nova Sonic reference implementation (noted 2026-10-16)
+
+`AntiGravity_projects/Voice_S2S` contains a working Amazon Nova Sonic implementation covering audio and text input, barge-in/interruption handling, and native tool calls and results. Treat it as the primary reference when building the Phase 2 Nova adapter:
+
+- `backend/src/sonic-client.ts`: Bedrock bidirectional stream session lifecycle, event handling, interruption, tool-result queue and usage events.
+- `backend/src/sonic-tool-result.ts`: the toolResult event sequence Nova expects.
+- `backend/src/test-stream.ts`: minimal stream access test (already uses `amazon.nova-2-5-sonic`).
+- `assume-role.sh`: MFA role assumption; mirrored for this repo by `scripts/aws-session.sh`.
+
+It is a source of proven patterns, not evidence: Phase 0 capability claims still require this repo's probe (`scripts/probe/nova_probe.mjs`). In particular, barge-in and interruption were not exercised by that probe, and the Voice_S2S behaviour should be re-verified here (for example with `--speech-wav`) before the row moves from `unknown`.
