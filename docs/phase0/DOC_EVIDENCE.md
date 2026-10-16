@@ -75,3 +75,12 @@ Sources: ai.google.dev/gemini-api/docs/live-api, /live-guide, /live-session.
 1. Read the pages marked partially read (Nova input events, tool configuration, event flow; OpenAI VAD and Tools/MCP guides; Gemini Vertex Live page).
 2. Operator attestation of retention, quotas and pricing, which probes cannot establish.
 3. Live probes need credentials (spec §3 steps 1–9).
+
+## Secondary lead: benchr model-ID directory
+Source: https://benchr.org/api-model-ids (third-party "dated record, not live discovery", headed 2026-10-15; retrieved 2026-10-16). It is a **candidate list, not evidence**: spec §3 requires primary documentation plus a passing probe before any ID is configured.
+| Provider | benchr ID | Cross-check |
+|---|---|---|
+| OpenAI | `gpt-realtime-2.1`, `gpt-realtime-2.1-mini`, `gpt-live-1` (record 2026-09-19; no ID for GPT-Live-1 mini) | `gpt-realtime-2.1` matches OpenAI docs. `-mini` and `gpt-live-1` have no primary-doc confirmation; "GPT-Live" stays unconfigured until OpenAI docs and a probe confirm it. |
+| Amazon | `amazon.nova-2.5-sonic-v1:0` (record 2026-10-10, not labelled Bedrock) | Matches the Nova 2 naming pattern (`amazon.nova-2-sonic-v1:0`) but no AWS page confirms it. To be checked with `list-foundation-models`. |
+| xAI | only `grok-voice-transcribe-2.0` (STT) | No conversational model listed; use `grok-voice-3.0` from xAI docs. |
+| Google | `gemini-3.8-live`, `gemini-3.8-live-extended-thinking` | Match Google docs. |
