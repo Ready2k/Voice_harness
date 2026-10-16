@@ -7,7 +7,8 @@ closed set of normalised events. Unsupported operations must say so via
 
 from __future__ import annotations
 
-from typing import Annotated, Any, AsyncIterator, Literal, Protocol, Union, runtime_checkable
+from collections.abc import AsyncIterator
+from typing import Annotated, Any, Literal, Protocol, runtime_checkable
 
 from pydantic import BaseModel, ConfigDict, Field, TypeAdapter
 
@@ -99,10 +100,7 @@ class ProviderError(_Ev):
 
 
 AdapterEvent = Annotated[
-    Union[
-        AudioOut, TranscriptDelta, TranscriptFinal, ToolCall, TurnStart,
-        TurnEnd, Interrupted, Usage, ProviderError,
-    ],
+    AudioOut | TranscriptDelta | TranscriptFinal | ToolCall | TurnStart | TurnEnd | Interrupted | Usage | ProviderError,
     Field(discriminator="type"),
 ]
 AdapterEventAdapter: TypeAdapter = TypeAdapter(AdapterEvent)

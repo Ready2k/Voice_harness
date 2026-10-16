@@ -28,8 +28,9 @@ import json
 import os
 import time
 import uuid
+from collections.abc import AsyncIterator
 from pathlib import Path
-from typing import Any, AsyncIterator
+from typing import Any
 
 from . import (
     UNSUPPORTED,
@@ -135,12 +136,14 @@ class NodeBridgeTransport:
         await self.send({"_open": {"region": self.region, "modelId": self.model_id}})
 
     async def send(self, msg: dict) -> None:
-        assert self.proc and self.proc.stdin
+        if not (self.proc and self.proc.stdin):
+            raise RuntimeError("NOVA_BRIDGE_NOT_STARTED")
         self.proc.stdin.write((json.dumps(msg) + "\n").encode())
         await self.proc.stdin.drain()
 
     async def recv(self) -> dict | None:
-        assert self.proc and self.proc.stdout
+        if not (self.proc and self.proc.stdout):
+            raise RuntimeError("NOVA_BRIDGE_NOT_STARTED")
         line = await self.proc.stdout.readline()
         return json.loads(line) if line else None
 
@@ -151,7 +154,7 @@ class NodeBridgeTransport:
             self.proc.stdin.close()
         try:
             await asyncio.wait_for(self.proc.wait(), 5)
-        except asyncio.TimeoutError:
+        except TimeoutError:
             self.proc.kill()
             await self.proc.wait()
 
@@ -455,7 +458,7 @@ class NovaSonicAdapter:
         if self._reader:
             try:
                 await asyncio.wait_for(self._reader, 5)
-            except (asyncio.TimeoutError, asyncio.CancelledError, Exception):
+            except (TimeoutError, asyncio.CancelledError, Exception):
                 self._reader.cancel()
 
     def estimate_cost(self, usage: dict[str, Any]) -> dict[str, Any]:

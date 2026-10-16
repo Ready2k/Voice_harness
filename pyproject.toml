@@ -20,3 +20,19 @@ package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py313"
+extend-exclude = ["contracts", "artifacts"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "S"]
+ignore = ["E501", "S311", "S608"]  # S311/S608: seeded fixtures and internal table names (reviewed)
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101", "S105", "S106", "S108", "S603", "S607"]
+
+[tool.bandit]
+exclude_dirs = ["tests"]
+skips = ["B311", "B608"]

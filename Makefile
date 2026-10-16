@@ -1,4 +1,4 @@
-.PHONY: build test golden recovery infra stop up init benchmark demo
+.PHONY: lint audit build test golden recovery infra stop up init benchmark demo
 
 init:
 	@mkdir -p .local
@@ -13,6 +13,13 @@ demo:
 
 build:
 	docker compose build harness tests
+
+lint:
+	uvx ruff@0.17.1 check src tests scripts
+	uvx bandit@1.9.4 -q -r src -c pyproject.toml
+
+audit:
+	uvx pip-audit -r requirements.lock --no-deps --disable-pip
 
 test: init
 	docker compose run --build --rm tests

@@ -98,7 +98,8 @@ def benchmark(output, observations=1000, database_url=None, pace_ms=20):
                             )
                             decode = stamp()
                             binary = struct.pack("<II", 24000, len(pcm)) + pcm
-                            assert binary[8:] == decoded
+                            if binary[8:] != decoded:
+                                raise RuntimeError("BENCHMARK_FRAME_MISMATCH")
                             binary_end = stamp()
                             payload = {
                                 "index": iteration,
@@ -119,7 +120,8 @@ def benchmark(output, observations=1000, database_url=None, pace_ms=20):
                                 verified=True,
                                 account_number="acct_1001",
                             )
-                            assert decision.allowed
+                            if not decision.allowed:
+                                raise RuntimeError("BENCHMARK_POLICY_DENIED")
                             policy_end = stamp()
                             with database.transaction(runs[index]) as tx:
                                 event_id = tx.event(
@@ -134,7 +136,8 @@ def benchmark(output, observations=1000, database_url=None, pace_ms=20):
                             token_end = stamp()
                             outbound = base64.b64encode(gate.release(token))
                             outbound_end = stamp()
-                            assert base64.b64decode(outbound) == pcm
+                            if base64.b64decode(outbound) != pcm:
+                                raise RuntimeError("BENCHMARK_OUTBOUND_MISMATCH")
                             ack_end = time.monotonic_ns()
                             if iteration >= 10:
                                 observation = {

@@ -182,6 +182,7 @@ OUTPUTS = dict(
             HandoffResult,
             PolicyResult,
         ],
+        strict=True,
     )
 )
 

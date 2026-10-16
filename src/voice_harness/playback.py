@@ -47,7 +47,9 @@ class PlaybackGate:
     ) -> ApprovalUnit:
         if not 0 <= sample_range[0] < sample_range[1]:
             raise ValueError("INVALID_SAMPLE_RANGE")
-        encode = lambda value: value.encode() if isinstance(value, str) else value
+        def encode(value):
+            return value.encode() if isinstance(value, str) else value
+
         size = sum(len(encode(u.audio_text)) for u in self._pending.values())
         if size + len(encode(audio_text)) > self.max_buffer_bytes:
             raise ValueError("AUDIO_BUFFER_OVERFLOW")

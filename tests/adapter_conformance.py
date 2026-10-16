@@ -14,8 +14,9 @@ import asyncio
 import json
 import os
 import unittest
+from collections.abc import Awaitable, Callable
 from pathlib import Path
-from typing import Any, Awaitable, Callable
+from typing import Any
 
 from voice_harness.adapters import AudioOut, CapabilityUnsupported, ProviderError, ToolCall
 
@@ -36,7 +37,7 @@ async def _collect(adapter, want, timeout: float) -> list:
 
     try:
         await asyncio.wait_for(pump(), timeout)
-    except asyncio.TimeoutError:
+    except TimeoutError:
         pass
     return events
 
@@ -148,7 +149,7 @@ async def run_conformance(
     try:
         await adapter.send_text("x")
         fail("error", "send after close accepted")
-    except Exception:  # noqa: BLE001
+    except Exception:  # noqa: BLE001, S110 - rejection is the expected outcome
         pass
 
     failed = [d for d, r in res.items() if r["status"] == "fail"]

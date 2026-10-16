@@ -11,10 +11,13 @@ RUN groupadd --gid 10001 harness && useradd --uid 10001 --gid harness --create-h
 COPY --chown=harness:harness src/ ./src/
 COPY --chown=harness:harness contracts/ ./contracts/
 COPY --chown=harness:harness apps/web/ ./apps/web/
+COPY --chown=harness:harness artifacts/phase2/ ./artifacts/phase2/
+COPY --chown=harness:harness artifacts/phase0/*-capability-report.json ./artifacts/phase0/
 USER harness
 
 FROM base AS test
 COPY --chown=harness:harness tests/ ./tests/
+COPY --chown=harness:harness artifacts/phase0/ ./artifacts/phase0/
 CMD ["python", "-m", "unittest", "discover", "-s", "tests", "-v"]
 
 FROM public.ecr.aws/docker/library/node:24.9.0-bookworm-slim@sha256:3e69116c924bfcba6c6979aff60d966c37aef56d488ce091c69d442ebec9f103 AS browser-test

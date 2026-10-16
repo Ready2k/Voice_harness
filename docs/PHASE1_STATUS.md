@@ -43,6 +43,10 @@ The spec's §16 baseline commit is recorded: git was initialised on 2026-10-16 a
 
 Implemented since the initial acceptance notes: signed browser approval verification and bounded AudioWorklet scheduling; acknowledgement/flush/revocation handling; strict and exploratory release profiles; consent revision revocation and rejected-observation replay prevention; MCP fault and unknown-outcome recovery; generated TypeScript contracts and relational projections; raw benchmark spans and provenance hashes; preservation renewal and expiry-notice events.
 
+## Compose validation (16 October 2026, post-Phase 2 code)
+
+`make test` against PostgreSQL: 101 Python tests OK (3 live-provider tests skipped by design) and 3 browser-scheduler tests passed; `make golden` and `make recovery` exit 0. `make lint` (ruff 0.17.1, bandit 1.9.4; configuration in `pyproject.toml`) and `make audit` (pip-audit on the hash-locked requirements: no known vulnerabilities) pass and run in CI. Reviewed suppressions: bandit B311/B608 (seeded fixtures; internal table names, no user input). This supersedes the earlier "fresh PostgreSQL validation outstanding" item. The Nova bridge (Node) is not exercised inside the container.
+
 ## Remaining v0.3 conformance work
 
 The whole Phase 1 release is not yet formally complete:
@@ -51,7 +55,6 @@ The whole Phase 1 release is not yet formally complete:
 - The reference client is not a complete operator review UI.
 - A final requirement-by-requirement conformance audit is still needed for exhaustive record metadata/examples, retention lifecycle, queue accounting and finding-scoped preservation dependency closure.
 - AC-15 needs explicit evidence for unsolicited and cross-session confirmation rejection and direct changed-payee invalidation, rather than inferring coverage from related binding tests.
-- The expanded 59-test suite needs a fresh PostgreSQL-backed Compose validation.
 - Confirmation and semantic safety checks use labelled scripted fixtures, not live voice recognition or independently calibrated judges.
 
 ## Phase 2 adapter prerequisite

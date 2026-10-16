@@ -29,7 +29,8 @@ import json
 import logging
 import os
 import time
-from typing import Any, AsyncIterator
+from collections.abc import AsyncIterator
+from typing import Any
 
 from ..mock_provider import CapabilityUnsupported  # noqa: F401  (re-exported contract)
 from . import (
@@ -179,7 +180,7 @@ class OpenAIRealtimeAdapter:
         self._acks[etype] = fut
         try:
             return await asyncio.wait_for(fut, timeout)
-        except asyncio.TimeoutError:
+        except TimeoutError:
             raise ValueError(f"PROVIDER_TIMEOUT:{etype}") from None
         finally:
             self._acks.pop(etype, None)
@@ -224,7 +225,7 @@ class OpenAIRealtimeAdapter:
         try:
             await asyncio.wait_for(fut, self._ack_timeout)
             ack = "acknowledged"
-        except asyncio.TimeoutError:
+        except TimeoutError:
             ack = "unconfirmed"
         finally:
             self._acks.pop(f"output:{call_id}", None)
@@ -258,7 +259,7 @@ class OpenAIRealtimeAdapter:
             try:
                 await asyncio.wait_for(fut, self._ack_timeout)
                 truncation = "acknowledged"
-            except asyncio.TimeoutError:
+            except TimeoutError:
                 truncation = "rejected"
             finally:
                 self._acks.pop(f"truncated:{item_id}", None)

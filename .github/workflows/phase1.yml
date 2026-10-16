@@ -6,6 +6,9 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: make lint
+      - run: make audit
       - run: make test
       - if: failure()
         run: docker compose logs --tail=100 postgres

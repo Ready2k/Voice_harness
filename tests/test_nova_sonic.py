@@ -4,7 +4,7 @@ import base64
 import json
 import os
 import unittest
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 from voice_harness.adapters import CapabilityUnsupported
@@ -216,7 +216,7 @@ def _creds_live():
     txt = ENV.read_text()
     for line in txt.splitlines():
         if line.startswith("# expires "):
-            return datetime.fromisoformat(line.split()[2]) > datetime.now(timezone.utc)
+            return datetime.fromisoformat(line.split()[2]) > datetime.now(UTC)
     return False
 
 

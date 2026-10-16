@@ -1,11 +1,10 @@
 import json
-import os
-from unittest import mock
 import math
-import tempfile
 import sys
+import tempfile
 import unittest
 from pathlib import Path as _P
+from unittest import mock
 
 sys.path.insert(0, str(_P(__file__).parent))
 from datetime import UTC, datetime, timedelta
@@ -55,7 +54,7 @@ class ResampleTests(unittest.TestCase):
         back = rs.resample(rs.resample(pcm, 16000, 24000), 24000, 16000)
         a, b = samples(pcm), samples(back)
         self.assertEqual(len(a), len(b))
-        err = max(abs(x - y) for x, y in zip(a[:-2], b[:-2]))
+        err = max(abs(x - y) for x, y in zip(a[:-2], b[:-2], strict=True))
         self.assertLess(err / 32768, 0.05)
 
     def test_no_clipping_at_full_scale(self):
@@ -155,6 +154,7 @@ class CoverageTests(unittest.TestCase):
 
     def test_api_endpoints(self):
         from fastapi.testclient import TestClient
+
         from voice_harness.api import create_app
 
         with tempfile.TemporaryDirectory() as d, mock.patch(
@@ -178,6 +178,7 @@ if __name__ == "__main__":
 import asyncio  # noqa: E402
 
 from adapter_conformance import LiveConformance, run_conformance, write_result  # noqa: E402,F401
+
 from voice_harness.adapters import AudioOut, CapabilityUnsupported  # noqa: E402
 
 
