@@ -18,14 +18,14 @@ CARD = "https://docs.aws.amazon.com/ai/responsible-ai/nova-2-5-sonic/overview.md
 _RULES = {
     "input_codecs_rates": ("observed", None, "16 kHz PCM16 mono accepted; other rates untested"),
     "output_codecs_rates": ("observed", None, "24 kHz PCM16 requested and bytes received; rate not measured"),
-    "audio_in": ("verified", DOC, "silence only; recognition not exercised"),
+    "audio_in": ("verified", DOC, "silence accepted; synthetic speech (macOS say) recognised when --speech-wav is used"),
     "audio_out": ("verified", DOC, "first audio about 0.9-1.4 s after stream open"),
     "tool_arguments_and_results": ("verified", DOC, "native toolUse/toolResult; bridged to MCP would be gateway_bridge"),
     "transcript_finality": ("observed", None, "SPECULATIVE and FINAL generationStage seen; not alignment"),
     "turn_signalling": ("observed", None, "contentEnd stopReason (PARTIAL_TURN, END_TURN, TOOL_USE)"),
     "usage_granularity": ("verified", DOC, "usageEvent with speech/text token deltas and totals"),
     "reconnect_resume": ("unknown", None, "fresh session works; resume token not tested"),
-    "cancel_truncate": ("unknown", None, "barge-in needs real speech; run probe with --speech-wav"),
+    "cancel_truncate": ("observed", None, "barge-in by synthetic speech: INTERRUPTED stopReason and in-band interrupted marker ~0.5 s after speech began; client must flush its own buffered audio; no truncate-at-offset primitive"),
     "audio_alignment": ("unknown", None, "no word/audio timestamps seen"),
     "direct_mcp": ("unknown", None, "docs describe native function calling only"),
 }

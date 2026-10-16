@@ -7,12 +7,12 @@
   "requested_model_id": "amazon.nova-2-5-sonic",
   "returned_model_id": null,
   "version_unresolved": true,
-  "checked_at": "2026-10-16T22:26:46.545989+00:00",
-  "expires_at": "2026-10-23T22:26:46.545989+00:00",
+  "checked_at": "2026-10-16T22:29:48.566400+00:00",
+  "expires_at": "2026-10-23T22:29:48.566400+00:00",
   "adapter_version": "nova_probe.mjs/0",
   "sdk_version": "@aws-sdk/client-bedrock-runtime@3.1136.0",
   "effective_session_config": {
-    "raw_event_log": "artifacts/phase0/nova-probe-2026-10-16T22-21-40-853Z.jsonl",
+    "raw_event_log": "see artifacts/phase0/",
     "inference": {
       "maxTokens": 1024,
       "topP": 0.9,
@@ -32,7 +32,8 @@
         "doc_url": null,
         "doc_retrieved_at": null,
         "probe_event_ids": [
-          "nova_ev_7"
+          "nova_ev_7",
+          "nova_ev_461"
         ]
       },
       "limitations": [
@@ -49,24 +50,24 @@
         "probe_event_ids": [
           "nova_ev_102",
           "nova_ev_104",
-          "nova_ev_107",
+          "nova_ev_106",
           "nova_ev_110",
           "nova_ev_112",
           "nova_ev_113",
-          "nova_ev_114",
+          "nova_ev_115",
+          "nova_ev_116",
           "nova_ev_117",
-          "nova_ev_118",
           "nova_ev_119",
-          "nova_ev_121",
-          "nova_ev_126",
+          "nova_ev_120",
+          "nova_ev_125",
+          "nova_ev_127",
           "nova_ev_128",
           "nova_ev_129",
           "nova_ev_130",
-          "nova_ev_131",
           "nova_ev_132",
+          "nova_ev_137",
           "nova_ev_138",
-          "nova_ev_139",
-          "nova_ev_140"
+          "nova_ev_139"
         ]
       },
       "limitations": [
@@ -81,12 +82,14 @@
         "doc_url": "https://docs.aws.amazon.com/nova/latest/nova2-userguide/using-conversational-speech.html",
         "doc_retrieved_at": "2026-10-16",
         "probe_event_ids": [
-          "nova_ev_7"
+          "nova_ev_7",
+          "nova_ev_461"
         ]
       },
       "limitations": [
-        "silence only; recognition not exercised",
-        "125 x 20 ms chunks of 16 kHz PCM16 silence accepted without error (recognition not exercised)"
+        "silence accepted; synthetic speech (macOS say) recognised when --speech-wav is used",
+        "119 x 20 ms chunks of 16 kHz PCM16 silence accepted without error (recognition not exercised)",
+        "speech recognised: \"stop. please stop and listen to me for a moment.\""
       ],
       "tool_mode": null
     },
@@ -99,30 +102,30 @@
         "probe_event_ids": [
           "nova_ev_102",
           "nova_ev_104",
-          "nova_ev_107",
+          "nova_ev_106",
           "nova_ev_110",
           "nova_ev_112",
           "nova_ev_113",
-          "nova_ev_114",
+          "nova_ev_115",
+          "nova_ev_116",
           "nova_ev_117",
-          "nova_ev_118",
           "nova_ev_119",
-          "nova_ev_121",
-          "nova_ev_126",
+          "nova_ev_120",
+          "nova_ev_125",
+          "nova_ev_127",
           "nova_ev_128",
           "nova_ev_129",
           "nova_ev_130",
-          "nova_ev_131",
           "nova_ev_132",
+          "nova_ev_137",
           "nova_ev_138",
-          "nova_ev_139",
-          "nova_ev_140"
+          "nova_ev_139"
         ]
       },
       "limitations": [
         "first audio about 0.9-1.4 s after stream open",
-        "first audio 1411ms after open",
-        "first audio 903ms after open"
+        "first audio 1404ms after open",
+        "first audio 904ms after open"
       ],
       "tool_mode": null
     },
@@ -133,10 +136,10 @@
         "doc_url": "https://docs.aws.amazon.com/nova/latest/nova2-userguide/using-conversational-speech.html",
         "doc_retrieved_at": "2026-10-16",
         "probe_event_ids": [
-          "nova_ev_67",
+          "nova_ev_66",
           "nova_ev_71",
-          "nova_ev_541",
-          "nova_ev_545"
+          "nova_ev_832",
+          "nova_ev_840"
         ]
       },
       "limitations": [
@@ -154,14 +157,21 @@
         "doc_retrieved_at": null,
         "probe_event_ids": [
           "nova_ev_93",
-          "nova_ev_353",
-          "nova_ev_449"
+          "nova_ev_219",
+          "nova_ev_223",
+          "nova_ev_235",
+          "nova_ev_292",
+          "nova_ev_295",
+          "nova_ev_461",
+          "nova_ev_476",
+          "nova_ev_642",
+          "nova_ev_739"
         ]
       },
       "limitations": [
         "SPECULATIVE and FINAL generationStage seen; not alignment",
         "ASSISTANT/SPECULATIVE",
-        "ASSISTANT/SPECULATIVE"
+        "ASSISTANT/FINAL"
       ],
       "tool_mode": null
     },
@@ -185,13 +195,22 @@
         "doc_url": null,
         "doc_retrieved_at": null,
         "probe_event_ids": [
-          "nova_ev_68",
+          "nova_ev_67",
           "nova_ev_94",
-          "nova_ev_212",
-          "nova_ev_354",
-          "nova_ev_392",
-          "nova_ev_451",
-          "nova_ev_542"
+          "nova_ev_203",
+          "nova_ev_221",
+          "nova_ev_224",
+          "nova_ev_236",
+          "nova_ev_272",
+          "nova_ev_293",
+          "nova_ev_296",
+          "nova_ev_462",
+          "nova_ev_477",
+          "nova_ev_521",
+          "nova_ev_643",
+          "nova_ev_680",
+          "nova_ev_740",
+          "nova_ev_833"
         ]
       },
       "limitations": [
@@ -203,15 +222,18 @@
     },
     {
       "name": "cancel_truncate",
-      "status": "unknown",
+      "status": "observed",
       "evidence": {
         "doc_url": null,
         "doc_retrieved_at": null,
-        "probe_event_ids": []
+        "probe_event_ids": [
+          "nova_ev_292"
+        ]
       },
       "limitations": [
-        "barge-in needs real speech; run probe with --speech-wav",
-        "barge-in not exercised: no --speech-wav supplied"
+        "barge-in by synthetic speech: INTERRUPTED stopReason and in-band interrupted marker ~0.5 s after speech began; client must flush its own buffered audio; no truncate-at-offset primitive",
+        "interrupted marker BEFORE any speech was sent (nova_ev_219); not counted as barge-in",
+        "interrupted marker 491 ms after speech started streaming"
       ],
       "tool_mode": null
     },
@@ -223,25 +245,25 @@
         "doc_retrieved_at": "2026-10-16",
         "probe_event_ids": [
           "nova_ev_37",
+          "nova_ev_38",
           "nova_ev_39",
-          "nova_ev_40",
-          "nova_ev_44",
+          "nova_ev_43",
+          "nova_ev_46",
           "nova_ev_47",
-          "nova_ev_48",
-          "nova_ev_50",
-          "nova_ev_66",
-          "nova_ev_69",
+          "nova_ev_49",
+          "nova_ev_64",
+          "nova_ev_68",
           "nova_ev_78",
           "nova_ev_79",
           "nova_ev_90",
           "nova_ev_105",
-          "nova_ev_127",
-          "nova_ev_149",
-          "nova_ev_170",
-          "nova_ev_191",
-          "nova_ev_294",
-          "nova_ev_330",
-          "nova_ev_333"
+          "nova_ev_126",
+          "nova_ev_147",
+          "nova_ev_168",
+          "nova_ev_189",
+          "nova_ev_217",
+          "nova_ev_225",
+          "nova_ev_227"
         ]
       },
       "limitations": [
@@ -257,7 +279,7 @@
         "doc_url": null,
         "doc_retrieved_at": null,
         "probe_event_ids": [
-          "nova_ev_476"
+          "nova_ev_764"
         ]
       },
       "limitations": [

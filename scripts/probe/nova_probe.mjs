@@ -65,7 +65,8 @@ async function runSession(label, { textTurn, audioSilence, tool, badToolResult, 
   const silence = Buffer.alloc(640).toString("base64"); // 20 ms at 16 kHz s16le
   st.wavChunks = []; st.pumped = 0;
   const pump = setInterval(() => {
-    const c = st.wavChunks.shift() ?? silence;
+    const w = st.wavChunks.shift(); const c = w ?? silence;
+    if (w && !st.speechStartedAt) { st.speechStartedAt = Date.now(); st.speechStartSeq = seq + 1; }
     const id = log(label, "out", "audioInput", { bytes_b64: c.length, sha: sha(c) });
     q.push({ chunk: { bytes: Buffer.from(JSON.stringify({ event: { audioInput: { promptName, contentName: aud, content: c } } })) } });
     if (++st.pumped === 1) st.firstAudioId = id;
@@ -94,7 +95,10 @@ async function runSession(label, { textTurn, audioSilence, tool, badToolResult, 
         if (ev.contentStart) { role = ev.contentStart.role; cur = ev.contentStart.type; try { stage = JSON.parse(ev.contentStart.additionalModelFields ?? "{}").generationStage ?? null; } catch { stage = null; } }
         if (ev.textOutput) {
           const text = ev.textOutput.content;
-          if (text.includes('"interrupted"')) { st.interrupted = true; mark("cancel_truncate", id, "interrupted marker in textOutput"); }
+          if (text.includes('"interrupted"')) {
+            if (st.speechStartedAt) { st.interrupted = true; mark("cancel_truncate", id, `interrupted marker ${Date.now() - st.speechStartedAt} ms after speech started streaming`); }
+            else note("cancel_truncate", `interrupted marker BEFORE any speech was sent (${id}); not counted as barge-in`);
+          } else if (role === "USER" && stage === "FINAL" && st.speechStartedAt) { mark("audio_in", id, `speech recognised: "${text.slice(0, 80)}"`); st.recognised = text; }
           mark(role === "USER" ? "transcript_finality" : "transcript_finality", id, `${role}/${stage}`);
           st.sawText = true;
         }
@@ -147,7 +151,7 @@ async function runSession(label, { textTurn, audioSilence, tool, badToolResult, 
     send({ event: { contentEnd: { promptName, contentName: c } } });
     const base = st.audioOut; const dl3 = Date.now() + 20000;
     while (st.audioOut < base + 5 && Date.now() < dl3) await sleep(50);
-    const pcm = readFileSync(wav).subarray(44);
+    const pcm = wavData(readFileSync(wav));
     for (let o = 0; o < pcm.length; o += 640) st.wavChunks.push(pcm.subarray(o, o + 640).toString("base64"));
     await sleep(4000);
   }
@@ -159,6 +163,13 @@ async function runSession(label, { textTurn, audioSilence, tool, badToolResult, 
   q.close();
   await Promise.race([reader, sleep(10000)]);
   return { st, failed: false };
+}
+
+function wavData(buf) {
+  // find the 'data' chunk (afconvert inserts FLLR padding, so the header is not always 44 bytes)
+  let o = 12;
+  while (o + 8 <= buf.length) { const id = buf.toString("ascii", o, o + 4), len = buf.readUInt32LE(o + 4); if (id === "data") return buf.subarray(o + 8, o + 8 + len); o += 8 + len; }
+  throw new Error("no data chunk in WAV");
 }
 
 function summarize(ev) {
