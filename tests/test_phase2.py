@@ -157,8 +157,8 @@ class CoverageTests(unittest.TestCase):
         from fastapi.testclient import TestClient
         from voice_harness.api import create_app
 
-        with tempfile.TemporaryDirectory() as d, mock.patch.dict(
-            os.environ, {"HARNESS_PHASE2_DIR": d}
+        with tempfile.TemporaryDirectory() as d, mock.patch(
+            "voice_harness.coverage.DEFAULT_AC09_DIR", Path(d)
         ):  # empty AC-09 dir: no verified providers
             app = create_app(root=d, token="t", recover=False)
             c = TestClient(app)
