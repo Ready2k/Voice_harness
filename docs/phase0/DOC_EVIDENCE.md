@@ -84,3 +84,12 @@ Source: https://benchr.org/api-model-ids (third-party "dated record, not live di
 | Amazon | `amazon.nova-2.5-sonic-v1:0` (record 2026-10-10, not labelled Bedrock) | Matches the Nova 2 naming pattern (`amazon.nova-2-sonic-v1:0`) but no AWS page confirms it. To be checked with `list-foundation-models`. |
 | xAI | only `grok-voice-transcribe-2.0` (STT) | No conversational model listed; use `grok-voice-3.0` from xAI docs. |
 | Google | `gemini-3.8-live`, `gemini-3.8-live-extended-thinking` | Match Google docs. |
+
+## Runtime evidence: Bedrock model discovery (2026-10-16)
+Command: `aws bedrock list-foundation-models --region <r>` filtered on "sonic", using the Voice_S2S role with MFA (`scripts/aws-session.sh`). This is spec §3 step 2 (model discovery) only; steps 1 and 3–9 are not yet run, so nothing is `verified`.
+| Region | Returned model IDs | Lifecycle | Inference | Streaming |
+|---|---|---|---|---|
+| us-east-1, us-west-2, eu-north-1, ap-northeast-1 | `amazon.nova-2-sonic-v1:0`, **`amazon.nova-2-5-sonic`** | ACTIVE | ON_DEMAND | true |
+
+- **Correction:** the Nova 2.5 ID is `amazon.nova-2-5-sonic` (no `-v1:0` suffix). The benchr ID `amazon.nova-2.5-sonic-v1:0` is wrong and must not be used; this confirms the rule to treat third-party lists as unverified.
+- The four regions match the secondary blog's list. The returned ID has no version suffix, so treat it as an alias: `version_unresolved` per spec §2 until the invoke response reports metadata.
