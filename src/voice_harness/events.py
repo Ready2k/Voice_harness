@@ -10,6 +10,11 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any
 
+from .canonical import canonical_json
+
+# Closed set of canonical envelope sources (spec section 5).
+SOURCES = frozenset({"provider", "orchestrator", "guardrail", "mcp", "judge", "playback"})
+
 PROCESS_CLOCK_DOMAIN = "process_" + uuid.uuid4().hex
 
 
@@ -72,6 +77,10 @@ class Event:
     redaction: dict = field(default_factory=lambda: {"applied": False, "fields": []})
     trace_context: dict = field(default_factory=trace_context)
 
+    def __post_init__(self):
+        if self.source not in SOURCES:
+            raise ValueError("INVALID_EVENT_SOURCE")
+
     def seal(self, previous_hash: str | None) -> None:
         self.prev_hash = previous_hash
         self.event_hash = self.digest()
@@ -79,8 +88,7 @@ class Event:
     def digest(self) -> str:
         payload = asdict(self)
         payload["event_hash"] = None
-        encoded = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()
-        return hashlib.sha256(encoded).hexdigest()
+        return hashlib.sha256(canonical_json(payload)).hexdigest()
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)

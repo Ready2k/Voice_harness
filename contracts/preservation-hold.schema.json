@@ -1,6 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
+  "description": "Preservation hold: exactly one of finding_ids or an explicit run-wide scope.",
   "properties": {
     "reason": {
       "maxLength": 500,
@@ -15,12 +16,38 @@
       "type": "string"
     },
     "expires_at": {
-      "title": "Expires At",
-      "type": "number"
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Expires At"
+    },
+    "finding_ids": {
+      "anyOf": [
+        {
+          "items": {
+            "maxLength": 200,
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 100,
+          "minItems": 1,
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Finding Ids"
     },
     "run_wide": {
-      "const": true,
-      "default": true,
+      "default": false,
       "title": "Run Wide",
       "type": "boolean"
     },
@@ -34,7 +61,6 @@
   "required": [
     "reason",
     "owner_id",
-    "expires_at",
     "idempotency_key"
   ],
   "title": "HoldRequest",

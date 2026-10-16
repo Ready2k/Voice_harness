@@ -1,0 +1,273 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "ScenarioCustomer": {
+      "additionalProperties": false,
+      "properties": {
+        "persona": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Persona",
+          "type": "string"
+        },
+        "vulnerability": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Vulnerability",
+          "type": "string"
+        }
+      },
+      "required": [
+        "persona",
+        "vulnerability"
+      ],
+      "title": "ScenarioCustomer",
+      "type": "object"
+    },
+    "ScenarioInitialState": {
+      "additionalProperties": false,
+      "properties": {
+        "identity": {
+          "enum": [
+            "unverified",
+            "verified"
+          ],
+          "title": "Identity",
+          "type": "string"
+        },
+        "account_fixture": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Account Fixture",
+          "type": "string"
+        }
+      },
+      "required": [
+        "identity",
+        "account_fixture"
+      ],
+      "title": "ScenarioInitialState",
+      "type": "object"
+    },
+    "ScenarioTurn": {
+      "additionalProperties": false,
+      "properties": {
+        "customer": {
+          "maxLength": 1000,
+          "minLength": 1,
+          "title": "Customer",
+          "type": "string"
+        },
+        "expected_intent": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Expected Intent",
+          "type": "string"
+        },
+        "allowed_actions": {
+          "items": {
+            "maxLength": 200,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Allowed Actions",
+          "type": "array"
+        },
+        "prohibited_actions": {
+          "items": {
+            "maxLength": 200,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Prohibited Actions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "customer",
+        "expected_intent",
+        "allowed_actions",
+        "prohibited_actions"
+      ],
+      "title": "ScenarioTurn",
+      "type": "object"
+    },
+    "StopCondition": {
+      "additionalProperties": false,
+      "properties": {
+        "tool_called": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Tool Called"
+        },
+        "session_transferred": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Session Transferred"
+        }
+      },
+      "title": "StopCondition",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Id",
+      "type": "string"
+    },
+    "version": {
+      "minimum": 1,
+      "title": "Version",
+      "type": "integer"
+    },
+    "locale": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Locale",
+      "type": "string"
+    },
+    "audio_profile": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Audio Profile",
+      "type": "string"
+    },
+    "customer": {
+      "$ref": "#/$defs/ScenarioCustomer"
+    },
+    "initial_state": {
+      "$ref": "#/$defs/ScenarioInitialState"
+    },
+    "goal": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Goal",
+      "type": "string"
+    },
+    "turns": {
+      "items": {
+        "$ref": "#/$defs/ScenarioTurn"
+      },
+      "maxItems": 100,
+      "minItems": 1,
+      "title": "Turns",
+      "type": "array"
+    },
+    "stop_conditions": {
+      "items": {
+        "$ref": "#/$defs/StopCondition"
+      },
+      "title": "Stop Conditions",
+      "type": "array"
+    },
+    "rubric": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Rubric",
+      "type": "string"
+    },
+    "max_turns": {
+      "default": 12,
+      "maximum": 100,
+      "minimum": 1,
+      "title": "Max Turns",
+      "type": "integer"
+    },
+    "max_duration_seconds": {
+      "default": 120,
+      "maximum": 3600,
+      "minimum": 1,
+      "title": "Max Duration Seconds",
+      "type": "integer"
+    },
+    "expected_tool_sequence": {
+      "items": {
+        "maxLength": 200,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Expected Tool Sequence",
+      "type": "array"
+    },
+    "expected_tool_order": {
+      "default": "sequence",
+      "enum": [
+        "sequence",
+        "partial_order"
+      ],
+      "title": "Expected Tool Order",
+      "type": "string"
+    },
+    "starting_fixture_hash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Starting Fixture Hash",
+      "type": "string"
+    },
+    "applicable_criteria": {
+      "items": {
+        "maxLength": 200,
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Applicable Criteria",
+      "type": "array"
+    },
+    "termination_reason_mapping": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Termination Reason Mapping",
+      "type": "object"
+    },
+    "reference_transcript": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Reference Transcript"
+    }
+  },
+  "required": [
+    "id",
+    "version",
+    "locale",
+    "audio_profile",
+    "customer",
+    "initial_state",
+    "goal",
+    "turns",
+    "stop_conditions",
+    "rubric",
+    "expected_tool_sequence",
+    "starting_fixture_hash",
+    "applicable_criteria",
+    "termination_reason_mapping"
+  ],
+  "title": "ScenarioDefinition",
+  "type": "object"
+}

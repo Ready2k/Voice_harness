@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "unit_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Unit Id",
+      "type": "string"
+    },
+    "old": {
+      "title": "Old",
+      "type": "string"
+    },
+    "new": {
+      "title": "New",
+      "type": "string"
+    },
+    "old_state": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Old State",
+      "type": "string"
+    },
+    "source": {
+      "enum": [
+        "independent_fixture",
+        "provider",
+        "independent_asr"
+      ],
+      "title": "Source",
+      "type": "string"
+    },
+    "old_revision_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Old Revision Id",
+      "type": "string"
+    },
+    "new_revision_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "New Revision Id",
+      "type": "string"
+    },
+    "affected_sample_range": {
+      "items": {
+        "type": "integer"
+      },
+      "maxItems": 2,
+      "minItems": 2,
+      "title": "Affected Sample Range",
+      "type": "array"
+    },
+    "alignment_known": {
+      "title": "Alignment Known",
+      "type": "boolean"
+    },
+    "assessment_epoch": {
+      "title": "Assessment Epoch",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "unit_id",
+    "old",
+    "new",
+    "old_state",
+    "source",
+    "old_revision_id",
+    "new_revision_id",
+    "affected_sample_range",
+    "alignment_known",
+    "assessment_epoch"
+  ],
+  "title": "TranscriptRevised",
+  "type": "object"
+}

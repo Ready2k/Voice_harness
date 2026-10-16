@@ -1,0 +1,281 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "HoldHistory": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "enum": [
+            "activated",
+            "renewed",
+            "released"
+          ],
+          "title": "Action",
+          "type": "string"
+        },
+        "at": {
+          "title": "At",
+          "type": "number"
+        },
+        "by": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "By",
+          "type": "string"
+        },
+        "expires_at": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Expires At"
+        },
+        "previous_expiry": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Previous Expiry"
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reason"
+        }
+      },
+      "required": [
+        "action",
+        "at",
+        "by"
+      ],
+      "title": "HoldHistory",
+      "type": "object"
+    },
+    "HoldScope": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "enum": [
+            "run",
+            "findings"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "finding_ids": {
+          "items": {
+            "maxLength": 200,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Finding Ids",
+          "type": "array"
+        },
+        "event_ids": {
+          "anyOf": [
+            {
+              "items": {
+                "maxLength": 200,
+                "minLength": 1,
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "const": "all_run_events",
+              "type": "string"
+            }
+          ],
+          "title": "Event Ids"
+        },
+        "artifact_hashes": {
+          "items": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "title": "Artifact Hashes",
+          "type": "array"
+        },
+        "fixture_snapshot_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Fixture Snapshot Id"
+        },
+        "scenario_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Scenario Id"
+        },
+        "policy_profile": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Policy Profile"
+        },
+        "includes_manifest": {
+          "title": "Includes Manifest",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "type",
+        "finding_ids",
+        "event_ids",
+        "artifact_hashes",
+        "fixture_snapshot_id",
+        "scenario_id",
+        "policy_profile",
+        "includes_manifest"
+      ],
+      "title": "HoldScope",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Response body for preservation-hold creation, renewal and release.",
+  "properties": {
+    "hold_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Hold Id",
+      "type": "string"
+    },
+    "run_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Run Id",
+      "type": "string"
+    },
+    "reason": {
+      "title": "Reason",
+      "type": "string"
+    },
+    "owner_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Owner Id",
+      "type": "string"
+    },
+    "requester_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Requester Id",
+      "type": "string"
+    },
+    "created_at": {
+      "title": "Created At",
+      "type": "number"
+    },
+    "expires_at": {
+      "title": "Expires At",
+      "type": "number"
+    },
+    "released_at": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Released At"
+    },
+    "release_reason": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Release Reason"
+    },
+    "access_classification": {
+      "const": "restricted_review",
+      "title": "Access Classification",
+      "type": "string"
+    },
+    "scope": {
+      "$ref": "#/$defs/HoldScope"
+    },
+    "history": {
+      "items": {
+        "$ref": "#/$defs/HoldHistory"
+      },
+      "title": "History",
+      "type": "array"
+    },
+    "audit_event_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Audit Event Id",
+      "type": "string"
+    },
+    "artifact_availability": {
+      "additionalProperties": {
+        "type": "boolean"
+      },
+      "title": "Artifact Availability",
+      "type": "object"
+    },
+    "expiry_notice_recorded": {
+      "default": false,
+      "title": "Expiry Notice Recorded",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "hold_id",
+    "run_id",
+    "reason",
+    "owner_id",
+    "requester_id",
+    "created_at",
+    "expires_at",
+    "released_at",
+    "release_reason",
+    "access_classification",
+    "scope",
+    "history",
+    "audit_event_id",
+    "artifact_availability"
+  ],
+  "title": "HoldRecord",
+  "type": "object"
+}

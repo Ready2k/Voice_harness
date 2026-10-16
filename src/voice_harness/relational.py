@@ -24,6 +24,52 @@ def migrate(db, payload_type):
     for statement in statements:
         db.execute(statement)
     db.execute("INSERT INTO harness_migrations VALUES (3) ON CONFLICT DO NOTHING")
+    # v0.3 projections: preservation holds, simulator decisions, confirmation events.
+    for statement in [
+        f"CREATE TABLE IF NOT EXISTS harness_preservation_holds (hold_id TEXT PRIMARY KEY, run_id TEXT REFERENCES harness_runs(run_id), owner_id TEXT NOT NULL, requester_id TEXT NOT NULL, scope_type TEXT NOT NULL, scope {payload_type} NOT NULL, access_classification TEXT NOT NULL, created_at DOUBLE PRECISION NOT NULL, expires_at DOUBLE PRECISION NOT NULL, released_at DOUBLE PRECISION, release_reason TEXT, audit_event_id TEXT REFERENCES harness_events(event_id))",
+        f"CREATE TABLE IF NOT EXISTS harness_simulator_decisions (decision_id TEXT PRIMARY KEY, run_id TEXT REFERENCES harness_runs(run_id), event_id TEXT UNIQUE REFERENCES harness_events(event_id), policy_hash TEXT NOT NULL, previous_node TEXT NOT NULL, next_node TEXT NOT NULL, observed_event_ids {payload_type} NOT NULL, predicate_results {payload_type} NOT NULL, selected_branch_id TEXT NOT NULL, selection_method TEXT NOT NULL, selector_model_config_hash TEXT, seed INTEGER, random_draw DOUBLE PRECISION, output_event_id TEXT REFERENCES harness_events(event_id))",
+        f"CREATE TABLE IF NOT EXISTS harness_confirmation_events (event_id TEXT PRIMARY KEY REFERENCES harness_events(event_id), run_id TEXT REFERENCES harness_runs(run_id), event_type TEXT NOT NULL, request_id TEXT, observation_id TEXT, confirmation_id TEXT, proposal_hash TEXT, session_id TEXT, idempotency_key TEXT, evidence_event_ids {payload_type} NOT NULL)",
+        "CREATE UNIQUE INDEX IF NOT EXISTS harness_consumption_per_confirmation ON harness_confirmation_events(confirmation_id) WHERE event_type='confirmation.consumed'",
+        "CREATE UNIQUE INDEX IF NOT EXISTS harness_consumption_per_key ON harness_confirmation_events(idempotency_key) WHERE event_type='confirmation.consumed'",
+    ]:
+        db.execute(statement)
+    db.execute("INSERT INTO harness_migrations VALUES (4) ON CONFLICT DO NOTHING")
+    # Migration 5: rows written before declarative scenarios existed were provider
+    # placeholders, not scenario definitions; drop them so versions stay immutable.
+    for row in db.execute(
+        "SELECT scenario_id, version, definition FROM harness_scenario_definitions"
+    ).fetchall():
+        definition = row["definition"]
+        definition = json.loads(definition) if isinstance(definition, str) else definition
+        if "turns" not in definition:
+            db.execute(
+                "DELETE FROM harness_scenario_definitions WHERE scenario_id=? AND version=?",
+                (row["scenario_id"], row["version"]),
+            )
+    db.execute("INSERT INTO harness_migrations VALUES (5) ON CONFLICT DO NOTHING")
+
+
+def upsert_hold(db, database, run_id, hold):
+    scope, update = database.encoded(hold["scope"]), (
+        hold["expires_at"],
+        hold["released_at"],
+        hold["release_reason"],
+    )
+    db.execute(
+        "INSERT INTO harness_preservation_holds VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(hold_id) DO UPDATE SET expires_at=excluded.expires_at, released_at=excluded.released_at, release_reason=excluded.release_reason",
+        (
+            hold["hold_id"],
+            run_id,
+            hold["owner_id"],
+            hold["requester_id"],
+            hold["scope"]["type"],
+            scope,
+            hold["access_classification"],
+            hold["created_at"],
+            *update,
+            hold["audit_event_id"],
+        ),
+    )
 
 
 def project(transaction, event):
@@ -72,21 +118,15 @@ def project(transaction, event):
                 database.encoded(snapshot),
             ),
         )
-        scenario = state["config"].get("scenario_id", "identity-bypass-001")
-        definition = {
-            "scenario_id": scenario,
-            "version": 1,
-            "provider": "scripted-fixture-v1",
-            "assessment": "controlled_fixture",
-        }
+        from .scenario_defs import SCENARIOS, definition_hash
+
+        definition = SCENARIOS[state["config"].get("scenario_id", "identity-bypass-001")]
         insert(
             "harness_scenario_definitions",
             (
-                scenario,
-                1,
-                hashlib.sha256(
-                    json.dumps(definition, sort_keys=True).encode()
-                ).hexdigest(),
+                definition["id"],
+                definition["version"],
+                definition_hash(definition),
                 database.encoded(definition),
             ),
         )
@@ -157,6 +197,53 @@ def project(transaction, event):
                 content.get("policy_version", "strict-v1"),
                 content.get("argument_hash", content.get("audio_sha256")),
                 event.occurred_at,
+            ),
+        )
+    elif kind == "simulator.branch_selected":
+        insert(
+            "harness_simulator_decisions",
+            (
+                content["decision_id"],
+                run,
+                event.event_id,
+                content["branch_policy_hash"],
+                content["previous_node"],
+                content["next_node"],
+                database.encoded(content["observed_event_ids"]),
+                database.encoded(content["predicate_results"]),
+                content["selected_branch_id"],
+                content["selection_method"],
+                content["selector_model_config_hash"],
+                content["seed"],
+                content["random_draw"],
+                None,
+            ),
+        )
+    elif kind == "simulator.utterance_generated":
+        db.execute(
+            "UPDATE harness_simulator_decisions SET output_event_id=? WHERE decision_id=?",
+            (event.event_id, content["decision_id"]),
+        )
+    elif kind in {
+        "confirmation.requested",
+        "customer.confirmation_observed",
+        "confirmation.accepted",
+        "confirmation.rejected",
+        "confirmation.consumed",
+    }:
+        insert(
+            "harness_confirmation_events",
+            (
+                event.event_id,
+                run,
+                kind,
+                content.get("request_id"),
+                content.get("observation_id"),
+                content.get("confirmation_id"),
+                content.get("proposal_hash"),
+                content.get("session_id", state["session_id"]),
+                content.get("idempotency_key"),
+                database.encoded(content.get("evidence_event_ids", [])),
             ),
         )
     elif kind == "judge.completed":

@@ -70,7 +70,7 @@ def run_identity_bypass(output: str | Path | None = None) -> dict[str, Any]:
         causation_event_ids=[denied.event_id],
     )
     ledger.append(
-        "adapter",
+        "provider",
         "tool.result_sent",
         {"call_id": "c1", "status": "denied", "acknowledgement": "acknowledged"},
         session_id=session_id,

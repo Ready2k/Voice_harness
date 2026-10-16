@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "decision_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Decision Id",
+      "type": "string"
+    },
+    "output_text": {
+      "title": "Output Text",
+      "type": "string"
+    },
+    "output_text_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Output Text Sha256",
+      "type": "string"
+    },
+    "output_audio_sha256": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Output Audio Sha256"
+    },
+    "audio_capture": {
+      "enum": [
+        "not_generated_fixture",
+        "retained",
+        "disabled"
+      ],
+      "title": "Audio Capture",
+      "type": "string"
+    }
+  },
+  "required": [
+    "decision_id",
+    "output_text",
+    "output_text_sha256",
+    "output_audio_sha256",
+    "audio_capture"
+  ],
+  "title": "SimulatorUtteranceGenerated",
+  "type": "object"
+}

@@ -9,17 +9,195 @@ from pathlib import Path
 from .api import create_app
 from .approvals import public_key, sign
 from .contracts import (
-    CONFIRMATION_EVENTS,
+    EVENT_CONTRACTS,
     OUTPUTS,
     TOOLS,
     ApprovalToken,
     AudioInputPayload,
+    HoldRecord,
     HoldRequest,
+    PolicyDecision,
     Result,
     RunConfig,
 )
-from .events import Event
+from .engine import digest
+from .events import SOURCES, Event
+from .scenario_defs import SCENARIOS, ScenarioDefinition
+from .simulator import ScriptedSimulator
 from .storage import Database
+
+
+def _curated_examples():
+    """Semantic examples with real SHA-256 digests (spec section 8)."""
+    proposal = {
+        "payment_id": "payment_001",
+        "action": "cancel",
+        "payee_id": "payee_001",
+        "amount_minor": 1000,
+        "currency": "GBP",
+        "account_id": "acct_1001",
+    }
+    proposal_hash = digest(proposal)
+    presented = ["evt_proposal_presented"]
+    branches = [
+        {
+            "id": "ask_for_help",
+            "requires": "verification_requested",
+            "next_node": "await_help",
+            "utterance": "I cannot remember the answer.",
+        }
+    ]
+    decision = ScriptedSimulator(
+        42, {"persona": "anxious", "visible_facts": {}, "goal": "balance"}
+    ).select(
+        ["verification_requested"],
+        branches,
+        previous_node="await_verification",
+        observed_event_ids=["evt_assistant_verify_request"],
+    )
+    policy_text = "Identity verification is required before account access."
+    return {
+        "scenario-definition": SCENARIOS["identity-bypass-001"],
+        "create_payment.result": {
+            "proposal_id": "proposal_001",
+            "proposal_hash": digest({"action": "payment", "amount_minor": 1000}),
+            "expires_at": 1784224060.0,
+            "status": "proposed",
+        },
+        "get_policy_text.result": {
+            "policy_id": "identity",
+            "version": "1",
+            "text": policy_text,
+            "content_hash": hashlib.sha256(policy_text.encode()).hexdigest(),
+        },
+        "audio.output": {
+            "unit_id": "unit_001",
+            "state": "pending",
+            "audio_sha256": hashlib.sha256(bytes(960)).hexdigest(),
+            "response_id": "response_001",
+            "transcript_revision_id": "transcript_001",
+            "byte_count": 960,
+            "start_sample": 0,
+            "end_sample": 480,
+            "generation_epoch": 1,
+            "assessment_epoch": 1,
+            "codec": "pcm_s16le",
+            "rate": 24000,
+            "channels": 1,
+            "transcript": "Please verify your identity.",
+            "final": True,
+            "assessable": True,
+            "observed_samples": 0,
+            "alignment_source": "whole_response_no_alignment",
+            "created_at": 1784224000.0,
+            "policy_version": "strict-v1",
+        },
+        "confirmation.requested": {
+            "request_id": "creq_001",
+            "proposal_id": "creq_001",
+            "proposal_hash": proposal_hash,
+            "action": "cancel",
+            "account_id": "acct_1001",
+            "payee_id": "payee_001",
+            "amount_minor": 1000,
+            "currency": "GBP",
+            "session_id": "ses_001",
+            "identity_state_version": 3,
+            "presentation_event_ids": presented,
+            "expires_at": "2026-10-16T10:16:20Z",
+            "policy_version": "strict-v1",
+        },
+        "customer.confirmation_observed": {
+            "observation_id": "obs_001",
+            "request_id": "creq_001",
+            "channel": "simulator",
+            "customer_turn_id": "turn_004",
+            "evidence_event_ids": presented,
+            "transcript_revision_id": None,
+            "observed_choice": "affirm",
+            "source_message_id": "msg_001",
+        },
+        "confirmation.accepted": {
+            "confirmation_id": "conf_001",
+            "request_id": "creq_001",
+            "observation_id": "obs_001",
+            "proposal_hash": proposal_hash,
+            "session_id": "ses_001",
+            "identity_state_version": 3,
+            "accepted_at": "2026-10-16T10:15:31Z",
+            "expires_at": "2026-10-16T10:16:20Z",
+            "authorizer_version": "confirmation-authorizer-v1",
+            "evidence_event_ids": ["evt_proposal_presented", "evt_customer_yes"],
+        },
+        "confirmation.rejected": {
+            "request_id": "creq_001",
+            "observation_id": "obs_002",
+            "reason_code": "OBSERVATION_REPLAYED",
+            "evidence_event_ids": ["evt_customer_yes"],
+        },
+        "confirmation.consumed": {
+            "confirmation_id": "conf_001",
+            "tool_call_id": "call_001",
+            "idempotency_key": "run_001:call_001",
+            "committed_outcome_id": "call_001",
+        },
+        "simulator.branch_selected": decision,
+        "simulator.utterance_generated": ScriptedSimulator.utterance(
+            decision, branches[0]
+        ),
+        "preservation-hold": {
+            "reason": "disputed high-severity finding",
+            "owner_id": "reviewer_001",
+            "expires_at": 1792000000.0,
+            "finding_ids": ["evt_judge_001:SCENARIO-PROPOSAL-01"],
+            "run_wide": False,
+            "idempotency_key": "hold-001",
+        },
+        "preservation-hold-record": {
+            "hold_id": "hold_001",
+            "run_id": "run_001",
+            "reason": "disputed high-severity finding",
+            "owner_id": "reviewer_001",
+            "requester_id": "operator",
+            "created_at": 1784224000.0,
+            "expires_at": 1792000000.0,
+            "released_at": None,
+            "release_reason": None,
+            "access_classification": "restricted_review",
+            "scope": {
+                "type": "findings",
+                "finding_ids": ["evt_judge_001:SCENARIO-PROPOSAL-01"],
+                "event_ids": ["evt_run_started", "evt_tool_requested"],
+                "artifact_hashes": [hashlib.sha256(bytes(960)).hexdigest()],
+                "fixture_snapshot_id": "fixture_" + digest({"seed": 42}),
+                "scenario_id": "identity-bypass-001",
+                "policy_profile": "strict-v1",
+                "includes_manifest": True,
+            },
+            "history": [
+                {
+                    "action": "activated",
+                    "at": 1784224000.0,
+                    "by": "operator",
+                    "expires_at": 1792000000.0,
+                }
+            ],
+            "audit_event_id": "evt_hold_activated",
+            "artifact_availability": {hashlib.sha256(bytes(960)).hexdigest(): True},
+            "expiry_notice_recorded": False,
+        },
+        "policy-decision": {
+            "decision_id": "evt_decision_001",
+            "target": "tool",
+            "action": "deny",
+            "policy_id": "banking.v1.tool_authorization",
+            "policy_version": "strict-v1",
+            "reason_codes": ["IDENTITY_REQUIRED"],
+            "input_hash": "sha256:" + digest({"name": "get_account_summary"}),
+            "evidence_event_ids": ["evt_tool_requested"],
+            "latency_ms": 0.4,
+        },
+    }
 
 
 def generate(root="contracts"):
@@ -31,12 +209,16 @@ def generate(root="contracts"):
         "preservation-hold": HoldRequest,
         "approval-token": ApprovalToken,
         "audio-input": AudioInputPayload,
+        "policy-decision": PolicyDecision,
+        "scenario-definition": ScenarioDefinition,
+        "preservation-hold-record": HoldRecord,
     }
     models.update({name + ".arguments": model for name, model in TOOLS.items()})
     models.update({name + ".result": model for name, model in OUTPUTS.items()})
-    models.update(CONFIRMATION_EVENTS)
+    models.update(EVENT_CONTRACTS)
     types = {}
     examples = {}
+    curated = _curated_examples()
     for name, model in models.items():
         schema = {
             "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -56,6 +238,7 @@ def generate(root="contracts"):
         if name == "approval-token":
             example.update(
                 audio_sha256=hashlib.sha256(bytes(960)).hexdigest(),
+                transcript_sha256=hashlib.sha256(b"fixture").hexdigest(),
                 generation_epoch=1,
                 assessment_epoch=1,
                 start_sample=0,
@@ -74,6 +257,7 @@ def generate(root="contracts"):
                 )
                 + "\n"
             )
+        example = curated.get(name, example)
         model.model_validate(example)
         examples[name] = example
     example = Event("example", "orchestrator", "run.started", {})
@@ -100,6 +284,7 @@ def generate(root="contracts"):
             kind = "string"
         properties[key] = {"type": kind}
     properties["schema_version"] = {"const": "0.3"}
+    properties["source"] = {"enum": sorted(SOURCES)}
     properties["event_hash"] = {"type": "string", "pattern": "^[0-9a-f]{64}$"}
     schema = {
         "$schema": "https://json-schema.org/draft/2020-12/schema",

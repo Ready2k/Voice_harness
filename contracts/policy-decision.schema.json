@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Spec section 6 decision record; decision_id is the ledger event id.",
+  "properties": {
+    "decision_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Decision Id",
+      "type": "string"
+    },
+    "target": {
+      "enum": [
+        "tool",
+        "audio_chunk",
+        "transcript",
+        "session"
+      ],
+      "title": "Target",
+      "type": "string"
+    },
+    "action": {
+      "enum": [
+        "allow",
+        "deny",
+        "modify",
+        "hold",
+        "release",
+        "escalate"
+      ],
+      "title": "Action",
+      "type": "string"
+    },
+    "policy_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Policy Id",
+      "type": "string"
+    },
+    "policy_version": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Policy Version",
+      "type": "string"
+    },
+    "reason_codes": {
+      "items": {
+        "maxLength": 200,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Reason Codes",
+      "type": "array"
+    },
+    "input_hash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Input Hash",
+      "type": "string"
+    },
+    "evidence_event_ids": {
+      "items": {
+        "maxLength": 200,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Evidence Event Ids",
+      "type": "array"
+    },
+    "latency_ms": {
+      "minimum": 0,
+      "title": "Latency Ms",
+      "type": "number"
+    }
+  },
+  "required": [
+    "decision_id",
+    "target",
+    "action",
+    "policy_id",
+    "policy_version",
+    "reason_codes",
+    "input_hash",
+    "evidence_event_ids",
+    "latency_ms"
+  ],
+  "title": "PolicyDecision",
+  "type": "object"
+}

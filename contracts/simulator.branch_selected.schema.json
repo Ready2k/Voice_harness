@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "decision_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Decision Id",
+      "type": "string"
+    },
+    "previous_node": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Previous Node",
+      "type": "string"
+    },
+    "previous_state_hash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Previous State Hash",
+      "type": "string"
+    },
+    "branch_policy_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Branch Policy Id",
+      "type": "string"
+    },
+    "branch_policy_version": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Branch Policy Version",
+      "type": "string"
+    },
+    "branch_policy_hash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Branch Policy Hash",
+      "type": "string"
+    },
+    "observed_event_ids": {
+      "items": {
+        "maxLength": 200,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Observed Event Ids",
+      "type": "array"
+    },
+    "eligible_branch_ids": {
+      "items": {
+        "maxLength": 200,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Eligible Branch Ids",
+      "type": "array"
+    },
+    "predicate_results": {
+      "additionalProperties": {
+        "type": "boolean"
+      },
+      "title": "Predicate Results",
+      "type": "object"
+    },
+    "selected_branch_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Selected Branch Id",
+      "type": "string"
+    },
+    "selection_method": {
+      "enum": [
+        "scripted",
+        "seeded",
+        "model"
+      ],
+      "title": "Selection Method",
+      "type": "string"
+    },
+    "selector_model_config_hash": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Selector Model Config Hash"
+    },
+    "seed": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Seed"
+    },
+    "random_draw": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Random Draw"
+    },
+    "next_node": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Next Node",
+      "type": "string"
+    },
+    "terminate": {
+      "title": "Terminate",
+      "type": "boolean"
+    },
+    "fallback_used": {
+      "title": "Fallback Used",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "decision_id",
+    "previous_node",
+    "previous_state_hash",
+    "branch_policy_id",
+    "branch_policy_version",
+    "branch_policy_hash",
+    "observed_event_ids",
+    "eligible_branch_ids",
+    "predicate_results",
+    "selected_branch_id",
+    "selection_method",
+    "selector_model_config_hash",
+    "seed",
+    "random_draw",
+    "next_node",
+    "terminate",
+    "fallback_used"
+  ],
+  "title": "SimulatorBranchSelected",
+  "type": "object"
+}

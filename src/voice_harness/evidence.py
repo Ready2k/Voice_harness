@@ -6,7 +6,9 @@ import os
 import time
 from pathlib import Path
 
+from .canonical import canonical_json
 from .engine import digest, identifier
+from .relational import upsert_hold
 
 
 class Evidence:
@@ -43,48 +45,220 @@ class Evidence:
             )
         return sha
 
-    def hold(self, run_id, reason, owner_id, expires_at, idempotency_key):
-        if expires_at <= self.clock():
+    ACCESS_CLASSIFICATION = "restricted_review"
+    DEFAULT_EXTENSION_SECONDS = 90 * 86400
+    # Event-content keys that name another entity whose lifecycle the finding depends on.
+    _GROUP_KEYS = (
+        "call_id",
+        "unit_id",
+        "request_id",
+        "confirmation_id",
+        "token_id",
+        "hold_id",
+    )
+
+    @staticmethod
+    def _events(tx, run_id):
+        return [
+            tx.database.decoded(row["payload"])
+            for row in tx.db.execute(
+                "SELECT payload FROM harness_events WHERE run_id=? ORDER BY sequence",
+                (run_id,),
+            ).fetchall()
+        ]
+
+    @staticmethod
+    def _references(content):
+        """Event ids named by evidence/presentation arrays, excluding native payloads."""
+        found = []
+        if isinstance(content, dict):
+            for key, value in content.items():
+                if key in {"native_envelope", "provider_event"}:
+                    continue
+                if key in {"evidence_event_ids", "presentation_event_ids"}:
+                    found.extend(value)
+                else:
+                    found.extend(Evidence._references(value))
+        elif isinstance(content, list):
+            for item in content:
+                found.extend(Evidence._references(item))
+        return found
+
+    def _scope(self, tx, run_id, finding_ids):
+        """Resolve a hold's immutable effective scope and its dependency closure."""
+        events = self._events(tx, run_id)
+        by_id = {e["event_id"]: e for e in events}
+        if finding_ids is None:
+            # A run-wide hold covers every artifact, including ones stored later.
+            return {
+                "type": "run",
+                "finding_ids": [],
+                "event_ids": "all_run_events",
+                "artifact_hashes": sorted(tx.state["artifacts"]),
+                "fixture_snapshot_id": tx.state.get("fixture_snapshot_id"),
+                "scenario_id": tx.state["config"].get("scenario_id"),
+                "policy_profile": tx.state["config"].get("policy_profile"),
+                "includes_manifest": True,
+            }
+        wanted, seeds = set(finding_ids), []
+        known = set()
+        for event in events:
+            if event["type"] != "judge.completed":
+                continue
+            for finding in event["content"].get("findings", []):
+                fid = event["event_id"] + ":" + finding["criterion_id"]
+                known.add(fid)
+                if fid in wanted:
+                    seeds.append(event["event_id"])
+                    seeds.extend(finding["evidence_event_ids"])
+        if wanted - known:
+            raise KeyError("FINDING_NOT_FOUND")
+        # Run envelope events are always necessary to interpret any finding.
+        seeds.extend(e["event_id"] for e in events if e["type"] in {"run.started", "session.opened"})
+        closure = set()
+        pending = list(seeds)
+        while pending:
+            event_id = pending.pop()
+            if event_id in closure or event_id not in by_id:
+                continue
+            closure.add(event_id)
+            event = by_id[event_id]
+            pending.extend(event["causation_event_ids"])
+            pending.extend(self._references(event["content"]))
+            # Pull in sibling lifecycle events for the same call/unit/request.
+            for key in self._GROUP_KEYS:
+                value = event["content"].get(key)
+                if value is None:
+                    continue
+                pending.extend(
+                    other["event_id"]
+                    for other in events
+                    if other["content"].get(key) == value
+                )
+        hashes = set()
+        for event_id in closure:
+            content = by_id[event_id]["content"]
+            for key in ("audio_sha256", "sha256"):
+                if content.get(key) in tx.state["artifacts"]:
+                    hashes.add(content[key])
+        return {
+            "type": "findings",
+            "finding_ids": sorted(wanted),
+            "event_ids": sorted(closure, key=lambda i: by_id[i]["sequence"]),
+            "artifact_hashes": sorted(hashes),
+            "fixture_snapshot_id": tx.state.get("fixture_snapshot_id"),
+            "scenario_id": tx.state["config"].get("scenario_id"),
+            "policy_profile": tx.state["config"].get("policy_profile"),
+            "includes_manifest": True,
+        }
+
+    def _availability(self, run_id, state, hashes):
+        return {
+            sha: bool(
+                state["artifacts"][sha]["available"]
+                and (self.root / run_id / sha).exists()
+            )
+            for sha in hashes
+        }
+
+    def _view(self, run_id, state, hold):
+        if hold["scope"]["type"] == "run":
+            hold = {
+                **hold,
+                "scope": {**hold["scope"], "artifact_hashes": sorted(state["artifacts"])},
+            }
+        return {
+            **{k: v for k, v in hold.items() if k not in {"idempotency_key", "body_hash"}},
+            "run_id": run_id,
+            "artifact_availability": self._availability(
+                run_id, state, hold["scope"]["artifact_hashes"]
+            ),
+        }
+
+    def hold(
+        self,
+        run_id,
+        reason,
+        owner_id,
+        expires_at,
+        idempotency_key,
+        *,
+        finding_ids=None,
+        requester_id="operator",
+    ):
+        now = self.clock()
+        expires_at = (
+            now + self.DEFAULT_EXTENSION_SECONDS if expires_at is None else expires_at
+        )
+        if expires_at <= now:
             raise ValueError("INVALID_HOLD_EXPIRY")
+        if finding_ids is not None and not finding_ids:
+            raise ValueError("INVALID_HOLD_SCOPE")
         with self.database.transaction(run_id) as tx:
             body_hash = digest(
-                {"reason": reason, "owner_id": owner_id, "expires_at": expires_at}
+                {
+                    "reason": reason,
+                    "owner_id": owner_id,
+                    "expires_at": expires_at,
+                    "finding_ids": sorted(finding_ids) if finding_ids else None,
+                }
             )
             for old in tx.state["holds"].values():
                 if old["idempotency_key"] == idempotency_key:
                     if old["body_hash"] != body_hash:
                         raise ValueError("IDEMPOTENCY_CONFLICT")
-                    return old
+                    return self._view(run_id, tx.state, old)
             hold_id = identifier("hold")
             hold = {
                 "hold_id": hold_id,
                 "reason": reason,
                 "owner_id": owner_id,
+                "requester_id": requester_id,
+                "created_at": now,
                 "expires_at": expires_at,
                 "released_at": None,
+                "release_reason": None,
+                "access_classification": self.ACCESS_CLASSIFICATION,
+                "scope": self._scope(tx, run_id, finding_ids),
+                "history": [
+                    {"action": "activated", "at": now, "by": requester_id,
+                     "expires_at": expires_at}
+                ],
                 "idempotency_key": idempotency_key,
                 "body_hash": body_hash,
             }
-            tx.state["holds"][hold_id] = hold
-            tx.event(
+            hold["audit_event_id"] = tx.event(
                 "orchestrator",
                 "preservation.activated",
-                {k: v for k, v in hold.items() if k != "idempotency_key"},
+                {
+                    k: v
+                    for k, v in hold.items()
+                    if k not in {"idempotency_key", "body_hash", "history"}
+                },
             )
-            return hold
+            tx.state["holds"][hold_id] = hold
+            upsert_hold(tx.db, self.database, run_id, hold)
+            return self._view(run_id, tx.state, hold)
 
-    def release(self, run_id, hold_id, reason):
+    def release(self, run_id, hold_id, reason, *, by="operator"):
         with self.database.transaction(run_id) as tx:
             hold = tx.state["holds"][hold_id]
             if hold["released_at"] is None:
                 hold["released_at"] = self.clock()
+                hold["release_reason"] = reason
+                hold["history"].append(
+                    {"action": "released", "at": hold["released_at"], "by": by,
+                     "reason": reason}
+                )
                 tx.event(
                     "orchestrator",
                     "preservation.released",
-                    {"hold_id": hold_id, "reason": reason},
+                    {"hold_id": hold_id, "reason": reason, "released_by": by},
                 )
+                upsert_hold(tx.db, self.database, run_id, hold)
+            return self._view(run_id, tx.state, hold)
 
-    def renew(self, run_id, hold_id, expires_at, reason):
+    def renew(self, run_id, hold_id, expires_at, reason, *, by="operator"):
         with self.database.transaction(run_id) as tx:
             hold = tx.state["holds"][hold_id]
             if (
@@ -94,6 +268,11 @@ class Evidence:
                 raise ValueError("INVALID_HOLD_RENEWAL")
             old = hold["expires_at"]
             hold["expires_at"] = expires_at
+            hold["expiry_notice_recorded"] = False
+            hold["history"].append(
+                {"action": "renewed", "at": self.clock(), "by": by,
+                 "previous_expiry": old, "expires_at": expires_at, "reason": reason}
+            )
             tx.event(
                 "orchestrator",
                 "preservation.renewed",
@@ -104,13 +283,15 @@ class Evidence:
                     "reason": reason,
                 },
             )
-            return hold
+            upsert_hold(tx.db, self.database, run_id, hold)
+            return self._view(run_id, tx.state, hold)
 
     def purge(self, run_id):
         deleted = []
         with self.database.transaction(run_id) as tx:
             now = self.clock()
-            for hold in tx.state["holds"].values():
+            holds = list(tx.state["holds"].values())
+            for hold in holds:
                 if (
                     hold["released_at"] is None
                     and not hold.get("expiry_notice_recorded")
@@ -127,29 +308,44 @@ class Evidence:
                             "channel": "authenticated_review_feed",
                         },
                     )
-            holds = tx.state["holds"].values()
-            if any(h["released_at"] is None and h["expires_at"] > now for h in holds):
-                return deleted
-            grace = max(
-                (
-                    h["released_at"]
-                    if h["released_at"] is not None
-                    else h["expires_at"]
-                    for h in holds
-                ),
-                default=0,
-            )
-            if grace and now < grace + self.GRACE_SECONDS:
-                return deleted
+
+            def protected(sha):
+                # Active holds, and the seven-day grace after release/expiry, shield
+                # exactly the artifacts inside each hold's persisted scope.
+                for hold in holds:
+                    if (
+                        hold["scope"]["type"] != "run"
+                        and sha not in hold["scope"]["artifact_hashes"]
+                    ):
+                        continue
+                    ended = (
+                        hold["released_at"]
+                        if hold["released_at"] is not None
+                        else hold["expires_at"]
+                    )
+                    if (hold["released_at"] is None and hold["expires_at"] > now) or (
+                        now < ended + self.GRACE_SECONDS
+                    ):
+                        return True
+                return False
+
             for sha, artifact in tx.state["artifacts"].items():
-                if artifact["available"] and artifact["expires_at"] <= now:
+                if (
+                    artifact["available"]
+                    and artifact["expires_at"] <= now
+                    and not protected(sha)
+                ):
                     # Tombstone is committed before filesystem garbage collection.
                     # A crash can leave an extra object, never a false available claim.
                     artifact["available"] = False
                     tx.event(
                         "orchestrator",
                         "artifact.purged",
-                        {"sha256": sha, "reason": "retention_expired"},
+                        {
+                            "sha256": sha,
+                            "reason": "retention_expired",
+                            "tombstoned_at": now,
+                        },
                     )
                     deleted.append(sha)
         for sha in deleted:
@@ -186,11 +382,81 @@ class Evidence:
                     a["sha256"] for a in artifacts if not a["available"]
                 ],
                 "audio_capture": "retained" if artifacts else "not_captured",
-                "holds": list(tx.state["holds"].values()),
+                "holds": [
+                    self._view(run_id, tx.state, h) for h in tx.state["holds"].values()
+                ],
                 "signature": None,
                 "signature_status": "unsigned_local",
                 "isolation_strategy": "transactional_run_namespace",
             }
+            config = tx.state["config"]
+            manifest.update(
+                {
+                    "export_type": "standard",
+                    "scenario": {
+                        "scenario_id": config.get("scenario_id"),
+                        "version": config.get("scenario_version"),
+                        "content_hash": next(
+                            (
+                                e["content"].get("scenario_hash")
+                                for e in events
+                                if e["type"] == "run.started"
+                            ),
+                            None,
+                        ),
+                    },
+                    "provider": {
+                        "adapter": "mock",
+                        "provider_config_id": config.get("provider_config_id"),
+                        "model_id": "scripted-fixture-v1",
+                        "endpoint": None,
+                        "region": None,
+                        "sdk_version": None,
+                        "version_resolution": "not_applicable_scripted_fixture",
+                        "capability_report_id": "mock-fixture-v1",
+                        "capability_status": "mock_only",
+                    },
+                    "policy": {
+                        "profile": config.get("policy_profile"),
+                        "version": "strict-v1",
+                    },
+                    "limits": tx.state.get("limits"),
+                    "retention": {
+                        "metadata_days_default": 30,
+                        "synthetic_audio_days_default": 7,
+                        "audio_opt_in": bool(config.get("retain_audio")),
+                        "metadata_purge": "not_implemented_ledger_is_append_only",
+                        "audio_purge": "tombstoned_after_ttl_unless_held",
+                    },
+                    "pricing": {
+                        "table_version": None,
+                        "reason": "NO_PROVIDER_BILLING_IN_MOCK",
+                    },
+                    "deterministic_check_and_judge_results": [
+                        {
+                            "event_id": e["event_id"],
+                            "assessment_source": e["content"].get("assessment_source"),
+                            "findings": e["content"].get("findings", []),
+                        }
+                        for e in events
+                        if e["type"] == "judge.completed"
+                    ],
+                    "human_adjudication": [],
+                    "final_disposition": tx.state["assurance"],
+                    "omitted_from_standard_export": [
+                        "challenge_answers",
+                        "isolation_keys",
+                        "provider_credentials",
+                        "fixture_oracle",
+                    ],
+                    "known_limitations": [
+                        "Scripted fixture provider: no live ASR, judge or provider behaviour",
+                        "Audio is PCM silence with scripted transcripts; semantic safety not measured",
+                        "Software playback boundary only; physical audibility unknown",
+                        "Manifest is unsigned; tamper evidence is relative to an untrusted local root",
+                    ],
+                }
+            )
             manifest["source_hash"] = tx.state.get("source_hash")
             manifest["config_hash"] = tx.state["config_hash"]
             manifest["fixture_snapshot_id"] = tx.state.get("fixture_snapshot_id")
@@ -251,9 +517,7 @@ def verify_bundle(bundle):
             # Verify the exact historical keys; current dataclass defaults must
             # never change the hashed representation of an older envelope.
             unsigned = {**payload, "event_hash": None}
-            expected = hashlib.sha256(
-                json.dumps(unsigned, sort_keys=True, separators=(",", ":")).encode()
-            ).hexdigest()
+            expected = hashlib.sha256(canonical_json(unsigned)).hexdigest()
             if (
                 payload["run_id"] != manifest["run_id"]
                 or payload["sequence"] != sequence

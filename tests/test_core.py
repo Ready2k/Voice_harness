@@ -11,8 +11,8 @@ from voice_harness.tool_lifecycle import ToolLifecycle
 class CoreTests(unittest.TestCase):
     def test_ledger_hash_chain_detects_tampering(self):
         ledger = Ledger("run_1")
-        ledger.append("test", "one", {"x": 1})
-        ledger.append("test", "two", {"x": 2})
+        ledger.append("orchestrator", "one", {"x": 1})
+        ledger.append("orchestrator", "two", {"x": 2})
         self.assertTrue(ledger.verify())
         ledger.events[0].content["x"] = 99
         self.assertFalse(ledger.verify())

@@ -32,6 +32,8 @@ from .contracts import AudioInputPayload, CancelRun, HoldRequest, RenewHold, Run
 from .coverage import build_registry, summarize
 from .engine import Engine
 from .evidence import Evidence
+from .metrics import derive as derive_metrics
+from .scenario_defs import SCENARIOS, ScenarioDefinition, definition_hash
 from .scenarios import run_scenario
 from .storage import Database
 from .verdicts import aggregate
@@ -71,6 +73,12 @@ def create_app(database=None, root=None, token=None, recover=True):
             with database.transaction(run_id) as tx:
                 if tx.state["state"] not in {"cancelled", "recovery_required"}:
                     tx.state["state"] = "failed"
+                    # A failed run must not keep buffered PCM beyond its retention class.
+                    for unit in tx.state["units"].values():
+                        if unit["state"] in {"pending", "approved", "scheduled"}:
+                            unit["state"] = "discarded"
+                        unit.pop("pcm", None)
+                    tx.state["tokens"].clear()
                     tx.event("orchestrator", "run.failed", {"reason": "WORKER_FAILED"})
         finally:
             evidence.save_manifest(run_id)
@@ -193,18 +201,60 @@ def create_app(database=None, root=None, token=None, recover=True):
     def providers_export():
         return {"export_type": "provider_coverage", **summarize(build_registry())}
 
-    @app.get("/api/v1/scenarios", dependencies=[Depends(auth)])
-    def scenarios():
+    def stored_scenarios():
+        with database.connection() as db:
+            rows = db.execute(
+                "SELECT scenario_id, version, content_hash, definition FROM harness_scenario_definitions ORDER BY scenario_id, version"
+            ).fetchall()
         return {
-            "items": [
-                {"scenario_id": s, "version": 1}
-                for s in [
-                    "identity-bypass-001",
-                    "balance-verified-001",
-                    "unsafe-disclosure-001",
-                ]
-            ]
+            (r["scenario_id"], r["version"]): (
+                r["content_hash"],
+                database.decoded(r["definition"]),
+            )
+            for r in rows
         }
+
+    @app.get("/api/v1/scenarios", dependencies=[Depends(auth)])
+    def scenarios(cursor: int = 0, limit: int = 100):
+        if cursor < 0 or not 1 <= limit <= 1000:
+            raise HTTPException(422, "INVALID_PAGINATION")
+        merged = {(d["id"], d["version"]): (definition_hash(d), d) for d in SCENARIOS.values()}
+        merged.update(stored_scenarios())
+        items = [
+            {
+                "scenario_id": key[0],
+                "version": key[1],
+                "content_hash": value[0],
+                "runnable": key[0] in SCENARIOS and key[1] == 1,
+                "definition": value[1],
+            }
+            for key, value in sorted(merged.items())
+        ]
+        page = items[cursor : cursor + limit]
+        more = cursor + limit < len(items)
+        return {"items": page, "next_cursor": cursor + limit if more else None}
+
+    @app.post("/api/v1/scenarios", status_code=201, dependencies=[Depends(auth)])
+    def create_scenario(definition: ScenarioDefinition):
+        body = definition.model_dump()
+        content_hash = definition_hash(body)
+        key = (body["id"], body["version"])
+        builtin = SCENARIOS.get(body["id"])
+        existing = (
+            (definition_hash(builtin), builtin)
+            if builtin and builtin["version"] == body["version"]
+            else stored_scenarios().get(key)
+        )
+        if existing:
+            if existing[0] != content_hash:
+                raise ValueError("SCENARIO_VERSION_CONFLICT")
+            return {"scenario_id": key[0], "version": key[1], "content_hash": content_hash, "created": False}
+        with database.connection() as db:
+            db.execute(
+                "INSERT INTO harness_scenario_definitions VALUES (?, ?, ?, ?) ON CONFLICT DO NOTHING",
+                (key[0], key[1], content_hash, database.encoded(body)),
+            )
+        return {"scenario_id": key[0], "version": key[1], "content_hash": content_hash, "created": True}
 
     @app.post("/api/v1/runs", status_code=202, dependencies=[Depends(auth)])
     def launch(
@@ -239,16 +289,48 @@ def create_app(database=None, root=None, token=None, recover=True):
     @app.get("/api/v1/runs/{run_id}", dependencies=[Depends(auth)])
     def get_run(run_id: str):
         state = database.get(run_id)
+        events = database.events(run_id)
+        terminal = state["state"] in {"completed", "cancelled", "failed"}
+        reason = next(
+            (
+                e["content"].get("reason", e["type"].removeprefix("run."))
+                for e in reversed(events)
+                if e["type"] in {"run.completed", "run.cancelled", "run.failed"}
+            ),
+            None,
+        )
+        artifacts = state["artifacts"].values()
         return {
             "run_id": run_id,
             "state": state["state"],
             "session_id": state["session_id"],
             "assurance": state["assurance"],
             "config": state["config"],
+            "scenario": {
+                "scenario_id": state["config"].get("scenario_id"),
+                "version": state["config"].get("scenario_version"),
+            },
+            "provider_config_id": state["config"].get("provider_config_id"),
             "capability_status": "mock_only",
+            "capability_report_id": "mock-fixture-v1",
+            "started_at": events[0]["occurred_at"] if events else None,
+            "ended_at": events[-1]["occurred_at"] if terminal and events else None,
+            "termination_reason": reason if terminal else None,
+            "metric_summary": {
+                "status": "not_collected_per_run",
+                "reference": "artifacts/phase1-final-baseline.json",
+            },
+            "evidence": {
+                "event_count": len(events),
+                "artifacts_total": len(state["artifacts"]),
+                "artifacts_available": sum(a["available"] for a in artifacts),
+                "manifest": "unsigned_local",
+            },
         }
 
-    @app.post("/api/v1/runs/{run_id}/cancel", dependencies=[Depends(auth)])
+    @app.post(
+        "/api/v1/runs/{run_id}/cancel", status_code=202, dependencies=[Depends(auth)]
+    )
     def cancel(run_id: str, body: CancelRun):
         state = engine.cancel(run_id, body.reason)
         evidence.save_manifest(run_id)
@@ -267,6 +349,15 @@ def create_app(database=None, root=None, token=None, recover=True):
             else None,
         }
 
+    @app.get("/api/v1/metrics/{run_id}", dependencies=[Depends(auth)])
+    def run_metrics(run_id: str):
+        database.get(run_id)
+        return {
+            "run_id": run_id,
+            "schema_version": "0.3",
+            "observations": derive_metrics(database.events(run_id)),
+        }
+
     @app.get("/api/v1/runs/{run_id}/evidence", dependencies=[Depends(auth)])
     def bundle(run_id: str):
         return evidence.bundle(run_id)
@@ -278,7 +369,12 @@ def create_app(database=None, root=None, token=None, recover=True):
     )
     def hold(run_id: str, body: HoldRequest):
         return evidence.hold(
-            run_id, body.reason, body.owner_id, body.expires_at, body.idempotency_key
+            run_id,
+            body.reason,
+            body.owner_id,
+            body.expires_at,
+            body.idempotency_key,
+            finding_ids=body.finding_ids,
         )
 
     @app.post(
@@ -286,8 +382,10 @@ def create_app(database=None, root=None, token=None, recover=True):
         dependencies=[Depends(auth)],
     )
     def release_hold(run_id: str, hold_id: str, body: CancelRun):
-        evidence.release(run_id, hold_id, body.reason)
-        return {"state": "released", "hold_id": hold_id}
+        return {
+            "state": "released",
+            **evidence.release(run_id, hold_id, body.reason),
+        }
 
     @app.post(
         "/api/v1/runs/{run_id}/preservation-holds/{hold_id}/renew",
@@ -369,6 +467,7 @@ def create_app(database=None, root=None, token=None, recover=True):
                 "approval_public_key": public_key(state["isolation_key"]),
                 "media_profile": "pcm24k-mono-v1",
                 "max_bytes": engine.MAX_AUDIO_BYTES,
+                "limits": engine.limits,
             }
         )
         wire_cursor = max((e["sequence"] for e in database.events(run_id)), default=0)
@@ -453,6 +552,18 @@ def create_app(database=None, root=None, token=None, recover=True):
                     raise ValueError("CONTROL_LIMIT_EXCEEDED")
                 seen.add(message["message_id"])
                 if message["client_sequence"] != sequence + 1:
+                    await asyncio.to_thread(
+                        _record_transport_error,
+                        database,
+                        run_id,
+                        "audio.discontinuity",
+                        {
+                            "failure_code": "AUDIO_DISCONTINUITY",
+                            "expected_client_sequence": sequence + 1,
+                            "received_client_sequence": message["client_sequence"],
+                            "strict_measurements": "invalidated",
+                        },
+                    )
                     raise ValueError("AUDIO_DISCONTINUITY")
                 sequence += 1
                 if message["type"] == "audio.input":
@@ -557,14 +668,27 @@ def create_app(database=None, root=None, token=None, recover=True):
                 else:
                     raise ValueError("UNSUPPORTED_CONTROL")
         except (TimeoutError, ValueError, KeyError) as error:
-            await socket.send_json(
-                {"type": "error", "code": str(error) or "IDLE_TIMEOUT"}
-            )
+            code = str(error) or "IDLE_TIMEOUT"
+            if code != "AUDIO_DISCONTINUITY":
+                with suppress(Exception):
+                    await asyncio.to_thread(
+                        _record_transport_error,
+                        database,
+                        run_id,
+                        "session.error",
+                        {"failure_code": code},
+                    )
+            await socket.send_json({"type": "error", "code": code})
             await socket.close(code=1008)
         except WebSocketDisconnect:
             pass
 
     return app
+
+
+def _record_transport_error(database, run_id, kind, content):
+    with database.transaction(run_id) as tx:
+        tx.event("orchestrator", kind, content)
 
 
 def _input_event(database, run_id, samples, raw, epoch, stream_id):

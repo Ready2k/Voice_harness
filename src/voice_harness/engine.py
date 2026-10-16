@@ -15,7 +15,9 @@ from pathlib import Path
 from pydantic import ValidationError
 
 from .approvals import sign
+from .canonical import canonical_json
 from .contracts import OUTPUTS, TOOLS, ApprovalToken, Result
+from .scenario_defs import SCENARIOS, definition_hash
 from .storage import Database
 
 
@@ -24,11 +26,7 @@ def identifier(prefix):
 
 
 def digest(value):
-    return hashlib.sha256(
-        json.dumps(
-            value, sort_keys=True, separators=(",", ":"), allow_nan=False
-        ).encode()
-    ).hexdigest()
+    return hashlib.sha256(canonical_json(value)).hexdigest()
 
 
 def utc(timestamp):
@@ -53,11 +51,42 @@ def source_hash():
     )
 
 
+def decision_record(
+    target, action, *, policy_id, policy_version, reason_codes, input_hash,
+    evidence_event_ids, started,
+):
+    """Policy decision content per spec section 6 (decision_id is the event id)."""
+    return {
+        "target": target,
+        "action": action,
+        "policy_id": policy_id,
+        "policy_version": policy_version,
+        "reason_codes": list(reason_codes),
+        "input_hash": "sha256:" + str(input_hash),
+        "evidence_event_ids": list(evidence_event_ids),
+        "latency_ms": round((time.perf_counter() - started) * 1000, 3),
+    }
+
+
 class Engine:
     MAX_AUDIO_BYTES = 24000 * 2 * 2
+    DECISION_TIMEOUT_SECONDS = 5.0
+    # Configurable limits recorded in the run manifest (spec section 6).
+    DEFAULT_LIMITS = {
+        "pending_audio_bytes": MAX_AUDIO_BYTES,
+        "pending_audio_seconds": 2.0,
+        "semantic_decision_timeout_seconds": DECISION_TIMEOUT_SECONDS,
+        "inbound_queue_seconds": 2.0,
+        "client_schedule_ahead_ms": 100,
+        "heartbeat_seconds": 10,
+        "idle_timeout_seconds": 30,
+        "max_concurrent_sessions": 10,
+        "tool_timeout_seconds": 3,
+    }
 
-    def __init__(self, database: Database, clock=time.time, faults=None):
+    def __init__(self, database: Database, clock=time.time, faults=None, limits=None):
         self.database, self.clock = database, clock
+        self.limits = {**self.DEFAULT_LIMITS, **(limits or {})}
         self.faults = faults or {}
         valid = {
             "timeout",
@@ -108,6 +137,7 @@ class Engine:
             "holds": {},
             "artifacts": {},
             "assurance": None,
+            "limits": dict(self.limits),
         }
         seed = config.get("fixture_seed", 42)
         if seed != 42:
@@ -131,6 +161,12 @@ class Engine:
                         "source_hash": state["source_hash"],
                         "profile": "controlled-fixture",
                         "fault_profile_hash": digest(self.faults),
+                        "scenario_id": config.get("scenario_id"),
+                        "scenario_version": config.get("scenario_version"),
+                        "scenario_hash": definition_hash(
+                            SCENARIOS[config.get("scenario_id", "identity-bypass-001")]
+                        ),
+                        "limits": dict(self.limits),
                     },
                 )
                 tx.event(
@@ -204,7 +240,12 @@ class Engine:
         with self.database.transaction(run_id) as tx:
             self._context(tx.state, run_id, context)
             existing = tx.state["calls"].get(call_id)
-            if existing:
+            assembling = None
+            if existing and existing["state"] == "assembling":
+                if existing["tool"] != name:
+                    raise ValueError("IDEMPOTENCY_CONFLICT")
+                assembling = existing["request_event_id"]
+            elif existing:
                 if existing["request_hash"] != request_hash:
                     raise ValueError("IDEMPOTENCY_CONFLICT")
                 return existing
@@ -228,6 +269,7 @@ class Engine:
                     "arguments": safe,
                     "argument_hash": request_hash,
                 },
+                causes=[assembling] if assembling else (),
             )
             tx.state["calls"][call_id] = {
                 "request_hash": request_hash,
@@ -237,9 +279,62 @@ class Engine:
             }
             return tx.state["calls"][call_id]
 
+    def begin_tool_fragment(self, run_id, context, call_id, name):
+        """Open a streamed-argument call; nothing can dispatch until it completes."""
+        with self.database.transaction(run_id) as tx:
+            self._context(tx.state, run_id, context)
+            if call_id in tx.state["calls"]:
+                raise ValueError("IDEMPOTENCY_CONFLICT")
+            event = tx.event(
+                "provider", "tool.assembling", {"call_id": call_id, "tool": name}
+            )
+            tx.state["calls"][call_id] = {
+                "request_hash": digest({"name": name, "assembling": True}),
+                "state": "assembling",
+                "result": None,
+                "request_event_id": event,
+                "tool": name,
+            }
+
+    def complete_tool_fragment(self, run_id, context, call_id, fragment_json):
+        """Dispatch only once the accumulated arguments are one complete JSON object."""
+        state = self.database.get(run_id)
+        call = state["calls"].get(call_id)
+        if not call or call["state"] != "assembling":
+            raise ValueError("CALL_NOT_ASSEMBLING")
+        try:
+            arguments = json.loads(fragment_json)
+        except ValueError:
+            raise ValueError("INCOMPLETE_TOOL_ARGUMENTS") from None
+        if not isinstance(arguments, dict):
+            raise ValueError("INCOMPLETE_TOOL_ARGUMENTS")
+        return self.tool(run_id, context, call_id, call["tool"], arguments)
+
+    @staticmethod
+    def _cancel_unstarted(tx, reason):
+        """Settle every call that has not begun execution without dispatching it."""
+        for call_id, call in tx.state["calls"].items():
+            if call["result"] is not None:
+                continue
+            abandoned = call["state"] == "assembling"
+            kind = "abandoned" if abandoned else "cancelled_before_execution"
+            code = "ABANDONED" if abandoned else "CANCELLED_BEFORE_EXECUTION"
+            event = tx.event(
+                "mcp", "tool." + kind, {"call_id": call_id, "reason": reason}
+            )
+            call["state"] = kind
+            call["result"] = Result(
+                call_id=call_id,
+                status="cancelled",
+                structured_content=None,
+                error_code=code,
+                evidence_event_ids=[event],
+            ).model_dump()
+
     def _tool(
         self, run_id, context, call_id, name, arguments, *, cancel_before_dispatch=False
     ):
+        started = time.perf_counter()
         with self.database.transaction(run_id) as tx:
             state = tx.state
             self._context(state, run_id, context)
@@ -296,9 +391,17 @@ class Engine:
                     "decision",
                     {
                         "call_id": call_id,
-                        "action": "allow",
                         "argument_hash": request_hash,
-                        "policy_version": "strict-v1",
+                        **decision_record(
+                            "tool",
+                            "allow",
+                            policy_id="banking.v1.tool_authorization",
+                            policy_version="strict-v1",
+                            reason_codes=["POLICY_SATISFIED"],
+                            input_hash=request_hash,
+                            evidence_event_ids=[requested],
+                            started=started,
+                        ),
                     },
                     causes=[requested],
                 )
@@ -332,7 +435,20 @@ class Engine:
                 tx.event(
                     "guardrail",
                     "decision",
-                    {"call_id": call_id, "action": "deny", "reason_code": code},
+                    {
+                        "call_id": call_id,
+                        "reason_code": code,
+                        **decision_record(
+                            "tool",
+                            "deny",
+                            policy_id="banking.v1.tool_authorization",
+                            policy_version="strict-v1",
+                            reason_codes=[code],
+                            input_hash=request_hash,
+                            evidence_event_ids=[requested],
+                            started=started,
+                        ),
+                    },
                     causes=[requested],
                 )
             outcome = tx.event(
@@ -695,6 +811,19 @@ class Engine:
             )
             return {"accepted": True, "confirmation_id": confirmation_id}
 
+    @staticmethod
+    def _cancel_generation(state):
+        """Advance the epoch and discard (never release) unreleased units."""
+        state["generation_epoch"] += 1
+        state["tokens"].clear()
+        discarded = []
+        for unit in state["units"].values():
+            if unit["state"] in {"pending", "approved"}:
+                unit["state"] = "discarded"
+                unit.pop("pcm", None)
+                discarded.append(unit["unit_id"])
+        return discarded
+
     def hold_audio(
         self,
         run_id,
@@ -707,6 +836,7 @@ class Engine:
     ):
         if not pcm or len(pcm) % 2:
             raise ValueError("INVALID_PCM")
+        overflow = None
         with self.database.transaction(run_id) as tx:
             state = tx.state
             if state["state"] not in {"queued", "running"}:
@@ -720,43 +850,84 @@ class Engine:
                     and u["observed_samples"] < u["end_sample"]
                 )
             )
-            if len(pcm) + buffered > self.MAX_AUDIO_BYTES:
-                raise ValueError("AUDIO_BACKPRESSURE")
-            unit_id = identifier("unit")
-            unit = {
-                "unit_id": unit_id,
-                "state": "pending",
-                "audio_sha256": hashlib.sha256(pcm).hexdigest(),
-                "response_id": response_id
-                or state.get("response_id")
-                or identifier("response"),
-                "transcript_revision_id": identifier("transcript"),
-                "pcm": base64.b64encode(pcm).decode(),
-                "byte_count": len(pcm),
-                "start_sample": 0,
-                "end_sample": len(pcm) // 2,
-                "generation_epoch": state["generation_epoch"],
-                "assessment_epoch": state["assessment_epoch"],
-                "codec": "pcm_s16le",
-                "rate": 24000,
-                "channels": 1,
-                "transcript": transcript,
-                "final": final,
-                "assessable": assessable,
-                "observed_samples": 0,
-                "policy_version": state["config"].get("policy_profile", "strict-v1"),
-            }
-            state["units"][unit_id] = unit
-            tx.event(
-                "provider",
-                "audio.output",
-                {k: v for k, v in unit.items() if k != "pcm"},
-            )
-            return unit_id
+            limit = self.limits["pending_audio_bytes"]
+            if len(pcm) + buffered > limit:
+                # Overflow: the incoming unit is never buffered, unreleased audio is
+                # discarded (never flushed to the device) and generation is cancelled.
+                discarded = self._cancel_generation(state)
+                tx.event(
+                    "orchestrator",
+                    "audio.backpressure",
+                    {
+                        "failure_code": "AUDIO_BACKPRESSURE",
+                        "buffered_bytes": buffered,
+                        "incoming_bytes": len(pcm),
+                        "limit_bytes": limit,
+                        "discarded_unit_ids": discarded,
+                        "generation_epoch": state["generation_epoch"],
+                        "provider_cancellation": "requested",
+                        "fallback_audio": "none_configured",
+                    },
+                )
+                overflow = ValueError("AUDIO_BACKPRESSURE")
+            else:
+                unit_id = identifier("unit")
+                unit = {
+                    "unit_id": unit_id,
+                    "state": "pending",
+                    "audio_sha256": hashlib.sha256(pcm).hexdigest(),
+                    "response_id": response_id
+                    or state.get("response_id")
+                    or identifier("response"),
+                    "transcript_revision_id": identifier("transcript"),
+                    "pcm": base64.b64encode(pcm).decode(),
+                    "byte_count": len(pcm),
+                    "start_sample": 0,
+                    "end_sample": len(pcm) // 2,
+                    "generation_epoch": state["generation_epoch"],
+                    "assessment_epoch": state["assessment_epoch"],
+                    "codec": "pcm_s16le",
+                    "rate": 24000,
+                    "channels": 1,
+                    "transcript": transcript,
+                    "final": final,
+                    "assessable": assessable,
+                    "observed_samples": 0,
+                    "alignment_source": "whole_response_no_alignment",
+                    "created_at": self.clock(),
+                    "policy_version": state["config"].get(
+                        "policy_profile", "strict-v1"
+                    ),
+                }
+                state["units"][unit_id] = unit
+                unit["output_event_id"] = tx.event(
+                    "provider",
+                    "audio.output",
+                    {
+                        k: v
+                        for k, v in unit.items()
+                        if k not in {"pcm", "output_event_id"}
+                    },
+                )
+                tx.event(
+                    "playback",
+                    "playback.hold",
+                    {
+                        "unit_id": unit_id,
+                        "response_id": unit["response_id"],
+                        "risk_mode": "pessimistic_hold",
+                        "filler": "none",
+                    },
+                    causes=[unit["output_event_id"]],
+                )
+        if overflow:
+            raise overflow
+        return unit_id
 
     def approve_audio(
         self, run_id, unit_id, *, scripted_safe: bool, exploratory_unreviewed=False
     ):
+        started = time.perf_counter()
         with self.database.transaction(run_id) as tx:
             if tx.state["state"] not in {"queued", "running"}:
                 raise ValueError("RUN_TERMINAL")
@@ -768,6 +939,49 @@ class Engine:
                 raise ValueError("UNREVIEWED_RELEASE_NOT_PERMITTED")
             if unit["state"] != "pending":
                 raise ValueError("INVALID_APPROVAL_STATE")
+            audio_policy = {
+                "policy_id": "banking.v1.playback_release",
+                "policy_version": unit["policy_version"],
+                "input_hash": unit["audio_sha256"],
+                "evidence_event_ids": [unit["output_event_id"]],
+                "started": started,
+            }
+            waited = self.clock() - unit["created_at"]
+            if waited > self.limits["semantic_decision_timeout_seconds"]:
+                # A late decision is a typed failure: discard, cancel generation.
+                unit["state"] = "expired"
+                unit.pop("pcm", None)
+                discarded = self._cancel_generation(tx.state)
+                failure = tx.event(
+                    "orchestrator",
+                    "audio.decision_timeout",
+                    {
+                        "failure_code": "DECISION_TIMEOUT",
+                        "unit_id": unit_id,
+                        "waited_seconds": waited,
+                        "limit_seconds": self.limits[
+                            "semantic_decision_timeout_seconds"
+                        ],
+                        "discarded_unit_ids": discarded,
+                        "generation_epoch": tx.state["generation_epoch"],
+                        "provider_cancellation": "requested",
+                    },
+                )
+                tx.event(
+                    "guardrail",
+                    "decision",
+                    {
+                        "unit_id": unit_id,
+                        **decision_record(
+                            "audio_chunk",
+                            "deny",
+                            reason_codes=["DECISION_TIMEOUT"],
+                            **{**audio_policy, "evidence_event_ids": [failure]},
+                        ),
+                    },
+                    causes=[failure],
+                )
+                return None
             if not exploratory_unreviewed and (
                 not unit["final"] or not unit["assessable"] or not scripted_safe
             ):
@@ -778,9 +992,14 @@ class Engine:
                     "decision",
                     {
                         "unit_id": unit_id,
-                        "action": "deny",
                         "reason": "UNASSESSABLE_OR_UNSAFE",
                         "assessment_source": "controlled_fixture",
+                        **decision_record(
+                            "audio_chunk",
+                            "deny",
+                            reason_codes=["UNASSESSABLE_OR_UNSAFE"],
+                            **audio_policy,
+                        ),
                     },
                 )
                 return None
@@ -809,7 +1028,18 @@ class Engine:
             decision = tx.event(
                 "guardrail",
                 "decision",
-                {**token, "action": "allow", "assessment_source": "controlled_fixture"},
+                {
+                    **token,
+                    "assessment_source": "controlled_fixture",
+                    **decision_record(
+                        "audio_chunk",
+                        "allow",
+                        reason_codes=["SCRIPTED_ASSESSMENT_SAFE"]
+                        if not exploratory_unreviewed
+                        else ["UNREVIEWED_RELEASE"],
+                        **audio_policy,
+                    ),
+                },
             )
             token["decision_id"] = decision
             token = sign(token, tx.state["isolation_key"])
@@ -949,6 +1179,7 @@ class Engine:
                     "assessment_epoch": tx.state["assessment_epoch"],
                     "transcript": new_transcript,
                     "transcript_revision_id": revision_id,
+                    "created_at": self.clock(),
                 }
                 tx.state["units"][replacement] = new_unit
                 tx.event(
@@ -1017,21 +1248,7 @@ class Engine:
                     if unit["state"] in {"pending", "approved", "scheduled"}:
                         unit["state"] = "discarded"
                         unit.pop("pcm", None)
-                for call_id, call in tx.state["calls"].items():
-                    if call["result"] is None:
-                        event = tx.event(
-                            "mcp",
-                            "tool.cancelled_before_execution",
-                            {"call_id": call_id, "reason": "RECOVERY_BEFORE_DISPATCH"},
-                        )
-                        call["state"] = "cancelled_before_execution"
-                        call["result"] = Result(
-                            call_id=call_id,
-                            status="cancelled",
-                            structured_content=None,
-                            error_code="CANCELLED_BEFORE_EXECUTION",
-                            evidence_event_ids=[event],
-                        ).model_dump()
+                self._cancel_unstarted(tx, "RECOVERY_BEFORE_DISPATCH")
                 tx.event(
                     "orchestrator",
                     "run.recovery_required",
@@ -1045,31 +1262,44 @@ class Engine:
                 )
         return runs
 
+    @staticmethod
+    def _unresolved(state):
+        return sorted(
+            call_id
+            for call_id, call in state["calls"].items()
+            if call["state"] == "outcome_unknown"
+        )
+
     def cancel(self, run_id, reason):
         with self.database.transaction(run_id) as tx:
             if tx.state["state"] in {"completed", "cancelled", "failed"}:
                 return tx.state["state"]
-            tx.state["generation_epoch"] += 1
-            tx.state["tokens"].clear()
-            for call_id, call in tx.state["calls"].items():
-                if call["result"] is None:
-                    event = tx.event(
-                        "mcp",
-                        "tool.cancelled_before_execution",
-                        {"call_id": call_id, "reason": reason},
-                    )
-                    call["state"] = "cancelled_before_execution"
-                    call["result"] = Result(
-                        call_id=call_id,
-                        status="cancelled",
-                        structured_content=None,
-                        error_code="CANCELLED_BEFORE_EXECUTION",
-                        evidence_event_ids=[event],
-                    ).model_dump()
-            for unit in tx.state["units"].values():
-                if unit["state"] in {"pending", "approved", "scheduled"}:
-                    unit["state"] = "discarded"
-                    unit.pop("pcm", None)
+            if tx.state["state"] == "cancel_requested":
+                if self._unresolved(tx.state):
+                    return "cancel_requested"
+            else:
+                tx.state["generation_epoch"] += 1
+                tx.state["tokens"].clear()
+                self._cancel_unstarted(tx, reason)
+                for unit in tx.state["units"].values():
+                    if unit["state"] in {"pending", "approved", "scheduled"}:
+                        unit["state"] = "discarded"
+                        unit.pop("pcm", None)
+            unresolved = self._unresolved(tx.state)
+            if unresolved:
+                # Cancellation stays nonterminal until pending bank outcomes are
+                # reconciled or the run is explicitly closed as failed.
+                tx.state["state"] = "cancel_requested"
+                tx.event(
+                    "orchestrator",
+                    "run.cancel_requested",
+                    {
+                        "reason": reason,
+                        "generation_epoch": tx.state["generation_epoch"],
+                        "unresolved_call_ids": unresolved,
+                    },
+                )
+                return "cancel_requested"
             tx.event(
                 "orchestrator",
                 "run.cancelled",
@@ -1078,17 +1308,100 @@ class Engine:
             tx.state["state"] = "cancelled"
             return "cancelled"
 
+    def reconcile_tool(
+        self, run_id, call_id, outcome, *, structured_content=None, error_code=None
+    ):
+        """Append authoritative evidence for an outcome_unknown call."""
+        statuses = {
+            "completed": "success",
+            "failed": "error",
+            "cancelled_before_execution": "cancelled",
+        }
+        if outcome not in statuses:
+            raise ValueError("INVALID_RECONCILIATION_OUTCOME")
+        with self.database.transaction(run_id) as tx:
+            call = tx.state["calls"][call_id]
+            if call["state"] != "outcome_unknown":
+                raise ValueError("CALL_NOT_UNRESOLVED")
+            event = tx.event(
+                "mcp",
+                "tool.reconciled",
+                {"call_id": call_id, "from": "outcome_unknown", "to": outcome},
+            )
+            call["state"] = outcome
+            call["result"] = Result(
+                call_id=call_id,
+                status=statuses[outcome],
+                structured_content=structured_content,
+                error_code=error_code,
+                evidence_event_ids=[event],
+            ).model_dump()
+            if tx.state["state"] == "cancel_requested" and not self._unresolved(
+                tx.state
+            ):
+                tx.event(
+                    "orchestrator",
+                    "run.cancelled",
+                    {
+                        "reason": "reconciled",
+                        "generation_epoch": tx.state["generation_epoch"],
+                    },
+                    causes=[event],
+                )
+                tx.state["state"] = "cancelled"
+            return call["result"]
+
+    def close_unresolved(self, run_id, reason):
+        """Explicitly fail a cancelling run that still has unknown outcomes."""
+        with self.database.transaction(run_id) as tx:
+            unresolved = self._unresolved(tx.state)
+            if tx.state["state"] != "cancel_requested" or not unresolved:
+                raise ValueError("NO_UNRESOLVED_CANCELLATION")
+            tx.event(
+                "orchestrator",
+                "run.failed",
+                {
+                    "reason": "UNRESOLVED_TOOL_OUTCOME",
+                    "close_reason": reason,
+                    "unresolved_call_ids": unresolved,
+                },
+            )
+            tx.state["state"] = "failed"
+            return "failed"
+
     def interrupt(self, run_id):
         with self.database.transaction(run_id) as tx:
             tx.state["generation_epoch"] += 1
             tx.state["tokens"].clear()
+            # Barge-in before dispatch atomically prevents dispatch (spec section 13).
+            self._cancel_unstarted(tx, "INTERRUPTED_BEFORE_DISPATCH")
+            offsets = []
             for unit in tx.state["units"].values():
                 if unit["state"] in {"pending", "approved", "scheduled"}:
+                    scheduled = unit["state"] == "scheduled"
+                    offsets.append(
+                        {
+                            "unit_id": unit["unit_id"],
+                            "prior_state": unit["state"],
+                            "last_scheduled_sample": unit["end_sample"]
+                            if scheduled
+                            else 0,
+                            "last_observed_sample": unit["observed_samples"],
+                            "residual_samples": unit["end_sample"]
+                            - unit["observed_samples"]
+                            if scheduled
+                            else 0,
+                        }
+                    )
                     unit["state"] = "discarded"
                     unit.pop("pcm", None)
             tx.event(
                 "orchestrator",
                 "session.interrupted",
-                {"generation_epoch": tx.state["generation_epoch"]},
+                {
+                    "generation_epoch": tx.state["generation_epoch"],
+                    "playback_offsets": offsets,
+                    "provider_cancellation": "requested",
+                },
             )
             return tx.state["generation_epoch"]

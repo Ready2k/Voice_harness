@@ -250,17 +250,21 @@ class RunTransaction:
     def event(self, source, kind, content, *, causes=()):
         if self.database.fail_writes:
             raise OSError("EVIDENCE_UNAVAILABLE")
-        from .contracts import CONFIRMATION_EVENTS
+        from .contracts import EVENT_CONTRACTS
 
-        if kind in CONFIRMATION_EVENTS:
-            CONFIRMATION_EVENTS[kind].model_validate(content)
+        if kind in EVENT_CONTRACTS:
+            EVENT_CONTRACTS[kind].model_validate(content)
 
         def evidence_ids(value):
             if isinstance(value, dict):
                 for key, item in value.items():
                     if key in {"native_envelope", "provider_event"}:
                         continue  # Untrusted native payload is evidence data.
-                    if key in {"evidence_event_ids", "presentation_event_ids"}:
+                    if key in {
+                        "evidence_event_ids",
+                        "presentation_event_ids",
+                        "observed_event_ids",
+                    }:
                         yield from item
                     else:
                         yield from evidence_ids(item)
@@ -311,7 +315,11 @@ class RunTransaction:
             content.get("tool") == "verify_identity"
             and content.get("arguments", {}).get("answer") == "[REDACTED]"
         ):
-            event.redaction = {"applied": True, "fields": ["content.arguments.answer"]}
+            event.redaction = {
+                "applied": True,
+                "fields": ["content.arguments.answer"],
+                "reasons": {"content.arguments.answer": "CHALLENGE_ANSWER_SECRET"},
+            }
         event.seal(previous)
         self.db.execute(
             "INSERT INTO harness_events VALUES (?, ?, ?, ?)",

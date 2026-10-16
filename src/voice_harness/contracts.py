@@ -99,11 +99,20 @@ class CancelRun(Closed):
 
 
 class HoldRequest(Closed):
+    """Preservation hold: exactly one of finding_ids or an explicit run-wide scope."""
+
     reason: Annotated[str, Field(min_length=1, max_length=500)]
     owner_id: Identifier
-    expires_at: float
-    run_wide: Literal[True] = True
+    expires_at: float | None = None  # default: 90 days from request
+    finding_ids: Annotated[list[Identifier], Field(min_length=1, max_length=100)] | None = None
+    run_wide: bool = False
     idempotency_key: Identifier
+
+    @model_validator(mode="after")
+    def exactly_one_scope(self):
+        if bool(self.finding_ids) == self.run_wide:
+            raise ValueError("HOLD_SCOPE_REQUIRED")
+        return self
 
 
 class RenewHold(Closed):
@@ -247,6 +256,142 @@ CONFIRMATION_EVENTS = {
     "confirmation.accepted": ConfirmationAccepted,
     "confirmation.rejected": ConfirmationRejected,
     "confirmation.consumed": ConfirmationConsumed,
+}
+
+
+Sha256Prefixed = Annotated[str, Field(pattern="^sha256:[0-9a-f]{64}$")]
+
+
+class PolicyDecision(Closed):
+    """Spec section 6 decision record; decision_id is the ledger event id."""
+
+    decision_id: Identifier
+    target: Literal["tool", "audio_chunk", "transcript", "session"]
+    action: Literal["allow", "deny", "modify", "hold", "release", "escalate"]
+    policy_id: Identifier
+    policy_version: Identifier
+    reason_codes: list[Identifier]
+    input_hash: Sha256Prefixed
+    evidence_event_ids: list[Identifier]
+    latency_ms: Annotated[float, Field(ge=0)]
+
+
+class TranscriptRevised(Closed):
+    unit_id: Identifier
+    old: str
+    new: str
+    old_state: Identifier
+    source: Literal["independent_fixture", "provider", "independent_asr"]
+    old_revision_id: Identifier
+    new_revision_id: Identifier
+    affected_sample_range: Annotated[list[int], Field(min_length=2, max_length=2)]
+    alignment_known: bool
+    assessment_epoch: int
+
+
+class AudioOutputUnit(Closed):
+    """Immutable approval unit content (spec section 6)."""
+
+    unit_id: Identifier
+    state: Literal["pending"]
+    audio_sha256: Annotated[str, Field(pattern="^[0-9a-f]{64}$")]
+    response_id: Identifier
+    transcript_revision_id: Identifier
+    byte_count: int
+    start_sample: int
+    end_sample: int
+    generation_epoch: int
+    assessment_epoch: int
+    codec: Literal["pcm_s16le"]
+    rate: Literal[24000]
+    channels: Literal[1]
+    transcript: str
+    final: bool
+    assessable: bool
+    observed_samples: int
+    alignment_source: Identifier
+    created_at: float
+    policy_version: Identifier
+
+
+class HoldScope(Closed):
+    type: Literal["run", "findings"]
+    finding_ids: list[Identifier]
+    event_ids: list[Identifier] | Literal["all_run_events"]
+    artifact_hashes: list[Annotated[str, Field(pattern="^[0-9a-f]{64}$")]]
+    fixture_snapshot_id: str | None
+    scenario_id: str | None
+    policy_profile: str | None
+    includes_manifest: bool
+
+
+class HoldHistory(Closed):
+    action: Literal["activated", "renewed", "released"]
+    at: float
+    by: Identifier
+    expires_at: float | None = None
+    previous_expiry: float | None = None
+    reason: str | None = None
+
+
+class HoldRecord(Closed):
+    """Response body for preservation-hold creation, renewal and release."""
+
+    hold_id: Identifier
+    run_id: Identifier
+    reason: str
+    owner_id: Identifier
+    requester_id: Identifier
+    created_at: float
+    expires_at: float
+    released_at: float | None
+    release_reason: str | None
+    access_classification: Literal["restricted_review"]
+    scope: HoldScope
+    history: list[HoldHistory]
+    audit_event_id: Identifier
+    artifact_availability: dict[str, bool]
+    expiry_notice_recorded: bool = False
+
+
+class SimulatorBranchSelected(Closed):
+    decision_id: Identifier
+    previous_node: Identifier
+    previous_state_hash: Sha256Prefixed
+    branch_policy_id: Identifier
+    branch_policy_version: Identifier
+    branch_policy_hash: Sha256Prefixed
+    observed_event_ids: list[Identifier]
+    eligible_branch_ids: list[Identifier]
+    predicate_results: dict[str, bool]
+    selected_branch_id: Identifier
+    selection_method: Literal["scripted", "seeded", "model"]
+    selector_model_config_hash: str | None
+    seed: int | None
+    random_draw: float | None
+    next_node: Identifier
+    terminate: bool
+    fallback_used: bool
+
+
+class SimulatorUtteranceGenerated(Closed):
+    decision_id: Identifier
+    output_text: str
+    output_text_sha256: Annotated[str, Field(pattern="^[0-9a-f]{64}$")]
+    output_audio_sha256: str | None
+    audio_capture: Literal["not_generated_fixture", "retained", "disabled"]
+
+
+SIMULATOR_EVENTS = {
+    "simulator.branch_selected": SimulatorBranchSelected,
+    "simulator.utterance_generated": SimulatorUtteranceGenerated,
+}
+
+EVENT_CONTRACTS = {
+    **CONFIRMATION_EVENTS,
+    **SIMULATOR_EVENTS,
+    "transcript.revised": TranscriptRevised,
+    "audio.output": AudioOutputUnit,
 }
 
 

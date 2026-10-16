@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Immutable approval unit content (spec section 6).",
+  "properties": {
+    "unit_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Unit Id",
+      "type": "string"
+    },
+    "state": {
+      "const": "pending",
+      "title": "State",
+      "type": "string"
+    },
+    "audio_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Audio Sha256",
+      "type": "string"
+    },
+    "response_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Response Id",
+      "type": "string"
+    },
+    "transcript_revision_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Transcript Revision Id",
+      "type": "string"
+    },
+    "byte_count": {
+      "title": "Byte Count",
+      "type": "integer"
+    },
+    "start_sample": {
+      "title": "Start Sample",
+      "type": "integer"
+    },
+    "end_sample": {
+      "title": "End Sample",
+      "type": "integer"
+    },
+    "generation_epoch": {
+      "title": "Generation Epoch",
+      "type": "integer"
+    },
+    "assessment_epoch": {
+      "title": "Assessment Epoch",
+      "type": "integer"
+    },
+    "codec": {
+      "const": "pcm_s16le",
+      "title": "Codec",
+      "type": "string"
+    },
+    "rate": {
+      "const": 24000,
+      "title": "Rate",
+      "type": "integer"
+    },
+    "channels": {
+      "const": 1,
+      "title": "Channels",
+      "type": "integer"
+    },
+    "transcript": {
+      "title": "Transcript",
+      "type": "string"
+    },
+    "final": {
+      "title": "Final",
+      "type": "boolean"
+    },
+    "assessable": {
+      "title": "Assessable",
+      "type": "boolean"
+    },
+    "observed_samples": {
+      "title": "Observed Samples",
+      "type": "integer"
+    },
+    "alignment_source": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Alignment Source",
+      "type": "string"
+    },
+    "created_at": {
+      "title": "Created At",
+      "type": "number"
+    },
+    "policy_version": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Policy Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "unit_id",
+    "state",
+    "audio_sha256",
+    "response_id",
+    "transcript_revision_id",
+    "byte_count",
+    "start_sample",
+    "end_sample",
+    "generation_epoch",
+    "assessment_epoch",
+    "codec",
+    "rate",
+    "channels",
+    "transcript",
+    "final",
+    "assessable",
+    "observed_samples",
+    "alignment_source",
+    "created_at",
+    "policy_version"
+  ],
+  "title": "AudioOutputUnit",
+  "type": "object"
+}
