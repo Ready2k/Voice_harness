@@ -34,7 +34,7 @@ Historical artifacts: `artifacts/phase1-baseline.json` records connection-per-ev
 
 These measurements include no live ASR, provider latency or physical browser/DAC path. The canonical artifact's source hash identifies the benchmarked revision; subsequent trace-propagation changes were tested but not re-benchmarked.
 
-The spec's §16 requirement to commit the measurement baseline remains outstanding: this workspace has no Git repository. The artifact and executable `make benchmark` command exist locally, but timing targets remain **provisional**, not established. Git initialisation and a baseline commit have not been performed.
+The spec's §16 baseline commit is recorded: git was initialised on 2026-10-16 and commit `b548b98` (tag `phase1-baseline`) includes the measurement artifacts. Timing targets nonetheless remain **provisional**, not established, until the Compose-backed re-run and the remaining conformance work below are complete.
 
 ## Latest validation (16 October 2026)
 
@@ -51,7 +51,7 @@ The whole Phase 1 release is not yet formally complete:
 - The reference client is not a complete operator review UI.
 - A final requirement-by-requirement conformance audit is still needed for exhaustive record metadata/examples, retention lifecycle, queue accounting and finding-scoped preservation dependency closure.
 - AC-15 needs explicit evidence for unsolicited and cross-session confirmation rejection and direct changed-payee invalidation, rather than inferring coverage from related binding tests.
-- The expanded 59-test suite needs a fresh PostgreSQL-backed Compose validation, and the measurement baseline must be committed before timing targets can be treated as established.
+- The expanded 59-test suite needs a fresh PostgreSQL-backed Compose validation.
 - Confirmation and semantic safety checks use labelled scripted fixtures, not live voice recognition or independently calibrated judges.
 
 ## Phase 2 adapter prerequisite

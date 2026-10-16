@@ -10,6 +10,6 @@ Status: **APPROVED by user 2026-10-16.** Each restates a spec default; none is n
 | D-04 | Retention: metadata 30 days; synthetic audio opt-in, 7 days; secrets never retained in general telemetry; purge appends a tombstone. | spec l.582 |
 | D-05 | Privacy: minimal retention by default; replay suites explicitly enable audio retention; holds override expiry but not secret exclusion. | spec l.582-590, l.1010 |
 | D-06 | Capability reports expire after 7 days and invalidate on config/SDK/endpoint/model change; fail closed on missing primitives. | spec §3 |
-| D-07 | Schema freeze: `contracts/` JSON Schemas and event models are the Phase 1 baseline. Freezing means a version tag and change-control rule, not an edit. | spec §16 |
+| D-07 | Schema freeze: `contracts/` JSON Schemas and event models are the Phase 1 baseline. Frozen at git tag `phase1-baseline` (commit b548b98); later changes to `contracts/` or event models require a new schema version and a recorded decision. | spec §16 |
 
 Not decided (need user/provider input): supported input codecs beyond PCM, any jurisdiction-specific retention duty.
