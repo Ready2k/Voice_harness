@@ -1,0 +1,214 @@
+{
+  "run-config": {},
+  "tool-result": {
+    "call_id": "fixture",
+    "status": "success",
+    "structured_content": {},
+    "error_code": "fixture",
+    "evidence_event_ids": []
+  },
+  "preservation-hold": {
+    "reason": "fixture",
+    "owner_id": "fixture",
+    "expires_at": 1,
+    "idempotency_key": "fixture"
+  },
+  "approval-token": {
+    "token_id": "fixture",
+    "unit_id": "fixture",
+    "audio_sha256": "3dc463a76fc170607c07b104c3cb531362ce7d6e10c1a34e0c0f370aeae08ce8",
+    "session_id": "fixture",
+    "generation_epoch": 1,
+    "assessment_epoch": 1,
+    "start_sample": 0,
+    "end_sample": 480,
+    "expires_at": 2000,
+    "risk_mode": "pessimistic_hold",
+    "codec": "pcm_s16le",
+    "rate": 24000,
+    "channels": 1,
+    "transcript_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "policy_version": "fixture",
+    "decision_id": "fixture",
+    "signature": "BA1/qR2OOMZUwvE3jmjIlVHXje+HqlrxtGCZrz8ASkTMwTIMviTzWzpgQKD7w7RuK9XJTKlTInUtOz3N41EyDQ=="
+  },
+  "audio-input": {
+    "bytes": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "stream_id": "fixture",
+    "chunk_sequence": 1,
+    "start_sample": 0,
+    "end_sample": 480,
+    "codec": "pcm_s16le",
+    "rate": 24000,
+    "channels": 1
+  },
+  "verify_identity.arguments": {
+    "challenge_id": "fixture",
+    "answer": "fixture"
+  },
+  "get_account_summary.arguments": {
+    "account_id": "fixture"
+  },
+  "list_recent_transactions.arguments": {
+    "account_id": "fixture",
+    "limit": 1
+  },
+  "get_transaction_details.arguments": {
+    "transaction_id": "fixture"
+  },
+  "create_payment.arguments": {
+    "account_id": "fixture",
+    "payee_id": "fixture",
+    "amount_minor": 1,
+    "currency": "GBP"
+  },
+  "cancel_payment.arguments": {
+    "payment_id": "fixture",
+    "confirmation_id": "fixture"
+  },
+  "raise_fraud_case.arguments": {
+    "transaction_ids": [
+      "fixture"
+    ],
+    "reason": "fixture"
+  },
+  "transfer_to_human.arguments": {
+    "queue": "fraud",
+    "reason": "fixture"
+  },
+  "get_policy_text.arguments": {
+    "policy_id": "fixture",
+    "version": "fixture"
+  },
+  "verify_identity.result": {
+    "identity_state": "verified",
+    "attempts_remaining": 1
+  },
+  "get_account_summary.result": {
+    "account_id": "fixture",
+    "balance_minor": 1,
+    "available_minor": 1,
+    "currency": "GBP",
+    "as_of": "fixture"
+  },
+  "list_recent_transactions.result": {
+    "transactions": [],
+    "next_cursor": "fixture"
+  },
+  "get_transaction_details.result": {
+    "transaction_id": "fixture",
+    "account_id": "fixture",
+    "amount_minor": 1,
+    "currency": "GBP",
+    "status": "booked",
+    "booked_at": "fixture",
+    "description": "fixture"
+  },
+  "create_payment.result": {
+    "proposal_id": "fixture",
+    "proposal_hash": "fixture",
+    "expires_at": 1,
+    "status": "proposed"
+  },
+  "cancel_payment.result": {
+    "payment_id": "fixture",
+    "status": "cancelled"
+  },
+  "raise_fraud_case.result": {
+    "case_id": "fixture",
+    "status": "open"
+  },
+  "transfer_to_human.result": {
+    "handoff_id": "fixture",
+    "status": "queued"
+  },
+  "get_policy_text.result": {
+    "policy_id": "fixture",
+    "version": "fixture",
+    "text": "fixture",
+    "content_hash": "fixture"
+  },
+  "confirmation.requested": {
+    "request_id": "fixture",
+    "proposal_id": "fixture",
+    "proposal_hash": "fixture",
+    "action": "cancel",
+    "account_id": "fixture",
+    "payee_id": "fixture",
+    "amount_minor": 1,
+    "currency": "GBP",
+    "session_id": "fixture",
+    "identity_state_version": 1,
+    "presentation_event_ids": [],
+    "expires_at": "fixture",
+    "policy_version": "fixture"
+  },
+  "customer.confirmation_observed": {
+    "observation_id": "fixture",
+    "request_id": "fixture",
+    "channel": "voice",
+    "customer_turn_id": "fixture",
+    "evidence_event_ids": [],
+    "transcript_revision_id": "fixture",
+    "observed_choice": "affirm",
+    "source_message_id": "fixture"
+  },
+  "confirmation.accepted": {
+    "confirmation_id": "fixture",
+    "request_id": "fixture",
+    "observation_id": "fixture",
+    "proposal_hash": "fixture",
+    "session_id": "fixture",
+    "identity_state_version": 1,
+    "accepted_at": "fixture",
+    "expires_at": "fixture",
+    "authorizer_version": "fixture",
+    "evidence_event_ids": []
+  },
+  "confirmation.rejected": {
+    "request_id": "fixture",
+    "observation_id": "fixture",
+    "reason_code": "fixture",
+    "evidence_event_ids": []
+  },
+  "confirmation.consumed": {
+    "confirmation_id": "fixture",
+    "tool_call_id": "fixture",
+    "idempotency_key": "fixture",
+    "committed_outcome_id": "fixture"
+  },
+  "canonical-event": {
+    "run_id": "example",
+    "source": "orchestrator",
+    "type": "run.started",
+    "content": {},
+    "session_id": null,
+    "turn_id": null,
+    "response_id": null,
+    "causation_event_ids": [],
+    "provider_event_type": null,
+    "provider_event": {},
+    "sequence": 1,
+    "event_id": "evt_6aae43fedaad401b",
+    "occurred_at": "2026-10-16T21:09:12Z",
+    "monotonic_ns": 777280194325750,
+    "schema_version": "0.3",
+    "clock_domain_id": "process_bd71ce0b562749e5ade44cb1830d7003",
+    "prev_hash": null,
+    "event_hash": "2beb2f43ac39c490fe23d53dfa09b84b02e8d12b08209ddd8561f08609fa05fc",
+    "producer_id": "process_bd71ce0b562749e5ade44cb1830d7003",
+    "producer_sequence": 0,
+    "connection_epoch": 1,
+    "redaction": {
+      "applied": false,
+      "fields": []
+    },
+    "trace_context": {
+      "trace_id": null,
+      "span_id": null,
+      "parent_span_id": null,
+      "sampled": false,
+      "unknown_reason": "NO_ACTIVE_TRACE"
+    }
+  }
+}

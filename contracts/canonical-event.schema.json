@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "run_id",
+    "source",
+    "type",
+    "content",
+    "session_id",
+    "turn_id",
+    "response_id",
+    "causation_event_ids",
+    "provider_event_type",
+    "provider_event",
+    "sequence",
+    "event_id",
+    "occurred_at",
+    "monotonic_ns",
+    "schema_version",
+    "clock_domain_id",
+    "prev_hash",
+    "event_hash",
+    "producer_id",
+    "producer_sequence",
+    "connection_epoch",
+    "redaction",
+    "trace_context"
+  ],
+  "properties": {
+    "run_id": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string"
+    },
+    "content": {
+      "type": "object"
+    },
+    "session_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "turn_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "response_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "causation_event_ids": {
+      "type": "array"
+    },
+    "provider_event_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "provider_event": {
+      "type": "object"
+    },
+    "sequence": {
+      "type": "integer"
+    },
+    "event_id": {
+      "type": "string"
+    },
+    "occurred_at": {
+      "type": "string"
+    },
+    "monotonic_ns": {
+      "type": "integer"
+    },
+    "schema_version": {
+      "const": "0.3"
+    },
+    "clock_domain_id": {
+      "type": "string"
+    },
+    "prev_hash": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "event_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "producer_id": {
+      "type": "string"
+    },
+    "producer_sequence": {
+      "type": "integer"
+    },
+    "connection_epoch": {
+      "type": "integer"
+    },
+    "redaction": {
+      "type": "object"
+    },
+    "trace_context": {
+      "type": "object"
+    }
+  }
+}

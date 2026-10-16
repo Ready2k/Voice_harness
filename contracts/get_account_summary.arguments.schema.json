@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "account_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Account Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "account_id"
+  ],
+  "title": "AccountArgs",
+  "type": "object"
+}

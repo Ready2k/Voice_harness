@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "call_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Call Id",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "success",
+        "denied",
+        "error",
+        "cancelled",
+        "outcome_unknown"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "structured_content": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Structured Content"
+    },
+    "error_code": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Error Code"
+    },
+    "evidence_event_ids": {
+      "items": {
+        "maxLength": 200,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Evidence Event Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "call_id",
+    "status",
+    "structured_content",
+    "error_code",
+    "evidence_event_ids"
+  ],
+  "title": "Result",
+  "type": "object"
+}

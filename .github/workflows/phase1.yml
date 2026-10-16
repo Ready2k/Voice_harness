@@ -1,0 +1,13 @@
+name: Phase 1 deterministic checks
+on: [push, pull_request]
+jobs:
+  container-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - run: make test
+      - if: failure()
+        run: docker compose logs --tail=100 postgres
+      - if: always()
+        run: docker compose --profile infra down

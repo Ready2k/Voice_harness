@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "handoff_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Handoff Id",
+      "type": "string"
+    },
+    "status": {
+      "const": "queued",
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "handoff_id",
+    "status"
+  ],
+  "title": "HandoffResult",
+  "type": "object"
+}

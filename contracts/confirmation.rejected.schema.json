@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "request_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Request Id",
+      "type": "string"
+    },
+    "observation_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Observation Id"
+    },
+    "reason_code": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Reason Code",
+      "type": "string"
+    },
+    "evidence_event_ids": {
+      "items": {
+        "maxLength": 200,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Evidence Event Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "request_id",
+    "observation_id",
+    "reason_code",
+    "evidence_event_ids"
+  ],
+  "title": "ConfirmationRejected",
+  "type": "object"
+}

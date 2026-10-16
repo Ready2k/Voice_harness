@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "bytes": {
+      "maxLength": 4096,
+      "minLength": 1,
+      "title": "Bytes",
+      "type": "string"
+    },
+    "stream_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Stream Id",
+      "type": "string"
+    },
+    "chunk_sequence": {
+      "minimum": 1,
+      "title": "Chunk Sequence",
+      "type": "integer"
+    },
+    "start_sample": {
+      "minimum": 0,
+      "title": "Start Sample",
+      "type": "integer"
+    },
+    "end_sample": {
+      "exclusiveMinimum": 0,
+      "title": "End Sample",
+      "type": "integer"
+    },
+    "codec": {
+      "const": "pcm_s16le",
+      "title": "Codec",
+      "type": "string"
+    },
+    "rate": {
+      "const": 24000,
+      "title": "Rate",
+      "type": "integer"
+    },
+    "channels": {
+      "const": 1,
+      "title": "Channels",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "bytes",
+    "stream_id",
+    "chunk_sequence",
+    "start_sample",
+    "end_sample",
+    "codec",
+    "rate",
+    "channels"
+  ],
+  "title": "AudioInputPayload",
+  "type": "object"
+}

@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "confirmation_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Confirmation Id",
+      "type": "string"
+    },
+    "tool_call_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Tool Call Id",
+      "type": "string"
+    },
+    "idempotency_key": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Idempotency Key",
+      "type": "string"
+    },
+    "committed_outcome_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Committed Outcome Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "confirmation_id",
+    "tool_call_id",
+    "idempotency_key",
+    "committed_outcome_id"
+  ],
+  "title": "ConfirmationConsumed",
+  "type": "object"
+}

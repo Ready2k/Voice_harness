@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "transaction_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Transaction Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "transaction_id"
+  ],
+  "title": "TransactionArgs",
+  "type": "object"
+}

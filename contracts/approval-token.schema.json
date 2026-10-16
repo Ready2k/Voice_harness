@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "token_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Token Id",
+      "type": "string"
+    },
+    "unit_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Unit Id",
+      "type": "string"
+    },
+    "audio_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Audio Sha256",
+      "type": "string"
+    },
+    "session_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Session Id",
+      "type": "string"
+    },
+    "generation_epoch": {
+      "title": "Generation Epoch",
+      "type": "integer"
+    },
+    "assessment_epoch": {
+      "title": "Assessment Epoch",
+      "type": "integer"
+    },
+    "start_sample": {
+      "title": "Start Sample",
+      "type": "integer"
+    },
+    "end_sample": {
+      "title": "End Sample",
+      "type": "integer"
+    },
+    "expires_at": {
+      "title": "Expires At",
+      "type": "integer"
+    },
+    "risk_mode": {
+      "enum": [
+        "pessimistic_hold",
+        "unreviewed_release"
+      ],
+      "title": "Risk Mode",
+      "type": "string"
+    },
+    "codec": {
+      "const": "pcm_s16le",
+      "title": "Codec",
+      "type": "string"
+    },
+    "rate": {
+      "const": 24000,
+      "title": "Rate",
+      "type": "integer"
+    },
+    "channels": {
+      "const": 1,
+      "title": "Channels",
+      "type": "integer"
+    },
+    "transcript_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Transcript Sha256",
+      "type": "string"
+    },
+    "policy_version": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Policy Version",
+      "type": "string"
+    },
+    "decision_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Decision Id",
+      "type": "string"
+    },
+    "signature": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Signature",
+      "type": "string"
+    }
+  },
+  "required": [
+    "token_id",
+    "unit_id",
+    "audio_sha256",
+    "session_id",
+    "generation_epoch",
+    "assessment_epoch",
+    "start_sample",
+    "end_sample",
+    "expires_at",
+    "risk_mode",
+    "codec",
+    "rate",
+    "channels",
+    "transcript_sha256",
+    "policy_version",
+    "decision_id",
+    "signature"
+  ],
+  "title": "ApprovalToken",
+  "type": "object"
+}

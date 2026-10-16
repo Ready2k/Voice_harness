@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "proposal_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Proposal Id",
+      "type": "string"
+    },
+    "proposal_hash": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Proposal Hash",
+      "type": "string"
+    },
+    "expires_at": {
+      "title": "Expires At",
+      "type": "number"
+    },
+    "status": {
+      "const": "proposed",
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "proposal_id",
+    "proposal_hash",
+    "expires_at",
+    "status"
+  ],
+  "title": "PaymentResult",
+  "type": "object"
+}

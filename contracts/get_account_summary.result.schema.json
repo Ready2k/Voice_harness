@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "account_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Account Id",
+      "type": "string"
+    },
+    "balance_minor": {
+      "title": "Balance Minor",
+      "type": "integer"
+    },
+    "available_minor": {
+      "title": "Available Minor",
+      "type": "integer"
+    },
+    "currency": {
+      "const": "GBP",
+      "title": "Currency",
+      "type": "string"
+    },
+    "as_of": {
+      "title": "As Of",
+      "type": "string"
+    }
+  },
+  "required": [
+    "account_id",
+    "balance_minor",
+    "available_minor",
+    "currency",
+    "as_of"
+  ],
+  "title": "AccountResult",
+  "type": "object"
+}

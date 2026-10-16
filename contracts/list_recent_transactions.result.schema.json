@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "TransactionResult": {
+      "additionalProperties": false,
+      "properties": {
+        "transaction_id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Transaction Id",
+          "type": "string"
+        },
+        "account_id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Account Id",
+          "type": "string"
+        },
+        "amount_minor": {
+          "title": "Amount Minor",
+          "type": "integer"
+        },
+        "currency": {
+          "const": "GBP",
+          "title": "Currency",
+          "type": "string"
+        },
+        "status": {
+          "const": "booked",
+          "title": "Status",
+          "type": "string"
+        },
+        "booked_at": {
+          "title": "Booked At",
+          "type": "string"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        }
+      },
+      "required": [
+        "transaction_id",
+        "account_id",
+        "amount_minor",
+        "currency",
+        "status",
+        "booked_at",
+        "description"
+      ],
+      "title": "TransactionResult",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "transactions": {
+      "items": {
+        "$ref": "#/$defs/TransactionResult"
+      },
+      "title": "Transactions",
+      "type": "array"
+    },
+    "next_cursor": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Next Cursor"
+    }
+  },
+  "required": [
+    "transactions",
+    "next_cursor"
+  ],
+  "title": "TransactionsResult",
+  "type": "object"
+}

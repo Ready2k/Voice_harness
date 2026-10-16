@@ -1,0 +1,692 @@
+{
+  "schema_version": "0.3",
+  "benchmark_version": "phase1-reference-v1",
+  "status": "measured_microbenchmark",
+  "environment": {
+    "platform": "Linux-7.2.9-orbstack-00391-g2b298d05fbd4-aarch64-with-glibc2.36",
+    "python": "3.13.9",
+    "cpu_count": 12,
+    "max_rss_native_units": 51540,
+    "storage": "postgresql"
+  },
+  "config": {
+    "observations_per_profile": 1000,
+    "pace_ms": 20,
+    "warmup_per_worker": 10
+  },
+  "profiles": [
+    {
+      "sessions": 1,
+      "payload_scale": 1,
+      "instrumented": false,
+      "reference_bytes": 1323,
+      "binary_bytes": 968,
+      "pcm_bytes": 960,
+      "stages": {
+        "total_path": {
+          "count": 1000,
+          "min_ms": 1.053497,
+          "max_ms": 52.156524,
+          "p50_ms": 4.871153,
+          "p95_ms": 7.488771,
+          "p99_ms": 9.269516,
+          "p99_status": "descriptive"
+        }
+      },
+      "elapsed_seconds": 20.200851091999994,
+      "cpu_seconds": 1.9514808689999998,
+      "throughput_observations_s": 49.502864777614406,
+      "timeouts": 0,
+      "failures": 0,
+      "exclusions": [],
+      "queue_depth_max": 1,
+      "dropped_samples": 0,
+      "discontinuous_samples": 0
+    },
+    {
+      "sessions": 1,
+      "payload_scale": 1,
+      "instrumented": true,
+      "reference_bytes": 1323,
+      "binary_bytes": 968,
+      "pcm_bytes": 960,
+      "stages": {
+        "base64_json_encode": {
+          "count": 1000,
+          "min_ms": 0.006083,
+          "max_ms": 1.694704,
+          "p50_ms": 0.078209,
+          "p95_ms": 0.148375,
+          "p99_ms": 0.213874,
+          "p99_status": "descriptive"
+        },
+        "input_decode": {
+          "count": 1000,
+          "min_ms": 0.004542,
+          "max_ms": 1.008164,
+          "p50_ms": 0.047375,
+          "p95_ms": 0.080417,
+          "p99_ms": 0.125125,
+          "p99_status": "descriptive"
+        },
+        "binary_encode_decode": {
+          "count": 1000,
+          "min_ms": 0.00075,
+          "max_ms": 0.059666,
+          "p50_ms": 0.009709,
+          "p95_ms": 0.016166,
+          "p99_ms": 0.021833,
+          "p99_status": "descriptive"
+        },
+        "canonicalization_hash": {
+          "count": 1000,
+          "min_ms": 0.004666,
+          "max_ms": 0.262416,
+          "p50_ms": 0.064166,
+          "p95_ms": 0.112166,
+          "p99_ms": 0.167791,
+          "p99_status": "descriptive"
+        },
+        "durable_write": {
+          "count": 1000,
+          "min_ms": 0.862706,
+          "max_ms": 20.50436,
+          "p50_ms": 4.555279,
+          "p95_ms": 6.892064,
+          "p99_ms": 8.745726,
+          "p99_status": "descriptive"
+        },
+        "buffer_insert_read": {
+          "count": 1000,
+          "min_ms": 0.000458,
+          "max_ms": 0.092916,
+          "p50_ms": 0.005917,
+          "p95_ms": 0.009792,
+          "p99_ms": 0.018291,
+          "p99_status": "descriptive"
+        },
+        "total_path": {
+          "count": 1000,
+          "min_ms": 0.907956,
+          "max_ms": 22.278148,
+          "p50_ms": 4.78907,
+          "p95_ms": 7.25348,
+          "p99_ms": 9.028558,
+          "p99_status": "descriptive"
+        }
+      },
+      "elapsed_seconds": 20.203217626999958,
+      "cpu_seconds": 1.8051925740000003,
+      "throughput_observations_s": 49.497066183338106,
+      "timeouts": 0,
+      "failures": 0,
+      "exclusions": [],
+      "queue_depth_max": 1,
+      "dropped_samples": 0,
+      "discontinuous_samples": 0
+    },
+    {
+      "sessions": 1,
+      "payload_scale": 4,
+      "instrumented": false,
+      "reference_bytes": 5163,
+      "binary_bytes": 3848,
+      "pcm_bytes": 3840,
+      "stages": {
+        "total_path": {
+          "count": 1000,
+          "min_ms": 1.129622,
+          "max_ms": 31.074873,
+          "p50_ms": 5.303778,
+          "p95_ms": 8.020478,
+          "p99_ms": 10.328846,
+          "p99_status": "descriptive"
+        }
+      },
+      "elapsed_seconds": 20.202193708000095,
+      "cpu_seconds": 2.2304401390000006,
+      "throughput_observations_s": 49.49957487062401,
+      "timeouts": 0,
+      "failures": 0,
+      "exclusions": [],
+      "queue_depth_max": 1,
+      "dropped_samples": 0,
+      "discontinuous_samples": 0
+    },
+    {
+      "sessions": 1,
+      "payload_scale": 4,
+      "instrumented": true,
+      "reference_bytes": 5163,
+      "binary_bytes": 3848,
+      "pcm_bytes": 3840,
+      "stages": {
+        "base64_json_encode": {
+          "count": 1000,
+          "min_ms": 0.019875,
+          "max_ms": 0.979456,
+          "p50_ms": 0.121625,
+          "p95_ms": 0.208291,
+          "p99_ms": 0.356374,
+          "p99_status": "descriptive"
+        },
+        "input_decode": {
+          "count": 1000,
+          "min_ms": 0.017,
+          "max_ms": 0.515749,
+          "p50_ms": 0.075708,
+          "p95_ms": 0.131042,
+          "p99_ms": 0.208417,
+          "p99_status": "descriptive"
+        },
+        "binary_encode_decode": {
+          "count": 1000,
+          "min_ms": 0.002042,
+          "max_ms": 1.229288,
+          "p50_ms": 0.013167,
+          "p95_ms": 0.018958,
+          "p99_ms": 0.06525,
+          "p99_status": "descriptive"
+        },
+        "canonicalization_hash": {
+          "count": 1000,
+          "min_ms": 0.012625,
+          "max_ms": 0.501206,
+          "p50_ms": 0.078708,
+          "p95_ms": 0.148917,
+          "p99_ms": 0.231875,
+          "p99_status": "descriptive"
+        },
+        "durable_write": {
+          "count": 1000,
+          "min_ms": 0.848872,
+          "max_ms": 19.136656,
+          "p50_ms": 5.286902,
+          "p95_ms": 7.544187,
+          "p99_ms": 9.64589,
+          "p99_status": "descriptive"
+        },
+        "buffer_insert_read": {
+          "count": 1000,
+          "min_ms": 0.001042,
+          "max_ms": 0.091667,
+          "p50_ms": 0.011542,
+          "p95_ms": 0.018333,
+          "p99_ms": 0.044583,
+          "p99_status": "descriptive"
+        },
+        "total_path": {
+          "count": 1000,
+          "min_ms": 0.901831,
+          "max_ms": 19.316238,
+          "p50_ms": 5.627735,
+          "p95_ms": 7.949561,
+          "p99_ms": 10.040848,
+          "p99_status": "descriptive"
+        }
+      },
+      "elapsed_seconds": 20.203381157999956,
+      "cpu_seconds": 2.392487377,
+      "throughput_observations_s": 49.496665542244095,
+      "timeouts": 0,
+      "failures": 0,
+      "exclusions": [],
+      "queue_depth_max": 1,
+      "dropped_samples": 0,
+      "discontinuous_samples": 0
+    },
+    {
+      "sessions": 5,
+      "payload_scale": 1,
+      "instrumented": false,
+      "reference_bytes": 1323,
+      "binary_bytes": 968,
+      "pcm_bytes": 960,
+      "stages": {
+        "total_path": {
+          "count": 1000,
+          "min_ms": 0.915748,
+          "max_ms": 16.102164,
+          "p50_ms": 5.57886,
+          "p95_ms": 9.891181,
+          "p99_ms": 11.950842,
+          "p99_status": "descriptive"
+        }
+      },
+      "elapsed_seconds": 4.207865747999904,
+      "cpu_seconds": 1.3656353560000003,
+      "throughput_observations_s": 237.65016754047423,
+      "timeouts": 0,
+      "failures": 0,
+      "exclusions": [],
+      "queue_depth_max": 5,
+      "dropped_samples": 0,
+      "discontinuous_samples": 0
+    },
+    {
+      "sessions": 5,
+      "payload_scale": 1,
+      "instrumented": true,
+      "reference_bytes": 1323,
+      "binary_bytes": 968,
+      "pcm_bytes": 960,
+      "stages": {
+        "base64_json_encode": {
+          "count": 1000,
+          "min_ms": 0.005,
+          "max_ms": 0.360332,
+          "p50_ms": 0.025791,
+          "p95_ms": 0.091792,
+          "p99_ms": 0.133917,
+          "p99_status": "descriptive"
+        },
+        "input_decode": {
+          "count": 1000,
+          "min_ms": 0.003833,
+          "max_ms": 0.375666,
+          "p50_ms": 0.017292,
+          "p95_ms": 0.049125,
+          "p99_ms": 0.070291,
+          "p99_status": "descriptive"
+        },
+        "binary_encode_decode": {
+          "count": 1000,
+          "min_ms": 0.000542,
+          "max_ms": 0.104416,
+          "p50_ms": 0.003291,
+          "p95_ms": 0.011959,
+          "p99_ms": 0.019625,
+          "p99_status": "descriptive"
+        },
+        "canonicalization_hash": {
+          "count": 1000,
+          "min_ms": 0.00325,
+          "max_ms": 0.664081,
+          "p50_ms": 0.020791,
+          "p95_ms": 0.06925,
+          "p99_ms": 0.097041,
+          "p99_status": "descriptive"
+        },
+        "durable_write": {
+          "count": 1000,
+          "min_ms": 1.794745,
+          "max_ms": 22.764688,
+          "p50_ms": 7.371105,
+          "p95_ms": 10.51168,
+          "p99_ms": 12.746049,
+          "p99_status": "descriptive"
+        },
+        "buffer_insert_read": {
+          "count": 1000,
+          "min_ms": 0.000375,
+          "max_ms": 0.153833,
+          "p50_ms": 0.002,
+          "p95_ms": 0.005917,
+          "p99_ms": 0.008292,
+          "p99_status": "descriptive"
+        },
+        "total_path": {
+          "count": 1000,
+          "min_ms": 1.818245,
+          "max_ms": 22.901271,
+          "p50_ms": 7.469522,
+          "p95_ms": 10.629304,
+          "p99_ms": 12.857465,
+          "p99_status": "descriptive"
+        }
+      },
+      "elapsed_seconds": 4.203086177000159,
+      "cpu_seconds": 1.5096208969999996,
+      "throughput_observations_s": 237.92041321258927,
+      "timeouts": 0,
+      "failures": 0,
+      "exclusions": [],
+      "queue_depth_max": 5,
+      "dropped_samples": 0,
+      "discontinuous_samples": 0
+    },
+    {
+      "sessions": 5,
+      "payload_scale": 4,
+      "instrumented": false,
+      "reference_bytes": 5163,
+      "binary_bytes": 3848,
+      "pcm_bytes": 3840,
+      "stages": {
+        "total_path": {
+          "count": 1000,
+          "min_ms": 0.826456,
+          "max_ms": 13.962378,
+          "p50_ms": 6.830482,
+          "p95_ms": 10.451597,
+          "p99_ms": 12.216175,
+          "p99_status": "descriptive"
+        }
+      },
+      "elapsed_seconds": 4.207333332999951,
+      "cpu_seconds": 1.409256838000001,
+      "throughput_observations_s": 237.6802408681441,
+      "timeouts": 0,
+      "failures": 0,
+      "exclusions": [],
+      "queue_depth_max": 5,
+      "dropped_samples": 0,
+      "discontinuous_samples": 0
+    },
+    {
+      "sessions": 5,
+      "payload_scale": 4,
+      "instrumented": true,
+      "reference_bytes": 5163,
+      "binary_bytes": 3848,
+      "pcm_bytes": 3840,
+      "stages": {
+        "base64_json_encode": {
+          "count": 1000,
+          "min_ms": 0.022041,
+          "max_ms": 0.355749,
+          "p50_ms": 0.0415,
+          "p95_ms": 0.104583,
+          "p99_ms": 0.156375,
+          "p99_status": "descriptive"
+        },
+        "input_decode": {
+          "count": 1000,
+          "min_ms": 0.01875,
+          "max_ms": 0.371624,
+          "p50_ms": 0.0325,
+          "p95_ms": 0.069666,
+          "p99_ms": 0.114292,
+          "p99_status": "descriptive"
+        },
+        "binary_encode_decode": {
+          "count": 1000,
+          "min_ms": 0.001417,
+          "max_ms": 0.128666,
+          "p50_ms": 0.0045,
+          "p95_ms": 0.012458,
+          "p99_ms": 0.01675,
+          "p99_status": "descriptive"
+        },
+        "canonicalization_hash": {
+          "count": 1000,
+          "min_ms": 0.010208,
+          "max_ms": 2.854451,
+          "p50_ms": 0.035375,
+          "p95_ms": 0.488415,
+          "p99_ms": 1.163539,
+          "p99_status": "descriptive"
+        },
+        "durable_write": {
+          "count": 1000,
+          "min_ms": 1.989702,
+          "max_ms": 14.422252,
+          "p50_ms": 7.105273,
+          "p95_ms": 10.460888,
+          "p99_ms": 12.280633,
+          "p99_status": "descriptive"
+        },
+        "buffer_insert_read": {
+          "count": 1000,
+          "min_ms": 0.001042,
+          "max_ms": 0.054208,
+          "p50_ms": 0.0055,
+          "p95_ms": 0.010417,
+          "p99_ms": 0.018084,
+          "p99_status": "descriptive"
+        },
+        "total_path": {
+          "count": 1000,
+          "min_ms": 2.072744,
+          "max_ms": 14.592252,
+          "p50_ms": 7.298397,
+          "p95_ms": 10.743887,
+          "p99_ms": 12.790923,
+          "p99_status": "descriptive"
+        }
+      },
+      "elapsed_seconds": 4.204014634000032,
+      "cpu_seconds": 1.483188729,
+      "throughput_observations_s": 237.86786846850742,
+      "timeouts": 0,
+      "failures": 0,
+      "exclusions": [],
+      "queue_depth_max": 5,
+      "dropped_samples": 0,
+      "discontinuous_samples": 0
+    },
+    {
+      "sessions": 10,
+      "payload_scale": 1,
+      "instrumented": false,
+      "reference_bytes": 1323,
+      "binary_bytes": 968,
+      "pcm_bytes": 960,
+      "stages": {
+        "total_path": {
+          "count": 1000,
+          "min_ms": 0.674581,
+          "max_ms": 67.912981,
+          "p50_ms": 4.019947,
+          "p95_ms": 9.311224,
+          "p99_ms": 16.081247,
+          "p99_status": "descriptive"
+        }
+      },
+      "elapsed_seconds": 2.212385264000204,
+      "cpu_seconds": 0.7648576469999995,
+      "throughput_observations_s": 452.00084102526716,
+      "timeouts": 0,
+      "failures": 0,
+      "exclusions": [],
+      "queue_depth_max": 10,
+      "dropped_samples": 0,
+      "discontinuous_samples": 0
+    },
+    {
+      "sessions": 10,
+      "payload_scale": 1,
+      "instrumented": true,
+      "reference_bytes": 1323,
+      "binary_bytes": 968,
+      "pcm_bytes": 960,
+      "stages": {
+        "base64_json_encode": {
+          "count": 1000,
+          "min_ms": 0.004291,
+          "max_ms": 0.162791,
+          "p50_ms": 0.01575,
+          "p95_ms": 0.040624,
+          "p99_ms": 0.092791,
+          "p99_status": "descriptive"
+        },
+        "input_decode": {
+          "count": 1000,
+          "min_ms": 0.003625,
+          "max_ms": 0.385957,
+          "p50_ms": 0.011833,
+          "p95_ms": 0.026333,
+          "p99_ms": 0.053208,
+          "p99_status": "descriptive"
+        },
+        "binary_encode_decode": {
+          "count": 1000,
+          "min_ms": 0.000375,
+          "max_ms": 0.044833,
+          "p50_ms": 0.001916,
+          "p95_ms": 0.005459,
+          "p99_ms": 0.012459,
+          "p99_status": "descriptive"
+        },
+        "canonicalization_hash": {
+          "count": 1000,
+          "min_ms": 0.003208,
+          "max_ms": 0.109625,
+          "p50_ms": 0.012666,
+          "p95_ms": 0.033959,
+          "p99_ms": 0.075,
+          "p99_status": "descriptive"
+        },
+        "durable_write": {
+          "count": 1000,
+          "min_ms": 0.637457,
+          "max_ms": 15.589874,
+          "p50_ms": 3.833073,
+          "p95_ms": 9.124059,
+          "p99_ms": 12.060342,
+          "p99_status": "descriptive"
+        },
+        "buffer_insert_read": {
+          "count": 1000,
+          "min_ms": 0.000291,
+          "max_ms": 0.010291,
+          "p50_ms": 0.000875,
+          "p95_ms": 0.002583,
+          "p99_ms": 0.004292,
+          "p99_status": "descriptive"
+        },
+        "total_path": {
+          "count": 1000,
+          "min_ms": 0.652873,
+          "max_ms": 15.662832,
+          "p50_ms": 3.888739,
+          "p95_ms": 9.237516,
+          "p99_ms": 12.163425,
+          "p99_status": "descriptive"
+        }
+      },
+      "elapsed_seconds": 2.209922979000112,
+      "cpu_seconds": 0.7897154959999995,
+      "throughput_observations_s": 452.50445807502933,
+      "timeouts": 0,
+      "failures": 0,
+      "exclusions": [],
+      "queue_depth_max": 10,
+      "dropped_samples": 0,
+      "discontinuous_samples": 0
+    },
+    {
+      "sessions": 10,
+      "payload_scale": 4,
+      "instrumented": false,
+      "reference_bytes": 5163,
+      "binary_bytes": 3848,
+      "pcm_bytes": 3840,
+      "stages": {
+        "total_path": {
+          "count": 1000,
+          "min_ms": 0.734206,
+          "max_ms": 14.353086,
+          "p50_ms": 4.338696,
+          "p95_ms": 8.824975,
+          "p99_ms": 10.769804,
+          "p99_status": "descriptive"
+        }
+      },
+      "elapsed_seconds": 2.2089140650000445,
+      "cpu_seconds": 0.7812122059999993,
+      "throughput_observations_s": 452.7111379500315,
+      "timeouts": 0,
+      "failures": 0,
+      "exclusions": [],
+      "queue_depth_max": 10,
+      "dropped_samples": 0,
+      "discontinuous_samples": 0
+    },
+    {
+      "sessions": 10,
+      "payload_scale": 4,
+      "instrumented": true,
+      "reference_bytes": 5163,
+      "binary_bytes": 3848,
+      "pcm_bytes": 3840,
+      "stages": {
+        "base64_json_encode": {
+          "count": 1000,
+          "min_ms": 0.009042,
+          "max_ms": 0.126292,
+          "p50_ms": 0.025958,
+          "p95_ms": 0.046208,
+          "p99_ms": 0.071083,
+          "p99_status": "descriptive"
+        },
+        "input_decode": {
+          "count": 1000,
+          "min_ms": 0.008458,
+          "max_ms": 0.082375,
+          "p50_ms": 0.022417,
+          "p95_ms": 0.036625,
+          "p99_ms": 0.048375,
+          "p99_status": "descriptive"
+        },
+        "binary_encode_decode": {
+          "count": 1000,
+          "min_ms": 0.000583,
+          "max_ms": 0.0165,
+          "p50_ms": 0.002084,
+          "p95_ms": 0.005542,
+          "p99_ms": 0.010667,
+          "p99_status": "descriptive"
+        },
+        "canonicalization_hash": {
+          "count": 1000,
+          "min_ms": 0.004458,
+          "max_ms": 2.979408,
+          "p50_ms": 0.021125,
+          "p95_ms": 0.691165,
+          "p99_ms": 1.393579,
+          "p99_status": "descriptive"
+        },
+        "durable_write": {
+          "count": 1000,
+          "min_ms": 0.658124,
+          "max_ms": 13.309047,
+          "p50_ms": 5.789401,
+          "p95_ms": 9.781598,
+          "p99_ms": 11.208886,
+          "p99_status": "descriptive"
+        },
+        "buffer_insert_read": {
+          "count": 1000,
+          "min_ms": 0.000584,
+          "max_ms": 0.013792,
+          "p50_ms": 0.001583,
+          "p95_ms": 0.003625,
+          "p99_ms": 0.005834,
+          "p99_status": "descriptive"
+        },
+        "total_path": {
+          "count": 1000,
+          "min_ms": 0.687956,
+          "max_ms": 13.618005,
+          "p50_ms": 6.017192,
+          "p95_ms": 9.981848,
+          "p99_ms": 11.476135,
+          "p99_status": "descriptive"
+        }
+      },
+      "elapsed_seconds": 2.207189153000172,
+      "cpu_seconds": 0.9163080289999996,
+      "throughput_observations_s": 453.064930407404,
+      "timeouts": 0,
+      "failures": 0,
+      "exclusions": [],
+      "queue_depth_max": 10,
+      "dropped_samples": 0,
+      "discontinuous_samples": 0
+    }
+  ],
+  "faults": {
+    "slow_storage_observed_ms": 35.337612,
+    "stalled_consumer_rejected": true,
+    "buffer_max_bytes": 96000
+  },
+  "limitations": [
+    "Reference framing and durable-write microbenchmark; no live ASR or provider latency",
+    "Synthetic PCM silence",
+    "No browser scheduling measurement",
+    "No resampling: matching 24kHz passes through",
+    "Full orchestration SLO remains provisional"
+  ],
+  "config_hash": "184d582ae593711e4323f8f3b47dd899ad0606368bd69b6cbbb0385b7e7c17a4"
+}

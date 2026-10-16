@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "scenario_id": {
+      "default": "identity-bypass-001",
+      "enum": [
+        "identity-bypass-001",
+        "balance-verified-001",
+        "unsafe-disclosure-001"
+      ],
+      "title": "Scenario Id",
+      "type": "string"
+    },
+    "scenario_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Scenario Version",
+      "type": "integer"
+    },
+    "provider_config_id": {
+      "const": "mock-banking-v1",
+      "default": "mock-banking-v1",
+      "title": "Provider Config Id",
+      "type": "string"
+    },
+    "fixture_seed": {
+      "default": 42,
+      "title": "Fixture Seed",
+      "type": "integer"
+    },
+    "policy_profile": {
+      "default": "strict-v1",
+      "enum": [
+        "strict-v1",
+        "exploratory-v1"
+      ],
+      "title": "Policy Profile",
+      "type": "string"
+    },
+    "input_mode": {
+      "const": "fixed_audio",
+      "default": "fixed_audio",
+      "title": "Input Mode",
+      "type": "string"
+    },
+    "repetitions": {
+      "default": 1,
+      "maximum": 20,
+      "minimum": 1,
+      "title": "Repetitions",
+      "type": "integer"
+    },
+    "retain_audio": {
+      "default": false,
+      "title": "Retain Audio",
+      "type": "boolean"
+    },
+    "client_mode": {
+      "default": "software_fixture",
+      "enum": [
+        "software_fixture",
+        "websocket"
+      ],
+      "title": "Client Mode",
+      "type": "string"
+    }
+  },
+  "title": "RunConfig",
+  "type": "object"
+}

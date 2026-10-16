@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "request_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Request Id",
+      "type": "string"
+    },
+    "proposal_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Proposal Id",
+      "type": "string"
+    },
+    "proposal_hash": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Proposal Hash",
+      "type": "string"
+    },
+    "action": {
+      "enum": [
+        "cancel",
+        "payment"
+      ],
+      "title": "Action",
+      "type": "string"
+    },
+    "account_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Account Id",
+      "type": "string"
+    },
+    "payee_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Payee Id"
+    },
+    "amount_minor": {
+      "title": "Amount Minor",
+      "type": "integer"
+    },
+    "currency": {
+      "const": "GBP",
+      "title": "Currency",
+      "type": "string"
+    },
+    "session_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Session Id",
+      "type": "string"
+    },
+    "identity_state_version": {
+      "title": "Identity State Version",
+      "type": "integer"
+    },
+    "presentation_event_ids": {
+      "items": {
+        "maxLength": 200,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Presentation Event Ids",
+      "type": "array"
+    },
+    "expires_at": {
+      "title": "Expires At",
+      "type": "string"
+    },
+    "policy_version": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Policy Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "request_id",
+    "proposal_id",
+    "proposal_hash",
+    "action",
+    "account_id",
+    "payee_id",
+    "amount_minor",
+    "currency",
+    "session_id",
+    "identity_state_version",
+    "presentation_event_ids",
+    "expires_at",
+    "policy_version"
+  ],
+  "title": "ConfirmationRequested",
+  "type": "object"
+}

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "payment_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Payment Id",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "cancelled",
+        "not_cancellable"
+      ],
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "payment_id",
+    "status"
+  ],
+  "title": "CancellationResult",
+  "type": "object"
+}

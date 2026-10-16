@@ -1,0 +1,14 @@
+**
+!Dockerfile
+!requirements.lock
+!src/
+!src/**
+!contracts/
+!contracts/**
+!tests/
+!tests/**
+!apps/
+!apps/web/
+!apps/web/**
+**/__pycache__/
+**/*.py[cod]

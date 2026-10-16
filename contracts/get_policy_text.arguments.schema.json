@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "policy_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Policy Id",
+      "type": "string"
+    },
+    "version": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "policy_id",
+    "version"
+  ],
+  "title": "PolicyArgs",
+  "type": "object"
+}

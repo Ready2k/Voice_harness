@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "identity_state": {
+      "enum": [
+        "verified",
+        "unverified",
+        "locked"
+      ],
+      "title": "Identity State",
+      "type": "string"
+    },
+    "attempts_remaining": {
+      "title": "Attempts Remaining",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "identity_state",
+    "attempts_remaining"
+  ],
+  "title": "IdentityResult",
+  "type": "object"
+}

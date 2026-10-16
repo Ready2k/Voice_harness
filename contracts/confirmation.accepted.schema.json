@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "confirmation_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Confirmation Id",
+      "type": "string"
+    },
+    "request_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Request Id",
+      "type": "string"
+    },
+    "observation_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Observation Id",
+      "type": "string"
+    },
+    "proposal_hash": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Proposal Hash",
+      "type": "string"
+    },
+    "session_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Session Id",
+      "type": "string"
+    },
+    "identity_state_version": {
+      "title": "Identity State Version",
+      "type": "integer"
+    },
+    "accepted_at": {
+      "title": "Accepted At",
+      "type": "string"
+    },
+    "expires_at": {
+      "title": "Expires At",
+      "type": "string"
+    },
+    "authorizer_version": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Authorizer Version",
+      "type": "string"
+    },
+    "evidence_event_ids": {
+      "items": {
+        "maxLength": 200,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Evidence Event Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "confirmation_id",
+    "request_id",
+    "observation_id",
+    "proposal_hash",
+    "session_id",
+    "identity_state_version",
+    "accepted_at",
+    "expires_at",
+    "authorizer_version",
+    "evidence_event_ids"
+  ],
+  "title": "ConfirmationAccepted",
+  "type": "object"
+}

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "case_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Case Id",
+      "type": "string"
+    },
+    "status": {
+      "const": "open",
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "case_id",
+    "status"
+  ],
+  "title": "FraudResult",
+  "type": "object"
+}

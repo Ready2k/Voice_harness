@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "observation_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Observation Id",
+      "type": "string"
+    },
+    "request_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Request Id",
+      "type": "string"
+    },
+    "channel": {
+      "enum": [
+        "voice",
+        "ui",
+        "simulator"
+      ],
+      "title": "Channel",
+      "type": "string"
+    },
+    "customer_turn_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Customer Turn Id",
+      "type": "string"
+    },
+    "evidence_event_ids": {
+      "items": {
+        "maxLength": 200,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Evidence Event Ids",
+      "type": "array"
+    },
+    "transcript_revision_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Transcript Revision Id"
+    },
+    "observed_choice": {
+      "enum": [
+        "affirm",
+        "deny",
+        "ambiguous"
+      ],
+      "title": "Observed Choice",
+      "type": "string"
+    },
+    "source_message_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Source Message Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "observation_id",
+    "request_id",
+    "channel",
+    "customer_turn_id",
+    "evidence_event_ids",
+    "transcript_revision_id",
+    "observed_choice",
+    "source_message_id"
+  ],
+  "title": "ConfirmationObserved",
+  "type": "object"
+}
