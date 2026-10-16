@@ -93,3 +93,10 @@ Command: `aws bedrock list-foundation-models --region <r>` filtered on "sonic", 
 
 - **Correction:** the Nova 2.5 ID is `amazon.nova-2-5-sonic` (no `-v1:0` suffix). The benchr ID `amazon.nova-2.5-sonic-v1:0` is wrong and must not be used; this confirms the rule to treat third-party lists as unverified.
 - The four regions match the secondary blog's list. The returned ID has no version suffix, so treat it as an alias: `version_unresolved` per spec §2 until the invoke response reports metadata.
+
+## Runtime evidence: Nova 2.5 Sonic live probe (2026-10-16)
+Probe: `scripts/probe/nova_probe.mjs` (us-east-1, `amazon.nova-2-5-sonic`, SDK 3.1136.0). Report: `artifacts/phase0/nova-capability-report.json` (passes `probe validate`, expires in 7 days). Raw redacted events: `artifacts/phase0/nova-probe-*.jsonl` (audio stored as hash and length only).
+- **Verified (docs + probe):** audio in (silence only), audio out, native tool call and result round trip, usage events (speech/text token deltas and totals).
+- **Observed only:** 16 kHz input and 24 kHz output accepted, SPECULATIVE/FINAL transcripts, `stopReason` turn signalling (PARTIAL_TURN, END_TURN, TOOL_USE).
+- **Unknown:** barge-in/cancel (needs `--speech-wav` with real speech), audio alignment, session resume (a fresh session after a clean close works), direct MCP.
+- **Findings:** Nova rejects a prompt with no audio content ("must have at least one audio content") and times out after 55 s without audio, so text turns need a silence stream held open. A toolResult with an unknown toolUseId raises `ValidationException` and ends the stream. First audio arrived about 0.9-1.4 s after stream open (text-driven turn, not a latency claim). The stream returned no model version, so the alias remains `version_unresolved`.

@@ -1,0 +1,67 @@
+{
+  "meta": {
+    "modelId": "amazon.nova-2-5-sonic",
+    "region": "us-east-1",
+    "startedAt": "2026-10-16T22:18:44.591Z",
+    "node": "v24.9.0"
+  },
+  "evidence": {
+    "auth_reachability": [
+      "nova_ev_6",
+      "nova_ev_74",
+      "nova_ev_90"
+    ],
+    "text_in": [
+      "nova_ev_8",
+      "nova_ev_76",
+      "nova_ev_92"
+    ],
+    "usage_granularity": [
+      "nova_ev_10",
+      "nova_ev_11",
+      "nova_ev_12",
+      "nova_ev_13",
+      "nova_ev_78",
+      "nova_ev_79",
+      "nova_ev_80",
+      "nova_ev_81",
+      "nova_ev_94",
+      "nova_ev_95",
+      "nova_ev_96",
+      "nova_ev_97"
+    ],
+    "error_handling": [
+      "nova_ev_14",
+      "nova_ev_84",
+      "nova_ev_98"
+    ]
+  },
+  "notes": {
+    "auth_reachability": [
+      "HTTP 200",
+      "HTTP 200",
+      "HTTP 200"
+    ],
+    "tool_arguments_and_results": [
+      "no toolUse event within 30s",
+      "no toolUse event within 30s"
+    ],
+    "error_handling": [
+      "ValidationException: RequestId=966c319f-fd84-4d69-8b58-7138c60e0bd0 : Timed out waiting for audio bytes or interactive content. Please ensure gaps between audio bytes and interactive content are less than 55 seconds.",
+      "ValidationException: RequestId=f8892660-add2-4f05-9c11-895dc27b344a : Error(s):\nError 1 : Prompt [cb0ac173-ad54-449d-873a-fdab8a5ad38f] must have at least one audio content",
+      "ValidationException: RequestId=df21ed43-f766-4fa7-b326-df09d12f9215 : Timed out waiting for audio bytes or interactive content. Please ensure gaps between audio bytes and interactive content are less than 55 seconds.",
+      "bogus toolUseId: 1 error event(s) observed"
+    ],
+    "cancel_truncate": [
+      "barge-in not exercised: no --speech-wav supplied"
+    ],
+    "usage_granularity": [
+      "usageEvent keys: completionId,details,promptName,sessionId,totalInputTokens,totalOutputTokens,totalTokens"
+    ]
+  },
+  "flags": {
+    "toolCalled": false,
+    "interrupted": false,
+    "sdk": "@aws-sdk/client-bedrock-runtime@3.1136.0"
+  }
+}

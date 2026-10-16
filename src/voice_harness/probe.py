@@ -20,6 +20,9 @@ def main(argv: list[str] | None = None) -> int:
     s.add_argument("--report-id", default=None)
     v = sub.add_parser("validate", help="validate a report JSON file; exit 1 if invalid or fails closed")
     v.add_argument("path")
+    o = sub.add_parser("from-nova-observations", help="build a report from nova_probe.mjs output")
+    o.add_argument("path")
+    o.add_argument("--report-id", required=True)
     sub.add_parser("schema", help="print the JSON Schema")
     a = ap.parse_args(argv)
 
@@ -29,6 +32,11 @@ def main(argv: list[str] | None = None) -> int:
     if a.cmd == "seed":
         rid = a.report_id or f"cap_{a.provider_family}_seed"
         print(unknown_report(rid, a.provider_family, a.requested_model_id).model_dump_json(indent=2))
+        return 0
+    if a.cmd == "from-nova-observations":
+        from .nova_report import load
+
+        print(load(a.path, a.report_id).model_dump_json(indent=2))
         return 0
     with open(a.path) as f:
         report = CapabilityReport.model_validate_json(f.read())

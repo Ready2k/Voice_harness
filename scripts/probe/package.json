@@ -1,0 +1,6 @@
+{
+  "name": "voice-harness-nova-probe",
+  "private": true,
+  "type": "module",
+  "dependencies": { "@aws-sdk/client-bedrock-runtime": "3.1136.0" }
+}

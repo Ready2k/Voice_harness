@@ -1,0 +1,290 @@
+{
+  "schema_version": 1,
+  "report_id": "cap_nova_2_5_20261016",
+  "provider_family": "aws_nova_sonic",
+  "api_surface": "bedrock-runtime InvokeModelWithBidirectionalStream",
+  "region": "us-east-1",
+  "requested_model_id": "amazon.nova-2-5-sonic",
+  "returned_model_id": null,
+  "version_unresolved": true,
+  "checked_at": "2026-10-16T22:22:29.666495+00:00",
+  "expires_at": "2026-10-23T22:22:29.666495+00:00",
+  "adapter_version": "nova_probe.mjs/0",
+  "sdk_version": "@aws-sdk/client-bedrock-runtime@3.1136.0",
+  "effective_session_config": {
+    "raw_event_log": "artifacts/phase0/nova-probe-2026-10-16T22-21-40-853Z.jsonl",
+    "inference": {
+      "maxTokens": 1024,
+      "topP": 0.9,
+      "temperature": 0.2
+    },
+    "endpointingSensitivity": "MEDIUM",
+    "input": "audio/lpcm 16000 s16le mono",
+    "output": "audio/lpcm 24000 s16le mono, voice matthew",
+    "service_card": "https://docs.aws.amazon.com/ai/responsible-ai/nova-2-5-sonic/overview.md"
+  },
+  "operator_terms_attestation": null,
+  "rows": [
+    {
+      "name": "input_codecs_rates",
+      "status": "observed",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": [
+          "nova_ev_7"
+        ]
+      },
+      "limitations": [
+        "16 kHz PCM16 mono accepted; other rates untested"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "output_codecs_rates",
+      "status": "observed",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": [
+          "nova_ev_102",
+          "nova_ev_104",
+          "nova_ev_107",
+          "nova_ev_110",
+          "nova_ev_112",
+          "nova_ev_113",
+          "nova_ev_114",
+          "nova_ev_117",
+          "nova_ev_118",
+          "nova_ev_119",
+          "nova_ev_121",
+          "nova_ev_126",
+          "nova_ev_128",
+          "nova_ev_129",
+          "nova_ev_130",
+          "nova_ev_131",
+          "nova_ev_132",
+          "nova_ev_138",
+          "nova_ev_139",
+          "nova_ev_140"
+        ]
+      },
+      "limitations": [
+        "24 kHz PCM16 requested and bytes received; rate not measured"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "audio_in",
+      "status": "verified",
+      "evidence": {
+        "doc_url": "https://docs.aws.amazon.com/nova/latest/nova2-userguide/using-conversational-speech.html",
+        "doc_retrieved_at": "2026-10-16",
+        "probe_event_ids": [
+          "nova_ev_7"
+        ]
+      },
+      "limitations": [
+        "silence only; recognition not exercised",
+        "125 x 20 ms chunks of 16 kHz PCM16 silence accepted without error (recognition not exercised)"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "audio_out",
+      "status": "verified",
+      "evidence": {
+        "doc_url": "https://docs.aws.amazon.com/nova/latest/nova2-userguide/using-conversational-speech.html",
+        "doc_retrieved_at": "2026-10-16",
+        "probe_event_ids": [
+          "nova_ev_102",
+          "nova_ev_104",
+          "nova_ev_107",
+          "nova_ev_110",
+          "nova_ev_112",
+          "nova_ev_113",
+          "nova_ev_114",
+          "nova_ev_117",
+          "nova_ev_118",
+          "nova_ev_119",
+          "nova_ev_121",
+          "nova_ev_126",
+          "nova_ev_128",
+          "nova_ev_129",
+          "nova_ev_130",
+          "nova_ev_131",
+          "nova_ev_132",
+          "nova_ev_138",
+          "nova_ev_139",
+          "nova_ev_140"
+        ]
+      },
+      "limitations": [
+        "first audio about 0.9-1.4 s after stream open",
+        "first audio 1411ms after open",
+        "first audio 903ms after open"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "tool_arguments_and_results",
+      "status": "verified",
+      "evidence": {
+        "doc_url": "https://docs.aws.amazon.com/nova/latest/nova2-userguide/using-conversational-speech.html",
+        "doc_retrieved_at": "2026-10-16",
+        "probe_event_ids": [
+          "nova_ev_67",
+          "nova_ev_71",
+          "nova_ev_541",
+          "nova_ev_545"
+        ]
+      },
+      "limitations": [
+        "native toolUse/toolResult; bridged to MCP would be gateway_bridge",
+        "toolUse get_account_summary {\"account_id\":\"ACC-001\"}",
+        "sent toolResult"
+      ],
+      "tool_mode": "gateway_bridge"
+    },
+    {
+      "name": "transcript_finality",
+      "status": "observed",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": [
+          "nova_ev_93",
+          "nova_ev_353",
+          "nova_ev_449"
+        ]
+      },
+      "limitations": [
+        "SPECULATIVE and FINAL generationStage seen; not alignment",
+        "ASSISTANT/SPECULATIVE",
+        "ASSISTANT/SPECULATIVE"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "audio_alignment",
+      "status": "unknown",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": []
+      },
+      "limitations": [
+        "no word/audio timestamps seen"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "turn_signalling",
+      "status": "observed",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": [
+          "nova_ev_68",
+          "nova_ev_94",
+          "nova_ev_212",
+          "nova_ev_354",
+          "nova_ev_392",
+          "nova_ev_451",
+          "nova_ev_542"
+        ]
+      },
+      "limitations": [
+        "contentEnd stopReason (PARTIAL_TURN, END_TURN, TOOL_USE)",
+        "stopReason=TOOL_USE role=TOOL type=TOOL",
+        "stopReason=PARTIAL_TURN role=ASSISTANT type=TEXT"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "cancel_truncate",
+      "status": "unknown",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": []
+      },
+      "limitations": [
+        "barge-in needs real speech; run probe with --speech-wav",
+        "barge-in not exercised: no --speech-wav supplied"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "usage_granularity",
+      "status": "verified",
+      "evidence": {
+        "doc_url": "https://docs.aws.amazon.com/nova/latest/nova2-userguide/using-conversational-speech.html",
+        "doc_retrieved_at": "2026-10-16",
+        "probe_event_ids": [
+          "nova_ev_37",
+          "nova_ev_39",
+          "nova_ev_40",
+          "nova_ev_44",
+          "nova_ev_47",
+          "nova_ev_48",
+          "nova_ev_50",
+          "nova_ev_66",
+          "nova_ev_69",
+          "nova_ev_78",
+          "nova_ev_79",
+          "nova_ev_90",
+          "nova_ev_105",
+          "nova_ev_127",
+          "nova_ev_149",
+          "nova_ev_170",
+          "nova_ev_191",
+          "nova_ev_294",
+          "nova_ev_330",
+          "nova_ev_333"
+        ]
+      },
+      "limitations": [
+        "usageEvent with speech/text token deltas and totals",
+        "usageEvent keys: completionId,details,promptName,sessionId,totalInputTokens,totalOutputTokens,totalTokens"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "reconnect_resume",
+      "status": "unknown",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": [
+          "nova_ev_476"
+        ]
+      },
+      "limitations": [
+        "fresh session works; resume token not tested",
+        "new session after clean close works; no resume token observed (resume NOT tested)"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "direct_mcp",
+      "status": "unknown",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": []
+      },
+      "limitations": [
+        "docs describe native function calling only"
+      ],
+      "tool_mode": null
+    }
+  ],
+  "limitations": [
+    "No returned model version in stream; alias treated as version_unresolved",
+    "Audio inputs were synthetic silence; text turns drove the conversation",
+    "Nova requires an open audio input content for the whole prompt",
+    "Terms/retention/quotas/pricing not established by probe; need operator attestation",
+    "Bogus toolUseId produces ValidationException, ending the stream"
+  ]
+}

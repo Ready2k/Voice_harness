@@ -52,5 +52,29 @@ class CapabilityReportTests(unittest.TestCase):
         self.assertTrue(r.expired(datetime.now(UTC) + timedelta(days=8)))
 
 
+
+class NovaReportTests(unittest.TestCase):
+    OBS = {
+        "meta": {"modelId": "amazon.nova-2-5-sonic", "region": "us-east-1"},
+        "flags": {"sdk": "x"},
+        "notes": {},
+        "evidence": {
+            "audio_in": ["e1"], "audio_out": ["e2"], "tool_arguments_and_results": ["e3"],
+            "turn_signalling": ["e4"], "usage_granularity": ["e5"],
+        },
+    }
+
+    def test_report_passes_gate_and_marks_untested_rows_unknown(self):
+        from voice_harness.nova_report import build_report
+
+        r = build_report(self.OBS, "cap_t", "log.jsonl")
+        by = {x.name: x for x in r.rows}
+        self.assertEqual(r.failed_closed(), [])
+        self.assertEqual(by["audio_in"].status, "verified")
+        self.assertEqual(by["cancel_truncate"].status, "unknown")
+        self.assertEqual(by["transcript_finality"].status, "unknown")  # no evidence supplied
+        self.assertTrue(r.version_unresolved)
+
+
 if __name__ == "__main__":
     unittest.main()
