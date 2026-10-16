@@ -1,0 +1,110 @@
+{
+  "meta": {
+    "modelId": "gpt-realtime-2.1",
+    "startedAt": "2026-10-16T22:24:36.874Z",
+    "node": "v24.9.0",
+    "sessionCreated": {
+      "model": "gpt-realtime-2.1",
+      "id": "sess_EZkdpgTtomgIVeP4PjZSy"
+    }
+  },
+  "evidence": {
+    "auth_reachability": [
+      "oai_ev_1",
+      "oai_ev_82"
+    ],
+    "model_discovery": [
+      "oai_ev_2"
+    ],
+    "input_codecs_rates": [
+      "oai_ev_4"
+    ],
+    "output_codecs_rates": [
+      "oai_ev_4"
+    ],
+    "turn_signalling": [
+      "oai_ev_4",
+      "oai_ev_45"
+    ],
+    "audio_out": [
+      "oai_ev_17",
+      "oai_ev_97"
+    ],
+    "tool_arguments_and_results": [
+      "oai_ev_45",
+      "oai_ev_47"
+    ],
+    "usage_granularity": [
+      "oai_ev_45"
+    ],
+    "transcript_finality": [
+      "oai_ev_38"
+    ],
+    "audio_in": [
+      "oai_ev_48"
+    ],
+    "cancel_truncate": [
+      "oai_ev_77"
+    ],
+    "error_handling": [
+      "oai_ev_81"
+    ],
+    "reconnect_resume": [
+      "oai_ev_157"
+    ]
+  },
+  "notes": {
+    "auth_reachability": [
+      "websocket open",
+      "websocket open"
+    ],
+    "model_discovery": [
+      "session.created model=gpt-realtime-2.1"
+    ],
+    "input_codecs_rates": [
+      "{\"type\":\"audio/pcm\",\"rate\":24000}"
+    ],
+    "output_codecs_rates": [
+      "{\"type\":\"audio/pcm\",\"rate\":24000}"
+    ],
+    "turn_signalling": [
+      "session.updated accepted turn_detection=null",
+      "response.done status=completed"
+    ],
+    "tool_arguments_and_results": [
+      "function_call get_account_summary {\"account_id\":\"ACC-001\"}",
+      "function_call_output delivered then response.create"
+    ],
+    "usage_granularity": [
+      "response.done usage keys: total_tokens,input_tokens,output_tokens,input_token_details,output_token_details; {\"text_tokens\":359,\"audio_tokens\":0,\"image_tokens\":0,\"cached_tokens\":0,\"cached_tokens_details\":{\"text_tokens\":0,\"audio_tokens\":0,\"image_tokens\":0}}"
+    ],
+    "transcript_finality": [
+      "response.output_audio_transcript.delta then .done"
+    ],
+    "audio_alignment": [
+      "no word/audio timestamps in observed events"
+    ],
+    "audio_in": [
+      "append + commit accepted (input_audio_buffer.committed); recognition not exercised"
+    ],
+    "cancel_truncate": [
+      "response.cancel -> response.done status=cancelled",
+      "truncate result: none"
+    ],
+    "error_handling": [
+      "unknown event -> error: invalid_value; connection stayed open"
+    ],
+    "reconnect_resume": [
+      "fresh connection after close works; session resume not documented/tested"
+    ],
+    "direct_mcp": [
+      "docs list MCP tools as a supported tool type; not exercised (gateway_bridge used)"
+    ]
+  },
+  "log_file": "artifacts/phase0/openai-probe-2026-10-16T22-24-36-874Z.jsonl",
+  "flags": {
+    "toolCalled": true,
+    "firstAudioMs": 863,
+    "sdk": "ws@8.18.3 node v24.9.0"
+  }
+}

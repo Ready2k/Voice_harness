@@ -76,5 +76,24 @@ class NovaReportTests(unittest.TestCase):
         self.assertTrue(r.version_unresolved)
 
 
+class OpenAIReportTests(unittest.TestCase):
+    OBS = {
+        "meta": {"modelId": "gpt-realtime-2.1", "sessionCreated": {"model": "gpt-realtime-2.1"}},
+        "flags": {"sdk": "x"},
+        "notes": {},
+        "evidence": {"audio_in": ["e1"], "audio_out": ["e2"], "tool_arguments_and_results": ["e3"], "turn_signalling": ["e4"]},
+    }
+
+    def test_report_passes_gate_and_unprobed_rows_unknown(self):
+        from voice_harness.openai_report import build_report
+
+        r = build_report(self.OBS, "cap_o")
+        by = {x.name: x for x in r.rows}
+        self.assertEqual(r.failed_closed(), [])
+        self.assertEqual(by["tool_arguments_and_results"].status, "verified")
+        self.assertEqual(by["usage_granularity"].status, "unknown")  # no evidence supplied
+        self.assertFalse(r.version_unresolved)
+
+
 if __name__ == "__main__":
     unittest.main()

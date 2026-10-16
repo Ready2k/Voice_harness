@@ -100,3 +100,11 @@ Probe: `scripts/probe/nova_probe.mjs` (us-east-1, `amazon.nova-2-5-sonic`, SDK 3
 - **Observed only:** 16 kHz input and 24 kHz output accepted, SPECULATIVE/FINAL transcripts, `stopReason` turn signalling (PARTIAL_TURN, END_TURN, TOOL_USE).
 - **Unknown:** barge-in/cancel (needs `--speech-wav` with real speech), audio alignment, session resume (a fresh session after a clean close works), direct MCP.
 - **Findings:** Nova rejects a prompt with no audio content ("must have at least one audio content") and times out after 55 s without audio, so text turns need a silence stream held open. A toolResult with an unknown toolUseId raises `ValidationException` and ends the stream. First audio arrived about 0.9-1.4 s after stream open (text-driven turn, not a latency claim). The stream returned no model version, so the alias remains `version_unresolved`.
+
+## Runtime evidence: OpenAI live probe (2026-10-16)
+Account discovery (`GET /v1/models`, HTTP 200) lists `gpt-realtime-2.1`, `gpt-realtime-2.1-mini`, `gpt-realtime-2`, `gpt-realtime-1.5`, `gpt-realtime`, `gpt-realtime-mini` and `gpt-live-1` (plus transcribe/translate variants). `gpt-live-1` is therefore real for this account, but its protocol is unprobed and it stays unconfigured.
+Probe: `scripts/probe/openai_probe.mjs` (WebSocket, `gpt-realtime-2.1`). Report: `artifacts/phase0/openai-capability-report.json` (passes `probe validate`, 7-day expiry). `session.created` returned `gpt-realtime-2.1`, matching the request and docs' single snapshot.
+- **Verified (docs + probe):** audio in (silence append + commit), audio out, function call and `function_call_output` round trip, output transcript delta/done, `response.done` status, usage in `response.done`.
+- **Observed only:** 24 kHz PCM accepted for input and output; `response.cancel` yields `response.done` status `cancelled`.
+- **Unknown:** truncate (no `conversation.item.truncated` seen on the cancelled item), server VAD and barge-in by speech, alignment, resume, MCP tools.
+- **Findings:** first audio about 0.9 s after `response.create` on a text turn (not a latency claim). An unknown event type returns an `error` (`invalid_value`) and the connection stays open.
