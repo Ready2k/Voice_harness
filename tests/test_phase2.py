@@ -1,4 +1,6 @@
 import json
+import os
+from unittest import mock
 import math
 import tempfile
 import sys
@@ -155,7 +157,9 @@ class CoverageTests(unittest.TestCase):
         from fastapi.testclient import TestClient
         from voice_harness.api import create_app
 
-        with tempfile.TemporaryDirectory() as d:
+        with tempfile.TemporaryDirectory() as d, mock.patch.dict(
+            os.environ, {"HARNESS_PHASE2_DIR": d}
+        ):  # empty AC-09 dir: no verified providers
             app = create_app(root=d, token="t", recover=False)
             c = TestClient(app)
             h = {"Authorization": "Bearer t"}
