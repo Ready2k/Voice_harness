@@ -1,0 +1,33 @@
+{
+  "provider": "openai",
+  "model_id": "gpt-realtime-2.1",
+  "dimensions": {
+    "audio_in": {
+      "status": "pass"
+    },
+    "audio_out": {
+      "status": "pass",
+      "chunks": 1
+    },
+    "tool_result_correlation": {
+      "status": "pass",
+      "call_id": "call_bRBWi2H7gWTuenNE"
+    },
+    "interruption": {
+      "status": "pass",
+      "result": [
+        "audio_end_ms",
+        "generation_cancelled",
+        "history_truncation",
+        "item_id"
+      ]
+    },
+    "error": {
+      "status": "pass"
+    }
+  },
+  "excluded": {},
+  "failures": [],
+  "passed": true,
+  "capability_report_id": "cap_openai_gpt_realtime_2_1_20261016"
+}

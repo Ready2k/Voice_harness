@@ -1,0 +1,30 @@
+{
+  "provider": "aws_nova_sonic",
+  "model_id": "amazon.nova-2-5-sonic",
+  "dimensions": {
+    "audio_in": {
+      "status": "pass"
+    },
+    "audio_out": {
+      "status": "pass",
+      "chunks": 1
+    },
+    "tool_result_correlation": {
+      "status": "pass",
+      "call_id": "chatcmpl-tool-8342e86a5181c461"
+    },
+    "interruption": {
+      "status": "excluded",
+      "reason": "interrupt_truncate unsupported (explicit)"
+    },
+    "error": {
+      "status": "pass"
+    }
+  },
+  "excluded": {
+    "interruption": "interrupt_truncate unsupported (explicit)"
+  },
+  "failures": [],
+  "passed": true,
+  "capability_report_id": "cap_nova_2_5_20261016"
+}

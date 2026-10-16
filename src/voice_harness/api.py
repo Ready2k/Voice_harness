@@ -29,7 +29,7 @@ from pydantic import ValidationError
 
 from .approvals import public_key
 from .contracts import AudioInputPayload, CancelRun, HoldRequest, RenewHold, RunConfig
-from .coverage import default_registry
+from .coverage import build_registry, summarize
 from .engine import Engine
 from .evidence import Evidence
 from .scenarios import run_scenario
@@ -187,7 +187,11 @@ def create_app(database=None, root=None, token=None, recover=True):
 
     @app.get("/api/v1/providers", dependencies=[Depends(auth)])
     def providers():
-        return {"items": [c.to_dict() for c in default_registry()], "verified_count": 0}
+        return summarize(build_registry())
+
+    @app.get("/api/v1/providers/export", dependencies=[Depends(auth)])
+    def providers_export():
+        return {"export_type": "provider_coverage", **summarize(build_registry())}
 
     @app.get("/api/v1/scenarios", dependencies=[Depends(auth)])
     def scenarios():
