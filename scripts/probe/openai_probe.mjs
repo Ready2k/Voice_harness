@@ -3,12 +3,13 @@
 // Writes a redacted raw event log and observations JSON to artifacts/phase0/ (audio = hash + length only).
 import WebSocket from "ws";
 import { createHash } from "node:crypto";
-import { writeFileSync, mkdirSync, appendFileSync } from "node:fs";
+import { writeFileSync, mkdirSync, appendFileSync, readFileSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const arg = (k, d) => { const i = process.argv.indexOf(`--${k}`); return i > 0 ? process.argv[i + 1] : d; };
 const modelId = arg("model", "gpt-realtime-2.1");
+const speechWav = arg("speech-wav", null); // 24 kHz mono PCM16 WAV used for the speech barge-in stage
 const key = process.env.OPENAI_API_KEY;
 if (!key) { console.error("OPENAI_API_KEY not set"); process.exit(2); }
 const root = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
@@ -29,6 +30,11 @@ const log = (session, dir, type, detail) => {
   appendFileSync(logPath, JSON.stringify({ id, t: new Date().toISOString(), session, dir, type, detail }) + "\n");
   return id;
 };
+function wavData(buf) {
+  let o = 12;
+  while (o + 8 <= buf.length) { const id = buf.toString("ascii", o, o + 4), len = buf.readUInt32LE(o + 4); if (id === "data") return buf.subarray(o + 8, o + 8 + len); o += 8 + len; }
+  throw new Error("no data chunk in WAV");
+}
 const redact = (ev) => {
   const e = JSON.parse(JSON.stringify(ev));
   for (const k of ["audio", "delta"]) if (typeof e[k] === "string" && /audio/.test(e.type ?? "") && !/transcript/.test(e.type)) { e[k] = { b64_len: e[k].length, sha: sha(e[k]) }; }
@@ -127,6 +133,39 @@ async function textTurn(s, text) {
   if (s1.errors.length > n0) mark("error_handling", s1.errors.at(-1).id, `unknown event -> error: ${s1.errors.at(-1).ev.error?.code ?? s1.errors.at(-1).ev.error?.type}; connection ${s1.ws.readyState === 1 ? "stayed open" : "closed"}`);
   flags.firstAudioMs = s1.firstAudioMs;
   s1.ws.close(); await sleep(500);
+
+  // --- s4: speech barge-in with server VAD (only when a 24 kHz speech WAV is supplied)
+  if (speechWav) {
+    const s4 = await connect("s4");
+    await waitFor(s4, (e) => e.type === "session.created", 10000);
+    send(s4, { type: "session.update", session: { type: "realtime", model: modelId, output_modalities: ["audio"],
+      instructions: "Reply in full sentences.",
+      audio: { input: { format: { type: "audio/pcm", rate: 24000 }, turn_detection: { type: "server_vad", interrupt_response: true, create_response: true }, transcription: { model: "gpt-4o-transcribe" } },
+               output: { format: { type: "audio/pcm", rate: 24000 }, voice: "marin" } } } });
+    await waitFor(s4, (e) => e.type === "session.updated", 10000);
+    await textTurn(s4, "Count from one to thirty slowly, one number per sentence.");
+    await waitFor(s4, () => s4.audioDeltas >= 5, 20000);
+    const pcm = wavData(readFileSync(speechWav));
+    const startAt = Date.now(); let firstChunk;
+    for (let o = 0; o < pcm.length; o += 960) { const id = send(s4, { type: "input_audio_buffer.append", audio: pcm.subarray(o, o + 960).toString("base64") }); firstChunk ??= id; await sleep(20); if (s4.events.some((e) => e.ev.type === "input_audio_buffer.speech_started")) s4.sawStart ??= Date.now() - startAt; }
+    for (let i = 0; i < 50; i++) { send(s4, { type: "input_audio_buffer.append", audio: Buffer.alloc(960).toString("base64") }); await sleep(20); } // trailing silence so VAD ends the turn
+    const ss = await waitFor(s4, (e) => e.type === "input_audio_buffer.speech_started", 5000);
+    const cancelled = await waitFor(s4, (e) => e.type === "response.cancelled" || (e.type === "response.done" && e.response?.status === "cancelled"), 10000);
+    if (ss && cancelled) {
+      mark("cancel_truncate", ss.id, `server VAD speech_started ${s4.sawStart ?? "?"} ms after speech began streaming`);
+      mark("cancel_truncate", cancelled.id, `in-flight response cancelled by speech (${cancelled.ev.type}, status=${cancelled.ev.response?.status})`);
+      const msg = [...s4.events].reverse().find((e) => e.ev.type === "response.output_item.added" && e.ev.item?.type === "message" && e.id < cancelled.id) ?? s4.events.find((e) => e.ev.type === "response.output_item.added" && e.ev.item?.type === "message");
+      if (msg) {
+        send(s4, { type: "conversation.item.truncate", item_id: msg.ev.item.id, content_index: 0, audio_end_ms: 500 });
+        const trn = await waitFor(s4, (e) => e.type === "conversation.item.truncated" || e.type === "error", 10000);
+        if (trn?.ev.type === "conversation.item.truncated") mark("cancel_truncate", trn.id, "conversation.item.truncate acknowledged: conversation.item.truncated");
+        else note("cancel_truncate", `truncate after barge-in: ${trn ? JSON.stringify(trn.ev.error) : "no reply"}`);
+      }
+    } else note("cancel_truncate", `speech barge-in not observed (speech_started=${!!ss}, cancelled=${!!cancelled})`);
+    const tcomp = await waitFor(s4, (e) => e.type === "conversation.item.input_audio_transcription.completed", 15000);
+    if (tcomp) mark("audio_in", tcomp.id, `speech recognised: "${(tcomp.ev.transcript ?? "").trim().slice(0, 80)}"`);
+    s4.ws.close(); await sleep(300);
+  }
 
   // --- s2: reconnect (fresh connection)
   const s2 = await connect("s2");

@@ -7,12 +7,12 @@
   "requested_model_id": "gpt-realtime-2.1",
   "returned_model_id": "gpt-realtime-2.1",
   "version_unresolved": false,
-  "checked_at": "2026-10-16T22:26:46.610524+00:00",
-  "expires_at": "2026-10-23T22:26:46.610524+00:00",
+  "checked_at": "2026-10-16T22:32:19.647156+00:00",
+  "expires_at": "2026-10-23T22:32:19.647156+00:00",
   "adapter_version": "openai_probe.mjs/0",
   "sdk_version": "ws@8.18.3 node v24.9.0",
   "effective_session_config": {
-    "raw_event_log": "artifacts/phase0/openai-probe-2026-10-16T22-24-36-874Z.jsonl",
+    "raw_event_log": "artifacts/phase0/openai-probe-2026-10-16T22-31-44-780Z.jsonl",
     "audio": "audio/pcm 24000 in and out, voice marin",
     "turn_detection": null,
     "model_doc": "https://developers.openai.com/api/docs/models/gpt-realtime-2.1"
@@ -58,12 +58,14 @@
         "doc_url": "https://developers.openai.com/api/docs/guides/realtime-conversations",
         "doc_retrieved_at": "2026-10-16",
         "probe_event_ids": [
-          "oai_ev_48"
+          "oai_ev_56",
+          "oai_ev_363"
         ]
       },
       "limitations": [
-        "silence append + commit only; recognition not exercised",
-        "append + commit accepted (input_audio_buffer.committed); recognition not exercised"
+        "silence append + commit; synthetic speech recognised in the --speech-wav stage",
+        "append + commit accepted (input_audio_buffer.committed); recognition not exercised",
+        "speech recognised: \"Stop, please stop and listen to me for a moment.\""
       ],
       "tool_mode": null
     },
@@ -75,7 +77,8 @@
         "doc_retrieved_at": "2026-10-16",
         "probe_event_ids": [
           "oai_ev_17",
-          "oai_ev_97"
+          "oai_ev_104",
+          "oai_ev_395"
         ]
       },
       "limitations": [
@@ -90,8 +93,8 @@
         "doc_url": "https://developers.openai.com/api/docs/guides/realtime-conversations",
         "doc_retrieved_at": "2026-10-16",
         "probe_event_ids": [
-          "oai_ev_45",
-          "oai_ev_47"
+          "oai_ev_52",
+          "oai_ev_55"
         ]
       },
       "limitations": [
@@ -108,7 +111,7 @@
         "doc_url": "https://developers.openai.com/api/docs/guides/realtime-conversations",
         "doc_retrieved_at": "2026-10-16",
         "probe_event_ids": [
-          "oai_ev_38"
+          "oai_ev_45"
         ]
       },
       "limitations": [
@@ -139,7 +142,7 @@
         "doc_retrieved_at": "2026-10-16",
         "probe_event_ids": [
           "oai_ev_4",
-          "oai_ev_45"
+          "oai_ev_52"
         ]
       },
       "limitations": [
@@ -151,16 +154,19 @@
     },
     {
       "name": "cancel_truncate",
-      "status": "observed",
+      "status": "verified",
       "evidence": {
-        "doc_url": null,
-        "doc_retrieved_at": null,
+        "doc_url": "https://developers.openai.com/api/docs/guides/realtime-conversations",
+        "doc_retrieved_at": "2026-10-16",
         "probe_event_ids": [
-          "oai_ev_77"
+          "oai_ev_85",
+          "oai_ev_135",
+          "oai_ev_142",
+          "oai_ev_368"
         ]
       },
       "limitations": [
-        "response.cancel observed; truncate ack not seen on a cancelled item",
+        "server VAD speech_started cancels the in-flight response; response.cancel and conversation.item.truncate acknowledged. Truncate on an already-cancelled item was acknowledged in one run and silent in another",
         "response.cancel -> response.done status=cancelled",
         "truncate result: none"
       ],
@@ -173,7 +179,7 @@
         "doc_url": "https://developers.openai.com/api/docs/guides/realtime-conversations",
         "doc_retrieved_at": "2026-10-16",
         "probe_event_ids": [
-          "oai_ev_45"
+          "oai_ev_52"
         ]
       },
       "limitations": [
@@ -189,7 +195,7 @@
         "doc_url": null,
         "doc_retrieved_at": null,
         "probe_event_ids": [
-          "oai_ev_157"
+          "oai_ev_435"
         ]
       },
       "limitations": [

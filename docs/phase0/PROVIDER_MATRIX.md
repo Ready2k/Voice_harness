@@ -28,12 +28,12 @@ The first table above is the original baseline. Approved state, from `artifacts/
 |---|---|---|---|---|
 | Account access / model discovery | verified | verified (alias, `version_unresolved`) | unknown (no API key) | unknown (no API key) |
 | Input / output codecs | observed (24 kHz PCM) | observed (16 kHz in, 24 kHz out) | unknown | unknown |
-| Audio in / out | verified | verified (speech recognised, synthetic voice) | unknown | unknown |
+| Audio in / out | verified (speech recognised, synthetic voice) | verified (speech recognised, synthetic voice) | unknown | unknown |
 | Tool args and results | verified (native; MCP bridged = `gateway_bridge`) | verified (native) | unknown | unknown |
 | Transcript finality | verified | observed | unknown | unknown |
 | Audio alignment | unknown | unknown | unknown | unknown |
 | Turn signalling | verified (manual turns) | observed | unknown | unknown |
-| Cancel / truncate | observed (cancel; truncate ack not seen) | observed (speech barge-in: `INTERRUPTED` stopReason about 0.5 s after speech began; two runs) | unknown | unknown |
+| Cancel / truncate | verified (speech barge-in via server VAD cancels the response in about 0.2 s; truncate acknowledged) | observed (speech barge-in: `INTERRUPTED` stopReason about 0.5 s after speech began; two runs) | unknown | unknown |
 | Usage granularity | verified | verified | unknown | unknown |
 | Reconnect / resume | unknown | unknown | unknown | unknown |
 | Direct MCP | unknown | unknown | unknown | unknown |

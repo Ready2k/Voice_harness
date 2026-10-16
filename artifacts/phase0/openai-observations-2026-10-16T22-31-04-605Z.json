@@ -1,0 +1,120 @@
+{
+  "meta": {
+    "modelId": "gpt-realtime-2.1",
+    "startedAt": "2026-10-16T22:31:04.609Z",
+    "node": "v24.9.0",
+    "sessionCreated": {
+      "model": "gpt-realtime-2.1",
+      "id": "sess_EZkk5cmaeRUENJqLeWUH9"
+    }
+  },
+  "evidence": {
+    "auth_reachability": [
+      "oai_ev_1",
+      "oai_ev_89",
+      "oai_ev_287"
+    ],
+    "model_discovery": [
+      "oai_ev_2"
+    ],
+    "input_codecs_rates": [
+      "oai_ev_4"
+    ],
+    "output_codecs_rates": [
+      "oai_ev_4"
+    ],
+    "turn_signalling": [
+      "oai_ev_4",
+      "oai_ev_52"
+    ],
+    "audio_out": [
+      "oai_ev_16",
+      "oai_ev_103",
+      "oai_ev_301"
+    ],
+    "tool_arguments_and_results": [
+      "oai_ev_52",
+      "oai_ev_55"
+    ],
+    "usage_granularity": [
+      "oai_ev_52"
+    ],
+    "transcript_finality": [
+      "oai_ev_45"
+    ],
+    "audio_in": [
+      "oai_ev_56"
+    ],
+    "cancel_truncate": [
+      "oai_ev_84",
+      "oai_ev_86",
+      "oai_ev_131",
+      "oai_ev_139",
+      "oai_ev_286"
+    ],
+    "error_handling": [
+      "oai_ev_88"
+    ],
+    "reconnect_resume": [
+      "oai_ev_342"
+    ]
+  },
+  "notes": {
+    "auth_reachability": [
+      "websocket open",
+      "websocket open",
+      "websocket open"
+    ],
+    "model_discovery": [
+      "session.created model=gpt-realtime-2.1"
+    ],
+    "input_codecs_rates": [
+      "{\"type\":\"audio/pcm\",\"rate\":24000}"
+    ],
+    "output_codecs_rates": [
+      "{\"type\":\"audio/pcm\",\"rate\":24000}"
+    ],
+    "turn_signalling": [
+      "session.updated accepted turn_detection=null",
+      "response.done status=completed"
+    ],
+    "tool_arguments_and_results": [
+      "function_call get_account_summary {\"account_id\":\"ACC-001\"}",
+      "function_call_output delivered then response.create"
+    ],
+    "usage_granularity": [
+      "response.done usage keys: total_tokens,input_tokens,output_tokens,input_token_details,output_token_details; {\"text_tokens\":359,\"audio_tokens\":0,\"image_tokens\":0,\"cached_tokens\":0,\"cached_tokens_details\":{\"text_tokens\":0,\"audio_tokens\":0,\"image_tokens\":0}}"
+    ],
+    "transcript_finality": [
+      "response.output_audio_transcript.delta then .done"
+    ],
+    "audio_alignment": [
+      "no word/audio timestamps in observed events"
+    ],
+    "audio_in": [
+      "append + commit accepted (input_audio_buffer.committed); recognition not exercised"
+    ],
+    "cancel_truncate": [
+      "response.cancel -> response.done status=cancelled",
+      "conversation.item.truncate -> conversation.item.truncated",
+      "server VAD speech_started 213 ms after speech began streaming",
+      "in-flight response cancelled by speech (response.done, status=cancelled)",
+      "conversation.item.truncate acknowledged: conversation.item.truncated"
+    ],
+    "error_handling": [
+      "unknown event -> error: invalid_value; connection stayed open"
+    ],
+    "reconnect_resume": [
+      "fresh connection after close works; session resume not documented/tested"
+    ],
+    "direct_mcp": [
+      "docs list MCP tools as a supported tool type; not exercised (gateway_bridge used)"
+    ]
+  },
+  "log_file": "artifacts/phase0/openai-probe-2026-10-16T22-31-04-605Z.jsonl",
+  "flags": {
+    "toolCalled": true,
+    "firstAudioMs": 723,
+    "sdk": "ws@8.18.3 node v24.9.0"
+  }
+}
