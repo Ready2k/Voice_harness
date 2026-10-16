@@ -17,6 +17,8 @@ Sources: developers.openai.com/api/docs/guides/realtime, /guides/realtime-conver
 | Not found | Usage fields in `response.done`, reconnect/resume, retention terms. |
 
 ## Amazon Nova 2 Sonic (Bedrock)
+
+**Operator decision (2026-10-16): Nova 2.5 Sonic is the target model.** Evidence for it is thin: one secondary blog (aitamer.news, "generally available in Bedrock", dated 2026-10-05) reports regions us-east-1, us-west-2, eu-north-1, ap-northeast-1, and no primary AWS page or model ID was found. The Nova 2 rows below are the closest documented baseline and are **not** evidence for 2.5. The 2.5 model ID stays unconfigured until `aws bedrock list-foundation-models --region <region>` (filter "sonic") or AWS docs name it, then a probe passes (spec §3). Status: `unknown`.
 Sources: docs.aws.amazon.com/nova/latest/nova2-userguide/ (using-conversational-speech, sonic-getting-started; search hits for sonic-input-events, sonic-tool-configuration, sonic-event-flow not read in full).
 | Row | Doc claim |
 |---|---|
