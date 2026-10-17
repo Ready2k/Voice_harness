@@ -8,7 +8,7 @@ This audit read the code rather than the status documents, ran the suites, and f
 ## Verdict
 
 - **AC gate: every named acceptance check passes its executable oracle** (AC-01 Met, AC-02 Met, AC-03 Met, AC-04 Met, AC-05 Met, AC-06 Met, AC-07 Met, AC-08 Met, AC-13 Met, AC-14 Met, AC-15 Met, AC-16 Met, AC-17 Met, AC-18 Met, AC-21 Met). The suite passes on SQLite (150 tests locally, 3 live-provider skips by design) and on PostgreSQL through Compose (`make test`: 150 Python tests OK with 4 skips (3 live-provider; the golden-artifact check skips because the image does not ship `artifacts/`), 3 browser-scheduler tests OK; `make golden`, `make recovery`, `make lint` (ruff 0.17.1 + bandit) and `make audit` (pip-audit) all exit 0).
-- **Full Phase 1 requirement conformance is not yet complete.** 31 requirement rows are partially met and 3 are not met; none sits inside an AC oracle, but several are MUST-level statements (details under "Open gaps").
+- **Full Phase 1 requirement conformance is not yet complete.** 29 requirement rows are partially met and 2 are not met; none sits inside an AC oracle, but several are MUST-level statements (details under "Open gaps").
 - **Recommendation.** The AC gate can be declared met on this evidence, with the scope qualifications above, once two housekeeping conditions are satisfied by the maintainer: (1) commit this work; (2) re-run `make benchmark` so the committed baseline matches the audited source (the existing baseline predates the RFC 8785 canonicalization and decision-record changes, so timing targets stay **provisional**, as the spec requires until a matching baseline exists). Declaring "Phase 1 complete" without qualification is not supported while the open gaps remain.
 
 ## Counts
