@@ -31,6 +31,7 @@ services:
       HARNESS_DATABASE_URL: postgresql://harness@postgres/voice_harness
       HARNESS_DB_PASSWORD_FILE: /run/secrets/postgres_password
       HARNESS_BIND: 0.0.0.0
+      HARNESS_PUBLISHED_LOOPBACK_ONLY: "1"  # host publish below is 127.0.0.1 only
       OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
     secrets: [postgres_password]
     ports: ["127.0.0.1:8765:8000"]

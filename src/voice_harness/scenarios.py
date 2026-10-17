@@ -142,7 +142,11 @@ async def _run_scenario(engine: Engine, run_id, evidence):
         },
     ]
     with engine.database.transaction(run_id) as tx:
-        if tx.state["state"] == "cancelled":
+        if tx.state["state"] in {"queued", "running"}:
+            tx.state["state"] = "evaluating"
+            tx.event("orchestrator", "run.evaluating", {})
+    with engine.database.transaction(run_id) as tx:
+        if tx.state["state"] != "evaluating":
             return None
         tx.event(
             "provider",

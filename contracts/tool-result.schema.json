@@ -1,5 +1,32 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "ToolError": {
+      "additionalProperties": false,
+      "description": "Spec section 8 error: catalogue code, retryable flag, safe message.",
+      "properties": {
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "retryable": {
+          "title": "Retryable",
+          "type": "boolean"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "retryable",
+        "message"
+      ],
+      "title": "ToolError",
+      "type": "object"
+    }
+  },
   "additionalProperties": false,
   "properties": {
     "call_id": {
@@ -50,6 +77,17 @@
       },
       "title": "Evidence Event Ids",
       "type": "array"
+    },
+    "error": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ToolError"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
     }
   },
   "required": [

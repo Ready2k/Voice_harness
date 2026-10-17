@@ -1236,7 +1236,7 @@ class Engine:
             runs = [
                 row["run_id"]
                 for row in db.execute(
-                    "SELECT run_id FROM harness_runs WHERE state IN ('running', 'awaiting_playback')"
+                    "SELECT run_id FROM harness_runs WHERE state IN ('probing', 'running', 'evaluating', 'awaiting_playback')"
                 ).fetchall()
             ]
         for run_id in runs:
