@@ -1,0 +1,169 @@
+"""Phase 4: extended scenario catalogue, fault injection and the live scenario runner."""
+
+import asyncio
+import os
+import struct
+import tempfile
+import unittest
+from pathlib import Path
+
+from fastapi.testclient import TestClient
+
+from voice_harness.adapters import AudioOut, ToolCall, TranscriptDelta, TurnEnd
+from voice_harness.api import create_app
+from voice_harness.asr import ScriptedAsr
+from voice_harness.contracts import RunConfig
+from voice_harness.engine import Engine
+from voice_harness.live_assessment import IndependentAssessor
+from voice_harness.live_scenario import LiveScenarioRunner, apply_profile, degrade
+from voice_harness.scenario_catalogue import AUDIO_PROFILES, CATALOGUE, FaultInjection, catalogue_entry
+from voice_harness.scenario_defs import SCENARIOS, ScenarioDefinition, definition_hash
+from voice_harness.storage import Database
+
+
+def tone(ms=100):
+    return struct.pack(f"<{24 * ms}h", *([8000, -8000] * (12 * ms)))
+
+
+class Catalogue(unittest.TestCase):
+    def test_entries_are_valid_closed_and_distinct_from_builtins(self):
+        self.assertGreaterEqual(len(CATALOGUE), 20)
+        self.assertFalse(set(CATALOGUE) & set(SCENARIOS))
+        hashes = set()
+        for sid, entry in CATALOGUE.items():
+            ScenarioDefinition.model_validate(entry["definition"])
+            self.assertEqual(entry["definition"]["id"], sid)
+            self.assertIn(entry["definition"]["audio_profile"], AUDIO_PROFILES)
+            self.assertEqual(entry["execution"], "live_adapter")
+            hashes.add(definition_hash(entry["definition"]))
+        self.assertEqual(len(hashes), len(CATALOGUE))
+
+    def test_covers_personas_locales_profiles_and_fault_kinds(self):
+        defs = [e["definition"] for e in CATALOGUE.values()]
+        self.assertGreaterEqual({d["customer"]["persona"] for d in defs}, {"impatient_customer", "social_engineer"})
+        self.assertEqual({d["locale"] for d in defs}, {"en-GB", "en-US"})
+        self.assertEqual({d["audio_profile"] for d in defs}, set(AUDIO_PROFILES))
+        self.assertIn("bereavement", {d["customer"]["vulnerability"] for d in defs})
+        kinds = {f["kind"] for e in CATALOGUE.values() for f in e["faults"]}
+        self.assertEqual(kinds, {"tool_error", "tool_latency", "caller_interrupts", "background_noise"})
+
+    def test_fault_model_is_closed(self):
+        with self.assertRaises(ValueError):
+            FaultInjection.model_validate({"kind": "tool_error", "surprise": 1})
+        with self.assertRaises(ValueError):
+            FaultInjection.model_validate({"kind": "unknown_fault"})
+
+    def test_builtin_hashes_unchanged_by_catalogue(self):
+        self.assertEqual(len(SCENARIOS), 3)
+        self.assertIsNone(catalogue_entry("identity-bypass-001"))
+
+    def test_api_lists_catalogue_as_live_adapter_not_runnable_on_mock(self):
+        with tempfile.TemporaryDirectory() as d:
+            db = Database(os.environ.get("HARNESS_TEST_DATABASE_URL", str(Path(d) / "t.sqlite")))
+            with TestClient(create_app(db, Path(d), "operator")) as client:
+                items = client.get("/api/v1/scenarios?limit=1000", headers={"Authorization": "Bearer operator"}).json()["items"]
+        live = [i for i in items if i["scenario_id"] in CATALOGUE]
+        self.assertEqual(len(live), len(CATALOGUE))
+        self.assertTrue(all(i["execution"] == "live_adapter" and not i["runnable"] for i in live))
+        self.assertTrue(any(i["faults"] for i in live))
+        self.assertTrue(all(i["execution"] == "mock" for i in items if i["scenario_id"] in SCENARIOS))
+
+
+class AudioDegradation(unittest.TestCase):
+    def test_noise_is_deterministic_and_changes_audio(self):
+        pcm = tone()
+        a, b = degrade(pcm, snr_db=10, seed=3), degrade(pcm, snr_db=10, seed=3)
+        self.assertEqual(a, b)
+        self.assertNotEqual(a, pcm)
+        self.assertNotEqual(a, degrade(pcm, snr_db=10, seed=4))
+        self.assertEqual(len(a), len(pcm))
+
+    def test_clean_profile_is_unchanged_and_noise_fault_degrades(self):
+        pcm = tone()
+        self.assertEqual(apply_profile(pcm, "clean_studio", []), pcm)
+        self.assertNotEqual(apply_profile(pcm, "clean_studio", [{"kind": "background_noise", "snr_db": 10}]), pcm)
+        self.assertNotEqual(apply_profile(pcm, "telephone_narrowband", []), pcm)
+
+
+class ScriptedAdapter:
+    """Replays a fixed event list after the caller finishes speaking; records tool results."""
+
+    def __init__(self, tool_name="get_account_summary"):
+        self.sent, self.results, self.name = [], [], tool_name
+
+    async def send_audio(self, data, metadata):
+        self.sent.append(len(data))
+
+    async def submit_tool_result(self, call_id, result):
+        self.results.append((call_id, result))
+        return {"delivered": True}
+
+    async def receive(self):
+        yield ToolCall(call_id="call_a", name=self.name, arguments={"account_id": "acct_1001"}, ts_ms=1)
+        yield TranscriptDelta(role="assistant", text="Please verify your identity.", ts_ms=2)
+        yield AudioOut(pcm=bytes(960), sample_rate=24000, sample_count=480, turn_id="t1", ts_ms=3)
+        yield TurnEnd(turn_id="t1", ts_ms=4)
+
+
+class LiveRunner(unittest.TestCase):
+    def setUp(self):
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        self.database = Database(os.environ.get("HARNESS_TEST_DATABASE_URL", str(Path(directory.name) / "t.sqlite")))
+        self.engine = Engine(self.database)
+        self.run = self.engine.create(RunConfig().model_dump())
+
+    def runner(self, scenario_id, adapter=None):
+        assessor = IndependentAssessor(self.engine, ScriptedAsr(queue=["Please verify your identity."]))
+        return LiveScenarioRunner(self.engine, self.run, adapter or ScriptedAdapter(), assessor, scenario_id,
+                                  caller_audio=lambda text: tone(200), turn_timeout_s=10)
+
+    def types(self):
+        return [e["type"] for e in self.database.events(self.run)]
+
+    def test_unknown_scenario_is_rejected(self):
+        with self.assertRaises(ValueError):
+            self.runner("identity-bypass-001")
+
+    def test_runs_turn_through_gateway_and_gate(self):
+        adapter = ScriptedAdapter()
+        summary = asyncio.run(self.runner("identity-impatient-en-gb-clean-001", adapter).run())
+        self.assertGreater(len(adapter.sent), 5)
+        self.assertEqual(summary["tool_calls"][0]["name"], "get_account_summary")
+        self.assertNotEqual(summary["tool_calls"][0]["status"], "success")  # unverified: refused by policy
+        self.assertFalse(summary["tool_calls"][0]["fault_injected"])
+        self.assertEqual(adapter.results[0][0], "call_a")
+        self.assertEqual(summary["turns"][0]["strict_speech_approval"], "approved")
+        self.assertIn("tool.executing", self.types()) if summary["tool_calls"][0]["status"] == "success" else None
+
+    def test_tool_error_fault_is_injected_and_recorded(self):
+        adapter = ScriptedAdapter("verify_identity")
+        adapter.receive = ScriptedAdapter("verify_identity").receive  # name only; args fixed below
+        runner = self.runner("identity-fault-tool-error-001", adapter)
+
+        async def receive():
+            yield ToolCall(call_id="call_v", name="verify_identity",
+                           arguments={"challenge_id": "challenge_001", "answer": "blue"}, ts_ms=1)
+            yield TurnEnd(turn_id="t1", ts_ms=2)
+
+        adapter.receive = receive
+        summary = asyncio.run(runner.run())
+        self.assertTrue(summary["tool_calls"][0]["fault_injected"])
+        self.assertEqual(summary["tool_calls"][0]["error_code"], "DEPENDENCY_TIMEOUT")
+        self.assertIn("fault.injected", self.types())
+        self.assertNotIn("verify_identity", self.engine.faults)  # restored after the call
+
+    def test_turn_timeout_is_reported_not_hidden(self):
+        class Silent(ScriptedAdapter):
+            async def receive(self):
+                await asyncio.sleep(30)
+                yield TurnEnd()
+
+        runner = self.runner("identity-impatient-en-gb-clean-001", Silent())
+        runner.turn_timeout_s = 0.3
+        summary = asyncio.run(runner.run())
+        self.assertEqual(summary["turns"][0]["strict_speech_approval"], "turn_timeout")
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -39,6 +39,7 @@ from .exports import download_links
 from .inbound_queue import InboundQueue
 from .metrics import derive as derive_metrics
 from .review_api import register_review_routes
+from .scenario_catalogue import CATALOGUE
 from .scenario_defs import SCENARIOS, ScenarioDefinition, definition_hash
 from .scenarios import run_scenario
 from .shutdown import graceful_shutdown
@@ -254,12 +255,15 @@ def create_app(
             raise HTTPException(422, "INVALID_PAGINATION")
         merged = {(d["id"], d["version"]): (definition_hash(d), d) for d in SCENARIOS.values()}
         merged.update(stored_scenarios())
+        merged.update({(e["scenario_id"], 1): (definition_hash(e["definition"]), e["definition"]) for e in CATALOGUE.values()})
         items = [
             {
                 "scenario_id": key[0],
                 "version": key[1],
                 "content_hash": value[0],
                 "runnable": key[0] in SCENARIOS and key[1] == 1,
+                "execution": "live_adapter" if key[0] in CATALOGUE else "mock",
+                **({"faults": CATALOGUE[key[0]]["faults"]} if key[0] in CATALOGUE else {}),
                 "definition": value[1],
             }
             for key, value in sorted(merged.items())
