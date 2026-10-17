@@ -1,18 +1,18 @@
 {
   "schema_version": 1,
-  "report_id": "cap_openai_gpt_realtime_2_1_20261016",
+  "report_id": "cap_openai_gpt_realtime_2_1_20261017",
   "provider_family": "openai",
   "api_surface": "realtime websocket wss://api.openai.com/v1/realtime",
   "region": null,
   "requested_model_id": "gpt-realtime-2.1",
   "returned_model_id": "gpt-realtime-2.1",
   "version_unresolved": false,
-  "checked_at": "2026-10-16T22:32:19.647156+00:00",
-  "expires_at": "2026-10-23T22:32:19.647156+00:00",
+  "checked_at": "2026-10-17T11:20:18.795999+00:00",
+  "expires_at": "2026-10-24T11:20:18.795999+00:00",
   "adapter_version": "openai_probe.mjs/0",
   "sdk_version": "ws@8.18.3 node v24.9.0",
   "effective_session_config": {
-    "raw_event_log": "artifacts/phase0/openai-probe-2026-10-16T22-31-44-780Z.jsonl",
+    "raw_event_log": "artifacts/phase0/openai-probe-2026-10-17T11-19-46-325Z.jsonl",
     "audio": "audio/pcm 24000 in and out, voice marin",
     "turn_detection": null,
     "model_doc": "https://developers.openai.com/api/docs/models/gpt-realtime-2.1"
@@ -58,8 +58,8 @@
         "doc_url": "https://developers.openai.com/api/docs/guides/realtime-conversations",
         "doc_retrieved_at": "2026-10-16",
         "probe_event_ids": [
-          "oai_ev_56",
-          "oai_ev_363"
+          "oai_ev_53",
+          "oai_ev_387"
         ]
       },
       "limitations": [
@@ -76,9 +76,9 @@
         "doc_url": "https://developers.openai.com/api/docs/guides/realtime-conversations",
         "doc_retrieved_at": "2026-10-16",
         "probe_event_ids": [
-          "oai_ev_17",
-          "oai_ev_104",
-          "oai_ev_395"
+          "oai_ev_16",
+          "oai_ev_103",
+          "oai_ev_406"
         ]
       },
       "limitations": [
@@ -93,8 +93,8 @@
         "doc_url": "https://developers.openai.com/api/docs/guides/realtime-conversations",
         "doc_retrieved_at": "2026-10-16",
         "probe_event_ids": [
-          "oai_ev_52",
-          "oai_ev_55"
+          "oai_ev_49",
+          "oai_ev_52"
         ]
       },
       "limitations": [
@@ -111,7 +111,7 @@
         "doc_url": "https://developers.openai.com/api/docs/guides/realtime-conversations",
         "doc_retrieved_at": "2026-10-16",
         "probe_event_ids": [
-          "oai_ev_45"
+          "oai_ev_42"
         ]
       },
       "limitations": [
@@ -142,7 +142,7 @@
         "doc_retrieved_at": "2026-10-16",
         "probe_event_ids": [
           "oai_ev_4",
-          "oai_ev_52"
+          "oai_ev_49"
         ]
       },
       "limitations": [
@@ -159,10 +159,10 @@
         "doc_url": "https://developers.openai.com/api/docs/guides/realtime-conversations",
         "doc_retrieved_at": "2026-10-16",
         "probe_event_ids": [
-          "oai_ev_85",
-          "oai_ev_135",
-          "oai_ev_142",
-          "oai_ev_368"
+          "oai_ev_84",
+          "oai_ev_127",
+          "oai_ev_134",
+          "oai_ev_356"
         ]
       },
       "limitations": [
@@ -179,7 +179,7 @@
         "doc_url": "https://developers.openai.com/api/docs/guides/realtime-conversations",
         "doc_retrieved_at": "2026-10-16",
         "probe_event_ids": [
-          "oai_ev_52"
+          "oai_ev_49"
         ]
       },
       "limitations": [
@@ -195,7 +195,7 @@
         "doc_url": null,
         "doc_retrieved_at": null,
         "probe_event_ids": [
-          "oai_ev_435"
+          "oai_ev_448"
         ]
       },
       "limitations": [

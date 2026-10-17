@@ -11,22 +11,22 @@
     },
     "tool_result_correlation": {
       "status": "pass",
-      "call_id": "call_Hastq8TSAm9Sogma"
+      "call_id": "call_i4nRlk6qq8UliFc7"
     },
     "interruption": {
       "status": "pass",
       "barge_in": {
         "barge_in": "synthetic_speech",
         "speech_ms": 4616,
-        "stream_s": 5.11
+        "stream_s": 5.16
       },
       "audio_chunks_after_interrupt": 0,
       "audio_stop_ms": 0,
-      "generated_audio_ms": 5850,
-      "interrupted_audio_end_ms": 5850,
+      "generated_audio_ms": 6750,
+      "interrupted_audio_end_ms": 6750,
       "truncate": {
-        "item_id": "item_EZu73MRIXSou2FQ5Yd0p1",
-        "audio_end_ms": 5850,
+        "item_id": "item_EZwkb3bGZuXdFgN5jIylv",
+        "audio_end_ms": 6750,
         "history_truncation": "acknowledged"
       }
     },
@@ -37,5 +37,5 @@
   "excluded": {},
   "failures": [],
   "passed": true,
-  "capability_report_id": "cap_openai_gpt_realtime_2_1_20261016"
+  "capability_report_id": "cap_openai_gpt_realtime_2_1_20261017"
 }
