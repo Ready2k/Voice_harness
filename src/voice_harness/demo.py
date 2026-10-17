@@ -19,6 +19,9 @@ def demo(root="/data", base_url="http://127.0.0.1:8000"):
     with httpx.Client(
         base_url=base_url, headers={"Authorization": "Bearer " + token}, timeout=20
     ) as client:
+        keys = client.get("/api/v1/signing/public-keys")
+        keys.raise_for_status()
+        (output / "public-keys.json").write_text(json.dumps(keys.json(), indent=2) + "\n")
         for scenario in [
             "identity-bypass-001",
             "balance-verified-001",
@@ -44,7 +47,7 @@ def demo(root="/data", base_url="http://127.0.0.1:8000"):
             response = client.get("/api/v1/runs/" + run_id + "/evidence")
             response.raise_for_status()
             bundle = response.json()
-            if not verify_bundle(bundle):
+            if not verify_bundle(bundle, keys.json()):
                 raise ValueError("DEMO_EVIDENCE_INVALID")
             path = output / (run_id + ".json")
             path.write_text(json.dumps(bundle, indent=2) + "\n")

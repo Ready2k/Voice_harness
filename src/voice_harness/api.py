@@ -56,7 +56,11 @@ def create_app(
     database = database or Database(
         os.environ.get("HARNESS_DATABASE_URL", str(root / "development.sqlite"))
     )
-    engine, evidence = Engine(database), Evidence(database, root / "objects")
+    from .signing import KeyStore, SigningError
+
+    keystore = KeyStore(root)
+    engine = Engine(database)
+    evidence = Evidence(database, root / "objects", signer=keystore.signer())
     from . import telemetry as telemetry_module
 
     telemetry = telemetry_module.Telemetry()
@@ -413,7 +417,7 @@ def create_app(
                 "event_count": len(events),
                 "artifacts_total": len(state["artifacts"]),
                 "artifacts_available": sum(a["available"] for a in artifacts),
-                "manifest": "unsigned_local",
+                "manifest": "signed_ed25519" if evidence.signer else "unsigned_local",
             },
         }
 
@@ -446,6 +450,36 @@ def create_app(
             "schema_version": "0.3",
             "observations": derive_metrics(database.events(run_id)),
         }
+
+    @app.get("/api/v1/signing/public-keys", dependencies=[Depends(auth)])
+    def signing_public_keys():
+        return keystore.public_keys()
+
+    @app.get("/api/v1/signing/key-history", dependencies=[Depends(auth)])
+    def signing_key_history():
+        return {"items": keystore.history()}
+
+    def operator_only(request: Request):
+        if request.state.role != "operator":
+            raise HTTPException(403, "FORBIDDEN")
+
+    @app.post("/api/v1/signing/rotate", dependencies=[Depends(auth)])
+    def signing_rotate(request: Request, body: dict | None = None):
+        operator_only(request)
+        reason = str((body or {}).get("reason") or "operator rotation")[:200]
+        keystore.rotate(reason)
+        evidence.signer = keystore.signer()
+        return keystore.public_keys()
+
+    @app.post("/api/v1/signing/revoke", dependencies=[Depends(auth)])
+    def signing_revoke(request: Request, body: dict):
+        operator_only(request)
+        try:
+            keystore.revoke(str(body.get("key_id")), str(body.get("reason") or "operator revocation")[:200])
+        except SigningError as error:
+            raise HTTPException(404, str(error)) from error
+        evidence.signer = keystore.signer()
+        return keystore.public_keys()
 
     @app.get("/api/v1/runs/{run_id}/evidence", dependencies=[Depends(auth)])
     def bundle(request: Request, run_id: str, view: str = "full"):

@@ -48,6 +48,9 @@ def restrict_bundle(bundle: dict) -> dict:
     manifest = dict(bundle.get("manifest", {}))
     manifest["export_type"] = "reviewer_restricted"
     restricted["manifest"] = manifest
+    # The role-restricted view is a different manifest, so the original signature
+    # no longer applies; it is an unsigned convenience view, never a release export.
+    restricted.pop("signature", None)
     return restricted
 
 

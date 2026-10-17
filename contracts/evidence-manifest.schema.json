@@ -70,8 +70,16 @@
       "type": "array"
     },
     "signature": {
-      "title": "Signature",
-      "type": "null"
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Signature"
     },
     "signature_status": {
       "maxLength": 200,

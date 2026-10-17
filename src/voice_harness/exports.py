@@ -113,6 +113,9 @@ def reviewer_export(evidence, run_id):
             "source manifest hash, not the contents of omitted source artifacts",
         },
     }
+    # AC-08: the derived view is sealed as its own manifest (the copied source
+    # signature fields are replaced); the source signature travels alongside.
+    envelope = evidence.sign_manifest(manifest)
     return {
         "manifest": manifest,
         "manifest_hash": digest(manifest),
@@ -121,6 +124,7 @@ def reviewer_export(evidence, run_id):
         "schemas": source["schemas"],
         "versions": source["versions"],
         "source_manifest": src,
+        **({"signature": envelope, "source_signature": source["signature"]} if envelope else {}),
     }
 
 
@@ -136,8 +140,12 @@ def to_ndjson(bundle):
         line("manifest", manifest=bundle["manifest"], manifest_hash=bundle["manifest_hash"]),
         line("versions", versions=bundle.get("versions")),
     ]
+    if "signature" in bundle:
+        lines.append(line("signature", signature=bundle["signature"]))
     if "source_manifest" in bundle:
         lines.append(line("source_manifest", manifest=bundle["source_manifest"]))
+    if "source_signature" in bundle:
+        lines.append(line("source_signature", signature=bundle["source_signature"]))
     lines += [line("schema", name=n, schema=s) for n, s in (bundle.get("schemas") or {}).items()]
     lines += [line("event", event=e) for e in bundle["events"]]
     lines += [line("artifact", artifact=a) for a in bundle["artifacts"]]
@@ -158,6 +166,8 @@ def from_ndjson(text):
             bundle["versions"] = record["versions"]
         elif kind == "source_manifest":
             bundle["source_manifest"] = record["manifest"]
+        elif kind in ("signature", "source_signature"):
+            bundle[kind] = record["signature"]
         elif kind == "schema":
             bundle["schemas"][record["name"]] = record["schema"]
         elif kind == "event":

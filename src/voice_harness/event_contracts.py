@@ -441,7 +441,7 @@ class EvidenceManifest(Closed):
     missing_artifacts: list[Hex64]
     audio_capture: Literal["retained", "not_captured"]
     holds: list[Free]
-    signature: None
+    signature: Free | None
     signature_status: Identifier
     isolation_strategy: Identifier
     export_type: Identifier

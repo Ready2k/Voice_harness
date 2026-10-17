@@ -17,8 +17,10 @@ from .retention import is_tombstone, purge_metadata, tombstone_records, tombston
 class Evidence:
     GRACE_SECONDS = 7 * 86400
 
-    def __init__(self, database, root, clock=time.time, coverage=None):
+    def __init__(self, database, root, clock=time.time, coverage=None, signer=None):
         self.database, self.root, self.clock = database, Path(root), clock
+        # AC-08: optional manifest signer (signing.Signer); None keeps unsigned_local.
+        self.signer = signer
         # AC-20: export-time snapshot of provider coverage (injectable for tests).
         self.coverage = coverage or (lambda: summarize(build_registry()))
         self.root.mkdir(parents=True, exist_ok=True)
@@ -473,6 +475,7 @@ class Evidence:
             manifest["source_hash"] = tx.state.get("source_hash")
             manifest["config_hash"] = tx.state["config_hash"]
             manifest["fixture_snapshot_id"] = tx.state.get("fixture_snapshot_id")
+            envelope = self.sign_manifest(manifest)
             return {
                 "manifest": manifest,
                 "manifest_hash": digest(manifest),
@@ -480,7 +483,17 @@ class Evidence:
                 "artifacts": artifacts,
                 "schemas": embedded_schemas(),
                 "versions": manifest["versions"],
+                **({"signature": envelope} if envelope else {}),
             }
+
+    def sign_manifest(self, manifest):
+        """Seal ``manifest`` in place (AC-08); returns the envelope or None if unsigned."""
+        if self.signer is None:
+            return None
+        manifest["known_limitations"] = [
+            x for x in manifest["known_limitations"] if not x.startswith("Manifest is unsigned")
+        ]
+        return self.signer.seal(manifest)
 
     def save_manifest(self, run_id):
         bundle = self.bundle(run_id)
@@ -583,7 +596,22 @@ def _derivation_valid(bundle, manifest):
     )
 
 
-def verify_bundle(bundle):
+def verify_bundle(bundle, keyring=None, *, allow_unsigned=None, revoked=()):
+    """Offline integrity check; with ``keyring`` (or ``allow_unsigned=False``) also
+    enforces the AC-08 signature policy.  ``allow_unsigned=True`` accepts a bundle
+    that honestly declares itself unsigned.  With neither argument only integrity
+    is checked (legacy local use)."""
+    if keyring is not None or allow_unsigned is not None:
+        from .signing import SigningError, check_bundle_signature
+
+        try:
+            outcome = check_bundle_signature(
+                bundle, keyring, allow_unsigned=bool(allow_unsigned), revoked=revoked
+            )
+        except (SigningError, AttributeError, TypeError):
+            return False
+        if outcome != "ok":
+            return False
     try:
         manifest, events, artifacts = (
             bundle["manifest"],
