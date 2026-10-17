@@ -2,9 +2,9 @@
 
 ## Delivered
 
-- **Scenario catalogue** (`scenario_catalogue.py`): 16 live-adapter scenarios built as ordinary
+- **Scenario catalogue** (`scenario_catalogue.py`): 18 persona/locale/profile live-adapter scenarios built as ordinary
   `ScenarioDefinition` records (personas: impatient, bereaved/vulnerable, social engineer; locales
-  en-GB/en-US; audio profiles clean, street noise 10 dB, telephone narrowband) plus 4 fault-injected
+  en-GB/en-US; audio profiles clean, street noise 10 dB, telephone narrowband) plus 4 fault-injected (22 entries)
   identity variants. `FaultInjection` is a separate closed model kept outside the definition, so the
   three mock built-ins keep their content hashes. `GET /api/v1/scenarios` lists them with
   `execution: "live_adapter"`, `runnable: false` (the mock runner does not execute them) and their faults.
@@ -28,7 +28,7 @@
 ## Not yet established
 
 - Fault paths (`tool_error`, `tool_latency`, `caller_interrupts`) against a live provider; Nova runner use.
-- Model-driven customer simulator (AC-16) and synthetic commit cancel/recovery (AC-15) on live adapters.
+- Model-driven customer simulator (AC-16). Synthetic commit (AC-15) is tested through the real MCP gateway with a scripted adapter (`tests/test_phase4_commit.py`: denial before identity/confirmation, single-use consumption, changed-amount invalidation, restart idempotency); a live model has not been driven to propose a commit.
 - A first OpenAI vs Nova comparison on the catalogue (needs go-ahead for API spend).
 - The synthetic caller uses macOS `say`; the catalogue declares locales but `say` voice selection is not
   yet locale-aware. Narrowband/noise are simple synthetic shaping, not measured telephony.
