@@ -1,5 +1,15 @@
 # Phase 3 status
 
+Merged 2026-10-17: manifest signing (AC-08), cost accounting (AC-12, AC-19), judges/calibration/human review (AC-10), comparison reports and independent-ASR assessment (AC-11, AC-14 live). Compose on PostgreSQL: 381 Python tests OK, 28 Node tests OK; ruff, bandit and pip-audit clean.
+
+**Not yet established (read before claiming Phase 3 complete):**
+- No live judge has been calibrated; all AI findings are advisory and blocking is off. The shipped holdout is tiny and synthetic, so the 0.80 thresholds are exploratory.
+- No live ASR or live judge (OpenAI/Bedrock) call has been exercised: smoke tests were skipped for lack of a key in the agents' shells. Live paths are covered only by fakes.
+- Pricing table has null prices for every real meter; real run costs export as `unknown` until tariffs are verified. The run loop does not yet record adapter usage into cost lines.
+- The evidence manifest does not yet list new judge findings or human adjudications (the ledger export does), and preservation holds cannot target the new findings.
+- Comparison input is caller-supplied observations; no live-provider study has been run.
+- Signature trust root is distributed out of band; revocation is not time-scoped; private key is on disk.
+
 ## Signing (AC-08 signature gate)
 
 - **What is signed:** the evidence manifest, as RFC 8785 canonical bytes (`canonical.canonical_json`), with Ed25519 (`cryptography`). The manifest's own `signature` section (`{algorithm, key_id, envelope}`) and `signature_status: signed_ed25519` are written before signing, so the key choice is covered. The detached envelope `{algorithm, key_id, payload_sha256, value}` travels in the bundle as `signature` (and as a `signature` NDJSON record). `manifest_hash` is still `digest(manifest)`. `provider_coverage` and retention tombstones are inside the manifest and therefore signed.
