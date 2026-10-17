@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "report_id": "cap_nova_2_5_20261016",
+  "report_id": "cap_nova_2_5_20261017",
   "provider_family": "aws_nova_sonic",
   "api_surface": "bedrock-runtime InvokeModelWithBidirectionalStream",
   "region": "us-east-1",
   "requested_model_id": "amazon.nova-2-5-sonic",
   "returned_model_id": null,
   "version_unresolved": true,
-  "checked_at": "2026-10-16T22:29:48.566400+00:00",
-  "expires_at": "2026-10-23T22:29:48.566400+00:00",
+  "checked_at": "2026-10-17T12:15:53.459515+00:00",
+  "expires_at": "2026-10-24T12:15:53.459515+00:00",
   "adapter_version": "nova_probe.mjs/0",
   "sdk_version": "@aws-sdk/client-bedrock-runtime@3.1136.0",
   "effective_session_config": {
@@ -33,7 +33,7 @@
         "doc_retrieved_at": null,
         "probe_event_ids": [
           "nova_ev_7",
-          "nova_ev_461"
+          "nova_ev_465"
         ]
       },
       "limitations": [
@@ -48,26 +48,26 @@
         "doc_url": null,
         "doc_retrieved_at": null,
         "probe_event_ids": [
-          "nova_ev_102",
-          "nova_ev_104",
-          "nova_ev_106",
+          "nova_ev_108",
           "nova_ev_110",
           "nova_ev_112",
-          "nova_ev_113",
-          "nova_ev_115",
           "nova_ev_116",
-          "nova_ev_117",
+          "nova_ev_118",
           "nova_ev_119",
-          "nova_ev_120",
+          "nova_ev_121",
+          "nova_ev_122",
+          "nova_ev_123",
           "nova_ev_125",
-          "nova_ev_127",
-          "nova_ev_128",
-          "nova_ev_129",
-          "nova_ev_130",
+          "nova_ev_126",
           "nova_ev_132",
+          "nova_ev_134",
+          "nova_ev_135",
+          "nova_ev_136",
           "nova_ev_137",
           "nova_ev_138",
-          "nova_ev_139"
+          "nova_ev_144",
+          "nova_ev_145",
+          "nova_ev_146"
         ]
       },
       "limitations": [
@@ -83,13 +83,13 @@
         "doc_retrieved_at": "2026-10-16",
         "probe_event_ids": [
           "nova_ev_7",
-          "nova_ev_461"
+          "nova_ev_465"
         ]
       },
       "limitations": [
         "silence accepted; synthetic speech (macOS say) recognised when --speech-wav is used",
-        "119 x 20 ms chunks of 16 kHz PCM16 silence accepted without error (recognition not exercised)",
-        "speech recognised: \"stop. please stop and listen to me for a moment.\""
+        "125 x 20 ms chunks of 16 kHz PCM16 silence accepted without error (recognition not exercised)",
+        "speech recognised: \"stop! please stop and listen to me for a moment.\""
       ],
       "tool_mode": null
     },
@@ -100,32 +100,32 @@
         "doc_url": "https://docs.aws.amazon.com/nova/latest/nova2-userguide/using-conversational-speech.html",
         "doc_retrieved_at": "2026-10-16",
         "probe_event_ids": [
-          "nova_ev_102",
-          "nova_ev_104",
-          "nova_ev_106",
+          "nova_ev_108",
           "nova_ev_110",
           "nova_ev_112",
-          "nova_ev_113",
-          "nova_ev_115",
           "nova_ev_116",
-          "nova_ev_117",
+          "nova_ev_118",
           "nova_ev_119",
-          "nova_ev_120",
+          "nova_ev_121",
+          "nova_ev_122",
+          "nova_ev_123",
           "nova_ev_125",
-          "nova_ev_127",
-          "nova_ev_128",
-          "nova_ev_129",
-          "nova_ev_130",
+          "nova_ev_126",
           "nova_ev_132",
+          "nova_ev_134",
+          "nova_ev_135",
+          "nova_ev_136",
           "nova_ev_137",
           "nova_ev_138",
-          "nova_ev_139"
+          "nova_ev_144",
+          "nova_ev_145",
+          "nova_ev_146"
         ]
       },
       "limitations": [
         "first audio about 0.9-1.4 s after stream open",
-        "first audio 1404ms after open",
-        "first audio 904ms after open"
+        "first audio 1578ms after open",
+        "first audio 940ms after open"
       ],
       "tool_mode": null
     },
@@ -136,10 +136,10 @@
         "doc_url": "https://docs.aws.amazon.com/nova/latest/nova2-userguide/using-conversational-speech.html",
         "doc_retrieved_at": "2026-10-16",
         "probe_event_ids": [
-          "nova_ev_66",
-          "nova_ev_71",
-          "nova_ev_832",
-          "nova_ev_840"
+          "nova_ev_69",
+          "nova_ev_77",
+          "nova_ev_830",
+          "nova_ev_838"
         ]
       },
       "limitations": [
@@ -156,16 +156,16 @@
         "doc_url": null,
         "doc_retrieved_at": null,
         "probe_event_ids": [
-          "nova_ev_93",
-          "nova_ev_219",
+          "nova_ev_99",
           "nova_ev_223",
-          "nova_ev_235",
-          "nova_ev_292",
-          "nova_ev_295",
-          "nova_ev_461",
-          "nova_ev_476",
-          "nova_ev_642",
-          "nova_ev_739"
+          "nova_ev_226",
+          "nova_ev_240",
+          "nova_ev_293",
+          "nova_ev_296",
+          "nova_ev_465",
+          "nova_ev_481",
+          "nova_ev_643",
+          "nova_ev_743"
         ]
       },
       "limitations": [
@@ -195,22 +195,22 @@
         "doc_url": null,
         "doc_retrieved_at": null,
         "probe_event_ids": [
-          "nova_ev_67",
-          "nova_ev_94",
-          "nova_ev_203",
-          "nova_ev_221",
+          "nova_ev_70",
+          "nova_ev_100",
+          "nova_ev_207",
           "nova_ev_224",
-          "nova_ev_236",
-          "nova_ev_272",
-          "nova_ev_293",
-          "nova_ev_296",
-          "nova_ev_462",
-          "nova_ev_477",
-          "nova_ev_521",
-          "nova_ev_643",
-          "nova_ev_680",
-          "nova_ev_740",
-          "nova_ev_833"
+          "nova_ev_227",
+          "nova_ev_241",
+          "nova_ev_277",
+          "nova_ev_294",
+          "nova_ev_297",
+          "nova_ev_466",
+          "nova_ev_482",
+          "nova_ev_531",
+          "nova_ev_644",
+          "nova_ev_683",
+          "nova_ev_744",
+          "nova_ev_831"
         ]
       },
       "limitations": [
@@ -227,13 +227,13 @@
         "doc_url": null,
         "doc_retrieved_at": null,
         "probe_event_ids": [
-          "nova_ev_292"
+          "nova_ev_293"
         ]
       },
       "limitations": [
         "barge-in by synthetic speech: INTERRUPTED stopReason and in-band interrupted marker ~0.5 s after speech began; client must flush its own buffered audio; no truncate-at-offset primitive",
-        "interrupted marker BEFORE any speech was sent (nova_ev_219); not counted as barge-in",
-        "interrupted marker 491 ms after speech started streaming"
+        "interrupted marker BEFORE any speech was sent (nova_ev_223); not counted as barge-in",
+        "interrupted marker 409 ms after speech started streaming"
       ],
       "tool_mode": null
     },
@@ -244,26 +244,26 @@
         "doc_url": "https://docs.aws.amazon.com/nova/latest/nova2-userguide/using-conversational-speech.html",
         "doc_retrieved_at": "2026-10-16",
         "probe_event_ids": [
-          "nova_ev_37",
-          "nova_ev_38",
           "nova_ev_39",
+          "nova_ev_42",
           "nova_ev_43",
-          "nova_ev_46",
           "nova_ev_47",
           "nova_ev_49",
-          "nova_ev_64",
-          "nova_ev_68",
-          "nova_ev_78",
-          "nova_ev_79",
-          "nova_ev_90",
-          "nova_ev_105",
-          "nova_ev_126",
-          "nova_ev_147",
-          "nova_ev_168",
-          "nova_ev_189",
-          "nova_ev_217",
-          "nova_ev_225",
-          "nova_ev_227"
+          "nova_ev_50",
+          "nova_ev_52",
+          "nova_ev_67",
+          "nova_ev_71",
+          "nova_ev_85",
+          "nova_ev_86",
+          "nova_ev_96",
+          "nova_ev_111",
+          "nova_ev_133",
+          "nova_ev_154",
+          "nova_ev_175",
+          "nova_ev_196",
+          "nova_ev_221",
+          "nova_ev_228",
+          "nova_ev_231"
         ]
       },
       "limitations": [
@@ -279,7 +279,7 @@
         "doc_url": null,
         "doc_retrieved_at": null,
         "probe_event_ids": [
-          "nova_ev_764"
+          "nova_ev_763"
         ]
       },
       "limitations": [
