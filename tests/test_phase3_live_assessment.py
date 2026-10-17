@@ -233,7 +233,7 @@ class LiveAsrSmoke(Fixture):
     def test_synthetic_speech_through_live_asr(self):
         from voice_harness.adapters.openai_realtime import synth_caller_pcm
 
-        pcm = synth_caller_pcm("Your payment is one hundred and fifty pounds.", lead_ms=100, trail_ms=300)
+        pcm = synth_caller_pcm("One hundred fifty pounds", lead_ms=0, trail_ms=50)  # must fit the 2 s pending-audio cap
         unit = self.engine.hold_audio(self.run, pcm, transcript="provider text")
         out = IndependentAssessor(self.engine, select_backend()).assess(
             self.run, unit, {"amounts_minor": [15000]})
