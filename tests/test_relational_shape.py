@@ -111,12 +111,14 @@ class RelationalShape(unittest.TestCase):
 
     @unittest.skipUnless(os.environ.get("HARNESS_TEST_DATABASE_URL"), "PostgreSQL only")
     def test_postgres_generated_columns_exist(self):
-        names = {
-            r["column_name"]
-            for r in self.rows(
-                "SELECT column_name FROM information_schema.columns WHERE table_name='harness_events'"
-            )
-        }
+        postgres = Database(os.environ["HARNESS_TEST_DATABASE_URL"])
+        with postgres.connection() as db:
+            names = {
+                r["column_name"]
+                for r in db.execute(
+                    "SELECT column_name FROM information_schema.columns WHERE table_name='harness_events'"
+                ).fetchall()
+            }
         self.assertLessEqual({"session_id", "turn_id", "event_type"}, names)
 
 

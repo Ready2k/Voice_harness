@@ -188,7 +188,7 @@ class ClockRuntimeTests(Base):
         client_send = 1000.0 + index * 50
         received = client_send + offset + up
         pong = session.on_ping(
-            {"sample_id": f"s{index}-{session.round}", "round": 1, "client_send": client_send}, received
+            {"sample_id": f"{self.run}-s{index}-{session.round}", "round": 1, "client_send": client_send}, received
         )
         sent = pong["server_send"]
         # Server processing time is the server_send - server_receive gap (monotonic fake).

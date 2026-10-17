@@ -261,7 +261,9 @@ class ApiTests(unittest.TestCase):
         with TestClient(self.app) as client:
             listing = client.get("/api/v1/preservation-holds", headers=self.headers)
             self.assertEqual(listing.status_code, 200)
-            items = {h["hold_id"]: h for h in listing.json()["items"]}
+            mine = {near["hold_id"], far["hold_id"], released["hold_id"]}
+            # the register is cross-run: other tests sharing the database may add holds
+            items = {h["hold_id"]: h for h in listing.json()["items"] if h["hold_id"] in mine}
             self.assertEqual(set(items), {near["hold_id"], far["hold_id"]})
             self.assertTrue(items[near["hold_id"]]["expiry_notice_due"])
             self.assertFalse(items[far["hold_id"]]["expiry_notice_due"])
@@ -269,7 +271,7 @@ class ApiTests(unittest.TestCase):
             event = next(e for e in self.database.events(self.run) if e["event_id"] == notice)
             self.assertEqual(event["type"], "preservation.expiry_notice")
             self.assertEqual(items[near["hold_id"]]["dispute"]["reason"], "disputed")
-            page = client.get("/api/v1/preservation-holds?limit=1", headers=self.headers).json()
+            page = client.get("/api/v1/preservation-holds?limit=1", headers=self.headers).json()  # noqa: E501
             self.assertEqual(len(page["items"]), 1)
             self.assertIsNotNone(page["next_cursor"])
             self.assertEqual(
