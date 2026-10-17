@@ -6,9 +6,10 @@ validate each ledger event, so drift between emitters and schemas fails CI
 without making the hot write path depend on this module.
 """
 
+from decimal import Decimal
 from typing import Annotated, Any, Literal
 
-from pydantic import Field
+from pydantic import Field, model_validator
 
 from .contracts import Closed, Identifier
 
@@ -462,9 +463,62 @@ class EvidenceManifest(Closed):
     source_hash: Hex64 | None
     config_hash: Hex64
     fixture_snapshot_id: Identifier | None
+    cost: Free | None = None
+
+
+# --- Phase 3 cost accounting (spec section 11): usage reports and expected components ---
+DecimalText = Annotated[str, Field(pattern=r"^\d+(\.\d+)?$")]
+UsageDate = Annotated[str, Field(pattern=r"^\d{4}-\d{2}-\d{2}$")]
+
+
+class CostUsageReported(Closed):
+    report_id: Identifier
+    component: Identifier
+    provider: Identifier
+    service: Identifier
+    model: Identifier | None
+    region: Identifier | None
+    meter_id: Identifier
+    billing_scope_id: Identifier
+    scope_type: Literal["request", "session", "account_period", "unknown"]
+    report_kind: Literal["incremental", "cumulative"]
+    revision: Annotated[int, Field(ge=1)]
+    corrects_report_id: Identifier | None
+    covers_scope_ids: list[Identifier]
+    provenance: Literal["provider_reported_usage", "estimated"]
+    quantity: DecimalText | None
+    unit: Literal["token", "second", "request", "character"]
+    cached_quantity: DecimalText | None
+    generation_state: Literal["completed", "cancelled", "discarded"]
+    usage_date: UsageDate
+    interval_start_ms: Count | None
+    interval_end_ms: Count | None
+    estimation_method: Identifier | None
+    assumptions: list[str]
+    unknown_reason: Identifier | None
+    evidence_event_ids: list[Identifier]
+
+    @model_validator(mode="after")
+    def _coherent(self):
+        if self.provenance == "estimated" and not self.estimation_method:
+            raise ValueError("estimated usage requires estimation_method")
+        if self.quantity is None and not self.unknown_reason:
+            raise ValueError("unknown quantity requires unknown_reason")
+        if self.cached_quantity is not None and (
+            self.quantity is None or Decimal(self.cached_quantity) > Decimal(self.quantity)
+        ):
+            raise ValueError("cached usage is a subset of total usage")
+        return self
+
+
+class CostExpectationDeclared(Closed):
+    components: Annotated[list[Identifier], Field(min_length=1)]
+    declared_by: Identifier
 
 
 EVENT_CONTENT_CONTRACTS = {
+    "cost.usage_reported": CostUsageReported,
+    "cost.expectation_declared": CostExpectationDeclared,
     "artifact.stored": ArtifactStored,
     "artifact.purged": ArtifactPurged,
     "audio.input": AudioInput,

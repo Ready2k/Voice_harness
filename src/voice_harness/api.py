@@ -31,6 +31,7 @@ from .approvals import public_key
 from .auth import load_token, restrict_bundle, reviewer_may, role_for, tls_options
 from .clock_runtime import ClockSyncSession, invalidate_prior_connection
 from .contracts import AudioInputPayload, CancelRun, HoldRequest, RenewHold, RunConfig
+from .cost_api import register_cost_routes
 from .coverage import build_registry, summarize
 from .engine import Engine
 from .evidence import Evidence
@@ -498,6 +499,7 @@ def create_app(
         return evidence.renew(run_id, hold_id, body.expires_at, body.reason)
 
     register_review_routes(app, database, evidence, auth)
+    register_cost_routes(app, database, auth)
 
     @app.post("/api/v1/runs/{run_id}/ws-ticket", dependencies=[Depends(auth)])
     def ws_ticket(run_id: str):

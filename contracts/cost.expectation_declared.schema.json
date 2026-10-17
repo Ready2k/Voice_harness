@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "components": {
+      "items": {
+        "maxLength": 200,
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Components",
+      "type": "array"
+    },
+    "declared_by": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Declared By",
+      "type": "string"
+    }
+  },
+  "required": [
+    "components",
+    "declared_by"
+  ],
+  "title": "CostExpectationDeclared",
+  "type": "object"
+}

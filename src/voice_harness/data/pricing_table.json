@@ -1,0 +1,60 @@
+{
+  "table_id": "voice-harness-pricing",
+  "version": "1",
+  "status": "no_provider_tariff_established",
+  "note": "No live provider tariff has been established by a primary source or operator attestation (docs/phase0/DOC_EVIDENCE.md). Every row therefore has unit_price null with an unknown_reason. A candidate OpenAI figure appears in DOC_EVIDENCE as an unverified documentation excerpt and is deliberately NOT entered here. Operators add attested rows with effective dates and evidence ids; nothing is ever defaulted to zero.",
+  "tariffs": [
+    {
+      "tariff_id": "openai-realtime-audio-input-tokens",
+      "provider": "openai", "service": "realtime", "model": null, "region": null,
+      "component": "voice", "meter_id": "audio_input_tokens", "unit": "token",
+      "billing_model": "per_token", "exclusivity_group": "openai_realtime_audio_input", "exclusivity_priority": 1,
+      "effective_from": "2026-10-16", "effective_to": null,
+      "currency": null, "rate_unit_quantity": null, "unit_price": null, "cached_unit_price": null,
+      "cached_billing": "not_documented",
+      "quantity_increment": null, "quantity_rounding": "none", "minimum_billed_quantity": null,
+      "amount_scale": 6, "amount_rounding": "ROUND_HALF_UP",
+      "source_status": "unestablished", "evidence_ids": ["phase0/DOC_EVIDENCE.md"],
+      "unknown_reason": "PRICING_NOT_ESTABLISHED_OPERATOR_ATTESTATION_REQUIRED"
+    },
+    {
+      "tariff_id": "openai-realtime-audio-output-tokens",
+      "provider": "openai", "service": "realtime", "model": null, "region": null,
+      "component": "voice", "meter_id": "audio_output_tokens", "unit": "token",
+      "billing_model": "per_token", "exclusivity_group": "openai_realtime_audio_output", "exclusivity_priority": 1,
+      "effective_from": "2026-10-16", "effective_to": null,
+      "currency": null, "rate_unit_quantity": null, "unit_price": null, "cached_unit_price": null,
+      "cached_billing": "not_documented",
+      "quantity_increment": null, "quantity_rounding": "none", "minimum_billed_quantity": null,
+      "amount_scale": 6, "amount_rounding": "ROUND_HALF_UP",
+      "source_status": "unestablished", "evidence_ids": ["phase0/DOC_EVIDENCE.md"],
+      "unknown_reason": "PRICING_NOT_ESTABLISHED_OPERATOR_ATTESTATION_REQUIRED"
+    },
+    {
+      "tariff_id": "aws-nova-sonic-input-tokens",
+      "provider": "aws_nova_sonic", "service": "bedrock", "model": null, "region": null,
+      "component": "voice", "meter_id": "input_tokens_unclassified", "unit": "token",
+      "billing_model": "per_token", "exclusivity_group": "nova_sonic_input", "exclusivity_priority": 1,
+      "effective_from": "2026-10-16", "effective_to": null,
+      "currency": null, "rate_unit_quantity": null, "unit_price": null, "cached_unit_price": null,
+      "cached_billing": "not_documented",
+      "quantity_increment": null, "quantity_rounding": "none", "minimum_billed_quantity": null,
+      "amount_scale": 6, "amount_rounding": "ROUND_HALF_UP",
+      "source_status": "unestablished", "evidence_ids": ["phase0/DOC_EVIDENCE.md"],
+      "unknown_reason": "BEDROCK_PRICING_NOT_ESTABLISHED"
+    },
+    {
+      "tariff_id": "aws-nova-sonic-output-tokens",
+      "provider": "aws_nova_sonic", "service": "bedrock", "model": null, "region": null,
+      "component": "voice", "meter_id": "output_tokens_unclassified", "unit": "token",
+      "billing_model": "per_token", "exclusivity_group": "nova_sonic_output", "exclusivity_priority": 1,
+      "effective_from": "2026-10-16", "effective_to": null,
+      "currency": null, "rate_unit_quantity": null, "unit_price": null, "cached_unit_price": null,
+      "cached_billing": "not_documented",
+      "quantity_increment": null, "quantity_rounding": "none", "minimum_billed_quantity": null,
+      "amount_scale": 6, "amount_rounding": "ROUND_HALF_UP",
+      "source_status": "unestablished", "evidence_ids": ["phase0/DOC_EVIDENCE.md"],
+      "unknown_reason": "BEDROCK_PRICING_NOT_ESTABLISHED"
+    }
+  ]
+}

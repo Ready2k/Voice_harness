@@ -374,6 +374,40 @@
     "created_at": 1784224000.0,
     "policy_version": "strict-v1"
   },
+  "cost.usage_reported": {
+    "report_id": "usage_001",
+    "component": "voice",
+    "provider": "fixture",
+    "service": "rt",
+    "model": null,
+    "region": null,
+    "meter_id": "tok_in",
+    "billing_scope_id": "resp_001",
+    "scope_type": "request",
+    "report_kind": "incremental",
+    "revision": 1,
+    "corrects_report_id": null,
+    "covers_scope_ids": [],
+    "provenance": "provider_reported_usage",
+    "quantity": "1200",
+    "unit": "token",
+    "cached_quantity": "200",
+    "generation_state": "completed",
+    "usage_date": "2026-10-17",
+    "interval_start_ms": null,
+    "interval_end_ms": null,
+    "estimation_method": null,
+    "assumptions": [],
+    "unknown_reason": null,
+    "evidence_event_ids": []
+  },
+  "cost.expectation_declared": {
+    "components": [
+      "voice",
+      "online_judge"
+    ],
+    "declared_by": "orchestrator"
+  },
   "artifact.stored": {
     "sha256": "2a9569d5160893662a5c3579f2531ac3250dcb5a42a2a4832c5503e28424b8d8",
     "kind": "synthetic_audio",
@@ -797,7 +831,18 @@
     },
     "source_hash": "41cf6794ba4200b839c53531555f0f3998df4cbb01a4d5cb0b94e3ca5e23947d",
     "config_hash": "b79606fb3afea5bd1609ed40b622142f1c98125abcfe89a76a661b0e8e343910",
-    "fixture_snapshot_id": "fixture_001"
+    "fixture_snapshot_id": "fixture_001",
+    "cost": {
+      "section_hash": "4bd3dfea6632c354547568a36f8617d045d35f340a6561ee2c0815b0a5c22dd0",
+      "pricing_table_id": "voice-harness-pricing",
+      "pricing_table_version": "1",
+      "pricing_document_hash": "4f95d768ba76ce4fd59d110cfcc10a62314b6a307a0612539decc205e5ba61d4",
+      "line_count": 0,
+      "completeness": "unknown",
+      "summary_label": "unknown",
+      "unknown_line_count": 0,
+      "unknown_components": []
+    }
   },
   "canonical-event": {
     "run_id": "example",
@@ -812,14 +857,14 @@
     "provider_event_type": null,
     "provider_event": {},
     "sequence": 1,
-    "event_id": "evt_1311930c72de4e95",
-    "occurred_at": "2026-10-17T09:38:13Z",
-    "monotonic_ns": 820187340037125,
+    "event_id": "evt_c316dfb084ab420b",
+    "occurred_at": "2026-10-17T10:44:24Z",
+    "monotonic_ns": 824157837832916,
     "schema_version": "0.3",
-    "clock_domain_id": "process_5cafb31b68d043a58d391542f71d6ced",
+    "clock_domain_id": "process_b9d511f89553498a89395a640d1a9483",
     "prev_hash": null,
-    "event_hash": "4bad62312d883ffd4de76247c477b580d12a834884e3943563b29034b9cdca4d",
-    "producer_id": "process_5cafb31b68d043a58d391542f71d6ced",
+    "event_hash": "5d38a064f5ad21f80a1e80d9dc0fac6606fde1afbe717262e7461f3033bb2144",
+    "producer_id": "process_b9d511f89553498a89395a640d1a9483",
     "producer_sequence": 0,
     "connection_epoch": 1,
     "redaction": {

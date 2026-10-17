@@ -473,7 +473,19 @@ class Evidence:
             manifest["source_hash"] = tx.state.get("source_hash")
             manifest["config_hash"] = tx.state["config_hash"]
             manifest["fixture_snapshot_id"] = tx.state.get("fixture_snapshot_id")
+            from . import cost, cost_store
+
+            cost_section = cost.build_section(
+                run_id, events, cost_store.allocations_for_run(self.database, run_id, tx.db)
+            )
+            manifest["cost"] = cost.manifest_entry(cost_section)
+            if cost_section["lines"]:
+                manifest["pricing"] = {k: cost_section["pricing"][k] for k in ("table_id", "version", "document_hash")}
+            cost_store.persist_lines(
+                self.database, tx.db, run_id, manifest["cost"]["section_hash"], cost_section["lines"]
+            )
             return {
+                "cost": cost_section,
                 "manifest": manifest,
                 "manifest_hash": digest(manifest),
                 "events": events,
@@ -596,6 +608,10 @@ def verify_bundle(bundle):
         ):
             return False
         if not coverage_section_valid(manifest.get("provider_coverage")):
+            return False
+        from .cost import verify_cost_section
+
+        if not verify_cost_section(bundle):
             return False
         previous = None
         for sequence, payload in enumerate(events, 1):

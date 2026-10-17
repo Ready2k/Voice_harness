@@ -53,6 +53,9 @@ def migrate(db, payload_type):
     from . import indexing
 
     indexing.migrate(db, payload_type)
+    from . import cost_store
+
+    cost_store.migrate(db, payload_type)
 
 
 def upsert_hold(db, database, run_id, hold):
