@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "condition": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Condition",
+      "type": "string"
+    },
+    "mapped_termination_reason": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Mapped Termination Reason",
+      "type": "string"
+    },
+    "turns_taken": {
+      "minimum": 0,
+      "title": "Turns Taken",
+      "type": "integer"
+    },
+    "tools_called": {
+      "items": {
+        "maxLength": 200,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Tools Called",
+      "type": "array"
+    },
+    "guardrail_path": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Guardrail Path",
+      "type": "string"
+    }
+  },
+  "required": [
+    "condition",
+    "mapped_termination_reason",
+    "turns_taken",
+    "tools_called",
+    "guardrail_path"
+  ],
+  "title": "ScenarioStopConditionMet",
+  "type": "object"
+}

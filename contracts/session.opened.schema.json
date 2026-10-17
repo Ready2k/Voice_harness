@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "generation_epoch": {
+      "minimum": 0,
+      "title": "Generation Epoch",
+      "type": "integer"
+    },
+    "identity": {
+      "enum": [
+        "unverified",
+        "verified",
+        "locked"
+      ],
+      "title": "Identity",
+      "type": "string"
+    }
+  },
+  "required": [
+    "generation_epoch",
+    "identity"
+  ],
+  "title": "SessionOpened",
+  "type": "object"
+}

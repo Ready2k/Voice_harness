@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
+<title>Runs</title>
+<link rel="stylesheet" href="./ops.css">
+</head>
+<body>
+<main>
+  <nav><a href="./runs.html">Runs</a><a href="./review.html">Hold review</a><a href="./coverage.html">Provider coverage</a></nav>
+  <h1>Runs</h1>
+  <p class="sub">Launch a built-in scenario and watch it. States come from the evidence ledger, not from model output. Scripted fixtures only.</p>
+  <form id="auth">
+    <input id="token" type="password" autocomplete="off" placeholder="Operator token" aria-label="Operator token" required>
+    <button type="submit">Connect</button>
+  </form>
+  <form id="launch" hidden>
+    <select id="scenario" aria-label="Scenario"></select>
+    <button type="submit">Launch run</button>
+    <button type="button" id="refresh">Refresh</button>
+  </form>
+  <p id="error" role="alert"></p>
+  <div class="layout two">
+    <div><section class="panel"><h2>All runs</h2><div id="list"></div></section></div>
+    <div id="detail"><p class="muted">Select a run to see its transcript, tool lifecycle, guardrail decisions, holds and metrics.</p></div>
+  </div>
+  <p class="note">Live view polls the events endpoint every two seconds while a run is not terminal.</p>
+</main>
+<script type="module" src="./runs-page.mjs"></script>
+</body>
+</html>

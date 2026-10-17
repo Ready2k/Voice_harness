@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "confirmation_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Confirmation Id",
+      "type": "string"
+    },
+    "observed_choice": {
+      "enum": [
+        "affirm",
+        "deny",
+        "ambiguous"
+      ],
+      "title": "Observed Choice",
+      "type": "string"
+    }
+  },
+  "required": [
+    "confirmation_id",
+    "observed_choice"
+  ],
+  "title": "ConfirmationObservationRevised",
+  "type": "object"
+}

@@ -28,8 +28,8 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import ValidationError
 
 from .approvals import public_key
-from .clock_runtime import ClockSyncSession, invalidate_prior_connection
 from .auth import load_token, restrict_bundle, reviewer_may, role_for, tls_options
+from .clock_runtime import ClockSyncSession, invalidate_prior_connection
 from .contracts import AudioInputPayload, CancelRun, HoldRequest, RenewHold, RunConfig
 from .coverage import build_registry, summarize
 from .engine import Engine
@@ -57,15 +57,22 @@ def create_app(
         os.environ.get("HARNESS_DATABASE_URL", str(root / "development.sqlite"))
     )
     engine, evidence = Engine(database), Evidence(database, root / "objects")
-    from .telemetry import provider
+    from . import telemetry as telemetry_module
 
-    traces = provider()
-    tracer = traces.get_tracer("voice-harness.control")
+    telemetry = telemetry_module.Telemetry()
+    telemetry_module.install(telemetry)
+    tracer = telemetry.traces.get_tracer("voice-harness.control")
+    job_links = {}
     jobs, job_lock = {}, threading.Lock()
     tickets = {}
     executor = ThreadPoolExecutor(max_workers=10, thread_name_prefix="mock-run")
 
     def work(run_id):
+        # The job is its own trace, linked to the request that scheduled it.
+        with telemetry.job_span("run.job", job_links.pop(run_id, ()), run_id=run_id):
+            run_work(run_id)
+
+    def run_work(run_id):
         try:
             with database.transaction(run_id) as tx:
                 if tx.state["state"] != "queued":
@@ -133,7 +140,8 @@ def create_app(
         await asyncio.to_thread(
             graceful_shutdown, engine, evidence, database, executor
         )
-        traces.shutdown()
+        telemetry.shutdown()
+        telemetry_module.uninstall(telemetry)
 
     app = FastAPI(
         title="Voice Harness Phase 1",
@@ -303,6 +311,7 @@ def create_app(
                     config.model_dump(), idempotency_key + ":" + str(repetition)
                 )
                 if database.get(run_id)["state"] == "queued" and run_id not in jobs:
+                    job_links[run_id] = telemetry_module.capture_link()
                     jobs[run_id] = executor.submit(
                         contextvars.copy_context().run, work, run_id
                     )
@@ -319,6 +328,55 @@ def create_app(
                 o["metric"]: o["exclusion_reason"] for o in observations if o["value"] is None
             },
         }
+
+    @app.get("/api/v1/runs", dependencies=[Depends(auth)])
+    def list_runs(cursor: int = 0, limit: int = 50):
+        """Operator list, newest first; identifiers come from indexed columns."""
+        if cursor < 0 or not 1 <= limit <= 200:
+            raise HTTPException(422, "INVALID_PAGINATION")
+        with database.connection() as db:
+            rows = db.execute(
+                "SELECT r.run_id, r.state, r.session_id, r.scenario_id, r.scenario_version, r.policy_profile, r.provider_config_id, e.occurred_at AS started_at "
+                "FROM harness_runs r LEFT JOIN harness_events e ON e.run_id=r.run_id AND e.sequence=1 "
+                "ORDER BY e.occurred_at DESC, r.run_id LIMIT ? OFFSET ?",
+                (limit + 1, cursor),
+            ).fetchall()
+        items = [dict(row) for row in rows[:limit]]
+        return {
+            "items": items,
+            "next_cursor": cursor + limit if len(rows) > limit else None,
+        }
+
+    @app.get("/api/v1/holds-register", dependencies=[Depends(auth)])
+    def list_holds(state: str = "active", run_id: str | None = None, limit: int = 200):
+        """Cross-run hold register for review: active (default), released or all."""
+        if state not in {"active", "released", "all"} or not 1 <= limit <= 1000:
+            raise HTTPException(422, "INVALID_FILTER")
+        clauses, params = [], []
+        if state == "active":
+            clauses.append("released_at IS NULL")
+        elif state == "released":
+            clauses.append("released_at IS NOT NULL")
+        if run_id:
+            clauses.append("run_id=?")
+            params.append(run_id)
+        with database.connection() as db:
+            rows = db.execute(
+                "SELECT hold_id, run_id, owner_id, requester_id, scope_type, scope, access_classification, created_at, expires_at, released_at, release_reason, audit_event_id "
+                "FROM harness_preservation_holds"
+                + (" WHERE " + " AND ".join(clauses) if clauses else "")
+                + " ORDER BY expires_at, hold_id LIMIT ?",
+                (*params, limit),
+            ).fetchall()
+        now = time.time()
+        items = []
+        for row in rows:
+            item = dict(row)
+            scope = database.decoded(item.pop("scope"))
+            item["finding_ids"] = scope.get("finding_ids", [])
+            item["expired"] = item["released_at"] is None and item["expires_at"] <= now
+            items.append(item)
+        return {"items": items, "server_time": now}
 
     @app.get("/api/v1/runs/{run_id}", dependencies=[Depends(auth)])
     def get_run(run_id: str):

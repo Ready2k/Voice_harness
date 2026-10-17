@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "hold_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Hold Id",
+      "type": "string"
+    },
+    "owner_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Owner Id",
+      "type": "string"
+    },
+    "requester_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Requester Id",
+      "type": "string"
+    },
+    "reason": {
+      "title": "Reason",
+      "type": "string"
+    },
+    "access_classification": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Access Classification",
+      "type": "string"
+    },
+    "created_at": {
+      "title": "Created At",
+      "type": "number"
+    },
+    "expires_at": {
+      "title": "Expires At",
+      "type": "number"
+    },
+    "released_at": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Released At"
+    },
+    "release_reason": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Release Reason"
+    },
+    "scope": {
+      "additionalProperties": true,
+      "title": "Scope",
+      "type": "object"
+    }
+  },
+  "required": [
+    "hold_id",
+    "owner_id",
+    "requester_id",
+    "reason",
+    "access_classification",
+    "created_at",
+    "expires_at",
+    "released_at",
+    "release_reason",
+    "scope"
+  ],
+  "title": "PreservationActivated",
+  "type": "object"
+}

@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "hold_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Hold Id",
+      "type": "string"
+    },
+    "owner_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Owner Id",
+      "type": "string"
+    },
+    "channel": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Channel",
+      "type": "string"
+    },
+    "expires_at": {
+      "title": "Expires At",
+      "type": "number"
+    }
+  },
+  "required": [
+    "hold_id",
+    "owner_id",
+    "channel",
+    "expires_at"
+  ],
+  "title": "PreservationExpiryNotice",
+  "type": "object"
+}

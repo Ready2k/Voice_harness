@@ -18,6 +18,9 @@ from . import interruption
 from .approvals import sign
 from .canonical import canonical_json
 from .contracts import OUTPUTS, TOOLS, ApprovalToken, Result
+from .guardrail import POLICY_ID as CONTENT_POLICY_ID
+from .guardrail import POLICY_VERSION as CONTENT_POLICY_VERSION
+from .guardrail import evaluate_content
 from .scenario_defs import SCENARIOS, definition_hash
 from .storage import Database
 
@@ -1095,6 +1098,41 @@ class Engine:
                         ),
                     },
                     causes=[failure],
+                )
+                return None
+            content = (
+                None
+                if exploratory_unreviewed
+                else evaluate_content(
+                    unit["transcript"],
+                    identity_verified=tx.state["identity"] == "verified",
+                )
+            )
+            if content and not content.allowed:
+                # Deterministic content layer: audio cannot be edited, so every
+                # non-allow action withholds it; redact/replace record the safe text.
+                unit["state"] = "blocked"
+                unit.pop("pcm", None)
+                tx.event(
+                    "guardrail",
+                    "decision",
+                    {
+                        "unit_id": unit_id,
+                        "reason": "CONTENT_POLICY",
+                        "assessment_source": "deterministic_content_rules",
+                        "content_categories": content.categories,
+                        "safe_text": content.text or None,
+                        **decision_record(
+                            "audio_chunk",
+                            content.action,
+                            reason_codes=content.reason_codes,
+                            **{
+                                **audio_policy,
+                                "policy_id": CONTENT_POLICY_ID,
+                                "policy_version": CONTENT_POLICY_VERSION,
+                            },
+                        ),
+                    },
                 )
                 return None
             if not exploratory_unreviewed and (

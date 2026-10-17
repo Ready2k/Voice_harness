@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "reason": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Reason",
+      "type": "string"
+    },
+    "retention_days": {
+      "minimum": 0,
+      "title": "Retention Days",
+      "type": "integer"
+    },
+    "tombstoned_count": {
+      "minimum": 0,
+      "title": "Tombstoned Count",
+      "type": "integer"
+    },
+    "sequences": {
+      "items": {
+        "minimum": 0,
+        "type": "integer"
+      },
+      "title": "Sequences",
+      "type": "array"
+    },
+    "purged_at": {
+      "title": "Purged At",
+      "type": "number"
+    }
+  },
+  "required": [
+    "reason",
+    "retention_days",
+    "tombstoned_count",
+    "sequences",
+    "purged_at"
+  ],
+  "title": "RetentionMetadataPurged",
+  "type": "object"
+}

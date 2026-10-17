@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "connection_epoch": {
+      "minimum": 0,
+      "title": "Connection Epoch",
+      "type": "integer"
+    },
+    "window_round": {
+      "title": "Window Round",
+      "type": "integer"
+    },
+    "reason": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Reason",
+      "type": "string"
+    },
+    "age_ms": {
+      "title": "Age Ms",
+      "type": "number"
+    }
+  },
+  "required": [
+    "connection_epoch",
+    "window_round",
+    "reason",
+    "age_ms"
+  ],
+  "title": "ClockWindowInvalidated",
+  "type": "object"
+}

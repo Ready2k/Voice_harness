@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "call_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Call Id",
+      "type": "string"
+    },
+    "error_code": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Error Code",
+      "type": "string"
+    },
+    "status": {
+      "anyOf": [
+        {
+          "maxLength": 200,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Status"
+    }
+  },
+  "required": [
+    "call_id",
+    "error_code"
+  ],
+  "title": "ToolFailed",
+  "type": "object"
+}

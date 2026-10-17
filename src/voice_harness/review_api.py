@@ -5,7 +5,6 @@ import hashlib
 from fastapi import Depends, HTTPException, Request, Response
 
 from .auth import restrict_bundle
-
 from .exports import REVIEWER_EXPORT_TYPE, render, reviewer_export
 
 NOTICE_SECONDS = 7 * 86400

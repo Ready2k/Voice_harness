@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "turn_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Turn Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "turn_id"
+  ],
+  "title": "TurnStarted",
+  "type": "object"
+}

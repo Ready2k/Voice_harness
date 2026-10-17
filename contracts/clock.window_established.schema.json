@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "connection_epoch": {
+      "minimum": 0,
+      "title": "Connection Epoch",
+      "type": "integer"
+    },
+    "window_round": {
+      "minimum": 0,
+      "title": "Window Round",
+      "type": "integer"
+    },
+    "chosen_sample_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Chosen Sample Id",
+      "type": "string"
+    },
+    "offset_ms": {
+      "title": "Offset Ms",
+      "type": "number"
+    },
+    "uncertainty_ms": {
+      "title": "Uncertainty Ms",
+      "type": "number"
+    },
+    "drift_ppm": {
+      "title": "Drift Ppm",
+      "type": "number"
+    },
+    "profile_version": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Profile Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "connection_epoch",
+    "window_round",
+    "chosen_sample_id",
+    "offset_ms",
+    "uncertainty_ms",
+    "drift_ppm",
+    "profile_version"
+  ],
+  "title": "ClockWindowEstablished",
+  "type": "object"
+}

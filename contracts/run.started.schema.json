@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "config_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Config Hash",
+      "type": "string"
+    },
+    "fault_profile_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Fault Profile Hash",
+      "type": "string"
+    },
+    "fixture_seed": {
+      "title": "Fixture Seed",
+      "type": "integer"
+    },
+    "fixture_snapshot_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Fixture Snapshot Id",
+      "type": "string"
+    },
+    "limits": {
+      "additionalProperties": true,
+      "title": "Limits",
+      "type": "object"
+    },
+    "profile": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Profile",
+      "type": "string"
+    },
+    "scenario_hash": {
+      "pattern": "^(sha256:)?[0-9a-f]{64}$",
+      "title": "Scenario Hash",
+      "type": "string"
+    },
+    "scenario_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Scenario Id",
+      "type": "string"
+    },
+    "scenario_version": {
+      "minimum": 1,
+      "title": "Scenario Version",
+      "type": "integer"
+    },
+    "source_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Source Hash",
+      "type": "string"
+    }
+  },
+  "required": [
+    "config_hash",
+    "fault_profile_hash",
+    "fixture_seed",
+    "fixture_snapshot_id",
+    "limits",
+    "profile",
+    "scenario_hash",
+    "scenario_id",
+    "scenario_version",
+    "source_hash"
+  ],
+  "title": "RunStarted",
+  "type": "object"
+}

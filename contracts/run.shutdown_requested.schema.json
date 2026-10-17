@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "revoked_tokens": {
+      "minimum": 0,
+      "title": "Revoked Tokens",
+      "type": "integer"
+    },
+    "discarded_units": {
+      "minimum": 0,
+      "title": "Discarded Units",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "revoked_tokens",
+    "discarded_units"
+  ],
+  "title": "RunShutdownRequested",
+  "type": "object"
+}

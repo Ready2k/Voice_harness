@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "failure_code": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Failure Code",
+      "type": "string"
+    },
+    "expected_client_sequence": {
+      "minimum": 0,
+      "title": "Expected Client Sequence",
+      "type": "integer"
+    },
+    "received_client_sequence": {
+      "minimum": 0,
+      "title": "Received Client Sequence",
+      "type": "integer"
+    },
+    "strict_measurements": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Strict Measurements",
+      "type": "string"
+    }
+  },
+  "required": [
+    "failure_code",
+    "expected_client_sequence",
+    "received_client_sequence",
+    "strict_measurements"
+  ],
+  "title": "AudioDiscontinuity",
+  "type": "object"
+}

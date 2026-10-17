@@ -50,6 +50,9 @@ def migrate(db, payload_type):
     from . import clock_runtime
 
     clock_runtime.migrate(db)
+    from . import indexing
+
+    indexing.migrate(db, payload_type)
 
 
 def upsert_hold(db, database, run_id, hold):

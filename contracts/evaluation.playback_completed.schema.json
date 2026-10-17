@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "assurance": {
+      "additionalProperties": true,
+      "title": "Assurance",
+      "type": "object"
+    },
+    "evidence_event_ids": {
+      "items": {
+        "maxLength": 200,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Evidence Event Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "assurance",
+    "evidence_event_ids"
+  ],
+  "title": "EvaluationPlaybackCompleted",
+  "type": "object"
+}

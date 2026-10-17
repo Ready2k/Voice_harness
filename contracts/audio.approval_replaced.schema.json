@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "old_unit_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Old Unit Id",
+      "type": "string"
+    },
+    "new_unit_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "New Unit Id",
+      "type": "string"
+    },
+    "assessment_epoch": {
+      "minimum": 0,
+      "title": "Assessment Epoch",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "old_unit_id",
+    "new_unit_id",
+    "assessment_epoch"
+  ],
+  "title": "AudioApprovalReplaced",
+  "type": "object"
+}

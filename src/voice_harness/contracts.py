@@ -284,7 +284,9 @@ class PolicyDecision(Closed):
 
     decision_id: Identifier
     target: Literal["tool", "audio_chunk", "transcript", "session"]
-    action: Literal["allow", "deny", "modify", "hold", "release", "escalate"]
+    action: Literal[
+        "allow", "deny", "modify", "hold", "release", "escalate", "redact", "replace"
+    ]
     policy_id: Identifier
     policy_version: Identifier
     reason_codes: list[Identifier]

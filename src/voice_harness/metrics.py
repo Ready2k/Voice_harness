@@ -36,7 +36,7 @@ def derive(events):
             ended.setdefault(content["unit_id"], e)
         elif e["type"] == "decision" and content.get("target") == "audio_chunk":
             unit = content["unit_id"]
-            if content["action"] == "deny":
+            if content["action"] in {"deny", "redact", "replace", "escalate"}:
                 ended.setdefault(unit, e)
             else:
                 risk[unit] = content.get("risk_mode")

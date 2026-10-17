@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "call_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Call Id",
+      "type": "string"
+    },
+    "reason": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Reason",
+      "type": "string"
+    }
+  },
+  "required": [
+    "call_id",
+    "reason"
+  ],
+  "title": "ToolAbandoned",
+  "type": "object"
+}

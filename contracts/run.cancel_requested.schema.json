@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "generation_epoch": {
+      "minimum": 0,
+      "title": "Generation Epoch",
+      "type": "integer"
+    },
+    "reason": {
+      "title": "Reason",
+      "type": "string"
+    },
+    "unresolved_call_ids": {
+      "items": {
+        "maxLength": 200,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Unresolved Call Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "generation_epoch",
+    "reason",
+    "unresolved_call_ids"
+  ],
+  "title": "RunCancelRequested",
+  "type": "object"
+}

@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "call_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Call Id",
+      "type": "string"
+    },
+    "delivery_receipt": {
+      "additionalProperties": true,
+      "title": "Delivery Receipt",
+      "type": "object"
+    },
+    "logical_result_count": {
+      "minimum": 0,
+      "title": "Logical Result Count",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "call_id",
+    "delivery_receipt",
+    "logical_result_count"
+  ],
+  "title": "ToolResultSent",
+  "type": "object"
+}

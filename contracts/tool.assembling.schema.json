@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "call_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Call Id",
+      "type": "string"
+    },
+    "tool": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Tool",
+      "type": "string"
+    }
+  },
+  "required": [
+    "call_id",
+    "tool"
+  ],
+  "title": "ToolAssembling",
+  "type": "object"
+}

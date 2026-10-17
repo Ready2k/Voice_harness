@@ -36,7 +36,7 @@ COPY apps/web/ ./apps/web/
 COPY tests/browser/ ./tests/browser/
 COPY contracts/approval-fixture.json ./contracts/approval-fixture.json
 USER node
-CMD ["node", "--test", "tests/browser/scheduler.test.mjs", "tests/browser/coverage.test.mjs", "tests/browser/clock-sync.test.mjs"]
+CMD ["node", "--test", "tests/browser/scheduler.test.mjs", "tests/browser/coverage.test.mjs", "tests/browser/clock-sync.test.mjs", "tests/browser/runs.test.mjs"]
 
 FROM base AS runtime
 ENTRYPOINT ["python", "-m", "voice_harness"]

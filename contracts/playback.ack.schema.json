@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "unit_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Unit Id",
+      "type": "string"
+    },
+    "observed_end_sample": {
+      "minimum": 0,
+      "title": "Observed End Sample",
+      "type": "integer"
+    },
+    "physical_audibility": {
+      "const": "unknown",
+      "title": "Physical Audibility",
+      "type": "string"
+    }
+  },
+  "required": [
+    "unit_id",
+    "observed_end_sample",
+    "physical_audibility"
+  ],
+  "title": "PlaybackAck",
+  "type": "object"
+}

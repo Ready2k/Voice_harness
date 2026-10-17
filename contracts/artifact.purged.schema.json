@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Sha256",
+      "type": "string"
+    },
+    "reason": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Reason",
+      "type": "string"
+    },
+    "tombstoned_at": {
+      "title": "Tombstoned At",
+      "type": "number"
+    }
+  },
+  "required": [
+    "sha256",
+    "reason",
+    "tombstoned_at"
+  ],
+  "title": "ArtifactPurged",
+  "type": "object"
+}
