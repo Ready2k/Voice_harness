@@ -26,6 +26,9 @@ from .scenario_catalogue import AUDIO_PROFILES, catalogue_entry
 CHUNK_MS = 20
 RATE = 24000
 TURN_TIMEOUT_S = 45.0
+# Whole-response approval holds a full reply; live replies exceed the 2 s mock default.
+# Engines for live runs are built with these limits, which the run manifest records.
+LIVE_LIMITS = {"pending_audio_seconds": 15.0, "pending_audio_bytes": 15 * RATE * 2}
 
 
 def degrade(pcm: bytes, *, snr_db=None, narrowband=False, seed=0) -> bytes:
