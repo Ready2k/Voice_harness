@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "stream_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Stream Id",
+      "type": "string"
+    },
+    "chunk_sequence": {
+      "minimum": 1,
+      "title": "Chunk Sequence",
+      "type": "integer"
+    },
+    "start_sample": {
+      "minimum": 0,
+      "title": "Start Sample",
+      "type": "integer"
+    },
+    "end_sample": {
+      "minimum": 0,
+      "title": "End Sample",
+      "type": "integer"
+    },
+    "byte_count": {
+      "minimum": 0,
+      "title": "Byte Count",
+      "type": "integer"
+    },
+    "duration_ms": {
+      "minimum": 0,
+      "title": "Duration Ms",
+      "type": "integer"
+    },
+    "checksum": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Checksum",
+      "type": "string"
+    },
+    "codec": {
+      "const": "pcm_s16le",
+      "title": "Codec",
+      "type": "string"
+    },
+    "rate": {
+      "const": 24000,
+      "title": "Rate",
+      "type": "integer"
+    },
+    "channels": {
+      "const": 1,
+      "title": "Channels",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "stream_id",
+    "chunk_sequence",
+    "start_sample",
+    "end_sample",
+    "byte_count",
+    "duration_ms",
+    "checksum",
+    "codec",
+    "rate",
+    "channels"
+  ],
+  "title": "AudioInput",
+  "type": "object"
+}

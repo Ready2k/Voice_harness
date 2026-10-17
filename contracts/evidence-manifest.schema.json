@@ -1,0 +1,243 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Run manifest (evidence.bundle). The identity, integrity and artifact fields\nare closed and required; nested policy/provider sections are typed as objects.\nSections added by later phases (signing, restricted exports) must be added here\ndeliberately: unknown top-level keys are rejected.",
+  "properties": {
+    "schema_version": {
+      "const": "0.3",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "run_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Run Id",
+      "type": "string"
+    },
+    "state": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "State",
+      "type": "string"
+    },
+    "event_count": {
+      "minimum": 0,
+      "title": "Event Count",
+      "type": "integer"
+    },
+    "final_ledger_hash": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Final Ledger Hash"
+    },
+    "artifact_hashes": {
+      "items": {
+        "pattern": "^[0-9a-f]{64}$",
+        "type": "string"
+      },
+      "title": "Artifact Hashes",
+      "type": "array"
+    },
+    "missing_artifacts": {
+      "items": {
+        "pattern": "^[0-9a-f]{64}$",
+        "type": "string"
+      },
+      "title": "Missing Artifacts",
+      "type": "array"
+    },
+    "audio_capture": {
+      "enum": [
+        "retained",
+        "not_captured"
+      ],
+      "title": "Audio Capture",
+      "type": "string"
+    },
+    "holds": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Holds",
+      "type": "array"
+    },
+    "signature": {
+      "title": "Signature",
+      "type": "null"
+    },
+    "signature_status": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Signature Status",
+      "type": "string"
+    },
+    "isolation_strategy": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Isolation Strategy",
+      "type": "string"
+    },
+    "export_type": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Export Type",
+      "type": "string"
+    },
+    "scenario": {
+      "additionalProperties": true,
+      "title": "Scenario",
+      "type": "object"
+    },
+    "provider": {
+      "additionalProperties": true,
+      "title": "Provider",
+      "type": "object"
+    },
+    "policy": {
+      "additionalProperties": true,
+      "title": "Policy",
+      "type": "object"
+    },
+    "limits": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Limits"
+    },
+    "retention": {
+      "additionalProperties": true,
+      "title": "Retention",
+      "type": "object"
+    },
+    "pricing": {
+      "additionalProperties": true,
+      "title": "Pricing",
+      "type": "object"
+    },
+    "deterministic_check_and_judge_results": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Deterministic Check And Judge Results",
+      "type": "array"
+    },
+    "human_adjudication": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Human Adjudication",
+      "type": "array"
+    },
+    "final_disposition": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Final Disposition"
+    },
+    "omitted_from_standard_export": {
+      "items": {
+        "maxLength": 200,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Omitted From Standard Export",
+      "type": "array"
+    },
+    "known_limitations": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Known Limitations",
+      "type": "array"
+    },
+    "provider_coverage": {
+      "additionalProperties": true,
+      "title": "Provider Coverage",
+      "type": "object"
+    },
+    "source_hash": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Source Hash"
+    },
+    "config_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Config Hash",
+      "type": "string"
+    },
+    "fixture_snapshot_id": {
+      "anyOf": [
+        {
+          "maxLength": 200,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Fixture Snapshot Id"
+    }
+  },
+  "required": [
+    "schema_version",
+    "run_id",
+    "state",
+    "event_count",
+    "final_ledger_hash",
+    "artifact_hashes",
+    "missing_artifacts",
+    "audio_capture",
+    "holds",
+    "signature",
+    "signature_status",
+    "isolation_strategy",
+    "export_type",
+    "scenario",
+    "provider",
+    "policy",
+    "limits",
+    "retention",
+    "pricing",
+    "deterministic_check_and_judge_results",
+    "human_adjudication",
+    "final_disposition",
+    "omitted_from_standard_export",
+    "known_limitations",
+    "provider_coverage",
+    "source_hash",
+    "config_hash",
+    "fixture_snapshot_id"
+  ],
+  "title": "EvidenceManifest",
+  "type": "object"
+}

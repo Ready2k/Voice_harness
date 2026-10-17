@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "call_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Call Id",
+      "type": "string"
+    },
+    "status": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Status",
+      "type": "string"
+    },
+    "error_code": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Error Code",
+      "type": "string"
+    }
+  },
+  "required": [
+    "call_id",
+    "status",
+    "error_code"
+  ],
+  "title": "ToolDenied",
+  "type": "object"
+}

@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "hold_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Hold Id",
+      "type": "string"
+    },
+    "reason": {
+      "title": "Reason",
+      "type": "string"
+    },
+    "expires_at": {
+      "title": "Expires At",
+      "type": "number"
+    },
+    "previous_expiry": {
+      "title": "Previous Expiry",
+      "type": "number"
+    }
+  },
+  "required": [
+    "hold_id",
+    "reason",
+    "expires_at",
+    "previous_expiry"
+  ],
+  "title": "PreservationRenewed",
+  "type": "object"
+}

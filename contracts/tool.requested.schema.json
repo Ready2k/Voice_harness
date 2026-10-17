@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "call_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Call Id",
+      "type": "string"
+    },
+    "tool": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Tool",
+      "type": "string"
+    },
+    "arguments": {
+      "additionalProperties": true,
+      "title": "Arguments",
+      "type": "object"
+    },
+    "argument_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Argument Hash",
+      "type": "string"
+    }
+  },
+  "required": [
+    "call_id",
+    "tool",
+    "arguments",
+    "argument_hash"
+  ],
+  "title": "ToolRequested",
+  "type": "object"
+}

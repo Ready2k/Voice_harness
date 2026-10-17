@@ -47,6 +47,9 @@ def migrate(db, payload_type):
                 (row["scenario_id"], row["version"]),
             )
     db.execute("INSERT INTO harness_migrations VALUES (5) ON CONFLICT DO NOTHING")
+    from . import indexing
+
+    indexing.migrate(db, payload_type)
 
 
 def upsert_hold(db, database, run_id, hold):

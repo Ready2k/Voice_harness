@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "call_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Call Id",
+      "type": "string"
+    },
+    "native_envelope": {
+      "additionalProperties": true,
+      "title": "Native Envelope",
+      "type": "object"
+    }
+  },
+  "required": [
+    "call_id",
+    "native_envelope"
+  ],
+  "title": "McpResultReceived",
+  "type": "object"
+}

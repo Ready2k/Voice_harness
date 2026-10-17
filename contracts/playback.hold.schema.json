@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "unit_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Unit Id",
+      "type": "string"
+    },
+    "response_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Response Id",
+      "type": "string"
+    },
+    "risk_mode": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Risk Mode",
+      "type": "string"
+    },
+    "filler": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Filler",
+      "type": "string"
+    }
+  },
+  "required": [
+    "unit_id",
+    "response_id",
+    "risk_mode",
+    "filler"
+  ],
+  "title": "PlaybackHold",
+  "type": "object"
+}

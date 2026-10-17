@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "generation_epoch": {
+      "minimum": 0,
+      "title": "Generation Epoch",
+      "type": "integer"
+    },
+    "playback_offsets": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Playback Offsets",
+      "type": "array"
+    },
+    "provider_cancellation": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Provider Cancellation",
+      "type": "string"
+    }
+  },
+  "required": [
+    "generation_epoch",
+    "playback_offsets",
+    "provider_cancellation"
+  ],
+  "title": "SessionInterrupted",
+  "type": "object"
+}

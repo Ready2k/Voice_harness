@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "fault": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Fault",
+      "type": "string"
+    },
+    "fixture_version": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Fixture Version",
+      "type": "string"
+    },
+    "tool": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Tool",
+      "type": "string"
+    }
+  },
+  "required": [
+    "fault",
+    "fixture_version",
+    "tool"
+  ],
+  "title": "FaultInjected",
+  "type": "object"
+}

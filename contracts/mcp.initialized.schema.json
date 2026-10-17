@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "bridge": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Bridge",
+      "type": "string"
+    },
+    "protocol_version": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Protocol Version",
+      "type": "string"
+    },
+    "sdk_version": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Sdk Version",
+      "type": "string"
+    },
+    "transport": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Transport",
+      "type": "string"
+    }
+  },
+  "required": [
+    "bridge",
+    "protocol_version",
+    "sdk_version",
+    "transport"
+  ],
+  "title": "McpInitialized",
+  "type": "object"
+}

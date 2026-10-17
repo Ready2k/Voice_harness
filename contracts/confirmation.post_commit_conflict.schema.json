@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "confirmation_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Confirmation Id",
+      "type": "string"
+    },
+    "disposition": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Disposition",
+      "type": "string"
+    },
+    "rollback": {
+      "title": "Rollback",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "confirmation_id",
+    "disposition",
+    "rollback"
+  ],
+  "title": "ConfirmationPostCommitConflict",
+  "type": "object"
+}

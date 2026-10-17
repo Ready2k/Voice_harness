@@ -21,6 +21,8 @@ from .contracts import (
     RunConfig,
 )
 from .engine import digest
+from .event_contracts import EVENT_CONTENT_CONTRACTS, EvidenceManifest
+from .event_examples import examples as event_examples
 from .events import SOURCES, Event
 from .scenario_defs import SCENARIOS, ScenarioDefinition
 from .simulator import ScriptedSimulator
@@ -216,9 +218,11 @@ def generate(root="contracts"):
     models.update({name + ".arguments": model for name, model in TOOLS.items()})
     models.update({name + ".result": model for name, model in OUTPUTS.items()})
     models.update(EVENT_CONTRACTS)
+    models.update(EVENT_CONTENT_CONTRACTS)
+    models["evidence-manifest"] = EvidenceManifest
     types = {}
     examples = {}
-    curated = _curated_examples()
+    curated = {**_curated_examples(), **event_examples()}
     for name, model in models.items():
         schema = {
             "$schema": "https://json-schema.org/draft/2020-12/schema",

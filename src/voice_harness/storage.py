@@ -333,4 +333,7 @@ class RunTransaction:
         from .relational import project
 
         project(self, event)
+        from .telemetry import observe
+
+        observe(event.to_dict())  # best-effort; never raises
         return event.event_id

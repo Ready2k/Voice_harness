@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "failure_code": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Failure Code",
+      "type": "string"
+    },
+    "unit_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Unit Id",
+      "type": "string"
+    },
+    "waited_seconds": {
+      "minimum": 0,
+      "title": "Waited Seconds",
+      "type": "number"
+    },
+    "limit_seconds": {
+      "minimum": 0,
+      "title": "Limit Seconds",
+      "type": "number"
+    },
+    "discarded_unit_ids": {
+      "items": {
+        "maxLength": 200,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Discarded Unit Ids",
+      "type": "array"
+    },
+    "generation_epoch": {
+      "minimum": 0,
+      "title": "Generation Epoch",
+      "type": "integer"
+    },
+    "provider_cancellation": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Provider Cancellation",
+      "type": "string"
+    }
+  },
+  "required": [
+    "failure_code",
+    "unit_id",
+    "waited_seconds",
+    "limit_seconds",
+    "discarded_unit_ids",
+    "generation_epoch",
+    "provider_cancellation"
+  ],
+  "title": "AudioDecisionTimeout",
+  "type": "object"
+}

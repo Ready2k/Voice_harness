@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "reason": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Reason",
+      "type": "string"
+    },
+    "close_reason": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Close Reason",
+      "type": "string"
+    },
+    "unresolved_call_ids": {
+      "items": {
+        "maxLength": 200,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Unresolved Call Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "reason",
+    "close_reason",
+    "unresolved_call_ids"
+  ],
+  "title": "RunFailed",
+  "type": "object"
+}

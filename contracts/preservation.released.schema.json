@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "hold_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Hold Id",
+      "type": "string"
+    },
+    "reason": {
+      "title": "Reason",
+      "type": "string"
+    },
+    "released_by": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Released By",
+      "type": "string"
+    }
+  },
+  "required": [
+    "hold_id",
+    "reason",
+    "released_by"
+  ],
+  "title": "PreservationReleased",
+  "type": "object"
+}

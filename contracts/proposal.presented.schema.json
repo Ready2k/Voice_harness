@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "request_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Request Id",
+      "type": "string"
+    },
+    "channel": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Channel",
+      "type": "string"
+    },
+    "proposal": {
+      "additionalProperties": true,
+      "title": "Proposal",
+      "type": "object"
+    }
+  },
+  "required": [
+    "request_id",
+    "channel",
+    "proposal"
+  ],
+  "title": "ProposalPresented",
+  "type": "object"
+}

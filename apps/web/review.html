@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
+<title>Hold review</title>
+<link rel="stylesheet" href="./ops.css">
+</head>
+<body>
+<main>
+  <nav><a href="./runs.html">Runs</a><a href="./review.html">Hold review</a><a href="./coverage.html">Provider coverage</a></nav>
+  <h1>Hold review</h1>
+  <p class="sub">Unresolved preservation holds and disputes, most urgent first. Owners are notified seven days before expiry; a hold overrides retention but never secret-exclusion rules.</p>
+  <form id="auth">
+    <input id="token" type="password" autocomplete="off" placeholder="Operator token" aria-label="Operator token" required>
+    <button type="submit">Load holds</button>
+  </form>
+  <p id="error" role="alert"></p>
+  <div id="root"></div>
+</main>
+<script type="module" src="./review-page.mjs"></script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "unit_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Unit Id",
+      "type": "string"
+    },
+    "token_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Token Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "unit_id",
+    "token_id"
+  ],
+  "title": "PlaybackReleased",
+  "type": "object"
+}

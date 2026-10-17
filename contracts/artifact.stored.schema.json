@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Sha256",
+      "type": "string"
+    },
+    "kind": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Kind",
+      "type": "string"
+    },
+    "size": {
+      "minimum": 0,
+      "title": "Size",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "sha256",
+    "kind",
+    "size"
+  ],
+  "title": "ArtifactStored",
+  "type": "object"
+}
