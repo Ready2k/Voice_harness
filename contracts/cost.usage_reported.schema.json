@@ -1,0 +1,264 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "report_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Report Id",
+      "type": "string"
+    },
+    "component": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Component",
+      "type": "string"
+    },
+    "provider": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Provider",
+      "type": "string"
+    },
+    "service": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Service",
+      "type": "string"
+    },
+    "model": {
+      "anyOf": [
+        {
+          "maxLength": 200,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Model"
+    },
+    "region": {
+      "anyOf": [
+        {
+          "maxLength": 200,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Region"
+    },
+    "meter_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Meter Id",
+      "type": "string"
+    },
+    "billing_scope_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Billing Scope Id",
+      "type": "string"
+    },
+    "scope_type": {
+      "enum": [
+        "request",
+        "session",
+        "account_period",
+        "unknown"
+      ],
+      "title": "Scope Type",
+      "type": "string"
+    },
+    "report_kind": {
+      "enum": [
+        "incremental",
+        "cumulative"
+      ],
+      "title": "Report Kind",
+      "type": "string"
+    },
+    "revision": {
+      "minimum": 1,
+      "title": "Revision",
+      "type": "integer"
+    },
+    "corrects_report_id": {
+      "anyOf": [
+        {
+          "maxLength": 200,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Corrects Report Id"
+    },
+    "covers_scope_ids": {
+      "items": {
+        "maxLength": 200,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Covers Scope Ids",
+      "type": "array"
+    },
+    "provenance": {
+      "enum": [
+        "provider_reported_usage",
+        "estimated"
+      ],
+      "title": "Provenance",
+      "type": "string"
+    },
+    "quantity": {
+      "anyOf": [
+        {
+          "pattern": "^\\d+(\\.\\d+)?$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Quantity"
+    },
+    "unit": {
+      "enum": [
+        "token",
+        "second",
+        "request",
+        "character"
+      ],
+      "title": "Unit",
+      "type": "string"
+    },
+    "cached_quantity": {
+      "anyOf": [
+        {
+          "pattern": "^\\d+(\\.\\d+)?$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Cached Quantity"
+    },
+    "generation_state": {
+      "enum": [
+        "completed",
+        "cancelled",
+        "discarded"
+      ],
+      "title": "Generation State",
+      "type": "string"
+    },
+    "usage_date": {
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "title": "Usage Date",
+      "type": "string"
+    },
+    "interval_start_ms": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Interval Start Ms"
+    },
+    "interval_end_ms": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Interval End Ms"
+    },
+    "estimation_method": {
+      "anyOf": [
+        {
+          "maxLength": 200,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Estimation Method"
+    },
+    "assumptions": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Assumptions",
+      "type": "array"
+    },
+    "unknown_reason": {
+      "anyOf": [
+        {
+          "maxLength": 200,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Unknown Reason"
+    },
+    "evidence_event_ids": {
+      "items": {
+        "maxLength": 200,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Evidence Event Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "report_id",
+    "component",
+    "provider",
+    "service",
+    "model",
+    "region",
+    "meter_id",
+    "billing_scope_id",
+    "scope_type",
+    "report_kind",
+    "revision",
+    "corrects_report_id",
+    "covers_scope_ids",
+    "provenance",
+    "quantity",
+    "unit",
+    "cached_quantity",
+    "generation_state",
+    "usage_date",
+    "interval_start_ms",
+    "interval_end_ms",
+    "estimation_method",
+    "assumptions",
+    "unknown_reason",
+    "evidence_event_ids"
+  ],
+  "title": "CostUsageReported",
+  "type": "object"
+}

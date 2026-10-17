@@ -240,6 +240,19 @@
         }
       ],
       "title": "Fixture Snapshot Id"
+    },
+    "cost": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Cost"
     }
   },
   "required": [

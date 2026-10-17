@@ -150,6 +150,16 @@ def examples():
             "call_id": call, "delivery_receipt": {"state": "sent_locally"}, "logical_result_count": 1,
         },
         "turn.started": {"turn_id": "turn_001"},
+        "cost.usage_reported": {
+            "report_id": "usage_001", "component": "voice", "provider": "fixture", "service": "rt",
+            "model": None, "region": None, "meter_id": "tok_in", "billing_scope_id": "resp_001",
+            "scope_type": "request", "report_kind": "incremental", "revision": 1, "corrects_report_id": None,
+            "covers_scope_ids": [], "provenance": "provider_reported_usage", "quantity": "1200", "unit": "token",
+            "cached_quantity": "200", "generation_state": "completed", "usage_date": "2026-10-17",
+            "interval_start_ms": None, "interval_end_ms": None, "estimation_method": None, "assumptions": [],
+            "unknown_reason": None, "evidence_event_ids": [],
+        },
+        "cost.expectation_declared": {"components": ["voice", "online_judge"], "declared_by": "orchestrator"},
         "evidence-manifest": {
             "schema_version": "0.3", "run_id": "run_001", "state": "completed", "event_count": 31,
             "final_ledger_hash": _h("ledger-final"), "artifact_hashes": [pcm], "missing_artifacts": [],
@@ -167,6 +177,12 @@ def examples():
             "known_limitations": ["Manifest is unsigned"],
             "provider_coverage": {"ranking": None}, "source_hash": _h("source"),
             "config_hash": _h("config"), "fixture_snapshot_id": "fixture_001",
+            "cost": {
+                "section_hash": _h("cost-section"), "pricing_table_id": "voice-harness-pricing",
+                "pricing_table_version": "1", "pricing_document_hash": _h("pricing-document"), "line_count": 0,
+                "completeness": "unknown", "summary_label": "unknown", "unknown_line_count": 0,
+                "unknown_components": [],
+            },
         },
     }
     return out

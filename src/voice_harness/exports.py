@@ -125,6 +125,7 @@ def reviewer_export(evidence, run_id):
         "versions": source["versions"],
         "source_manifest": src,
         **({"signature": envelope, "source_signature": source["signature"]} if envelope else {}),
+        "cost": source.get("cost"),
     }
 
 
@@ -146,6 +147,8 @@ def to_ndjson(bundle):
         lines.append(line("source_manifest", manifest=bundle["source_manifest"]))
     if "source_signature" in bundle:
         lines.append(line("source_signature", signature=bundle["source_signature"]))
+    if bundle.get("cost") is not None:
+        lines.append(line("cost", section=bundle["cost"]))
     lines += [line("schema", name=n, schema=s) for n, s in (bundle.get("schemas") or {}).items()]
     lines += [line("event", event=e) for e in bundle["events"]]
     lines += [line("artifact", artifact=a) for a in bundle["artifacts"]]
@@ -168,6 +171,8 @@ def from_ndjson(text):
             bundle["source_manifest"] = record["manifest"]
         elif kind in ("signature", "source_signature"):
             bundle[kind] = record["signature"]
+        elif kind == "cost":
+            bundle["cost"] = record["section"]
         elif kind == "schema":
             bundle["schemas"][record["name"]] = record["schema"]
         elif kind == "event":
