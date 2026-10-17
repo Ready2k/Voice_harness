@@ -269,6 +269,7 @@ def generate(root="contracts"):
         "response_id",
         "provider_event_type",
         "prev_hash",
+        "causation_unknown_reason",
     }
     properties = {}
     for key, value in example.to_dict().items():

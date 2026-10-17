@@ -1,4 +1,5 @@
 import {ApprovalScheduler} from "./scheduler.mjs";
+import {ClockSync} from "./clock-sync.mjs";
 
 // Call after a user gesture resumes a 24kHz AudioContext. It is a privileged
 // client sink: no provider SDK or unapproved audio is accepted here.
@@ -14,8 +15,10 @@ export async function connectPlayback({audioContext, runId, operatorToken, baseU
   url.protocol = url.protocol === "https:" ? "wss:" : "ws:";
   const socket = new WebSocket(url, ["harness.v1", "ticket." + ticket]);
   let start, scheduler, sequence = 0, chain = Promise.resolve();
+  let clock;
   const send = (type, payload) => socket.send(JSON.stringify({schema_version:"0.3",message_id:crypto.randomUUID(),session_id:start.session_id,connection_epoch:start.connection_epoch,client_sequence:++sequence,type,payload}));
   node.port.onmessage = ({data}) => {
+    if (data.type === "playback.progress" && scheduler) scheduler.progress(data.unitId, data.endSample);
     if (data.type === "playback.ack") send("playback.ack", {unit_id:data.unitId,end_sample:data.endSample});
     if (data.type === "playback.stopped" && start) send("playback.stopped", {ranges:data.ranges});
     if (data.type === "error") { send("stop", {reason:data.code}); node.disconnect(); }
@@ -25,16 +28,21 @@ export async function connectPlayback({audioContext, runId, operatorToken, baseU
       const message = JSON.parse(data);
       if (message.type === "start") {
         start = message;
-        scheduler = new ApprovalScheduler({sessionId:start.session_id,publicKey:start.approval_public_key,generationEpoch:start.generation_epoch,render:{
-          enqueue({unitId, epoch, pcm}) {
+        scheduler = new ApprovalScheduler({sessionId:start.session_id,publicKey:start.approval_public_key,generationEpoch:start.generation_epoch,lookaheadMs:start.limits?.client_schedule_ahead_ms ?? 100,render:{
+          enqueue({unitId, epoch, pcm, base = 0, final = true}) {
             const view = new DataView(pcm.buffer, pcm.byteOffset, pcm.byteLength);
             const samples = Float32Array.from({length:pcm.length / 2}, (_, i) => view.getInt16(i * 2, true) / 32768);
-            node.port.postMessage({type:"approved",unitId,epoch,samples}, [samples.buffer]);
+            node.port.postMessage({type:"approved",unitId,epoch,samples,base,final}, [samples.buffer]);
           },
           flush:epoch=>node.port.postMessage({type:"flush",epoch}),
           revoke:unitId=>node.port.postMessage({type:"revoke",unitId})
         }});
         scheduler.flush(start.generation_epoch);
+        // Eight four-timestamp exchanges now and every 30 s; a new socket starts a new window.
+        clock = new ClockSync({send});
+        clock.start();
+      } else if (message.type === "clock.pong") {
+        clock?.onPong(message);
       } else if (message.type === "audio.approved") {
         await scheduler.accept(message);
       } else if (message.type === "playback.stopped") {
@@ -46,6 +54,6 @@ export async function connectPlayback({audioContext, runId, operatorToken, baseU
       }
     }).catch(() => { node.disconnect(); socket.close(); });
   };
-  socket.onclose = () => node.disconnect();
-  return {interrupt() { scheduler.flush(scheduler.generationEpoch + 1); send("interrupt", {}); },close() { socket.close();node.disconnect(); }};
+  socket.onclose = () => { clock?.stop(); node.disconnect(); };
+  return {interrupt() { scheduler.flush(scheduler.generationEpoch + 1); send("interrupt", {}); },close() { clock?.stop(); socket.close();node.disconnect(); }};
 }

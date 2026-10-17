@@ -15,6 +15,22 @@ from .canonical import canonical_json
 # Closed set of canonical envelope sources (spec section 5).
 SOURCES = frozenset({"provider", "orchestrator", "guardrail", "mcp", "judge", "playback"})
 
+# Events whose cause is outside the ledger (client, operator or timer stimulus).
+EXTERNAL_STIMULUS_TYPES = frozenset(
+    {
+        "audio.input",
+        "session.connected",
+        "run.started",
+        "run.cancel_requested",
+        "playback.ack",
+        "playback.client_stopped",
+        "mcp.initialized",
+    }
+)
+CAUSATION_UNKNOWN_REASONS = frozenset(
+    {"ROOT_EVENT", "EXTERNAL_STIMULUS", "PRODUCER_DID_NOT_DECLARE"}
+)
+
 PROCESS_CLOCK_DOMAIN = "process_" + uuid.uuid4().hex
 
 
@@ -59,6 +75,8 @@ class Event:
     turn_id: str | None = None
     response_id: str | None = None
     causation_event_ids: list[str] = field(default_factory=list)
+    # FN-02: every event has explicit causation or a declared reason it is unknown.
+    causation_unknown_reason: str | None = None
     provider_event_type: str | None = None
     provider_event: dict[str, Any] = field(default_factory=dict)
     sequence: int = 0
@@ -80,6 +98,18 @@ class Event:
     def __post_init__(self):
         if self.source not in SOURCES:
             raise ValueError("INVALID_EVENT_SOURCE")
+        if self.causation_event_ids:
+            self.causation_unknown_reason = None
+        elif self.causation_unknown_reason is None:
+            self.causation_unknown_reason = (
+                "ROOT_EVENT"
+                if self.sequence <= 1
+                else "EXTERNAL_STIMULUS"
+                if self.type in EXTERNAL_STIMULUS_TYPES or self.type.startswith("clock.")
+                else "PRODUCER_DID_NOT_DECLARE"
+            )
+        elif self.causation_unknown_reason not in CAUSATION_UNKNOWN_REASONS:
+            raise ValueError("INVALID_CAUSATION_REASON")
 
     def seal(self, previous_hash: str | None) -> None:
         self.prev_hash = previous_hash

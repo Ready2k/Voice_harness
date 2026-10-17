@@ -47,6 +47,9 @@ def migrate(db, payload_type):
                 (row["scenario_id"], row["version"]),
             )
     db.execute("INSERT INTO harness_migrations VALUES (5) ON CONFLICT DO NOTHING")
+    from . import clock_runtime
+
+    clock_runtime.migrate(db)
 
 
 def upsert_hold(db, database, run_id, hold):
@@ -158,6 +161,10 @@ def project(transaction, event):
                 event.event_id,
             ),
         )
+    elif kind.startswith("clock."):
+        from . import clock_runtime
+
+        clock_runtime.project(db, event)
     elif kind == "transcript.revised":
         insert(
             "harness_transcript_segments",

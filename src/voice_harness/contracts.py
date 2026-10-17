@@ -282,6 +282,9 @@ class TranscriptRevised(Closed):
     new: str
     old_state: Identifier
     source: Literal["independent_fixture", "provider", "independent_asr"]
+    # Provider revisions are evidence only; they never authorize or revoke release.
+    authoritative: bool = True
+    disagrees_with_independent: bool | None = None
     old_revision_id: Identifier
     new_revision_id: Identifier
     affected_sample_range: Annotated[list[int], Field(min_length=2, max_length=2)]
@@ -397,6 +400,7 @@ EVENT_CONTRACTS = {
 
 class ApprovalToken(Closed):
     token_id: Identifier
+    sequence: Annotated[int, Field(ge=1)]
     unit_id: Identifier
     audio_sha256: Annotated[str, Field(pattern="^[0-9a-f]{64}$")]
     session_id: Identifier

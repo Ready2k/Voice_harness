@@ -5,6 +5,8 @@ import struct
 
 from .engine import Engine
 from .mock_provider import MockProvider
+from .scenario_defs import SCENARIOS
+from .scenario_stop import StopEvaluator
 from .simulator import ScriptedSimulator
 from .verdicts import aggregate
 
@@ -53,18 +55,59 @@ async def _run_scenario(engine: Engine, run_id, evidence):
         )
     from .mcp_gateway import gateway
 
+    # SC-03: declared stop conditions end the customer script; the guardrail and
+    # evidence path below still runs to completion.
+    stop = StopEvaluator(SCENARIOS[scenario]) if scenario in SCENARIOS else None
+    stop_event = []
+
+    def observe(name=None):
+        if stop is None:
+            return
+        reason = stop.observe_tool(name) if name else stop.observe_turn()
+        if reason and not stop_event:
+            with engine.database.transaction(run_id) as tx:
+                stop_event.append(
+                    tx.event(
+                        "orchestrator",
+                        "scenario.stop_condition_met",
+                        {
+                            "condition": reason,
+                            "mapped_termination_reason": stop.mapped_reason(),
+                            "turns_taken": stop.turns_taken,
+                            "tools_called": list(stop.tools_called),
+                            "guardrail_path": "continues_to_completion",
+                        },
+                        causes=[selected],
+                    )
+                )
+
+    observe()
+    result = None
     async with gateway(engine, run_id) as bank:
-        if scenario == "balance-verified-001":
+        if scenario == "balance-verified-001" and not (stop and stop.check()):
             await bank.tool(
                 "idv",
                 "verify_identity",
                 {"challenge_id": "challenge_001", "answer": "blue"},
             )
-        result = await bank.tool(
-            "balance", "get_account_summary", {"account_id": "acct_1001"}
-        )
-    receipt = await provider.submit_tool_result("balance", result)
-    await provider.submit_tool_result("balance", result)
+            observe("verify_identity")
+        if not (stop and stop.check()):
+            result = await bank.tool(
+                "balance", "get_account_summary", {"account_id": "acct_1001"}
+            )
+            observe("get_account_summary")
+    receipt = "not_sent_scenario_stopped"
+    if result is None:
+        result = {
+            "call_id": "balance",
+            "status": "cancelled",
+            "structured_content": None,
+            "error_code": "SCENARIO_STOPPED",
+            "evidence_event_ids": list(stop_event),
+        }
+    else:
+        receipt = await provider.submit_tool_result("balance", result)
+        await provider.submit_tool_result("balance", result)
     # A fixed PCM silence fixture exercises bytes, sample ranges and sink control.
     # The scripted transcript/assessment is metadata, not ASR of this silence.
     pcm = struct.pack("<480h", *([0] * 480))
@@ -144,16 +187,17 @@ async def _run_scenario(engine: Engine, run_id, evidence):
     with engine.database.transaction(run_id) as tx:
         if tx.state["state"] == "cancelled":
             return None
-        tx.event(
-            "provider",
-            "tool.result_sent",
-            {
-                "call_id": "balance",
-                "logical_result_count": len(provider.receiver.results),
-                "delivery_receipt": receipt,
-            },
-            causes=result["evidence_event_ids"],
-        )
+        if result["error_code"] != "SCENARIO_STOPPED":
+            tx.event(
+                "provider",
+                "tool.result_sent",
+                {
+                    "call_id": "balance",
+                    "logical_result_count": len(provider.receiver.results),
+                    "delivery_receipt": receipt,
+                },
+                causes=result["evidence_event_ids"],
+            )
         tx.event(
             "judge",
             "judge.completed",

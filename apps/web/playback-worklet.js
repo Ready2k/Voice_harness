@@ -5,7 +5,7 @@ class GatedPlayback extends AudioWorkletProcessor {
     this.queue = [];
     this.port.onmessage = ({data}) => {
       if (data.type === "flush") {
-        this.port.postMessage({type:"playback.stopped",ranges:this.queue.map(item=>({unitId:item.unitId,endSample:item.offset,epoch:item.epoch}))});
+        this.port.postMessage({type:"playback.stopped",ranges:this.queue.map(item=>({unitId:item.unitId,endSample:(item.base ?? 0) + item.offset,epoch:item.epoch}))});
         this.epoch = Math.max(this.epoch, data.epoch);
         this.queue = [];
       } else if (data.type === "revoke") {
@@ -31,9 +31,11 @@ class GatedPlayback extends AudioWorkletProcessor {
       output.set(item.samples.subarray(item.offset, item.offset + count), cursor);
       item.offset += count;
       cursor += count;
-      this.port.postMessage({type: "playback.progress", unitId: item.unitId, endSample: item.offset, epoch: item.epoch});
+      const endSample = (item.base ?? 0) + item.offset;
+      this.port.postMessage({type: "playback.progress", unitId: item.unitId, endSample, epoch: item.epoch});
       if (item.offset === item.samples.length) {
-        this.port.postMessage({type: "playback.ack", unitId: item.unitId, endSample: item.offset, epoch: item.epoch});
+        // Chunks of one unit share an ack; only the final chunk completes the unit.
+        if (item.final ?? true) this.port.postMessage({type: "playback.ack", unitId: item.unitId, endSample, epoch: item.epoch});
         this.queue.shift();
       }
     }

@@ -31,6 +31,23 @@
       "title": "Source",
       "type": "string"
     },
+    "authoritative": {
+      "default": true,
+      "title": "Authoritative",
+      "type": "boolean"
+    },
+    "disagrees_with_independent": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Disagrees With Independent"
+    },
     "old_revision_id": {
       "maxLength": 200,
       "minLength": 1,

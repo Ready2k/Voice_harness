@@ -28,10 +28,12 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import ValidationError
 
 from .approvals import public_key
+from .clock_runtime import ClockSyncSession, invalidate_prior_connection
 from .contracts import AudioInputPayload, CancelRun, HoldRequest, RenewHold, RunConfig
 from .coverage import build_registry, summarize
 from .engine import Engine
 from .evidence import Evidence
+from .inbound_queue import InboundQueue
 from .metrics import derive as derive_metrics
 from .scenario_defs import SCENARIOS, ScenarioDefinition, definition_hash
 from .scenarios import run_scenario
@@ -472,6 +474,16 @@ def create_app(database=None, root=None, token=None, recover=True):
         )
         wire_cursor = max((e["sequence"] for e in database.events(run_id)), default=0)
         last_activity = last_ping = time.monotonic()
+        inbound = InboundQueue(engine.limits["inbound_queue_seconds"])
+        inbound.start(socket)
+
+        def record_clock(kind, content):
+            with database.transaction(run_id) as tx:
+                tx.event("orchestrator", kind, content)
+
+        clock = ClockSyncSession(epoch, record_clock)
+        if epoch > 1:
+            await asyncio.to_thread(invalidate_prior_connection, record_clock, epoch)
         try:
             while True:
                 changes = await asyncio.to_thread(
@@ -515,15 +527,14 @@ def create_app(database=None, root=None, token=None, recover=True):
                                 "audio": base64.b64encode(pcm).decode(),
                             }
                         )
+                await asyncio.to_thread(clock.expire_if_stale)
                 if time.monotonic() - last_activity > 30:
                     raise ValueError("IDLE_TIMEOUT")
                 if time.monotonic() - last_ping > 10:
                     await socket.send_json({"type": "ping"})
                     last_ping = time.monotonic()
                 try:
-                    message = await asyncio.wait_for(
-                        socket.receive_json(), timeout=0.05
-                    )
+                    message = await inbound.get(0.05)
                 except TimeoutError:
                     continue
                 last_activity = time.monotonic()
@@ -654,6 +665,13 @@ def create_app(database=None, root=None, token=None, recover=True):
                     await socket.send_json({"type": "playback.acknowledged"})
                 elif message["type"] == "pong":
                     pass
+                elif message["type"] == "clock.ping":
+                    received_ms = (inbound.last_received or time.monotonic()) * 1000
+                    await socket.send_json(
+                        clock.on_ping(message["payload"], received_ms)
+                    )
+                elif message["type"] == "clock.sample":
+                    await asyncio.to_thread(clock.on_sample, message["payload"])
                 elif message["type"] == "playback.stopped":
                     with database.transaction(run_id) as tx:
                         tx.event(
@@ -678,10 +696,17 @@ def create_app(database=None, root=None, token=None, recover=True):
                         "session.error",
                         {"failure_code": code},
                     )
+            if code == "AUDIO_BACKPRESSURE":
+                with suppress(Exception):
+                    await asyncio.to_thread(engine.cancel, run_id, code)
             await socket.send_json({"type": "error", "code": code})
             await socket.close(code=1008)
         except WebSocketDisconnect:
             pass
+        finally:
+            inbound.close()
+            with suppress(Exception):
+                await asyncio.to_thread(clock.invalidate, "DISCONNECT")
 
     return app
 

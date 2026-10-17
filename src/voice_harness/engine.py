@@ -14,6 +14,7 @@ from pathlib import Path
 
 from pydantic import ValidationError
 
+from . import interruption
 from .approvals import sign
 from .canonical import canonical_json
 from .contracts import OUTPUTS, TOOLS, ApprovalToken, Result
@@ -202,7 +203,9 @@ class Engine:
     ):
         self.prepare_tool(run_id, context, call_id, name, arguments)
         try:
-            return self._tool(
+            # Dispatch commits the observable `executing` state; the bank call and
+            # outcome commit separately (spec section 13, TL-02).
+            settled = self._tool(
                 run_id,
                 context,
                 call_id,
@@ -210,6 +213,9 @@ class Engine:
                 arguments,
                 cancel_before_dispatch=cancel_before_dispatch,
             )
+            if settled is not None:
+                return settled
+            return self.commit_tool(run_id, context, call_id, name, arguments)
         except ValidationError:
             # Validation failure rolls back the bank transaction before recording
             # a safe terminal failure in a separate transaction.
@@ -233,6 +239,11 @@ class Engine:
                     "result": result,
                 }
                 return result
+
+    def dispatch_tool(self, run_id, context, call_id, name, arguments):
+        """Authorize and mark the call `executing`; returns a result only if settled."""
+        self.prepare_tool(run_id, context, call_id, name, arguments)
+        return self._tool(run_id, context, call_id, name, arguments)
 
     def prepare_tool(self, run_id, context, call_id, name, arguments):
         """Persist dispatch intent before starting the transactional bank call."""
@@ -311,10 +322,22 @@ class Engine:
         return self.tool(run_id, context, call_id, call["tool"], arguments)
 
     @staticmethod
-    def _cancel_unstarted(tx, reason):
-        """Settle every call that has not begun execution without dispatching it."""
+    def _cancel_unstarted(tx, reason, only=None):
+        """Settle calls that have not begun execution; request cancel of executing ones."""
         for call_id, call in tx.state["calls"].items():
-            if call["result"] is not None:
+            if (only and call_id != only) or call["result"] is not None or call[
+                "state"
+            ] in {"cancel_requested", "outcome_unknown"}:
+                continue
+            if call["state"] == "executing":
+                # Interruption during execution: attempt cancellation, claim no rollback.
+                call["cancel_event_id"] = tx.event(
+                    "mcp",
+                    "tool.cancel_requested",
+                    {"call_id": call_id, "reason": reason},
+                    causes=[call["approval_event_id"]],
+                )
+                call["state"] = "cancel_requested"
                 continue
             abandoned = call["state"] == "assembling"
             kind = "abandoned" if abandoned else "cancelled_before_execution"
@@ -331,6 +354,51 @@ class Engine:
                 evidence_event_ids=[event],
             ).model_dump()
 
+    def request_tool_cancel(self, run_id, call_id, reason):
+        """Per-call cancellation: returns the terminal result, or None if now pending."""
+        with self.database.transaction(run_id) as tx:
+            call = tx.state["calls"].get(call_id)
+            if call is None:
+                raise ValueError("UNKNOWN_CALL")
+            if call["result"] is None:
+                self._cancel_unstarted(tx, reason, only=call_id)
+            return call["result"]
+
+    def mark_outcome_unknown(self, run_id, call_id, reason):
+        """Lost result/connection while executing or cancel_requested."""
+        with self.database.transaction(run_id) as tx:
+            call = tx.state["calls"][call_id]
+            if call["state"] not in {"executing", "cancel_requested"}:
+                raise ValueError("CALL_NOT_IN_FLIGHT")
+            event = tx.event(
+                "mcp",
+                "tool.outcome_unknown",
+                {"call_id": call_id, "reason": reason, "from": call["state"]},
+            )
+            call["state"] = "outcome_unknown"
+            call["result"] = Result(
+                call_id=call_id,
+                status="outcome_unknown",
+                structured_content=None,
+                error_code="OUTCOME_UNKNOWN",
+                evidence_event_ids=[event],
+            ).model_dump()
+            return call["result"]
+
+    @staticmethod
+    def _complete_cancellation(tx, cause):
+        if tx.state["state"] == "cancel_requested" and not Engine._unresolved(tx.state):
+            tx.event(
+                "orchestrator",
+                "run.cancelled",
+                {
+                    "reason": "reconciled",
+                    "generation_epoch": tx.state["generation_epoch"],
+                },
+                causes=[cause],
+            )
+            tx.state["state"] = "cancelled"
+
     def _tool(
         self, run_id, context, call_id, name, arguments, *, cancel_before_dispatch=False
     ):
@@ -345,6 +413,8 @@ class Engine:
                     raise ValueError("IDEMPOTENCY_CONFLICT")
                 if existing["result"] is not None:
                     return existing["result"]
+                if existing["state"] in {"executing", "cancel_requested"}:
+                    return None  # already dispatched; the caller commits
             requested = existing["request_event_id"]
             error = None
             if state["state"] not in {"queued", "running"}:
@@ -377,99 +447,144 @@ class Engine:
             ):
                 error = "FORBIDDEN"
             if cancel_before_dispatch:
-                status, code, data, terminal = (
-                    "cancelled",
-                    "CANCELLED_BEFORE_EXECUTION",
-                    None,
+                return self._finish(
+                    tx, call_id, request_hash, requested, started,
+                    "cancelled", "CANCELLED_BEFORE_EXECUTION", None,
                     "cancelled_before_execution",
                 )
             elif error:
-                status, code, data, terminal = "denied", error, None, "denied"
-            else:
-                approval = tx.event(
-                    "guardrail",
-                    "decision",
-                    {
-                        "call_id": call_id,
-                        "argument_hash": request_hash,
-                        **decision_record(
-                            "tool",
-                            "allow",
-                            policy_id="banking.v1.tool_authorization",
-                            policy_version="strict-v1",
-                            reason_codes=["POLICY_SATISFIED"],
-                            input_hash=request_hash,
-                            evidence_event_ids=[requested],
-                            started=started,
-                        ),
-                    },
-                    causes=[requested],
+                return self._finish(
+                    tx, call_id, request_hash, requested, started,
+                    "denied", error, None, "denied",
                 )
-                tx.event(
-                    "mcp",
-                    "tool.authorized",
-                    {
-                        "call_id": call_id,
-                        "argument_hash": request_hash,
-                        "identity_state_version": state["identity_version"],
-                    },
-                    causes=[approval],
-                )
-                tx.event(
-                    "mcp",
-                    "tool.executing",
-                    {"call_id": call_id, "idempotency_key": run_id + ":" + call_id},
-                    causes=[approval],
-                )
-                data, code = self._bank(tx, name, arguments, call_id)
-                if not code:
-                    # Invalid bank responses roll back all effects and evidence.
-                    OUTPUTS[name].model_validate(data)
-                if code in {"DEPENDENCY_TIMEOUT", "RATE_LIMITED"}:
-                    status, terminal = "error", "failed"
-                else:
-                    status, terminal = (
-                        ("denied", "denied") if code else ("success", "completed")
-                    )
-            if status != "success":
-                tx.event(
-                    "guardrail",
-                    "decision",
-                    {
-                        "call_id": call_id,
-                        "reason_code": code,
-                        **decision_record(
-                            "tool",
-                            "deny",
-                            policy_id="banking.v1.tool_authorization",
-                            policy_version="strict-v1",
-                            reason_codes=[code],
-                            input_hash=request_hash,
-                            evidence_event_ids=[requested],
-                            started=started,
-                        ),
-                    },
-                    causes=[requested],
-                )
-            outcome = tx.event(
-                "mcp",
-                "tool." + terminal,
-                {"call_id": call_id, "status": status, "error_code": code},
+            approval = tx.event(
+                "guardrail",
+                "decision",
+                {
+                    "call_id": call_id,
+                    "argument_hash": request_hash,
+                    **decision_record(
+                        "tool",
+                        "allow",
+                        policy_id="banking.v1.tool_authorization",
+                        policy_version="strict-v1",
+                        reason_codes=["POLICY_SATISFIED"],
+                        input_hash=request_hash,
+                        evidence_event_ids=[requested],
+                        started=started,
+                    ),
+                },
                 causes=[requested],
             )
-            result = Result(
-                call_id=call_id,
-                status=status,
-                structured_content=data,
-                error_code=code,
-                evidence_event_ids=[outcome],
-            ).model_dump()
-            state["calls"][call_id] = {
-                "request_hash": request_hash,
-                "state": terminal,
-                "result": result,
-            }
+            tx.event(
+                "mcp",
+                "tool.authorized",
+                {
+                    "call_id": call_id,
+                    "argument_hash": request_hash,
+                    "identity_state_version": state["identity_version"],
+                },
+                causes=[approval],
+            )
+            tx.event(
+                "mcp",
+                "tool.executing",
+                {"call_id": call_id, "idempotency_key": run_id + ":" + call_id},
+                causes=[approval],
+            )
+            existing_call = state["calls"][call_id]
+            existing_call.update(
+                {"state": "executing", "approval_event_id": approval}
+            )
+            return None
+
+    def commit_tool(self, run_id, context, call_id, name, arguments):
+        """Second phase: run the bank call and persist the authoritative outcome."""
+        started = time.perf_counter()
+        with self.database.transaction(run_id) as tx:
+            state = tx.state
+            self._context(state, run_id, context)
+            request_hash = digest({"name": name, "arguments": arguments})
+            call = state["calls"].get(call_id)
+            if call is None or call["request_hash"] != request_hash:
+                raise ValueError("IDEMPOTENCY_CONFLICT")
+            if call["result"] is not None:
+                return call["result"]
+            requested = call["request_event_id"]
+            if call["state"] == "cancel_requested":
+                # Cancellation response: the bank never started, so the authoritative
+                # evidence is cancelled_before_execution (no rollback is claimed).
+                result = self._finish(
+                    tx, call_id, request_hash, requested, started,
+                    "cancelled", "CANCELLED_BEFORE_EXECUTION", None,
+                    "cancelled_before_execution",
+                    cancel_cause=call.get("cancel_event_id"),
+                )
+                self._complete_cancellation(tx, result["evidence_event_ids"][0])
+                return result
+            if call["state"] != "executing":
+                raise ValueError("CALL_NOT_EXECUTING")
+            data, code = self._bank(tx, name, arguments, call_id)
+            if not code:
+                # Invalid bank responses roll back all effects and evidence.
+                OUTPUTS[name].model_validate(data)
+            if code in {"DEPENDENCY_TIMEOUT", "RATE_LIMITED"}:
+                status, terminal = "error", "failed"
+            else:
+                status, terminal = (
+                    ("denied", "denied") if code else ("success", "completed")
+                )
+            result = self._finish(
+                tx, call_id, request_hash, requested, started,
+                status, code, data, terminal,
+            )
+            self._complete_cancellation(tx, result["evidence_event_ids"][0])
             return result
+
+    @staticmethod
+    def _finish(
+        tx, call_id, request_hash, requested, started, status, code, data, terminal,
+        *, cancel_cause=None,
+    ):
+        if status != "success":
+            tx.event(
+                "guardrail",
+                "decision",
+                {
+                    "call_id": call_id,
+                    "reason_code": code,
+                    **decision_record(
+                        "tool",
+                        "deny",
+                        policy_id="banking.v1.tool_authorization",
+                        policy_version="strict-v1",
+                        reason_codes=[code],
+                        input_hash=request_hash,
+                        evidence_event_ids=[requested],
+                        started=started,
+                    ),
+                },
+                causes=[requested],
+            )
+        outcome = tx.event(
+            "mcp",
+            "tool." + terminal,
+            {"call_id": call_id, "status": status, "error_code": code},
+            causes=[requested] + ([cancel_cause] if cancel_cause else []),
+        )
+        result = Result(
+            call_id=call_id,
+            status=status,
+            structured_content=data,
+            error_code=code,
+            evidence_event_ids=[outcome],
+        ).model_dump()
+        tx.state["calls"][call_id] = {
+            "request_hash": request_hash,
+            "state": terminal,
+            "result": result,
+        }
+        return result
 
     def _bank(self, tx, name, args, call_id):
         fault = self.faults.get(name)
@@ -1004,8 +1119,11 @@ class Engine:
                 )
                 return None
             token_id = secrets.token_urlsafe(32)
+            # Session-monotonic release order; clients reject non-increasing values.
+            tx.state["token_sequence"] = tx.state.get("token_sequence", 0) + 1
             token = {
                 "token_id": token_id,
+                "sequence": tx.state["token_sequence"],
                 "unit_id": unit_id,
                 "audio_sha256": unit["audio_sha256"],
                 "session_id": tx.state["session_id"],
@@ -1141,9 +1259,14 @@ class Engine:
         *,
         actual_audio_assessment="unassessable",
         alignment_known=True,
+        source="independent_fixture",
     ):
         if actual_audio_assessment not in {"safe", "unsafe", "unassessable"}:
             raise ValueError("INVALID_FIXTURE_ASSESSMENT")
+        if source not in {"independent_fixture", "independent_asr", "provider"}:
+            raise ValueError("INVALID_REVISION_SOURCE")
+        if source == "provider":
+            return self._provider_revision(run_id, unit_id, new_transcript)
         with self.database.transaction(run_id) as tx:
             unit = tx.state["units"][unit_id]
             old_state = unit["state"]
@@ -1160,7 +1283,8 @@ class Engine:
                     "old": unit["transcript"],
                     "new": new_transcript,
                     "old_state": old_state,
-                    "source": "independent_fixture",
+                    "source": source,
+                    "authoritative": True,
                     "old_revision_id": unit["transcript_revision_id"],
                     "new_revision_id": revision_id,
                     "affected_sample_range": [unit["start_sample"], unit["end_sample"]],
@@ -1231,6 +1355,36 @@ class Engine:
                     )
             return replacement
 
+    def _provider_revision(self, run_id, unit_id, new_transcript):
+        """PB-16: a provider-sourced revision is evidence, never an approval basis.
+
+        It cannot bump the assessment epoch, revoke or replace tokens, or authorize
+        release; only the independent source (fixture or ASR) does. Disagreement
+        with the independent transcript is recorded for review.
+        """
+        with self.database.transaction(run_id) as tx:
+            unit = tx.state["units"][unit_id]
+            revision_id = identifier("transcript")
+            tx.event(
+                "provider",
+                "transcript.revised",
+                {
+                    "unit_id": unit_id,
+                    "old": unit["transcript"],
+                    "new": new_transcript,
+                    "old_state": unit["state"],
+                    "source": "provider",
+                    "authoritative": False,
+                    "old_revision_id": unit["transcript_revision_id"],
+                    "new_revision_id": revision_id,
+                    "affected_sample_range": [unit["start_sample"], unit["end_sample"]],
+                    "alignment_known": True,
+                    "assessment_epoch": tx.state["assessment_epoch"],
+                    "disagrees_with_independent": new_transcript != unit["transcript"],
+                },
+            )
+            return None
+
     def recover(self):
         with self.database.connection() as db:
             runs = [
@@ -1267,7 +1421,7 @@ class Engine:
         return sorted(
             call_id
             for call_id, call in state["calls"].items()
-            if call["state"] == "outcome_unknown"
+            if call["state"] in {"outcome_unknown", "executing", "cancel_requested"}
         )
 
     def cancel(self, run_id, reason):
@@ -1369,7 +1523,7 @@ class Engine:
             tx.state["state"] = "failed"
             return "failed"
 
-    def interrupt(self, run_id):
+    def interrupt(self, run_id, provider_receipt=None):
         with self.database.transaction(run_id) as tx:
             tx.state["generation_epoch"] += 1
             tx.state["tokens"].clear()
@@ -1395,6 +1549,7 @@ class Engine:
                     )
                     unit["state"] = "discarded"
                     unit.pop("pcm", None)
+            interruption_receipt = interruption.receipt(offsets, provider_receipt)
             tx.event(
                 "orchestrator",
                 "session.interrupted",
@@ -1402,6 +1557,9 @@ class Engine:
                     "generation_epoch": tx.state["generation_epoch"],
                     "playback_offsets": offsets,
                     "provider_cancellation": "requested",
+                    "interruption_receipt": interruption_receipt,
                 },
             )
+            if interruption_receipt["history_state"] == "history_diverged":
+                tx.state["history_diverged"] = True
             return tx.state["generation_epoch"]

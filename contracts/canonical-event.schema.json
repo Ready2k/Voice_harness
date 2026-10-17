@@ -11,6 +11,7 @@
     "turn_id",
     "response_id",
     "causation_event_ids",
+    "causation_unknown_reason",
     "provider_event_type",
     "provider_event",
     "sequence",
@@ -67,6 +68,12 @@
     },
     "causation_event_ids": {
       "type": "array"
+    },
+    "causation_unknown_reason": {
+      "type": [
+        "string",
+        "null"
+      ]
     },
     "provider_event_type": {
       "type": [
