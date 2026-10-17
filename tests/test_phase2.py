@@ -272,6 +272,23 @@ class ConformanceHarnessTests(unittest.TestCase):
             self.assertEqual(c["openai"].coverage_state, "implemented_and_verified")
 
 
+class CoveragePageTests(unittest.TestCase):
+    def test_page_served_with_csp_and_no_inline_script(self):
+        from fastapi.testclient import TestClient
+
+        from voice_harness.api import create_app
+
+        with tempfile.TemporaryDirectory() as d:
+            c = TestClient(create_app(root=d, token="t", recover=False))
+            page = c.get("/client/coverage.html")
+            self.assertEqual(page.status_code, 200)
+            self.assertIn("script-src 'self'", page.text)
+            self.assertNotIn("<script>", page.text)
+            self.assertEqual(c.get("/client/coverage.mjs").status_code, 200)
+            # data stays behind auth even though the page shell is static
+            self.assertEqual(c.get("/api/v1/providers").status_code, 401)
+
+
 class StreamResamplerTests(unittest.TestCase):
     def test_chunked_matches_one_shot_length_and_has_no_seams(self):
         import array

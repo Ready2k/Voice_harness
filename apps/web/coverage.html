@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; connect-src 'self'; base-uri 'none'; form-action 'none'">
+<title>Provider coverage</title>
+<style>
+:root { --bg:#f6f7f9; --fg:#14181f; --muted:#5a6472; --card:#fff; --line:#d9dde3;
+  --ok:#0b6b3a; --warn:#8a5a00; --off:#5a6472; }
+@media (prefers-color-scheme: dark) { :root { --bg:#12151a; --fg:#e8ebf0; --muted:#9aa4b2; --card:#1b2028; --line:#2c3440;
+  --ok:#5fd394; --warn:#f0b94d; --off:#9aa4b2; } }
+* { box-sizing:border-box }
+body { margin:0; padding:24px 16px; background:var(--bg); color:var(--fg); font:15px/1.5 system-ui,sans-serif }
+main { max-width:960px; margin:0 auto }
+h1 { margin:0 0 4px; font-size:1.4rem }
+.sub { color:var(--muted); margin:0 0 16px }
+form { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px }
+input { flex:1 1 260px; padding:8px 10px; border:1px solid var(--line); border-radius:6px; background:var(--card); color:var(--fg) }
+button { padding:8px 14px; border:1px solid var(--line); border-radius:6px; background:var(--card); color:var(--fg); cursor:pointer }
+.statement { font-weight:600; margin:0 0 12px }
+.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:12px }
+.card { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:14px; border-left-width:5px }
+.card h2 { margin:0 0 6px; font-size:1.05rem }
+.badge { display:inline-block; font-size:.8rem; font-weight:600; margin-bottom:8px }
+.state-implemented_and_verified { border-left-color:var(--ok) } .state-implemented_and_verified .badge { color:var(--ok) }
+.state-implemented_but_unverified { border-left-color:var(--warn) } .state-implemented_but_unverified .badge { color:var(--warn) }
+.state-not_implemented, .state-unavailable { border-left-color:var(--off) } .state-not_implemented .badge, .state-unavailable .badge { color:var(--off) }
+.meta { margin:2px 0; color:var(--muted); font-size:.85rem; overflow-wrap:anywhere }
+.reasons { margin:8px 0 0; padding-left:18px; font-size:.85rem }
+#error { color:#b3261e; min-height:1.4em }
+.note { color:var(--muted); font-size:.8rem; margin-top:16px }
+</style>
+</head>
+<body>
+<main>
+  <h1>Provider coverage</h1>
+  <p class="sub">Every requested provider family is shown, in a fixed order. Only “Implemented and verified” counts as support. There is no ranking.</p>
+  <form id="auth">
+    <input id="token" type="password" autocomplete="off" placeholder="Operator token" aria-label="Operator token" required>
+    <button type="submit">Load coverage</button>
+  </form>
+  <p id="error" role="alert"></p>
+  <div id="root"></div>
+  <p class="note">Coverage reflects capability reports (7-day expiry) and AC-09 conformance results. Scripted fixtures and probes are not production quality measurements.</p>
+</main>
+<script type="module" src="./coverage-page.mjs"></script>
+</body>
+</html>

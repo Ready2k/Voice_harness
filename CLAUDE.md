@@ -31,7 +31,7 @@ PYTHONPATH=src .venv/bin/python -m voice_harness.generate_contracts             
 docker compose exec -T api python -m voice_harness verify-bundle /data/demo/RUN_ID.json
 ```
 
-Tests use `unittest` (not pytest). `tests/test_release.py` requires PostgreSQL, so it only fully runs under Compose. Browser scheduler tests are `tests/browser/scheduler.test.mjs` (Node).
+Tests use `unittest` (not pytest). `tests/test_release.py` requires PostgreSQL, so it only fully runs under Compose. Browser tests are `tests/browser/*.test.mjs` (Node). The provider coverage panel (AC-20) is served at `/client/coverage.html` (needs the operator token).
 
 Dependencies are pinned in `pyproject.toml` and hash-locked in `requirements.lock`; Python and collector images are pinned by digest — update the lock, not just `pyproject.toml`.
 
