@@ -87,3 +87,25 @@ class ModelSimulatorTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class OpenAIChooserTests(unittest.TestCase):
+    def test_disabled_without_opt_in_and_parses_branch_id(self):
+        from voice_harness.model_simulator import OpenAIChooser
+
+        with self.assertRaisesRegex(RuntimeError, "LIVE_CHOOSER_DISABLED"):
+            OpenAIChooser(environ={})
+
+        class Client:
+            def post(self, url, **kw):
+                self.body = kw["json"]
+
+                class R:
+                    def raise_for_status(self): pass
+                    def json(self): return {"choices": [{"message": {"content": '{"branch_id": "give-answer"}'}}]}
+                return R()
+
+        client = Client()
+        chooser = OpenAIChooser(environ={"VOICE_HARNESS_LIVE_JUDGES": "openai", "OPENAI_API_KEY": "k"}, client=client)
+        self.assertEqual(chooser({"persona": "p"}), "give-answer")
+        self.assertEqual(client.body["response_format"], {"type": "json_object"})

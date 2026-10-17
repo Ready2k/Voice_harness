@@ -25,10 +25,16 @@
   assistant reply passed independent ASR and was approved; the model did not call a tool, so the
   tool/fault paths are not yet exercised against a live provider.
 
+- Live, once each, synthetic data (OpenAI Realtime): `identity-fault-tool-error-001` — the model called
+  `verify_identity` through the gateway and the reply was approved; the call was refused `INVALID_ARGUMENT`
+  (the model's arguments failed validation before the injected timeout could apply), so the injected-fault
+  *outcome* is still not shown live. `identity-fault-caller-interrupts-001` — single turn, no real barge-in
+  observed. Live chooser: one real OpenAI call picked an eligible branch with no simulator failure.
+
 ## Not yet established
 
 - Fault paths (`tool_error`, `tool_latency`, `caller_interrupts`) against a live provider; Nova runner use.
-- Live-model chooser for the AC-16 simulator (`model_simulator.py` is offline-tested with an injected chooser: model picks branch, oracle rejected, bad output attributed to the simulator with fallback, hashed prompt/config recorded; no OpenAI chooser wired yet). Synthetic commit (AC-15) is tested through the real MCP gateway with a scripted adapter (`tests/test_phase4_commit.py`: denial before identity/confirmation, single-use consumption, changed-amount invalidation, restart idempotency); a live model has not been driven to propose a commit.
+- Live-model chooser for the AC-16 simulator (`model_simulator.py` is offline-tested with an injected chooser: model picks branch, oracle rejected, bad output attributed to the simulator with fallback, hashed prompt/config recorded; `OpenAIChooser` (opt-in `VOICE_HARNESS_LIVE_JUDGES=openai`) added). Synthetic commit (AC-15) is tested through the real MCP gateway with a scripted adapter (`tests/test_phase4_commit.py`: denial before identity/confirmation, single-use consumption, changed-amount invalidation, restart idempotency); a live model has not been driven to propose a commit.
 - A first OpenAI vs Nova comparison on the catalogue (needs go-ahead for API spend).
 - The synthetic caller uses macOS `say`; the catalogue declares locales but `say` voice selection is not
   yet locale-aware. Narrowband/noise are simple synthetic shaping, not measured telephony.

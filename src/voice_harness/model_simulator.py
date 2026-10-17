@@ -71,3 +71,36 @@ class ModelSimulator(ScriptedSimulator):
     @classmethod
     def reproduce(cls, *_args, **_kwargs):
         raise NotImplementedError("MODEL_DECISIONS_REPLAY_FROM_RECORD_NOT_RE-QUERY")
+
+
+class OpenAIChooser:
+    """Chat Completions chooser (opt-in via VOICE_HARNESS_LIVE_JUDGES=openai; synthetic prompts only)."""
+
+    SYSTEM = ("You play a synthetic bank customer on a phone call. Using only the persona, facts, goal and "
+              'observations given, choose which listed branch to say next. Reply as JSON {"branch_id": "<id>"}.')
+
+    def __init__(self, model="gpt-4.1-mini", *, environ=None, client=None, timeout=60.0):
+        import os
+
+        self._environ = os.environ if environ is None else environ
+        if "openai" not in {p.strip() for p in self._environ.get("VOICE_HARNESS_LIVE_JUDGES", "").split(",")}:
+            raise RuntimeError("LIVE_CHOOSER_DISABLED")
+        self.model, self.client, self.timeout = model, client, timeout
+        self.config = {"provider": "openai", "model": model, "system_hash": digest(self.SYSTEM)}
+
+    def __call__(self, prompt):
+        import json
+
+        import httpx
+
+        key = self._environ.get("OPENAI_API_KEY")
+        if not key:
+            raise RuntimeError("OPENAI_API_KEY_MISSING")
+        body = {"model": self.model, "response_format": {"type": "json_object"},
+                "messages": [{"role": "system", "content": self.SYSTEM},
+                             {"role": "user", "content": json.dumps(prompt)}]}
+        response = (self.client or httpx).post(
+            "https://api.openai.com/v1/chat/completions", json=body, timeout=self.timeout,
+            headers={"Authorization": "Bearer " + key})
+        response.raise_for_status()
+        return json.loads(response.json()["choices"][0]["message"]["content"])["branch_id"]
