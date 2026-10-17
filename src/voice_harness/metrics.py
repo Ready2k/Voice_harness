@@ -25,6 +25,7 @@ def _summary(values):
 
 
 def derive(events):
+    events = [e for e in events if "tombstone" not in e]  # RT-02: payload expired
     observations = []
     generated = {e["content"]["unit_id"]: e for e in events if e["type"] == "audio.output"}
     ended = {}

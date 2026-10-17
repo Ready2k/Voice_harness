@@ -74,7 +74,7 @@ class Database:
                     "CREATE UNIQUE INDEX IF NOT EXISTS harness_producer_sequence ON harness_events(run_id, (payload->>'producer_id'), (payload->>'producer_sequence'))"
                 )
                 db.execute(
-                    """CREATE OR REPLACE FUNCTION harness_reject_evidence_edit() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'APPEND_ONLY_EVIDENCE'; END $$"""
+                    """CREATE OR REPLACE FUNCTION harness_reject_evidence_edit() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN IF TG_OP = 'UPDATE' AND current_setting('harness.retention_purge', true) = 'on' AND NEW.run_id = OLD.run_id AND NEW.sequence = OLD.sequence AND NEW.event_id = OLD.event_id AND NEW.payload->>'event_hash' = OLD.payload->>'event_hash' AND NEW.payload->>'prev_hash' IS NOT DISTINCT FROM OLD.payload->>'prev_hash' AND OLD.payload->'tombstone' IS NULL AND NEW.payload->'tombstone' IS NOT NULL THEN RETURN NEW; END IF; RAISE EXCEPTION 'APPEND_ONLY_EVIDENCE'; END $$"""
                 )
                 # A single idempotent trigger protects all existing ledger rows.
                 db.execute(

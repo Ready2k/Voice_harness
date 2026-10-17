@@ -34,8 +34,10 @@ from .contracts import AudioInputPayload, CancelRun, HoldRequest, RenewHold, Run
 from .coverage import build_registry, summarize
 from .engine import Engine
 from .evidence import Evidence
+from .exports import download_links
 from .inbound_queue import InboundQueue
 from .metrics import derive as derive_metrics
+from .review_api import register_review_routes
 from .scenario_defs import SCENARIOS, ScenarioDefinition, definition_hash
 from .scenarios import run_scenario
 from .shutdown import graceful_shutdown
@@ -119,6 +121,7 @@ def create_app(
                 ids = await asyncio.to_thread(batch)
                 for run_id in ids:
                     await asyncio.to_thread(evidence.purge, run_id)
+                    await asyncio.to_thread(evidence.purge_metadata, run_id)
                 cursor = ids[-1] if ids else ""
 
         maintenance = asyncio.create_task(retention())
@@ -387,11 +390,22 @@ def create_app(
         }
 
     @app.get("/api/v1/runs/{run_id}/evidence", dependencies=[Depends(auth)])
-    def bundle(run_id: str, request: Request):
-        exported = evidence.bundle(run_id)
+    def bundle(request: Request, run_id: str, view: str = "full"):
+        result = evidence.bundle(run_id)
         if request.state.role == "reviewer":
-            return restrict_bundle(exported)
-        return exported
+            result = restrict_bundle(result)
+        links = download_links(run_id)
+        if view == "summary":
+            # Manifest and artifact availability only; the bundle is fetched via the link.
+            return {
+                "manifest": result["manifest"],
+                "manifest_hash": result["manifest_hash"],
+                "artifact_availability": {
+                    a["sha256"]: a["available"] for a in result["artifacts"]
+                },
+                "download_links": links,
+            }
+        return {**result, "download_links": links}
 
     @app.post(
         "/api/v1/runs/{run_id}/preservation-holds",
@@ -424,6 +438,8 @@ def create_app(
     )
     def renew_hold(run_id: str, hold_id: str, body: RenewHold):
         return evidence.renew(run_id, hold_id, body.expires_at, body.reason)
+
+    register_review_routes(app, database, evidence, auth)
 
     @app.post("/api/v1/runs/{run_id}/ws-ticket", dependencies=[Depends(auth)])
     def ws_ticket(run_id: str):
