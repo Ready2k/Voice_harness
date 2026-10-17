@@ -185,4 +185,7 @@ def examples():
             },
         },
     }
+    from .judges.examples import judge_examples
+
+    out.update(judge_examples())
     return out

@@ -579,3 +579,8 @@ EVENT_CONTENT_CONTRACTS = {
     "tool.result_sent": ToolResultSent,
     "turn.started": TurnStarted,
 }
+
+# Phase 3 judging and review events (closed schemas live in judges/events.py).
+from .judges.events import JUDGE_EVENT_CONTRACTS  # noqa: E402
+
+EVENT_CONTENT_CONTRACTS.update(JUDGE_EVENT_CONTRACTS)

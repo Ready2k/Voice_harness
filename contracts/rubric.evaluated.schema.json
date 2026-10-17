@@ -1,0 +1,268 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "FindingRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "finding_id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Finding Id",
+          "type": "string"
+        },
+        "criterion_id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Criterion Id",
+          "type": "string"
+        },
+        "criterion_version": {
+          "minimum": 1,
+          "title": "Criterion Version",
+          "type": "integer"
+        },
+        "verdict": {
+          "enum": [
+            "pass",
+            "fail",
+            "partial",
+            "untestable",
+            "evaluation_error"
+          ],
+          "title": "Verdict",
+          "type": "string"
+        },
+        "severity": {
+          "enum": [
+            "critical",
+            "high",
+            "medium",
+            "low"
+          ],
+          "title": "Severity",
+          "type": "string"
+        },
+        "evidence_event_ids": {
+          "items": {
+            "maxLength": 200,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Evidence Event Ids",
+          "type": "array"
+        },
+        "modality": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Modality",
+          "type": "string"
+        },
+        "rationale": {
+          "maxLength": 4000,
+          "title": "Rationale",
+          "type": "string"
+        },
+        "confidence_source": {
+          "enum": [
+            "deterministic",
+            "judge_self_reported",
+            "human"
+          ],
+          "title": "Confidence Source",
+          "type": "string"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Confidence"
+        },
+        "score": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Score"
+        },
+        "uncertainty": {
+          "anyOf": [
+            {
+              "maxLength": 4000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Uncertainty"
+        },
+        "abstained": {
+          "title": "Abstained",
+          "type": "boolean"
+        },
+        "status": {
+          "enum": [
+            "valid",
+            "invalid"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "validation_errors": {
+          "items": {
+            "maxLength": 200,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Validation Errors",
+          "type": "array"
+        },
+        "rejected_citation_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Rejected Citation Ids",
+          "type": "array"
+        },
+        "reason_codes": {
+          "items": {
+            "maxLength": 200,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Reason Codes",
+          "type": "array"
+        },
+        "judge_id": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Judge Id"
+        }
+      },
+      "required": [
+        "finding_id",
+        "criterion_id",
+        "criterion_version",
+        "verdict",
+        "severity",
+        "evidence_event_ids",
+        "modality",
+        "rationale",
+        "confidence_source",
+        "confidence",
+        "score",
+        "uncertainty",
+        "abstained",
+        "status",
+        "validation_errors",
+        "rejected_citation_ids",
+        "reason_codes",
+        "judge_id"
+      ],
+      "title": "FindingRecord",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "evaluation_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Evaluation Id",
+      "type": "string"
+    },
+    "rubric_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Rubric Id",
+      "type": "string"
+    },
+    "rubric_version": {
+      "minimum": 1,
+      "title": "Rubric Version",
+      "type": "integer"
+    },
+    "evaluation_version": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Evaluation Version",
+      "type": "string"
+    },
+    "scenario_id": {
+      "anyOf": [
+        {
+          "maxLength": 200,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Scenario Id"
+    },
+    "cutoff_event_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Cutoff Event Id",
+      "type": "string"
+    },
+    "applicable_criteria": {
+      "items": {
+        "maxLength": 200,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Applicable Criteria",
+      "type": "array"
+    },
+    "not_applicable_criteria": {
+      "items": {
+        "maxLength": 200,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Not Applicable Criteria",
+      "type": "array"
+    },
+    "findings": {
+      "items": {
+        "$ref": "#/$defs/FindingRecord"
+      },
+      "title": "Findings",
+      "type": "array"
+    }
+  },
+  "required": [
+    "evaluation_id",
+    "rubric_id",
+    "rubric_version",
+    "evaluation_version",
+    "scenario_id",
+    "cutoff_event_id",
+    "applicable_criteria",
+    "not_applicable_criteria",
+    "findings"
+  ],
+  "title": "RubricEvaluated",
+  "type": "object"
+}

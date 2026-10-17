@@ -1,0 +1,228 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "JudgeIdentity": {
+      "additionalProperties": false,
+      "properties": {
+        "judge_id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Judge Id",
+          "type": "string"
+        },
+        "backend": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Backend",
+          "type": "string"
+        },
+        "provider": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Provider",
+          "type": "string"
+        },
+        "model_id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Model Id",
+          "type": "string"
+        },
+        "family": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Family",
+          "type": "string"
+        },
+        "prompt_template_id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Prompt Template Id",
+          "type": "string"
+        },
+        "evaluation_version": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Evaluation Version",
+          "type": "string"
+        },
+        "session_id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Session Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "judge_id",
+        "backend",
+        "provider",
+        "model_id",
+        "family",
+        "prompt_template_id",
+        "evaluation_version",
+        "session_id"
+      ],
+      "title": "JudgeIdentity",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "finding_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Finding Id",
+      "type": "string"
+    },
+    "judge": {
+      "$ref": "#/$defs/JudgeIdentity"
+    },
+    "category": {
+      "enum": [
+        "unsupported_financial_claim",
+        "identity_verification_bypass",
+        "unauthorised_tool_request",
+        "missing_consent_or_confirmation",
+        "vulnerable_customer_handling",
+        "synthetic_secret_disclosure",
+        "uncertainty_or_escalation_failure"
+      ],
+      "title": "Category",
+      "type": "string"
+    },
+    "severity": {
+      "enum": [
+        "critical",
+        "high",
+        "medium",
+        "low"
+      ],
+      "title": "Severity",
+      "type": "string"
+    },
+    "confidence": {
+      "anyOf": [
+        {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Confidence"
+    },
+    "confidence_source": {
+      "const": "judge_self_reported",
+      "title": "Confidence Source",
+      "type": "string"
+    },
+    "evidence_event_ids": {
+      "items": {
+        "maxLength": 200,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Evidence Event Ids",
+      "type": "array"
+    },
+    "recommended_action": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Recommended Action",
+      "type": "string"
+    },
+    "blocking_capability": {
+      "enum": [
+        "none",
+        "hold_audio",
+        "deny_tool",
+        "escalate_to_human",
+        "terminate_session"
+      ],
+      "title": "Blocking Capability",
+      "type": "string"
+    },
+    "blocking_enforced": {
+      "title": "Blocking Enforced",
+      "type": "boolean"
+    },
+    "advisory_reason": {
+      "anyOf": [
+        {
+          "maxLength": 200,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Advisory Reason"
+    },
+    "rationale": {
+      "maxLength": 4000,
+      "title": "Rationale",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "valid",
+        "invalid"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "validation_errors": {
+      "items": {
+        "maxLength": 200,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Validation Errors",
+      "type": "array"
+    },
+    "rejected_citation_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Rejected Citation Ids",
+      "type": "array"
+    },
+    "window_from_event_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Window From Event Id",
+      "type": "string"
+    },
+    "window_to_event_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Window To Event Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "finding_id",
+    "judge",
+    "category",
+    "severity",
+    "confidence",
+    "confidence_source",
+    "evidence_event_ids",
+    "recommended_action",
+    "blocking_capability",
+    "blocking_enforced",
+    "advisory_reason",
+    "rationale",
+    "status",
+    "validation_errors",
+    "rejected_citation_ids",
+    "window_from_event_id",
+    "window_to_event_id"
+  ],
+  "title": "JudgeOnlineFinding",
+  "type": "object"
+}
