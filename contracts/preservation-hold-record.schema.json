@@ -258,6 +258,20 @@
       "default": false,
       "title": "Expiry Notice Recorded",
       "type": "boolean"
+    },
+    "expiry_notice_event_id": {
+      "anyOf": [
+        {
+          "maxLength": 200,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Expiry Notice Event Id"
     }
   },
   "required": [

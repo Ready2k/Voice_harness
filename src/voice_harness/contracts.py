@@ -352,6 +352,7 @@ class HoldRecord(Closed):
     audit_event_id: Identifier
     artifact_availability: dict[str, bool]
     expiry_notice_recorded: bool = False
+    expiry_notice_event_id: Identifier | None = None
 
 
 class SimulatorBranchSelected(Closed):

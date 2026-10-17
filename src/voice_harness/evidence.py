@@ -9,7 +9,9 @@ from pathlib import Path
 from .canonical import canonical_json
 from .coverage import FAMILIES, Coverage, build_registry, summarize
 from .engine import digest, identifier
+from .exports import embedded_schemas, schema_digests, versions
 from .relational import upsert_hold
+from .retention import is_tombstone, purge_metadata, tombstone_records, tombstone_valid
 
 
 class Evidence:
@@ -301,7 +303,7 @@ class Evidence:
                     and now >= hold["expires_at"] - 7 * 86400
                 ):
                     hold["expiry_notice_recorded"] = True
-                    tx.event(
+                    hold["expiry_notice_event_id"] = tx.event(
                         "orchestrator",
                         "preservation.expiry_notice",
                         {
@@ -354,6 +356,10 @@ class Evidence:
         for sha in deleted:
             (self.root / run_id / sha).unlink(missing_ok=True)
         return deleted
+
+    def purge_metadata(self, run_id):
+        """RT-02: tombstone ledger payloads past the 30-day metadata retention."""
+        return purge_metadata(self, run_id)
 
     def bundle(self, run_id):
         # Read root/state/events under one locked transaction to prevent mixed versions.
@@ -428,7 +434,8 @@ class Evidence:
                         "metadata_days_default": 30,
                         "synthetic_audio_days_default": 7,
                         "audio_opt_in": bool(config.get("retain_audio")),
-                        "metadata_purge": "not_implemented_ledger_is_append_only",
+                        "metadata_purge": "tombstoned_after_30d_unless_held",
+                        "metadata_tombstones": tombstone_records(events),
                         "audio_purge": "tombstoned_after_ttl_unless_held",
                     },
                     "pricing": {
@@ -461,6 +468,8 @@ class Evidence:
                 }
             )
             manifest["provider_coverage"] = json.loads(json.dumps(self.coverage()))
+            manifest["schema_digests"] = schema_digests()
+            manifest["versions"] = versions(config)
             manifest["source_hash"] = tx.state.get("source_hash")
             manifest["config_hash"] = tx.state["config_hash"]
             manifest["fixture_snapshot_id"] = tx.state.get("fixture_snapshot_id")
@@ -469,6 +478,8 @@ class Evidence:
                 "manifest_hash": digest(manifest),
                 "events": events,
                 "artifacts": artifacts,
+                "schemas": embedded_schemas(),
+                "versions": manifest["versions"],
             }
 
     def save_manifest(self, run_id):
@@ -556,6 +567,22 @@ def coverage_section_valid(section):
     )
 
 
+def _derivation_valid(bundle, manifest):
+    """A derived view must name its source hash and keep ledger bytes verbatim."""
+    source, derived = bundle["source_manifest"], manifest.get("derived_from")
+    transform = manifest.get("transformation")
+    return (
+        isinstance(derived, dict)
+        and isinstance(transform, dict)
+        and derived["source_manifest_hash"] == digest(source)
+        and derived["source_final_ledger_hash"] == source["final_ledger_hash"] == manifest["final_ledger_hash"]
+        and derived["source_event_count"] == source["event_count"] == manifest["event_count"]
+        and source["artifact_hashes"] == manifest["artifact_hashes"]
+        and transform.get("events_modified") is False
+        and transform.get("artifacts_modified") is False
+    )
+
+
 def verify_bundle(bundle):
     try:
         manifest, events, artifacts = (
@@ -574,8 +601,15 @@ def verify_bundle(bundle):
         for sequence, payload in enumerate(events, 1):
             # Verify the exact historical keys; current dataclass defaults must
             # never change the hashed representation of an older envelope.
-            unsigned = {**payload, "event_hash": None}
-            expected = hashlib.sha256(canonical_json(unsigned)).hexdigest()
+            if is_tombstone(payload):
+                # Retained hash cannot be recomputed from a tombstoned payload;
+                # chain linkage and the manifest's tombstone list still bind it.
+                expected = payload["event_hash"]
+                if not tombstone_valid(payload):
+                    return False
+            else:
+                unsigned = {**payload, "event_hash": None}
+                expected = hashlib.sha256(canonical_json(unsigned)).hexdigest()
             if (
                 payload["run_id"] != manifest["run_id"]
                 or payload["sequence"] != sequence
@@ -584,6 +618,16 @@ def verify_bundle(bundle):
             ):
                 return False
             previous = payload["event_hash"]
+        listed = manifest.get("retention", {}).get("metadata_tombstones")
+        if listed is not None and listed != tombstone_records(events):
+            return False
+        if "schemas" in bundle and (
+            {n: digest(s) for n, s in bundle["schemas"].items()}
+            != manifest.get("schema_digests")
+        ):
+            return False
+        if "source_manifest" in bundle and not _derivation_valid(bundle, manifest):
+            return False
         if (
             previous != manifest["final_ledger_hash"]
             or [a["sha256"] for a in artifacts] != manifest["artifact_hashes"]
