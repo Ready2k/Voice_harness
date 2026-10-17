@@ -18,11 +18,12 @@ from collections.abc import Awaitable, Callable
 from pathlib import Path
 from typing import Any
 
-from voice_harness.adapters import AudioOut, CapabilityUnsupported, ProviderError, ToolCall
+from voice_harness.adapters import AudioOut, CapabilityUnsupported, Interrupted, ProviderError, ToolCall
 
 DIMENSIONS = ("audio_in", "audio_out", "tool_result_correlation", "interruption", "error")
 MANDATORY = ("audio_in", "audio_out", "tool_result_correlation")
 SAMPLES_20MS = 480  # 24 kHz harness chunk
+SAMPLE_RATE = 24000
 
 
 async def _collect(adapter, want, timeout: float) -> list:
@@ -42,16 +43,56 @@ async def _collect(adapter, want, timeout: float) -> list:
     return events
 
 
+async def _judge_interruption(adapter, evs, info, stop_bound_ms) -> dict[str, Any]:
+    """Assert a real barge-in: exactly one Interrupted, output audio stops within the bound,
+    and truncation (when an item id is known) is acknowledged with audio_end_ms <= generated audio."""
+    ints = [e for e in evs if isinstance(e, Interrupted)]
+    if not ints:
+        return {"status": "fail", "reason": "no Interrupted event after barge-in"}
+    if len(ints) > 1:
+        return {"status": "fail", "reason": f"{len(ints)} Interrupted events (expected exactly one)"}
+    it = ints[0]
+    pos = evs.index(it)
+    after = [e for e in evs[pos + 1:] if isinstance(e, AudioOut)]
+    stop_ms = None
+    if after and it.ts_ms is not None and all(e.ts_ms is not None for e in after):
+        stop_ms = max(e.ts_ms for e in after) - it.ts_ms
+        if stop_ms > stop_bound_ms:
+            return {"status": "fail", "reason": f"audio continued {stop_ms} ms after Interrupted (bound {stop_bound_ms})"}
+    generated_ms = sum(e.sample_count for e in evs if isinstance(e, AudioOut)
+                       and (it.item_id is None or e.item_id == it.item_id)) * 1000 // SAMPLE_RATE
+    out: dict[str, Any] = {"status": "pass", "barge_in": info, "audio_chunks_after_interrupt": len(after),
+                           "audio_stop_ms": stop_ms or 0, "generated_audio_ms": generated_ms,
+                           "interrupted_audio_end_ms": it.audio_end_ms}
+    end_ms = min(it.audio_end_ms if it.audio_end_ms is not None else generated_ms, generated_ms)
+    try:
+        r = await adapter.interrupt(it.item_id, end_ms)
+    except Exception as e:  # noqa: BLE001
+        return {"status": "fail", "reason": f"interrupt/truncate raised {e!r}"}
+    if it.item_id is not None:
+        if r.get("history_truncation") != "acknowledged":
+            return {"status": "fail", "reason": f"truncate not acknowledged: {r.get('history_truncation')}"}
+        if end_ms > generated_ms:
+            return {"status": "fail", "reason": "audio_end_ms exceeds generated audio"}
+        out["truncate"] = {"item_id": it.item_id, "audio_end_ms": end_ms, "history_truncation": "acknowledged"}
+    return out
+
+
 async def run_conformance(
     adapter,
     *,
     prime: Callable[[str], Awaitable[None]] | None = None,
     timeout: float = 30.0,
+    settle: float = 1.5,
+    stop_bound_ms: int = 1000,
     session_id: str = "conformance-1",
 ) -> dict[str, Any]:
     """``prime(dimension)`` lets a driver provoke provider behaviour: for
     audio_out/tool_result_correlation it must cause the adapter to emit
-    AudioOut / ToolCall (live adapters: send_text prompt; mock: script queue)."""
+    AudioOut / ToolCall (live adapters: send_text prompt; mock: script queue).
+    For "interruption" it must perform a barge-in (speech while the assistant is talking) and may
+    return a dict of evidence; the harness then requires an Interrupted event, bounded audio stop
+    and an acknowledged truncate."""
     prime = prime or (lambda _d: asyncio.sleep(0))
     caps = adapter.capabilities()
     res: dict[str, dict[str, Any]] = {}
@@ -126,12 +167,12 @@ async def run_conformance(
             except Exception as e:  # noqa: BLE001
                 fail("interruption", f"unsupported must raise CapabilityUnsupported, got {e!r}")
         else:
-            await prime("interruption")
-            try:
-                r = await adapter.interrupt(None, 100)
-                ok("interruption", result=sorted(r) if isinstance(r, dict) else None)
-            except Exception as e:  # noqa: BLE001
-                fail("interruption", repr(e))
+            await _collect(adapter, lambda _e: False, 0.3)  # drain events left by earlier dimensions
+            info = await prime("interruption")  # driver performs the barge-in
+            evs = await _collect(adapter, lambda e: any(isinstance(x, Interrupted) for x in e), timeout)
+            if any(isinstance(x, Interrupted) for x in evs):
+                evs += await _collect(adapter, lambda _e: False, settle)  # late audio / duplicate Interrupted
+            res["interruption"] = await _judge_interruption(adapter, evs, info, stop_bound_ms)
 
         # error: malformed audio must raise or yield ProviderError, not hang/succeed
         err_ok = False

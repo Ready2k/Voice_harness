@@ -228,6 +228,77 @@ class OfflineTests(unittest.IsolatedAsyncioTestCase):
         self.assertNotIn("sk-", json.dumps(redact({"Authorization": "Bearer sk-abc"})))
 
 
+class BargeInReplayTests(unittest.IsolatedAsyncioTestCase):
+    """Offline replay of the live barge-in shape: long streamed answer, speech_started on caller audio,
+    server cancels (response.done cancelled), truncate acknowledged."""
+
+    def _server(self, ack_truncate=True, keep_streaming=False):
+        state = {"cancelled": False}
+
+        async def on_event(ws, ev, srv):
+            t = ev["type"]
+            if t == "response.create":
+                async def stream():
+                    await ws.send(json.dumps({"type": "response.created", "response": {"id": "resp_1"}}))
+                    await ws.send(json.dumps({"type": "response.output_item.added",
+                                              "item": {"id": "item_1", "type": "message", "role": "assistant"}}))
+                    for _ in range(400):
+                        if state["cancelled"] and not keep_streaming:
+                            return
+                        await ws.send(json.dumps({"type": "response.output_audio.delta", "item_id": "item_1",
+                                                  "delta": base64.b64encode(bytes(3840)).decode()}))
+                        await asyncio.sleep(0.01)
+                srv.task = asyncio.ensure_future(stream())
+            elif t == "input_audio_buffer.append" and not state["cancelled"]:
+                state["cancelled"] = True
+                await ws.send(json.dumps({"type": "input_audio_buffer.speech_started", "item_id": "u1"}))
+                await ws.send(json.dumps({"type": "response.done", "response": {"id": "resp_1", "status": "cancelled"}}))
+            elif t == "conversation.item.truncate" and ack_truncate:
+                await ws.send(json.dumps({"type": "conversation.item.truncated", "item_id": ev["item_id"],
+                                          "audio_end_ms": ev["audio_end_ms"]}))
+        return FakeServer(on_event)
+
+    async def _run(self, srv, bound=1000):
+        from unittest import mock
+
+        from adapter_conformance import _collect, _judge_interruption
+
+        from voice_harness.adapters import openai_realtime as m
+
+        a = OpenAIRealtimeAdapter(api_key="k", url=srv.url, ack_timeout=0.5)
+        await a.open_session({"session_id": "s1"})
+        self.addAsyncCleanup(a.close, "t")
+        with mock.patch.object(m, "synth_caller_pcm", return_value=bytes(960 * 5)):
+            info = await m._barge_in(a)
+        evs = await _collect(a, lambda e: any(x.type == "interrupted" for x in e), 5)
+        evs += await _collect(a, lambda _e: False, 0.4)
+        return info, evs, await _judge_interruption(a, evs, info, bound), srv
+
+    async def test_replay_passes(self):
+        async with self._server() as srv:
+            info, evs, res, srv = await self._run(srv)
+            self.assertEqual(res["status"], "pass", res)
+            self.assertEqual(sum(e.type == "interrupted" for e in evs), 1)
+            self.assertEqual(res["truncate"]["history_truncation"], "acknowledged")
+            self.assertLessEqual(res["truncate"]["audio_end_ms"], res["generated_audio_ms"])
+            self.assertEqual(info["barge_in"], "synthetic_speech")
+            td = [r for r in srv.received if r["type"] == "session.update"][-1]["session"]["audio"]["input"]["turn_detection"]
+            self.assertTrue(td["interrupt_response"])
+            self.assertFalse(td["create_response"])
+
+    async def test_replay_fails_when_audio_keeps_flowing(self):
+        async with self._server(keep_streaming=True) as srv:
+            _, _, res, _ = await self._run(srv, bound=200)
+            self.assertEqual(res["status"], "fail", res)
+            self.assertIn("audio continued", res["reason"])
+
+    async def test_replay_fails_when_truncate_unacknowledged(self):
+        async with self._server(ack_truncate=False) as srv:
+            _, _, res, _ = await self._run(srv)
+            self.assertEqual(res["status"], "fail", res)
+            self.assertIn("truncate not acknowledged", res["reason"])
+
+
 @unittest.skipUnless(os.environ.get("OPENAI_API_KEY"), "OPENAI_API_KEY not set")
 class LiveOpenAITests(unittest.IsolatedAsyncioTestCase):
     async def test_text_turn_with_tool_round_trip(self):

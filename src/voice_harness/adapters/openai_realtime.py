@@ -209,6 +209,14 @@ class OpenAIRealtimeAdapter:
         await self._send({"type": "input_audio_buffer.commit"})
         await self._create_response()
 
+    async def configure_turn_detection(self, turn_detection: dict[str, Any] | None) -> None:
+        """Change turn detection mid-session (session.update) and wait for session.updated."""
+        waiter = asyncio.ensure_future(self._wait_for("session.updated", 15))
+        await asyncio.sleep(0)  # register the ack future before sending
+        await self._send({"type": "session.update", "session": {
+            "type": "realtime", "audio": {"input": {"turn_detection": turn_detection}}}})
+        await waiter
+
     async def _create_response(self) -> None:
         await self._send({"type": "response.create"})
 
@@ -394,6 +402,37 @@ class OpenAIRealtimeAdapter:
                        fatal=code in FATAL_CODES)
 
 
+def wav_data(buf: bytes) -> bytes:
+    """Return the PCM payload of a RIFF/WAVE file by walking chunks to ``data`` (no fixed 44-byte header)."""
+    o = 12
+    while o + 8 <= len(buf):
+        cid, size = buf[o:o + 4], int.from_bytes(buf[o + 4:o + 8], "little")
+        if cid == b"data":
+            return buf[o + 8:o + 8 + size]
+        o += 8 + size + (size & 1)
+    raise ValueError("no data chunk in WAV")
+
+
+def synth_caller_pcm(text: str = "Stop. Please stop talking, I have a question.", *, lead_ms: int = 200,
+                     trail_ms: int = 1000) -> bytes:
+    """Synthetic caller utterance (macOS ``say`` + ``afconvert``) as 24 kHz s16le mono with silence padding.
+    Raises RuntimeError where those tools are unavailable."""
+    import shutil
+    import subprocess  # noqa: S404  # nosec B404
+    import tempfile
+
+    say, afconvert = shutil.which("say"), shutil.which("afconvert")
+    if not (say and afconvert):
+        raise RuntimeError("say/afconvert unavailable (macOS only)")
+    with tempfile.TemporaryDirectory() as d:
+        aiff, wav = f"{d}/u.aiff", f"{d}/u.wav"
+        subprocess.run([say, "-o", aiff, text], check=True, timeout=60)  # noqa: S603  # nosec B603
+        subprocess.run([afconvert, "-f", "WAVE", "-d", "LEI16@24000", "-c", "1", aiff, wav], check=True, timeout=60)  # noqa: S603  # nosec B603
+        with open(wav, "rb") as f:
+            pcm = wav_data(f.read())
+    return bytes(SAMPLE_RATE * 2 * lead_ms // 1000) + pcm + bytes(SAMPLE_RATE * 2 * trail_ms // 1000)
+
+
 def conformance_factory():
     """AC-09 driver: (adapter, prime). Config is baked in; the harness opens with only a session id."""
     tool = {"name": "get_account_summary", "description": "Account summary",
@@ -403,15 +442,44 @@ def conformance_factory():
         async def open_session(self, config):
             return await super().open_session({
                 **config, "tools": [tool], "turn_detection": "manual",
-                "instructions": "Banking test assistant. One short sentence. Use tools for accounts."})
+                "instructions": "Banking test assistant. Keep answers to one short sentence unless asked to count."
+                                " Use tools for accounts."})
 
     adapter = _Conformance()
 
-    async def prime(dimension: str) -> None:
+    async def prime(dimension: str) -> dict[str, Any] | None:
         if dimension == "audio_out":
             await adapter.send_text("Say hello.")
         elif dimension == "tool_result_correlation":
             await asyncio.sleep(3)  # let the greeting finish
             await adapter.send_text("What is the balance for account ACC-001?")
+        elif dimension == "interruption":
+            return await _barge_in(adapter)
+        return None
 
     return adapter, prime
+
+
+async def _barge_in(adapter: OpenAIRealtimeAdapter) -> dict[str, Any]:
+    """Real barge-in: long answer, then synthetic caller speech streamed in 20 ms chunks mid-response."""
+    pcm = synth_caller_pcm()
+    with contextlib.suppress(asyncio.TimeoutError):
+        await asyncio.wait_for(adapter._idle.wait(), 30)  # prior turn (tool result follow-up) must finish
+    # interrupt_response: server cancels on speech; create_response off so no new answer pollutes the check
+    await adapter.configure_turn_detection(
+        {"type": "server_vad", "interrupt_response": True, "create_response": False})
+    await adapter.send_text("Count from one to thirty slowly, one number per sentence.")
+    deadline = time.monotonic() + 30
+    while time.monotonic() < deadline:  # at least ~1.5 s of generated audio before the caller speaks
+        if adapter._item_id and adapter._item_audio_bytes.get(adapter._item_id, 0) >= SAMPLE_RATE * 2 * 3 // 2:
+            break
+        await asyncio.sleep(0.02)
+    else:
+        raise RuntimeError("no assistant audio before barge-in")
+    started = time.monotonic()
+    for o in range(0, len(pcm), 960):
+        chunk = pcm[o:o + 960]
+        await adapter.send_audio(chunk, {"sample_count": len(chunk) // 2, "sample_rate": SAMPLE_RATE})
+        await asyncio.sleep(0.02)
+    return {"barge_in": "synthetic_speech", "speech_ms": len(pcm) * 1000 // (SAMPLE_RATE * 2),
+            "stream_s": round(time.monotonic() - started, 2)}

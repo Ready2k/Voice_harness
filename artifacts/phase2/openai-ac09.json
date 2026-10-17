@@ -11,16 +11,24 @@
     },
     "tool_result_correlation": {
       "status": "pass",
-      "call_id": "call_Rw0F7J0t3LjeUkCu"
+      "call_id": "call_Hastq8TSAm9Sogma"
     },
     "interruption": {
       "status": "pass",
-      "result": [
-        "audio_end_ms",
-        "generation_cancelled",
-        "history_truncation",
-        "item_id"
-      ]
+      "barge_in": {
+        "barge_in": "synthetic_speech",
+        "speech_ms": 4616,
+        "stream_s": 5.11
+      },
+      "audio_chunks_after_interrupt": 0,
+      "audio_stop_ms": 0,
+      "generated_audio_ms": 5850,
+      "interrupted_audio_end_ms": 5850,
+      "truncate": {
+        "item_id": "item_EZu73MRIXSou2FQ5Yd0p1",
+        "audio_end_ms": 5850,
+        "history_truncation": "acknowledged"
+      }
     },
     "error": {
       "status": "pass"

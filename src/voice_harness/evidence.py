@@ -7,6 +7,7 @@ import time
 from pathlib import Path
 
 from .canonical import canonical_json
+from .coverage import FAMILIES, Coverage, build_registry, summarize
 from .engine import digest, identifier
 from .relational import upsert_hold
 
@@ -14,8 +15,10 @@ from .relational import upsert_hold
 class Evidence:
     GRACE_SECONDS = 7 * 86400
 
-    def __init__(self, database, root, clock=time.time):
+    def __init__(self, database, root, clock=time.time, coverage=None):
         self.database, self.root, self.clock = database, Path(root), clock
+        # AC-20: export-time snapshot of provider coverage (injectable for tests).
+        self.coverage = coverage or (lambda: summarize(build_registry()))
         self.root.mkdir(parents=True, exist_ok=True)
 
     def put(self, run_id, data: bytes, kind="audio", ttl=7 * 86400):
@@ -457,6 +460,7 @@ class Evidence:
                     ],
                 }
             )
+            manifest["provider_coverage"] = json.loads(json.dumps(self.coverage()))
             manifest["source_hash"] = tx.state.get("source_hash")
             manifest["config_hash"] = tx.state["config_hash"]
             manifest["fixture_snapshot_id"] = tx.state.get("fixture_snapshot_id")
@@ -500,6 +504,58 @@ class Evidence:
         return path
 
 
+_COVERAGE_STATES = {
+    "not_implemented",
+    "implemented_but_unverified",
+    "implemented_and_verified",
+}
+_COVERAGE_KEYS = {"items", "verified_count", "requested_count", "statement", "ranking"}
+
+
+def coverage_section_valid(section):
+    """AC-20 semantic check of an exported coverage snapshot.
+
+    Strict: exact family set and order, closed key sets (no score/rank fields),
+    verified only with a bound report and no reason codes, counts and statement
+    derived from the items, ranking null. Bundles lacking the section fail.
+    """
+    if not isinstance(section, dict) or set(section) != _COVERAGE_KEYS:
+        return False
+    items = section["items"]
+    if (
+        section["ranking"] is not None
+        or not isinstance(items, list)
+        or [i.get("provider_family") if isinstance(i, dict) else None for i in items]
+        != list(FAMILIES)
+    ):
+        return False
+    fields = set(Coverage.__dataclass_fields__)
+    verified = 0
+    for item in items:
+        if set(item) != fields or item["coverage_state"] not in _COVERAGE_STATES:
+            return False
+        reasons, state = item["reason_codes"], item["coverage_state"]
+        if not isinstance(reasons, list) or not isinstance(item["evidence_ids"], list):
+            return False
+        if state == "implemented_and_verified":
+            verified += 1
+            if reasons or not item["capability_report_id"] or not item["checked_at"]:
+                return False
+        else:
+            if not reasons or item["evidence_ids"]:
+                return False
+            if state == "not_implemented" and (
+                item["model_id"] or item["api_surface"] or item["region"]
+            ):
+                return False
+    return (
+        section["verified_count"] == verified
+        and section["requested_count"] == len(items)
+        and section["statement"]
+        == f"verified for {verified} of {len(items)} requested provider families"
+    )
+
+
 def verify_bundle(bundle):
     try:
         manifest, events, artifacts = (
@@ -511,6 +567,8 @@ def verify_bundle(bundle):
             digest(manifest) != bundle["manifest_hash"]
             or len(events) != manifest["event_count"]
         ):
+            return False
+        if not coverage_section_valid(manifest.get("provider_coverage")):
             return False
         previous = None
         for sequence, payload in enumerate(events, 1):

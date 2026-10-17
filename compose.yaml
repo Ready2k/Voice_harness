@@ -71,6 +71,21 @@ services:
       postgres:
         condition: service_healthy
 
+  # Opt-in live Nova conformance (make nova-live-container). Credentials mounted read-only at run time only.
+  nova-live:
+    <<: *sandbox
+    profiles: [live]
+    build:
+      context: .
+      target: test
+    environment:
+      VOICE_HARNESS_LIVE_ADAPTERS: aws_nova_sonic
+      HARNESS_AWS_SESSION_ENV: /run/secrets/aws-session.env
+      HOME: /tmp
+    volumes:
+      - ./.local/aws-session.env:/run/secrets/aws-session.env:ro
+    command: [python, -m, unittest, tests.adapter_conformance.LiveConformance, -v]
+
   postgres:
     image: public.ecr.aws/docker/library/postgres:17.6-bookworm@sha256:f3bd19c606e442c3d7bdfa8002e03fe260a1023351e0ea4598032022b68dd6e3
     environment:

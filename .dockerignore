@@ -12,6 +12,11 @@
 !artifacts/phase0/**
 !artifacts/phase2/
 !artifacts/phase2/**
+!scripts/
+!scripts/probe/
+!scripts/probe/package.json
+!scripts/probe/package-lock.json
+!scripts/probe/nova_bridge.mjs
 !apps/
 !apps/web/
 !apps/web/**

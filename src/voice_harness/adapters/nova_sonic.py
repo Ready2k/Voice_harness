@@ -57,8 +57,29 @@ SILENCE_CHUNK = b"\x00" * (INPUT_RATE * CHUNK_MS // 1000 * 2)  # 640 bytes
 AUDIO_TIMEOUT_S = 55
 
 _REPO = Path(__file__).resolve().parents[3]
-BRIDGE_SCRIPT = _REPO / "scripts" / "probe" / "nova_bridge.mjs"
+# Overridable for relocated installs: HARNESS_NOVA_BRIDGE (script; node_modules resolves beside it), HARNESS_NODE_BIN.
+BRIDGE_SCRIPT = Path(os.environ.get("HARNESS_NOVA_BRIDGE") or _REPO / "scripts" / "probe" / "nova_bridge.mjs")
+NODE_BIN = os.environ.get("HARNESS_NODE_BIN") or "node"
+SESSION_ENV = Path(os.environ.get("HARNESS_AWS_SESSION_ENV") or _REPO / ".local" / "aws-session.env")
 CAPABILITY_REPORT = _REPO / "artifacts" / "phase0" / "nova-capability-report.json"
+
+
+def runtime_status() -> list[str]:
+    """Cheap preflight: reason codes (empty = adapter can run here). No network, no credentials."""
+    import shutil
+
+    reasons = []
+    if not shutil.which(NODE_BIN):
+        reasons.append("NODE_MISSING")
+    if not BRIDGE_SCRIPT.is_file():
+        reasons.append("BRIDGE_MISSING")
+    elif not (BRIDGE_SCRIPT.parent / "node_modules" / "@aws-sdk" / "client-bedrock-runtime").is_dir():
+        reasons.append("BRIDGE_DEPS_MISSING")
+    return reasons
+
+
+def runtime_available() -> bool:
+    return not runtime_status()
 
 
 def map_error(name: str, message: str) -> tuple[str, bool]:
@@ -98,7 +119,7 @@ class NodeBridgeTransport:
 
     async def start(self) -> None:
         self.proc = await asyncio.create_subprocess_exec(
-            "node", str(BRIDGE_SCRIPT),
+            NODE_BIN, str(BRIDGE_SCRIPT),
             stdin=asyncio.subprocess.PIPE, stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.DEVNULL, cwd=str(BRIDGE_SCRIPT.parent),
             env={**os.environ, **(self.env or {})}, limit=1 << 24,
@@ -440,10 +461,8 @@ class NovaSonicAdapter:
 
 def conformance_factory():
     """AC-09 driver: (adapter, prime). Needs unexpired credentials in .local/aws-session.env."""
-    from pathlib import Path
-
     env = {}
-    path = Path(__file__).resolve().parents[3] / ".local" / "aws-session.env"
+    path = SESSION_ENV
     for line in path.read_text().splitlines():
         line = line.strip().removeprefix("export ")
         if "=" in line and not line.startswith("#"):

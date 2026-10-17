@@ -37,3 +37,10 @@ test("unavailable and unimplemented providers carry explicit reasons, no score",
 test("unknown reason codes pass through as text", () => {
   assert.deepEqual(describe({ provider_family: "x", coverage_state: "unavailable", reason_codes: ["NEW_CODE"] }).reasons, ["NEW_CODE"]);
 });
+
+test("runtime-unavailable reason has explanatory text and stays uncounted", () => {
+  const m = describe({ provider_family: "aws_nova_sonic", coverage_state: "implemented_but_unverified",
+    reason_codes: ["ADAPTER_RUNTIME_UNAVAILABLE"] });
+  assert.equal(m.counted, false);
+  assert.match(m.reasons[0], /cannot run in this environment/);
+});

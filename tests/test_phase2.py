@@ -182,13 +182,15 @@ import asyncio  # noqa: E402
 
 from adapter_conformance import LiveConformance, run_conformance, write_result  # noqa: E402,F401
 
-from voice_harness.adapters import AudioOut, CapabilityUnsupported  # noqa: E402
+from voice_harness.adapters import AudioOut, CapabilityUnsupported, Interrupted  # noqa: E402
 
 
 class MockAdapter:
     """MockProvider wrapped to the LiveAdapter shape (scripted events)."""
 
-    def __init__(self, interrupt_supported=True, drop_tool_check=False):
+    def __init__(self, interrupt_supported=True, drop_tool_check=False, barge=True, late_audio=False, double=False,
+                 barge_item=None):
+        self.barge, self.late_audio, self.double, self.barge_item = barge, late_audio, double, barge_item
         self.m = MockProvider()
         self.q = asyncio.Queue()
         self.sup = interrupt_supported
@@ -233,6 +235,15 @@ class MockAdapter:
         elif dim == "tool_result_correlation":
             self.known.add("call-1")
             self.q.put_nowait(ToolCall(call_id="call-1", name="get_balance", arguments={}))
+        elif dim == "interruption" and self.sup and self.barge:
+            for _ in range(3):
+                self.q.put_nowait(AudioOut(pcm=bytes(960), sample_count=480, item_id="it1", ts_ms=1000))
+            self.q.put_nowait(Interrupted(item_id=self.barge_item, audio_end_ms=60, ts_ms=1100))
+            if self.late_audio:
+                self.q.put_nowait(AudioOut(pcm=bytes(960), sample_count=480, item_id="it1", ts_ms=1100 + 5000))
+            if self.double:
+                self.q.put_nowait(Interrupted(item_id=self.barge_item, audio_end_ms=60, ts_ms=1110))
+            return {"barge_in": "scripted"}
 
 
 class ConformanceHarnessTests(unittest.TestCase):
@@ -251,6 +262,22 @@ class ConformanceHarnessTests(unittest.TestCase):
         self.assertEqual(r["dimensions"]["interruption"]["status"], "excluded")
         self.assertIn("interruption", r["excluded"])
         self.assertTrue(r["passed"])
+
+    def test_interruption_requires_interrupted_event(self):
+        r = self.run_it(barge=False)
+        self.assertEqual(r["dimensions"]["interruption"]["status"], "fail")
+        self.assertIn("no Interrupted", r["dimensions"]["interruption"]["reason"])
+        self.assertFalse(r["passed"])
+
+    def test_interruption_fails_if_audio_continues_or_duplicates(self):
+        self.assertIn("audio continued", self.run_it(late_audio=True)["dimensions"]["interruption"]["reason"])
+        self.assertIn("2 Interrupted", self.run_it(double=True)["dimensions"]["interruption"]["reason"])
+
+    def test_interruption_records_barge_in_evidence(self):
+        d = self.run_it()["dimensions"]["interruption"]
+        self.assertEqual(d["status"], "pass")
+        self.assertEqual(d["generated_audio_ms"], 60)
+        self.assertEqual(d["barge_in"], {"barge_in": "scripted"})
 
     def test_missing_correlation_check_fails(self):
         r = self.run_it(drop_tool_check=True)

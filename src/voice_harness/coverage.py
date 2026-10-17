@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import importlib
 import importlib.util
 import json
 import os
@@ -103,6 +104,16 @@ def _adapter_present(family: str) -> bool:
         return False
 
 
+def _runtime_reasons(family: str) -> list[str]:
+    """Adapter runtime preflight (e.g. Nova needs node + bridge + deps). Empty = can run here."""
+    module = ADAPTER_MODULES.get(family)
+    try:
+        fn = getattr(importlib.import_module(module), "runtime_status", None) if module else None
+    except ImportError:
+        return ["ADAPTER_RUNTIME_UNAVAILABLE"]
+    return ["ADAPTER_RUNTIME_UNAVAILABLE"] if fn and fn() else []
+
+
 def _load_reports(report_dir: Path) -> dict[str, dict[str, Any]]:
     """Latest *-capability-report.json per family; malformed files are skipped."""
     from .capability_report import CapabilityReport
@@ -137,6 +148,7 @@ def build_registry(
     ac09_dir: Path | str | None = None,
     now: datetime | None = None,
     adapter_present=_adapter_present,
+    runtime_reasons=_runtime_reasons,
 ) -> list[Coverage]:
     """Derive coverage per family. Only implemented_and_verified counts as support."""
     now = now or datetime.now(UTC)
@@ -156,7 +168,7 @@ def build_registry(
             )
             continue
         r = entry["report"]
-        reasons: list[str] = []
+        reasons: list[str] = list(runtime_reasons(family))
         if r.expired(now):
             reasons.append("REPORT_EXPIRED")
         if r.failed_closed():

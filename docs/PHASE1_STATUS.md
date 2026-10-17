@@ -64,7 +64,7 @@ The whole Phase 1 release is not yet formally complete:
 - **Excluded (documented):** real-browser and physical-device playback verification. Node playback tests and Python WebSocket clients are not evidence of physical audibility or browser/DAC latency.
 - **Not met:** 30-day metadata retention purge; operator UI (the reference client is a playback scheduler only); Python per-sample resampler violates the native-library constraint (Phase 2 adapters only).
 - **Partially met, highest risk first:** per-call `cancel_requested` during execution; runtime browser clock-sync exchange and `clock_sync_samples`; operator/reviewer roles and TLS enforcement; relational shape of `runs`/`events`; OTel metrics/logs and span links; NDJSON/restricted export; guardrail content layer; MC error shape (`retryable`, `message`). Full list and proposed fixes are in the audit.
-- Hashes in ledger bundles created before the audit no longer verify (RFC 8785 canonicalization). `artifacts/golden-run.json` was regenerated and is checked by a test; any external exports must be regenerated.
+- Hashes in ledger bundles created before the audit no longer verify (RFC 8785 canonicalization). `artifacts/golden-run.json` was regenerated and is checked by a test; any external exports must be regenerated. Bundles exported before the AC-20 coverage section (Phase 2) also fail `verify_bundle` and must be re-exported.
 - The measurement baseline predates the audit changes; re-run `make benchmark` before treating timing targets as established.
 - Confirmation and semantic safety checks use labelled scripted fixtures, not live voice recognition or independently calibrated judges.
 

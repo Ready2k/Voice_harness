@@ -1,4 +1,4 @@
-.PHONY: lint audit build test golden recovery infra stop up init benchmark demo
+.PHONY: nova-live-container lint audit build test golden recovery infra stop up init benchmark demo
 
 init:
 	@mkdir -p .local
@@ -39,3 +39,8 @@ infra:
 
 stop:
 	docker compose --profile infra down
+
+# Opt-in: needs unexpired .local/aws-session.env (./scripts/aws-session.sh <MFA>); runs Nova AC-09 in the image.
+nova-live-container:
+	@test -f .local/aws-session.env || { echo "missing .local/aws-session.env: run ./scripts/aws-session.sh <MFA_CODE>" >&2; exit 2; }
+	docker compose run --build --rm nova-live

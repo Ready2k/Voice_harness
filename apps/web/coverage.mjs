@@ -19,6 +19,7 @@ export const REASON_TEXT = {
   NO_CAPABILITY_REPORT: "No capability report has been produced.",
   REPORT_EXPIRED: "The capability report has expired (reports last 7 days).",
   REPORT_FAILED_CLOSED: "A required primitive is not verified or observed.",
+  ADAPTER_RUNTIME_UNAVAILABLE: "The adapter cannot run in this environment (its runtime dependencies are missing), so it cannot be verified here.",
   AC09_NOT_PASSED: "The AC-09 adapter conformance run has not passed for this report.",
 };
 
