@@ -174,7 +174,13 @@ class OpenAIBackend(JudgeBackend):
         if response.status_code != 200:
             raise JudgeUnavailable(f"JUDGE_HTTP_{response.status_code}")
         try:
-            return response.json()["choices"][0]["message"]["content"]
+            payload = response.json()
+            usage = payload.get("usage") or {}
+            if usage.get("prompt_tokens") is not None:
+                self.last_usage = {"input_tokens": usage.get("prompt_tokens"),
+                                   "output_tokens": usage.get("completion_tokens"),
+                                   "cached_tokens": (usage.get("prompt_tokens_details") or {}).get("cached_tokens")}
+            return payload["choices"][0]["message"]["content"]
         except (KeyError, IndexError, ValueError) as exc:
             raise JudgeInvalidOutput("JUDGE_RESPONSE_SHAPE") from exc
 
@@ -206,6 +212,10 @@ class BedrockConverseBackend(JudgeBackend):
                 messages=[{"role": "user", "content": [{"text": request.user_payload}]}],
                 inferenceConfig={"maxTokens": 4096, "temperature": 0},
             )
+            usage = out.get("usage") or {}
+            if usage.get("inputTokens") is not None:
+                self.last_usage = {"input_tokens": usage.get("inputTokens"), "output_tokens": usage.get("outputTokens"),
+                                   "cached_tokens": usage.get("cacheReadInputTokens")}
             return out["output"]["message"]["content"][0]["text"]
         except (KeyError, IndexError) as exc:
             raise JudgeInvalidOutput("JUDGE_RESPONSE_SHAPE") from exc

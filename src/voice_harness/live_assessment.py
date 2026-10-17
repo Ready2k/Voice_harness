@@ -38,8 +38,9 @@ def _sha(text):
 
 
 class IndependentAssessor:
-    def __init__(self, engine, backend=None):
+    def __init__(self, engine, backend=None, cost_recorder=None):
         self.engine, self.backend = engine, backend
+        self.cost_recorder = cost_recorder  # cost.UsageRecorder: records ASR usage (or unknown) per assessment
 
     def status(self):
         return strict_speech_status(self.backend)
@@ -58,7 +59,13 @@ class IndependentAssessor:
                 raise AsrUnavailable(reason)
             result = self.backend.transcribe(pcm, unit["rate"])
         except AsrUnavailable as error:
-            return self._unavailable(run_id, unit, str(error) or "ASR_UNAVAILABLE")
+            reason = str(error) or "ASR_UNAVAILABLE"
+            if self.cost_recorder and reason.startswith(("ASR_HTTP_", "ASR_TRANSPORT", "ASR_MALFORMED")):
+                # the request left the harness, so a charge cannot be ruled out: unknown, not zero
+                self.cost_recorder.record_asr(None, f"asr:{unit_id}", failed_reason="ASR_REQUEST_FAILED_USAGE_UNKNOWN")
+            return self._unavailable(run_id, unit, reason)
+        if self.cost_recorder:
+            self.cost_recorder.record_asr(result, f"asr:{unit_id}")
         check = semantic_check(result.text, expected)
         mapped = {"safe": "safe", "unsafe": "unsafe", "untestable": "unassessable"}[check["disposition"]]
         # The independent transcript becomes authoritative: new assessment epoch, replacement unit.
@@ -174,12 +181,20 @@ class AdapterTurnDriver:
         speech_end_ms=None,
         adapter_clock_domain=PROCESS_CLOCK_DOMAIN,
         now_ms=lambda: int(time.monotonic() * 1000),
+        cost_recorder=None,
     ):
         self.engine, self.run_id, self.assessor = engine, run_id, assessor
         self.expected_claims = expected_claims or {}
         self.speech_start_ms, self.speech_end_ms = speech_start_ms, speech_end_ms
         self.adapter_clock_domain, self.now_ms = adapter_clock_domain, now_ms
         self.results = []
+        # Provider usage -> cost.usage_reported; declares the expected components for this run.
+        self.cost_recorder = cost_recorder
+        if cost_recorder is not None:
+            if assessor.cost_recorder is None:
+                assessor.cost_recorder = cost_recorder
+            asr_live = assessor.backend is not None and assessor.backend.available()[0]
+            cost_recorder.declare(cost_recorder.component, *(["asr"] if asr_live else []))
         self._reset()
 
     def _reset(self):
@@ -187,6 +202,15 @@ class AdapterTurnDriver:
         self._text, self._turn_id = [], None
 
     def feed(self, event):
+        if self.cost_recorder is not None:
+            self.cost_recorder.observe(event)
+        return self._feed(event)
+
+    def close(self):
+        """Session end: cumulative-usage providers that never reported usage record unknown, not zero."""
+        return self.cost_recorder.close() if self.cost_recorder is not None else []
+
+    def _feed(self, event):
         kind = event.type
         if kind == "transcript_delta" or kind == "transcript_final":
             if event.text.strip() and self._first_transcript is None:

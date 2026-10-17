@@ -407,7 +407,8 @@ class NovaSonicAdapter:
             out.append(Usage(**base, turn_id=body.get("completionId"),
                              input_tokens=body.get("totalInputTokens"), output_tokens=body.get("totalOutputTokens"),
                              raw={"totalTokens": body.get("totalTokens"), "details": body.get("details", {}),
-                                  "cumulative": True}))
+                                  "cumulative": True,
+                                  "provider_session_id": body.get("sessionId")}))
         return out
 
     @staticmethod
