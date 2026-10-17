@@ -74,6 +74,18 @@ class Base(unittest.TestCase):
         self.database = Database(os.environ.get("HARNESS_TEST_DATABASE_URL", str(self.root / "t.sqlite")))
         self.engine = Engine(self.database)
         self.evidence = Evidence(self.database, self.root / "objects")
+        # Review queue and calibration are global stores; isolate from other tests sharing PostgreSQL.
+        from voice_harness.judges import store
+
+        store.ensure(self.database)
+        with self.database.connection() as db:
+            for table in (
+                "harness_calibration_approvals",
+                "harness_calibration_reports",
+                "harness_calibration_policies",
+                "harness_review_queue",
+            ):
+                db.execute(f"DELETE FROM {table}")  # nosec B608 - fixed table names
 
     def run_of(self, scenario):
         run = self.engine.create({**RunConfig().model_dump(), "scenario_id": scenario})
