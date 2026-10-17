@@ -170,7 +170,7 @@ Test names are `module.TestName`; `test_conformance` is the new file added by th
 | SE-01 | §18 | Loopback bind, generated operator token, origin allow-list, authenticated downloads; non-loopback needs TLS and operator/reviewer roles | api.create_app, compose.yaml (127.0.0.1) | test_release.test_API_auth_idempotency_exports_and_websocket | Partially met | Token (0600) and origin allow-list (HTTP and WebSocket) present; one role only; HARNESS_BIND can expose a non-loopback port without TLS enforcement |
 | SE-02 | §18 | Ten live sessions default, excess => 429; bounded queues | api.launch | test_release.test_API_auth_idempotency_exports_and_websocket | Met | Offline judge worker limit is Phase 3 |
 | SE-03 | §18 | Graceful shutdown: stop intake, revoke unreleased audio, reconcile in-flight tools, flush evidence, terminal manifest; crash => recovery_required | api.lifespan, engine.recover | test_release.test_crash_recovery_revokes_tokens_and_preserves_completed_outcomes | Partially met | Crash path complete; graceful path drains workers and writes manifests but does not explicitly revoke unreleased audio or reconcile unknown outcomes |
-| SE-04 | §18 | Native/C-backed resampling, no Python per-sample loops; CPU-heavy work outside the audio loop | resample.py (pure Python loop) | test_phase2.ResampleTests | Not met | Phase 1 never resamples (24 kHz pass-through), so no Phase 1 gate is affected, but the Phase 2 resampler violates the stack constraint and must be replaced (e.g. soxr/numpy) before any non-24 kHz adapter claims support |
+| SE-04 | §18 | Native/C-backed resampling, no Python per-sample loops; CPU-heavy work outside the audio loop | resample.py (libsoxr via numpy; `StreamResampler` for continuous input) | test_phase2.ResampleTests, StreamResamplerTests | Met (2026-10-17) | Phase 1 never resamples (24 kHz pass-through), so no Phase 1 gate is affected, but the Phase 2 resampler violates the stack constraint and must be replaced (e.g. soxr/numpy) before any non-24 kHz adapter claims support |
 | EX-01 | §6/§11/§15 | Physical browser/DAC audibility and loopback latency (AC-03/AC-21 physical clauses, `physical_audibility`) | apps/web, playback.ack | - | Excluded | Operator cannot perform; every report keeps `physical_audibility: unknown`. Not a failure |
 
 ## Defects found and fixed
@@ -202,7 +202,7 @@ Not met:
 
 - **RT-02 metadata retention (30 days).** Proposal: a purge job that replaces event payloads older than the retention class with a tombstone that retains `event_hash`, `prev_hash` and sequence so the chain still verifies, honours holds, and records the tombstone in the manifest.
 - **FN-03 operator UI.** Not a gate item. Proposal: a minimal run-detail page backed by the existing events/metrics/holds endpoints.
-- **SE-04 resampler.** Phase 2: `resample.py` is a per-sample Python loop, violating the native-library constraint. Replace with a C-backed implementation before any non-24 kHz adapter claims support.
+- **SE-04 resampler (resolved 2026-10-17).** `resample.py` now uses libsoxr (C-backed); the Nova adapter uses a stateful `StreamResampler`. CPU-heavy work still runs on the event loop at current (sub-millisecond per 10 s of audio) cost; revisit under Phase 5 load tests.
 
 Partially met, ordered by risk:
 

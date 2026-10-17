@@ -70,6 +70,6 @@ The whole Phase 1 release is not yet formally complete:
 
 ## Phase 2 adapter prerequisite
 
-Native mismatched-rate resampling is not implemented; the reference playback path requires 24 kHz. This is a Phase 2 adapter gap rather than a Phase 1 mock-rate blocker. Any adapter with a verified native rate other than 24 kHz must implement and validate the spec's resampling path before claiming support.
+Native (libsoxr) mismatched-rate resampling is implemented (2026-10-17); the reference playback path still requires 24 kHz. This is a Phase 2 adapter gap rather than a Phase 1 mock-rate blocker. Any adapter with a verified native rate other than 24 kHz must implement and validate the spec's resampling path before claiming support.
 
 Live provider verification, live ASR/judge calibration, signing and provider costs are later-phase work. Scripted PCM fixtures must not be reported as live semantic-assessment success.

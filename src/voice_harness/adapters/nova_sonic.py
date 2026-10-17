@@ -32,6 +32,7 @@ from collections.abc import AsyncIterator
 from pathlib import Path
 from typing import Any
 
+from ..resample import StreamResampler
 from . import (
     UNSUPPORTED,
     AdapterEvent,
@@ -58,37 +59,6 @@ AUDIO_TIMEOUT_S = 55
 _REPO = Path(__file__).resolve().parents[3]
 BRIDGE_SCRIPT = _REPO / "scripts" / "probe" / "nova_bridge.mjs"
 CAPABILITY_REPORT = _REPO / "artifacts" / "phase0" / "nova-capability-report.json"
-
-
-def resample_pcm16(data: bytes, src_rate: int, dst_rate: int) -> bytes:
-    """Resample s16le mono. Prefers the shared ``voice_harness.resample`` module if present."""
-    if src_rate == dst_rate:
-        return data
-    try:
-        from .. import resample as shared  # sibling-owned module
-        for name in ("resample_pcm16", "resample_s16le", "resample"):
-            fn = getattr(shared, name, None)
-            if callable(fn):
-                return fn(data, src_rate, dst_rate)
-    except ImportError:
-        pass
-    return _linear_resample(data, src_rate, dst_rate)
-
-
-def _linear_resample(data: bytes, src: int, dst: int) -> bytes:
-    import array
-    a = array.array("h")
-    a.frombytes(data[: len(data) // 2 * 2])
-    n_out = len(a) * dst // src
-    out = array.array("h", bytes(2 * n_out))
-    for i in range(n_out):
-        pos = i * src / dst
-        j = int(pos)
-        frac = pos - j
-        s0 = a[j]
-        s1 = a[j + 1] if j + 1 < len(a) else s0
-        out[i] = int(s0 + (s1 - s0) * frac)
-    return out.tobytes()
 
 
 def map_error(name: str, message: str) -> tuple[str, bool]:
@@ -167,6 +137,7 @@ class NovaSonicAdapter:
         self.transport: Any = None
         self._queue: asyncio.Queue = asyncio.Queue()
         self._audio_buf = bytearray()
+        self._input_resampler: StreamResampler | None = None
         self._pump: asyncio.Task | None = None
         self._reader: asyncio.Task | None = None
         self._prompt = ""
@@ -295,7 +266,9 @@ class NovaSonicAdapter:
         if "sample_count" in metadata and len(data) != metadata["sample_count"] * 2:
             raise ValueError("INVALID_NOVA_AUDIO")
         rate = metadata.get("sample_rate", OUTPUT_RATE)  # harness canonical rate is 24 kHz
-        self._audio_buf += resample_pcm16(data, rate, INPUT_RATE)
+        if self._input_resampler is None or self._input_resampler.src_rate != rate:
+            self._input_resampler = StreamResampler(rate, INPUT_RATE)
+        self._audio_buf += self._input_resampler.process(data)
 
     async def send_text(self, text: str) -> None:
         if self.closed:

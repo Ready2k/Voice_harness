@@ -63,8 +63,11 @@ class ResampleTests(unittest.TestCase):
         pcm = array.array("h", [32767, -32768] * 400).tobytes()
         out = samples(rs.resample(pcm, 16000, 24000))
         self.assertTrue(all(-32768 <= v <= 32767 for v in out))
-        dc = array.array("h", [32767] * 100).tobytes()
-        self.assertEqual(set(samples(rs.resample(dc, 16000, 24000))), {32767})
+        # full-scale DC: no sign wraparound; the filter's edge transient is bounded, interior settles
+        dc = array.array("h", [32767] * 400).tobytes()
+        out = samples(rs.resample(dc, 16000, 24000))
+        self.assertTrue(all(v > 0 for v in out))
+        self.assertTrue(all(abs(v - 32767) < 330 for v in out[100:-100]))
 
     def test_odd_length_rejected(self):
         with self.assertRaises(ValueError):
@@ -267,3 +270,18 @@ class ConformanceHarnessTests(unittest.TestCase):
             c = {x.provider_family: x for x in build_registry(
                 REPORTS, d, CoverageTests.NOW, lambda f: f == "openai")}
             self.assertEqual(c["openai"].coverage_state, "implemented_and_verified")
+
+
+class StreamResamplerTests(unittest.TestCase):
+    def test_chunked_matches_one_shot_length_and_has_no_seams(self):
+        import array
+
+        tone = array.array("h", [int(8000 * math.sin(2 * math.pi * 440 * n / 24000)) for n in range(2400)])
+        pcm = tone.tobytes()
+        st = rs.StreamResampler(24000, 16000)
+        out = b"".join(st.process(c) for c in rs.chunk(pcm))
+        got = array.array("h")
+        got.frombytes(out)
+        self.assertGreaterEqual(len(got), 1400)  # filter delay withholds the tail
+        # no seam discontinuities: successive-sample jumps stay within a sine's maximum slope
+        self.assertLess(max(abs(got[i + 1] - got[i]) for i in range(200, len(got) - 1)), 2 * 8000 * 2 * math.pi * 440 / 16000)

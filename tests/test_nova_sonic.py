@@ -103,15 +103,16 @@ class NovaOffline(unittest.IsolatedAsyncioTestCase):
 
     async def test_caller_audio_resampled_24k_to_16k(self):
         a, tr = await self.open([], hold_open=True)
-        await a.send_audio(b"\x10\x00" * 480, {"sample_count": 480, "sample_rate": 24000})  # 20 ms @24k
-        await asyncio.sleep(0.05)
+        for _ in range(5):  # 100 ms @24k; the streaming filter withholds a short startup delay
+            await a.send_audio(b"\x10\x00" * 480, {"sample_count": 480, "sample_rate": 24000})
+        await asyncio.sleep(0.15)
         await a.close("done")
         chunks = [base64.b64decode(m["event"]["audioInput"]["content"]) for m in tr.sent
                   if "audioInput" in m.get("event", {})]
         loud = [c for c in chunks if any(c)]
-        self.assertEqual(len(loud), 1)
-        self.assertEqual(len(loud[0]), 640)
-        self.assertEqual(a.stats["audio_chunks"], 1)
+        self.assertGreaterEqual(len(loud), 3)
+        self.assertTrue(all(len(c) == 640 for c in chunks))
+        self.assertGreaterEqual(a.stats["audio_chunks"], 3)
 
     async def test_tool_flow_replay(self):
         a, tr = await self.open(inbound(TOOL_LOG, "s1"))
