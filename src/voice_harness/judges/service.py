@@ -11,7 +11,7 @@ import time
 import uuid
 
 from ..scenario_defs import SCENARIOS
-from . import adjudicate, independence, rubric, store
+from . import adjudicate, calibration, independence, rubric, store
 from .backends import JudgeBackend
 from .events import JUDGE_EVENT_CONTRACTS
 from .findings import det_finding
@@ -84,6 +84,10 @@ def assess_run(database, run_id: str, *, tested: dict, backends: list[JudgeBacke
     if unknown:
         verdicts["reason_codes"].append("UNKNOWN_CRITERIA_IN_SCENARIO")
     now = time.time()
+    judge_calibration = [
+        calibration.binding_for(database, b.config)
+        for b, e in zip(backends, indep["judges"], strict=True) if e["eligible"]
+    ]
     independence_content = {k: v for k, v in indep.items() if not k.startswith("_")}
     with database.transaction(run_id) as tx:
         cutoff = all_events[-1]["event_id"]
@@ -111,7 +115,7 @@ def assess_run(database, run_id: str, *, tested: dict, backends: list[JudgeBacke
             "judge_coverage": indep["coverage"],
             "review_required_criteria": [e["criterion_id"] for e in entries if e["verdict"] == "review_required"],
             "rubric_event_id": rubric_event, "independence_event_id": indep_event,
-            "offline_event_ids": offline_events,
+            "offline_event_ids": offline_events, "judge_calibration": judge_calibration,
         }, [rubric_event, indep_event, *offline_events])
         review_ids = []
         for cid, reason, severity in items:
@@ -150,6 +154,7 @@ def assess_online(database, run_id: str, backend: JudgeBackend, *, tested: dict 
     )
     ids = (window[0]["event_id"], window[-1]["event_id"])
     result = run_online(backend, oracle, ctx.by_id, window=ids, blocking_enabled=blocking_enabled)
+    binding = calibration.binding_for(database, backend.config)
     with database.transaction(run_id) as tx:
         if result["error_code"]:
             emit(tx, "judge.online_error", {
@@ -157,5 +162,5 @@ def assess_online(database, run_id: str, backend: JudgeBackend, *, tested: dict 
                 "window_from_event_id": ids[0], "window_to_event_id": ids[1],
             }, [ids[1]])
         for finding in result["findings"]:
-            emit(tx, "judge.online_finding", finding, [ids[1]])
+            emit(tx, "judge.online_finding", {**finding, "calibration": binding}, [ids[1]])
     return result

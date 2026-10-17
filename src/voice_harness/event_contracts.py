@@ -464,6 +464,7 @@ class EvidenceManifest(Closed):
     config_hash: Hex64
     fixture_snapshot_id: Identifier | None
     cost: Free | None = None
+    judging: Free | None = None  # hash-bound link to the ledger-derived judging section (judges/section.py)
 
 
 # --- Phase 3 cost accounting (spec section 11): usage reports and expected components ---

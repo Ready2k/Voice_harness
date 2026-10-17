@@ -1,6 +1,101 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$defs": {
+    "CalibrationBinding": {
+      "additionalProperties": false,
+      "description": "Which calibration report/policy (if any) governed a judge's blocking eligibility for this output.",
+      "properties": {
+        "judge_id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Judge Id",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "report_bound",
+            "no_calibration_report"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "report_id": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Report Id"
+        },
+        "policy_id": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Policy Id"
+        },
+        "policy_version": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Policy Version"
+        },
+        "policy_hash": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Policy Hash"
+        },
+        "approved": {
+          "default": false,
+          "title": "Approved",
+          "type": "boolean"
+        },
+        "blocking_enabled_criteria": {
+          "items": {
+            "maxLength": 200,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Blocking Enabled Criteria",
+          "type": "array"
+        }
+      },
+      "required": [
+        "judge_id",
+        "status"
+      ],
+      "title": "CalibrationBinding",
+      "type": "object"
+    },
     "CriterionAdjudication": {
       "additionalProperties": false,
       "properties": {
@@ -247,6 +342,13 @@
         "type": "string"
       },
       "title": "Offline Event Ids",
+      "type": "array"
+    },
+    "judge_calibration": {
+      "items": {
+        "$ref": "#/$defs/CalibrationBinding"
+      },
+      "title": "Judge Calibration",
       "type": "array"
     }
   },

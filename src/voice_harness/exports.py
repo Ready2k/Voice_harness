@@ -41,6 +41,7 @@ def versions(config=None):
         "manifest_schema": "0.3",
         "canonicalization": "RFC8785",
         "hash": "sha256",
+        "judging_section": "1",
         "scenario_id": config.get("scenario_id"),
         "scenario_version": config.get("scenario_version"),
         "policy_profile": config.get("policy_profile"),
@@ -126,6 +127,7 @@ def reviewer_export(evidence, run_id):
         "source_manifest": src,
         **({"signature": envelope, "source_signature": source["signature"]} if envelope else {}),
         "cost": source.get("cost"),
+        "judging": source.get("judging"),
     }
 
 
@@ -149,6 +151,8 @@ def to_ndjson(bundle):
         lines.append(line("source_signature", signature=bundle["source_signature"]))
     if bundle.get("cost") is not None:
         lines.append(line("cost", section=bundle["cost"]))
+    if bundle.get("judging") is not None:
+        lines.append(line("judging", section=bundle["judging"]))
     lines += [line("schema", name=n, schema=s) for n, s in (bundle.get("schemas") or {}).items()]
     lines += [line("event", event=e) for e in bundle["events"]]
     lines += [line("artifact", artifact=a) for a in bundle["artifacts"]]
@@ -173,6 +177,8 @@ def from_ndjson(text):
             bundle[kind] = record["signature"]
         elif kind == "cost":
             bundle["cost"] = record["section"]
+        elif kind == "judging":
+            bundle["judging"] = record["section"]
         elif kind == "schema":
             bundle["schemas"][record["name"]] = record["schema"]
         elif kind == "event":

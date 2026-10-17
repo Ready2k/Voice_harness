@@ -348,6 +348,22 @@ def blocking_enabled_for(database, criterion_id: str, judge_fp: dict, locale: st
     return False
 
 
+def binding_for(database, judge_config) -> dict:
+    """Newest stored calibration report for this exact judge fingerprint, as a ledger-recordable binding."""
+    fp = fingerprint(judge_config)
+    for report in list_reports(database):
+        if report["judge_fingerprint"] == fp:
+            return {
+                "judge_id": judge_config.judge_id, "status": "report_bound", "report_id": report["report_id"],
+                "policy_id": report["policy_id"], "policy_version": report["policy_version"],
+                "policy_hash": report["policy_hash"], "approved": is_approved(database, report["policy_hash"]),
+                "blocking_enabled_criteria": list(report["blocking_enabled_criteria"]),
+            }
+    return {"judge_id": judge_config.judge_id, "status": "no_calibration_report", "report_id": None,
+            "policy_id": None, "policy_version": None, "policy_hash": None, "approved": False,
+            "blocking_enabled_criteria": []}
+
+
 def blocking_checker(database, judge_config, locale: str, audio_profile: str):
     fp = fingerprint(judge_config)
     return lambda category: (category in CATEGORY_CRITERION and blocking_enabled_for(

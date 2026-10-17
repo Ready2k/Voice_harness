@@ -118,6 +118,19 @@ class JudgeOfflineEvaluated(Closed):
     latency_ms: Annotated[float, Field(ge=0)]
 
 
+class CalibrationBinding(Closed):
+    """Which calibration report/policy (if any) governed a judge's blocking eligibility for this output."""
+
+    judge_id: Identifier
+    status: Literal["report_bound", "no_calibration_report"]
+    report_id: Identifier | None = None
+    policy_id: Identifier | None = None
+    policy_version: Annotated[int, Field(ge=1)] | None = None
+    policy_hash: Identifier | None = None
+    approved: bool = False
+    blocking_enabled_criteria: list[Identifier] = Field(default_factory=list)
+
+
 class JudgeOnlineFinding(Closed):
     finding_id: Identifier
     judge: JudgeIdentity
@@ -136,6 +149,7 @@ class JudgeOnlineFinding(Closed):
     rejected_citation_ids: list[str]
     window_from_event_id: Identifier
     window_to_event_id: Identifier
+    calibration: CalibrationBinding | None = None
 
 
 class JudgeOnlineError(Closed):
@@ -179,6 +193,7 @@ class JudgeAdjudicated(Closed):
     rubric_event_id: Identifier
     independence_event_id: Identifier
     offline_event_ids: list[Identifier]
+    judge_calibration: list[CalibrationBinding] = Field(default_factory=list)
 
 
 class ReviewOpened(Closed):

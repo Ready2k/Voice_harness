@@ -62,6 +62,7 @@ class Evidence:
         "confirmation_id",
         "token_id",
         "hold_id",
+        "review_id",
     )
 
     @staticmethod
@@ -91,6 +92,51 @@ class Evidence:
                 found.extend(Evidence._references(item))
         return found
 
+    @staticmethod
+    def _judge_finding_seeds(events):
+        """Finding id -> closure seeds for Phase 3 judging events.
+
+        Addressable ids: rubric (deterministic) and judge.offline_evaluated ``finding_id``s, online
+        ``finding_id``s, and review ids. An evaluation-scoped finding pulls in the rubric, independence
+        and adjudication events of its evaluation plus the review items for its criterion; review
+        siblings (claimed/decided) join through the ``review_id`` group key in the closure walk.
+        """
+        by_eval = {}
+        reviews = {}
+        for event in events:
+            if "tombstone" in event:
+                continue
+            content = event["content"]
+            if event["type"] in {"rubric.evaluated", "judge.independence_recorded", "judge.adjudicated"}:
+                by_eval.setdefault(content["evaluation_id"], []).append(event["event_id"])
+            elif event["type"] == "review.opened":
+                reviews.setdefault((content["evaluation_id"], content["criterion_id"]), []).append(event["event_id"])
+        found = {}
+
+        def evaluation_seeds(evaluation_id, criterion_id):
+            return by_eval.get(evaluation_id, []) + reviews.get((evaluation_id, criterion_id), [])
+
+        for event in events:
+            if "tombstone" in event:
+                continue
+            content, kind = event["content"], event["type"]
+            if kind in {"rubric.evaluated", "judge.offline_evaluated"}:
+                for finding in content.get("findings", content.get("results", [])):
+                    found[finding["finding_id"]] = [
+                        event["event_id"], *finding["evidence_event_ids"],
+                        *evaluation_seeds(content["evaluation_id"], finding["criterion_id"]),
+                    ]
+            elif kind == "judge.online_finding":
+                found[content["finding_id"]] = [
+                    event["event_id"], *content["evidence_event_ids"],
+                    content["window_from_event_id"], content["window_to_event_id"],
+                ]
+            elif kind == "review.opened":
+                found[content["review_id"]] = [
+                    event["event_id"], *evaluation_seeds(content["evaluation_id"], content["criterion_id"]),
+                ]
+        return found
+
     def _scope(self, tx, run_id, finding_ids):
         """Resolve a hold's immutable effective scope and its dependency closure."""
         events = self._events(tx, run_id)
@@ -118,6 +164,10 @@ class Evidence:
                 if fid in wanted:
                     seeds.append(event["event_id"])
                     seeds.extend(finding["evidence_event_ids"])
+        judge_seeds = self._judge_finding_seeds(events)
+        known.update(judge_seeds)
+        for fid in wanted & set(judge_seeds):
+            seeds.extend(judge_seeds[fid])
         if wanted - known:
             raise KeyError("FINDING_NOT_FOUND")
         # Run envelope events are always necessary to interpret any finding.
@@ -486,9 +536,17 @@ class Evidence:
             cost_store.persist_lines(
                 self.database, tx.db, run_id, manifest["cost"]["section_hash"], cost_section["lines"]
             )
+            # Judging/human-review section: derived from the ledger and bound by hash into the manifest
+            # before sealing, so the signature covers it. Must precede sign_manifest.
+            from .judges import section as judging
+
+            judging_section = judging.build_section(run_id, events)
+            manifest["judging"] = judging.manifest_entry(judging_section)
+            manifest["human_adjudication"] = judging_section["human_adjudication"]
             envelope = self.sign_manifest(manifest)
             return {
                 "cost": cost_section,
+                "judging": judging_section,
                 "manifest": manifest,
                 "manifest_hash": digest(manifest),
                 "events": events,
@@ -640,6 +698,10 @@ def verify_bundle(bundle, keyring=None, *, allow_unsigned=None, revoked=()):
         from .cost import verify_cost_section
 
         if not verify_cost_section(bundle):
+            return False
+        from .judges.section import verify_judging_section
+
+        if not verify_judging_section(bundle):
             return False
         previous = None
         for sequence, payload in enumerate(events, 1):

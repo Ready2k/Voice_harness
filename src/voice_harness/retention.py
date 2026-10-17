@@ -43,6 +43,32 @@ def tombstone_of(payload, now, reason=TOMBSTONE_REASON):
     }
 
 
+def _cited(content):
+    found = []
+    if isinstance(content, dict):
+        for key, value in content.items():
+            if key in {"native_envelope", "provider_event"}:
+                continue
+            found.extend(value if key == "evidence_event_ids" else _cited(value))
+    elif isinstance(content, list):
+        for item in content:
+            found.extend(_cited(item))
+    return found
+
+
+def _late_review_events(events, protected):
+    """A hold's scope is fixed at activation; review claims/decisions appended afterwards for a
+    protected review item (and the evidence they cite) stay readable too."""
+    reviews = {e["content"]["review_id"] for e in events if e["event_id"] in protected
+               and e["type"] == "review.opened"}
+    extra = set()
+    for e in events:
+        if e["type"] in {"review.claimed", "review.decided"} and e["content"].get("review_id") in reviews:
+            extra.add(e["event_id"])
+            extra.update(_cited(e["content"]))
+    return extra
+
+
 def _protection(state, events, now, grace):
     """Return (all_events_protected, protected_event_ids) from hold scopes."""
     everything, ids, live_holds = False, set(), set()
@@ -58,6 +84,8 @@ def _protection(state, events, now, grace):
         else:
             ids.update(hold["scope"]["event_ids"])
     ids.discard(None)
+    if not everything:
+        ids.update(_late_review_events(events, ids))
     # Lifecycle events naming a still-protecting hold stay readable too.
     ids.update(e["event_id"] for e in events if e["content"].get("hold_id") in live_holds)
     return everything, ids

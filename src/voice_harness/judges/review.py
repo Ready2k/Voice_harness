@@ -33,8 +33,10 @@ def _ledger(tx):
 
 def replay(events: list[dict]) -> dict:
     """Rebuild review state and the latest adjudication from ledger events only."""
-    reviews, adjudications = {}, {}
+    reviews, adjudications, latest = {}, {}, None
     for e in events:
+        if "tombstone" in e:  # purged payloads carry no content; the surviving ledger is replayed
+            continue
         c, kind = e["content"], e["type"]
         if kind == "judge.adjudicated":
             adjudications[c["evaluation_id"]] = e
@@ -46,7 +48,7 @@ def replay(events: list[dict]) -> dict:
             reviews[c["review_id"]].update(state="in_review", claimed_by=c["reviewer_id"])
         elif kind == "review.decided" and c["review_id"] in reviews:
             reviews[c["review_id"]].update(state="decided", decision=c, decided_event_id=e["event_id"])
-    return {"reviews": reviews, "adjudications": adjudications, "latest": latest if adjudications else None}
+    return {"reviews": reviews, "adjudications": adjudications, "latest": latest}
 
 
 def _transition(database, review_id):
@@ -117,7 +119,11 @@ def decide(database, review_id: str, *, reviewer_id: str, role: str, disposition
 
 def effective_assurance(database, run_id: str) -> dict:
     """Latest adjudication with human decisions applied; derived purely from the ledger."""
-    state = replay(database.events(run_id))
+    return effective_from_events(database.events(run_id), run_id)
+
+
+def effective_from_events(events: list[dict], run_id: str) -> dict:
+    state = replay(events)
     if state["latest"] is None:
         return {"run_id": run_id, "status": "not_assessed", "overall_assurance": "untestable",
                 "reason_codes": ["NOT_ASSESSED"]}
