@@ -1,0 +1,318 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "Observation": {
+      "additionalProperties": false,
+      "properties": {
+        "provider": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Provider",
+          "type": "string"
+        },
+        "model_alias": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Model Alias"
+        },
+        "resolved_version": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Resolved Version"
+        },
+        "version_unresolved": {
+          "default": true,
+          "title": "Version Unresolved",
+          "type": "boolean"
+        },
+        "scenario_id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Scenario Id",
+          "type": "string"
+        },
+        "scenario_version": {
+          "minimum": 1,
+          "title": "Scenario Version",
+          "type": "integer"
+        },
+        "audio_variant": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Audio Variant",
+          "type": "string"
+        },
+        "fixture_seed": {
+          "title": "Fixture Seed",
+          "type": "integer"
+        },
+        "policy_profile": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Policy Profile",
+          "type": "string"
+        },
+        "repetition": {
+          "minimum": 1,
+          "title": "Repetition",
+          "type": "integer"
+        },
+        "run_id": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Run Id"
+        },
+        "status": {
+          "default": "completed",
+          "enum": [
+            "completed",
+            "failed",
+            "incomplete",
+            "timeout"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "clock_uncertainty_ms": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Clock Uncertainty Ms"
+        },
+        "same_clock_domain": {
+          "default": true,
+          "title": "Same Clock Domain",
+          "type": "boolean"
+        },
+        "unsupported_dimensions": {
+          "items": {
+            "maxLength": 200,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Unsupported Dimensions",
+          "type": "array"
+        },
+        "latency_ms": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "propertyNames": {
+            "maxLength": 200,
+            "minLength": 1
+          },
+          "title": "Latency Ms",
+          "type": "object"
+        },
+        "model_outcomes": {
+          "additionalProperties": {
+            "enum": [
+              "occurred",
+              "not_occurred",
+              "untestable"
+            ],
+            "type": "string"
+          },
+          "propertyNames": {
+            "maxLength": 200,
+            "minLength": 1
+          },
+          "title": "Model Outcomes",
+          "type": "object"
+        },
+        "platform_outcomes": {
+          "additionalProperties": {
+            "enum": [
+              "occurred",
+              "not_occurred",
+              "untestable"
+            ],
+            "type": "string"
+          },
+          "propertyNames": {
+            "maxLength": 200,
+            "minLength": 1
+          },
+          "title": "Platform Outcomes",
+          "type": "object"
+        }
+      },
+      "required": [
+        "provider",
+        "scenario_id",
+        "scenario_version",
+        "audio_variant",
+        "fixture_seed",
+        "policy_profile",
+        "repetition"
+      ],
+      "title": "Observation",
+      "type": "object"
+    },
+    "Predeclaration": {
+      "additionalProperties": false,
+      "properties": {
+        "sample_size_per_provider": {
+          "minimum": 1,
+          "title": "Sample Size Per Provider",
+          "type": "integer"
+        },
+        "primary_endpoints": {
+          "items": {
+            "maxLength": 200,
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Primary Endpoints",
+          "type": "array"
+        },
+        "strata": {
+          "items": {
+            "maxLength": 200,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Strata",
+          "type": "array"
+        },
+        "stopping_rules": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Stopping Rules",
+          "type": "string"
+        }
+      },
+      "required": [
+        "sample_size_per_provider",
+        "primary_endpoints",
+        "stopping_rules"
+      ],
+      "title": "Predeclaration",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "providers": {
+      "items": {
+        "maxLength": 200,
+        "minLength": 1,
+        "type": "string"
+      },
+      "maxItems": 8,
+      "minItems": 2,
+      "title": "Providers",
+      "type": "array"
+    },
+    "observations": {
+      "items": {
+        "$ref": "#/$defs/Observation"
+      },
+      "maxItems": 20000,
+      "minItems": 1,
+      "title": "Observations",
+      "type": "array"
+    },
+    "mode": {
+      "default": "exploratory",
+      "enum": [
+        "exploratory",
+        "version_pinned"
+      ],
+      "title": "Mode",
+      "type": "string"
+    },
+    "seed": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Seed"
+    },
+    "bootstrap_resamples": {
+      "default": 2000,
+      "maximum": 10000,
+      "minimum": 200,
+      "title": "Bootstrap Resamples",
+      "type": "integer"
+    },
+    "planned_per_provider": {
+      "anyOf": [
+        {
+          "minimum": 1,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Planned Per Provider"
+    },
+    "predeclaration": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Predeclaration"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "providers",
+    "observations"
+  ],
+  "title": "ComparisonRequest",
+  "type": "object"
+}

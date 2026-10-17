@@ -1043,7 +1043,13 @@ class Engine:
         return unit_id
 
     def approve_audio(
-        self, run_id, unit_id, *, scripted_safe: bool, exploratory_unreviewed=False
+        self,
+        run_id,
+        unit_id,
+        *,
+        scripted_safe: bool,
+        exploratory_unreviewed=False,
+        assessment_source="controlled_fixture",
     ):
         started = time.perf_counter()
         with self.database.transaction(run_id) as tx:
@@ -1146,7 +1152,7 @@ class Engine:
                     {
                         "unit_id": unit_id,
                         "reason": "UNASSESSABLE_OR_UNSAFE",
-                        "assessment_source": "controlled_fixture",
+                        "assessment_source": assessment_source,
                         **decision_record(
                             "audio_chunk",
                             "deny",
@@ -1186,11 +1192,15 @@ class Engine:
                 "decision",
                 {
                     **token,
-                    "assessment_source": "controlled_fixture",
+                    "assessment_source": assessment_source,
                     **decision_record(
                         "audio_chunk",
                         "allow",
-                        reason_codes=["SCRIPTED_ASSESSMENT_SAFE"]
+                        reason_codes=[
+                            "SCRIPTED_ASSESSMENT_SAFE"
+                            if assessment_source == "controlled_fixture"
+                            else "INDEPENDENT_ASR_ASSESSMENT_SAFE"
+                        ]
                         if not exploratory_unreviewed
                         else ["UNREVIEWED_RELEASE"],
                         **audio_policy,

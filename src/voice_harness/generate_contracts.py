@@ -8,6 +8,7 @@ from pathlib import Path
 
 from .api import create_app
 from .approvals import public_key, sign
+from .comparison import ComparisonRequest, example_request
 from .contracts import (
     EVENT_CONTRACTS,
     OUTPUTS,
@@ -215,6 +216,7 @@ def generate(root="contracts"):
         "scenario-definition": ScenarioDefinition,
         "preservation-hold-record": HoldRecord,
     }
+    models["comparison-request"] = ComparisonRequest
     models.update({name + ".arguments": model for name, model in TOOLS.items()})
     models.update({name + ".result": model for name, model in OUTPUTS.items()})
     models.update(EVENT_CONTRACTS)
@@ -222,7 +224,7 @@ def generate(root="contracts"):
     models["evidence-manifest"] = EvidenceManifest
     types = {}
     examples = {}
-    curated = {**_curated_examples(), **event_examples()}
+    curated = {**_curated_examples(), **event_examples(), "comparison-request": example_request()}
     for name, model in models.items():
         schema = {
             "$schema": "https://json-schema.org/draft/2020-12/schema",

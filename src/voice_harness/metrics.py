@@ -1,5 +1,7 @@
 """Ledger-derived run metrics: every null carries an exclusion reason (spec section 12)."""
 
+from .events import PROCESS_CLOCK_DOMAIN
+
 NS_PER_MS = 1_000_000
 
 
@@ -22,6 +24,32 @@ def _summary(values):
     ordered = sorted(values)
     pick = lambda p: ordered[min(len(ordered) - 1, int((len(ordered) - 1) * p))]  # noqa: E731
     return {"count": len(ordered), "p50": pick(0.5), "p95": pick(0.95), "max": ordered[-1]}
+
+
+def _adapter_metrics(events):
+    """Adapter-run boundaries (benchmark.adapter_metrics): one observation per metric name.
+
+    Values come from adapter events in one declared clock domain; a metric with no
+    value in any turn keeps its recorded exclusion reason.
+    """
+    values, reasons, source_events = {}, {}, {}
+    for e in events:
+        if e["type"] != "benchmark.adapter_metrics":
+            continue
+        for m in e["content"]["metrics"]:
+            source_events.setdefault(m["metric"], e["event_id"])
+            if m["value"] is None:
+                reasons[m["metric"]] = m["exclusion_reason"]
+            else:
+                values.setdefault(m["metric"], []).append(m["value"])
+    out = {}
+    for name in sorted(set(values) | set(reasons)):
+        if name in values:
+            out[name] = _observation(name, "ms", _summary(values[name]), start=source_events[name],
+                                     domain=PROCESS_CLOCK_DOMAIN)
+        else:
+            out[name] = _observation(name, "ms", None, start=source_events[name], reason=reasons[name])
+    return out
 
 
 def derive(events):
@@ -98,9 +126,14 @@ def derive(events):
         _observation("decision_timeouts", "count",
                      sum(e["type"] == "audio.decision_timeout" for e in events)),
     ]
+    adapter = _adapter_metrics(events)
     for name in ("time_to_first_generated_audio", "time_to_first_released_audio"):
+        if name in adapter:
+            observations.append(adapter.pop(name))
+            continue
         observations.append(_observation(
             name, "ms", None, reason="NO_INPUT_SPEECH_END_EVENT_IN_FIXTURE_RUN"))
+    observations += [adapter[name] for name in sorted(adapter)]
     observations.append(_observation(
         "audio_underruns", "count", None, reason="CLIENT_SIDE_NOT_REPORTED_TO_SERVER"))
     return observations

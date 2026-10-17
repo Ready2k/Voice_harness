@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "unit_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Unit Id",
+      "type": "string"
+    },
+    "audio_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Audio Sha256",
+      "type": "string"
+    },
+    "reason": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Reason",
+      "type": "string"
+    },
+    "strict_speech_approval": {
+      "const": "unavailable",
+      "title": "Strict Speech Approval",
+      "type": "string"
+    }
+  },
+  "required": [
+    "unit_id",
+    "audio_sha256",
+    "reason",
+    "strict_speech_approval"
+  ],
+  "title": "AssessmentAsrUnavailable",
+  "type": "object"
+}

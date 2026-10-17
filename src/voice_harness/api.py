@@ -498,6 +498,9 @@ def create_app(
         return evidence.renew(run_id, hold_id, body.expires_at, body.reason)
 
     register_review_routes(app, database, evidence, auth)
+    from .comparison_api import register_comparison_routes
+
+    register_comparison_routes(app, database, auth)
 
     @app.post("/api/v1/runs/{run_id}/ws-ticket", dependencies=[Depends(auth)])
     def ws_ticket(run_id: str):

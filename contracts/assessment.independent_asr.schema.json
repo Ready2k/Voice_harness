@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "unit_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Unit Id",
+      "type": "string"
+    },
+    "replacement_unit_id": {
+      "anyOf": [
+        {
+          "maxLength": 200,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Replacement Unit Id"
+    },
+    "backend": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Backend",
+      "type": "string"
+    },
+    "model": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Model",
+      "type": "string"
+    },
+    "live": {
+      "title": "Live",
+      "type": "boolean"
+    },
+    "assessment_scope": {
+      "enum": [
+        "live_asr",
+        "offline_fixture_not_live_evidence"
+      ],
+      "title": "Assessment Scope",
+      "type": "string"
+    },
+    "audio_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Audio Sha256",
+      "type": "string"
+    },
+    "transcript_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Transcript Sha256",
+      "type": "string"
+    },
+    "disposition": {
+      "enum": [
+        "safe",
+        "unsafe",
+        "untestable"
+      ],
+      "title": "Disposition",
+      "type": "string"
+    },
+    "reason_codes": {
+      "items": {
+        "maxLength": 200,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Reason Codes",
+      "type": "array"
+    },
+    "claims": {
+      "additionalProperties": true,
+      "title": "Claims",
+      "type": "object"
+    },
+    "expected": {
+      "additionalProperties": true,
+      "title": "Expected",
+      "type": "object"
+    },
+    "boundary": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Boundary",
+      "type": "string"
+    }
+  },
+  "required": [
+    "unit_id",
+    "replacement_unit_id",
+    "backend",
+    "model",
+    "live",
+    "assessment_scope",
+    "audio_sha256",
+    "transcript_sha256",
+    "disposition",
+    "reason_codes",
+    "claims",
+    "expected",
+    "boundary"
+  ],
+  "title": "AssessmentIndependentAsr",
+  "type": "object"
+}

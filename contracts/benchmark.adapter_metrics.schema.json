@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "response_id": {
+      "anyOf": [
+        {
+          "maxLength": 200,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Response Id"
+    },
+    "unit_id": {
+      "anyOf": [
+        {
+          "maxLength": 200,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Unit Id"
+    },
+    "source": {
+      "const": "adapter_events",
+      "title": "Source",
+      "type": "string"
+    },
+    "clock_domain_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Clock Domain Id",
+      "type": "string"
+    },
+    "adapter_clock_domain_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Adapter Clock Domain Id",
+      "type": "string"
+    },
+    "metrics": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Metrics",
+      "type": "array"
+    }
+  },
+  "required": [
+    "response_id",
+    "unit_id",
+    "source",
+    "clock_domain_id",
+    "adapter_clock_domain_id",
+    "metrics"
+  ],
+  "title": "BenchmarkAdapterMetrics",
+  "type": "object"
+}
