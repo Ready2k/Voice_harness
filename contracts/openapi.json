@@ -1144,6 +1144,640 @@
         }
       }
     },
+    "/api/v1/rubric": {
+      "get": {
+        "summary": "Rubric",
+        "operationId": "rubric_api_v1_rubric_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/runs/{run_id}/assessments": {
+      "post": {
+        "summary": "Assess",
+        "operationId": "assess_api_v1_runs__run_id__assessments_post",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Run Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssessBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/runs/{run_id}/assurance": {
+      "get": {
+        "summary": "Assurance",
+        "operationId": "assurance_api_v1_runs__run_id__assurance_get",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Run Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reviews": {
+      "get": {
+        "summary": "Reviews",
+        "operationId": "reviews_api_v1_reviews_get",
+        "parameters": [
+          {
+            "name": "state",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "State"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "Cursor"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reviews/{review_id}": {
+      "get": {
+        "summary": "Get Review",
+        "operationId": "get_review_api_v1_reviews__review_id__get",
+        "parameters": [
+          {
+            "name": "review_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Review Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reviews/{review_id}/claim": {
+      "post": {
+        "summary": "Claim",
+        "operationId": "claim_api_v1_reviews__review_id__claim_post",
+        "parameters": [
+          {
+            "name": "review_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Review Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClaimBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reviews/{review_id}/decision": {
+      "post": {
+        "summary": "Decision",
+        "operationId": "decision_api_v1_reviews__review_id__decision_post",
+        "parameters": [
+          {
+            "name": "review_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Review Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DecisionBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/calibration/policy": {
+      "get": {
+        "summary": "Default Policy",
+        "operationId": "default_policy_api_v1_calibration_policy_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/calibration/reports": {
+      "get": {
+        "summary": "Reports",
+        "operationId": "reports_api_v1_calibration_reports_get",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/calibration/evaluate": {
+      "post": {
+        "summary": "Evaluate",
+        "operationId": "evaluate_api_v1_calibration_evaluate_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CalibrateBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/calibration/policies/{policy_hash}/approve": {
+      "post": {
+        "summary": "Approve",
+        "operationId": "approve_api_v1_calibration_policies__policy_hash__approve_post",
+        "parameters": [
+          {
+            "name": "policy_hash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Policy Hash"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApproveBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/runs/{run_id}/ws-ticket": {
       "post": {
         "summary": "Ws Ticket",
@@ -1200,6 +1834,108 @@
   },
   "components": {
     "schemas": {
+      "ApproveBody": {
+        "properties": {
+          "approver_id": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Approver Id"
+          },
+          "rationale": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Rationale"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "approver_id",
+          "rationale"
+        ],
+        "title": "ApproveBody"
+      },
+      "AssessBody": {
+        "properties": {
+          "tested": {
+            "$ref": "#/components/schemas/TestedBody"
+          },
+          "judges": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "maxItems": 8,
+            "title": "Judges"
+          },
+          "material_benchmark": {
+            "type": "boolean",
+            "title": "Material Benchmark",
+            "default": false
+          },
+          "required_judges": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 8.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Required Judges"
+          },
+          "extra_applicable": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 20,
+            "title": "Extra Applicable"
+          },
+          "order_seed": {
+            "type": "integer",
+            "title": "Order Seed",
+            "default": 0
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "tested"
+        ],
+        "title": "AssessBody"
+      },
+      "CalibrateBody": {
+        "properties": {
+          "judge": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Judge"
+          },
+          "policy_hash": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Policy Hash"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "judge"
+        ],
+        "title": "CalibrateBody"
+      },
       "CancelRun": {
         "properties": {
           "reason": {
@@ -1213,6 +1949,115 @@
         "additionalProperties": false,
         "type": "object",
         "title": "CancelRun"
+      },
+      "ClaimBody": {
+        "properties": {
+          "reviewer_id": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Reviewer Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "reviewer_id"
+        ],
+        "title": "ClaimBody"
+      },
+      "CorrectionBody": {
+        "properties": {
+          "correction_id": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Correction Id"
+          },
+          "corrected_check_id": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Corrected Check Id"
+          },
+          "corrected_check_version": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Corrected Check Version"
+          },
+          "rationale": {
+            "type": "string",
+            "maxLength": 4000,
+            "minLength": 1,
+            "title": "Rationale"
+          },
+          "evidence_event_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "minItems": 1,
+            "title": "Evidence Event Ids"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "correction_id",
+          "corrected_check_id",
+          "corrected_check_version",
+          "rationale",
+          "evidence_event_ids"
+        ],
+        "title": "CorrectionBody"
+      },
+      "DecisionBody": {
+        "properties": {
+          "reviewer_id": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Reviewer Id"
+          },
+          "disposition": {
+            "type": "string",
+            "title": "Disposition"
+          },
+          "rationale": {
+            "type": "string",
+            "maxLength": 4000,
+            "minLength": 1,
+            "title": "Rationale"
+          },
+          "evidence_event_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "title": "Evidence Event Ids"
+          },
+          "check_correction": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CorrectionBody"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "reviewer_id",
+          "disposition",
+          "rationale"
+        ],
+        "title": "DecisionBody"
       },
       "HTTPValidationError": {
         "properties": {
@@ -1649,6 +2494,36 @@
         "additionalProperties": false,
         "type": "object",
         "title": "StopCondition"
+      },
+      "TestedBody": {
+        "properties": {
+          "provider": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Provider"
+          },
+          "model_id": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Model Id"
+          },
+          "family": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Family"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "provider",
+          "model_id",
+          "family"
+        ],
+        "title": "TestedBody"
       },
       "ValidationError": {
         "properties": {

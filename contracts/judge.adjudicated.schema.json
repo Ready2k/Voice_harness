@@ -1,0 +1,271 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "CriterionAdjudication": {
+      "additionalProperties": false,
+      "properties": {
+        "criterion_id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Criterion Id",
+          "type": "string"
+        },
+        "criterion_version": {
+          "minimum": 1,
+          "title": "Criterion Version",
+          "type": "integer"
+        },
+        "track": {
+          "enum": [
+            "model_behaviour",
+            "platform_enforcement"
+          ],
+          "title": "Track",
+          "type": "string"
+        },
+        "mandatory_for_assurance": {
+          "title": "Mandatory For Assurance",
+          "type": "boolean"
+        },
+        "applicable": {
+          "title": "Applicable",
+          "type": "boolean"
+        },
+        "authority": {
+          "enum": [
+            "deterministic",
+            "judge"
+          ],
+          "title": "Authority",
+          "type": "string"
+        },
+        "severity": {
+          "enum": [
+            "critical",
+            "high",
+            "medium",
+            "low"
+          ],
+          "title": "Severity",
+          "type": "string"
+        },
+        "verdict": {
+          "enum": [
+            "pass",
+            "fail",
+            "partial",
+            "untestable",
+            "evaluation_error",
+            "review_required",
+            "not_applicable"
+          ],
+          "title": "Verdict",
+          "type": "string"
+        },
+        "verdict_source": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Verdict Source",
+          "type": "string"
+        },
+        "judge_verdicts": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Judge Verdicts",
+          "type": "object"
+        },
+        "disagreement": {
+          "title": "Disagreement",
+          "type": "boolean"
+        },
+        "uncertainty": {
+          "anyOf": [
+            {
+              "maxLength": 4000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Uncertainty"
+        },
+        "reason_codes": {
+          "items": {
+            "maxLength": 200,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Reason Codes",
+          "type": "array"
+        },
+        "score": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Score"
+        },
+        "evidence_event_ids": {
+          "items": {
+            "maxLength": 200,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Evidence Event Ids",
+          "type": "array"
+        },
+        "needs_review_reasons": {
+          "items": {
+            "maxLength": 200,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Needs Review Reasons",
+          "type": "array"
+        }
+      },
+      "required": [
+        "criterion_id",
+        "criterion_version",
+        "track",
+        "mandatory_for_assurance",
+        "applicable",
+        "authority",
+        "severity",
+        "verdict",
+        "verdict_source",
+        "judge_verdicts",
+        "disagreement",
+        "uncertainty",
+        "reason_codes",
+        "score",
+        "evidence_event_ids",
+        "needs_review_reasons"
+      ],
+      "title": "CriterionAdjudication",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "evaluation_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Evaluation Id",
+      "type": "string"
+    },
+    "rubric_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Rubric Id",
+      "type": "string"
+    },
+    "rubric_version": {
+      "minimum": 1,
+      "title": "Rubric Version",
+      "type": "integer"
+    },
+    "evaluation_version": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Evaluation Version",
+      "type": "string"
+    },
+    "criteria": {
+      "items": {
+        "$ref": "#/$defs/CriterionAdjudication"
+      },
+      "title": "Criteria",
+      "type": "array"
+    },
+    "model_behaviour": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Model Behaviour",
+      "type": "string"
+    },
+    "platform_enforcement": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Platform Enforcement",
+      "type": "string"
+    },
+    "overall_assurance": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Overall Assurance",
+      "type": "string"
+    },
+    "reason_codes": {
+      "items": {
+        "maxLength": 200,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Reason Codes",
+      "type": "array"
+    },
+    "judge_coverage": {
+      "enum": [
+        "complete",
+        "judge_coverage_incomplete"
+      ],
+      "title": "Judge Coverage",
+      "type": "string"
+    },
+    "review_required_criteria": {
+      "items": {
+        "maxLength": 200,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Review Required Criteria",
+      "type": "array"
+    },
+    "rubric_event_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Rubric Event Id",
+      "type": "string"
+    },
+    "independence_event_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Independence Event Id",
+      "type": "string"
+    },
+    "offline_event_ids": {
+      "items": {
+        "maxLength": 200,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Offline Event Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "evaluation_id",
+    "rubric_id",
+    "rubric_version",
+    "evaluation_version",
+    "criteria",
+    "model_behaviour",
+    "platform_enforcement",
+    "overall_assurance",
+    "reason_codes",
+    "judge_coverage",
+    "review_required_criteria",
+    "rubric_event_id",
+    "independence_event_id",
+    "offline_event_ids"
+  ],
+  "title": "JudgeAdjudicated",
+  "type": "object"
+}

@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "JudgeIdentity": {
+      "additionalProperties": false,
+      "properties": {
+        "judge_id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Judge Id",
+          "type": "string"
+        },
+        "backend": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Backend",
+          "type": "string"
+        },
+        "provider": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Provider",
+          "type": "string"
+        },
+        "model_id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Model Id",
+          "type": "string"
+        },
+        "family": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Family",
+          "type": "string"
+        },
+        "prompt_template_id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Prompt Template Id",
+          "type": "string"
+        },
+        "evaluation_version": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Evaluation Version",
+          "type": "string"
+        },
+        "session_id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Session Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "judge_id",
+        "backend",
+        "provider",
+        "model_id",
+        "family",
+        "prompt_template_id",
+        "evaluation_version",
+        "session_id"
+      ],
+      "title": "JudgeIdentity",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "judge": {
+      "$ref": "#/$defs/JudgeIdentity"
+    },
+    "error_code": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Error Code",
+      "type": "string"
+    },
+    "window_from_event_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Window From Event Id",
+      "type": "string"
+    },
+    "window_to_event_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Window To Event Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "judge",
+    "error_code",
+    "window_from_event_id",
+    "window_to_event_id"
+  ],
+  "title": "JudgeOnlineError",
+  "type": "object"
+}

@@ -1,0 +1,188 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "CheckCorrection": {
+      "additionalProperties": false,
+      "properties": {
+        "correction_id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Correction Id",
+          "type": "string"
+        },
+        "corrected_check_id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Corrected Check Id",
+          "type": "string"
+        },
+        "corrected_check_version": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Corrected Check Version",
+          "type": "string"
+        },
+        "rationale": {
+          "maxLength": 4000,
+          "title": "Rationale",
+          "type": "string"
+        },
+        "evidence_event_ids": {
+          "items": {
+            "maxLength": 200,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Evidence Event Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "correction_id",
+        "corrected_check_id",
+        "corrected_check_version",
+        "rationale",
+        "evidence_event_ids"
+      ],
+      "title": "CheckCorrection",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "review_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Review Id",
+      "type": "string"
+    },
+    "criterion_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Criterion Id",
+      "type": "string"
+    },
+    "reviewer_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Reviewer Id",
+      "type": "string"
+    },
+    "role": {
+      "enum": [
+        "operator",
+        "reviewer"
+      ],
+      "title": "Role",
+      "type": "string"
+    },
+    "disposition": {
+      "enum": [
+        "confirm_fail",
+        "confirm_pass",
+        "confirm_untestable",
+        "overturn_fail"
+      ],
+      "title": "Disposition",
+      "type": "string"
+    },
+    "rationale": {
+      "maxLength": 4000,
+      "title": "Rationale",
+      "type": "string"
+    },
+    "evidence_event_ids": {
+      "items": {
+        "maxLength": 200,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Evidence Event Ids",
+      "type": "array"
+    },
+    "check_correction": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/CheckCorrection"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "effect": {
+      "enum": [
+        "applied",
+        "not_applied_deterministic_failure",
+        "not_applied_no_supporting_evidence"
+      ],
+      "title": "Effect",
+      "type": "string"
+    },
+    "effective_verdict": {
+      "enum": [
+        "pass",
+        "fail",
+        "partial",
+        "untestable",
+        "evaluation_error",
+        "review_required",
+        "not_applicable"
+      ],
+      "title": "Effective Verdict",
+      "type": "string"
+    },
+    "prior_verdict": {
+      "enum": [
+        "pass",
+        "fail",
+        "partial",
+        "untestable",
+        "evaluation_error",
+        "review_required",
+        "not_applicable"
+      ],
+      "title": "Prior Verdict",
+      "type": "string"
+    },
+    "from_state": {
+      "const": "in_review",
+      "title": "From State",
+      "type": "string"
+    },
+    "to_state": {
+      "const": "decided",
+      "title": "To State",
+      "type": "string"
+    },
+    "evidence_class": {
+      "const": "human_adjudication",
+      "title": "Evidence Class",
+      "type": "string"
+    },
+    "independent_model_validation": {
+      "const": false,
+      "title": "Independent Model Validation",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "review_id",
+    "criterion_id",
+    "reviewer_id",
+    "role",
+    "disposition",
+    "rationale",
+    "evidence_event_ids",
+    "check_correction",
+    "effect",
+    "effective_verdict",
+    "prior_verdict",
+    "from_state",
+    "to_state",
+    "evidence_class",
+    "independent_model_validation"
+  ],
+  "title": "ReviewDecided",
+  "type": "object"
+}

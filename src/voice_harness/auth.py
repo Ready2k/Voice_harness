@@ -2,6 +2,7 @@
 
 import hmac
 import os
+import re
 import secrets
 from pathlib import Path
 
@@ -33,9 +34,14 @@ def role_for(authorization, operator_token, reviewer_token):
     return None
 
 
-def reviewer_may(method: str) -> bool:
-    """Reviewers are read-only: safe methods only."""
-    return method in {"GET", "HEAD"}
+REVIEWER_WRITE = re.compile(
+    r"^/api/v1/(reviews/[A-Za-z0-9_-]+/(claim|decision)|calibration/policies/[0-9a-f]{64}/approve)$"
+)
+
+
+def reviewer_may(method: str, path: str = "") -> bool:
+    """Reviewers are read-only except recording their own review decisions and policy approvals."""
+    return method in {"GET", "HEAD"} or (method == "POST" and REVIEWER_WRITE.fullmatch(path) is not None)
 
 
 def restrict_bundle(bundle: dict) -> dict:

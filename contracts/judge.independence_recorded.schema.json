@@ -1,0 +1,209 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "Blinding": {
+      "additionalProperties": false,
+      "properties": {
+        "provider_identity_hidden": {
+          "title": "Provider Identity Hidden",
+          "type": "boolean"
+        },
+        "limitations": {
+          "items": {
+            "maxLength": 4000,
+            "type": "string"
+          },
+          "title": "Limitations",
+          "type": "array"
+        }
+      },
+      "required": [
+        "provider_identity_hidden",
+        "limitations"
+      ],
+      "title": "Blinding",
+      "type": "object"
+    },
+    "JudgeEligibility": {
+      "additionalProperties": false,
+      "properties": {
+        "judge_id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Judge Id",
+          "type": "string"
+        },
+        "provider": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Provider",
+          "type": "string"
+        },
+        "model_id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Model Id",
+          "type": "string"
+        },
+        "family": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Family",
+          "type": "string"
+        },
+        "eligible": {
+          "title": "Eligible",
+          "type": "boolean"
+        },
+        "reason_codes": {
+          "items": {
+            "maxLength": 200,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Reason Codes",
+          "type": "array"
+        },
+        "disclosures": {
+          "items": {
+            "maxLength": 200,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Disclosures",
+          "type": "array"
+        }
+      },
+      "required": [
+        "judge_id",
+        "provider",
+        "model_id",
+        "family",
+        "eligible",
+        "reason_codes",
+        "disclosures"
+      ],
+      "title": "JudgeEligibility",
+      "type": "object"
+    },
+    "TestedModel": {
+      "additionalProperties": false,
+      "properties": {
+        "provider": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Provider",
+          "type": "string"
+        },
+        "model_id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Model Id",
+          "type": "string"
+        },
+        "family": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Family",
+          "type": "string"
+        }
+      },
+      "required": [
+        "provider",
+        "model_id",
+        "family"
+      ],
+      "title": "TestedModel",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "evaluation_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Evaluation Id",
+      "type": "string"
+    },
+    "tested": {
+      "$ref": "#/$defs/TestedModel"
+    },
+    "judges": {
+      "items": {
+        "$ref": "#/$defs/JudgeEligibility"
+      },
+      "title": "Judges",
+      "type": "array"
+    },
+    "independent_judge_count": {
+      "minimum": 0,
+      "title": "Independent Judge Count",
+      "type": "integer"
+    },
+    "required_judges": {
+      "minimum": 0,
+      "title": "Required Judges",
+      "type": "integer"
+    },
+    "material_benchmark": {
+      "title": "Material Benchmark",
+      "type": "boolean"
+    },
+    "coverage": {
+      "enum": [
+        "complete",
+        "judge_coverage_incomplete"
+      ],
+      "title": "Coverage",
+      "type": "string"
+    },
+    "cross_family_judge_present": {
+      "title": "Cross Family Judge Present",
+      "type": "boolean"
+    },
+    "blinding": {
+      "$ref": "#/$defs/Blinding"
+    },
+    "order_seed": {
+      "title": "Order Seed",
+      "type": "integer"
+    },
+    "execution_credentials_granted": {
+      "const": false,
+      "title": "Execution Credentials Granted",
+      "type": "boolean"
+    },
+    "judge_session_ids": {
+      "items": {
+        "maxLength": 200,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Judge Session Ids",
+      "type": "array"
+    },
+    "run_session_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Run Session Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "evaluation_id",
+    "tested",
+    "judges",
+    "independent_judge_count",
+    "required_judges",
+    "material_benchmark",
+    "coverage",
+    "cross_family_judge_present",
+    "blinding",
+    "order_seed",
+    "execution_credentials_granted",
+    "judge_session_ids",
+    "run_session_id"
+  ],
+  "title": "JudgeIndependenceRecorded",
+  "type": "object"
+}

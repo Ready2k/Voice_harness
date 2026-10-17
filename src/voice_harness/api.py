@@ -168,7 +168,7 @@ def create_app(
         role = role_for(authorization, token, reviewer_token)
         if role is None:
             raise HTTPException(401, "AUTH_REQUIRED")
-        if role == "reviewer" and not reviewer_may(request.method):
+        if role == "reviewer" and not reviewer_may(request.method, request.url.path):
             raise HTTPException(403, "FORBIDDEN")
         request.state.role = role
 
@@ -498,6 +498,9 @@ def create_app(
         return evidence.renew(run_id, hold_id, body.expires_at, body.reason)
 
     register_review_routes(app, database, evidence, auth)
+    from .judges.api import register_judge_routes
+
+    register_judge_routes(app, database, auth)
 
     @app.post("/api/v1/runs/{run_id}/ws-ticket", dependencies=[Depends(auth)])
     def ws_ticket(run_id: str):

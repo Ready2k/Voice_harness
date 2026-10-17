@@ -169,4 +169,7 @@ def examples():
             "config_hash": _h("config"), "fixture_snapshot_id": "fixture_001",
         },
     }
+    from .judges.examples import judge_examples
+
+    out.update(judge_examples())
     return out

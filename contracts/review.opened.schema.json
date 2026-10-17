@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "review_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Review Id",
+      "type": "string"
+    },
+    "evaluation_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Evaluation Id",
+      "type": "string"
+    },
+    "criterion_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Criterion Id",
+      "type": "string"
+    },
+    "reason": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Reason",
+      "type": "string"
+    },
+    "severity": {
+      "enum": [
+        "critical",
+        "high",
+        "medium",
+        "low"
+      ],
+      "title": "Severity",
+      "type": "string"
+    },
+    "adjudication_event_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Adjudication Event Id",
+      "type": "string"
+    },
+    "state": {
+      "const": "open",
+      "title": "State",
+      "type": "string"
+    }
+  },
+  "required": [
+    "review_id",
+    "evaluation_id",
+    "criterion_id",
+    "reason",
+    "severity",
+    "adjudication_event_id",
+    "state"
+  ],
+  "title": "ReviewOpened",
+  "type": "object"
+}
