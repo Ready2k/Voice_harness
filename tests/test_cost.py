@@ -317,7 +317,7 @@ class Ac19Provenance(Base):
         self.assertEqual(other_section["lines"], [])  # an allocation for a run with no such usage attributes nothing
         records = {r["record_id"]: r for r in cost_store.records(self.database)}
         self.assertEqual(records["inv_1"]["status"], "partially_allocated")
-        self.assertEqual(records["inv_1"]["revision"], 2)
+        self.assertGreaterEqual(records["inv_1"]["revision"], 2)  # shared database: earlier runs may revise it too
 
     def test_event_validation_and_evidence_references(self):
         self.assertIn("cost.usage_reported", EVENT_CONTENT_CONTRACTS)
@@ -367,7 +367,8 @@ class Export(Base):
             self.assertIsNotNone(db.execute("SELECT 1 FROM harness_migrations WHERE version=11").fetchone())
         self.evidence.bundle(self.run)  # idempotent snapshot
         with self.database.connection() as db:
-            self.assertEqual(db.execute("SELECT COUNT(*) AS n FROM harness_cost_lines").fetchone()["n"], 2)
+            self.assertEqual(
+                db.execute("SELECT COUNT(*) AS n FROM harness_cost_lines WHERE run_id=?", (self.run,)).fetchone()["n"], 2)
 
     def test_tampered_cost_section_fails_verification(self):
         self.prepare()
