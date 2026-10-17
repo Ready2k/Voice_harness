@@ -49,6 +49,21 @@ def record_usage(database, run_id, report: dict):
         return tx.event("orchestrator", "cost.usage_reported", content)
 
 
+def ensure_expected_components(database, run_id, components, declared_by="orchestrator"):
+    """Declare components, unioned with the latest declaration (the newest declaration replaces older ones).
+
+    Appends nothing when every component is already expected; returns the event id or None.
+    """
+    current = []
+    for event in database.events(run_id):
+        if event["type"] == "cost.expectation_declared":
+            current = list(event["content"]["components"])
+    merged = current + [c for c in components if c not in current]
+    if merged == current:
+        return None
+    return declare_expected_components(database, run_id, merged, declared_by)
+
+
 def declare_expected_components(database, run_id, components, declared_by="orchestrator"):
     content = CostExpectationDeclared.model_validate(
         {"components": list(components), "declared_by": declared_by}
@@ -58,7 +73,8 @@ def declare_expected_components(database, run_id, components, declared_by="orche
 
 
 def reports_from_adapter_usage(provider, usage, *, scope_id, usage_date, revision=1, service=None, model=None,
-                               region=None, component="voice", evidence_event_ids=()):
+                               region=None, component="voice", evidence_event_ids=(), generation_state=None,
+                               assumptions=(), meter_map=None):
     """Translate an adapter ``Usage`` (dict or model) into report dicts.
 
     Provider-reported only; nothing is estimated. Nova usage is cumulative per
@@ -75,23 +91,28 @@ def reports_from_adapter_usage(provider, usage, *, scope_id, usage_date, revisio
         "region": region, "billing_scope_id": scope_id, "scope_type": "session" if cumulative else "request",
         "report_kind": "cumulative" if cumulative else "incremental", "revision": revision,
         "corrects_report_id": None, "covers_scope_ids": [], "provenance": "provider_reported_usage",
-        "generation_state": "cancelled" if raw.get("status") == "cancelled" else "completed",
+        "generation_state": generation_state or ("cancelled" if raw.get("status") == "cancelled" else "completed"),
         "usage_date": usage_date, "interval_start_ms": None, "interval_end_ms": None,
-        "estimation_method": None, "assumptions": [], "unknown_reason": None,
+        "estimation_method": None, "assumptions": list(assumptions), "unknown_reason": None,
         "evidence_event_ids": list(evidence_event_ids), "cached_quantity": None, "unit": "token",
     }
     out = []
+    meter_map = meter_map or {}
 
     def add(meter, quantity, cached=None):
         unknown = None if quantity is not None else "USAGE_NOT_REPORTED"
         out.append({**base, "report_id": f"{scope_id}:{meter}" + ("" if cumulative else f":{revision}"),
-                    "meter_id": meter, "quantity": None if quantity is None else str(int(quantity)),
+                    "meter_id": meter_map.get(meter, meter), "quantity": None if quantity is None else str(int(quantity)),
                     "cached_quantity": None if cached is None else str(int(cached)), "unknown_reason": unknown})
 
     for side, total_key, details_key in (("input", "input_tokens", "input_token_details"),
                                          ("output", "output_tokens", "output_token_details")):
         total = data.get(total_key)
         details = raw.get(details_key) if isinstance(raw.get(details_key), dict) else None
+        if details is None:  # Nova usageEvent: details.total.{input|output}.{speechTokens,textTokens}
+            nova = ((raw.get("details") or {}).get("total") or {}).get(side)
+            if isinstance(nova, dict) and "speechTokens" in nova and "textTokens" in nova:
+                details = {"audio_tokens": nova["speechTokens"], "text_tokens": nova["textTokens"]}
         audio, text = (details or {}).get("audio_tokens"), (details or {}).get("text_tokens")
         cached_total = (details or {}).get("cached_tokens") or 0
         cached_by = (details or {}).get("cached_tokens_details") or {}

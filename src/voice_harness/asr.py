@@ -31,6 +31,7 @@ class AsrResult:
     backend: str
     model: str
     live: bool
+    usage: dict | None = None  # provider-returned usage, verbatim (None when the provider returned none)
 
 
 class AsrBackend(Protocol):
@@ -112,10 +113,12 @@ class OpenAITranscriptionAsr:
         if response.status_code != 200:
             raise AsrUnavailable(f"ASR_HTTP_{response.status_code}")
         try:
-            text = str(response.json().get("text", ""))
+            body = response.json()
+            text = str(body.get("text", ""))
         except ValueError:
             raise AsrUnavailable("ASR_MALFORMED_RESPONSE") from None
-        return AsrResult(text, self.name, self.model, True)
+        usage = body.get("usage")
+        return AsrResult(text, self.name, self.model, True, usage if isinstance(usage, dict) else None)
 
 
 def select_backend(environ=None, client=None) -> AsrBackend | None:

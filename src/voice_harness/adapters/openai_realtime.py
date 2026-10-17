@@ -391,7 +391,7 @@ class OpenAIRealtimeAdapter:
                 self._emit(Interrupted, item_id=iid, audio_end_ms=ms)
             if usage:
                 self._emit(Usage, input_tokens=usage.get("input_tokens"), output_tokens=usage.get("output_tokens"),
-                           raw=usage)
+                           raw={**usage, "response_status": resp.get("status")})
             self._emit(TurnEnd)
             self._response_id = None
             self._idle.set()
