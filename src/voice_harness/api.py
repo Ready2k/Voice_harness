@@ -29,6 +29,7 @@ from pydantic import ValidationError
 
 from .approvals import public_key
 from .clock_runtime import ClockSyncSession, invalidate_prior_connection
+from .auth import load_token, restrict_bundle, reviewer_may, role_for, tls_options
 from .contracts import AudioInputPayload, CancelRun, HoldRequest, RenewHold, RunConfig
 from .coverage import build_registry, summarize
 from .engine import Engine
@@ -37,20 +38,19 @@ from .inbound_queue import InboundQueue
 from .metrics import derive as derive_metrics
 from .scenario_defs import SCENARIOS, ScenarioDefinition, definition_hash
 from .scenarios import run_scenario
+from .shutdown import graceful_shutdown
 from .storage import Database
 from .verdicts import aggregate
 
 
-def create_app(database=None, root=None, token=None, recover=True):
+def create_app(
+    database=None, root=None, token=None, recover=True, reviewer_token=None
+):
     root = Path(root or os.environ.get("HARNESS_DATA", "/data"))
     root.mkdir(parents=True, exist_ok=True)
-    token_file = root / "operator-token"
     if token is None:
-        if not token_file.exists():
-            fd = os.open(token_file, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
-            with os.fdopen(fd, "w") as stream:
-                stream.write(secrets.token_urlsafe(32))
-        token = token_file.read_text().strip()
+        token = load_token(root, "operator-token")
+        reviewer_token = reviewer_token or load_token(root, "reviewer-token")
     database = database or Database(
         os.environ.get("HARNESS_DATABASE_URL", str(root / "development.sqlite"))
     )
@@ -67,6 +67,16 @@ def create_app(database=None, root=None, token=None, recover=True):
         try:
             with database.transaction(run_id) as tx:
                 if tx.state["state"] != "queued":
+                    return
+                # Mock capability probe: fixture providers have nothing to discover.
+                tx.state["state"] = "probing"
+                tx.event(
+                    "orchestrator",
+                    "run.probing",
+                    {"capability_status": "mock_only"},
+                )
+            with database.transaction(run_id) as tx:
+                if tx.state["state"] != "probing":
                     return
                 tx.state["state"] = "running"
                 tx.event("orchestrator", "run.running", {})
@@ -113,10 +123,13 @@ def create_app(database=None, root=None, token=None, recover=True):
 
         maintenance = asyncio.create_task(retention())
         yield
+        app.state.accepting = False  # stop intake before anything else
         maintenance.cancel()
         with suppress(asyncio.CancelledError):
             await maintenance
-        executor.shutdown(wait=True, cancel_futures=False)
+        await asyncio.to_thread(
+            graceful_shutdown, engine, evidence, database, executor
+        )
         traces.shutdown()
 
     app = FastAPI(
@@ -127,6 +140,7 @@ def create_app(database=None, root=None, token=None, recover=True):
     )
     app.state.engine, app.state.evidence = engine, evidence
     app.state.jobs = jobs
+    app.state.accepting = True
     client_assets = Path(__file__).resolve().parents[2] / "apps" / "web"
     if client_assets.exists():
         app.mount(
@@ -139,11 +153,13 @@ def create_app(database=None, root=None, token=None, recover=True):
         "http://127.0.0.1:8000",
     }
 
-    def auth(authorization: str | None = Header(default=None)):
-        if not authorization or not hmac.compare_digest(
-            authorization, "Bearer " + token
-        ):
+    def auth(request: Request, authorization: str | None = Header(default=None)):
+        role = role_for(authorization, token, reviewer_token)
+        if role is None:
             raise HTTPException(401, "AUTH_REQUIRED")
+        if role == "reviewer" and not reviewer_may(request.method):
+            raise HTTPException(403, "FORBIDDEN")
+        request.state.role = role
 
     @app.middleware("http")
     async def origin_policy(request: Request, call_next):
@@ -262,6 +278,8 @@ def create_app(database=None, root=None, token=None, recover=True):
     def launch(
         config: RunConfig, idempotency_key: str = Header(min_length=1, max_length=200)
     ):
+        if not app.state.accepting:
+            raise HTTPException(503, "SHUTTING_DOWN")
         run_ids = []
         with job_lock:
             with database.connection() as db:
@@ -287,6 +305,17 @@ def create_app(database=None, root=None, token=None, recover=True):
                     )
             run_ids.append(run_id)
         return {"run_ids": run_ids, "state": "queued", "schema_version": "0.3"}
+
+    def metric_summary(run_id, events):
+        observations = derive_metrics(events)
+        return {
+            "status": "derived_from_ledger",
+            "detail": "/api/v1/metrics/" + run_id,
+            "values": {o["metric"]: o["value"] for o in observations if o["value"] is not None},
+            "unavailable": {
+                o["metric"]: o["exclusion_reason"] for o in observations if o["value"] is None
+            },
+        }
 
     @app.get("/api/v1/runs/{run_id}", dependencies=[Depends(auth)])
     def get_run(run_id: str):
@@ -318,10 +347,7 @@ def create_app(database=None, root=None, token=None, recover=True):
             "started_at": events[0]["occurred_at"] if events else None,
             "ended_at": events[-1]["occurred_at"] if terminal and events else None,
             "termination_reason": reason if terminal else None,
-            "metric_summary": {
-                "status": "not_collected_per_run",
-                "reference": "artifacts/phase1-final-baseline.json",
-            },
+            "metric_summary": metric_summary(run_id, events),
             "evidence": {
                 "event_count": len(events),
                 "artifacts_total": len(state["artifacts"]),
@@ -361,8 +387,11 @@ def create_app(database=None, root=None, token=None, recover=True):
         }
 
     @app.get("/api/v1/runs/{run_id}/evidence", dependencies=[Depends(auth)])
-    def bundle(run_id: str):
-        return evidence.bundle(run_id)
+    def bundle(run_id: str, request: Request):
+        exported = evidence.bundle(run_id)
+        if request.state.role == "reviewer":
+            return restrict_bundle(exported)
+        return exported
 
     @app.post(
         "/api/v1/runs/{run_id}/preservation-holds",
@@ -741,9 +770,12 @@ def _input_event(database, run_id, samples, raw, epoch, stream_id):
 def serve():
     import uvicorn
 
+    host = os.environ.get("HARNESS_BIND", "127.0.0.1")
+    tls = tls_options(host)  # refuses a non-loopback bind without TLS
     uvicorn.run(
         create_app(),
-        host=os.environ.get("HARNESS_BIND", "127.0.0.1"),
+        host=host,
         port=8000,
         ws_max_size=16384,
+        **tls,
     )

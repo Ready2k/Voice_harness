@@ -11,10 +11,11 @@ from mcp.client.stdio import stdio_client
 from pydantic import ValidationError
 
 from .contracts import TOOLS, Result
+from .ratelimit import RateLimiter
 
 
 @asynccontextmanager
-async def gateway(engine, run_id):
+async def gateway(engine, run_id, limiter=None):
     from opentelemetry.propagate import inject
 
     carrier = {}
@@ -44,17 +45,23 @@ async def gateway(engine, run_id):
                         "bridge": "gateway_bridge",
                     },
                 )
-            yield Gateway(session, engine, run_id)
+            yield Gateway(session, engine, run_id, limiter)
 
 
 class Gateway:
-    def __init__(self, session, engine, run_id):
+    def __init__(self, session, engine, run_id, limiter=None):
         self.session, self.engine, self.run_id = session, engine, run_id
+        self.limiter = limiter or RateLimiter(
+            int(os.environ.get("HARNESS_TOOL_RATE_LIMIT", "60")),
+            float(os.environ.get("HARNESS_TOOL_RATE_WINDOW", "10")),
+        )
 
     async def tool(self, call_id, name, args):
         self.engine.prepare_tool(
             self.run_id, self.engine.context(self.run_id), call_id, name, args
         )
+        if not self.limiter.allow(self.run_id):
+            return self._rate_limited(call_id)
         try:
             TOOLS[name].model_validate(args)
         except (KeyError, ValidationError):
@@ -114,3 +121,26 @@ class Gateway:
                 },
             )
         return result
+
+    def _rate_limited(self, call_id):
+        """Reject before dispatch: nothing executes, the refusal is evidence."""
+        with self.engine.database.transaction(self.run_id) as tx:
+            call = tx.state["calls"][call_id]
+            if call["result"] is not None:
+                return call["result"]
+            requested = call["request_event_id"]
+            event = tx.event(
+                "mcp",
+                "tool.failed",
+                {"call_id": call_id, "status": "error", "error_code": "RATE_LIMITED"},
+                causes=[requested],
+            )
+            result = Result(
+                call_id=call_id,
+                status="error",
+                structured_content=None,
+                error_code="RATE_LIMITED",
+                evidence_event_ids=[event],
+            ).model_dump()
+            call["state"], call["result"] = "failed", result
+            return result

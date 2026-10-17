@@ -86,12 +86,29 @@ TOOLS = {
 }
 
 
+class ToolError(Closed):
+    """Spec section 8 error: catalogue code, retryable flag, safe message."""
+
+    code: str
+    retryable: bool
+    message: str
+
+
 class Result(Closed):
     call_id: Identifier
     status: Literal["success", "denied", "error", "cancelled", "outcome_unknown"]
     structured_content: dict | None
-    error_code: str | None
+    error_code: str | None  # internal diagnostic; error.code is the public catalogue code
     evidence_event_ids: list[Identifier]
+    error: ToolError | None = None
+
+    @model_validator(mode="after")
+    def _catalogue_error(self):
+        if self.error_code and self.error is None:
+            from .errors import tool_error
+
+            self.error = ToolError(**tool_error(self.error_code))
+        return self
 
 
 class CancelRun(Closed):

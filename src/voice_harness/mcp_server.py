@@ -43,8 +43,15 @@ async def main():
         result = await asyncio.to_thread(
             engine.tool, run_id, context, call_id, name, arguments or {}
         )
+        # Native MCP envelope carries only the safe catalogue error; the canonical
+        # ToolResult travels separately in structuredContent.
+        native = (
+            result["error"]
+            if result["status"] != "success" and result.get("error")
+            else result
+        )
         return CallToolResult(
-            content=[TextContent(type="text", text=json.dumps(result))],
+            content=[TextContent(type="text", text=json.dumps(native))],
             structuredContent=result,
             isError=result["status"] != "success",
         )
