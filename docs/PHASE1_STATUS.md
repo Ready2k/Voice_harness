@@ -1,6 +1,6 @@
 # Phase 1 acceptance status
 
-The canonical measurement artifact is now `artifacts/phase1-post-audit-baseline.json` (re-run on 2026-10-17 after the conformance audit changes: twelve PostgreSQL component profiles, `total_path` p95 **9.54–14.08 ms**, versus 6.22–12.08 ms before the audit; the increase is plausibly the RFC 8785 canonicalisation and added projections, not isolated). `artifacts/phase1-final-baseline.json` is the pre-audit measurement; similarly named earlier files are historical and are superseded for current measurement reporting.
+The canonical measurement artifact is now `artifacts/phase1-post-gap-baseline.json` (re-run on 2026-10-17 after the gap-closure merge: twelve PostgreSQL component profiles, `total_path` p95 **5.84-11.25 ms**; same 1 GiB container, so targets remain provisional). Previous: `artifacts/phase1-post-audit-baseline.json` (re-run on 2026-10-17 after the conformance audit changes: twelve PostgreSQL component profiles, `total_path` p95 **9.54–14.08 ms**, versus 6.22–12.08 ms before the audit; the increase is plausibly the RFC 8785 canonicalisation and added projections, not isolated). `artifacts/phase1-final-baseline.json` is the pre-audit measurement; similarly named earlier files are historical and are superseded for current measurement reporting.
 
 Phase 0 (verification and design) is tracked separately in `docs/phase0/`: capability report schema and probe CLI are implemented; the provider matrix is approved but every cell is `unknown` pending provider accounts.
 

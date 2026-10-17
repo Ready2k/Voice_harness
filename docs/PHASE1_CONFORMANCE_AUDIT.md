@@ -210,7 +210,7 @@ Remaining partial rows and why:
 - **DM-01:** no experiment key writer until AC-11; `human_reviews` has no write path; `sessions` lacks epoch/config hash. Migration 6 is untested on PostgreSQL until the Compose run.
 - **AP-01:** capability-probe, judgement and comparison endpoints belong to Phase 3.
 - **FN-04:** provider comparison is Phase 3 (AC-11).
-- **PF-01 / PH-02:** timing targets remain provisional (1 GiB container vs 16 GiB reference host; baseline must be re-run after the gap-closure changes).
+- **PF-01 / PH-02:** timing targets remain provisional (1 GiB container vs the 16 GiB reference host; post-gap-closure baseline recorded, total_path p95 5.84-11.25 ms).
 
 ## Residual risks
 
