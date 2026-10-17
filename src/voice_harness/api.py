@@ -537,6 +537,9 @@ def create_app(
     from .judges.api import register_judge_routes
 
     register_judge_routes(app, database, auth)
+    from .comparison_api import register_comparison_routes
+
+    register_comparison_routes(app, database, auth)
 
     @app.post("/api/v1/runs/{run_id}/ws-ticket", dependencies=[Depends(auth)])
     def ws_ticket(run_id: str):

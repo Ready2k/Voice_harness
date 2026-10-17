@@ -584,3 +584,44 @@ EVENT_CONTENT_CONTRACTS = {
 from .judges.events import JUDGE_EVENT_CONTRACTS  # noqa: E402
 
 EVENT_CONTENT_CONTRACTS.update(JUDGE_EVENT_CONTRACTS)
+
+# --- Phase 3: independent ASR assessment and adapter-run metrics (appended block) ---
+class AssessmentIndependentAsr(Closed):
+    unit_id: Identifier
+    replacement_unit_id: Identifier | None
+    backend: Identifier
+    model: Identifier
+    live: bool
+    assessment_scope: Literal["live_asr", "offline_fixture_not_live_evidence"]
+    audio_sha256: Hex64
+    transcript_sha256: Hex64
+    disposition: Literal["safe", "unsafe", "untestable"]
+    reason_codes: list[Identifier]
+    claims: Free
+    expected: Free
+    boundary: Identifier
+
+
+class AssessmentAsrUnavailable(Closed):
+    unit_id: Identifier
+    audio_sha256: Hex64
+    reason: Identifier
+    strict_speech_approval: Literal["unavailable"]
+
+
+class BenchmarkAdapterMetrics(Closed):
+    response_id: Identifier | None
+    unit_id: Identifier | None
+    source: Literal["adapter_events"]
+    clock_domain_id: Identifier
+    adapter_clock_domain_id: Identifier
+    metrics: list[Free]
+
+
+EVENT_CONTENT_CONTRACTS.update(
+    {
+        "assessment.independent_asr": AssessmentIndependentAsr,
+        "assessment.asr_unavailable": AssessmentAsrUnavailable,
+        "benchmark.adapter_metrics": BenchmarkAdapterMetrics,
+    }
+)

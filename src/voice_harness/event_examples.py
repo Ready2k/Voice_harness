@@ -188,4 +188,27 @@ def examples():
     from .judges.examples import judge_examples
 
     out.update(judge_examples())
+    # Phase 3 (appended block)
+    out.update(
+        {
+            "assessment.independent_asr": {
+                "unit_id": "unit_001", "replacement_unit_id": "unit_002", "backend": "scripted_offline",
+                "model": "scripted-v1", "live": False, "assessment_scope": "offline_fixture_not_live_evidence",
+                "audio_sha256": pcm, "transcript_sha256": _h("transcript"), "disposition": "safe",
+                "reason_codes": ["CLAIMS_MATCH_EXPECTED"],
+                "claims": {"amounts_minor": [15000], "dates": [], "ambiguities": []},
+                "expected": {"amounts_minor": [15000]}, "boundary": "whole_response_no_alignment",
+            },
+            "assessment.asr_unavailable": {
+                "unit_id": "unit_001", "audio_sha256": pcm, "reason": "NO_ASR_BACKEND_CONFIGURED",
+                "strict_speech_approval": "unavailable",
+            },
+            "benchmark.adapter_metrics": {
+                "response_id": "response_001", "unit_id": "unit_001", "source": "adapter_events",
+                "clock_domain_id": "process_fixture", "adapter_clock_domain_id": "process_fixture",
+                "metrics": [{"metric": "time_to_first_generated_audio", "unit": "ms", "value": 120.0,
+                             "exclusion_reason": None}],
+            },
+        }
+    )
     return out

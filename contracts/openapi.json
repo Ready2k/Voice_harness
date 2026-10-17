@@ -2145,6 +2145,208 @@
         }
       }
     },
+    "/api/v1/comparisons": {
+      "post": {
+        "summary": "Create Comparison",
+        "operationId": "create_comparison_api_v1_comparisons_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ComparisonRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "List Comparisons",
+        "operationId": "list_comparisons_api_v1_comparisons_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/comparisons/{comparison_id}": {
+      "get": {
+        "summary": "Get Comparison",
+        "operationId": "get_comparison_api_v1_comparisons__comparison_id__get",
+        "parameters": [
+          {
+            "name": "comparison_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Comparison Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/comparisons/{comparison_id}/export": {
+      "get": {
+        "summary": "Export Comparison",
+        "operationId": "export_comparison_api_v1_comparisons__comparison_id__export_get",
+        "parameters": [
+          {
+            "name": "comparison_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Comparison Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/runs/{run_id}/ws-ticket": {
       "post": {
         "summary": "Ws Ticket",
@@ -2333,6 +2535,86 @@
         ],
         "title": "ClaimBody"
       },
+      "ComparisonRequest": {
+        "properties": {
+          "providers": {
+            "items": {
+              "type": "string",
+              "maxLength": 200,
+              "minLength": 1
+            },
+            "type": "array",
+            "maxItems": 8,
+            "minItems": 2,
+            "title": "Providers"
+          },
+          "observations": {
+            "items": {
+              "$ref": "#/components/schemas/Observation"
+            },
+            "type": "array",
+            "maxItems": 20000,
+            "minItems": 1,
+            "title": "Observations"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "exploratory",
+              "version_pinned"
+            ],
+            "title": "Mode",
+            "default": "exploratory"
+          },
+          "seed": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seed"
+          },
+          "bootstrap_resamples": {
+            "type": "integer",
+            "maximum": 10000.0,
+            "minimum": 200.0,
+            "title": "Bootstrap Resamples",
+            "default": 2000
+          },
+          "planned_per_provider": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Planned Per Provider"
+          },
+          "predeclaration": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Predeclaration"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "providers",
+          "observations"
+        ],
+        "title": "ComparisonRequest"
+      },
       "CorrectionBody": {
         "properties": {
           "correction_id": {
@@ -2503,6 +2785,234 @@
         ],
         "title": "HoldRequest",
         "description": "Preservation hold: exactly one of finding_ids or an explicit run-wide scope."
+      },
+      "Observation": {
+        "properties": {
+          "provider": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Provider"
+          },
+          "model_alias": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Alias"
+          },
+          "resolved_version": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resolved Version"
+          },
+          "version_unresolved": {
+            "type": "boolean",
+            "title": "Version Unresolved",
+            "default": true
+          },
+          "scenario_id": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Scenario Id"
+          },
+          "scenario_version": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Scenario Version"
+          },
+          "audio_variant": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Audio Variant"
+          },
+          "fixture_seed": {
+            "type": "integer",
+            "title": "Fixture Seed"
+          },
+          "policy_profile": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Policy Profile"
+          },
+          "repetition": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Repetition"
+          },
+          "run_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Run Id"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "completed",
+              "failed",
+              "incomplete",
+              "timeout"
+            ],
+            "title": "Status",
+            "default": "completed"
+          },
+          "clock_uncertainty_ms": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Clock Uncertainty Ms"
+          },
+          "same_clock_domain": {
+            "type": "boolean",
+            "title": "Same Clock Domain",
+            "default": true
+          },
+          "unsupported_dimensions": {
+            "items": {
+              "type": "string",
+              "maxLength": 200,
+              "minLength": 1
+            },
+            "type": "array",
+            "title": "Unsupported Dimensions"
+          },
+          "latency_ms": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0.0
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "propertyNames": {
+              "maxLength": 200,
+              "minLength": 1
+            },
+            "type": "object",
+            "title": "Latency Ms"
+          },
+          "model_outcomes": {
+            "additionalProperties": {
+              "type": "string",
+              "enum": [
+                "occurred",
+                "not_occurred",
+                "untestable"
+              ]
+            },
+            "propertyNames": {
+              "maxLength": 200,
+              "minLength": 1
+            },
+            "type": "object",
+            "title": "Model Outcomes"
+          },
+          "platform_outcomes": {
+            "additionalProperties": {
+              "type": "string",
+              "enum": [
+                "occurred",
+                "not_occurred",
+                "untestable"
+              ]
+            },
+            "propertyNames": {
+              "maxLength": 200,
+              "minLength": 1
+            },
+            "type": "object",
+            "title": "Platform Outcomes"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "provider",
+          "scenario_id",
+          "scenario_version",
+          "audio_variant",
+          "fixture_seed",
+          "policy_profile",
+          "repetition"
+        ],
+        "title": "Observation"
+      },
+      "Predeclaration": {
+        "properties": {
+          "sample_size_per_provider": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Sample Size Per Provider"
+          },
+          "primary_endpoints": {
+            "items": {
+              "type": "string",
+              "maxLength": 200,
+              "minLength": 1
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Primary Endpoints"
+          },
+          "strata": {
+            "items": {
+              "type": "string",
+              "maxLength": 200,
+              "minLength": 1
+            },
+            "type": "array",
+            "title": "Strata"
+          },
+          "stopping_rules": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Stopping Rules"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "sample_size_per_provider",
+          "primary_endpoints",
+          "stopping_rules"
+        ],
+        "title": "Predeclaration"
       },
       "RenewHold": {
         "properties": {
