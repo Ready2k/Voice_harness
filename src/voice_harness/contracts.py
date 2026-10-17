@@ -395,6 +395,11 @@ class SimulatorBranchSelected(Closed):
     next_node: Identifier
     terminate: bool
     fallback_used: bool
+    # Model-driven selection only (AC-16): what was asked, what came back, and who failed.
+    prompt_hash: Sha256Prefixed | None = None
+    raw_choice_hash: Sha256Prefixed | None = None
+    simulator_failure: Identifier | None = None
+    failure_attribution: Literal["simulator"] | None = None
 
 
 class SimulatorUtteranceGenerated(Closed):

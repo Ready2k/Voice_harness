@@ -28,7 +28,7 @@
 ## Not yet established
 
 - Fault paths (`tool_error`, `tool_latency`, `caller_interrupts`) against a live provider; Nova runner use.
-- Model-driven customer simulator (AC-16). Synthetic commit (AC-15) is tested through the real MCP gateway with a scripted adapter (`tests/test_phase4_commit.py`: denial before identity/confirmation, single-use consumption, changed-amount invalidation, restart idempotency); a live model has not been driven to propose a commit.
+- Live-model chooser for the AC-16 simulator (`model_simulator.py` is offline-tested with an injected chooser: model picks branch, oracle rejected, bad output attributed to the simulator with fallback, hashed prompt/config recorded; no OpenAI chooser wired yet). Synthetic commit (AC-15) is tested through the real MCP gateway with a scripted adapter (`tests/test_phase4_commit.py`: denial before identity/confirmation, single-use consumption, changed-amount invalidation, restart idempotency); a live model has not been driven to propose a commit.
 - A first OpenAI vs Nova comparison on the catalogue (needs go-ahead for API spend).
 - The synthetic caller uses macOS `say`; the catalogue declares locales but `say` voice selection is not
   yet locale-aware. Narrowband/noise are simple synthetic shaping, not measured telephony.

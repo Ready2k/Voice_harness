@@ -122,6 +122,59 @@
     "fallback_used": {
       "title": "Fallback Used",
       "type": "boolean"
+    },
+    "prompt_hash": {
+      "anyOf": [
+        {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Prompt Hash"
+    },
+    "raw_choice_hash": {
+      "anyOf": [
+        {
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Raw Choice Hash"
+    },
+    "simulator_failure": {
+      "anyOf": [
+        {
+          "maxLength": 200,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Simulator Failure"
+    },
+    "failure_attribution": {
+      "anyOf": [
+        {
+          "const": "simulator",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Failure Attribution"
     }
   },
   "required": [
