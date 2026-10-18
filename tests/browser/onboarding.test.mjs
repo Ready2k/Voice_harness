@@ -2,19 +2,28 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { friendlyError, readinessItems, TOKEN_COMMAND } from "../../apps/web/onboarding.mjs";
 
-test("readiness turns each reason code into a fix, and shows unknown codes verbatim", () => {
-  const items = readinessItems({ items: [
-    { provider_config_id: "openai-realtime-live", available: true, reason: null },
-    { provider_config_id: "nova-sonic-live", available: false, reason: "NO_AWS_SESSION" },
-    { provider_config_id: "gemini-live", available: false, reason: "NO_GOOGLE_ADC" },
-    { provider_config_id: "x", available: false, reason: "SOMETHING_NEW" },
+test("readiness shows what every provider is waiting on once, then each provider's own gaps", () => {
+  const { shared, providers } = readinessItems({ items: [
+    { provider_config_id: "openai-realtime-live", available: false, reason: "NO_ASR_BACKEND_CONFIGURED", reasons: ["NO_ASR_BACKEND_CONFIGURED", "NO_CALLER_VOICE_SYNTH"] },
+    { provider_config_id: "nova-sonic-live", available: false, reason: "NO_ASR_BACKEND_CONFIGURED", reasons: ["NO_ASR_BACKEND_CONFIGURED", "NO_CALLER_VOICE_SYNTH", "NO_AWS_SESSION"] },
+    { provider_config_id: "gemini-live", available: false, reason: "NO_ASR_BACKEND_CONFIGURED", reasons: ["NO_ASR_BACKEND_CONFIGURED", "NO_CALLER_VOICE_SYNTH", "NO_GOOGLE_ADC", "SOMETHING_NEW"] },
   ] });
-  assert.deepEqual(items.map((i) => i.ready), [true, false, false, false]);
-  assert.equal(items[0].fix, null);
-  assert.match(items[1].fix, /aws-session\.sh/);
-  assert.match(items[2].fix, /application-default login/);
-  assert.equal(items[3].fix, "Unavailable: SOMETHING_NEW");
-  assert.deepEqual(readinessItems(undefined), []);
+  assert.deepEqual(shared.map((s) => s.code), ["NO_ASR_BACKEND_CONFIGURED", "NO_CALLER_VOICE_SYNTH"]);
+  assert.match(shared[0].fix, /make serve-live/);
+  assert.deepEqual(providers[0].fixes, []);
+  assert.match(providers[1].fixes[0], /aws-session\.sh/);
+  assert.match(providers[2].fixes[0], /application-default login/);
+  assert.equal(providers[2].fixes[1], "Unavailable: SOMETHING_NEW");
+});
+
+test("a ready provider has no fixes, nothing is shared when one is ready, and old payloads still work", () => {
+  const { shared, providers } = readinessItems({ items: [
+    { provider_config_id: "a", available: true, reason: null, reasons: [] },
+    { provider_config_id: "b", available: false, reason: "NO_XAI_API_KEY" },
+  ] });
+  assert.deepEqual(shared, []);
+  assert.deepEqual(providers.map((p) => [p.ready, p.fixes.length]), [[true, 0], [false, 1]]);
+  assert.deepEqual(readinessItems(undefined), { shared: [], providers: [] });
 });
 
 test("friendly errors explain a rejected token and an unreachable server, and keep other codes", () => {

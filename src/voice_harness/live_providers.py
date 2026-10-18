@@ -87,31 +87,43 @@ def _nova_env():
     return env
 
 
-def availability(provider_config_id, environ=None):
-    """(ok, reason). Strict speech approval needs a live ASR backend as well as the provider itself."""
+def requirements(provider_config_id, environ=None):
+    """Every reason code this config cannot run (empty when it can). Strict speech approval needs a live ASR backend
+    and a caller voice as well as the provider itself, so a provider can miss several things at once."""
     environ = os.environ if environ is None else environ
     if provider_config_id not in LIVE_PROVIDERS:
-        return False, "NOT_A_LIVE_PROVIDER"
+        return ["NOT_A_LIVE_PROVIDER"]
+    missing = []
     if environ.get(LIVE_FLAG) != "openai" or not environ.get("OPENAI_API_KEY"):
-        return False, "NO_ASR_BACKEND_CONFIGURED"
+        missing.append("NO_ASR_BACKEND_CONFIGURED")
     from .caller_voice import available as caller_voice_available
 
     voice_ok, voice_reason = caller_voice_available(environ)  # macOS say/afconvert default, or opt-in openai_tts
     if not voice_ok:
-        return False, voice_reason
-    if provider_config_id == "openai-realtime-live":
-        return True, None
+        missing.append(voice_reason)
     if provider_config_id == "xai-voice-live":
         from .adapters.xai_voice import KEY_ENV
 
-        return (True, None) if environ.get(KEY_ENV) else (False, "NO_XAI_API_KEY")
-    if provider_config_id == "gemini-live":
+        if not environ.get(KEY_ENV):
+            missing.append("NO_XAI_API_KEY")
+    elif provider_config_id == "gemini-live":
         from .adapters.google_gemini_live import credentials_available
 
-        return credentials_available(environ)  # ADC file + project id present; the token is fetched at session open
-    from .adapters.nova_sonic import SESSION_ENV
+        ok, reason = credentials_available(environ)  # ADC file + project id present; the token is fetched at session open
+        if not ok:
+            missing.append(reason)
+    elif provider_config_id == "nova-sonic-live":
+        from .adapters.nova_sonic import SESSION_ENV
 
-    return (True, None) if SESSION_ENV.exists() else (False, "NO_AWS_SESSION")
+        if not SESSION_ENV.exists():
+            missing.append("NO_AWS_SESSION")
+    return missing
+
+
+def availability(provider_config_id, environ=None):
+    """(ok, reason): the first missing requirement, in the order ASR, caller voice, provider."""
+    missing = requirements(provider_config_id, environ)
+    return (False, missing[0]) if missing else (True, None)
 
 
 FAMILIES = {"openai-realtime-live": "openai", "nova-sonic-live": "aws_nova_sonic", "xai-voice-live": "xai_grok_voice",

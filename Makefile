@@ -1,7 +1,7 @@
 # Secret file mode: 600 locally; CI runners need 644 so the non-root test container (different uid) can read it.
 SECRET_MODE ?= 600
 
-.PHONY: token nova-live-container lint audit build test golden recovery infra stop up init benchmark demo
+.PHONY: serve-live token-host token nova-live-container lint audit build test golden recovery infra stop up init benchmark demo
 
 init:
 	@mkdir -p .local
@@ -16,6 +16,23 @@ token:
 	@command -v pbcopy >/dev/null 2>&1 || { echo "no pbcopy: run 'docker compose exec -T api cat /data/operator-token' and copy the output yourself" >&2; exit 2; }
 	@t=$$(docker compose exec -T api cat /data/operator-token 2>/dev/null) && test -n "$$t" || { echo "could not read the token: is the API running? try 'make up'" >&2; exit 1; }; \
 	printf %s "$$t" | pbcopy && echo "Operator token copied to the clipboard. Paste it into the web page."
+
+# Live runs need a macOS host (say/afconvert caller voice), so run the API on the host, not in Compose.
+# Loads .env (KEY=value lines; values are never printed), uses its own data dir and port 8766, and does not touch Compose.
+serve-live:
+	@test -f .env || { echo "missing .env (OPENAI_API_KEY, xAI_API_KEY)" >&2; exit 2; }
+	@test -x .venv/bin/python || { echo "missing .venv: see CLAUDE.md local development" >&2; exit 2; }
+	@mkdir -p .local/host-data
+	@echo "Live API on http://127.0.0.1:8766/client/runs.html (get the token with: make token-host)"
+	@set -a; . ./.env; set +a; \
+	HARNESS_DATA="$(CURDIR)/.local/host-data" HARNESS_PORT=8766 VOICE_HARNESS_LIVE_ASR=openai PYTHONPATH=src \
+	.venv/bin/python -m voice_harness serve
+
+# Same as make token, for the host-run server (make serve-live); start it once so the token file exists.
+token-host:
+	@test -s .local/host-data/operator-token || { echo "no host token yet: start the server with 'make serve-live' first" >&2; exit 1; }
+	@command -v pbcopy >/dev/null 2>&1 || { echo "no pbcopy: copy .local/host-data/operator-token yourself" >&2; exit 2; }
+	@tr -d '\n' < .local/host-data/operator-token | pbcopy && echo "Host operator token copied to the clipboard. Paste it into the web page."
 
 demo:
 	docker compose exec -T api python -m voice_harness demo

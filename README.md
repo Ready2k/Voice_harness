@@ -43,7 +43,9 @@ Fixture audio is PCM silence with scripted transcript/assessment metadata. These
 
 ## Evidence and measurements
 
-Evidence persists in the voice-harness_evidence volume and PostgreSQL in voice-harness_postgres-data. The generated operator token is /data/operator-token (0600). `make token` copies it to the clipboard without printing it; the web pages explain this on first load. The database secret is .local/postgres-password, excluded from source and container builds. The deterministic core needs no provider credentials; live runs need provider keys and a macOS host (see the engineering guide).
+Evidence persists in the voice-harness_evidence volume and PostgreSQL in voice-harness_postgres-data. The generated operator token is /data/operator-token (0600). `make token` copies it to the clipboard without printing it; the web pages explain this on first load.
+
+Live provider runs need a macOS host, so run `make serve-live` (loads `.env`, own data dir under `.local/host-data`, port 8766, separate from Compose) and fetch its token with `make token-host`. The Runs page shows what each provider still needs. The database secret is .local/postgres-password, excluded from source and container builds. The deterministic core needs no provider credentials; live runs need provider keys and a macOS host (see the engineering guide).
 
 ```bash
 make benchmark

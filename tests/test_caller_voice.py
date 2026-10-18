@@ -41,6 +41,15 @@ class CallerVoiceTests(unittest.TestCase):
             self.assertEqual(live_providers.availability("openai-realtime-live", no_tts)[1], "NO_ASR_BACKEND_CONFIGURED")
             self.assertEqual(live_providers.availability("openai-realtime-live", LIVE)[1], "NO_CALLER_VOICE_SYNTH")
 
+    def test_requirements_lists_every_gap_and_availability_reports_the_first(self):
+        with mock.patch.object(cv, "_has_macos", return_value=False):
+            self.assertEqual(live_providers.requirements("openai-realtime-live", {}),
+                             ["NO_ASR_BACKEND_CONFIGURED", "NO_CALLER_VOICE_SYNTH"])
+            self.assertEqual(live_providers.requirements("xai-voice-live", {})[-1], "NO_XAI_API_KEY")
+            self.assertEqual(live_providers.availability("xai-voice-live", {}), (False, "NO_ASR_BACKEND_CONFIGURED"))
+            self.assertEqual(live_providers.requirements("openai-realtime-live", {**LIVE, cv.ENV: "openai_tts"}), [])
+        self.assertEqual(live_providers.requirements("nope", {}), ["NOT_A_LIVE_PROVIDER"])
+
     def test_tts_request_and_pcm(self):
         client = FakeClient(content=b"\x01\x00" * 10 + b"\x09")
         env = {**LIVE, cv.ENV: "openai_tts", "VOICE_HARNESS_CALLER_TTS_VOICE": "verse"}

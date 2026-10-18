@@ -165,6 +165,7 @@ class LiveApi(unittest.TestCase):
             scenario = next(i for i in client.get("/api/v1/scenarios", headers=self.headers).json()["items"] if i["scenario_id"] == LIVE)
         self.assertEqual({i["provider_config_id"] for i in items}, set(live_providers.LIVE_PROVIDERS))
         self.assertTrue(all(not i["available"] and i["reason"] == "NO_ASR_BACKEND_CONFIGURED" for i in items))
+        self.assertTrue(all(i["reasons"][0] == i["reason"] and "NO_ASR_BACKEND_CONFIGURED" in i["reasons"] for i in items))
         self.assertTrue(scenario["runnable"] and scenario["execution"] == "live_adapter")
 
     def test_scenario_and_provider_must_pair(self):

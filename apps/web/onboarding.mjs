@@ -4,21 +4,34 @@ export const TOKEN_COMMAND = "make token";
 export const TOKEN_FALLBACK = "docker compose exec -T api cat /data/operator-token";
 
 const FIXES = {
-  NO_ASR_BACKEND_CONFIGURED: "Set VOICE_HARNESS_LIVE_ASR=openai and OPENAI_API_KEY in the server's .env, then restart the server.",
-  NO_CALLER_VOICE_SYNTH: "No caller voice. Run the server on macOS (say and afconvert), or set VOICE_HARNESS_CALLER_VOICE=openai_tts.",
+  NO_ASR_BACKEND_CONFIGURED: "Set VOICE_HARNESS_LIVE_ASR=openai and OPENAI_API_KEY on the server. Run make serve-live on the host to load them from .env.",
+  NO_CALLER_VOICE_SYNTH: "This server has no caller voice (a container has no macOS speech tools). Run make serve-live on a Mac, or set VOICE_HARNESS_CALLER_VOICE=openai_tts.",
+  CALLER_VOICE_TTS_NOT_CONFIGURED: "openai_tts needs VOICE_HARNESS_LIVE_ASR=openai and OPENAI_API_KEY on the server.",
+  CALLER_VOICE_UNKNOWN_BACKEND: "VOICE_HARNESS_CALLER_VOICE must be macos or openai_tts.",
   NO_AWS_SESSION: "Start an AWS session on the server host: ./scripts/aws-session.sh <MFA code>.",
   NO_XAI_API_KEY: "Set xAI_API_KEY in the server's .env, then restart the server.",
   NO_GOOGLE_ADC: "Sign in on the server host: gcloud auth application-default login.",
   NO_GOOGLE_PROJECT: "Set GOOGLE_CLOUD_PROJECT on the server, or use ADC that carries a quota project.",
 };
 
-/** Pure: what to show for each live provider; an unknown reason code is shown as the code, never hidden. */
+const fixFor = (code) => FIXES[code] ?? "Unavailable: " + code;
+
+/** Pure: what every live provider is waiting on, then what each still needs on top of that.
+ * `shared` holds reason codes missing from every provider; they are shown once, not four times. */
 export function readinessItems(payload) {
-  return (payload?.items ?? []).map((p) => ({
+  const rows = (payload?.items ?? []).map((p) => ({
     id: p.provider_config_id,
     ready: Boolean(p.available),
-    fix: p.available ? null : (FIXES[p.reason] ?? "Unavailable: " + p.reason),
+    codes: p.available ? [] : (Array.isArray(p.reasons) && p.reasons.length ? p.reasons : [p.reason]),
   }));
+  const waiting = rows.filter((r) => !r.ready);
+  const shared = waiting.length === rows.length && rows.length
+    ? waiting[0].codes.filter((code) => waiting.every((r) => r.codes.includes(code))) : [];
+  return {
+    shared: shared.map((code) => ({ code, fix: fixFor(code) })),
+    providers: rows.map((r) => ({ id: r.id, ready: r.ready,
+      fixes: r.codes.filter((code) => !shared.includes(code)).map(fixFor) })),
+  };
 }
 
 /** Pure: a plain-language message for a failed request; the raw code is kept so nothing is hidden. */
@@ -48,8 +61,8 @@ export function renderGetStarted(root, open) {
   details.append(el("p", "", "The operator token is this harness's own password for its API. It is not an OpenAI, xAI, AWS or Google key, and provider keys never reach this page."));
   const list = el("ol");
   list.append(
-    step(["In a terminal in the project folder, start the harness: ", el("code", "", "make up")]),
-    step(["Copy the token to your clipboard without printing it: ", el("code", "", TOKEN_COMMAND)]),
+    step(["In a terminal in the project folder, start the harness: ", el("code", "", "make up"), " for scripted fixtures, or ", el("code", "", "make serve-live"), " on a Mac for live providers."]),
+    step(["Copy the token to your clipboard without printing it: ", el("code", "", TOKEN_COMMAND), " (", el("code", "", "make token-host"), " for the live server)."]),
     step(["Paste it into the token box above and choose Connect. It is kept for this browser tab only."]),
   );
   details.append(list);
@@ -59,13 +72,24 @@ export function renderGetStarted(root, open) {
 
 /** Readiness checklist for live providers; text only. */
 export function renderReadiness(root, payload) {
-  const items = readinessItems(payload);
+  const { shared, providers } = readinessItems(payload);
+  const parts = [];
+  if (shared.length) {
+    const box = el("div", "shared");
+    box.append(el("strong", "", "This server needs first (applies to every provider)"));
+    const ul = el("ul");
+    for (const s of shared) ul.append(el("li", "", s.fix));
+    box.append(ul);
+    parts.push(box);
+  }
   const list = el("ul", "checklist");
-  for (const item of items) {
-    const li = el("li", item.ready ? "ready" : "missing");
-    li.append(el("strong", "", (item.ready ? "Ready · " : "Needs setup · ") + item.id));
-    if (item.fix) li.append(el("span", "muted", item.fix));
+  for (const p of providers) {
+    const li = el("li", p.ready ? "ready" : "missing");
+    li.append(el("strong", "", (p.ready ? "Ready · " : "Needs setup · ") + p.id));
+    for (const fix of p.fixes) li.append(el("span", "muted", fix));
+    if (!p.ready && !p.fixes.length) li.append(el("span", "muted", "Nothing further beyond the server requirements above."));
     list.append(li);
   }
-  root.replaceChildren(items.length ? list : el("p", "muted", "No live providers are registered on this server."));
+  parts.push(providers.length ? list : el("p", "muted", "No live providers are registered on this server."));
+  root.replaceChildren(...parts);
 }

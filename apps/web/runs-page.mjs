@@ -96,6 +96,8 @@ async function connect() {
     options = launchOptions(await api(token, "/api/v1/scenarios"));
     const select = $("scenario");
     select.replaceChildren(...options.map((o, i) => Object.assign(el("option", "", o.label + (o.summary ? " - " + o.summary : "")), { value: String(i) })));
+    const scripted = options.findIndex((o) => !o.live);
+    if (scripted >= 0) select.value = String(scripted); // start on a fixture that needs no provider setup
     const liveProviders = await api(token, "/api/v1/live-providers");
     providers = providerChoices(liveProviders);
     renderReadiness($("checklist"), liveProviders);

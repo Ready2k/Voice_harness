@@ -258,6 +258,8 @@ def create_app(
         "http://localhost:8000",
         "http://127.0.0.1:8000",
     }
+    if os.environ.get("HARNESS_PORT", "").isdigit():  # the page is same-origin on whatever port the server runs on
+        origins |= {f"http://localhost:{os.environ['HARNESS_PORT']}", f"http://127.0.0.1:{os.environ['HARNESS_PORT']}"}
 
     def auth(request: Request, authorization: str | None = Header(default=None)):
         role = role_for(authorization, token, reviewer_token)
@@ -343,8 +345,9 @@ def create_app(
         """Which live provider configs this deployment can run; reasons are codes, never credentials."""
         items = []
         for provider_config_id in live_providers.LIVE_PROVIDERS:
-            ok, reason = live_providers.availability(provider_config_id)
-            items.append({"provider_config_id": provider_config_id, "available": ok, "reason": reason})
+            missing = live_providers.requirements(provider_config_id)
+            items.append({"provider_config_id": provider_config_id, "available": not missing,
+                          "reason": missing[0] if missing else None, "reasons": missing})
         backends, unavailable = live_providers.auto_judges()
         judges = [{"backend": b.config.provider, "model_id": b.config.model_id, "available": True} for b in backends]
         judges += [{"backend": u["backend"], "available": False, "reason": u["reason"]} for u in unavailable]
@@ -1004,11 +1007,12 @@ def serve():
     import uvicorn
 
     host = os.environ.get("HARNESS_BIND", "127.0.0.1")
+    port = int(os.environ.get("HARNESS_PORT", "8000"))  # a host run beside the Compose API needs a different port
     tls = tls_options(host)  # refuses a non-loopback bind without TLS
     uvicorn.run(
         create_app(),
         host=host,
-        port=8000,
+        port=port,
         ws_max_size=16384,
         **tls,
     )
