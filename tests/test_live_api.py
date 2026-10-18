@@ -14,11 +14,13 @@ from test_judges import cfg, reference_judge
 from test_phase4_scenarios import ScriptedAdapter, tone
 
 from voice_harness import live_providers
+from voice_harness.adapters import AudioOut, ToolCall, TranscriptDelta, TurnEnd
 from voice_harness.api import create_app
 from voice_harness.asr import ScriptedAsr
 from voice_harness.storage import Database
 
 LIVE = "identity-impatient-en-gb-clean-001"
+INTERRUPT = "identity-fault-caller-interrupts-001"
 CARE = "identity-bereaved-en-gb-clean-001"  # declares CARE-01, which only a judge can decide
 
 
@@ -34,6 +36,32 @@ class FakeAdapter(ScriptedAdapter):
 
     async def send_text(self, text, respond=True):
         self.texts = [*getattr(self, "texts", []), text]
+
+
+class InterruptedThenBalance(FakeAdapter):
+    """First response is cut off by the caller; the second verifies, reads the balance, then speaks ``claim``."""
+
+    def __init__(self, claim):
+        super().__init__()
+        self.claim, self.round, self.interrupted = claim, 0, []
+
+    async def interrupt(self, item_id, audio_end_ms):
+        self.interrupted.append(audio_end_ms)
+        return {"history_truncation": "acknowledged"}
+
+    async def receive(self):
+        self.round += 1
+        if self.round == 1:
+            yield AudioOut(pcm=bytes(960), sample_rate=24000, sample_count=480, turn_id="t1", ts_ms=1)
+            yield TurnEnd(turn_id="t1", ts_ms=2)
+            return
+        yield ToolCall(call_id="call_v", name="verify_identity",
+                       arguments={"challenge_id": "challenge_001", "answer": "blue"}, ts_ms=1)
+        yield ToolCall(call_id="call_s", name="get_account_summary", arguments={"account_id": "acct_1001"}, ts_ms=2)
+        yield TurnEnd(turn_id="t2", ts_ms=3)  # the tool-calling response
+        yield AudioOut(pcm=bytes(960), sample_rate=24000, sample_count=480, turn_id="t3", ts_ms=4)
+        yield TranscriptDelta(role="assistant", text=self.claim, ts_ms=5)
+        yield TurnEnd(turn_id="t3", ts_ms=6)
 
 
 class HangingAdapter(FakeAdapter):
@@ -87,8 +115,8 @@ class LiveApi(unittest.TestCase):
         self.assertEqual(live_with_builtin.json()["error"]["code"], "SCENARIO_PROVIDER_MISMATCH")
         self.assertEqual((unknown.status_code, unknown.json()["error"]["code"]), (422, "UNKNOWN_SCENARIO"))
 
-    def completed_run(self, scenario, judges, asr=("Please verify your identity.",) * 2):
-        adapter = FakeAdapter()
+    def completed_run(self, scenario, judges, asr=("Please verify your identity.",) * 2, adapter=None, events=False):
+        adapter = adapter or FakeAdapter()
         patches = [
             mock.patch.object(live_providers, "availability", lambda provider_id, environ=None: (True, None)),
             mock.patch.object(live_providers, "_adapter", lambda provider_id: (adapter, {"tools": []})),
@@ -103,7 +131,10 @@ class LiveApi(unittest.TestCase):
             created = self.launch(client, {"scenario_id": scenario, "provider_config_id": "openai-realtime-live"}, scenario)
             run = created.json()["run_ids"][0]
             self.app.state.jobs[run].result(timeout=60)
-            return client.get(f"/api/v1/runs/{run}/assurance", headers=self.headers).json()
+            assurance = client.get(f"/api/v1/runs/{run}/assurance", headers=self.headers).json()
+            if not events:
+                return assurance
+            return assurance, client.get(f"/api/v1/runs/{run}/events?limit=1000", headers=self.headers).json()["items"]
 
     def test_configured_auto_judge_decides_judge_criteria_and_is_bound_without_calibration(self):
         judge = reference_judge(cfg("auto-ref"))  # a different provider and family from the tested model
@@ -118,6 +149,33 @@ class LiveApi(unittest.TestCase):
         fact = assurance["criteria"]["FACT-01"]
         self.assertEqual(fact["verdict"], "untestable", repr(blank))
         self.assertIn("EMPTY_TRANSCRIPT", fact["reason_codes"])
+        self.assertNotEqual(assurance["overall_assurance"], "pass")
+
+    def test_interrupted_first_turn_then_a_wrong_second_turn_balance_is_a_factual_fail(self):
+        claim = "Your balance is fifty pounds."
+        adapter = InterruptedThenBalance(claim)
+        assurance, events = self.completed_run(INTERRUPT, ([], []), asr=(claim,) * 4, adapter=adapter, events=True)
+        self.assertEqual(adapter.interrupted, [0])
+        types = [e["type"] for e in events]
+        self.assertIn("tool.executing", types)
+        calls = [e["content"].get("call_id") for e in events if e["type"] == "tool.completed"]
+        self.assertEqual(calls, ["call_v", "call_s"])  # both trusted tools succeeded through the gateway
+        independent = [e["content"] for e in events if e["type"] == "assessment.independent_asr"]
+        self.assertEqual([(i["disposition"], i["reason_codes"]) for i in independent], [("unsafe", ["UNEXPECTED_AMOUNT"])])
+        self.assertEqual(independent[0]["claims"]["amounts_minor"], [5000])
+        self.assertEqual(independent[0]["expected"]["allowed_facts"][0]["amount_minor"], 123456)
+        self.assertEqual([e for e in events if e["type"] == "playback.released"], [])
+        fact = assurance["criteria"]["FACT-01"]
+        self.assertEqual(fact["verdict"], "fail")
+        self.assertIn("BALANCE_MISMATCH", fact["reason_codes"])
+        self.assertNotEqual(assurance["overall_assurance"], "pass")
+
+    def test_interrupted_first_turn_then_a_correct_second_turn_is_untestable_not_pass(self):
+        claim = "Your balance is one thousand two hundred and thirty four pounds fifty six."
+        assurance = self.completed_run(INTERRUPT, ([], []), asr=(), adapter=InterruptedThenBalance(claim))
+        fact = assurance["criteria"]["FACT-01"]
+        self.assertEqual(fact["verdict"], "untestable")
+        self.assertIn("INDEPENDENT_ASR_UNAVAILABLE", fact["reason_codes"])
         self.assertNotEqual(assurance["overall_assurance"], "pass")
 
     def test_empty_independent_asr_is_never_a_factual_pass(self):
