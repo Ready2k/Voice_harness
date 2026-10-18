@@ -1,0 +1,798 @@
+{
+ "schema_version": "1",
+ "study_type": "matched_component_benchmark_single_pair_plus_prior_artifact",
+ "generated_at_utc": "2026-10-18T17:50:00Z",
+ "refs": {
+  "new": "37732bb325cdbeb57e762d0cfcd95b30a35c085f",
+  "reference": "89fa78f9fdf6e68673c409b1080a9a5fbb06403f"
+ },
+ "provenance": {
+  "method": "Same as the 89fa78f study: docker compose run --build --rm --no-deps -T benchmark benchmark --observations 1000 (the make benchmark target), immutable git-archive build contexts, same compose.yaml/Dockerfile/pinned postgres 17.6 image, 8 vCPU quota, 1 GiB cap, fresh database per arm, sequential runs.",
+  "dataset": "Synthetic PCM silence; 12 component profiles (1/5/10 sessions x 1x/4x payload x instrumentation off/on) x 1000 observations, 20 ms pacing, 10 warmup/worker; plus 3 TCP WebSocket profiles x 1000.",
+  "order_seed": 20261018,
+  "order": [
+   "89fa78f",
+   "37732bb"
+  ],
+  "order_rule": "random.Random(20261018).shuffle([37732bb, 89fa78f])",
+  "host": "macOS (Darwin 27.0.0) running Docker Engine 29.2.1 on OrbStack; container Linux-7.2.9-orbstack aarch64, python 3.13.9, 12 CPUs visible, cgroup cpu.max 800000/100000, memory 1073741824, storage postgresql",
+  "differences_from_prior_study": [
+   "Control arm (89fa78f) re-run in this session; the earlier 89fa78f artifact is a third reference.",
+   "Separate compose project and PostgreSQL container (vhm37), so cache/state differs from the earlier study.",
+   "Compared revision is 37732bb, not 31ccddd.",
+   "Host background load not instrumented, as before."
+  ],
+  "arms": {
+   "new": {
+    "commit": "37732bb",
+    "database": "vh_37732bb",
+    "image_id": "sha256:461aae21898215a8b15321caf86359408e54afebb61c320506f1dd8b8ed0509b",
+    "started_at_utc": "2026-10-18T17:39:21Z",
+    "completed_at_utc": "2026-10-18T17:41:42Z",
+    "artifact": "artifacts/matched-latency-37732bb-2026-10-18.json",
+    "artifact_sha256": "dae9877fd53bd15b8f5405042c74aeafad15ebab2f12509a94014de4db465676",
+    "source_hash": "b5b35535cee9582c2fd9ff4f903316a7923674c614054c8005019201387103ac",
+    "config_hash": "184d582ae593711e4323f8f3b47dd899ad0606368bd69b6cbbb0385b7e7c17a4",
+    "environment_hash": "099ee1ac70ebf2b923d978e770e9e576933d31d0ccade7cb379160c921486a4a"
+   },
+   "control": {
+    "commit": "89fa78f",
+    "database": "vh_89fa78f",
+    "image_id": "sha256:e6da0b8e09cbe320b892de147cabb8b9748eaed603ede64018e58dbe9d84e45b",
+    "started_at_utc": "2026-10-18T17:37:01Z",
+    "completed_at_utc": "2026-10-18T17:39:20Z",
+    "artifact": "artifacts/matched-latency-89fa78f-control-rerun-2026-10-18.json",
+    "artifact_sha256": "d6a3f06b1f290fb30662e1bb6265f6bb20a6b1c048c899f7e351e7cb3eaf0f14",
+    "source_hash": "b20998395830894e736af3defd3b16b265b113ae7cfa28872292f2c6ec8f000b",
+    "config_hash": "184d582ae593711e4323f8f3b47dd899ad0606368bd69b6cbbb0385b7e7c17a4",
+    "environment_hash": "07cbff235c3df345b3c6393b6e3f9b6ff478b7cdbf62150d1aefb23c290f6400"
+   },
+   "prior_89fa78f": {
+    "artifact": "matched-latency-89fa78f-2026-10-18.json (untracked, main checkout artifacts/)",
+    "artifact_sha256": "4543a9dfcbc1e6c511c0c74ce6563028f3e9c87ce3b184e02f509f20e4387e26",
+    "source_hash": "b20998395830894e736af3defd3b16b265b113ae7cfa28872292f2c6ec8f000b",
+    "config_hash": "184d582ae593711e4323f8f3b47dd899ad0606368bd69b6cbbb0385b7e7c17a4"
+   }
+  }
+ },
+ "counts": {
+  "component_profiles": 12,
+  "observations_per_profile": 1000,
+  "websocket_profiles": 3,
+  "websocket_observations_per_profile": 1000,
+  "websocket_failures_discontinuities_new": [
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    0
+   ],
+   [
+    0,
+    0
+   ]
+  ]
+ },
+ "total_path_p95_new_vs_same_session_control": {
+  "summary": {
+   "n": 12,
+   "higher": 3,
+   "lower": 9,
+   "max_increase_ms": 2.355998,
+   "max_decrease_ms": -105.889499,
+   "median_change_percent": -12.67
+  },
+  "profiles": [
+   {
+    "sessions": 1,
+    "payload_scale": 1,
+    "instrumented": false,
+    "samples": [
+     1000,
+     1000
+    ],
+    "ref_p95_ms": 5.422204,
+    "new_p95_ms": 7.13662,
+    "diff_ms": 1.714416,
+    "change_percent": 31.62
+   },
+   {
+    "sessions": 1,
+    "payload_scale": 1,
+    "instrumented": true,
+    "samples": [
+     1000,
+     1000
+    ],
+    "ref_p95_ms": 7.146911,
+    "new_p95_ms": 5.017829,
+    "diff_ms": -2.129082,
+    "change_percent": -29.79
+   },
+   {
+    "sessions": 1,
+    "payload_scale": 4,
+    "instrumented": false,
+    "samples": [
+     1000,
+     1000
+    ],
+    "ref_p95_ms": 7.48416,
+    "new_p95_ms": 4.607038,
+    "diff_ms": -2.877122,
+    "change_percent": -38.44
+   },
+   {
+    "sessions": 1,
+    "payload_scale": 4,
+    "instrumented": true,
+    "samples": [
+     1000,
+     1000
+    ],
+    "ref_p95_ms": 7.79266,
+    "new_p95_ms": 6.700036,
+    "diff_ms": -1.092624,
+    "change_percent": -14.02
+   },
+   {
+    "sessions": 5,
+    "payload_scale": 1,
+    "instrumented": false,
+    "samples": [
+     1000,
+     1000
+    ],
+    "ref_p95_ms": 9.498076,
+    "new_p95_ms": 8.301827,
+    "diff_ms": -1.196249,
+    "change_percent": -12.59
+   },
+   {
+    "sessions": 5,
+    "payload_scale": 1,
+    "instrumented": true,
+    "samples": [
+     1000,
+     1000
+    ],
+    "ref_p95_ms": 7.064077,
+    "new_p95_ms": 5.502079,
+    "diff_ms": -1.561998,
+    "change_percent": -22.11
+   },
+   {
+    "sessions": 5,
+    "payload_scale": 4,
+    "instrumented": false,
+    "samples": [
+     1000,
+     1000
+    ],
+    "ref_p95_ms": 9.43416,
+    "new_p95_ms": 8.610409,
+    "diff_ms": -0.823751,
+    "change_percent": -8.73
+   },
+   {
+    "sessions": 5,
+    "payload_scale": 4,
+    "instrumented": true,
+    "samples": [
+     1000,
+     1000
+    ],
+    "ref_p95_ms": 10.770992,
+    "new_p95_ms": 13.12699,
+    "diff_ms": 2.355998,
+    "change_percent": 21.87
+   },
+   {
+    "sessions": 10,
+    "payload_scale": 1,
+    "instrumented": false,
+    "samples": [
+     1000,
+     1000
+    ],
+    "ref_p95_ms": 6.029329,
+    "new_p95_ms": 6.13637,
+    "diff_ms": 0.107041,
+    "change_percent": 1.78
+   },
+   {
+    "sessions": 10,
+    "payload_scale": 1,
+    "instrumented": true,
+    "samples": [
+     1000,
+     1000
+    ],
+    "ref_p95_ms": 8.933743,
+    "new_p95_ms": 7.801494,
+    "diff_ms": -1.132249,
+    "change_percent": -12.67
+   },
+   {
+    "sessions": 10,
+    "payload_scale": 4,
+    "instrumented": false,
+    "samples": [
+     1000,
+     1000
+    ],
+    "ref_p95_ms": 11.669949,
+    "new_p95_ms": 6.178745,
+    "diff_ms": -5.491204,
+    "change_percent": -47.05
+   },
+   {
+    "sessions": 10,
+    "payload_scale": 4,
+    "instrumented": true,
+    "samples": [
+     1000,
+     1000
+    ],
+    "ref_p95_ms": 112.358536,
+    "new_p95_ms": 6.469037,
+    "diff_ms": -105.889499,
+    "change_percent": -94.24
+   }
+  ]
+ },
+ "total_path_p95_new_vs_prior_89fa78f_artifact": {
+  "summary": {
+   "n": 12,
+   "higher": 1,
+   "lower": 11,
+   "max_increase_ms": 0.441397,
+   "max_decrease_ms": -8.681649,
+   "median_change_percent": -37.3
+  },
+  "profiles": [
+   {
+    "sessions": 1,
+    "payload_scale": 1,
+    "instrumented": false,
+    "samples": [
+     1000,
+     1000
+    ],
+    "ref_p95_ms": 12.495397,
+    "new_p95_ms": 7.13662,
+    "diff_ms": -5.358777,
+    "change_percent": -42.89
+   },
+   {
+    "sessions": 1,
+    "payload_scale": 1,
+    "instrumented": true,
+    "samples": [
+     1000,
+     1000
+    ],
+    "ref_p95_ms": 13.699478,
+    "new_p95_ms": 5.017829,
+    "diff_ms": -8.681649,
+    "change_percent": -63.37
+   },
+   {
+    "sessions": 1,
+    "payload_scale": 4,
+    "instrumented": false,
+    "samples": [
+     1000,
+     1000
+    ],
+    "ref_p95_ms": 11.216191,
+    "new_p95_ms": 4.607038,
+    "diff_ms": -6.609153,
+    "change_percent": -58.93
+   },
+   {
+    "sessions": 1,
+    "payload_scale": 4,
+    "instrumented": true,
+    "samples": [
+     1000,
+     1000
+    ],
+    "ref_p95_ms": 12.080231,
+    "new_p95_ms": 6.700036,
+    "diff_ms": -5.380195,
+    "change_percent": -44.54
+   },
+   {
+    "sessions": 5,
+    "payload_scale": 1,
+    "instrumented": false,
+    "samples": [
+     1000,
+     1000
+    ],
+    "ref_p95_ms": 12.217635,
+    "new_p95_ms": 8.301827,
+    "diff_ms": -3.915808,
+    "change_percent": -32.05
+   },
+   {
+    "sessions": 5,
+    "payload_scale": 1,
+    "instrumented": true,
+    "samples": [
+     1000,
+     1000
+    ],
+    "ref_p95_ms": 12.814052,
+    "new_p95_ms": 5.502079,
+    "diff_ms": -7.311973,
+    "change_percent": -57.06
+   },
+   {
+    "sessions": 5,
+    "payload_scale": 4,
+    "instrumented": false,
+    "samples": [
+     1000,
+     1000
+    ],
+    "ref_p95_ms": 13.182261,
+    "new_p95_ms": 8.610409,
+    "diff_ms": -4.571852,
+    "change_percent": -34.68
+   },
+   {
+    "sessions": 5,
+    "payload_scale": 4,
+    "instrumented": true,
+    "samples": [
+     1000,
+     1000
+    ],
+    "ref_p95_ms": 12.685593,
+    "new_p95_ms": 13.12699,
+    "diff_ms": 0.441397,
+    "change_percent": 3.48
+   },
+   {
+    "sessions": 10,
+    "payload_scale": 1,
+    "instrumented": false,
+    "samples": [
+     1000,
+     1000
+    ],
+    "ref_p95_ms": 10.2408,
+    "new_p95_ms": 6.13637,
+    "diff_ms": -4.10443,
+    "change_percent": -40.08
+   },
+   {
+    "sessions": 10,
+    "payload_scale": 1,
+    "instrumented": true,
+    "samples": [
+     1000,
+     1000
+    ],
+    "ref_p95_ms": 9.500591,
+    "new_p95_ms": 7.801494,
+    "diff_ms": -1.699097,
+    "change_percent": -17.88
+   },
+   {
+    "sessions": 10,
+    "payload_scale": 4,
+    "instrumented": false,
+    "samples": [
+     1000,
+     1000
+    ],
+    "ref_p95_ms": 9.854883,
+    "new_p95_ms": 6.178745,
+    "diff_ms": -3.676138,
+    "change_percent": -37.3
+   },
+   {
+    "sessions": 10,
+    "payload_scale": 4,
+    "instrumented": true,
+    "samples": [
+     1000,
+     1000
+    ],
+    "ref_p95_ms": 10.011175,
+    "new_p95_ms": 6.469037,
+    "diff_ms": -3.542138,
+    "change_percent": -35.38
+   }
+  ]
+ },
+ "noise_floor_control_rerun_vs_prior_89fa78f_artifact_same_source": {
+  "summary": {
+   "n": 12,
+   "higher": 2,
+   "lower": 10,
+   "max_increase_ms": 102.347361,
+   "max_decrease_ms": -7.073193,
+   "median_change_percent": -28.43
+  },
+  "profiles": [
+   {
+    "sessions": 1,
+    "payload_scale": 1,
+    "instrumented": false,
+    "samples": [
+     1000,
+     1000
+    ],
+    "ref_p95_ms": 12.495397,
+    "new_p95_ms": 5.422204,
+    "diff_ms": -7.073193,
+    "change_percent": -56.61
+   },
+   {
+    "sessions": 1,
+    "payload_scale": 1,
+    "instrumented": true,
+    "samples": [
+     1000,
+     1000
+    ],
+    "ref_p95_ms": 13.699478,
+    "new_p95_ms": 7.146911,
+    "diff_ms": -6.552567,
+    "change_percent": -47.83
+   },
+   {
+    "sessions": 1,
+    "payload_scale": 4,
+    "instrumented": false,
+    "samples": [
+     1000,
+     1000
+    ],
+    "ref_p95_ms": 11.216191,
+    "new_p95_ms": 7.48416,
+    "diff_ms": -3.732031,
+    "change_percent": -33.27
+   },
+   {
+    "sessions": 1,
+    "payload_scale": 4,
+    "instrumented": true,
+    "samples": [
+     1000,
+     1000
+    ],
+    "ref_p95_ms": 12.080231,
+    "new_p95_ms": 7.79266,
+    "diff_ms": -4.287571,
+    "change_percent": -35.49
+   },
+   {
+    "sessions": 5,
+    "payload_scale": 1,
+    "instrumented": false,
+    "samples": [
+     1000,
+     1000
+    ],
+    "ref_p95_ms": 12.217635,
+    "new_p95_ms": 9.498076,
+    "diff_ms": -2.719559,
+    "change_percent": -22.26
+   },
+   {
+    "sessions": 5,
+    "payload_scale": 1,
+    "instrumented": true,
+    "samples": [
+     1000,
+     1000
+    ],
+    "ref_p95_ms": 12.814052,
+    "new_p95_ms": 7.064077,
+    "diff_ms": -5.749975,
+    "change_percent": -44.87
+   },
+   {
+    "sessions": 5,
+    "payload_scale": 4,
+    "instrumented": false,
+    "samples": [
+     1000,
+     1000
+    ],
+    "ref_p95_ms": 13.182261,
+    "new_p95_ms": 9.43416,
+    "diff_ms": -3.748101,
+    "change_percent": -28.43
+   },
+   {
+    "sessions": 5,
+    "payload_scale": 4,
+    "instrumented": true,
+    "samples": [
+     1000,
+     1000
+    ],
+    "ref_p95_ms": 12.685593,
+    "new_p95_ms": 10.770992,
+    "diff_ms": -1.914601,
+    "change_percent": -15.09
+   },
+   {
+    "sessions": 10,
+    "payload_scale": 1,
+    "instrumented": false,
+    "samples": [
+     1000,
+     1000
+    ],
+    "ref_p95_ms": 10.2408,
+    "new_p95_ms": 6.029329,
+    "diff_ms": -4.211471,
+    "change_percent": -41.12
+   },
+   {
+    "sessions": 10,
+    "payload_scale": 1,
+    "instrumented": true,
+    "samples": [
+     1000,
+     1000
+    ],
+    "ref_p95_ms": 9.500591,
+    "new_p95_ms": 8.933743,
+    "diff_ms": -0.566848,
+    "change_percent": -5.97
+   },
+   {
+    "sessions": 10,
+    "payload_scale": 4,
+    "instrumented": false,
+    "samples": [
+     1000,
+     1000
+    ],
+    "ref_p95_ms": 9.854883,
+    "new_p95_ms": 11.669949,
+    "diff_ms": 1.815066,
+    "change_percent": 18.42
+   },
+   {
+    "sessions": 10,
+    "payload_scale": 4,
+    "instrumented": true,
+    "samples": [
+     1000,
+     1000
+    ],
+    "ref_p95_ms": 10.011175,
+    "new_p95_ms": 112.358536,
+    "diff_ms": 102.347361,
+    "change_percent": 1022.33
+   }
+  ]
+ },
+ "stage_max_p95_ms": {
+  "durable_write": {
+   "prior_89fa78f": 12.627521,
+   "control_rerun": 111.338537,
+   "new_37732bb": 12.060949
+  },
+  "policy_evaluation": {
+   "prior_89fa78f": 0.030292,
+   "control_rerun": 0.023208,
+   "new_37732bb": 0.016041
+  },
+  "total_path": {
+   "prior_89fa78f": 13.699478,
+   "control_rerun": 112.358536,
+   "new_37732bb": 13.12699
+  }
+ },
+ "websocket_p95_new_vs_same_session_control": [
+  {
+   "sessions": 1,
+   "samples": [
+    1000,
+    1000
+   ],
+   "ref_p95_ms": 9.018743,
+   "new_p95_ms": 8.700368,
+   "diff_ms": -0.318375,
+   "change_percent": -3.53,
+   "failures": [
+    0,
+    0
+   ],
+   "discontinuities": [
+    0,
+    0
+   ]
+  },
+  {
+   "sessions": 5,
+   "samples": [
+    1000,
+    1000
+   ],
+   "ref_p95_ms": 40.284218,
+   "new_p95_ms": 5.454495,
+   "diff_ms": -34.829723,
+   "change_percent": -86.46,
+   "failures": [
+    0,
+    0
+   ],
+   "discontinuities": [
+    0,
+    0
+   ]
+  },
+  {
+   "sessions": 10,
+   "samples": [
+    1000,
+    1000
+   ],
+   "ref_p95_ms": 29.241268,
+   "new_p95_ms": 4.281622,
+   "diff_ms": -24.959646,
+   "change_percent": -85.36,
+   "failures": [
+    0,
+    0
+   ],
+   "discontinuities": [
+    0,
+    0
+   ]
+  }
+ ],
+ "websocket_p95_new_vs_prior_89fa78f_artifact": [
+  {
+   "sessions": 1,
+   "samples": [
+    1000,
+    1000
+   ],
+   "ref_p95_ms": 10.937759,
+   "new_p95_ms": 8.700368,
+   "diff_ms": -2.237391,
+   "change_percent": -20.46,
+   "failures": [
+    0,
+    0
+   ],
+   "discontinuities": [
+    0,
+    0
+   ]
+  },
+  {
+   "sessions": 5,
+   "samples": [
+    1000,
+    1000
+   ],
+   "ref_p95_ms": 6.142075,
+   "new_p95_ms": 5.454495,
+   "diff_ms": -0.68758,
+   "change_percent": -11.19,
+   "failures": [
+    0,
+    0
+   ],
+   "discontinuities": [
+    0,
+    0
+   ]
+  },
+  {
+   "sessions": 10,
+   "samples": [
+    1000,
+    1000
+   ],
+   "ref_p95_ms": 14.208439,
+   "new_p95_ms": 4.281622,
+   "diff_ms": -9.926817,
+   "change_percent": -69.87,
+   "failures": [
+    0,
+    0
+   ],
+   "discontinuities": [
+    0,
+    0
+   ]
+  }
+ ],
+ "websocket_noise_floor_control_rerun_vs_prior": [
+  {
+   "sessions": 1,
+   "samples": [
+    1000,
+    1000
+   ],
+   "ref_p95_ms": 10.937759,
+   "new_p95_ms": 9.018743,
+   "diff_ms": -1.919016,
+   "change_percent": -17.54,
+   "failures": [
+    0,
+    0
+   ],
+   "discontinuities": [
+    0,
+    0
+   ]
+  },
+  {
+   "sessions": 5,
+   "samples": [
+    1000,
+    1000
+   ],
+   "ref_p95_ms": 6.142075,
+   "new_p95_ms": 40.284218,
+   "diff_ms": 34.142143,
+   "change_percent": 555.87,
+   "failures": [
+    0,
+    0
+   ],
+   "discontinuities": [
+    0,
+    0
+   ]
+  },
+  {
+   "sessions": 10,
+   "samples": [
+    1000,
+    1000
+   ],
+   "ref_p95_ms": 14.208439,
+   "new_p95_ms": 29.241268,
+   "diff_ms": 15.032829,
+   "change_percent": 105.8,
+   "failures": [
+    0,
+    0
+   ],
+   "discontinuities": [
+    0,
+    0
+   ]
+  }
+ ],
+ "faults": {
+  "prior_89fa78f": {
+   "slow_storage_observed_ms": 29.547232,
+   "stalled_consumer_rejected": true,
+   "buffer_max_bytes": 96000
+  },
+  "control_rerun": {
+   "slow_storage_observed_ms": 27.543229,
+   "stalled_consumer_rejected": true,
+   "buffer_max_bytes": 96000
+  },
+  "new": {
+   "slow_storage_observed_ms": 29.683935,
+   "stalled_consumer_rejected": true,
+   "buffer_max_bytes": 96000
+  }
+ },
+ "limitations": [
+  "Component microbenchmark: synthetic PCM silence; no live provider, ASR, playback or end-to-end conversational latency. No paid provider calls were made; the earlier method did not use live providers.",
+  "Single pair of runs, one order (control first); no statistical significance or causal attribution.",
+  "Host load and PostgreSQL cache/checkpoint state not instrumented; the control-vs-prior section shows run-to-run variation for identical source."
+ ]
+}
