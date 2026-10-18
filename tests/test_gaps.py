@@ -5,6 +5,7 @@ import base64
 import copy
 import os
 import tempfile
+import time
 import unittest
 from pathlib import Path
 from unittest import mock
@@ -317,6 +318,13 @@ class ClockRuntimeTests(Base):
                 self.assertEqual(ws.receive_json()["sample_id"], "barrier")
             with self.connect(client) as ws:
                 ws.receive_json()
+                # The server records RECONNECT after sending `start`; wait for it rather than race the close.
+                deadline = time.monotonic() + 10
+                while time.monotonic() < deadline and not any(
+                    e["type"] == "clock.window_invalidated" and e["content"]["reason"] == "RECONNECT"
+                    for e in self.database.events(self.run)
+                ):
+                    time.sleep(0.05)
         types = self.types()
         self.assertEqual(types.count("clock.sync_sample"), 8)
         self.assertIn("clock.window_established", types)
