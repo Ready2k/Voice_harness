@@ -215,3 +215,7 @@ Detail is in the per-branch notes: `PHASE4_NOTES_interrupt_probe.md` (API-level 
 | 2 (P2) | A wrong transaction date passed by matching an unrelated `as_of` date | Returned dates keep their entity and field. A spoken date is checked only against the entity named in its sentence (or the field its cue word names). Several entities in one sentence, or a date that fits only some candidate entities with no owner named, is `untestable` (`DATE_ENTITY_UNRESOLVED`). Regressions: unrelated `as_of`, swapped transaction dates, unnamed owner. |
 
 Not done: the API-level consent regressions mock the engine's present/confirm step like the existing ones, so the review's real-engine cancellation probe is not reproduced here; there is no API-level date test through the local MCP.
+
+## xAI Grok Voice (merged fcca1de)
+
+`xai-voice-live` adapter, capability probe (`cap_xai_grok_voice_3_0_20261018`, expires 2026-10-25), live AC-09 (5 of 5 after a truncate fix) and one live smoke run (`identity-impatient-en-gb-clean-001`, single sample, FACT-01 `NO_AMOUNT_CLAIM` only). Coverage: `xai_grok_voice` is `implemented_and_verified`. Terms attestation is not extended to xAI. Direct MCP, reconnect/resume and audio alignment are Unknown. See `docs/PHASE4_NOTES_xai.md`.

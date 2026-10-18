@@ -1,6 +1,29 @@
 # Voice Harness
 
-Container-first deterministic core for the Voice AI Evaluation & Assurance Platform v0.3: synthetic banking fixtures, a mock provider, PostgreSQL, authenticated FastAPI, stdio MCP and a PCM playback gate.
+A local-first, vendor-neutral **evaluation and assurance harness for realtime voice agents in regulated
+conversations** (spec: [`docs/voice_evals_spec_v0.3.md`](docs/voice_evals_spec_v0.3.md)). It tests whether
+speech-to-speech models behave safely in synthetic banking calls, and produces signed evidence of what happened.
+It is not a production banking service, and passing it is not a certification.
+
+## What it does
+
+- **Contains** the model under test: every tool call passes an independent guardrail, and every spoken reply is
+  held as pending audio until policy releases it.
+- **Exercises** live providers (OpenAI Realtime, Amazon Nova Sonic, xAI Grok Voice; Gemini Live in progress)
+  with a catalogue of 24 scenarios: personas, locales, noise and narrowband audio, injected faults, interruptions.
+- **Judges** with deterministic checks first (identity, factual accuracy against independent ASR, consent,
+  audio), then advisory AI judges that are calibrated before they are trusted. Missing evidence is `untestable`,
+  never a pass.
+- **Proves** with an append-only, hash-chained ledger exported as an Ed25519-signed bundle that verifies offline.
+- **Reports** verified support per provider family. It never ranks providers.
+
+Read next: [Vision](docs/VISION.md) · [Architecture](docs/ARCHITECTURE.md) · [Engineering guide](docs/ENGINEERING.md)
+
+## Status
+
+Phases 0-3 are complete. Phase 4 (provider breadth, scenarios, live runs) is in progress: three of four provider
+families are `implemented_and_verified`. Live results are mostly single samples, no AI judge policy is approved
+(blocking is off), and no real prices are established. See [Phase 4 status](docs/PHASE4_STATUS.md).
 
 ## Start and verify
 
@@ -20,7 +43,7 @@ Fixture audio is PCM silence with scripted transcript/assessment metadata. These
 
 ## Evidence and measurements
 
-Evidence persists in the voice-harness_evidence volume and PostgreSQL in voice-harness_postgres-data. The generated operator token is /data/operator-token (0600). The database secret is .local/postgres-password, excluded from source and container builds. No provider credentials are needed.
+Evidence persists in the voice-harness_evidence volume and PostgreSQL in voice-harness_postgres-data. The generated operator token is /data/operator-token (0600). The database secret is .local/postgres-password, excluded from source and container builds. The deterministic core needs no provider credentials; live runs need provider keys and a macOS host (see the engineering guide).
 
 ```bash
 make benchmark
@@ -46,4 +69,4 @@ Local tests default to SQLite; Compose tests use PostgreSQL. Schemas and OpenAPI
 
 make golden and make recovery retain the earlier standalone development fixtures. The API/demo path is the integrated PostgreSQL/MCP implementation. make stop preserves volumes.
 
-All four live provider families remain not_implemented. See [Phase 1 status](docs/PHASE1_STATUS.md) for acceptance coverage and remaining conformance work.
+Acceptance coverage is mapped in [Phase 1 status](docs/PHASE1_STATUS.md) and the later phase status documents.
