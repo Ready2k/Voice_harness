@@ -68,12 +68,12 @@ Phases follow spec §16 and are gated by acceptance criteria (AC-01…AC-21), no
 | 1 | Deterministic core: orchestrator, ledger, synthetic MCP bank, playback gate, mock provider | Complete |
 | 2 | First adapters and coverage: OpenAI Realtime, Amazon Nova Sonic, AC-09, AC-20 | Complete |
 | 3 | Judges and observability: signing, cost, calibration, review, comparison, independent ASR | Complete |
-| 4 | Breadth and depth: xAI Grok Voice (merged), Gemini Live (in progress), scenario catalogue, faults, live API runs | In progress |
+| 4 | Breadth and depth: xAI Grok Voice and Gemini Live (both merged), scenario catalogue, faults, live API runs | In progress |
 | 5 | Hardening: security review, load and chaos tests, reproducibility, regression gates | Ongoing |
 
 ### Next
 
-- Finish Gemini Live and report the verified-provider count honestly.
+- Run the first cross-provider comparison on the catalogue, and keep capability reports current (they expire after 7 days).
 - Repeat live runs to get variance instead of single samples.
 - Build a calibration holdout from real live transcripts; the current synthetic holdout is exploratory.
 - Establish real tariffs (all shipped prices are `null`) so cost exports can be known.

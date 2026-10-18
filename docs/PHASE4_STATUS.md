@@ -219,3 +219,13 @@ Not done: the API-level consent regressions mock the engine's present/confirm st
 ## xAI Grok Voice (merged fcca1de)
 
 `xai-voice-live` adapter, capability probe (`cap_xai_grok_voice_3_0_20261018`, expires 2026-10-25), live AC-09 (5 of 5 after a truncate fix) and one live smoke run (`identity-impatient-en-gb-clean-001`, single sample, FACT-01 `NO_AMOUNT_CLAIM` only). Coverage: `xai_grok_voice` is `implemented_and_verified`. Terms attestation is not extended to xAI. Direct MCP, reconnect/resume and audio alignment are Unknown. See `docs/PHASE4_NOTES_xai.md`.
+
+## Google Gemini Live (merged eb6a32d)
+
+`gemini-live` adapter for `gemini-live-2.5-flash-native-audio` on Vertex AI (`us-central1`, authorized-user ADC, no new dependency), capability probe (expires 2026-10-25), live AC-09 (audio in/out, tool correlation, error pass; interruption excluded because truncation is unsupported) and one live smoke run on `identity-impatient-en-gb-clean-001` (single sample, no tool calls, overall `pass`). Coverage: `google_gemini_live` is `implemented_and_verified` while its report is current. Compose suite: 592 tests OK, 5 skipped.
+
+- Observed, not verified: every capability row is Observed from one probe run; no row cites documentation. Output sample rate (24 kHz) is inferred from byte count, not stated by the server.
+- Barge-in is detection only: the server sends `interrupted`, there is no client cancel or truncate, and `interrupt()` raises `CapabilityUnsupported`.
+- Unknown: reconnect with the resumption handle, audio alignment, direct MCP, `goAway`/`toolCallCancellation`, other regions, quotas, retention and pricing. The `global` endpoint connected then closed with 1008 (model not found) once.
+- Live Gemini runs need host ADC; containers have none (`NO_GOOGLE_ADC`). Service-account ADC is unsupported without `google-auth`.
+- Terms are not attested for Google; no prices recorded. The merge was scanned for ADC and provider key material with no matches. See `docs/PHASE4_NOTES_google.md`.

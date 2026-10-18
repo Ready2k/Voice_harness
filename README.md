@@ -9,7 +9,7 @@ It is not a production banking service, and passing it is not a certification.
 
 - **Contains** the model under test: every tool call passes an independent guardrail, and every spoken reply is
   held as pending audio until policy releases it.
-- **Exercises** live providers (OpenAI Realtime, Amazon Nova Sonic, xAI Grok Voice; Gemini Live in progress)
+- **Exercises** live providers (OpenAI Realtime, Amazon Nova Sonic, xAI Grok Voice, Google Gemini Live)
   with a catalogue of 24 scenarios: personas, locales, noise and narrowband audio, injected faults, interruptions.
 - **Judges** with deterministic checks first (identity, factual accuracy against independent ASR, consent,
   audio), then advisory AI judges that are calibrated before they are trusted. Missing evidence is `untestable`,
@@ -21,8 +21,8 @@ Read next: [Vision](docs/VISION.md) · [Architecture](docs/ARCHITECTURE.md) · [
 
 ## Status
 
-Phases 0-3 are complete. Phase 4 (provider breadth, scenarios, live runs) is in progress: three of four provider
-families are `implemented_and_verified`. Live results are mostly single samples, no AI judge policy is approved
+Phases 0-3 are complete. Phase 4 (provider breadth, scenarios, live runs) is in progress: all four provider
+families are `implemented_and_verified` while their capability reports are current (7-day expiry). Live results are mostly single samples, no AI judge policy is approved
 (blocking is off), and no real prices are established. See [Phase 4 status](docs/PHASE4_STATUS.md).
 
 ## Start and verify
