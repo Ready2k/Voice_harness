@@ -7,6 +7,8 @@ const error = $("error");
 let token = "";
 let options = [];
 let providers = [];
+let connected = false;
+let launching = false;
 let current = null; // {runId, events, timer}
 
 function remember(value) {
@@ -21,15 +23,21 @@ async function refreshList() {
 }
 
 async function paint() {
+  const selected = current;
+  const runId = selected.runId;
   const [run, metrics, holds, assurance] = await Promise.all([
-    api(token, "/api/v1/runs/" + encodeURIComponent(current.runId)),
-    api(token, "/api/v1/metrics/" + encodeURIComponent(current.runId)),
-    api(token, "/api/v1/holds-register?state=all&run_id=" + encodeURIComponent(current.runId)),
-    api(token, "/api/v1/runs/" + encodeURIComponent(current.runId) + "/assurance"),
+    api(token, "/api/v1/runs/" + encodeURIComponent(runId)),
+    api(token, "/api/v1/metrics/" + encodeURIComponent(runId)),
+    api(token, "/api/v1/holds-register?state=all&run_id=" + encodeURIComponent(runId)),
+    api(token, "/api/v1/runs/" + encodeURIComponent(runId) + "/assurance"),
   ]);
-  const after = current.events.length ? current.events[current.events.length - 1].sequence : 0;
-  current.events = mergeEvents(current.events, await fetchEvents(token, current.runId, after));
-  renderRun($("detail"), runView(run, current.events, metrics, holds, assurance), cancelRun);
+  const after = selected.events.length ? selected.events[selected.events.length - 1].sequence : 0;
+  const incoming = await fetchEvents(token, runId, after);
+  if (current !== selected) return true;
+  selected.events = mergeEvents(selected.events, incoming);
+  renderRun($("detail"), runView(run, selected.events, metrics, holds, assurance), cancelRun);
+  addEvidenceAction(runId);
+  $("connection").textContent = TERMINAL.has(run.state) ? "Connected · Run finished. Review its assurance verdict below." : "Connected · Updating this run every two seconds.";
   return TERMINAL.has(run.state);
 }
 
@@ -48,6 +56,10 @@ async function cancelRun(runId) {
 }
 
 async function openRun(runId) {
+  const url = new URL(location.href);
+  url.searchParams.set("run", runId);
+  history.replaceState(null, "", url);
+  error.textContent = "";
   if (current?.timer) clearTimeout(current.timer);
   current = { runId, events: [], timer: null };
   const mine = current;
@@ -55,16 +67,26 @@ async function openRun(runId) {
     try {
       const done = await paint();
       if (!done && current === mine) mine.timer = setTimeout(tick, 2000);
-      else await refreshList();
+      else if (current === mine) await refreshList();
     } catch (e) {
-      error.textContent = "Could not load run: " + e.message;
+      if (current !== mine) return;
+      error.textContent = "Could not update run: " + e.message + ". Retrying in 5 seconds; use Refresh runs / reconnect to retry now.";
+      $("connection").textContent = "Connection interrupted · Showing the last loaded results.";
+      mine.timer = setTimeout(tick, 5000);
     }
   };
   await tick();
 }
 
 function syncProvider() {
-  $("provider").hidden = !options[Number($("scenario").value)]?.live;
+  const option = options[Number($("scenario").value)];
+  $("provider-field").hidden = !option?.live;
+  const available = providers.some((p) => !p.disabled);
+  $("launch-button").disabled = launching || !option || (option.live && !available);
+  $("readiness").textContent = option?.live
+    ? available ? "Live evaluation · Uses the selected server configuration. Provider usage may incur charges."
+      : "Live evaluation unavailable. Configure provider credentials, independent ASR and caller voice synthesis on the server, then reconnect. Scripted fixtures remain available."
+    : "Scripted fixture · No live provider calls. Checks enforcement mechanics rather than voice quality.";
 }
 
 async function connect() {
@@ -80,8 +102,14 @@ async function connect() {
     syncProvider();
     $("launch").hidden = false;
     remember(token);
+    connected = true;
+    $("connection").textContent = "Connected · Select a scenario to launch or inspect a recent run.";
     await refreshList();
+    const wanted = new URLSearchParams(location.search).get("run");
+    if (wanted) await openRun(wanted);
   } catch (e) {
+    connected = false;
+    $("connection").textContent = "Not connected · Check your token and try again.";
     $("launch").hidden = true;
     error.textContent = "Could not connect: " + e.message;
   }
@@ -93,15 +121,20 @@ $("auth").addEventListener("submit", (event) => {
   connect();
 });
 $("scenario").addEventListener("change", syncProvider);
-$("refresh").addEventListener("click", () => refreshList().catch((e) => { error.textContent = e.message; }));
+$("refresh").addEventListener("click", () => connect());
 $("launch").addEventListener("submit", async (event) => {
   event.preventDefault();
+  if (launching || !connected) return;
+  launching = true;
+  syncProvider();
   error.textContent = "";
   try {
     const option = options[Number($("scenario").value)];
     const choice = providers.find((p) => p.id === $("provider").value);
     if (option.live && (!choice || choice.disabled)) throw new Error("no live provider is configured on the server");
     const body = launchBody(option, "strict-v1", option.live ? choice.id : null);
+    body.fixture_seed = Number($("seed").value);
+    body.retain_audio = $("retain").checked;
     const key = "ui-" + Date.now() + "-" + Math.random().toString(36).slice(2);
     const launched = await api(token, "/api/v1/runs", {
       method: "POST",
@@ -112,7 +145,7 @@ $("launch").addEventListener("submit", async (event) => {
     await openRun(launched.run_ids[0]);
   } catch (e) {
     error.textContent = "Could not launch: " + e.message;
-  }
+  } finally { launching = false; syncProvider(); }
 });
 
 const saved = recall();
@@ -121,5 +154,28 @@ if (saved) {
   token = saved;
   connect();
 }
-const wanted = new URLSearchParams(location.search).get("run");
-if (saved && wanted) openRun(wanted);
+
+
+function addEvidenceAction(runId) {
+  const actions = el("div", "actions");
+  const download = el("button", "", "Download evidence bundle");
+  download.type = "button";
+  download.addEventListener("click", async () => {
+    download.disabled = true;
+    error.textContent = "";
+    try {
+      const bundle = await api(token, "/api/v1/runs/" + encodeURIComponent(runId) + "/evidence");
+      const url = URL.createObjectURL(new Blob([JSON.stringify(bundle, null, 2)], {type: "application/json"}));
+      const link = el("a");
+      link.href = url;
+      link.download = runId + "-evidence.json";
+      document.body.append(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } catch (e) { error.textContent = "Could not export evidence: " + e.message; }
+    finally { download.disabled = false; }
+  });
+  actions.append(download);
+  $("detail").prepend(actions);
+}

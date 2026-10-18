@@ -254,6 +254,8 @@ export function runView(run, events, metrics, holds, assurance = null) {
     terminal: TERMINAL.has(run.state),
     scenario: (run.scenario?.scenario_id ?? "unknown") + "@" + (run.scenario?.version ?? "?"),
     termination: run.termination_reason ?? null,
+    config: run.config ?? {},
+    evidence: run.evidence ?? {},
     eventCount: events.length,
     tally,
     units,
@@ -325,6 +327,15 @@ export function renderRun(root, view, onCancel = null) {
     head.append(cancel);
   }
   root.append(head);
+  const config = el("dl", "config");
+  for (const [label, value] of [
+    ["Scenario", view.scenario], ["Provider configuration", view.config?.provider_config_id ?? "Unknown"],
+    ["Policy", view.config?.policy_profile ?? "Unknown"], ["Fixture seed", view.config?.fixture_seed ?? "Unknown"],
+    ["Audio retention requested", view.config?.retain_audio == null ? "Unknown" : view.config.retain_audio ? "Yes" : "No"],
+    ["Evidence manifest", view.evidence?.manifest ?? "Unknown"],
+    ["Available artifacts", view.evidence?.artifacts_available == null ? "Unknown" : view.evidence.artifacts_available + " / " + view.evidence.artifacts_total],
+  ]) config.append(el("dt", "", label), el("dd", "", String(value)));
+  root.append(section("Run configuration & evidence", config));
   const tally = el("div", "tally");
   for (const [name, value] of Object.entries(view.tally)) {
     const box = el("div", "tile tile-" + name);

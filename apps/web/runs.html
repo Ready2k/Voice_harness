@@ -5,30 +5,36 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
 <title>Runs</title>
-<link rel="stylesheet" href="./ops.css">
+<link rel="stylesheet" href="./ops.css?v=20261018-ui1">
 </head>
 <body>
 <main>
-  <nav><a href="./runs.html">Runs</a><a href="./review.html">Hold review</a><a href="./coverage.html">Provider coverage</a></nav>
-  <h1>Runs</h1>
-  <p class="sub">Launch a scenario and watch it. States come from the evidence ledger, not from model output. Built-in scenarios use scripted fixtures; catalogue scenarios call a live provider and need its credentials configured on the server.</p>
-  <form id="auth">
+  <nav aria-label="Main navigation"><a href="./runs.html" aria-current="page">Runs</a><a href="./review.html">Hold review</a><a href="./coverage.html">Provider coverage</a></nav>
+  <p class="eyebrow">Voice Harness / Evaluations</p>
+  <h1>Run an evaluation</h1>
+  <p class="sub">Choose a scripted fixture to check the harness, or a live scenario to evaluate a configured provider. Follow the transcript, safety decisions and assessment, then download the evidence.</p>
+  <form id="auth" class="panel">
     <input id="token" type="password" autocomplete="off" placeholder="Operator token" aria-label="Operator token" required>
     <button type="submit">Connect</button>
   </form>
-  <form id="launch" hidden>
-    <select id="scenario" aria-label="Scenario"></select>
-    <select id="provider" aria-label="Live provider" hidden></select>
-    <button type="submit">Launch run</button>
-    <button type="button" id="refresh">Refresh</button>
+  <p id="connection" role="status" aria-live="polite">Connect with your operator token to load scenarios and runs.</p>
+  <form id="launch" class="panel" hidden>
+    <label>Scenario<select id="scenario" aria-label="Scenario"></select></label>
+    <label id="provider-field" hidden>Provider configuration<select id="provider" aria-label="Live provider"></select></label>
+    <p id="readiness" class="muted"></p>
+    <label>Fixture seed<input id="seed" type="number" value="42" step="1" required></label>
+    <label class="check"><input id="retain" type="checkbox"> Retain audio in evidence</label>
+    <p class="muted">Policy: strict-v1 · One run per launch. Lifecycle completion does not mean the evaluation passed.</p>
+    <button id="launch-button" class="primary" type="submit">Launch evaluation</button>
+    <button type="button" id="refresh">Refresh runs / reconnect</button>
   </form>
   <p id="error" role="alert"></p>
   <div class="layout two">
-    <div><section class="panel"><h2>All runs</h2><div id="list"></div></section></div>
-    <div id="detail"><p class="muted">Select a run to see its transcript, tool lifecycle, guardrail decisions, holds and metrics.</p></div>
+    <div><section class="panel"><h2>Recent runs (latest 50)</h2><div id="list"><p class="muted">Connect to see recent runs.</p></div></section></div>
+    <div id="detail"><p class="muted">Select a run to inspect its results and evidence. Your selection gets a shareable local URL.</p></div>
   </div>
   <p class="note">Live view polls the events endpoint every two seconds while a run is not terminal.</p>
 </main>
-<script type="module" src="./runs-page.mjs"></script>
+<script type="module" src="./runs-page.mjs?v=20261018-ui1"></script>
 </body>
 </html>

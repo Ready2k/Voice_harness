@@ -52,3 +52,26 @@ th { color:var(--muted); font-weight:600 }
 .chip-released, .chip-played { color:var(--ok) } .chip-stopped, .chip-superseded { color:var(--muted) }
 .flag-expiring { color:var(--warn); font-weight:600 } .flag-expired { color:var(--bad); font-weight:600 }
 .note { color:var(--muted); font-size:.8rem; margin-top:16px }
+
+/* Shared operator workflow */
+nav { flex-wrap:wrap }
+nav a[aria-current="page"] { font-weight:700; text-underline-offset:6px }
+.eyebrow { color:var(--muted); font-size:.75rem; text-transform:uppercase; letter-spacing:.08em; margin:0 0 6px }
+h1 { font-size:1.8rem; margin-bottom:8px }
+label { display:flex; flex-direction:column; gap:5px; font-size:.85rem; font-weight:600; flex:1 1 220px }
+label input, label select { flex:initial; width:100% }
+label.check { flex-direction:row; align-items:center }
+label.check input { width:auto }
+#launch > p { flex-basis:100%; margin:0 }
+#launch button { margin-top:6px }
+button.primary { background:var(--info); color:var(--bg); border-color:var(--info); font-weight:600 }
+button:disabled { opacity:.55; cursor:not-allowed }
+:focus-visible { outline:3px solid var(--info); outline-offset:3px }
+#connection { color:var(--muted); font-size:.9rem }
+.actions { display:flex; gap:8px; flex-wrap:wrap; margin:12px 0 }
+.config { display:grid; grid-template-columns:max-content minmax(0,1fr); gap:6px 16px; font-size:.85rem }
+.config dt { color:var(--muted) } .config dd { margin:0; overflow-wrap:anywhere }
+#list { max-height:65vh; overflow:auto }
+#list th { position:sticky; top:0; background:var(--card) }
+#detail { min-width:0 }
+@media (max-width:600px) { .config { grid-template-columns:1fr; gap:3px } .config dd { margin-bottom:8px } }
