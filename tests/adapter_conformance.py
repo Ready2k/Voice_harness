@@ -217,13 +217,14 @@ def write_result(report: dict, family: str, capability_report_id: str, out_dir) 
 
 
 class LiveConformance(unittest.TestCase):
-    """Opt-in: VOICE_HARNESS_LIVE_ADAPTERS=openai,aws_nova_sonic,xai_grok_voice with credentials.
+    """Opt-in: VOICE_HARNESS_LIVE_ADAPTERS=openai,aws_nova_sonic,xai_grok_voice,google_gemini_live with credentials.
     Each adapter module must expose ``conformance_factory() -> (adapter, prime)``."""
 
     MODULES = {
         "openai": "voice_harness.adapters.openai_realtime",
         "aws_nova_sonic": "voice_harness.adapters.nova_sonic",
         "xai_grok_voice": "voice_harness.adapters.xai_voice",
+        "google_gemini_live": "voice_harness.adapters.google_gemini_live",
     }
 
     def test_live(self):

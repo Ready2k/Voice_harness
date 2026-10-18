@@ -33,6 +33,10 @@ def main(argv: list[str] | None = None) -> int:
     ox.add_argument("path")
     ox.add_argument("--report-id", required=True)
     ox.add_argument("--attest", action="store_true", help="record the operator terms attestation")
+    og = sub.add_parser("from-google-observations", help="build a report from google_gemini_probe.py output")
+    og.add_argument("path")
+    og.add_argument("--report-id", required=True)
+    og.add_argument("--attest", action="store_true", help="record the operator terms attestation")
     sub.add_parser("schema", help="print the JSON Schema")
     a = ap.parse_args(argv)
 
@@ -57,6 +61,11 @@ def main(argv: list[str] | None = None) -> int:
         from .xai_report import load as load_xai
 
         print(load_xai(a.path, a.report_id, OPERATOR_ATTESTATION if a.attest else None).model_dump_json(indent=2))
+        return 0
+    if a.cmd == "from-google-observations":
+        from .google_report import load as load_google
+
+        print(load_google(a.path, a.report_id, OPERATOR_ATTESTATION if a.attest else None).model_dump_json(indent=2))
         return 0
     with open(a.path) as f:
         report = CapabilityReport.model_validate_json(f.read())

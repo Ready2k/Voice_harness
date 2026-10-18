@@ -54,7 +54,7 @@ class CoverageExportTests(unittest.TestCase):
             if item["coverage_state"] != "implemented_and_verified":
                 self.assertTrue(item["reason_codes"])
         google = next(i for i in cov["items"] if i["provider_family"] == "google_gemini_live")
-        self.assertEqual(google["coverage_state"], "not_implemented")
+        self.assertIn(google["coverage_state"], ("implemented_but_unverified", "implemented_and_verified"))
         xai = next(i for i in cov["items"] if i["provider_family"] == "xai_grok_voice")
         self.assertIn(xai["coverage_state"], ("implemented_but_unverified", "implemented_and_verified"))
 
@@ -66,9 +66,12 @@ class CoverageExportTests(unittest.TestCase):
         self.assertEqual(bundle["manifest"]["provider_coverage"]["verified_count"], 0)
 
     def test_hash_detects_any_edit_to_coverage(self):
+        # a fixed snapshot: tampering must not depend on which live reports are current on the day the tests run
+        self.evidence.coverage = lambda: summarize(
+            [Coverage(f, None, None, None, "not_implemented", reason_codes=("NO_ADAPTER",)) for f in FAMILIES])
         original = self.bundle()
         edits = {
-            "flip_state": lambda c: c["items"][3].update(coverage_state="implemented_and_verified"),
+            "flip_state": lambda c: c["items"][1].update(coverage_state="implemented_and_verified"),
             "add_ranking": lambda c: c.update(ranking=["openai"]),
             "add_score": lambda c: c["items"][0].update(score=0.9),
             "drop_family": lambda c: c["items"].pop(),
@@ -80,10 +83,13 @@ class CoverageExportTests(unittest.TestCase):
                 self.assertFalse(verify_bundle(altered))
 
     def test_resealed_semantic_tampering_is_rejected(self):
+        # a fixed snapshot: tampering must not depend on which live reports are current on the day the tests run
+        self.evidence.coverage = lambda: summarize(
+            [Coverage(f, None, None, None, "not_implemented", reason_codes=("NO_ADAPTER",)) for f in FAMILIES])
         original = self.bundle()
         edits = {
-            "flip_state_keep_reasons": lambda c: c["items"][3].update(coverage_state="implemented_and_verified"),
-            "verified_without_report": lambda c: c["items"][3].update(
+            "flip_state_keep_reasons": lambda c: c["items"][1].update(coverage_state="implemented_and_verified"),
+            "verified_without_report": lambda c: c["items"][1].update(
                 coverage_state="implemented_and_verified", reason_codes=[]),
             "inflate_count": lambda c: c.update(verified_count=4),
             "forged_statement": lambda c: c.update(statement="verified for 4 of 4 requested provider families"),
@@ -92,7 +98,7 @@ class CoverageExportTests(unittest.TestCase):
             "extra_key": lambda c: c.update(rank=1),
             "drop_family": lambda c: c["items"].pop(),
             "reorder": lambda c: c["items"].reverse(),
-            "clear_reasons": lambda c: c["items"][3].update(reason_codes=[]),
+            "clear_reasons": lambda c: c["items"][1].update(reason_codes=[]),
             "bad_state": lambda c: c["items"][0].update(coverage_state="supported"),
         }
         for name, edit in edits.items():

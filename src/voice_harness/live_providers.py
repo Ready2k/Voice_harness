@@ -41,13 +41,15 @@ TOOLS = [
 ]
 
 LIVE_PROVIDERS = {"openai-realtime-live": "openai_realtime", "nova-sonic-live": "aws_nova_sonic",
-                  "xai-voice-live": "xai_grok_voice"}
+                  "xai-voice-live": "xai_grok_voice", "gemini-live": "google_gemini_live"}
 # The model under test, as recorded for judge independence checks (a judge must not be the tested model).
 TESTED_MODELS = {
     "openai-realtime-live": {"provider": "openai", "model_id": "gpt-realtime-2.1", "family": "openai_realtime"},
     "nova-sonic-live": {"provider": "aws", "model_id": "amazon.nova-2-5-sonic", "family": "aws_nova_sonic"},
     # pinned versioned name; the grok-voice-latest alias is never used for runs
     "xai-voice-live": {"provider": "xai", "model_id": "grok-voice-3.0", "family": "xai_grok_voice"},
+    # Vertex AI publisher model; setupComplete returns no version, so the pinned name is all there is
+    "gemini-live": {"provider": "google", "model_id": "gemini-live-2.5-flash-native-audio", "family": "google_gemini_live"},
 }
 
 
@@ -103,12 +105,17 @@ def availability(provider_config_id, environ=None):
         from .adapters.xai_voice import KEY_ENV
 
         return (True, None) if environ.get(KEY_ENV) else (False, "NO_XAI_API_KEY")
+    if provider_config_id == "gemini-live":
+        from .adapters.google_gemini_live import credentials_available
+
+        return credentials_available(environ)  # ADC file + project id present; the token is fetched at session open
     from .adapters.nova_sonic import SESSION_ENV
 
     return (True, None) if SESSION_ENV.exists() else (False, "NO_AWS_SESSION")
 
 
-FAMILIES = {"openai-realtime-live": "openai", "nova-sonic-live": "aws_nova_sonic", "xai-voice-live": "xai_grok_voice"}
+FAMILIES = {"openai-realtime-live": "openai", "nova-sonic-live": "aws_nova_sonic", "xai-voice-live": "xai_grok_voice",
+            "gemini-live": "google_gemini_live"}
 
 
 def capability_binding(provider_config_id, now=None):
@@ -168,6 +175,11 @@ def _adapter(provider_config_id):
 
         config.update(instructions=INSTRUCTIONS, turn_detection="server_vad", model_id=TESTED_MODELS[provider_config_id]["model_id"])
         return XaiVoiceAdapter(), config
+    if provider_config_id == "gemini-live":
+        from .adapters.google_gemini_live import GeminiLiveAdapter
+
+        config.update(instructions=INSTRUCTIONS, turn_detection="server_vad", model_id=TESTED_MODELS[provider_config_id]["model_id"])
+        return GeminiLiveAdapter(), config
     from .adapters.nova_sonic import NovaSonicAdapter
 
     config.update(system_prompt=INSTRUCTIONS, env=_nova_env())
@@ -186,7 +198,7 @@ async def run_live(engine, run_id, provider_config_id, scenario_id, *, seed=0):
     from .caller_voice import describe as describe_caller_voice
 
     metadata["caller_voice"] = describe_caller_voice()  # backend + voice/model ids only
-    context_only = provider_config_id in ("openai-realtime-live", "xai-voice-live")  # send_text(respond=False) supported
+    context_only = provider_config_id in ("openai-realtime-live", "xai-voice-live", "gemini-live")  # send_text(respond=False) supported
     from .cost_recorder import UsageRecorder
 
     tested = TESTED_MODELS[provider_config_id]

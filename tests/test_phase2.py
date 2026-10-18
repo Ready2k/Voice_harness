@@ -101,7 +101,7 @@ class AdapterContractTests(unittest.TestCase):
 class CoverageTests(unittest.TestCase):
     NOW = datetime(2026, 10, 17, tzinfo=UTC)
 
-    def reg(self, ac09=None, now=None, present=lambda f: f in ("openai", "aws_nova_sonic", "xai_grok_voice")):
+    def reg(self, ac09=None, now=None, present=lambda f: f in ("openai", "aws_nova_sonic", "xai_grok_voice", "google_gemini_live")):
         with tempfile.TemporaryDirectory() as d:
             for k, v in (ac09 or {}).items():
                 (Path(d) / f"{k}-ac09.json").write_text(json.dumps(v))
@@ -110,10 +110,9 @@ class CoverageTests(unittest.TestCase):
 
     def test_no_ac09_is_unverified_and_uncounted(self):
         r = self.reg()
-        for f in ("openai", "aws_nova_sonic", "xai_grok_voice"):
+        for f in ("openai", "aws_nova_sonic", "xai_grok_voice", "google_gemini_live"):
             self.assertEqual(r[f].coverage_state, "implemented_but_unverified")
             self.assertIn("AC09_NOT_PASSED", r[f].reason_codes)
-        self.assertEqual(r["google_gemini_live"].coverage_state, "not_implemented")
         s = summarize(list(r.values()))
         self.assertEqual(s["verified_count"], 0)
         self.assertIsNone(s["ranking"])
@@ -147,6 +146,21 @@ class CoverageTests(unittest.TestCase):
         self.assertIn("REPORT_EXPIRED", expired["xai_grok_voice"].reason_codes)
         self.assertEqual(self.reg(present=lambda f: f in ("openai",))["xai_grok_voice"].coverage_state,
                          "not_implemented")
+
+    def test_gemini_verified_only_with_bound_ac09_and_unresolved_version_is_reported(self):
+        r = self.reg()
+        rid = r["google_gemini_live"].capability_report_id
+        self.assertEqual((r["google_gemini_live"].model_id, r["google_gemini_live"].region),
+                         ("gemini-live-2.5-flash-native-audio", "us-central1"))
+        self.assertTrue(rid.startswith("cap_google_gemini_live_2_5"))
+        ok = self.reg({"google_gemini_live": {"passed": True, "capability_report_id": rid}})
+        self.assertEqual(ok["google_gemini_live"].coverage_state, "implemented_and_verified")
+        for ac09 in ({"passed": True, "capability_report_id": "other"},
+                     {"passed": True, "capability_report_id": rid, "failures": ["x"]},
+                     {"passed": False, "capability_report_id": rid}):
+            self.assertEqual(self.reg({"google_gemini_live": ac09})["google_gemini_live"].coverage_state,
+                             "implemented_but_unverified")
+        self.assertEqual(self.reg(present=lambda f: f == "openai")["google_gemini_live"].coverage_state, "not_implemented")
 
     def test_expired_report_downgrades(self):
         rid = self.reg()["openai"].capability_report_id
