@@ -191,6 +191,25 @@ class RubricAndDeterministicChecks(Base):
         self.assertEqual(self.fact(self.live_fact_events(None, "Your balance is £1,234.56.")), ("pass", []))
         self.assertEqual(self.fact(self.live_fact_events("", "Your balance is £9,999.00."))[0], "fail")
 
+    def test_live_fact_empty_or_blank_asr_is_untestable_not_no_claim(self):
+        for blank in ("", "   ", "\n"):
+            events = self.live_fact_events("Your balance is £1,234.56.", blank)
+            self.assertEqual(self.fact(events), ("untestable", ["EMPTY_TRANSCRIPT"]), repr(blank))
+
+    def test_live_fact_unassessed_unit_does_not_mask_a_wrong_amount_in_another_unit(self):
+        events = self.live_fact_events("x", None, unit="first") + self.live_fact_events(
+            "x", "Your balance is fifty pounds.", unit="second")[4:]
+        for i, e in enumerate(events):
+            e["event_id"] = f"e{i}"
+            e["sequence"] = i if e["type"] != "tool.completed" else 2
+        self.assertEqual(self.fact(events)[0], "fail")
+        right = self.live_fact_events("x", None, unit="first") + self.live_fact_events(
+            "x", "Your balance is £1,234.56.", unit="second")[4:]
+        for i, e in enumerate(right):
+            e["event_id"] = f"e{i}"
+            e["sequence"] = i if e["type"] != "tool.completed" else 2
+        self.assertEqual(self.fact(right), ("untestable", ["INDEPENDENT_ASR_UNAVAILABLE"]))
+
     def test_live_fact_contradiction_supplied_only_by_asr_fails(self):
         events = self.live_fact_events("Please verify your identity.", "Your balance is £50.00.")
         self.assertEqual(self.fact(events), ("fail", ["BALANCE_MISMATCH"]))

@@ -61,9 +61,9 @@ def _variant(base_id, scenario_id, persona, vulnerability, locale, audio_profile
     if scenario_id.startswith("commit-cancel-") and "out_of_band_confirmation" not in mechanics:
         criteria.append("CONFIRM-01")
     # Any scenario where the caller asks about balances or the account can elicit a spoken amount.
-    # The interruption scenario's first reply is cut off before any independent assessment, which would leave
-    # FACT-01 permanently untestable there, so it is left to the other post-verification scenario.
-    if "caller-interrupts" not in scenario_id and any(
+    # The interruption scenario keeps FACT-01: its interrupted reply is an evidence gap (untestable), but a later
+    # assessable wrong amount must still fail.
+    if any(
         word in line.lower() for line in lines for word in ("balance", "account")
     ):
         criteria.append("FACT-01")

@@ -293,12 +293,14 @@ def eval_fact(ctx: EvalContext):
         # may still have been withheld, which is the enforcement track's finding, not this one).
         if not generated:
             return _res("untestable", [], "No generated assistant audio.", ["TRANSCRIPT_UNAVAILABLE"])
-        missing = [e["event_id"] for e in generated if e["content"].get("unit_id") not in revised]
-        if missing:
-            return _res("untestable", missing, "Independent audio assessment is unavailable for a generated unit.",
-                        ["INDEPENDENT_ASR_UNAVAILABLE"])
-        units = list(generated)
+        # Unassessable units (no revision, or an empty one) leave factual correctness unresolved, but they must not
+        # mask a supported failure in a unit that was assessed, so they are reported after the assessable units.
+        unresolved = [e["event_id"] for e in generated if e["content"].get("unit_id") not in revised]
+        empty = [e["event_id"] for e in generated
+                 if e["content"].get("unit_id") in revised and not revised[e["content"]["unit_id"]].strip()]
+        units = [e for e in generated if e["event_id"] not in unresolved and e["event_id"] not in empty]
     else:
+        unresolved, empty = [], []
         units = [e for e in generated if e["content"].get("transcript")]
         if not units:
             return _res("untestable", [], "No assistant transcript evidence.", ["TRANSCRIPT_UNAVAILABLE"])
@@ -316,9 +318,15 @@ def eval_fact(ctx: EvalContext):
             ambiguous.append(unit["event_id"])
         for amount in amounts:
             claims.append((unit, amount))
-    if ambiguous:
-        return _res("untestable", ambiguous, "Spoken amount is ambiguous and needs review.",
-                    ["AMOUNT_AMBIGUOUS"])
+    gaps = ([("INDEPENDENT_ASR_UNAVAILABLE", unresolved)] if unresolved else []) + (
+        [("EMPTY_TRANSCRIPT", empty)] if empty else []) + ([("AMOUNT_AMBIGUOUS", ambiguous)] if ambiguous else [])
+
+    def unresolved_result():
+        return _res("untestable", [i for _, ids_ in gaps for i in ids_],
+                    "Factual correctness is unresolved for a generated unit.", [code for code, _ in gaps])
+
+    if gaps and not claims:
+        return unresolved_result()
     if not claims:
         return _res("pass", [units[0]["event_id"]], "No balance or amount claim was made.",
                     ["NO_AMOUNT_CLAIM"])
@@ -338,6 +346,8 @@ def eval_fact(ctx: EvalContext):
         if amount != expected or (expected_fixture is not None and authorised != expected_fixture):
             return _res("fail", ids, "Spoken balance contradicts the authorised fixture value.",
                         ["BALANCE_MISMATCH"])
+    if gaps:
+        return unresolved_result()
     return _res("pass", ids, "Spoken balance matches the authorised point-in-time fixture.")
 
 

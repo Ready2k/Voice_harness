@@ -193,3 +193,12 @@ Browser check (Chrome, local dev server): the Runs page loads the catalogue and 
 | R3 manifests assert mock | `run.live_binding` now records requested/returned model, provider session id and the capability-report binding (`capability_binding`: verified only with a current report, otherwise a labelled diagnostic); the probing event records the same; the manifest provider, limitations and pricing derive from the ledger (mock labels only for mock runs); live runs record provider-reported usage through `UsageRecorder`. Real OpenAI and Nova exports show the returned model, the bound capability report and a cost section, and verify offline. | Signed-export verification with a keyring for live bundles; endpoint/region/SDK version; provider tariffs remain null. |
 | R4 timeout and lifecycle | `turn_timeout` is a failed run (`TURN_TIMEOUT`); provider errors are `PROVIDER_FAILURE`. The worker moves to `evaluating`, assesses, then writes the terminal state once (`run.completed` carries the assurance), so an assessment failure is `failed`, never `completed` then `failed`. | Typed dispositions for scenario-injected faults in reliability denominators. |
 | R5 consent mechanics | The confirmed cancellation scenario is labelled `out_of_band_confirmation` (catalogue `mechanics`, recorded in the binding, the manifest provider and limitations) and no longer declares CONFIRM-01, so it contributes nothing to voice-confirmation assurance. | Authorising only after a trusted observation of the spoken confirmation, and denied/ambiguous/revised speech paths, before claiming voice AC-15 coverage. |
+
+## Response to the 497faeb recheck
+
+| # | Finding | Fix |
+| --- | --- | --- |
+| 1 | Empty or whitespace independent ASR became `pass / NO_AMOUNT_CLAIM` | Live FACT-01 treats a blank authoritative transcript as unresolved (`untestable / EMPTY_TRANSCRIPT`) and never infers "no claim" from it. API regressions for empty and whitespace ASR. |
+| 2 | `caller-interrupts` excluded FACT-01, hiding a wrong balance in the second turn | FACT-01 is declared again for that scenario. Unassessed units (interrupted, missing or blank ASR) are reported as `untestable` only after the assessable units are checked, so a supported failure is never masked by an evidence gap. Unit regressions cover both orders. |
+
+Not done: an API-level interruption probe with a wrong second-turn balance (covered at the evaluator level only).

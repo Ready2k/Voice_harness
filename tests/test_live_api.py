@@ -87,12 +87,12 @@ class LiveApi(unittest.TestCase):
         self.assertEqual(live_with_builtin.json()["error"]["code"], "SCENARIO_PROVIDER_MISMATCH")
         self.assertEqual((unknown.status_code, unknown.json()["error"]["code"]), (422, "UNKNOWN_SCENARIO"))
 
-    def completed_run(self, scenario, judges):
+    def completed_run(self, scenario, judges, asr=("Please verify your identity.",) * 2):
         adapter = FakeAdapter()
         patches = [
             mock.patch.object(live_providers, "availability", lambda provider_id, environ=None: (True, None)),
             mock.patch.object(live_providers, "_adapter", lambda provider_id: (adapter, {"tools": []})),
-            mock.patch.object(live_providers, "select_backend", lambda: ScriptedAsr(queue=["Please verify your identity."] * 2)),
+            mock.patch.object(live_providers, "select_backend", lambda: ScriptedAsr(queue=list(asr))),
             mock.patch("voice_harness.adapters.openai_realtime.synth_caller_pcm", lambda text, trail_ms=0: tone(200)),
             mock.patch.object(live_providers, "auto_judges", lambda environ=None: judges),
         ]
@@ -112,6 +112,19 @@ class LiveApi(unittest.TestCase):
         self.assertEqual(assurance["judge_calibration"][0]["status"], "no_calibration_report")
         self.assertFalse(assurance["judge_calibration"][0]["approved"])
         self.assertEqual(assurance["judge_calibration"][0]["blocking_enabled_criteria"], [])
+
+    def assert_blank_asr_is_unresolved(self, blank):
+        assurance = self.completed_run(LIVE, ([], []), asr=(blank,) * 4)
+        fact = assurance["criteria"]["FACT-01"]
+        self.assertEqual(fact["verdict"], "untestable", repr(blank))
+        self.assertIn("EMPTY_TRANSCRIPT", fact["reason_codes"])
+        self.assertNotEqual(assurance["overall_assurance"], "pass")
+
+    def test_empty_independent_asr_is_never_a_factual_pass(self):
+        self.assert_blank_asr_is_unresolved("")
+
+    def test_whitespace_independent_asr_is_never_a_factual_pass(self):
+        self.assert_blank_asr_is_unresolved("   ")
 
     def test_a_run_without_independent_asr_is_never_a_factual_pass(self):
         adapter = FakeAdapter()

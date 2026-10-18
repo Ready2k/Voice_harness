@@ -76,7 +76,7 @@ class CatalogueCriteria(unittest.TestCase):
             self.assertEqual("CARE-01" in criteria, entry["definition"]["customer"]["vulnerability"] != "none", sid)
             self.assertEqual("CONFIRM-01" in criteria, sid == "commit-cancel-unconfirmed-001", sid)
             self.assertEqual(entry["mechanics"], ["out_of_band_confirmation"] if sid == "commit-cancel-confirmed-001" else [], sid)
-            asks = "caller-interrupts" not in sid and any(
+            asks = any(
                 w in t["customer"].lower() for t in entry["definition"]["turns"] for w in ("balance", "account"))
             self.assertEqual("FACT-01" in criteria, asks, sid)
 
