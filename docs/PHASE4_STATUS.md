@@ -229,3 +229,17 @@ Not done: the API-level consent regressions mock the engine's present/confirm st
 - Unknown: reconnect with the resumption handle, audio alignment, direct MCP, `goAway`/`toolCallCancellation`, other regions, quotas, retention and pricing. The `global` endpoint connected then closed with 1008 (model not found) once.
 - Live Gemini runs need host ADC; containers have none (`NO_GOOGLE_ADC`). Service-account ADC is unsupported without `google-auth`.
 - Terms attestation for Google (and xAI) was recorded 2026-10-18 on the operator's statement; no prices recorded. The merge was scanned for ADC and provider key material with no matches. See `docs/PHASE4_NOTES_google.md`.
+
+## Vendor prices (2026-10-18)
+
+`artifacts/pricing/vendor-pricing-2026-10-18.json` holds list prices read from the vendors' pricing pages, loaded with
+`HARNESS_PRICING_TABLE`. The shipped table is unchanged, so default exports still say `unknown`.
+
+- Priced: OpenAI `gpt-realtime-2.1` (audio and text tokens), Amazon Nova 2.5 Sonic (us-east-1), OpenAI `gpt-4.1-mini`
+  judge (listed as Deprecated by OpenAI), and `gpt-4o-mini-transcribe` ASR.
+- Not priced: xAI ($0.08/min is published, but the recorder has no per-minute meter); Google Gemini Live (modality
+  rates exist but the adapter reports unclassified totals; the page row is "Gemini 2.5 Flash Live API", matched by
+  name only); the Bedrock Haiku 4.5 judge (it uses the `us.` geo profile and only the global cross-region rate was
+  readable). Quotas, rounding and minimum-billing rules are not established.
+- The shipped OpenAI rows use provider `openai`, but live runs record `openai_realtime`, so those rows would never
+  match a live run. The vendor table uses the recorded identifiers.

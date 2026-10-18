@@ -17,6 +17,7 @@ COPY --chown=harness:harness src/ ./src/
 COPY --chown=harness:harness contracts/ ./contracts/
 COPY --chown=harness:harness apps/web/ ./apps/web/
 COPY --chown=harness:harness artifacts/phase2/ ./artifacts/phase2/
+COPY --chown=harness:harness artifacts/pricing/ ./artifacts/pricing/
 COPY --chown=harness:harness artifacts/phase0/*-capability-report.json ./artifacts/phase0/
 # Node runtime for the Nova bridge (same pinned image as nova-deps) + lockfile-installed deps. No credentials.
 COPY --from=nova-deps /usr/local/bin/node /usr/local/bin/node

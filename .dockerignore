@@ -12,6 +12,8 @@
 !artifacts/phase0/**
 !artifacts/phase2/
 !artifacts/phase2/**
+!artifacts/pricing/
+!artifacts/pricing/**
 !scripts/
 !scripts/probe/
 !scripts/probe/package.json
