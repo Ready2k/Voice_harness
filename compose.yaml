@@ -88,7 +88,7 @@ services:
     command: [python, -m, unittest, tests.adapter_conformance.LiveConformance, -v]
 
   postgres:
-    image: mirror.gcr.io/library/postgres:17.6-bookworm@sha256:f3bd19c606e442c3d7bdfa8002e03fe260a1023351e0ea4598032022b68dd6e3
+    image: mirror.gcr.io/library/postgres:17.11-bookworm@sha256:3645570cccdfa447589da9f57dd740faa29b30938e861289a5574b6ca6b03826
     environment:
       POSTGRES_DB: voice_harness
       POSTGRES_USER: harness
@@ -113,7 +113,7 @@ services:
 
   otel-collector:
     profiles: [infra]
-    image: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector:0.137.0@sha256:089a8b3c81d328a190f6f0740b30c15b0c7f1f2cfeadeb810355574d5158b31c
+    image: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector:0.163.1@sha256:f0e23036dce3db3f9cb80d907c75a0d034cd32e93511a1943482d46129b9ae9c
     command: ["--config=/etc/otelcol/config.yaml"]
     volumes:
       - ./infra/otel/collector.yaml:/etc/otelcol/config.yaml:ro

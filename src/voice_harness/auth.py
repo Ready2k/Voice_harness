@@ -23,13 +23,20 @@ def load_token(root: Path, name: str) -> str:
     return path.read_text().strip()
 
 
+def bearer_matches(authorization, token) -> bool:
+    """Constant-time bearer check; bytes so non-ASCII headers fail closed instead of raising."""
+    return bool(authorization) and hmac.compare_digest(
+        authorization.encode("utf-8", "surrogateescape"), ("Bearer " + token).encode()
+    )
+
+
 def role_for(authorization, operator_token, reviewer_token):
     """Constant-time role lookup: 'operator', 'reviewer' or None."""
     if not authorization:
         return None
-    if hmac.compare_digest(authorization, "Bearer " + operator_token):
+    if bearer_matches(authorization, operator_token):
         return "operator"
-    if reviewer_token and hmac.compare_digest(authorization, "Bearer " + reviewer_token):
+    if reviewer_token and bearer_matches(authorization, reviewer_token):
         return "reviewer"
     return None
 

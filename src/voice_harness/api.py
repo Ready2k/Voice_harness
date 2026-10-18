@@ -4,7 +4,6 @@ import asyncio
 import base64
 import contextvars
 import hashlib
-import hmac
 import logging
 import os
 import secrets
@@ -30,7 +29,7 @@ from pydantic import ValidationError
 
 from . import live_providers
 from .approvals import public_key
-from .auth import load_token, restrict_bundle, reviewer_may, role_for, tls_options
+from .auth import bearer_matches, load_token, restrict_bundle, reviewer_may, role_for, tls_options
 from .clock_runtime import ClockSyncSession, invalidate_prior_connection
 from .contracts import AudioInputPayload, CancelRun, HoldRequest, RenewHold, RunConfig
 from .cost_api import register_cost_routes
@@ -241,7 +240,8 @@ def create_app(
     app = FastAPI(
         title="Voice Harness Phase 1",
         version="0.3",
-        openapi_version="3.1.0",
+        # Spans come from origin_policy below; FastAPI's native OTel would duplicate them.
+        telemetry={"tracing": False, "metrics": False, "logs": False},
         lifespan=lifespan,
     )
     app.state.engine, app.state.evidence = engine, evidence
@@ -689,7 +689,7 @@ def create_app(
             ticket and ticket["run_id"] == run_id and ticket["expires_at"] > time.time()
         )
         if (
-            not hmac.compare_digest(authorization, "Bearer " + token) and not ticket_ok
+            not bearer_matches(authorization, token) and not ticket_ok
         ) or socket.headers.get("origin") not in origins:
             await socket.close(code=1008)
             return

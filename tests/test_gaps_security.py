@@ -61,6 +61,13 @@ class RoleTests(Base):
                 401,
             )
 
+    def test_non_ascii_authorization_is_rejected_not_500(self):
+        app = create_app(self.database, self.root, "op", reviewer_token="rev")
+        with TestClient(app) as client:
+            response = client.get("/api/v1/providers", headers={"Authorization": "Bearer \xe9".encode("latin-1")})
+            self.assertEqual(response.status_code, 401)
+            self.assertEqual(response.json()["error"]["code"], "AUTH_REQUIRED")
+
     def test_reviewer_token_cannot_open_websocket(self):
         app = create_app(self.database, self.root, "op", reviewer_token="rev")
         run = self.engine.create(RunConfig().model_dump())
