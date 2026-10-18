@@ -544,14 +544,31 @@ class ExpiredVerification(Base):
         self.assertFalse(self.events("playback.released"))
 
     def test_expires_while_the_job_is_in_flight(self):
+        # Begin one second before expiry and commit one second after: well inside the five-second decision
+        # deadline, so only the identity revalidation can refuse (not DECISION_TIMEOUT).
+        self.now[0] = 1899
         driver = self.driver(self.TEXT)
         driver.feed(frame())
         job, _ = driver.begin(TurnEnd(turn_id="t1", ts_ms=2))
         self.assertEqual(job.facts["verified_account_id"], "acct_1001")
         analysis = driver.analyse(job)
-        self.now[0] = 1901  # expiry passes during ASR
+        self.now[0] = 1901
         outcome = driver.commit(job, analysis)
-        self.assertNotEqual(outcome["strict_speech_approval"], "approved")
+        self.assertEqual(outcome["strict_speech_approval"], "held")
+        self.assertEqual(outcome["reason_codes"][0], "IDENTITY_NOT_CURRENT")
+        self.assertNotIn("DECISION_TIMEOUT", outcome["reason_codes"])
+        self.assertFalse(self.events("playback.released"))
+        self.assertFalse(self.events("audio.decision_timeout"))
+
+    def test_identity_replaced_while_the_job_is_in_flight_is_not_the_frozen_identity(self):
+        driver = self.driver(self.TEXT)
+        driver.feed(frame())
+        job, _ = driver.begin(TurnEnd(turn_id="t1", ts_ms=2))
+        analysis = driver.analyse(job)
+        with self.engine.database.transaction(self.run) as tx:
+            tx.state["identity_version"] += 1  # re-verified or invalidated since the job was frozen
+        outcome = driver.commit(job, analysis)
+        self.assertEqual(outcome["reason_codes"][0], "IDENTITY_NOT_CURRENT")
         self.assertFalse(self.events("playback.released"))
 
     def test_still_valid_verification_is_approved(self):

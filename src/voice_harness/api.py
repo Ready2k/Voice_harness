@@ -88,13 +88,16 @@ def create_app(
             with database.transaction(run_id) as tx:
                 if tx.state["state"] != "queued":
                     return
-                # Mock capability probe: fixture providers have nothing to discover.
                 tx.state["state"] = "probing"
-                tx.event(
-                    "orchestrator",
-                    "run.probing",
-                    {"capability_status": "mock_only"},
-                )
+                provider_config = tx.state["config"]["provider_config_id"]
+                if provider_config in live_providers.LIVE_PROVIDERS:
+                    # Credentials alone are not capability verification: record the bound report, or the
+                    # fact that this is an unverified diagnostic run.
+                    probe = live_providers.capability_binding(provider_config)
+                    tx.event("orchestrator", "run.probing", probe)
+                else:
+                    # Mock capability probe: fixture providers have nothing to discover.
+                    tx.event("orchestrator", "run.probing", {"capability_status": "mock_only"})
             with database.transaction(run_id) as tx:
                 if tx.state["state"] != "probing":
                     return
@@ -156,19 +159,24 @@ def create_app(
         summary = asyncio.run(live_task(run_id, config))
         if summary is None:  # cancelled: Engine.cancel already settled the ledger and discarded held audio
             return
-        failed = [t for t in summary["turns"] if t["strict_speech_approval"] in ("provider_error", "stream_ended")]
+        outcomes = {t["strict_speech_approval"] for t in summary["turns"]}
+        if "turn_timeout" in outcomes:
+            failure = "TURN_TIMEOUT"
+        elif outcomes & {"provider_error", "stream_ended"} or summary["adapter_errors"]:
+            failure = "PROVIDER_FAILURE"
+        else:
+            failure = None
         with database.transaction(run_id) as tx:
             if tx.state["state"] != "running":
                 return
-            if failed or summary["adapter_errors"]:
+            if failure:
                 tx.state["state"] = "failed"
-                tx.event("orchestrator", "run.failed", {"reason": "PROVIDER_FAILURE"})
-            else:
-                tx.state["state"] = "completed"
-                # The overall assurance is derived by the assessment below, from the ledger.
-                tx.event("orchestrator", "run.completed", {"assurance": None})
-        if failed or summary["adapter_errors"]:
-            return
+                tx.event("orchestrator", "run.failed", {"reason": failure})
+                return
+            # The terminal state is written once, after the assessment: a failure while assessing is `failed`,
+            # never `completed` followed by `failed`.
+            tx.state["state"] = "evaluating"
+            tx.event("orchestrator", "run.evaluating", {})
         # Deterministic rubric checks always run. Judges named in HARNESS_AUTO_JUDGES run too (the assessment
         # decides eligibility against the tested model); a judge that cannot start is logged and the criteria
         # that need one stay untestable. Any assessment failure fails the run closed.
@@ -176,14 +184,20 @@ def create_app(
         for entry in unavailable:
             logging.getLogger("voice_harness.run").warning("auto judge unavailable: %s", entry)
         result = judge_service.assess_run(
-            database, run_id, tested=live_providers.TESTED_MODELS[config["provider_config_id"]], backends=backends
+            database, run_id, tested=live_providers.TESTED_MODELS[config["provider_config_id"]], backends=backends,
+            while_evaluating=True,
         )
+        assurance = {
+            "model_behaviour": result["model_behaviour"],
+            "platform_enforcement": result["platform_enforcement"],
+            "overall_assurance": result["overall_assurance"],
+        }
         with database.transaction(run_id) as tx:
-            tx.state["assurance"] = {
-                "model_behaviour": result["model_behaviour"],
-                "platform_enforcement": result["platform_enforcement"],
-                "overall_assurance": result["overall_assurance"],
-            }
+            if tx.state["state"] != "evaluating":  # cancelled while assessing
+                return
+            tx.state["assurance"] = assurance
+            tx.state["state"] = "completed"
+            tx.event("orchestrator", "run.completed", {"assurance": assurance})
 
     @asynccontextmanager
     async def lifespan(app):
@@ -350,7 +364,8 @@ def create_app(
                 "content_hash": value[0],
                 "runnable": (key[0] in SCENARIOS or key[0] in CATALOGUE) and key[1] == 1,
                 "execution": "live_adapter" if key[0] in CATALOGUE else "mock",
-                **({"faults": CATALOGUE[key[0]]["faults"]} if key[0] in CATALOGUE else {}),
+                **({"faults": CATALOGUE[key[0]]["faults"], "mechanics": CATALOGUE[key[0]]["mechanics"]}
+                   if key[0] in CATALOGUE else {}),
                 "definition": value[1],
             }
             for key, value in sorted(merged.items())

@@ -207,6 +207,13 @@ def examples():
                 "scenario_id": "identity-impatient-en-gb-clean-001", "scenario_hash": pcm,
                 "adapter": "openai_realtime", "seed": 0, "interrupt_mode": "client",
                 "audio_profile": "clean_studio", "faults": [], "limits": {"pending_audio_seconds": 15.0},
+                "harness_mechanics": [],
+                "provider": {
+                    "provider_config_id": "openai-realtime-live", "adapter": "openai_realtime", "family": "openai",
+                    "requested_model_id": "gpt-realtime-2.1", "returned_model_id": "gpt-realtime-2.1",
+                    "provider_session_id": "sess_001", "capability_status": "diagnostic_unverified",
+                    "capability_report_id": None, "capability_reason_codes": ["NO_CAPABILITY_REPORT"],
+                },
             },
             "assessment.abandoned": {
                 "reason": "TURN_TIMEOUT", "retired_jobs": [{"job_id": 1, "unit_id": "unit_001", "item_ids": ["item_a"]}],

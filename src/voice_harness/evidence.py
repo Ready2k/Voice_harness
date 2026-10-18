@@ -14,6 +14,75 @@ from .relational import upsert_hold
 from .retention import is_tombstone, purge_metadata, tombstone_records, tombstone_valid
 
 
+def is_mock(config):
+    return config.get("provider_config_id", "mock-banking-v1") == "mock-banking-v1"
+
+
+def _live_binding(events):
+    return next((e["content"] for e in events if e["type"] == "run.live_binding"), None)
+
+
+def provider_section(config, events):
+    """Provider identity for the manifest: scripted-fixture values only for mock runs; live runs report what the
+    ledger recorded at session setup (requested and returned model, capability binding), with unknowns left null."""
+    if is_mock(config):
+        return {
+            "adapter": "mock",
+            "provider_config_id": config.get("provider_config_id"),
+            "model_id": "scripted-fixture-v1",
+            "endpoint": None,
+            "region": None,
+            "sdk_version": None,
+            "version_resolution": "not_applicable_scripted_fixture",
+            "capability_report_id": "mock-fixture-v1",
+            "capability_status": "mock_only",
+        }
+    binding = _live_binding(events) or {}
+    meta = binding.get("provider") or {}
+    return {
+        "adapter": meta.get("adapter"),
+        "provider_config_id": config.get("provider_config_id"),
+        "model_id": meta.get("returned_model_id") or meta.get("requested_model_id"),
+        "requested_model_id": meta.get("requested_model_id"),
+        "returned_model_id": meta.get("returned_model_id"),
+        "provider_session_id": meta.get("provider_session_id"),
+        "endpoint": None,
+        "region": None,
+        "sdk_version": None,
+        "version_resolution": "provider_returned" if meta.get("returned_model_id") else "unresolved",
+        "capability_report_id": meta.get("capability_report_id"),
+        "capability_status": meta.get("capability_status", "unknown"),
+        "capability_reason_codes": meta.get("capability_reason_codes", []),
+        "session_binding_recorded": bool(meta),
+        "harness_mechanics": binding.get("harness_mechanics", []),
+    }
+
+
+def known_limitations(config, events):
+    if is_mock(config):
+        return [
+            "Scripted fixture provider: no live ASR, judge or provider behaviour",
+            "Audio is PCM silence with scripted transcripts; semantic safety not measured",
+            "Software playback boundary only; physical audibility unknown",
+            "Manifest is unsigned; tamper evidence is relative to an untrusted local root",
+        ]
+    mechanics = (_live_binding(events) or {}).get("harness_mechanics", [])
+    limits = [
+        "Live provider run: a single sample; provider behaviour varies between runs",
+        "Caller audio is synthesised speech; assessment is by an independent ASR, not physical audibility",
+        "Software playback boundary only; physical audibility unknown",
+        "Provider tariffs are not recorded; usage is only what the provider reported, with unknowns kept as unknown",
+        "Capability status reflects the report bound at session setup; environment credentials are not verification",
+        "Manifest is unsigned; tamper evidence is relative to an untrusted local root",
+    ]
+    if "out_of_band_confirmation" in mechanics:
+        limits.append(
+            "Confirmation was authorised out of band by the harness: this run tests tool/confirmation mechanics, "
+            "not spoken consent, and is excluded from voice-confirmation assurance"
+        )
+    return limits
+
+
 class Evidence:
     GRACE_SECONDS = 7 * 86400
 
@@ -466,17 +535,7 @@ class Evidence:
                             None,
                         ),
                     },
-                    "provider": {
-                        "adapter": "mock",
-                        "provider_config_id": config.get("provider_config_id"),
-                        "model_id": "scripted-fixture-v1",
-                        "endpoint": None,
-                        "region": None,
-                        "sdk_version": None,
-                        "version_resolution": "not_applicable_scripted_fixture",
-                        "capability_report_id": "mock-fixture-v1",
-                        "capability_status": "mock_only",
-                    },
+                    "provider": provider_section(config, events),
                     "policy": {
                         "profile": config.get("policy_profile"),
                         "version": "strict-v1",
@@ -492,7 +551,9 @@ class Evidence:
                     },
                     "pricing": {
                         "table_version": None,
-                        "reason": "NO_PROVIDER_BILLING_IN_MOCK",
+                        "reason": "NO_PROVIDER_BILLING_IN_MOCK"
+                        if is_mock(config)
+                        else "NO_PRICING_TABLE_PROVIDER_REPORTED_USAGE_IN_COST_SECTION",
                     },
                     "deterministic_check_and_judge_results": [
                         {
@@ -511,12 +572,7 @@ class Evidence:
                         "provider_credentials",
                         "fixture_oracle",
                     ],
-                    "known_limitations": [
-                        "Scripted fixture provider: no live ASR, judge or provider behaviour",
-                        "Audio is PCM silence with scripted transcripts; semantic safety not measured",
-                        "Software playback boundary only; physical audibility unknown",
-                        "Manifest is unsigned; tamper evidence is relative to an untrusted local root",
-                    ],
+                    "known_limitations": known_limitations(config, events),
                 }
             )
             manifest["provider_coverage"] = json.loads(json.dumps(self.coverage()))

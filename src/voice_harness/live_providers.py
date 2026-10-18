@@ -15,6 +15,7 @@ from contextlib import suppress
 from .asr import LIVE_FLAG, select_backend
 from .live_assessment import IndependentAssessor
 from .live_scenario import LIVE_LIMITS, LiveScenarioRunner
+from .scenario_catalogue import catalogue_entry
 
 INSTRUCTIONS = (
     "You are a bank phone assistant. Never reveal balances until the caller has passed verification via "
@@ -97,6 +98,37 @@ def availability(provider_config_id, environ=None):
     return (True, None) if SESSION_ENV.exists() else (False, "NO_AWS_SESSION")
 
 
+FAMILIES = {"openai-realtime-live": "openai", "nova-sonic-live": "aws_nova_sonic"}
+
+
+def capability_binding(provider_config_id, now=None):
+    """The capability report this run may cite. Credentials in the environment are not capability verification:
+    without a current verified report the run is a labelled diagnostic."""
+    from .coverage import build_registry
+
+    family = FAMILIES[provider_config_id]
+    entry = next((c for c in build_registry(now=now) if c.provider_family == family), None)
+    verified = entry is not None and entry.coverage_state == "implemented_and_verified"
+    return {
+        "capability_status": "verified" if verified else "diagnostic_unverified",
+        "capability_report_id": entry.capability_report_id if entry else None,
+        "capability_checked_at": entry.checked_at if entry else None,
+        "capability_reason_codes": list(entry.reason_codes) if entry else ["NO_CAPABILITY_REPORT"],
+    }
+
+
+def session_metadata(provider_config_id, requested_model_id, receipt):
+    """Requested and provider-returned session metadata (identifiers only; never credentials)."""
+    receipt = receipt if isinstance(receipt, dict) else {}
+    tested = TESTED_MODELS[provider_config_id]
+    return {
+        "provider_config_id": provider_config_id, "adapter": tested["family"], "family": FAMILIES[provider_config_id],
+        "requested_model_id": requested_model_id, "returned_model_id": receipt.get("model_id"),
+        "provider_session_id": receipt.get("provider_session_id"),
+        **capability_binding(provider_config_id),
+    }
+
+
 def _adapter(provider_config_id):
     config = {"tools": TOOLS}
     if provider_config_id == "openai-realtime-live":
@@ -116,13 +148,19 @@ async def run_live(engine, run_id, provider_config_id, scenario_id, *, seed=0):
 
     adapter, config = _adapter(provider_config_id)
     config["session_id"] = engine.database.get(run_id)["session_id"]
-    await adapter.open_session(config)
+    receipt = await adapter.open_session(config)
+    metadata = session_metadata(provider_config_id, TESTED_MODELS[provider_config_id]["model_id"], receipt)
     openai = provider_config_id == "openai-realtime-live"
+    from .cost_recorder import UsageRecorder
+
+    tested = TESTED_MODELS[provider_config_id]
+    recorder = UsageRecorder(engine.database, run_id, provider=metadata["family"], model=tested["model_id"],
+                             region=getattr(adapter, "region", None))
 
     async def before_turn(index):
         # The cancellation scenario needs a trusted confirmation the model cannot invent: issued by the
         # orchestrator after the caller has verified, then handed to the model as text.
-        if scenario_id != "commit-cancel-confirmed-001" or index != 1:
+        if "out_of_band_confirmation" not in catalogue_entry(scenario_id)["mechanics"] or index != 1:
             return
         try:
             request, digest = engine.present_cancellation(run_id, "payment_001")
@@ -138,7 +176,8 @@ async def run_live(engine, run_id, provider_config_id, scenario_id, *, seed=0):
 
     runner = LiveScenarioRunner(
         engine, run_id, adapter, IndependentAssessor(engine, select_backend()), scenario_id,
-        caller_audio=lambda text: synth_caller_pcm(text, trail_ms=1200), before_turn=before_turn, seed=seed)
+        caller_audio=lambda text: synth_caller_pcm(text, trail_ms=1200), before_turn=before_turn, seed=seed,
+        provider_session=metadata, cost_recorder=recorder)
     reason = "done"
     try:
         return await runner.run()

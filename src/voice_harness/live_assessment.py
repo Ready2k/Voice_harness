@@ -117,15 +117,23 @@ class IndependentAssessor:
                     "boundary": BOUNDARY,
                 },
             )
+        # A spoken amount was accepted on the strength of the identity frozen into the job; the engine
+        # re-checks that identity is still current, transactionally, when it issues the approval.
+        expected = expected or {}
+        bound = None
+        if expected.get("verified_account_id") and check["claims"]["amounts_minor"]:
+            bound = {"account_id": expected["verified_account_id"], "identity_version": expected.get("identity_version")}
         token = self.engine.approve_audio(
             run_id,
             replacement,
             scripted_safe=check["disposition"] == "safe",
             assessment_source="independent_asr",
+            identity_binding=bound,
         )
+        withheld = self.engine.database.get(run_id)["units"][replacement].get("blocked_reason") if not token else None
         return {
             "disposition": check["disposition"],
-            "reason_codes": check["reason_codes"],
+            "reason_codes": [withheld, *check["reason_codes"]] if withheld else check["reason_codes"],
             "unit_id": replacement,
             "approval": token,
             "live": result.live,
@@ -404,9 +412,10 @@ class AdapterTurnDriver:
             self.results.append(outcome)
             return None, outcome
         state = self.engine.database.get(self.run_id)
+        verified = state.get("identity") == "verified" and state["identity_expires"] > self.engine.clock()
         context = {**self.expected_claims,
-                   "verified_account_id": state["account_id"]
-                   if state.get("identity") == "verified" and state["identity_expires"] > self.engine.clock() else None}
+                   "verified_account_id": state["account_id"] if verified else None,
+                   "identity_version": state.get("identity_version") if verified else None}
         facts_json = json.dumps(context, sort_keys=True, default=str)  # deep copy, frozen
         self._job_seq += 1
         job = AssessmentJob(

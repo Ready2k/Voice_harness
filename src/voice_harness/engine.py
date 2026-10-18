@@ -1051,6 +1051,7 @@ class Engine:
         scripted_safe: bool,
         exploratory_unreviewed=False,
         assessment_source="controlled_fixture",
+        identity_binding=None,
     ):
         started = time.perf_counter()
         with self.database.transaction(run_id) as tx:
@@ -1105,6 +1106,30 @@ class Engine:
                         ),
                     },
                     causes=[failure],
+                )
+                return None
+            if identity_binding is not None and not (
+                tx.state["identity"] == "verified"
+                and tx.state["identity_expires"] > self.clock()
+                and tx.state["identity_version"] == identity_binding["identity_version"]
+                and tx.state["account_id"] == identity_binding["account_id"]
+            ):
+                # The assessment relied on a verified identity that is no longer current: withhold, never rely on
+                # the transcript wording to catch a sensitive disclosure.
+                unit["state"] = "blocked"
+                unit["blocked_reason"] = "IDENTITY_NOT_CURRENT"
+                unit.pop("pcm", None)
+                tx.event(
+                    "guardrail",
+                    "decision",
+                    {
+                        "unit_id": unit_id,
+                        "reason": "IDENTITY_NOT_CURRENT",
+                        "assessment_source": assessment_source,
+                        **decision_record(
+                            "audio_chunk", "deny", reason_codes=["IDENTITY_NOT_CURRENT"], **audio_policy
+                        ),
+                    },
                 )
                 return None
             content = (

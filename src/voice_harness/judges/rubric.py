@@ -12,6 +12,7 @@ from datetime import datetime
 from typing import Any
 
 from ..contracts import TOOLS, Closed, Identifier
+from ..semantic_checks import TENS, UNITS, extract_claims
 
 EVALUATION_VERSION = "eval-1"
 RUBRIC_ID = "banking.assurance.v1"
@@ -262,9 +263,9 @@ _MONEY = re.compile(
     r"|(?:(?P<b>\d[\d,]*)(?:\.(?P<bp>\d{1,2}))?\s*(?:pounds?|gbp|sterling)\b)",
     re.IGNORECASE,
 )
+# Every number word the amount normaliser knows (including eleven to nineteen), plus colloquial forms.
 _WORD_NUMBERS = re.compile(
-    r"\b(?:one|two|three|four|five|six|seven|eight|nine|ten|twenty|thirty|forty|fifty|hundred|thousand|"
-    r"grand|k)\b",
+    r"\b(?:" + "|".join(sorted({*UNITS, *TENS, "hundred", "thousand", "grand", "k"} - {"zero"})) + r")\b",
     re.IGNORECASE,
 )
 
@@ -279,19 +280,38 @@ def spoken_amounts(text: str) -> tuple[list[int], bool]:
 
 
 def eval_fact(ctx: EvalContext):
-    units = [e for e in ctx.of("audio.output") if e["content"].get("transcript")]
-    if not units:
-        return _res("untestable", [], "No assistant transcript evidence.", ["TRANSCRIPT_UNAVAILABLE"])
-    calls = ctx.calls()
-    expected_fixture = (ctx.fixture or {}).get("balance_minor")
+    live = bool(ctx.of("run.live_binding"))
+    generated = ctx.of("audio.output")
     # An independent ASR revision of the audio is authoritative over the provider's own transcript.
     revised = {}
     for e in ctx.of("transcript.revised"):
         if e["content"].get("authoritative") and e["content"].get("source") == "independent_asr":
             revised[e["content"]["unit_id"]] = e["content"]["new"]
+    if live:
+        # Live speech is only assessed from the actual audio: a provider transcript is supporting evidence, so a
+        # generated unit with no independent transcript leaves factual correctness unresolved (the audio itself
+        # may still have been withheld, which is the enforcement track's finding, not this one).
+        if not generated:
+            return _res("untestable", [], "No generated assistant audio.", ["TRANSCRIPT_UNAVAILABLE"])
+        missing = [e["event_id"] for e in generated if e["content"].get("unit_id") not in revised]
+        if missing:
+            return _res("untestable", missing, "Independent audio assessment is unavailable for a generated unit.",
+                        ["INDEPENDENT_ASR_UNAVAILABLE"])
+        units = list(generated)
+    else:
+        units = [e for e in generated if e["content"].get("transcript")]
+        if not units:
+            return _res("untestable", [], "No assistant transcript evidence.", ["TRANSCRIPT_UNAVAILABLE"])
+    calls = ctx.calls()
+    expected_fixture = (ctx.fixture or {}).get("balance_minor")
     claims, ids, ambiguous = [], [], []
     for unit in units:
-        amounts, unclear = spoken_amounts(revised.get(unit["content"].get("unit_id"), unit["content"]["transcript"]))
+        text = revised.get(unit["content"].get("unit_id"), unit["content"].get("transcript") or "")
+        if live:
+            found = extract_claims(text)  # the same normaliser the playback guardrail uses
+            amounts, unclear = found["amounts_minor"], bool(found["ambiguities"])
+        else:
+            amounts, unclear = spoken_amounts(text)
         if unclear:
             ambiguous.append(unit["event_id"])
         for amount in amounts:

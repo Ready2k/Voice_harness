@@ -74,12 +74,13 @@ CONTINUE = object()  # sentinel: the event does not settle the turn
 class LiveScenarioRunner:
     def __init__(self, engine, run_id, adapter, assessor, scenario_id, *, caller_audio, cost_recorder=None,
                  seed=0, turn_timeout_s=TURN_TIMEOUT_S, interrupt_mode="client", barge_after_tool=False,
-                 before_turn=None):
+                 before_turn=None, provider_session=None):
         entry = catalogue_entry(scenario_id)
         if entry is None:
             raise ValueError("SCENARIO_NOT_IN_CATALOGUE")
         self.engine, self.run_id, self.adapter, self.entry = engine, run_id, adapter, entry
         self.caller_audio, self.seed, self.turn_timeout_s = caller_audio, seed, turn_timeout_s
+        self.provider_session = provider_session  # requested/returned session metadata, recorded in the binding
         self.before_turn = before_turn  # async (index) hook run before a caller turn, e.g. a trusted confirmation
         self.interrupt_mode = interrupt_mode  # "client": runner calls interrupt(); "vad": caller speech overlaps, provider VAD cuts in
         self.driver = AdapterTurnDriver(engine, run_id, assessor, cost_recorder=cost_recorder)
@@ -116,6 +117,7 @@ class LiveScenarioRunner:
                 "adapter": type(self.adapter).__name__, "seed": self.seed_value,
                 "interrupt_mode": self.interrupt_mode, "audio_profile": definition["audio_profile"],
                 "faults": self.entry["faults"], "limits": dict(self.engine.limits),
+                "harness_mechanics": list(self.entry.get("mechanics", [])), "provider": self.provider_session,
             })
 
     def _record_input(self, index, turn, pcm, started_ms, ended_ms):

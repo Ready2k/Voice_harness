@@ -48,6 +48,29 @@
       "additionalProperties": true,
       "title": "Limits",
       "type": "object"
+    },
+    "harness_mechanics": {
+      "default": [],
+      "items": {
+        "maxLength": 200,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Harness Mechanics",
+      "type": "array"
+    },
+    "provider": {
+      "anyOf": [
+        {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Provider"
     }
   },
   "required": [

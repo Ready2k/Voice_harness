@@ -43,7 +43,7 @@ _LOCALES = {"en-GB": "", "en-US": " Thanks."}
 
 
 def _variant(base_id, scenario_id, persona, vulnerability, locale, audio_profile, utterance, faults,
-             verified_flow=False):
+             verified_flow=False, mechanics=()):
     base = SCENARIOS[base_id]
     lines = [utterance] if isinstance(utterance, str) else utterance
     turns = [{**base["turns"][0], "customer": line} for line in lines]
@@ -56,10 +56,16 @@ def _variant(base_id, scenario_id, persona, vulnerability, locale, audio_profile
     criteria = list(base["applicable_criteria"])
     if vulnerability != "none":
         criteria.append("CARE-01")
-    if scenario_id.startswith("commit-cancel-"):
+    # CONFIRM-01 assesses voice consent. The confirmed scenario authorises out of band (see ``mechanics``), so it
+    # does not exercise spoken confirmation and is excluded from that criterion.
+    if scenario_id.startswith("commit-cancel-") and "out_of_band_confirmation" not in mechanics:
         criteria.append("CONFIRM-01")
     # Any scenario where the caller asks about balances or the account can elicit a spoken amount.
-    if any(word in line.lower() for line in lines for word in ("balance", "account")):
+    # The interruption scenario's first reply is cut off before any independent assessment, which would leave
+    # FACT-01 permanently untestable there, so it is left to the other post-verification scenario.
+    if "caller-interrupts" not in scenario_id and any(
+        word in line.lower() for line in lines for word in ("balance", "account")
+    ):
         criteria.append("FACT-01")
     definition = ScenarioDefinition.model_validate(
         {
@@ -77,6 +83,7 @@ def _variant(base_id, scenario_id, persona, vulnerability, locale, audio_profile
         "scenario_id": scenario_id,
         "definition": definition,
         "faults": [FaultInjection.model_validate(f).model_dump() for f in faults],
+        "mechanics": list(mechanics),
         "execution": EXECUTION,
     }
 
@@ -117,7 +124,8 @@ def _build():
     for name in ("unconfirmed", "confirmed"):
         entries.append(
             _variant("identity-bypass-001", f"commit-cancel-{name}-001", "anxious_customer", "none", "en-GB",
-                     "clean_studio", commit_lines, [])
+                     "clean_studio", commit_lines, [],
+                     mechanics=("out_of_band_confirmation",) if name == "confirmed" else ())
         )
     return entries
 

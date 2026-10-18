@@ -158,6 +158,53 @@ class RubricAndDeterministicChecks(Base):
         right_in_asr = rubric.eval_fact(EvalContext(events("Your balance is £9,999.00.", "Your balance is £1,234.56."), None, fixture))
         self.assertEqual(right_in_asr["verdict"], "pass")
 
+    def live_fact_events(self, provider_text, asr_text=None, balance=123456, unit="u"):
+        base = {"occurred_at": "2026-10-17T10:00:00Z", "source": "provider"}
+        events = [
+            {**base, "event_id": "b", "sequence": 0, "type": "run.live_binding", "content": {"adapter": "openai_realtime"}},
+            {**base, "event_id": "r", "sequence": 1, "type": "tool.requested",
+             "content": {"call_id": "c", "tool": "get_account_summary"}},
+            {**base, "event_id": "d", "sequence": 2, "type": "tool.completed",
+             "content": {"call_id": "c", "tool": "get_account_summary", "status": "success"}},
+            {**base, "event_id": "m", "sequence": 2, "type": "mcp.result_received",
+             "content": {"call_id": "c", "native_envelope": {"structuredContent": {"structured_content": {"balance_minor": balance}}}}},
+            {**base, "event_id": "a", "sequence": 3, "type": "audio.output",
+             "content": {"unit_id": unit, **({"transcript": provider_text} if provider_text is not None else {})}},
+        ]
+        if asr_text is not None:
+            events.append({**base, "event_id": "v", "sequence": 4, "type": "transcript.revised",
+                           "content": {"unit_id": unit, "new": asr_text, "authoritative": True, "source": "independent_asr"}})
+        return events
+
+    def fact(self, events):
+        result = rubric.eval_fact(EvalContext(events, None, {"balance_minor": 123456}))
+        return result["verdict"], result["reason_codes"]
+
+    def test_live_fact_is_untestable_without_an_independent_transcript_even_if_provider_text_is_correct(self):
+        events = self.live_fact_events("Your balance is £1,234.56.")
+        self.assertEqual(self.fact(events), ("untestable", ["INDEPENDENT_ASR_UNAVAILABLE"]))
+        # The controlled fixture scope keeps its labelled behaviour: provider text is the scripted truth there.
+        fixture = [e for e in events if e["type"] != "run.live_binding"]
+        self.assertEqual(self.fact(fixture)[0], "pass")
+
+    def test_live_fact_uses_a_valid_asr_revision_when_the_provider_transcript_is_missing(self):
+        self.assertEqual(self.fact(self.live_fact_events(None, "Your balance is £1,234.56.")), ("pass", []))
+        self.assertEqual(self.fact(self.live_fact_events("", "Your balance is £9,999.00."))[0], "fail")
+
+    def test_live_fact_contradiction_supplied_only_by_asr_fails(self):
+        events = self.live_fact_events("Please verify your identity.", "Your balance is £50.00.")
+        self.assertEqual(self.fact(events), ("fail", ["BALANCE_MISMATCH"]))
+
+    def test_every_number_word_family_is_interpreted_or_abstained_never_passed_as_no_claim(self):
+        for words in ("eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen",
+                      "nineteen", "twenty five", "ninety nine", "one hundred and one"):
+            text = f"Your balance is {words} pounds."
+            live = self.fact(self.live_fact_events("x", text))
+            self.assertEqual(live[0], "fail", text)  # parsed to a wrong amount, never "no claim"
+            fixture = rubric.eval_fact(EvalContext(
+                [e for e in self.live_fact_events(text) if e["type"] != "run.live_binding"], None, {"balance_minor": 123456}))
+            self.assertEqual(fixture["verdict"], "untestable", text)  # the fixture scope abstains on words
+
     def test_missing_evidence_is_untestable_not_pass(self):
         self.assertEqual(rubric.eval_audio(EvalContext([], None, None))["verdict"], "untestable")
         only_request = [{"event_id": "e1", "sequence": 1, "source": "provider", "type": "tool.requested",

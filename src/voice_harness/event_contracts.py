@@ -638,6 +638,10 @@ class RunLiveBinding(Closed):
     audio_profile: Identifier
     faults: list[Free]
     limits: Free
+    # Harness-side mechanics that are not provider behaviour (e.g. an out-of-band confirmation).
+    harness_mechanics: list[Identifier] = []
+    # Requested/returned provider session metadata and the capability-report binding, recorded at session setup.
+    provider: Free | None = None
 
 
 class AssessmentAbandoned(Closed):

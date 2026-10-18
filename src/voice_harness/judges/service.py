@@ -48,10 +48,12 @@ def fixture_for(state: dict) -> dict:
 
 def assess_run(database, run_id: str, *, tested: dict, backends: list[JudgeBackend] | None = None,
                material_benchmark: bool = False, required_judges: int | None = None,
-               extra_applicable: list[str] | None = None, order_seed: int = 0) -> dict:
+               extra_applicable: list[str] | None = None, order_seed: int = 0,
+               while_evaluating: bool = False) -> dict:
+    """``while_evaluating`` lets the run's own worker assess it before the terminal state is written."""
     store.ensure(database)
     state = database.get(run_id)
-    if state["state"] in UNFINISHED:
+    if state["state"] in (UNFINISHED - {"evaluating"} if while_evaluating else UNFINISHED):
         raise ValueError("RUN_NOT_FINISHED")
     all_events = database.events(run_id)
     events = _plain(all_events)
