@@ -12,6 +12,7 @@ nav a { color:var(--info) }
 .sub, .muted { color:var(--muted) }
 .sub { margin:0 0 16px }
 .muted { font-size:.85rem; margin:2px 0 }
+[hidden] { display:none !important }
 form { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; align-items:center }
 input, select { flex:1 1 220px; padding:8px 10px; border:1px solid var(--line); border-radius:6px; background:var(--card); color:var(--fg); font:inherit }
 select { flex:0 1 320px }
