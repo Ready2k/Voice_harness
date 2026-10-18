@@ -9,7 +9,6 @@ from __future__ import annotations
 
 import asyncio
 import os
-import shutil
 from contextlib import suppress
 
 from .asr import LIVE_FLAG, select_backend
@@ -89,8 +88,11 @@ def availability(provider_config_id, environ=None):
         return False, "NOT_A_LIVE_PROVIDER"
     if environ.get(LIVE_FLAG) != "openai" or not environ.get("OPENAI_API_KEY"):
         return False, "NO_ASR_BACKEND_CONFIGURED"
-    if not (shutil.which("say") and shutil.which("afconvert")):
-        return False, "NO_CALLER_VOICE_SYNTH"  # caller speech is synthesised with macOS say/afconvert
+    from .caller_voice import available as caller_voice_available
+
+    voice_ok, voice_reason = caller_voice_available(environ)  # macOS say/afconvert default, or opt-in openai_tts
+    if not voice_ok:
+        return False, voice_reason
     if provider_config_id == "openai-realtime-live":
         return True, None
     from .adapters.nova_sonic import SESSION_ENV
@@ -150,6 +152,9 @@ async def run_live(engine, run_id, provider_config_id, scenario_id, *, seed=0):
     config["session_id"] = engine.database.get(run_id)["session_id"]
     receipt = await adapter.open_session(config)
     metadata = session_metadata(provider_config_id, TESTED_MODELS[provider_config_id]["model_id"], receipt)
+    from .caller_voice import describe as describe_caller_voice
+
+    metadata["caller_voice"] = describe_caller_voice()  # backend + voice/model ids only
     openai = provider_config_id == "openai-realtime-live"
     from .cost_recorder import UsageRecorder
 
