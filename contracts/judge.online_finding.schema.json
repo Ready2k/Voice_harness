@@ -240,9 +240,28 @@
       "title": "Blocking Capability",
       "type": "string"
     },
+    "blocking_eligible": {
+      "default": false,
+      "title": "Blocking Eligible",
+      "type": "boolean"
+    },
     "blocking_enforced": {
       "title": "Blocking Enforced",
       "type": "boolean"
+    },
+    "enforcement_decision_id": {
+      "anyOf": [
+        {
+          "maxLength": 200,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Enforcement Decision Id"
     },
     "advisory_reason": {
       "anyOf": [

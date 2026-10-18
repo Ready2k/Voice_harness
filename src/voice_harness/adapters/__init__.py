@@ -35,6 +35,11 @@ SUPPORTED = "supported"
 UNSUPPORTED = "unsupported"
 
 
+# Audio events queued ahead of the consumer; control events (errors, turn ends) are never bounded by this.
+AUDIO_QUEUE_MAX = 1500
+AUDIO_OVERFLOW_CODE = "AUDIO_QUEUE_OVERFLOW"
+
+
 class _Ev(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
     session_id: str | None = None

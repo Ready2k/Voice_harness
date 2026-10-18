@@ -396,9 +396,11 @@ class OnlineJudge(Base):
         by_id = {e["event_id"]: e for e in events}
         future = submit_online(run_online, backend, oracle, by_id, window=ids, blocking_enabled=lambda c: True)
         enforced = future.result(timeout=5)["findings"][0]
-        self.assertTrue(enforced["blocking_enforced"])
+        self.assertTrue(enforced["blocking_eligible"])
+        self.assertFalse(enforced["blocking_enforced"])  # eligible is not applied: no guardrail acknowledged it
+        self.assertEqual(enforced["advisory_reason"], "ENFORCEMENT_NOT_WIRED")
         default = run_online(backend, oracle, by_id, window=ids)["findings"][0]
-        self.assertFalse(default["blocking_enforced"])
+        self.assertFalse(default["blocking_eligible"])
         self.assertEqual(calibration.blocking_checker(self.database, backend.config, "en-GB",
                                                       "telephone_noisy")("identity_verification_bypass"), False)
 

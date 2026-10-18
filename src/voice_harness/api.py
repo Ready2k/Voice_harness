@@ -292,6 +292,9 @@ def create_app(
                 "INSERT INTO harness_scenario_definitions VALUES (?, ?, ?, ?) ON CONFLICT DO NOTHING",
                 (key[0], key[1], content_hash, database.encoded(body)),
             )
+        winner = stored_scenarios().get(key)  # a concurrent writer may have inserted different content first
+        if winner is None or winner[0] != content_hash:
+            raise ValueError("SCENARIO_VERSION_CONFLICT")
         return {"scenario_id": key[0], "version": key[1], "content_hash": content_hash, "created": True}
 
     @app.post("/api/v1/runs", status_code=202, dependencies=[Depends(auth)])

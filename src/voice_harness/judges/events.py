@@ -141,7 +141,9 @@ class JudgeOnlineFinding(Closed):
     evidence_event_ids: list[Identifier]
     recommended_action: Identifier
     blocking_capability: BLOCKING_CAPABILITIES
-    blocking_enforced: bool
+    blocking_eligible: bool = False  # calibration permits the action; nothing has been done
+    blocking_enforced: bool  # true only once a guardrail durably recorded the action (see enforcement_decision_id)
+    enforcement_decision_id: Identifier | None = None
     advisory_reason: Identifier | None
     rationale: Text
     status: Literal["valid", "invalid"]

@@ -626,3 +626,48 @@ EVENT_CONTENT_CONTRACTS.update(
         "benchmark.adapter_metrics": BenchmarkAdapterMetrics,
     }
 )
+
+
+# --- Review fixes (2026-10-18): live run binding, caller input evidence, native adapter events ---
+class RunLiveBinding(Closed):
+    scenario_id: Identifier
+    scenario_hash: Hex64
+    adapter: Identifier
+    seed: Count
+    interrupt_mode: Identifier
+    audio_profile: Identifier
+    faults: list[Free]
+    limits: Free
+
+
+class InputCallerAudio(Closed):
+    turn: Count
+    source_text_sha256: Hex64
+    pcm_sha256: Hex64
+    byte_count: Count
+    sample_rate: Count
+    audio_retained: bool
+    transformations: list[Identifier]
+    stream_started_ms: Count
+    stream_ended_ms: Count
+    clock_domain_id: Identifier
+
+
+class AdapterNativeEvent(Closed):
+    adapter: Identifier
+    native_type: Identifier
+    payload_sha256: Hex64
+    payload_bytes: Count
+    payload_retained: bool
+    omission_reason: Identifier | None
+    received_ms: Count
+    clock_domain_id: Identifier
+
+
+EVENT_CONTENT_CONTRACTS.update(
+    {
+        "run.live_binding": RunLiveBinding,
+        "input.caller_audio": InputCallerAudio,
+        "adapter.native_event": AdapterNativeEvent,
+    }
+)

@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "scenario_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Scenario Id",
+      "type": "string"
+    },
+    "scenario_hash": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Scenario Hash",
+      "type": "string"
+    },
+    "adapter": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Adapter",
+      "type": "string"
+    },
+    "seed": {
+      "minimum": 0,
+      "title": "Seed",
+      "type": "integer"
+    },
+    "interrupt_mode": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Interrupt Mode",
+      "type": "string"
+    },
+    "audio_profile": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Audio Profile",
+      "type": "string"
+    },
+    "faults": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Faults",
+      "type": "array"
+    },
+    "limits": {
+      "additionalProperties": true,
+      "title": "Limits",
+      "type": "object"
+    }
+  },
+  "required": [
+    "scenario_id",
+    "scenario_hash",
+    "adapter",
+    "seed",
+    "interrupt_mode",
+    "audio_profile",
+    "faults",
+    "limits"
+  ],
+  "title": "RunLiveBinding",
+  "type": "object"
+}

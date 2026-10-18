@@ -203,6 +203,21 @@ def examples():
                 "unit_id": "unit_001", "audio_sha256": pcm, "reason": "NO_ASR_BACKEND_CONFIGURED",
                 "strict_speech_approval": "unavailable",
             },
+            "run.live_binding": {
+                "scenario_id": "identity-impatient-en-gb-clean-001", "scenario_hash": pcm,
+                "adapter": "openai_realtime", "seed": 0, "interrupt_mode": "client",
+                "audio_profile": "clean_studio", "faults": [], "limits": {"pending_audio_seconds": 15.0},
+            },
+            "input.caller_audio": {
+                "turn": 0, "source_text_sha256": _h("text"), "pcm_sha256": pcm, "byte_count": 96000,
+                "sample_rate": 24000, "audio_retained": False, "transformations": ["clean_studio"],
+                "stream_started_ms": 1000, "stream_ended_ms": 3000, "clock_domain_id": "process_fixture",
+            },
+            "adapter.native_event": {
+                "adapter": "openai_realtime", "native_type": "response.output_audio.delta", "payload_sha256": pcm,
+                "payload_bytes": 4800, "payload_retained": False, "omission_reason": "AUDIO_AND_BULK_PAYLOAD_HASH_ONLY",
+                "received_ms": 1200, "clock_domain_id": "process_fixture",
+            },
             "benchmark.adapter_metrics": {
                 "response_id": "response_001", "unit_id": "unit_001", "source": "adapter_events",
                 "clock_domain_id": "process_fixture", "adapter_clock_domain_id": "process_fixture",

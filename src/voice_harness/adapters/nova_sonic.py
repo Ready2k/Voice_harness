@@ -34,6 +34,8 @@ from typing import Any
 
 from ..resample import StreamResampler
 from . import (
+    AUDIO_OVERFLOW_CODE,
+    AUDIO_QUEUE_MAX,
     UNSUPPORTED,
     AdapterEvent,
     AudioOut,
@@ -157,6 +159,7 @@ class NovaSonicAdapter:
         self.closed = False
         self.transport: Any = None
         self._queue: asyncio.Queue = asyncio.Queue()
+        self.native_sink = None  # optional (adapter, native_type, payload) -> None; preserves every provider event
         self._audio_buf = bytearray()
         self._input_resampler: StreamResampler | None = None
         self._pump: asyncio.Task | None = None
@@ -332,10 +335,17 @@ class NovaSonicAdapter:
 
     # ------------------------------------------------------------------ outputs
     async def _emit(self, ev: AdapterEvent) -> None:
+        if ev.type == "audio_out" and self._queue.qsize() >= AUDIO_QUEUE_MAX:
+            # Consumer is not draining: drop audio, signal once, keep the control path open.
+            self.dropped_audio_events = getattr(self, "dropped_audio_events", 0) + 1
+            if self.dropped_audio_events == 1:
+                await self._queue.put(ProviderError(**self._base(), code=AUDIO_OVERFLOW_CODE,
+                                                    message="consumer stalled", fatal=False))
+            return
         await self._queue.put(ev)
 
     def _base(self) -> dict[str, Any]:
-        return {"session_id": self.session_id, "ts_ms": int(time.time() * 1000)}
+        return {"session_id": self.session_id, "ts_ms": int(time.monotonic() * 1000)}  # process-monotonic, same domain as the driver
 
     async def _read_loop(self) -> None:
         try:
@@ -351,7 +361,10 @@ class NovaSonicAdapter:
                     await self._emit(ProviderError(**self._base(), code=code,
                                                    message=msg["_error"].get("message", ""), fatal=fatal))
                     continue
-                for ev in self._translate(msg.get("event") or {}):
+                native = msg.get("event") or {}
+                if self.native_sink is not None:
+                    self.native_sink("nova_sonic", next(iter(native), "unknown"), native)
+                for ev in self._translate(native):
                     await self._emit(ev)
         except asyncio.CancelledError:
             raise

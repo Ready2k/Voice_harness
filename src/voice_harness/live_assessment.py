@@ -22,6 +22,7 @@ import base64
 import hashlib
 import time
 
+from .adapters import AUDIO_OVERFLOW_CODE
 from .asr import AsrUnavailable, strict_speech_status
 from .engine import decision_record
 from .events import PROCESS_CLOCK_DOMAIN
@@ -66,6 +67,11 @@ class IndependentAssessor:
             return self._unavailable(run_id, unit, reason)
         if self.cost_recorder:
             self.cost_recorder.record_asr(result, f"asr:{unit_id}")
+        if self.engine.database.get(run_id)["units"][unit_id]["state"] != "pending":
+            # Interrupted (or otherwise superseded) while the ASR ran: a late result must never approve.
+            return {"disposition": "untestable", "reason_codes": ["SUPERSEDED_DURING_ASSESSMENT"],
+                    "unit_id": unit_id, "approval": None, "live": result.live,
+                    "strict_speech_approval": "superseded"}
         check = semantic_check(result.text, expected)
         mapped = {"safe": "safe", "unsafe": "unsafe", "untestable": "unassessable"}[check["disposition"]]
         # The independent transcript becomes authoritative: new assessment epoch, replacement unit.
@@ -188,6 +194,7 @@ class AdapterTurnDriver:
         self.speech_start_ms, self.speech_end_ms = speech_start_ms, speech_end_ms
         self.adapter_clock_domain, self.now_ms = adapter_clock_domain, now_ms
         self.results = []
+        self.interruptions_applied, self.cancel_requested = 0, False
         # Provider usage -> cost.usage_reported; declares the expected components for this run.
         self.cost_recorder = cost_recorder
         if cost_recorder is not None:
@@ -200,6 +207,7 @@ class AdapterTurnDriver:
     def _reset(self):
         self._pcm, self._first_audio, self._first_transcript = [], None, None
         self._text, self._turn_id = [], None
+        self._pcm_bytes, self._overflow = 0, None
 
     def feed(self, event):
         if self.cost_recorder is not None:
@@ -220,38 +228,88 @@ class AdapterTurnDriver:
                     self._text = [event.text]
                 else:
                     self._text.append(event.text)
+        elif kind == "error" and event.code == AUDIO_OVERFLOW_CODE:
+            self._discard("ADAPTER_QUEUE_OVERFLOW")
         elif kind == "audio_out":
+            if self._overflow:
+                return None  # already over budget: unreleased audio is discarded, never buffered
             if self._first_audio is None:
                 self._first_audio = event.ts_ms
             self._turn_id = event.turn_id or self._turn_id
             pcm = event.pcm
             if event.sample_rate != HARNESS_RATE:
                 pcm = resample(pcm, event.sample_rate, HARNESS_RATE)
-            self._pcm.append(pcm)
+            self._pcm_bytes += len(pcm)
+            limits = self.engine.limits
+            if (self._pcm_bytes > limits["pending_audio_bytes"]
+                    or self._pcm_bytes / 2 / HARNESS_RATE > limits["pending_audio_seconds"]):
+                self._discard("PENDING_AUDIO_LIMIT_EXCEEDED")  # accounted from ingress, not at response end
+            else:
+                self._pcm.append(pcm)
         elif kind == "interrupted":
             self._reset()  # unreleased audio is never flushed; the buffer is dropped
+            self.interrupt()
         elif kind == "turn_end":
             return self._finish(event)
         return None
 
+    def interrupt(self, provider_receipt=None):
+        """Provider or client interruption: advance the epoch, revoke tokens, discard unreleased units."""
+        self.engine.interrupt(self.run_id, provider_receipt)
+        self.interruptions_applied += 1
+
+    def _discard(self, reason):
+        """Drop buffered audio and record the typed failure; the response is never assessed or released."""
+        buffered, self._pcm, self._pcm_bytes = self._pcm_bytes, [], 0
+        if self._overflow is None:
+            self._overflow = reason
+            with self.engine.database.transaction(self.run_id) as tx:
+                tx.event("orchestrator", "audio.backpressure", {
+                    "failure_code": "AUDIO_BACKPRESSURE", "buffered_bytes": buffered, "incoming_bytes": 0,
+                    "limit_bytes": self.engine.limits["pending_audio_bytes"], "discarded_unit_ids": [],
+                    "generation_epoch": tx.state["generation_epoch"], "provider_cancellation": "requested",
+                    "fallback_audio": "none_configured",
+                })
+            self.cancel_requested = True  # the runner asks the provider to stop generating
+
     def _finish(self, end_event):
+        if self._overflow:
+            reason = self._overflow
+            self._reset()
+            outcome = {"approval": None, "strict_speech_approval": "audio_overflow", "reason_codes": [reason]}
+            self.results.append(outcome)
+            return outcome
         pcm = b"".join(self._pcm)
         if not pcm:
             self._reset()
             return None
         started = self.now_ms()
-        unit_id = self.engine.hold_audio(
-            self.run_id,
-            pcm,
-            transcript="".join(self._text),
-            response_id=self._turn_id,
-        )
+        try:
+            unit_id = self.engine.hold_audio(
+                self.run_id,
+                pcm,
+                transcript="".join(self._text),
+                response_id=self._turn_id,
+            )
+        except ValueError as error:
+            if str(error) != "AUDIO_BACKPRESSURE":
+                raise
+            self._reset()
+            self.cancel_requested = True
+            outcome = {"approval": None, "strict_speech_approval": "audio_overflow",
+                       "reason_codes": ["AUDIO_BACKPRESSURE"]}
+            self.results.append(outcome)
+            return outcome
         outcome = self.assessor.assess(self.run_id, unit_id, self.expected_claims)
         decided = self.now_ms()
         released = None
         if outcome["approval"]:
-            self.engine.release_audio(self.run_id, outcome["approval"])
-            released = self.now_ms()
+            try:
+                self.engine.release_audio(self.run_id, outcome["approval"])
+                released = self.now_ms()
+            except ValueError as error:  # superseded while assessing (interruption revoked the token)
+                outcome = {**outcome, "approval": None, "strict_speech_approval": "superseded",
+                           "reason_codes": [str(error)]}
         self._record(unit_id, outcome, end_event, started, decided, released)
         self.results.append(outcome)
         self._reset()

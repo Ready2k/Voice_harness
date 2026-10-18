@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "adapter": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Adapter",
+      "type": "string"
+    },
+    "native_type": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Native Type",
+      "type": "string"
+    },
+    "payload_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Payload Sha256",
+      "type": "string"
+    },
+    "payload_bytes": {
+      "minimum": 0,
+      "title": "Payload Bytes",
+      "type": "integer"
+    },
+    "payload_retained": {
+      "title": "Payload Retained",
+      "type": "boolean"
+    },
+    "omission_reason": {
+      "anyOf": [
+        {
+          "maxLength": 200,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Omission Reason"
+    },
+    "received_ms": {
+      "minimum": 0,
+      "title": "Received Ms",
+      "type": "integer"
+    },
+    "clock_domain_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Clock Domain Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "adapter",
+    "native_type",
+    "payload_sha256",
+    "payload_bytes",
+    "payload_retained",
+    "omission_reason",
+    "received_ms",
+    "clock_domain_id"
+  ],
+  "title": "AdapterNativeEvent",
+  "type": "object"
+}

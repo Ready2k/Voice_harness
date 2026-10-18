@@ -191,8 +191,8 @@ class LiveRunner(unittest.TestCase):
         adapter = Barge()
         runner = self.runner("identity-fault-caller-interrupts-001", adapter)
         summary = asyncio.run(runner.run())
-        self.assertEqual(adapter.interrupted, [500])
-        self.assertEqual(summary["turns"][0]["strict_speech_approval"], "barge_in_pending")
+        self.assertEqual(adapter.interrupted, [0])  # held audio: nothing was played
+        self.assertEqual(summary["turns"][0]["strict_speech_approval"], "barge_in_not_assessed")
         self.assertEqual(len(summary["interrupt_results"]), 1)
         self.assertEqual(len(summary["turns"]), 2)
 

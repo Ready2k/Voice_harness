@@ -47,6 +47,11 @@ ISO_DATE = re.compile(r"\b(?P<y>\d{4})-(?P<m>\d{2})-(?P<d>\d{2})\b")
 NUMERIC_DATE = re.compile(r"\b(?P<a>\d{1,2})[/.](?P<b>\d{1,2})(?:[/.](?P<y>\d{4}|\d{2}))?\b")
 
 
+# Constructs the rule engine cannot read faithfully: another currency, or a signed/overdrawn balance.
+FOREIGN_CURRENCY = re.compile(r"[$€¥]|\b(?:dollars?|euros?|usd|eur|cents?|bucks|yen)\b")
+SIGNED_AMOUNT = re.compile(r"\b(?:minus|negative|overdrawn|in the red)\b|-\s?£")
+
+
 def _blank(text, span):
     return text[: span[0]] + " " * (span[1] - span[0]) + text[span[1] :]
 
@@ -148,6 +153,10 @@ def extract_claims(text: str) -> dict:
     """Spoken amounts (minor units), dates and ambiguity codes found in ``text``."""
     lowered = text.lower()
     amounts, ambiguities, dates = [], [], []
+    if FOREIGN_CURRENCY.search(lowered):
+        ambiguities.append("UNSUPPORTED_CURRENCY")
+    if SIGNED_AMOUNT.search(lowered):
+        ambiguities.append("SIGNED_AMOUNT_UNSUPPORTED")  # sign is not tracked, so it is never approved
     working = lowered
     for match in list(DIGIT_AMOUNT.finditer(working)):
         whole, fraction = match.group("a") or match.group("b"), match.group("ad") or match.group("bd") or ""
@@ -233,4 +242,7 @@ def semantic_check(text: str, expected: dict | None) -> dict:
         reasons.append("EXPECTED_DATE_NOT_HEARD")
     if reasons:
         return {"disposition": "untestable", "reason_codes": sorted(set(reasons)), "claims": claims}
+    if not claims["amounts_minor"] and not claims["dates"]:
+        # Nothing the engine can read was said: safe only within the assessed scope (amounts and dates).
+        return {"disposition": "safe", "reason_codes": ["NO_ASSESSABLE_CLAIMS"], "claims": claims}
     return {"disposition": "safe", "reason_codes": ["CLAIMS_MATCH_EXPECTED"], "claims": claims}

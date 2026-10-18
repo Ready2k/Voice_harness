@@ -15,9 +15,12 @@ from __future__ import annotations
 
 import array
 import asyncio
+import hashlib
+import json
 import random
 import time
 
+from .events import PROCESS_CLOCK_DOMAIN
 from .live_assessment import AdapterTurnDriver
 from .mcp_gateway import gateway
 from .resample import chunk
@@ -26,6 +29,8 @@ from .scenario_catalogue import AUDIO_PROFILES, catalogue_entry
 CHUNK_MS = 20
 RATE = 24000
 TURN_TIMEOUT_S = 45.0
+# Replies are held for whole-response assessment, so none of an interrupted reply was ever played.
+PLAYED_MS_WHILE_HELD = 0
 # Whole-response approval holds a full reply; live replies exceed the 2 s mock default.
 # Engines for live runs are built with these limits, which the run manifest records.
 LIVE_LIMITS = {"pending_audio_seconds": 15.0, "pending_audio_bytes": 15 * RATE * 2}
@@ -72,7 +77,46 @@ class LiveScenarioRunner:
         self.driver = AdapterTurnDriver(engine, run_id, assessor, cost_recorder=cost_recorder)
         self.tool_calls, self._fault_profile, self.interruptions = [], {}, 0
         self.interrupt_results, self._cancelled_ends = [], 0
+        self.seed_value = seed
+        self._native = []  # provider events received since the last flush (type, size, hash; never the payload)
+        if hasattr(adapter, "native_sink"):
+            adapter.native_sink = self._on_native
         self.tool_calls_expected = barge_after_tool  # barge in on the reply that follows a tool result
+
+    def _on_native(self, adapter_name, native_type, payload):
+        encoded = json.dumps(payload, sort_keys=True, default=str).encode()
+        self._native.append({
+            "adapter": adapter_name, "native_type": str(native_type)[:120].replace(" ", "_"),
+            "payload_sha256": hashlib.sha256(encoded).hexdigest(), "payload_bytes": len(encoded),
+            "payload_retained": False, "omission_reason": "HASH_ONLY_PAYLOAD_NOT_STORED",
+            "received_ms": int(time.monotonic() * 1000), "clock_domain_id": PROCESS_CLOCK_DOMAIN,
+        })
+
+    def _flush_native(self):
+        pending, self._native = self._native, []
+        if pending:
+            with self.engine.database.transaction(self.run_id) as tx:
+                for record in pending:
+                    tx.event("provider", "adapter.native_event", record)
+
+    def _bind(self, definition):
+        with self.engine.database.transaction(self.run_id) as tx:
+            tx.event("orchestrator", "run.live_binding", {
+                "scenario_id": definition["id"], "scenario_hash": self.entry["content_hash"].removeprefix("sha256:"),
+                "adapter": type(self.adapter).__name__, "seed": self.seed_value,
+                "interrupt_mode": self.interrupt_mode, "audio_profile": definition["audio_profile"],
+                "faults": self.entry["faults"], "limits": dict(self.engine.limits),
+            })
+
+    def _record_input(self, index, turn, pcm, started_ms, ended_ms):
+        with self.engine.database.transaction(self.run_id) as tx:
+            tx.event("orchestrator", "input.caller_audio", {
+                "turn": index, "source_text_sha256": hashlib.sha256(turn["customer"].encode()).hexdigest(),
+                "pcm_sha256": hashlib.sha256(pcm).hexdigest(), "byte_count": len(pcm), "sample_rate": RATE,
+                "audio_retained": False, "transformations": [self.entry["definition"]["audio_profile"]],
+                "stream_started_ms": started_ms, "stream_ended_ms": ended_ms,
+                "clock_domain_id": PROCESS_CLOCK_DOMAIN,
+            })
 
     def _faults(self, kind, turn=None, tool=None):
         return [
@@ -103,6 +147,14 @@ class LiveScenarioRunner:
             "elapsed_ms": round((time.monotonic() - started) * 1000), "delivery": receipt,
         })
 
+    async def _cancel_generation(self):
+        """Overflow or similar: stop the provider generating a reply nobody can release."""
+        try:
+            self.interrupt_results.append(await self.adapter.interrupt(None, PLAYED_MS_WHILE_HELD))
+        except Exception as error:  # noqa: BLE001  # best effort; the failure is recorded, not hidden
+            self.interrupt_results.append({"generation_cancelled": "failed", "error": type(error).__name__})
+        self.driver.interrupt()
+
     async def _await_turn(self, bank, until_audio=False):
         """Pump adapter events until a turn_end (or fatal error / timeout); ``until_audio`` stops at the first reply audio."""
         errors = []
@@ -122,14 +174,23 @@ class LiveScenarioRunner:
                         return None
                 if event.type == "interrupted":
                     self.interruptions += 1
-                outcome = self.driver.feed(event)
+                if event.type == "turn_end":
+                    # Assessment does blocking ASR/DB work: keep the loop free for other tasks and timeouts.
+                    outcome = await asyncio.to_thread(self.driver.feed, event)
+                else:
+                    outcome = self.driver.feed(event)
+                if self.driver.cancel_requested:
+                    self.driver.cancel_requested = False
+                    await self._cancel_generation()
                 if until_audio and event.type == "audio_out" and (tool_seen or not self.tool_calls_expected):
                     # Playback is simulated at real time: the caller cuts in 500 ms into the reply.
                     await asyncio.sleep(0.5)
                     self._cancelled_ends += 1
                     if self.interrupt_mode == "client":
-                        self.interrupt_results.append(await self.adapter.interrupt(getattr(event, "item_id", None), 500))
-                    return {"approval": None, "strict_speech_approval": "barge_in_pending"}
+                        receipt = await self.adapter.interrupt(getattr(event, "item_id", None), PLAYED_MS_WHILE_HELD)
+                        self.interrupt_results.append(receipt)
+                        self.driver.interrupt(receipt)  # engine epoch, tokens, queued tools and history state
+                    return {"approval": None, "strict_speech_approval": "barge_in_not_assessed"}
                 if event.type == "turn_end" and follow_up:
                     follow_up = False  # end of the tool-calling response; wait for the one that uses the result
                     continue
@@ -167,22 +228,29 @@ class LiveScenarioRunner:
             self.engine.faults.update(previous)
 
     async def _run_turns(self, definition, outcomes, turn_errors):
+        self._bind(definition)
         try:
             async with gateway(self.engine, self.run_id) as bank:
                 for index, turn in enumerate(definition["turns"][: definition["max_turns"]]):
                     pcm = apply_profile(self.caller_audio(turn["customer"]), definition["audio_profile"],
                                         self._faults("background_noise"), self.seed + index)
+                    # Trusted tool amounts are allowed for the response they were returned in, not for later turns.
+                    self.driver.expected_claims["allowed_amounts_minor"] = []
                     if self.before_turn is not None:
                         await self.before_turn(index)
+                    started_ms = int(time.monotonic() * 1000)
                     await self._stream(pcm)
+                    self._record_input(index, turn, pcm, started_ms, int(time.monotonic() * 1000))
                     # The next turn interrupts: stop at the first reply audio and speak over it.
                     barge = self._faults("caller_interrupts", turn=index + 1)
                     outcome, errors = await self._await_turn(bank, until_audio=bool(barge))
                     outcomes.append({"turn": index, "strict_speech_approval": outcome["strict_speech_approval"]})
                     turn_errors.extend(errors)
+                    self._flush_native()
                     if outcome["strict_speech_approval"] in ("provider_error", "stream_ended"):
                         break  # the session is unusable; later turns would only time out
         finally:
+            self._flush_native()
             usage = self.driver.close()  # cost lines are closed out even when a turn raises
         return {
             "scenario_id": definition["id"], "run_id": self.run_id,

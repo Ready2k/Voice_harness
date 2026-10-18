@@ -60,3 +60,23 @@
 - The synthetic caller uses macOS `say`; the catalogue declares locales but `say` voice selection is not
   yet locale-aware. Narrowband/noise are simple synthetic shaping, not measured telephony.
 - xAI and Google adapters remain blocked on API keys.
+
+## Response to the 2026-10-18 code/spec review
+
+Addressed (driver-to-engine tests in `tests/test_live_review_fixes.py`):
+
+| Finding | Change | Still open |
+|---|---|---|
+| 1 interruption | Provider and client interruptions call `Engine.interrupt` (epoch, tokens, queued tools, history state). Held audio reports 0 ms played. A late ASR result after an interruption is `superseded`, never approved. | Truncation offsets from real playback acknowledgements; late-event quarantine by response id. |
+| 2 buffers | Byte and duration limits apply from ingress; overflow discards, records `audio.backpressure` and asks the provider to cancel. Adapter audio is bounded (`AUDIO_QUEUE_MAX`) with a non-bounded control path and a single `AUDIO_QUEUE_OVERFLOW` signal. | Shared per-session budget across all buffers; queue bound counts events, not bytes. |
+| 3 money claims | Foreign currency and signed/overdrawn language are `untestable`; a response with no assessable claims reports `NO_ASSESSABLE_CLAIMS`, not `CLAIMS_MATCH_EXPECTED`; trusted-tool amounts are allowed only for the turn they were returned in. | Typed facts bound to entity/field/currency/source; account-switch and stale-fact holdouts. |
+| 4 evidence | `run.live_binding` (scenario id + hash, adapter, seed, limits), `input.caller_audio` (text/PCM hashes, boundaries) and `adapter.native_event` (every provider event: type, size, hash; payload not stored, with an explicit omission reason). | Payload retention policy; linking normalised events to native event ids; capability report in the binding. |
+| 5 blocking ASR | Turn-end assessment runs in a worker thread, so the loop (and Nova's silence pump) stays responsive. | Interruption is only observed after the worker returns; a true cancellable async ASR client. |
+| 6 `blocking_enforced` | Split into `blocking_eligible` (calibration permits) and `blocking_enforced` (always false until a guardrail acknowledges, with `enforcement_decision_id`). | Wiring a guardrail consumer. |
+| 7 Nova clock | Nova `ts_ms` is process-monotonic like OpenAI. | Runner still supplies no speech boundaries for the latency metrics (`input.caller_audio` records stream start/end for a follow-up). |
+| 9 comparison | Duplicate observation units are rejected; run IDs must exist; bound/unbound counts recorded as `provenance`. | Extracting observations server-side from sealed manifests; capability/clock/version checks. |
+| 10 fatal errors | Typed `provider_error`/`stream_ended` outcomes, buffers reset on timeout, cost recorder closed in `finally`. | Persisting the failure disposition as its own event. |
+| 11 scenario race | The inserted row is re-read; a different winning hash returns 409. | |
+
+Not started: finding 8 (live scenarios through the API/UI/CLI run lifecycle) and the provider-config registry. Live runs remain a library path.
+Missed by the review, noted by the review agent: `_cancelled_ends` is a counter heuristic for swallowing an interrupted reply's `turn_end`; the barge-in outcome is now `barge_in_not_assessed` so it is not read as an approval disposition.

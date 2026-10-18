@@ -110,7 +110,8 @@ def run_online(backend: JudgeBackend, oracle: Oracle, by_id: dict, *, window: tu
         if not (isinstance(confidence, (int, float)) and not isinstance(confidence, bool) and 0 <= confidence <= 1):
             confidence = None
         valid = not errors
-        enforced = bool(valid and blocking != "none" and blocking_enabled(category))
+        eligible = bool(valid and blocking != "none" and blocking_enabled(category))
+        enforced = False  # no guardrail consumer acknowledges findings yet, so nothing is ever claimed enforced
         findings.append({
             "finding_id": finding_id(config.judge_id, window, index, item.get("category")),
             "judge": config.identity("online-judge/1"),
@@ -120,8 +121,8 @@ def run_online(backend: JudgeBackend, oracle: Oracle, by_id: dict, *, window: tu
             "evidence_event_ids": accepted if valid else [],
             "recommended_action": str(item.get("recommended_action") or "review")[:200] or "review",
             "blocking_capability": blocking if blocking in _BLOCKING else "none",
-            "blocking_enforced": enforced,
-            "advisory_reason": None if enforced else (
+            "blocking_eligible": eligible, "blocking_enforced": enforced, "enforcement_decision_id": None,
+            "advisory_reason": "ENFORCEMENT_NOT_WIRED" if eligible else (
                 "FINDING_INVALID" if not valid else "CALIBRATION_POLICY_NOT_SATISFIED"),
             "rationale": str(item.get("rationale") or "")[:2000] or "invalid finding",
             "status": "valid" if valid else "invalid", "validation_errors": sorted(set(errors)),

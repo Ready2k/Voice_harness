@@ -22,12 +22,26 @@ class ComparisonStore:
             db.execute("INSERT INTO harness_migrations VALUES (?) ON CONFLICT DO NOTHING", (MIGRATION_ID,))
 
     def create(self, request: ComparisonRequest, clock=time.time):
+        bound, unknown = 0, []
+        for observation in request.observations:
+            if observation.run_id is None:
+                continue
+            try:
+                self.database.get(observation.run_id)
+                bound += 1
+            except KeyError:
+                unknown.append(observation.run_id)
+        if unknown:
+            raise ValueError("UNKNOWN_RUN_ID:" + ",".join(sorted(set(unknown))[:5]))
         report = build_report(request)
         comparison_id = identifier("cmp")
         payload = {
             "comparison_id": comparison_id,
             "request": request.model_dump(mode="json"),
             "report": report,
+            # Run IDs prove an observation names a stored run, not that its values were extracted from it.
+            "provenance": {"observations": len(request.observations), "run_id_resolved": bound,
+                           "unbound_diagnostic": len(request.observations) - bound},
         }
         with self.database.connection() as db:
             db.execute(
@@ -74,8 +88,12 @@ def register_comparison_routes(app, database, auth):
 
     @app.post("/api/v1/comparisons", status_code=201, dependencies=[Depends(auth)])
     def create_comparison(body: ComparisonRequest):
-        stored = store.create(body)
-        return {"comparison_id": stored["comparison_id"], "report": stored["report"]}
+        try:
+            stored = store.create(body)
+        except ValueError as error:
+            raise HTTPException(422, str(error)) from None
+        return {"comparison_id": stored["comparison_id"], "report": stored["report"],
+                "provenance": stored["provenance"]}
 
     @app.get("/api/v1/comparisons", dependencies=[Depends(auth)])
     def list_comparisons():

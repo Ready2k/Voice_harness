@@ -120,6 +120,9 @@ class ComparisonRequest(Closed):
             raise ValueError("DUPLICATE_PROVIDERS")
         if not {o.provider for o in self.observations} <= set(self.providers):
             raise ValueError("OBSERVATION_FOR_UNLISTED_PROVIDER")
+        units = [(o.provider, *o.cluster(), o.repetition) for o in self.observations]
+        if len(set(units)) != len(units):
+            raise ValueError("DUPLICATE_OBSERVATION")  # one row per provider/scenario/variant/seed/profile/repetition
         return self
 
 
