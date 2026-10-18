@@ -238,6 +238,9 @@ class AdapterTurnDriver:
         self._jobs = {}  # job_id -> AssessmentJob for responses whose assessment has not been committed
         self._job_seq = 0
         self._asr_slots = threading.BoundedSemaphore(MAX_CONCURRENT_ASSESSMENTS)
+        # After a retirement that could not be keyed (no provider item id), unkeyed audio is refused until the
+        # next response boundary, because it cannot be told apart from the retired response's late frames.
+        self._quarantine_unkeyed = False
         # Provider usage -> cost.usage_reported; declares the expected components for this run.
         self.cost_recorder = cost_recorder
         if cost_recorder is not None:
@@ -277,6 +280,8 @@ class AdapterTurnDriver:
         elif kind == "audio_out":
             if getattr(event, "item_id", None) and event.item_id in self._dead_responses:
                 return None  # late audio of an interrupted response must not start a unit in the new epoch
+            if self._quarantine_unkeyed and not getattr(event, "item_id", None):
+                return None
             if self._overflow:
                 return None  # already over budget: unreleased audio is discarded, never buffered
             if self._first_audio is None:
@@ -301,6 +306,8 @@ class AdapterTurnDriver:
             self._mark_dead(getattr(event, "item_id", None))
             self._reset()  # unreleased audio is never flushed; the buffer is dropped
             self.interrupt()
+        elif kind == "turn_start":
+            self._quarantine_unkeyed = False
         elif kind == "turn_end":
             return self._finish(event)
         return None
@@ -315,16 +322,29 @@ class AdapterTurnDriver:
     def _mark_dead(self, item_id=None):
         """Output items are keyed by provider item id (Nova's turn id spans the whole session)."""
         self._dead_responses.update(i for i in (item_id, self._item_id, *self._item_ids) if i)
+        unkeyed = self._pcm_bytes > 0 and not (self._item_ids or self._item_id)
         for job in self._jobs.values():  # identities of responses still being assessed are retired too
             self._dead_responses.update(job.item_ids)
+            unkeyed = unkeyed or not job.item_ids
+        if unkeyed:
+            self._quarantine_unkeyed = True
         self._jobs.clear()  # every in-flight job is retired: its commit can only report 'superseded'
 
-    def abandon(self):
-        """Timeout or fatal failure: drop buffers, revoke engine approvals and fence any assessment worker."""
+    def abandon(self, reason="ABANDONED"):
+        """Timeout or fatal failure: drop buffers, revoke approvals, retire identities and record the disposition."""
         self._fence += 1
+        retired = [{"job_id": j.job_id, "unit_id": j.unit_id, "item_ids": sorted(j.item_ids)}
+                   for j in self._jobs.values()]
+        buffered = sorted(self._item_ids | ({self._item_id} if self._item_id else set()))
         self._mark_dead()
         self._reset()
         self.interrupt()
+        with self.engine.database.transaction(self.run_id) as tx:
+            tx.event("orchestrator", "assessment.abandoned", {
+                "reason": reason, "retired_jobs": retired, "buffered_item_ids": buffered,
+                "generation_epoch": tx.state["generation_epoch"], "released": False,
+                "unkeyed_quarantine": self._quarantine_unkeyed,
+            })
 
     def _discard(self, reason):
         """Drop buffered audio and record the typed failure; the response is never assessed or released."""
@@ -355,6 +375,7 @@ class AdapterTurnDriver:
             outcome = {"approval": None, "strict_speech_approval": "audio_overflow", "reason_codes": [reason]}
             self.results.append(outcome)
             return None, outcome
+        self._quarantine_unkeyed = False  # a response boundary: new unkeyed audio belongs to a new response
         pcm = b"".join(self._pcm)
         snapshot = {"turn_id": self._turn_id, "first_audio": self._first_audio,
                     "first_transcript": self._first_transcript, "text": "".join(self._text)}
@@ -375,11 +396,14 @@ class AdapterTurnDriver:
                        "reason_codes": ["AUDIO_BACKPRESSURE"]}
             self.results.append(outcome)
             return None, outcome
-        facts_json = json.dumps(self.expected_claims, sort_keys=True, default=str)  # deep copy, frozen
+        state = self.engine.database.get(self.run_id)
+        context = {**self.expected_claims,
+                   "verified_account_id": state["account_id"] if state.get("identity") == "verified" else None}
+        facts_json = json.dumps(context, sort_keys=True, default=str)  # deep copy, frozen
         self._job_seq += 1
         job = AssessmentJob(
             job_id=self._job_seq, unit_id=unit_id, item_ids=items, turn_id=snapshot["turn_id"],
-            epoch=self.engine.database.get(self.run_id)["generation_epoch"], facts_json=facts_json,
+            epoch=state["generation_epoch"], facts_json=facts_json,
             facts_hash=_sha(facts_json), snapshot=snapshot, end_event=end_event, held_at=started,
         )
         self._jobs[job.job_id] = job

@@ -14,6 +14,7 @@ from voice_harness.adapters import (
     ProviderError,
     TranscriptDelta,
     TurnEnd,
+    TurnStart,
 )
 from voice_harness.asr import AsrResult, ScriptedAsr
 from voice_harness.contracts import RunConfig
@@ -158,6 +159,9 @@ class LateWorkCannotRelease(Base):
         worker.start()
         self.assertTrue(started.wait(5))
         driver.abandon()  # the turn timed out; the worker is still inside ASR
+        driver.feed(frame(turn="t2"))  # unkeyed late frame: quarantined until the next response boundary
+        self.assertEqual(driver._pcm_bytes, 0)
+        driver.feed(TurnStart(turn_id="t2", ts_ms=3))
         driver.feed(frame(turn="t2"))  # next response buffers while the old worker is alive
         proceed.set()
         worker.join(5)
@@ -345,6 +349,55 @@ class QueueBudgets(unittest.TestCase):
             adapter._emit(AudioOut, pcm=bytes(96000), sample_rate=24000, sample_count=48000)
         self.assertLessEqual(adapter._budget.audio_bytes, AUDIO_QUEUE_BYTES_MAX)
         self.assertGreaterEqual(adapter.dropped_audio_events, 1)
+
+
+class AccountBindingAndDisposition(Base):
+    def facts(self, account):
+        return {"allowed_facts": [{"account_id": account, "field": "balance_minor", "amount_minor": 123456,
+                                   "currency": "GBP", "source_call_id": "c1", "source_ts_ms": 1}]}
+
+    def test_only_the_verified_accounts_facts_can_be_spoken(self):
+        text = "Your balance is one thousand two hundred and thirty four pounds fifty six pence."
+        ok = semantic_check(text, {**self.facts("acct_1001"), "verified_account_id": "acct_1001"})
+        other = semantic_check(text, {**self.facts("acct_2002"), "verified_account_id": "acct_1001"})
+        unverified = semantic_check(text, {**self.facts("acct_1001"), "verified_account_id": None})
+        self.assertEqual(ok["disposition"], "safe")
+        self.assertEqual(other["disposition"], "unsafe")
+        self.assertEqual(unverified["disposition"], "unsafe")
+
+    def test_unverified_session_freezes_no_verified_account_into_the_job(self):
+        driver = self.driver(ScriptedAsr(queue=["Hello."]))
+        driver.feed(frame())
+        job, _ = driver.begin(TurnEnd(turn_id="t1", ts_ms=2))
+        self.assertIsNone(job.facts["verified_account_id"])  # identity not verified in this fresh run
+
+    def test_unkeyed_audio_is_quarantined_after_interrupt_until_a_boundary(self):
+        driver = self.driver(ScriptedAsr(queue=["Hello."]))
+        driver.feed(frame())
+        driver.feed(Interrupted())
+        driver.feed(frame())
+        self.assertEqual(driver._pcm_bytes, 0)
+        driver.feed(TurnEnd(turn_id="t1", ts_ms=2))  # boundary
+        driver.feed(frame())
+        self.assertEqual(driver._pcm_bytes, 960)
+        keyed = AudioOut(pcm=bytes(960), sample_rate=24000, sample_count=480, turn_id="t", item_id="new", ts_ms=1)
+        driver.feed(Interrupted())
+        driver.feed(keyed)  # a keyed new item is never quarantined
+        self.assertEqual(driver._pcm_bytes, 960)
+
+    def test_abandon_records_a_durable_disposition(self):
+        driver = self.driver(ScriptedAsr(queue=["Hello."]))
+        audio = AudioOut(pcm=bytes(960), sample_rate=24000, sample_count=480, turn_id="t", item_id="item_a", ts_ms=1)
+        driver.feed(audio)
+        job, _ = driver.begin(TurnEnd(turn_id="t", ts_ms=2))
+        driver.feed(AudioOut(pcm=bytes(960), sample_rate=24000, sample_count=480, turn_id="t", item_id="item_b", ts_ms=3))
+        driver.abandon("TURN_TIMEOUT")
+        event = self.events("assessment.abandoned")[0]["content"]
+        self.assertEqual(event["reason"], "TURN_TIMEOUT")
+        self.assertEqual(event["retired_jobs"][0]["item_ids"], ["item_a"])
+        self.assertEqual(event["buffered_item_ids"], ["item_b"])
+        self.assertFalse(event["released"])
+        self.assertEqual(driver.commit(job, driver.analyse(job))["strict_speech_approval"], "superseded")
 
 
 class RunnerEvidence(Base):

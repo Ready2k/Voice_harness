@@ -89,7 +89,7 @@ def _build():
                 "identity-bypass-001", f"identity-fault-{name}-001", "anxious_customer", "none", "en-GB",
                 "street_noise_10db" if name == "noisy-line" else "clean_studio",
                 barge_line if name == "caller-interrupts" else (
-                    base_line + " Then tell me my balance." if name == "tool-latency" else base_line), faults,
+                    [base_line, "Thanks. What is my account balance?"] if name == "tool-latency" else base_line), faults,
             )
         )
     # Synthetic commit (AC-15): the caller verifies, then asks to cancel a pending payment.

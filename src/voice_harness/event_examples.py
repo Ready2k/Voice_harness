@@ -208,6 +208,11 @@ def examples():
                 "adapter": "openai_realtime", "seed": 0, "interrupt_mode": "client",
                 "audio_profile": "clean_studio", "faults": [], "limits": {"pending_audio_seconds": 15.0},
             },
+            "assessment.abandoned": {
+                "reason": "TURN_TIMEOUT", "retired_jobs": [{"job_id": 1, "unit_id": "unit_001", "item_ids": ["item_a"]}],
+                "buffered_item_ids": ["item_b"], "generation_epoch": 2, "released": False,
+                "unkeyed_quarantine": False,
+            },
             "input.caller_audio": {
                 "turn": 0, "source_text_sha256": _h("text"), "pcm_sha256": pcm, "byte_count": 96000,
                 "sample_rate": 24000, "audio_retained": False, "transformations": ["clean_studio"],

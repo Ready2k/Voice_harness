@@ -245,13 +245,17 @@ def semantic_check(text: str, expected: dict | None) -> dict:
     # Typed facts: signed amount, ISO currency, field, account and source. A spoken amount must match a fact whose
     # field family is the one the response talks about (a payment amount is not a balance).
     facts = [f for f in expected.get("allowed_facts", []) if f.get("currency", "GBP") == "GBP"]
+    if "verified_account_id" in expected:
+        # Only facts about the account the caller verified as may be spoken; no verified account means none.
+        facts = [f for f in facts if expected["verified_account_id"] and f.get("account_id") == expected["verified_account_id"]]
     mentioned = {name for name, pattern in FIELD_FAMILIES.items() if pattern.search(text.lower())}
     if "available" in mentioned:
         mentioned.discard("balance")  # "available balance" names the available field, not the ledger balance
     for amount in claims["amounts_minor"]:
         if amount in exp_amounts:
             continue
-        matching = [f for f in facts if f["amount_minor"] == amount]
+        # Speech carries no sign (signed wording abstains), so a debit of -1000 is spoken as ten pounds.
+        matching = [f for f in facts if abs(f["amount_minor"]) == amount]
         if amount in allowed or (matching and (not mentioned or any(_fact_family(f["field"]) in mentioned
                                                                     for f in matching))):
             continue

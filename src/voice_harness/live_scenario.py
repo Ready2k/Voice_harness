@@ -151,7 +151,8 @@ class LiveScenarioRunner:
             now = int(time.monotonic() * 1000)
             facts = list(self.driver.expected_claims.get("allowed_facts", []))
             facts.extend(
-                {"account_id": event.arguments.get("account_id"), "field": k, "amount_minor": v, "currency": "GBP",
+                {"account_id": (result.get("structured_content") or {}).get("account_id"), "field": k,
+                 "amount_minor": v, "currency": (result.get("structured_content") or {}).get("currency", "GBP"),
                  "source_call_id": event.call_id, "source_ts_ms": now}
                 for k, v in (result.get("structured_content") or {}).items()
                 if k.endswith("_minor") and isinstance(v, int))
@@ -272,10 +273,10 @@ class LiveScenarioRunner:
             outcome = await asyncio.wait_for(pump(), self.turn_timeout_s)
         except TimeoutError:
             # A worker may still be running ASR: fence it, revoke approvals and drop the half-received reply.
-            self.driver.abandon()
+            self.driver.abandon("TURN_TIMEOUT")
             return {"approval": None, "strict_speech_approval": "turn_timeout"}, errors
         if outcome is None:  # fatal provider error, or the event stream ended before a turn_end
-            self.driver.abandon()
+            self.driver.abandon("PROVIDER_FAILURE")
             fatal = any(e["fatal"] for e in errors)
             return {"approval": None, "strict_speech_approval": "provider_error" if fatal else "stream_ended"}, errors
         return outcome, errors

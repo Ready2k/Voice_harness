@@ -110,3 +110,12 @@ Single-sample comparison after these fixes: all seven catalogue scenarios approv
 Found while verifying live: headless runs never receive playback acknowledgements, so released audio stays pending in the engine's buffer accounting; with the 15 s limit a long session overflowed on its fourth response and the provider cancel hung until the turn timeout (about 1 in 5 OpenAI confirmed-cancel runs). Live limits are now a 120 s session budget with a separate 15 s per-response cap. Six consecutive OpenAI runs and the Nova run approved afterwards (single samples).
 
 Still open: account/ownership binding beyond the fact's account id, a shared byte budget across adapter, driver and engine, unkeyed (no item id) late events, API/UI execution of live scenarios (finding 8).
+
+## Closing the first three open items
+
+- **Account binding:** the job's frozen context carries `verified_account_id` (null until identity is verified); a spoken amount must match a fact for that account (and GBP). Facts are built from the tool *result* (account id, currency), not its arguments. Debits are matched on absolute value because signed wording abstains.
+- **Unkeyed events:** after an interruption or abandon that could not be keyed (no provider item id), unkeyed audio is refused until the next response boundary (turn start/end); keyed new items are never quarantined.
+- **Abandon disposition:** `assessment.abandoned` records reason, retired jobs, buffered item ids, epoch and `released: false`.
+- **Tool-latency scenario:** now two turns (verify, then ask for the balance). With the tool description telling the model which account id to use, both providers call `get_account_summary`, the 4 s fault fires, and the spoken balance is approved through the typed-fact path (single samples).
+
+Deferred by decision: finding 8 (live scenarios through the API/UI/CLI) and a shared byte budget across adapter, driver and engine.

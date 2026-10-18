@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "reason": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Reason",
+      "type": "string"
+    },
+    "retired_jobs": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Retired Jobs",
+      "type": "array"
+    },
+    "buffered_item_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Buffered Item Ids",
+      "type": "array"
+    },
+    "generation_epoch": {
+      "minimum": 0,
+      "title": "Generation Epoch",
+      "type": "integer"
+    },
+    "released": {
+      "title": "Released",
+      "type": "boolean"
+    },
+    "unkeyed_quarantine": {
+      "title": "Unkeyed Quarantine",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "reason",
+    "retired_jobs",
+    "buffered_item_ids",
+    "generation_epoch",
+    "released",
+    "unkeyed_quarantine"
+  ],
+  "title": "AssessmentAbandoned",
+  "type": "object"
+}

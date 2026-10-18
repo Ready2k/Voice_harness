@@ -640,6 +640,15 @@ class RunLiveBinding(Closed):
     limits: Free
 
 
+class AssessmentAbandoned(Closed):
+    reason: Identifier
+    retired_jobs: list[Free]
+    buffered_item_ids: list[str]
+    generation_epoch: Count
+    released: bool
+    unkeyed_quarantine: bool
+
+
 class InputCallerAudio(Closed):
     turn: Count
     source_text_sha256: Hex64
@@ -668,6 +677,7 @@ EVENT_CONTENT_CONTRACTS.update(
     {
         "run.live_binding": RunLiveBinding,
         "input.caller_audio": InputCallerAudio,
+        "assessment.abandoned": AssessmentAbandoned,
         "adapter.native_event": AdapterNativeEvent,
     }
 )
