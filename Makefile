@@ -1,9 +1,12 @@
+# Secret file mode: 600 locally; CI runners need 644 so the non-root test container (different uid) can read it.
+SECRET_MODE ?= 600
+
 .PHONY: nova-live-container lint audit build test golden recovery infra stop up init benchmark demo
 
 init:
 	@mkdir -p .local
 	@test -f .local/postgres-password || openssl rand -hex -out .local/postgres-password 32
-	@chmod 600 .local/postgres-password
+	@chmod $(SECRET_MODE) .local/postgres-password
 
 up: init
 	docker compose --profile infra up --build -d api otel-collector
