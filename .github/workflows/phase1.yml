@@ -11,13 +11,25 @@ jobs:
           cache-dependency-glob: requirements.lock
       - run: make lint
       - run: make audit
-      - name: Pre-pull images (public registries rate-limit anonymous pulls; retry)
+      # Anonymous pulls from the public registry are rate-limited per runner IP; keep the pinned images in the cache.
+      - id: images
+        uses: actions/cache@v4
+        with:
+          path: .ci-images
+          key: images-${{ hashFiles('compose.yaml', 'Dockerfile') }}
+      - name: Load or pull pinned images (retry on rate limit)
         run: |
-          for attempt in 1 2 3 4; do
-            docker compose --profile infra pull --ignore-buildable postgres otel-collector && exit 0
-            sleep $((attempt * 30))
-          done
-          exit 1
+          if [ -f .ci-images/images.tar ]; then
+            docker load -i .ci-images/images.tar
+          else
+            for attempt in 1 2 3 4 5; do
+              docker compose --profile infra pull --ignore-buildable postgres otel-collector && break
+              [ "$attempt" = 5 ] && exit 1
+              sleep $((attempt * 30))
+            done
+            mkdir -p .ci-images
+            docker save -o .ci-images/images.tar $(docker compose --profile infra config --images | grep -E 'postgres|opentelemetry')
+          fi
       - run: make test
         env:
           SECRET_MODE: "644"
