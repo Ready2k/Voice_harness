@@ -1,0 +1,24 @@
+# Phase review at 4e1ab36 (+ real-engine consent and API date regressions)
+
+Status words: **Done** (gate met for its declared scope), **Partial** (mechanism built, gate or scope incomplete), **Not started**. Evidence is deterministic or single-sample live; nothing here is a provider quality claim. Sources: `docs/PHASE{1,2,3,4}_STATUS.md`, `docs/phase0/`, spec §16 and §15.
+
+| Phase | Status | Basis |
+| --- | --- | --- |
+| 0 Verification and design | **Partial** | Done: capability report schema and probe CLI; decisions D-01..D-07 approved; schema freeze (tag `phase1-baseline`); OpenAI and Nova probed with reports (valid to 2026-10-24). Open: the provider matrix is still mostly `unknown` cells (xAI and Google not contacted; no keys); reports expire weekly and need re-probing; no jurisdiction-specific retention decision; codecs beyond PCM undecided. |
+| 1 Deterministic local core | **Done** (declared scope) | AC-01..08, 13..18, 21 pass executable oracles on SQLite and PostgreSQL; scripted fixtures and the software playback boundary only. Caveats: timing targets remain provisional (single noisy-host baselines; ten-session WebSocket p95 follow-up open); physical browser/DAC playback excluded by decision; the conformance audit left rows partially met. |
+| 2 First realtime adapters | **Partial** | Done: OpenAI Realtime and Nova 2.5 Sonic adapters, AC-09 passed for both (Nova with interruption excluded), AC-20 coverage API, export section and UI. Open: verified count is 2 of 4 families (xAI and Google `not_implemented`, no keys); barge-in driver and caller voice depended on macOS `say` (portable `openai_tts` path now exists, opt-in, not run live); truncate after client-initiated cancel untested; live ASR strict approval proven only on synthetic single samples. |
+| 3 Judges and observability | **Partial** | Done: signed manifests (AC-08) with keyring verification incl. live bundles; cost accounting mechanism (AC-12/19); judges, independence, adjudication, human review queue (AC-10); comparison reports (AC-11); live independent-ASR assessment (AC-14). Open: no calibration policy approved, so every judge criterion is advisory (OpenAI and Haiku 4.5 judges clear only CARE-01); shipped tariffs null so no run has a known cost; online judge not wired into the live pipeline; incremental semantic segmentation disabled; comparisons take caller-supplied observations, no live study. |
+| 4 Provider breadth and scenario depth | **Partial** | Done: 22-scenario catalogue, personas, locales, audio profiles, fault injection with typed dispositions, live runs through API and Runs page (probe, evaluating, cancel), judge/assurance for live runs, FACT-01 on live evidence (amounts, ids, dates bound to entity and field), consent observed before authorising, AC-15 synthetic cancel, AC-16 simulator (offline, chooser injected). Open: Nova delivered but xAI and Google blocked (AC-09 for all enabled adapters met only for the two enabled); no OpenAI vs Nova comparison on the catalogue (needs go-ahead for spend); live runs are single samples; `silence_gap` fault not implemented; dispositions not in comparison denominators; locale-aware caller voice missing; narrowband and noise are synthetic shaping. |
+| 5 Hardening | **Partial (started)** | Present: hash-locked dependencies and digest-pinned images, pip-audit and bandit and ruff in CI, container suite as a CI gate, component benchmark, fault and chaos fixtures, retention and hold tests (AC-17), reproducible manifests. Not started: a dedicated security review, load tests beyond the ten-session component profile, live-provider chaos tests, retention tests with real audio, reproducibility checks across hosts, regression gates on performance in CI. |
+
+## What the recent rechecks changed
+
+Live assurance is now fail-closed for the cases found so far: no authoritative independent ASR means `untestable`, blank ASR is `untestable`, evidence gaps cannot mask an assessed failure, consent needs an explicit affirmative, dates and ids are tied to the entity they describe. Each fix has a regression that fails on the previous code (checked for the consent and date probes by running them against the 8e2b402 source).
+
+## Next candidates (not started)
+
+1. Live comparison of OpenAI and Nova on the catalogue (needs go-ahead for spend and repeated samples).
+2. Calibration policy decision (human) and a holdout built from real live-run transcripts; investigate why judges miss FACT-01 and AUDIO-01.
+3. Provider tariffs from verified pricing so cost totals can be known.
+4. Phase 5 starters: security review, load and chaos tests, performance regression gate.
+5. xAI and Google adapters, blocked on keys.

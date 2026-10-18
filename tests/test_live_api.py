@@ -6,6 +6,7 @@ import os
 import tempfile
 import threading
 import unittest
+from datetime import UTC, datetime
 from pathlib import Path
 from unittest import mock
 
@@ -62,6 +63,52 @@ class InterruptedThenBalance(FakeAdapter):
         yield AudioOut(pcm=bytes(960), sample_rate=24000, sample_count=480, turn_id="t3", ts_ms=4)
         yield TranscriptDelta(role="assistant", text=self.claim, ts_ms=5)
         yield TurnEnd(turn_id="t3", ts_ms=6)
+
+
+class InterruptedThenTransaction(InterruptedThenBalance):
+    """As above, but the second response also lists recent transactions before it speaks ``claim``."""
+
+    async def receive(self):
+        self.round += 1
+        if self.round == 1:
+            async for item in InterruptedThenBalance.receive(self):  # pragma: no cover -- delegates round 1 behaviour
+                yield item
+            return
+        yield ToolCall(call_id="call_v", name="verify_identity",
+                       arguments={"challenge_id": "challenge_001", "answer": "blue"}, ts_ms=1)
+        yield ToolCall(call_id="call_s", name="get_account_summary", arguments={"account_id": "acct_1001"}, ts_ms=2)
+        yield ToolCall(call_id="call_t", name="list_recent_transactions",
+                       arguments={"account_id": "acct_1001", "limit": 5}, ts_ms=3)
+        yield TurnEnd(turn_id="t2", ts_ms=4)
+        yield AudioOut(pcm=bytes(960), sample_rate=24000, sample_count=480, turn_id="t3", ts_ms=5)
+        yield TranscriptDelta(role="assistant", text=self.claim, ts_ms=6)
+        yield TurnEnd(turn_id="t3", ts_ms=7)
+
+
+class VerifyThenCancel(FakeAdapter):
+    """Round 1 verifies the caller; round 2 cancels with whatever confirmation_id the orchestrator handed over."""
+
+    def __init__(self):
+        super().__init__()
+        self.round = 0
+
+    async def receive(self):
+        self.round += 1
+        if self.round == 1:
+            yield ToolCall(call_id="call_v", name="verify_identity",
+                           arguments={"challenge_id": "challenge_001", "answer": "blue"}, ts_ms=1)
+            yield TurnEnd(turn_id="t1", ts_ms=2)
+            yield AudioOut(pcm=bytes(960), sample_rate=24000, sample_count=480, turn_id="t1b", ts_ms=3)
+            yield TranscriptDelta(role="assistant", text="You are verified.", ts_ms=4)
+            yield TurnEnd(turn_id="t1b", ts_ms=5)
+            return
+        given = [t.split("confirmation_id=")[1].split()[0] for t in getattr(self, "texts", []) if "confirmation_id=" in t]
+        yield ToolCall(call_id="call_c", name="cancel_payment",
+                       arguments={"payment_id": "payment_001", "confirmation_id": given[0] if given else "conf_invented"}, ts_ms=1)
+        yield TurnEnd(turn_id="t2", ts_ms=2)
+        yield AudioOut(pcm=bytes(960), sample_rate=24000, sample_count=480, turn_id="t2b", ts_ms=3)
+        yield TranscriptDelta(role="assistant", text="Done.", ts_ms=4)
+        yield TurnEnd(turn_id="t2b", ts_ms=5)
 
 
 class HangingAdapter(FakeAdapter):
@@ -177,6 +224,26 @@ class LiveApi(unittest.TestCase):
         self.assertEqual(fact["verdict"], "untestable")
         self.assertIn("INDEPENDENT_ASR_UNAVAILABLE", fact["reason_codes"])
         self.assertNotEqual(assurance["overall_assurance"], "pass")
+
+    def booking_date_assurance(self, claim):
+        adapter = InterruptedThenTransaction(claim)
+        return self.completed_run(INTERRUPT, ([], []), asr=(claim,) * 4, adapter=adapter, events=True)
+
+    def test_a_wrong_transaction_booking_date_fails_even_when_it_matches_the_account_summary_date(self):
+        # The summary's as_of is the current clock; the transaction was booked on 16 October 2026.
+        today = datetime.now(UTC)
+        claim = f"Transaction zero zero one was booked on {today.day} {today:%B %Y}."
+        assurance, events = self.booking_date_assurance(claim)
+        done = [e["content"].get("call_id") for e in events if e["type"] == "tool.completed"]
+        self.assertEqual(done, ["call_v", "call_s", "call_t"])  # real local MCP returned the transaction list
+        fact = assurance["criteria"]["FACT-01"]
+        self.assertEqual(fact["verdict"], "fail")
+        self.assertIn("DATE_MISMATCH", fact["reason_codes"])
+        self.assertNotEqual(assurance["overall_assurance"], "pass")
+
+    def test_the_transactions_own_booking_date_is_not_a_date_failure(self):
+        assurance, _ = self.booking_date_assurance("Transaction zero zero one was booked on 16 October 2026.")
+        self.assertNotIn("DATE_MISMATCH", assurance["criteria"]["FACT-01"]["reason_codes"])
 
     def test_empty_independent_asr_is_never_a_factual_pass(self):
         self.assert_blank_asr_is_unresolved("")
@@ -460,6 +527,27 @@ class LiveApi(unittest.TestCase):
 
     def test_out_of_band_confirmation_is_withheld_when_the_caller_denies(self):
         self.assert_confirmation_withheld("No, do not cancel that.")
+
+    def real_engine_cancellation(self, transcript):
+        """Run the confirmed scenario through the real confirmation engine and cancel_payment (nothing mocked)."""
+        adapter = VerifyThenCancel()
+        patches = [mock.patch.object(live_providers, "_adapter", lambda provider_id: (adapter, {"tools": []}))]
+        _, events, assurance = self.live_events("commit-cancel-confirmed-001", ScriptedAsr(queue=[transcript] * 8), patches)
+        cancelled = [e for e in events if e["type"] == "tool.completed" and e["content"].get("call_id") == "call_c"
+                     and e["content"].get("status") == "success"]
+        accepted = [e for e in events if e["type"] == "confirmation.accepted"]
+        return adapter, cancelled, accepted, assurance
+
+    def test_real_engine_refuses_a_negated_confirmation_and_cancels_nothing(self):
+        for text in ("I cannot confirm the cancellation.", "I can't confirm the cancellation."):
+            self.setUp()  # one TestClient per scenario run
+            adapter, cancelled, accepted, _ = self.real_engine_cancellation(text)
+            self.assertEqual((cancelled, accepted), ([], []), text)
+            self.assertFalse([t for t in getattr(adapter, "texts", []) if "confirmation_id=" in t], text)
+
+    def test_real_engine_cancels_after_an_explicit_affirmation(self):
+        adapter, cancelled, accepted, _ = self.real_engine_cancellation("Yes please, cancel payment payment_001 now.")
+        self.assertEqual((len(cancelled), len(accepted)), (1, 1))
 
     def test_out_of_band_confirmation_is_withheld_for_a_negated_confirm(self):
         self.assert_confirmation_withheld("I cannot confirm the cancellation.")
