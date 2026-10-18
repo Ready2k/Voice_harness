@@ -218,6 +218,18 @@ class NovaSonicAdapter:
             "capability_rows": rows,
         }
 
+    def connection_info(self) -> dict[str, Any]:
+        """Region, derived Bedrock runtime host and the bridge's AWS SDK version (no credentials)."""
+        region = getattr(self.transport, "region", None) if getattr(self, "transport", None) else None
+        region = region or REGION
+        versions: dict[str, str | None] = {}
+        try:
+            package = BRIDGE_SCRIPT.parent / "node_modules" / "@aws-sdk" / "client-bedrock-runtime" / "package.json"
+            versions["@aws-sdk/client-bedrock-runtime"] = json.loads(package.read_text()).get("version")
+        except (OSError, ValueError):
+            versions["@aws-sdk/client-bedrock-runtime"] = None
+        return {"endpoint_host": f"bedrock-runtime.{region}.amazonaws.com", "region": region, "sdk_versions": versions}
+
     # ------------------------------------------------------------------ session
     async def open_session(self, config: dict[str, Any]) -> dict[str, Any]:
         self.session_id = config.get("session_id") or str(uuid.uuid4())
