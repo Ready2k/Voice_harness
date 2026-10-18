@@ -60,12 +60,14 @@ def apply_profile(pcm: bytes, profile: str, faults, seed=0) -> bytes:
 
 class LiveScenarioRunner:
     def __init__(self, engine, run_id, adapter, assessor, scenario_id, *, caller_audio, cost_recorder=None,
-                 seed=0, turn_timeout_s=TURN_TIMEOUT_S, interrupt_mode="client", barge_after_tool=False):
+                 seed=0, turn_timeout_s=TURN_TIMEOUT_S, interrupt_mode="client", barge_after_tool=False,
+                 before_turn=None):
         entry = catalogue_entry(scenario_id)
         if entry is None:
             raise ValueError("SCENARIO_NOT_IN_CATALOGUE")
         self.engine, self.run_id, self.adapter, self.entry = engine, run_id, adapter, entry
         self.caller_audio, self.seed, self.turn_timeout_s = caller_audio, seed, turn_timeout_s
+        self.before_turn = before_turn  # async (index) hook run before a caller turn, e.g. a trusted confirmation
         self.interrupt_mode = interrupt_mode  # "client": runner calls interrupt(); "vad": caller speech overlaps, provider VAD cuts in
         self.driver = AdapterTurnDriver(engine, run_id, assessor, cost_recorder=cost_recorder)
         self.tool_calls, self._fault_profile, self.interruptions = [], {}, 0
@@ -89,6 +91,11 @@ class LiveScenarioRunner:
             await asyncio.sleep(fault["delay_ms"] / 1000)
         injected = event.name in self._fault_profile
         result = await bank.tool(event.call_id, event.name, event.arguments)
+        if result["status"] == "success":
+            # Amounts returned by a trusted tool may be spoken; they are allowed, not required.
+            allowed = self.driver.expected_claims.setdefault("allowed_amounts_minor", [])
+            allowed.extend(v for k, v in (result.get("structured_content") or {}).items()
+                           if k.endswith("_minor") and isinstance(v, int) and v not in allowed)
         receipt = await self.adapter.submit_tool_result(event.call_id, result)
         self.tool_calls.append({
             "call_id": event.call_id, "name": event.name, "status": result["status"],
@@ -99,14 +106,15 @@ class LiveScenarioRunner:
     async def _await_turn(self, bank, until_audio=False):
         """Pump adapter events until a turn_end (or fatal error / timeout); ``until_audio`` stops at the first reply audio."""
         errors = []
+        follow_up = False  # a tool result was submitted, so the provider's next response belongs to this same turn
         tool_seen = False  # a tool-using reply speaks again after its result; that long reply is the barge-in target
 
         async def pump():
-            nonlocal tool_seen
+            nonlocal tool_seen, follow_up
             async for event in self.adapter.receive():
                 if event.type == "tool_call":
                     await self._tool(bank, event)
-                    tool_seen = True
+                    tool_seen = follow_up = True
                     continue
                 if event.type == "error":
                     errors.append({"code": event.code, "fatal": event.fatal})
@@ -122,6 +130,9 @@ class LiveScenarioRunner:
                     if self.interrupt_mode == "client":
                         self.interrupt_results.append(await self.adapter.interrupt(getattr(event, "item_id", None), 500))
                     return {"approval": None, "strict_speech_approval": "barge_in_pending"}
+                if event.type == "turn_end" and follow_up:
+                    follow_up = False  # end of the tool-calling response; wait for the one that uses the result
+                    continue
                 if event.type == "turn_end" and outcome is not None:
                     return outcome
                 if event.type == "turn_end" and self._cancelled_ends:
@@ -154,6 +165,8 @@ class LiveScenarioRunner:
             for index, turn in enumerate(definition["turns"][: definition["max_turns"]]):
                 pcm = apply_profile(self.caller_audio(turn["customer"]), definition["audio_profile"],
                                     self._faults("background_noise"), self.seed + index)
+                if self.before_turn is not None:
+                    await self.before_turn(index)
                 await self._stream(pcm)
                 # The next turn interrupts: stop at the first reply audio and speak over it.
                 barge = self._faults("caller_interrupts", turn=index + 1)

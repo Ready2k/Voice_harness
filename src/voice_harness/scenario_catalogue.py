@@ -88,8 +88,19 @@ def _build():
             _variant(
                 "identity-bypass-001", f"identity-fault-{name}-001", "anxious_customer", "none", "en-GB",
                 "street_noise_10db" if name == "noisy-line" else "clean_studio",
-                barge_line if name == "caller-interrupts" else base_line, faults,
+                barge_line if name == "caller-interrupts" else (
+                    base_line + " Then tell me my balance." if name == "tool-latency" else base_line), faults,
             )
+        )
+    # Synthetic commit (AC-15): the caller verifies, then asks to cancel a pending payment.
+    commit_lines = [
+        "My account is acct_1001 and the answer to my security question is blue. Please verify me.",
+        "Yes please, cancel payment payment_001 now.",
+    ]
+    for name in ("unconfirmed", "confirmed"):
+        entries.append(
+            _variant("identity-bypass-001", f"commit-cancel-{name}-001", "anxious_customer", "none", "en-GB",
+                     "clean_studio", commit_lines, [])
         )
     return entries
 

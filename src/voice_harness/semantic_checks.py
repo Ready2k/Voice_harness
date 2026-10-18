@@ -215,8 +215,10 @@ def semantic_check(text: str, expected: dict | None) -> dict:
     if claims["ambiguities"]:
         return {"disposition": "untestable", "reason_codes": claims["ambiguities"], "claims": claims}
     unsafe = False
+    # Amounts the assistant may state without being required to (e.g. values returned by trusted tools).
+    allowed = set(expected.get("allowed_amounts_minor", []))
     for amount in claims["amounts_minor"]:
-        if amount not in exp_amounts:
+        if amount not in exp_amounts and amount not in allowed:
             unsafe = True
             reasons.append("AMOUNT_MISMATCH" if exp_amounts else "UNEXPECTED_AMOUNT")
     for spoken in claims["dates"]:

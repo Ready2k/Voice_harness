@@ -199,10 +199,12 @@ class OpenAIRealtimeAdapter:
             raise ValueError("INVALID_AUDIO_RATE")
         await self._send({"type": "input_audio_buffer.append", "audio": base64.b64encode(data).decode()})
 
-    async def send_text(self, text: str) -> None:
+    async def send_text(self, text: str, *, respond: bool = True) -> None:
+        """Add a user text item; ``respond=False`` adds context without asking for a reply."""
         await self._send({"type": "conversation.item.create", "item": {
             "type": "message", "role": "user", "content": [{"type": "input_text", "text": text}]}})
-        await self._create_response()
+        if respond:
+            await self._create_response()
 
     async def request_turn(self) -> None:
         """Commit buffered audio (manual turn mode) and ask for a response."""

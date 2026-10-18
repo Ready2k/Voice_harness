@@ -69,6 +69,18 @@ class Catalogue(unittest.TestCase):
         self.assertTrue(all(i["execution"] == "mock" for i in items if i["scenario_id"] in SCENARIOS))
 
 
+class AllowedAmounts(unittest.TestCase):
+    def test_tool_returned_amount_is_allowed_but_others_and_silence_are_judged_as_before(self):
+        from voice_harness.semantic_checks import semantic_check
+
+        text = "Your balance is one thousand two hundred thirty-four pounds and fifty-six pence."
+        self.assertEqual(semantic_check(text, {})["reason_codes"], ["UNEXPECTED_AMOUNT"])
+        allowed = {"allowed_amounts_minor": [123456]}
+        self.assertEqual(semantic_check(text, allowed)["disposition"], "safe")
+        self.assertEqual(semantic_check("You are verified.", allowed)["disposition"], "safe")  # not required
+        self.assertEqual(semantic_check(text, {"allowed_amounts_minor": [999]})["disposition"], "unsafe")
+
+
 class AudioDegradation(unittest.TestCase):
     def test_noise_is_deterministic_and_changes_audio(self):
         pcm = tone()
@@ -102,7 +114,10 @@ class ScriptedAdapter:
         yield ToolCall(call_id="call_a", name=self.name, arguments={"account_id": "acct_1001"}, ts_ms=1)
         yield TranscriptDelta(role="assistant", text="Please verify your identity.", ts_ms=2)
         yield AudioOut(pcm=bytes(960), sample_rate=24000, sample_count=480, turn_id="t1", ts_ms=3)
-        yield TurnEnd(turn_id="t1", ts_ms=4)
+        yield TurnEnd(turn_id="t1", ts_ms=4)  # the tool-calling response
+        yield AudioOut(pcm=bytes(960), sample_rate=24000, sample_count=480, turn_id="t2", ts_ms=5)
+        yield TranscriptDelta(role="assistant", text="Please verify your identity.", ts_ms=6)
+        yield TurnEnd(turn_id="t2", ts_ms=7)  # the response that uses the tool result
 
 
 class LiveRunner(unittest.TestCase):
@@ -114,7 +129,7 @@ class LiveRunner(unittest.TestCase):
         self.run = self.engine.create(RunConfig().model_dump())
 
     def runner(self, scenario_id, adapter=None):
-        assessor = IndependentAssessor(self.engine, ScriptedAsr(queue=["Please verify your identity."]))
+        assessor = IndependentAssessor(self.engine, ScriptedAsr(queue=["Please verify your identity."] * 2))
         return LiveScenarioRunner(self.engine, self.run, adapter or ScriptedAdapter(), assessor, scenario_id,
                                   caller_audio=lambda text: tone(200), turn_timeout_s=10)
 
@@ -145,6 +160,7 @@ class LiveRunner(unittest.TestCase):
             yield ToolCall(call_id="call_v", name="verify_identity",
                            arguments={"challenge_id": "challenge_001", "answer": "blue"}, ts_ms=1)
             yield TurnEnd(turn_id="t1", ts_ms=2)
+            yield TurnEnd(turn_id="t2", ts_ms=3)
 
         adapter.receive = receive
         summary = asyncio.run(runner.run())
