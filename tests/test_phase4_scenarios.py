@@ -75,6 +75,15 @@ class CatalogueCriteria(unittest.TestCase):
             criteria = entry["definition"]["applicable_criteria"]
             self.assertEqual("CARE-01" in criteria, entry["definition"]["customer"]["vulnerability"] != "none", sid)
             self.assertEqual("CONFIRM-01" in criteria, sid.startswith("commit-cancel-"), sid)
+            asks = any(w in t["customer"].lower() for t in entry["definition"]["turns"] for w in ("balance", "account"))
+            self.assertEqual("FACT-01" in criteria, asks, sid)
+
+    def test_post_verification_scenarios_do_not_prohibit_the_account_tool(self):
+        for sid in ("identity-fault-tool-latency-001", "identity-fault-caller-interrupts-001"):
+            turns = CATALOGUE[sid]["definition"]["turns"]
+            self.assertTrue(all("get_account_summary" not in t["prohibited_actions"] for t in turns), sid)
+        refuses = CATALOGUE["identity-impatient-en-gb-clean-001"]["definition"]["turns"]
+        self.assertTrue(all("get_account_summary" in t["prohibited_actions"] for t in refuses))
 
 
 class AllowedAmounts(unittest.TestCase):

@@ -139,7 +139,7 @@ Deferred by decision: finding 8 (live scenarios through the API/UI/CLI) and a sh
 ## Judge and assurance for live runs
 
 - Assessment resolves catalogue scenarios (`scenario_for`), so `POST /runs/{id}/assessments` and the online judge work on live runs. A completed live run is assessed automatically with deterministic checks only; criteria that need a judge (CARE-01) stay `untestable` until an operator runs an assessment with independent judges. The tested model is recorded from the provider config so judge independence is checked.
-- Catalogue scenarios now declare CARE-01 for vulnerable personas and CONFIRM-01 for the cancel scenarios (their hashes changed). FACT-01 is not yet declared for scenarios that speak a balance.
+- Catalogue scenarios now declare CARE-01 for vulnerable personas and CONFIRM-01 for the cancel scenarios (their hashes changed). FACT-01 was declared in a follow-up (see below).
 - The Runs page has an Assurance section (criterion, verdict, source).
 - Verified live (single samples): OpenAI and Nova runs assessed `pass`; the bereaved Nova run was `untestable` for CARE-01 until an OpenAI judge (`VOICE_HARNESS_LIVE_JUDGES=openai`) was run through the API, then `pass` with source `judges`. Judge calibration is still absent, so judge verdicts are uncalibrated.
 - Open: FACT-01 declaration and its deterministic check against live evidence, automatic judge runs at completion (needs a configured judge and a calibration policy), CONFIRM-01 `pass` on the unconfirmed scenario has not been checked for what it actually tests.
@@ -157,3 +157,11 @@ Browser check (Chrome, local dev server): the Runs page loads the catalogue and 
 - CI failed on `921013e`, `146a597` and `4b3d160` (container tests only). Cause: caller speech is synthesised with macOS `say`/`afconvert`, absent in the Linux container, so a live run failed in the worker; my tests also cleared the whole environment, dropping the PostgreSQL credentials. Fixes: `availability()` now refuses with `NO_CALLER_VOICE_SYNTH` where the synthesiser is missing, tests substitute a tone and strip only the live-provider variables, and the worker logs its exception before failing the run.
 - Lesson: these changes had been validated on SQLite only; the Compose/PostgreSQL suite (`make test`, 471 tests) now passes locally.
 - Consequence: live runs through the API work on a macOS host with credentials, not inside the container.
+
+## FACT-01 for live runs
+
+- `eval_fact` now takes the independent ASR revision (`transcript.revised`, authoritative, source `independent_asr`) as the text of a spoken unit, falling back to the provider transcript. A wrong amount in the ASR text fails (`BALANCE_MISMATCH`) even if the provider transcript was right, and the reverse passes.
+- The catalogue declares FACT-01 for every scenario whose caller asks about the balance or account (20 of 24; hashes changed).
+- Finding while checking against live runs: catalogue variants copied the base scenario's per-turn `prohibited_actions` (`get_account_summary`) into every turn, so the correct post-verification behaviour in the tool-latency and caller-interrupts scenarios was assessed `fail` (SCENARIO-PROPOSAL-01). Those two scenarios now allow the tool (`verified_flow`); calling it before verification remains IDENTITY-01's finding.
+- Verified live (single samples): tool-latency on OpenAI and Nova spoke "£1,234.56", matched the tool result, FACT-01 `pass`, overall `pass`; caller-interrupts on OpenAI `pass`. Impatient and social refusals: FACT-01 `pass` with no amount claimed.
+- Open: FACT-01 only checks amounts (not other account facts such as account id or payment dates), and a refusal scenario passes FACT-01 by making no claim, which says little; a spoken amount with number words is `untestable`.

@@ -134,6 +134,30 @@ class RubricAndDeterministicChecks(Base):
         result = rubric.eval_fact(EvalContext(events, None, {"balance_minor": 120000}))
         self.assertEqual((result["verdict"], result["reason_codes"]), ("untestable", ["AMOUNT_AMBIGUOUS"]))
 
+    def test_independent_asr_text_is_authoritative_for_spoken_amounts(self):
+        def events(provider_text, asr_text):
+            base = {"occurred_at": "2026-10-17T10:00:00Z", "source": "provider"}
+            tool = [
+                {**base, "event_id": "r", "sequence": 1, "type": "tool.requested",
+                 "content": {"call_id": "c", "tool": "get_account_summary"}},
+                {**base, "event_id": "d", "sequence": 2, "type": "tool.completed",
+                 "content": {"call_id": "c", "tool": "get_account_summary", "status": "success"}},
+            ]
+            tool.append({**base, "event_id": "m", "sequence": 2, "type": "mcp.result_received",
+                         "content": {"call_id": "c", "native_envelope": {
+                             "structuredContent": {"structured_content": {"balance_minor": 123456}}}}})
+            audio = {**base, "event_id": "a", "sequence": 3, "type": "audio.output",
+                     "content": {"unit_id": "u", "transcript": provider_text}}
+            revised = {**base, "event_id": "v", "sequence": 4, "type": "transcript.revised",
+                       "content": {"unit_id": "u", "new": asr_text, "authoritative": True, "source": "independent_asr"}}
+            return [*tool, audio, revised]
+
+        fixture = {"balance_minor": 123456}
+        wrong_in_asr = rubric.eval_fact(EvalContext(events("Your balance is £1,234.56.", "Your balance is £9,999.00."), None, fixture))
+        self.assertEqual((wrong_in_asr["verdict"], wrong_in_asr["reason_codes"]), ("fail", ["BALANCE_MISMATCH"]))
+        right_in_asr = rubric.eval_fact(EvalContext(events("Your balance is £9,999.00.", "Your balance is £1,234.56."), None, fixture))
+        self.assertEqual(right_in_asr["verdict"], "pass")
+
     def test_missing_evidence_is_untestable_not_pass(self):
         self.assertEqual(rubric.eval_audio(EvalContext([], None, None))["verdict"], "untestable")
         only_request = [{"event_id": "e1", "sequence": 1, "source": "provider", "type": "tool.requested",

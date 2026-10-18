@@ -284,9 +284,14 @@ def eval_fact(ctx: EvalContext):
         return _res("untestable", [], "No assistant transcript evidence.", ["TRANSCRIPT_UNAVAILABLE"])
     calls = ctx.calls()
     expected_fixture = (ctx.fixture or {}).get("balance_minor")
+    # An independent ASR revision of the audio is authoritative over the provider's own transcript.
+    revised = {}
+    for e in ctx.of("transcript.revised"):
+        if e["content"].get("authoritative") and e["content"].get("source") == "independent_asr":
+            revised[e["content"]["unit_id"]] = e["content"]["new"]
     claims, ids, ambiguous = [], [], []
     for unit in units:
-        amounts, unclear = spoken_amounts(unit["content"]["transcript"])
+        amounts, unclear = spoken_amounts(revised.get(unit["content"].get("unit_id"), unit["content"]["transcript"]))
         if unclear:
             ambiguous.append(unit["event_id"])
         for amount in amounts:

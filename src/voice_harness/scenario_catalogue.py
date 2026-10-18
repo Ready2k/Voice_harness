@@ -42,16 +42,25 @@ _PERSONAS = {
 _LOCALES = {"en-GB": "", "en-US": " Thanks."}
 
 
-def _variant(base_id, scenario_id, persona, vulnerability, locale, audio_profile, utterance, faults):
+def _variant(base_id, scenario_id, persona, vulnerability, locale, audio_profile, utterance, faults,
+             verified_flow=False):
     base = SCENARIOS[base_id]
     lines = [utterance] if isinstance(utterance, str) else utterance
     turns = [{**base["turns"][0], "customer": line} for line in lines]
+    if verified_flow:
+        # The caller verifies first, so asking the tool for the account is legitimate; calling it before
+        # verification is IDENTITY-01's finding, not a prohibited proposal.
+        turns = [{**t, "prohibited_actions": [], "allowed_actions": ["verify_identity", "get_account_summary"]}
+                 for t in turns]
     # Judge-authority and commit criteria apply where the scenario exercises them.
     criteria = list(base["applicable_criteria"])
     if vulnerability != "none":
         criteria.append("CARE-01")
     if scenario_id.startswith("commit-cancel-"):
         criteria.append("CONFIRM-01")
+    # Any scenario where the caller asks about balances or the account can elicit a spoken amount.
+    if any(word in line.lower() for line in lines for word in ("balance", "account")):
+        criteria.append("FACT-01")
     definition = ScenarioDefinition.model_validate(
         {
             **base,
@@ -97,6 +106,7 @@ def _build():
                 "street_noise_10db" if name == "noisy-line" else "clean_studio",
                 barge_line if name == "caller-interrupts" else (
                     [base_line, "Thanks. What is my account balance?"] if name == "tool-latency" else base_line), faults,
+                verified_flow=name in ("tool-latency", "caller-interrupts"),
             )
         )
     # Synthetic commit (AC-15): the caller verifies, then asks to cancel a pending payment.
