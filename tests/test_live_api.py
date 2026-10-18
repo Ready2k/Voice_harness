@@ -301,7 +301,8 @@ class LiveApi(unittest.TestCase):
 
     def test_the_confirmed_cancellation_scenario_is_labelled_out_of_band_and_excluded_from_voice_consent(self):
         with mock.patch("voice_harness.engine.Engine.present_cancellation", lambda self, run, payment: ("req", "digest")), \
-                mock.patch("voice_harness.engine.Engine.confirm", lambda self, *a, **k: {"confirmation_id": "conf_1"}):
+                mock.patch.object(live_providers, "observe", lambda *a: {"observed_choice": "affirm", "reason_codes": [], "pcm_sha256": "0" * 64}), \
+                mock.patch("voice_harness.engine.Engine.confirm", lambda self, *a, **k: {"accepted": True, "confirmation_id": "conf_1"}):
             bundle, events = self.exported("commit-cancel-confirmed-001")
         binding = next(e["content"] for e in events if e["type"] == "run.live_binding")
         self.assertEqual(binding["harness_mechanics"], ["out_of_band_confirmation"])
@@ -398,6 +399,87 @@ class LiveApi(unittest.TestCase):
         assurance = self.database.get(run)["assurance"]
         self.assertEqual(assurance["overall_assurance"], effective["overall_assurance"])
         self.assertEqual(effective["reason_codes"], [])  # deterministic checks only; no judge was configured
+
+    def live_events(self, scenario, backend, patches=(), provider="openai-realtime-live"):
+        self.launches = getattr(self, "launches", 0) + 1
+        adapter = FakeAdapter()
+        active = [
+            mock.patch.object(live_providers, "availability", lambda provider_id, environ=None: (True, None)),
+            mock.patch.object(live_providers, "_adapter", lambda provider_id: (adapter, {"tools": []})),
+            mock.patch.object(live_providers, "select_backend", lambda: backend),
+            mock.patch("voice_harness.adapters.openai_realtime.synth_caller_pcm", lambda text, trail_ms=0: tone(200)),
+            mock.patch.object(live_providers, "auto_judges", lambda environ=None: ([], [])),
+            *patches,
+        ]
+        for patch in active:
+            patch.start()
+            self.addCleanup(patch.stop)
+        with TestClient(self.app) as client:
+            created = self.launch(client, {"scenario_id": scenario, "provider_config_id": provider}, f"{scenario}lv{self.launches}")
+            run = created.json()["run_ids"][0]
+            self.app.state.jobs[run].result(timeout=60)
+            events = client.get(f"/api/v1/runs/{run}/events?limit=1000", headers=self.headers).json()["items"]
+            assurance = client.get(f"/api/v1/runs/{run}/assurance", headers=self.headers).json()
+        return adapter, events, assurance
+
+    def test_a_declared_fault_that_never_fired_is_recorded_and_never_a_pass(self):
+        # The scripted provider's get_account_summary call is denied (unverified), so no delayed result is delivered.
+        _, events, assurance = self.live_events("identity-fault-tool-latency-001", ScriptedAsr(queue=["Please verify."] * 8))
+        recorded = [e["content"] for e in events if e["type"] == "fault.disposition"]
+        self.assertEqual([(r["fault_kind"], r["disposition"]) for r in recorded], [("tool_latency", "not_exercised")])
+        self.assertEqual(assurance["fault_dispositions"], recorded)
+        self.assertIn("FAULT_NOT_EXERCISED", assurance["reason_codes"])
+        self.assertNotEqual(assurance["overall_assurance"], "pass")
+
+    def test_a_scenario_without_faults_records_no_disposition(self):
+        _, events, assurance = self.live_events(LIVE, ScriptedAsr(queue=["Please verify."] * 8))
+        self.assertFalse([e for e in events if e["type"] == "fault.disposition"])
+        self.assertEqual(assurance["fault_dispositions"], [])
+
+    def cancel_patches(self, calls):
+        def confirm(engine, run, context, request, observation, digest, choice, **kw):
+            calls.append(choice)
+            return {"accepted": choice == "affirm", **({"confirmation_id": "conf_1"} if choice == "affirm" else {"reason_code": "AMBIGUOUS_RESPONSE"})}
+
+        return [mock.patch("voice_harness.engine.Engine.present_cancellation", lambda self, run, payment: ("req", "digest")),
+                mock.patch("voice_harness.engine.Engine.confirm", confirm)]
+
+    def assert_confirmation_withheld(self, transcript):
+        calls = []
+        adapter, events, _ = self.live_events("commit-cancel-confirmed-001", ScriptedAsr(queue=[transcript] * 8),
+                                              self.cancel_patches(calls))
+        observed = [e["content"] for e in events if e["type"] == "confirmation.voice_observation"]
+        self.assertEqual(len(observed), 1)
+        self.assertFalse(observed[0]["authorised"])
+        self.assertNotEqual(calls, ["affirm"])
+        self.assertEqual(len(calls), 1)  # the unauthorised outcome went through the engine, which records the rejection
+        self.assertFalse([t for t in getattr(adapter, "texts", []) if "confirmation_id" in t])
+
+    def test_out_of_band_confirmation_is_withheld_when_the_caller_audio_is_not_a_confirmation(self):
+        self.assert_confirmation_withheld("Please verify my identity.")
+
+    def test_out_of_band_confirmation_is_withheld_when_the_caller_denies(self):
+        self.assert_confirmation_withheld("No, do not cancel that.")
+
+    def test_out_of_band_confirmation_is_withheld_when_the_transcript_is_blank(self):
+        self.assert_confirmation_withheld("")
+
+    def test_out_of_band_confirmation_is_withheld_without_an_independent_asr_backend(self):
+        calls = []
+        adapter, events, _ = self.live_events("commit-cancel-confirmed-001", None, self.cancel_patches(calls))
+        observed = [e["content"] for e in events if e["type"] == "confirmation.voice_observation"]
+        self.assertEqual([(o["authorised"], o["reason_codes"]) for o in observed], [(False, ["INDEPENDENT_ASR_UNAVAILABLE"])])
+        self.assertEqual(calls, ["ambiguous"])
+
+    def test_out_of_band_confirmation_is_authorised_only_after_an_observed_affirmation(self):
+        calls = []
+        adapter, events, _ = self.live_events("commit-cancel-confirmed-001",
+                                              ScriptedAsr(queue=["Yes please, cancel payment payment_001 now."] * 8),
+                                              self.cancel_patches(calls))
+        observed = [e["content"] for e in events if e["type"] == "confirmation.voice_observation"]
+        self.assertEqual([(o["observed_choice"], o["authorised"]) for o in observed], [("affirm", True)])
+        self.assertEqual(calls, ["affirm"])
+        self.assertTrue([t for t in getattr(adapter, "texts", []) if "confirmation_id=conf_1" in t])
 
 
 if __name__ == "__main__":

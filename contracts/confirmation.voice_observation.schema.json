@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "request_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Request Id",
+      "type": "string"
+    },
+    "observed_choice": {
+      "enum": [
+        "affirm",
+        "deny",
+        "ambiguous"
+      ],
+      "title": "Observed Choice",
+      "type": "string"
+    },
+    "reason_codes": {
+      "items": {
+        "maxLength": 200,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Reason Codes",
+      "type": "array"
+    },
+    "pcm_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Pcm Sha256",
+      "type": "string"
+    },
+    "asr_backend": {
+      "anyOf": [
+        {
+          "maxLength": 200,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Asr Backend"
+    },
+    "transcript_sha256": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Transcript Sha256"
+    },
+    "authorised": {
+      "title": "Authorised",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "request_id",
+    "observed_choice",
+    "reason_codes",
+    "pcm_sha256",
+    "authorised"
+  ],
+  "title": "ConfirmationVoiceObservation",
+  "type": "object"
+}
