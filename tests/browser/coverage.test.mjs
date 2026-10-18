@@ -12,7 +12,8 @@ const summary = {
       checked_at: "2026-10-16T00:00:00+00:00", capability_report_id: "cap_o", reason_codes: [], evidence_ids: ["a", "b"] },
     { provider_family: "aws_nova_sonic", coverage_state: "implemented_but_unverified", model_id: "amazon.nova-2-5-sonic", region: "us-east-1",
       reason_codes: ["REPORT_EXPIRED", "AC09_NOT_PASSED"], evidence_ids: [] },
-    { provider_family: "xai_grok_voice", coverage_state: "not_implemented", model_id: null, reason_codes: ["NO_ADAPTER"] },
+    { provider_family: "xai_grok_voice", coverage_state: "implemented_but_unverified", model_id: "grok-voice-3.0", region: null,
+      reason_codes: ["AC09_NOT_PASSED"], evidence_ids: [] },
     { provider_family: "google_gemini_live", coverage_state: "not_implemented", model_id: null, reason_codes: ["NO_ADAPTER"] },
   ],
 };
@@ -25,10 +26,13 @@ test("all families stay visible in server order and only verified counts", () =>
 });
 
 test("unavailable and unimplemented providers carry explicit reasons, no score", () => {
-  const [, nova, xai] = view(summary).items;
-  assert.equal(xai.stateLabel, "Not implemented");
+  const [, nova, xai, google] = view(summary).items;
+  assert.equal(google.stateLabel, "Not implemented");
+  assert.equal(google.counted, false);
+  assert.match(google.reasons[0], /No adapter/);
+  assert.equal(xai.stateLabel, "Implemented, not verified");
   assert.equal(xai.counted, false);
-  assert.match(xai.reasons[0], /No adapter/);
+  assert.match(xai.reasons[0], /AC-09/);
   assert.equal(nova.counted, false);
   assert.equal(nova.reasons.length, 2);
   for (const i of view(summary).items) assert.equal("score" in i || "rank" in i, false);

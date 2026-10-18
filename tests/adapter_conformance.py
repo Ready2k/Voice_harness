@@ -5,7 +5,7 @@ A dimension an adapter declares unsupported (via capabilities) is reported as
 "excluded" with a reason, never as "pass". `report["passed"]` requires every
 non-excluded dimension to pass and audio_in/audio_out/tool_result_correlation
 not to be excluded. Live adapters opt in with VOICE_HARNESS_LIVE_ADAPTERS
-(comma list of: openai, aws_nova_sonic); see LiveConformance below.
+(comma list of: openai, aws_nova_sonic, xai_grok_voice); see LiveConformance below.
 """
 
 from __future__ import annotations
@@ -75,6 +75,8 @@ async def _judge_interruption(adapter, evs, info, stop_bound_ms) -> dict[str, An
         if end_ms > generated_ms:
             return {"status": "fail", "reason": "audio_end_ms exceeds generated audio"}
         out["truncate"] = {"item_id": it.item_id, "audio_end_ms": end_ms, "history_truncation": "acknowledged"}
+        if r.get("audio_end_ms") is not None and r["audio_end_ms"] != end_ms:  # adapter had to retry lower (xAI cut items)
+            out["truncate"].update(acknowledged_audio_end_ms=r["audio_end_ms"], truncate_attempts=r.get("truncate_attempts"))
     return out
 
 
@@ -215,12 +217,13 @@ def write_result(report: dict, family: str, capability_report_id: str, out_dir) 
 
 
 class LiveConformance(unittest.TestCase):
-    """Opt-in: VOICE_HARNESS_LIVE_ADAPTERS=openai,aws_nova_sonic with credentials.
+    """Opt-in: VOICE_HARNESS_LIVE_ADAPTERS=openai,aws_nova_sonic,xai_grok_voice with credentials.
     Each adapter module must expose ``conformance_factory() -> (adapter, prime)``."""
 
     MODULES = {
         "openai": "voice_harness.adapters.openai_realtime",
         "aws_nova_sonic": "voice_harness.adapters.nova_sonic",
+        "xai_grok_voice": "voice_harness.adapters.xai_voice",
     }
 
     def test_live(self):

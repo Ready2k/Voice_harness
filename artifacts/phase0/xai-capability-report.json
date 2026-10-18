@@ -1,0 +1,243 @@
+{
+  "schema_version": 1,
+  "report_id": "cap_xai_grok_voice_3_0_20261018",
+  "provider_family": "xai_grok_voice",
+  "api_surface": "realtime websocket wss://api.x.ai/v1/realtime",
+  "region": null,
+  "requested_model_id": "grok-voice-3.0",
+  "returned_model_id": "grok-voice-3.0",
+  "version_unresolved": false,
+  "checked_at": "2026-10-18T19:07:28.570636+00:00",
+  "expires_at": "2026-10-25T19:07:28.570636+00:00",
+  "adapter_version": "xai_probe.py/0",
+  "sdk_version": "websockets 17.2 python 3.11.13",
+  "effective_session_config": {
+    "raw_event_log": "artifacts/phase0/xai-probe-2026-10-18T19-06-51-161Z.jsonl",
+    "audio": "audio/pcm 24000 in and out",
+    "voice": "xai_ara",
+    "turn_detection": "null (manual) and server_vad were both exercised",
+    "input_transcription": "grok-transcribe",
+    "model_doc": "https://docs.x.ai/developers/models"
+  },
+  "operator_terms_attestation": null,
+  "rows": [
+    {
+      "name": "input_codecs_rates",
+      "status": "observed",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": [
+          "xai_ev_8"
+        ]
+      },
+      "limitations": [
+        "audio/pcm 24 kHz echoed in session.updated; other documented codecs and rates untested",
+        "{\"format\": {\"type\": \"audio/pcm\", \"rate\": 24000}, \"transport\": \"json\"}"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "output_codecs_rates",
+      "status": "observed",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": [
+          "xai_ev_8"
+        ]
+      },
+      "limitations": [
+        "audio/pcm 24 kHz echoed in session.updated; audio_duration_ms is reported per delta",
+        "{\"format\": {\"type\": \"audio/pcm\", \"rate\": 24000}, \"transport\": \"json\"}"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "audio_in",
+      "status": "verified",
+      "evidence": {
+        "doc_url": "https://docs.x.ai/developers/model-capabilities/audio/speech-to-speech",
+        "doc_retrieved_at": "2026-10-16",
+        "probe_event_ids": [
+          "xai_ev_180"
+        ]
+      },
+      "limitations": [
+        "synthetic speech streamed under server_vad was transcribed; a silence-only manual commit produced no committed event",
+        "no committed event for the silence-only manual commit within 4 s (errors: [])",
+        "speech transcribed; event kinds ['conversation.item.input_audio_transcription.completed', 'conversation.item.input_audio_transcription.updated']; final: 'Stop.'"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "audio_out",
+      "status": "verified",
+      "evidence": {
+        "doc_url": "https://docs.x.ai/developers/model-capabilities/audio/speech-to-speech",
+        "doc_retrieved_at": "2026-10-16",
+        "probe_event_ids": [
+          "xai_ev_16",
+          "xai_ev_38"
+        ]
+      },
+      "limitations": [
+        "response.output_audio.delta received (PCM 24 kHz)",
+        "response.output_audio.delta (pcm 24 kHz)",
+        "audio delta on the post-tool-result response"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "tool_arguments_and_results",
+      "status": "verified",
+      "evidence": {
+        "doc_url": "https://docs.x.ai/developers/model-capabilities/audio/speech-to-speech",
+        "doc_retrieved_at": "2026-10-16",
+        "probe_event_ids": [
+          "xai_ev_28",
+          "xai_ev_32",
+          "xai_ev_33"
+        ]
+      },
+      "limitations": [
+        "function call then function_call_output then response.create; native function tools, server-side MCP not exercised",
+        "function_call get_account_summary {\"account_id\":\"ACC-001\"}",
+        "function_call_output acknowledged by conversation.item.added",
+        "function_call_output delivered then response.create"
+      ],
+      "tool_mode": "gateway_bridge"
+    },
+    {
+      "name": "transcript_finality",
+      "status": "verified",
+      "evidence": {
+        "doc_url": "https://docs.x.ai/developers/model-capabilities/audio/speech-to-speech",
+        "doc_retrieved_at": "2026-10-16",
+        "probe_event_ids": [
+          "xai_ev_21",
+          "xai_ev_180"
+        ]
+      },
+      "limitations": [
+        "output transcript delta/done; input transcript is cumulative (.updated) with repeated .completed events per item",
+        "response.output_audio_transcript.delta then .done",
+        "input transcript final: conversation.item.input_audio_transcription.completed"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "audio_alignment",
+      "status": "unknown",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": []
+      },
+      "limitations": [
+        "audio_duration_ms and transcript start_time seen; no verified word/audio alignment",
+        "output audio deltas carry audio_duration_ms and transcript deltas carry start_time; no word-level audio alignment verified"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "turn_signalling",
+      "status": "verified",
+      "evidence": {
+        "doc_url": "https://docs.x.ai/developers/model-capabilities/audio/speech-to-speech",
+        "doc_retrieved_at": "2026-10-16",
+        "probe_event_ids": [
+          "xai_ev_8",
+          "xai_ev_30",
+          "xai_ev_53",
+          "xai_ev_173",
+          "xai_ev_318"
+        ]
+      },
+      "limitations": [
+        "response.done status; manual turns plus server_vad speech_started/speech_stopped",
+        "session.updated accepted turn_detection=null (manual)",
+        "response.done status=completed (tool-calling response)",
+        "response.done status=completed",
+        "server_vad input_audio_buffer.speech_started 1285 ms after speech began streaming",
+        "server_vad input_audio_buffer.speech_stopped"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "cancel_truncate",
+      "status": "verified",
+      "evidence": {
+        "doc_url": "https://docs.x.ai/developers/model-capabilities/audio/speech-to-speech",
+        "doc_retrieved_at": "2026-10-16",
+        "probe_event_ids": [
+          "xai_ev_70",
+          "xai_ev_72",
+          "xai_ev_173",
+          "xai_ev_172"
+        ]
+      },
+      "limitations": [
+        "response.cancel gives response.done status=cancelled and conversation.item.truncate is acknowledged; server_vad speech ends the in-flight response but reports status=completed with empty output (no distinct cancelled status)",
+        "response.cancel -> response.done status=cancelled",
+        "conversation.item.truncate -> conversation.item.truncated",
+        "server_vad speech_started while the assistant was generating",
+        "the in-flight response ended at speech_started: response.done status=completed, output=0 items, 12264 ms of audio generated (uninterrupted answers to this prompt were about 2 minutes); no distinct cancelled status",
+        "conversation.item.truncate on the server_vad-cut item: conversation.item.truncated; response.output_item.done for that item seen=False"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "usage_granularity",
+      "status": "verified",
+      "evidence": {
+        "doc_url": "https://docs.x.ai/developers/model-capabilities/audio/speech-to-speech",
+        "doc_retrieved_at": "2026-10-16",
+        "probe_event_ids": [
+          "xai_ev_53"
+        ]
+      },
+      "limitations": [
+        "response.done carries a top-level usage object (token details, output_audio_seconds, billable_audio_seconds); response.usage inside it is empty",
+        "response.done usage keys: input_tokens,input_token_details,output_tokens,output_token_details,total_tokens,output_audio_seconds,billable_audio_seconds; in={'text_tokens': 0, 'audio_tokens': 0, 'grok_tokens': 0}; out={'text_tokens': 15, 'audio_tokens': 368, 'grok_tokens': 0}"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "reconnect_resume",
+      "status": "unknown",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": [
+          "xai_ev_422"
+        ]
+      },
+      "limitations": [
+        "fresh connection works; documented history replay not exercised",
+        "fresh connection after close works; resume (history replay) documented but not exercised"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "direct_mcp",
+      "status": "unknown",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": []
+      },
+      "limitations": [
+        "session accepts an mcp tool and the server attempts MCP discovery itself, but no reachable MCP server was available to exercise it",
+        "session.update with an mcp tool declaration -> session.updated; no reachable MCP server, so tool use through server-side MCP was not exercised"
+      ],
+      "tool_mode": null
+    }
+  ],
+  "limitations": [
+    "Pinned grok-voice-3.0 returned grok-voice-3.0; alias grok-voice-latest resolved to grok-voice-3.0 on this date (observed once, not guaranteed) and is never used for runs",
+    "The server generates audio faster than real time (roughly 7x in one uninterrupted sample); server_vad speech ends a response early",
+    "Barge-in was exercised with one synthetic (macOS say) phrase only",
+    "Terms, retention, quotas and pricing need operator attestation; the existing operator attestation does not cover xAI"
+  ]
+}

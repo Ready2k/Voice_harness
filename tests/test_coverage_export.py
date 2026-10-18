@@ -53,9 +53,10 @@ class CoverageExportTests(unittest.TestCase):
         for item in cov["items"]:
             if item["coverage_state"] != "implemented_and_verified":
                 self.assertTrue(item["reason_codes"])
-        for family in ("xai_grok_voice", "google_gemini_live"):
-            item = next(i for i in cov["items"] if i["provider_family"] == family)
-            self.assertEqual(item["coverage_state"], "not_implemented")
+        google = next(i for i in cov["items"] if i["provider_family"] == "google_gemini_live")
+        self.assertEqual(google["coverage_state"], "not_implemented")
+        xai = next(i for i in cov["items"] if i["provider_family"] == "xai_grok_voice")
+        self.assertIn(xai["coverage_state"], ("implemented_but_unverified", "implemented_and_verified"))
 
     def test_injected_unverified_snapshot_is_not_supported(self):
         items = [Coverage(f, None, None, None, "not_implemented", reason_codes=("NO_ADAPTER",)) for f in FAMILIES]
@@ -67,7 +68,7 @@ class CoverageExportTests(unittest.TestCase):
     def test_hash_detects_any_edit_to_coverage(self):
         original = self.bundle()
         edits = {
-            "flip_state": lambda c: c["items"][2].update(coverage_state="implemented_and_verified"),
+            "flip_state": lambda c: c["items"][3].update(coverage_state="implemented_and_verified"),
             "add_ranking": lambda c: c.update(ranking=["openai"]),
             "add_score": lambda c: c["items"][0].update(score=0.9),
             "drop_family": lambda c: c["items"].pop(),
@@ -81,8 +82,8 @@ class CoverageExportTests(unittest.TestCase):
     def test_resealed_semantic_tampering_is_rejected(self):
         original = self.bundle()
         edits = {
-            "flip_state_keep_reasons": lambda c: c["items"][2].update(coverage_state="implemented_and_verified"),
-            "verified_without_report": lambda c: c["items"][2].update(
+            "flip_state_keep_reasons": lambda c: c["items"][3].update(coverage_state="implemented_and_verified"),
+            "verified_without_report": lambda c: c["items"][3].update(
                 coverage_state="implemented_and_verified", reason_codes=[]),
             "inflate_count": lambda c: c.update(verified_count=4),
             "forged_statement": lambda c: c.update(statement="verified for 4 of 4 requested provider families"),
@@ -91,7 +92,7 @@ class CoverageExportTests(unittest.TestCase):
             "extra_key": lambda c: c.update(rank=1),
             "drop_family": lambda c: c["items"].pop(),
             "reorder": lambda c: c["items"].reverse(),
-            "clear_reasons": lambda c: c["items"][2].update(reason_codes=[]),
+            "clear_reasons": lambda c: c["items"][3].update(reason_codes=[]),
             "bad_state": lambda c: c["items"][0].update(coverage_state="supported"),
         }
         for name, edit in edits.items():

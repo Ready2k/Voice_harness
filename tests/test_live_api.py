@@ -39,6 +39,10 @@ class FakeAdapter(ScriptedAdapter):
         self.texts = [*getattr(self, "texts", []), text]
 
 
+class XaiFakeAdapter(FakeAdapter):
+    receipt = {"model_id": "grok-voice-3.0", "provider_session_id": "sess_xai"}
+
+
 class InterruptedThenBalance(FakeAdapter):
     """First response is cut off by the caller; the second verifies, reads the balance, then speaks ``claim``."""
 
@@ -162,7 +166,8 @@ class LiveApi(unittest.TestCase):
         self.assertEqual(live_with_builtin.json()["error"]["code"], "SCENARIO_PROVIDER_MISMATCH")
         self.assertEqual((unknown.status_code, unknown.json()["error"]["code"]), (422, "UNKNOWN_SCENARIO"))
 
-    def completed_run(self, scenario, judges, asr=("Please verify your identity.",) * 2, adapter=None, events=False):
+    def completed_run(self, scenario, judges, asr=("Please verify your identity.",) * 2, adapter=None, events=False,
+                      provider="openai-realtime-live"):
         adapter = adapter or FakeAdapter()
         patches = [
             mock.patch.object(live_providers, "availability", lambda provider_id, environ=None: (True, None)),
@@ -175,7 +180,7 @@ class LiveApi(unittest.TestCase):
             patch.start()
             self.addCleanup(patch.stop)
         with TestClient(self.app) as client:
-            created = self.launch(client, {"scenario_id": scenario, "provider_config_id": "openai-realtime-live"}, scenario)
+            created = self.launch(client, {"scenario_id": scenario, "provider_config_id": provider}, scenario)
             run = created.json()["run_ids"][0]
             self.app.state.jobs[run].result(timeout=60)
             assurance = client.get(f"/api/v1/runs/{run}/assurance", headers=self.headers).json()
@@ -309,8 +314,8 @@ class LiveApi(unittest.TestCase):
         self.assertIn("run.evaluating", types)
         self.assertNotIn("run.completed", types)  # the terminal state is written once, after the assessment
 
-    def exported(self, scenario, provider="openai-realtime-live"):
-        adapter = FakeAdapter()
+    def exported(self, scenario, provider="openai-realtime-live", adapter=None):
+        adapter = adapter or FakeAdapter()
         patches = [
             mock.patch.object(live_providers, "availability", lambda provider_id, environ=None: (True, None)),
             mock.patch.object(live_providers, "_adapter", lambda provider_id: (adapter, {"tools": []})),
@@ -349,6 +354,52 @@ class LiveApi(unittest.TestCase):
         probing = next(e["content"] for e in events if e["type"] == "run.probing")
         self.assertNotEqual(probing.get("capability_status"), "mock_only")
         self.assertIn("capability_report_id", probing)
+
+    def test_xai_availability_checks_the_key_without_revealing_it(self):
+        secret = "xai-SECRET-VALUE-123"
+        live = {"VOICE_HARNESS_LIVE_ASR": "openai", "OPENAI_API_KEY": "k"}
+        with mock.patch("voice_harness.caller_voice.available", lambda environ=None: (True, None)):
+            self.assertEqual(live_providers.availability("xai-voice-live", {**live, "xAI_API_KEY": secret}), (True, None))
+            ok, reason = live_providers.availability("xai-voice-live", live)
+            self.assertEqual((ok, reason), (False, "NO_XAI_API_KEY"))
+            self.assertEqual(live_providers.availability("xai-voice-live", {"xAI_API_KEY": secret})[1],
+                             "NO_ASR_BACKEND_CONFIGURED")  # the same ASR gate as the other providers applies first
+            self.assertNotIn(secret, json.dumps(live_providers.availability("xai-voice-live", {**live, "xAI_API_KEY": secret})))
+        with mock.patch("voice_harness.caller_voice.available", lambda environ=None: (False, "NO_CALLER_VOICE_SYNTH")):
+            self.assertEqual(live_providers.availability("xai-voice-live", {**live, "xAI_API_KEY": secret})[1],
+                             "NO_CALLER_VOICE_SYNTH")
+
+    def test_xai_provider_is_registered_with_the_pinned_model_and_family(self):
+        self.assertEqual(live_providers.LIVE_PROVIDERS["xai-voice-live"], "xai_grok_voice")
+        self.assertEqual(live_providers.TESTED_MODELS["xai-voice-live"],
+                         {"provider": "xai", "model_id": "grok-voice-3.0", "family": "xai_grok_voice"})  # never the alias
+        self.assertEqual(live_providers.FAMILIES["xai-voice-live"], "xai_grok_voice")
+
+    def test_an_xai_live_run_launches_through_the_api_with_xai_session_binding_and_judge_independence(self):
+        same = reference_judge(cfg("xai-self", provider="xai", model="grok-voice-3.0", family="xai_grok_voice"))
+        other = reference_judge(cfg("other"))
+        _, events = self.completed_run(CARE, ([same, other], []), provider="xai-voice-live", adapter=XaiFakeAdapter(), events=True)
+        independence = next(e["content"] for e in events if e["type"] == "judge.independence_recorded")
+        self.assertEqual(independence["tested"], {"provider": "xai", "model_id": "grok-voice-3.0", "family": "xai_grok_voice"})
+        verdicts = {j["judge_id"]: j for j in independence["judges"]}
+        self.assertFalse(verdicts["xai-self"]["eligible"])
+        self.assertIn("JUDGE_IS_TESTED_MODEL", verdicts["xai-self"]["reason_codes"])
+        self.assertTrue(verdicts["other"]["eligible"])
+        probing = next(e["content"] for e in events if e["type"] == "run.probing")
+        self.assertEqual(probing["capability_report_id"], "cap_xai_grok_voice_3_0_20261018")
+
+    def test_an_xai_live_export_describes_the_xai_session_and_verifies_offline(self):
+        from voice_harness.evidence import verify_bundle
+
+        bundle, _ = self.exported(LIVE, provider="xai-voice-live", adapter=XaiFakeAdapter())
+        provider = bundle["manifest"]["provider"]
+        self.assertEqual((provider["provider_config_id"], provider["adapter"]), ("xai-voice-live", "xai_grok_voice"))
+        self.assertEqual((provider["requested_model_id"], provider["returned_model_id"]), ("grok-voice-3.0", "grok-voice-3.0"))
+        self.assertEqual(provider["provider_session_id"], "sess_xai")
+        self.assertEqual(provider["version_resolution"], "provider_returned")
+        self.assertNotEqual(provider["capability_status"], "mock_only")
+        self.assertTrue(verify_bundle(bundle))
+        self.assertNotIn("xAI_API_KEY", json.dumps(bundle))
 
     def test_a_live_export_verifies_offline(self):
         from voice_harness.evidence import verify_bundle

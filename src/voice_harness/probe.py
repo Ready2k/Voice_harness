@@ -1,7 +1,8 @@
-"""Phase 0 probe CLI: `python -m voice_harness.probe {seed,validate,schema}`.
+"""Phase 0 probe CLI: `python -m voice_harness.probe {seed,validate,schema,from-*-observations}`.
 
-No provider calls are made. Live probes are Phase 2; until then every row is
-`unknown` and the report fails closed.
+No provider calls are made here. Live probes live in scripts/probe/ and write observation files; the
+`from-*-observations` commands turn those into reports, and a row without probe evidence stays `unknown`,
+so the report fails closed.
 """
 
 import argparse
@@ -28,6 +29,10 @@ def main(argv: list[str] | None = None) -> int:
     oa.add_argument("path")
     oa.add_argument("--report-id", required=True)
     oa.add_argument("--attest", action="store_true", help="record the operator terms attestation")
+    ox = sub.add_parser("from-xai-observations", help="build a report from xai_probe.py output")
+    ox.add_argument("path")
+    ox.add_argument("--report-id", required=True)
+    ox.add_argument("--attest", action="store_true", help="record the operator terms attestation")
     sub.add_parser("schema", help="print the JSON Schema")
     a = ap.parse_args(argv)
 
@@ -47,6 +52,11 @@ def main(argv: list[str] | None = None) -> int:
         from .openai_report import load as load_openai
 
         print(load_openai(a.path, a.report_id, OPERATOR_ATTESTATION if a.attest else None).model_dump_json(indent=2))
+        return 0
+    if a.cmd == "from-xai-observations":
+        from .xai_report import load as load_xai
+
+        print(load_xai(a.path, a.report_id, OPERATOR_ATTESTATION if a.attest else None).model_dump_json(indent=2))
         return 0
     with open(a.path) as f:
         report = CapabilityReport.model_validate_json(f.read())
