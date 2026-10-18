@@ -21,6 +21,7 @@ import random
 import time
 
 from .events import PROCESS_CLOCK_DOMAIN
+from .fault_dispositions import classify
 from .live_assessment import AdapterTurnDriver
 from .mcp_gateway import gateway
 from .resample import chunk
@@ -87,6 +88,7 @@ class LiveScenarioRunner:
         self.tool_calls, self._fault_profile, self.interruptions = [], {}, 0
         self.interrupt_results, self._cancelled_ends = [], 0
         self.seed_value = seed
+        self.pending_caller_pcm = None
         self._native = []  # provider events received since the last flush (type, size, hash; never the payload)
         if hasattr(adapter, "native_sink"):
             adapter.native_sink = self._on_native
@@ -129,6 +131,17 @@ class LiveScenarioRunner:
                 "stream_started_ms": started_ms, "stream_ended_ms": ended_ms,
                 "clock_domain_id": PROCESS_CLOCK_DOMAIN,
             })
+
+    def _record_fault_dispositions(self, outcomes):
+        """One typed ``fault.disposition`` per declared fault: handled, not exercised, not handled or misconduct."""
+        if not self.entry["faults"]:
+            return
+        self._flush_native()
+        found = classify(self.entry["faults"], self.engine.database.events(self.run_id), outcomes=outcomes,
+                         tool_calls=self.tool_calls)
+        with self.engine.database.transaction(self.run_id) as tx:
+            for item in found:
+                tx.event("orchestrator", "fault.disposition", item)
 
     def _faults(self, kind, turn=None, tool=None):
         return [
@@ -306,6 +319,7 @@ class LiveScenarioRunner:
                     # Trusted tool amounts are allowed for the response they were returned in, not for later turns.
                     self.driver.expected_claims = {k: v for k, v in self.driver.expected_claims.items()
                                                    if k not in ("allowed_amounts_minor", "allowed_facts")}
+                    self.pending_caller_pcm = pcm  # the audio about to be spoken, for observing a confirmation
                     if self.before_turn is not None:
                         await self.before_turn(index)
                     started_ms = int(time.monotonic() * 1000)
@@ -319,6 +333,7 @@ class LiveScenarioRunner:
                     self._flush_native()
                     if outcome["strict_speech_approval"] in ("provider_error", "stream_ended"):
                         break  # the session is unusable; later turns would only time out
+            self._record_fault_dispositions(outcomes)
         finally:
             self._flush_native()
             usage = self.driver.close()  # cost lines are closed out even when a turn raises

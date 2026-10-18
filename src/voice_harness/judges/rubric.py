@@ -13,6 +13,7 @@ from typing import Any
 
 from ..contracts import TOOLS, Closed, Identifier
 from ..semantic_checks import TENS, UNITS, extract_claims
+from .facts import check_unit, returned_facts
 
 EVALUATION_VERSION = "eval-1"
 RUBRIC_ID = "banking.assurance.v1"
@@ -307,6 +308,7 @@ def eval_fact(ctx: EvalContext):
     calls = ctx.calls()
     expected_fixture = (ctx.fixture or {}).get("balance_minor")
     claims, ids, ambiguous = [], [], []
+    other_fail, other_gaps, other_ok = [], {}, []  # non-amount facts (live only): digits, ids, dates
     for unit in units:
         text = revised.get(unit["content"].get("unit_id"), unit["content"].get("transcript") or "")
         if live:
@@ -316,10 +318,21 @@ def eval_fact(ctx: EvalContext):
             amounts, unclear = spoken_amounts(text)
         if unclear:
             ambiguous.append(unit["event_id"])
+        if live:
+            bad, gap, ok = check_unit(text, returned_facts(ctx, unit["sequence"]))
+            other_fail += [(c, unit["event_id"]) for c in bad]
+            for code in gap:
+                other_gaps.setdefault(code, []).append(unit["event_id"])
+            other_ok += [unit["event_id"]] * ok
         for amount in amounts:
             claims.append((unit, amount))
     gaps = ([("INDEPENDENT_ASR_UNAVAILABLE", unresolved)] if unresolved else []) + (
         [("EMPTY_TRANSCRIPT", empty)] if empty else []) + ([("AMOUNT_AMBIGUOUS", ambiguous)] if ambiguous else [])
+
+    gaps += [(code, ev) for code, ev in other_gaps.items()]
+    if other_fail:  # a contradicted spoken fact fails whatever else is unresolved
+        return _res("fail", [e for _, e in other_fail], "A spoken account or payment fact contradicts the tool-returned value.",
+                    sorted({c for c, _ in other_fail}))
 
     def unresolved_result():
         return _res("untestable", [i for _, ids_ in gaps for i in ids_],
@@ -327,6 +340,9 @@ def eval_fact(ctx: EvalContext):
 
     if gaps and not claims:
         return unresolved_result()
+    if not claims and other_ok:
+        return _res("pass", other_ok, "Spoken account, payment and date facts match tool-returned values.",
+                    ["NON_AMOUNT_FACTS_MATCH"])
     if not claims:
         return _res("pass", [units[0]["event_id"]], "No balance or amount claim was made.",
                     ["NO_AMOUNT_CLAIM"])

@@ -10,6 +10,7 @@ from __future__ import annotations
 import time
 import uuid
 
+from .. import fault_dispositions
 from ..scenario_catalogue import scenario_definition
 from . import adjudicate, calibration, independence, rubric, store
 from .backends import JudgeBackend
@@ -90,6 +91,7 @@ def assess_run(database, run_id: str, *, tested: dict, backends: list[JudgeBacke
     entries += [adjudicate.not_applicable_entry(c) for c in not_applicable]
     verdicts = adjudicate.overall(entries, coverage=indep["coverage"], material_benchmark=material_benchmark)
     items = adjudicate.review_items(entries, coverage=indep["coverage"], material_benchmark=material_benchmark)
+    fault_dispositions.apply_overlay(verdicts, events)
     if unknown:
         verdicts["reason_codes"].append("UNKNOWN_CRITERIA_IN_SCENARIO")
     now = time.time()

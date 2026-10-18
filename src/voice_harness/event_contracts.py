@@ -666,6 +666,25 @@ class InputCallerAudio(Closed):
     clock_domain_id: Identifier
 
 
+class FaultDisposition(Closed):
+    fault_kind: Identifier
+    at_turn: Count
+    tool: Identifier | None = None
+    disposition: Literal["handled", "not_exercised", "not_handled", "misconduct"]
+    reason_codes: list[Identifier]
+    evidence_event_ids: list[str]
+
+
+class ConfirmationVoiceObservation(Closed):
+    request_id: Identifier
+    observed_choice: Literal["affirm", "deny", "ambiguous"]
+    reason_codes: list[Identifier]
+    pcm_sha256: Hex64
+    asr_backend: Identifier | None = None
+    transcript_sha256: Hex64 | None = None
+    authorised: bool
+
+
 class AdapterNativeEvent(Closed):
     adapter: Identifier
     native_type: Identifier
@@ -683,5 +702,7 @@ EVENT_CONTENT_CONTRACTS.update(
         "input.caller_audio": InputCallerAudio,
         "assessment.abandoned": AssessmentAbandoned,
         "adapter.native_event": AdapterNativeEvent,
+        "fault.disposition": FaultDisposition,
+        "confirmation.voice_observation": ConfirmationVoiceObservation,
     }
 )

@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import time
 
+from .. import fault_dispositions
 from . import adjudicate, store
 from .rubric import CRITERIA
 from .service import emit
@@ -148,6 +149,7 @@ def effective_from_events(events: list[dict], run_id: str) -> dict:
     material = "JUDGE_COVERAGE_INCOMPLETE" in adjudication["reason_codes"]
     verdicts = adjudicate.overall(entries, coverage=adjudication["judge_coverage"], material_benchmark=material,
                                   coverage_review_pending=pending_coverage)
+    faults = fault_dispositions.apply_overlay(verdicts, events)
     open_reviews = [r["review_id"] for r in state["reviews"].values()
                     if r["evaluation_id"] == state["latest"] and r["state"] != "decided"]
     return {
@@ -159,6 +161,7 @@ def effective_from_events(events: list[dict], run_id: str) -> dict:
             for e in entries
         },
         "judge_calibration": adjudication.get("judge_calibration", []),
+        "fault_dispositions": faults,
         "human_adjudication": human, "open_reviews": open_reviews,
         "unresolved": bool(open_reviews) or verdicts["overall_assurance"] in {"review_required", "untestable"},
     }

@@ -225,6 +225,14 @@ def examples():
                 "sample_rate": 24000, "audio_retained": False, "transformations": ["clean_studio"],
                 "stream_started_ms": 1000, "stream_ended_ms": 3000, "clock_domain_id": "process_fixture",
             },
+            "confirmation.voice_observation": {
+                "request_id": "confirmation_request_001", "observed_choice": "affirm", "reason_codes": [],
+                "pcm_sha256": pcm, "asr_backend": "scripted_offline", "transcript_sha256": pcm, "authorised": True,
+            },
+            "fault.disposition": {
+                "fault_kind": "tool_error", "at_turn": 0, "tool": "verify_identity", "disposition": "handled",
+                "reason_codes": ["ERROR_NOT_FABRICATED"], "evidence_event_ids": ["evt_001"],
+            },
             "adapter.native_event": {
                 "adapter": "openai_realtime", "native_type": "response.output_audio.delta", "payload_sha256": pcm,
                 "payload_bytes": 4800, "payload_retained": False, "omission_reason": "AUDIO_AND_BULK_PAYLOAD_HASH_ONLY",

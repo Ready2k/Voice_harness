@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "fault_kind": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Fault Kind",
+      "type": "string"
+    },
+    "at_turn": {
+      "minimum": 0,
+      "title": "At Turn",
+      "type": "integer"
+    },
+    "tool": {
+      "anyOf": [
+        {
+          "maxLength": 200,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Tool"
+    },
+    "disposition": {
+      "enum": [
+        "handled",
+        "not_exercised",
+        "not_handled",
+        "misconduct"
+      ],
+      "title": "Disposition",
+      "type": "string"
+    },
+    "reason_codes": {
+      "items": {
+        "maxLength": 200,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Reason Codes",
+      "type": "array"
+    },
+    "evidence_event_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Evidence Event Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "fault_kind",
+    "at_turn",
+    "disposition",
+    "reason_codes",
+    "evidence_event_ids"
+  ],
+  "title": "FaultDisposition",
+  "type": "object"
+}
