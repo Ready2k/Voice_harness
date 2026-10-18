@@ -460,8 +460,21 @@ def wav_data(buf: bytes) -> bytes:
 
 def synth_caller_pcm(text: str = "Stop. Please stop talking, I have a question.", *, lead_ms: int = 200,
                      trail_ms: int = 1000) -> bytes:
-    """Synthetic caller utterance (macOS ``say`` + ``afconvert``) as 24 kHz s16le mono with silence padding.
-    Raises RuntimeError where those tools are unavailable."""
+    """Synthetic caller utterance as 24 kHz s16le mono with silence padding. Backend per
+    ``VOICE_HARNESS_CALLER_VOICE`` (macOS say/afconvert by default, or opt-in openai_tts).
+    Raises RuntimeError when no synthesiser is usable."""
+    from .. import caller_voice
+
+    name, reason = caller_voice.backend()
+    if name is None:
+        raise caller_voice.CallerVoiceUnavailable(reason)
+    if name == "openai_tts":
+        pcm = caller_voice.openai_tts_pcm(text)
+        return bytes(SAMPLE_RATE * 2 * lead_ms // 1000) + pcm + bytes(SAMPLE_RATE * 2 * trail_ms // 1000)
+    return _synth_macos(text, lead_ms=lead_ms, trail_ms=trail_ms)
+
+
+def _synth_macos(text: str, *, lead_ms: int, trail_ms: int) -> bytes:
     import shutil
     import subprocess  # noqa: S404  # nosec B404
     import tempfile
