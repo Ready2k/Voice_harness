@@ -33,12 +33,23 @@ export function runRows(payload) {
 export function launchOptions(payload) {
   return payload.items
     .filter((s) => s.runnable)
-    .map((s) => ({ id: s.scenario_id, version: s.version, label: s.scenario_id + " v" + s.version, summary: s.definition?.goal ?? "" }));
+    .map((s) => ({ id: s.scenario_id, version: s.version, label: s.scenario_id + " v" + s.version, summary: s.definition?.goal ?? "", live: s.execution === "live_adapter" }));
 }
 
-/** Pure: body of POST /api/v1/runs for a scenario choice. */
-export function launchBody(option, policyProfile = "strict-v1") {
-  return { scenario_id: option.id, scenario_version: option.version, policy_profile: policyProfile };
+/** Pure: body of POST /api/v1/runs. A live scenario needs a live provider config; mock scenarios never take one. */
+export function launchBody(option, policyProfile = "strict-v1", providerConfigId = null) {
+  const body = { scenario_id: option.id, scenario_version: option.version, policy_profile: policyProfile };
+  if (option.live) body.provider_config_id = providerConfigId;
+  return body;
+}
+
+/** Pure: live provider choices; an unavailable config is listed but disabled with its reason code. */
+export function providerChoices(payload) {
+  return payload.items.map((p) => ({
+    id: p.provider_config_id,
+    label: p.provider_config_id + (p.available ? "" : " (unavailable: " + p.reason + ")"),
+    disabled: !p.available,
+  }));
 }
 
 /** Pure: append a page of events without duplicates, ordered by sequence. */

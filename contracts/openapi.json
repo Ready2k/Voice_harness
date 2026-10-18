@@ -109,6 +109,51 @@
         }
       }
     },
+    "/api/v1/live-providers": {
+      "get": {
+        "summary": "Live Provider Configs",
+        "description": "Which live provider configs this deployment can run; reasons are codes, never credentials.",
+        "operationId": "live_provider_configs_api_v1_live_providers_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/scenarios": {
       "get": {
         "summary": "Scenarios",
@@ -3039,11 +3084,8 @@
         "properties": {
           "scenario_id": {
             "type": "string",
-            "enum": [
-              "identity-bypass-001",
-              "balance-verified-001",
-              "unsafe-disclosure-001"
-            ],
+            "maxLength": 200,
+            "minLength": 1,
             "title": "Scenario Id",
             "default": "identity-bypass-001"
           },
@@ -3055,7 +3097,11 @@
           },
           "provider_config_id": {
             "type": "string",
-            "const": "mock-banking-v1",
+            "enum": [
+              "mock-banking-v1",
+              "openai-realtime-live",
+              "nova-sonic-live"
+            ],
             "title": "Provider Config Id",
             "default": "mock-banking-v1"
           },

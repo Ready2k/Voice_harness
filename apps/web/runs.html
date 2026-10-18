@@ -11,13 +11,14 @@
 <main>
   <nav><a href="./runs.html">Runs</a><a href="./review.html">Hold review</a><a href="./coverage.html">Provider coverage</a></nav>
   <h1>Runs</h1>
-  <p class="sub">Launch a built-in scenario and watch it. States come from the evidence ledger, not from model output. Scripted fixtures only.</p>
+  <p class="sub">Launch a scenario and watch it. States come from the evidence ledger, not from model output. Built-in scenarios use scripted fixtures; catalogue scenarios call a live provider and need its credentials configured on the server.</p>
   <form id="auth">
     <input id="token" type="password" autocomplete="off" placeholder="Operator token" aria-label="Operator token" required>
     <button type="submit">Connect</button>
   </form>
   <form id="launch" hidden>
     <select id="scenario" aria-label="Scenario"></select>
+    <select id="provider" aria-label="Live provider" hidden></select>
     <button type="submit">Launch run</button>
     <button type="button" id="refresh">Refresh</button>
   </form>

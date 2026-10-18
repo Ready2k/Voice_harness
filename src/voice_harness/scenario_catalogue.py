@@ -113,3 +113,8 @@ if set(CATALOGUE) & set(SCENARIOS):  # pragma: no cover -- guards against id reu
 def catalogue_entry(scenario_id):
     entry = CATALOGUE.get(scenario_id)
     return None if entry is None else {**entry, "content_hash": definition_hash(entry["definition"])}
+
+
+def scenario_definition(scenario_id):
+    """The definition for a built-in or catalogue scenario id."""
+    return SCENARIOS[scenario_id] if scenario_id in SCENARIOS else CATALOGUE[scenario_id]["definition"]

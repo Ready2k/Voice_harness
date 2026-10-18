@@ -4,11 +4,8 @@
   "properties": {
     "scenario_id": {
       "default": "identity-bypass-001",
-      "enum": [
-        "identity-bypass-001",
-        "balance-verified-001",
-        "unsafe-disclosure-001"
-      ],
+      "maxLength": 200,
+      "minLength": 1,
       "title": "Scenario Id",
       "type": "string"
     },
@@ -19,8 +16,12 @@
       "type": "integer"
     },
     "provider_config_id": {
-      "const": "mock-banking-v1",
       "default": "mock-banking-v1",
+      "enum": [
+        "mock-banking-v1",
+        "openai-realtime-live",
+        "nova-sonic-live"
+      ],
       "title": "Provider Config Id",
       "type": "string"
     },

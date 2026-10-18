@@ -21,7 +21,8 @@ from .contracts import OUTPUTS, TOOLS, ApprovalToken, Result
 from .guardrail import POLICY_ID as CONTENT_POLICY_ID
 from .guardrail import POLICY_VERSION as CONTENT_POLICY_VERSION
 from .guardrail import evaluate_content
-from .scenario_defs import SCENARIOS, definition_hash
+from .scenario_catalogue import scenario_definition
+from .scenario_defs import definition_hash
 from .storage import Database
 
 
@@ -168,7 +169,7 @@ class Engine:
                         "scenario_id": config.get("scenario_id"),
                         "scenario_version": config.get("scenario_version"),
                         "scenario_hash": definition_hash(
-                            SCENARIOS[config.get("scenario_id", "identity-bypass-001")]
+                            scenario_definition(config.get("scenario_id", "identity-bypass-001"))
                         ),
                         "limits": dict(self.limits),
                     },

@@ -27,6 +27,7 @@ from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import ValidationError
 
+from . import live_providers
 from .approvals import public_key
 from .auth import load_token, restrict_bundle, reviewer_may, role_for, tls_options
 from .clock_runtime import ClockSyncSession, invalidate_prior_connection
@@ -37,6 +38,7 @@ from .engine import Engine
 from .evidence import Evidence
 from .exports import download_links
 from .inbound_queue import InboundQueue
+from .live_scenario import LIVE_LIMITS
 from .metrics import derive as derive_metrics
 from .review_api import register_review_routes
 from .scenario_catalogue import CATALOGUE
@@ -62,6 +64,7 @@ def create_app(
 
     keystore = KeyStore(root)
     engine = Engine(database)
+    live_engine = Engine(database, limits=LIVE_LIMITS)  # live runs record, and are bound by, the live budgets
     evidence = Evidence(database, root / "objects", signer=keystore.signer())
     from . import telemetry as telemetry_module
 
@@ -95,7 +98,11 @@ def create_app(
                     return
                 tx.state["state"] = "running"
                 tx.event("orchestrator", "run.running", {})
-            run_scenario(engine, run_id, evidence)
+            config = database.get(run_id)["config"]
+            if config["provider_config_id"] in live_providers.LIVE_PROVIDERS:
+                run_live_work(run_id, config)
+            else:
+                run_scenario(engine, run_id, evidence)
         except Exception:  # noqa: BLE001 -- protected worker boundary fails closed
             with database.transaction(run_id) as tx:
                 if tx.state["state"] not in {"cancelled", "recovery_required"}:
@@ -109,6 +116,25 @@ def create_app(
                     tx.event("orchestrator", "run.failed", {"reason": "WORKER_FAILED"})
         finally:
             evidence.save_manifest(run_id)
+
+    def run_live_work(run_id, config):
+        """A live adapter run: provider failures are recorded in the ledger, never silently completed."""
+        summary = asyncio.run(
+            live_providers.run_live(
+                live_engine, run_id, config["provider_config_id"], config["scenario_id"], seed=config["fixture_seed"]
+            )
+        )
+        failed = [t for t in summary["turns"] if t["strict_speech_approval"] in ("provider_error", "stream_ended")]
+        with database.transaction(run_id) as tx:
+            if tx.state["state"] != "running":
+                return
+            if failed or summary["adapter_errors"]:
+                tx.state["state"] = "failed"
+                tx.event("orchestrator", "run.failed", {"reason": "PROVIDER_FAILURE"})
+            else:
+                tx.state["state"] = "completed"
+                # Live speech decisions are in the ledger; no overall assurance is claimed without a judge run.
+                tx.event("orchestrator", "run.completed", {"assurance": None})
 
     @asynccontextmanager
     async def lifespan(app):
@@ -249,6 +275,15 @@ def create_app(
             for r in rows
         }
 
+    @app.get("/api/v1/live-providers", dependencies=[Depends(auth)])
+    def live_provider_configs():
+        """Which live provider configs this deployment can run; reasons are codes, never credentials."""
+        items = []
+        for provider_config_id in live_providers.LIVE_PROVIDERS:
+            ok, reason = live_providers.availability(provider_config_id)
+            items.append({"provider_config_id": provider_config_id, "available": ok, "reason": reason})
+        return {"items": items}
+
     @app.get("/api/v1/scenarios", dependencies=[Depends(auth)])
     def scenarios(cursor: int = 0, limit: int = 100):
         if cursor < 0 or not 1 <= limit <= 1000:
@@ -261,7 +296,7 @@ def create_app(
                 "scenario_id": key[0],
                 "version": key[1],
                 "content_hash": value[0],
-                "runnable": key[0] in SCENARIOS and key[1] == 1,
+                "runnable": (key[0] in SCENARIOS or key[0] in CATALOGUE) and key[1] == 1,
                 "execution": "live_adapter" if key[0] in CATALOGUE else "mock",
                 **({"faults": CATALOGUE[key[0]]["faults"]} if key[0] in CATALOGUE else {}),
                 "definition": value[1],
@@ -303,6 +338,13 @@ def create_app(
     ):
         if not app.state.accepting:
             raise HTTPException(503, "SHUTTING_DOWN")
+        is_live = config.provider_config_id in live_providers.LIVE_PROVIDERS
+        if is_live != (config.scenario_id in CATALOGUE):
+            raise ValueError("SCENARIO_PROVIDER_MISMATCH")
+        if not is_live and config.scenario_id not in SCENARIOS:
+            raise HTTPException(422, "UNKNOWN_SCENARIO")
+        if is_live and not live_providers.availability(config.provider_config_id)[0]:
+            raise ValueError("PROVIDER_NOT_CONFIGURED")
         run_ids = []
         with job_lock:
             with database.connection() as db:
@@ -319,7 +361,7 @@ def create_app(
                     del jobs[old_id]
                 if sum(not job.done() for job in jobs.values()) >= 10:
                     raise HTTPException(429, "CONCURRENCY_LIMIT")
-                run_id = engine.create(
+                run_id = (live_engine if is_live else engine).create(
                     config.model_dump(), idempotency_key + ":" + str(repetition)
                 )
                 if database.get(run_id)["state"] == "queued" and run_id not in jobs:

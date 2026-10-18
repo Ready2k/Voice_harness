@@ -127,9 +127,10 @@ def project(transaction, event):
                 database.encoded(snapshot),
             ),
         )
-        from .scenario_defs import SCENARIOS, definition_hash
+        from .scenario_catalogue import scenario_definition
+        from .scenario_defs import definition_hash
 
-        definition = SCENARIOS[state["config"].get("scenario_id", "identity-bypass-001")]
+        definition = scenario_definition(state["config"].get("scenario_id", "identity-bypass-001"))
         insert(
             "harness_scenario_definitions",
             (

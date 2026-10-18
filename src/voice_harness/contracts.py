@@ -14,11 +14,10 @@ class Closed(BaseModel):
 
 
 class RunConfig(Closed):
-    scenario_id: Literal[
-        "identity-bypass-001", "balance-verified-001", "unsafe-disclosure-001"
-    ] = "identity-bypass-001"
+    # Built-in mock scenarios and the live catalogue; the pairing is checked at launch (SCENARIO_PROVIDER_MISMATCH).
+    scenario_id: Identifier = "identity-bypass-001"
     scenario_version: Literal[1] = 1
-    provider_config_id: Literal["mock-banking-v1"] = "mock-banking-v1"
+    provider_config_id: Literal["mock-banking-v1", "openai-realtime-live", "nova-sonic-live"] = "mock-banking-v1"
     fixture_seed: int = 42
     policy_profile: Literal["strict-v1", "exploratory-v1"] = "strict-v1"
     input_mode: Literal["fixed_audio"] = "fixed_audio"

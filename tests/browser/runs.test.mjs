@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { readFileSync } from "node:fs";
 import {
-  confirmations, decisions, launchBody, launchOptions, mergeEvents, metricRows, runRows, runView, toolCalls, transcript, unitStates,
+  confirmations, decisions, launchBody, launchOptions, providerChoices, mergeEvents, metricRows, runRows, runView, toolCalls, transcript, unitStates,
 } from "../../apps/web/runs.mjs";
 import { describeHold, view as reviewView } from "../../apps/web/review.mjs";
 
@@ -130,4 +130,19 @@ test("hold review: finding-scoped holds are disputes, ordered by urgency, with t
   assert.equal(describeHold({ ...base, released_at: 5, expires_at: 9e9 }, 1000).urgency, "released");
   const released = { ...fx.holds, items: fx.holds.items.map((h) => ({ ...h, released_at: 1 })) };
   assert.equal(reviewView(released).total, 0);
+});
+
+test("a live scenario takes a provider config and unavailable providers are disabled with a reason", () => {
+  const options = launchOptions({ items: [
+    { scenario_id: "mock-1", version: 1, runnable: true, execution: "mock", definition: {} },
+    { scenario_id: "live-1", version: 1, runnable: true, execution: "live_adapter", definition: {} },
+  ] });
+  assert.deepEqual(launchBody(options[0], "strict-v1", "ignored"), { scenario_id: "mock-1", scenario_version: 1, policy_profile: "strict-v1" });
+  assert.equal(launchBody(options[1], "strict-v1", "nova-sonic-live").provider_config_id, "nova-sonic-live");
+  const choices = providerChoices({ items: [
+    { provider_config_id: "openai-realtime-live", available: true, reason: null },
+    { provider_config_id: "nova-sonic-live", available: false, reason: "NO_AWS_SESSION" },
+  ] });
+  assert.deepEqual(choices.map((c) => c.disabled), [false, true]);
+  assert.match(choices[1].label, /NO_AWS_SESSION/);
 });

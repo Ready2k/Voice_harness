@@ -57,14 +57,14 @@ class Catalogue(unittest.TestCase):
         self.assertEqual(len(SCENARIOS), 3)
         self.assertIsNone(catalogue_entry("identity-bypass-001"))
 
-    def test_api_lists_catalogue_as_live_adapter_not_runnable_on_mock(self):
+    def test_api_lists_catalogue_as_live_adapter_runnable_only_with_a_live_provider(self):
         with tempfile.TemporaryDirectory() as d:
             db = Database(os.environ.get("HARNESS_TEST_DATABASE_URL", str(Path(d) / "t.sqlite")))
             with TestClient(create_app(db, Path(d), "operator")) as client:
                 items = client.get("/api/v1/scenarios?limit=1000", headers={"Authorization": "Bearer operator"}).json()["items"]
         live = [i for i in items if i["scenario_id"] in CATALOGUE]
         self.assertEqual(len(live), len(CATALOGUE))
-        self.assertTrue(all(i["execution"] == "live_adapter" and not i["runnable"] for i in live))
+        self.assertTrue(all(i["execution"] == "live_adapter" and i["runnable"] for i in live))
         self.assertTrue(any(i["faults"] for i in live))
         self.assertTrue(all(i["execution"] == "mock" for i in items if i["scenario_id"] in SCENARIOS))
 

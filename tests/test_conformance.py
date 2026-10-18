@@ -708,7 +708,6 @@ class MetricsAndFailClosedTests(Base):
 
 class ScenarioDefinitionTests(Base):
     def test_builtins_are_closed_versioned_and_consistent_with_the_fixture(self):
-        from typing import get_args
 
         from voice_harness.scenario_defs import (
             SCENARIOS,
@@ -717,7 +716,7 @@ class ScenarioDefinitionTests(Base):
             definition_hash,
         )
 
-        self.assertEqual(set(SCENARIOS), set(get_args(RunConfig.model_fields["scenario_id"].annotation)))
+        self.assertIn(RunConfig().scenario_id, SCENARIOS)
         self.assertFalse(ScenarioDefinition.model_json_schema()["additionalProperties"])
         for definition in SCENARIOS.values():
             ScenarioDefinition.model_validate(definition)

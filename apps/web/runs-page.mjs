@@ -1,11 +1,12 @@
 import {
-  api, fetchEvents, launchBody, launchOptions, mergeEvents, renderRun, renderRunList, runRows, runView, TERMINAL, el,
+  api, fetchEvents, launchBody, launchOptions, mergeEvents, providerChoices, renderRun, renderRunList, runRows, runView, TERMINAL, el,
 } from "./runs.mjs";
 
 const $ = (id) => document.getElementById(id);
 const error = $("error");
 let token = "";
 let options = [];
+let providers = [];
 let current = null; // {runId, events, timer}
 
 function remember(value) {
@@ -47,12 +48,21 @@ async function openRun(runId) {
   await tick();
 }
 
+function syncProvider() {
+  $("provider").hidden = !options[Number($("scenario").value)]?.live;
+}
+
 async function connect() {
   error.textContent = "";
   try {
     options = launchOptions(await api(token, "/api/v1/scenarios"));
     const select = $("scenario");
     select.replaceChildren(...options.map((o, i) => Object.assign(el("option", "", o.label + (o.summary ? " - " + o.summary : "")), { value: String(i) })));
+    providers = providerChoices(await api(token, "/api/v1/live-providers"));
+    $("provider").replaceChildren(...providers.map((p) => Object.assign(el("option", "", p.label), { value: p.id, disabled: p.disabled })));
+    const firstAvailable = providers.find((p) => !p.disabled);
+    if (firstAvailable) $("provider").value = firstAvailable.id;
+    syncProvider();
     $("launch").hidden = false;
     remember(token);
     await refreshList();
@@ -67,12 +77,16 @@ $("auth").addEventListener("submit", (event) => {
   token = $("token").value;
   connect();
 });
+$("scenario").addEventListener("change", syncProvider);
 $("refresh").addEventListener("click", () => refreshList().catch((e) => { error.textContent = e.message; }));
 $("launch").addEventListener("submit", async (event) => {
   event.preventDefault();
   error.textContent = "";
   try {
-    const body = launchBody(options[Number($("scenario").value)]);
+    const option = options[Number($("scenario").value)];
+    const choice = providers.find((p) => p.id === $("provider").value);
+    if (option.live && (!choice || choice.disabled)) throw new Error("no live provider is configured on the server");
+    const body = launchBody(option, "strict-v1", option.live ? choice.id : null);
     const key = "ui-" + Date.now() + "-" + Math.random().toString(36).slice(2);
     const launched = await api(token, "/api/v1/runs", {
       method: "POST",
