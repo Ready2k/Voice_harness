@@ -185,6 +185,23 @@ class OpenAIBackend(JudgeBackend):
             raise JudgeInvalidOutput("JUDGE_RESPONSE_SHAPE") from exc
 
 
+def strip_json_fence(text: str) -> str:
+    """Remove one surrounding ```json fence (Bedrock Converse has no JSON mode); content is otherwise untouched."""
+    s = text.strip()
+    if s.startswith("```") and s.endswith("```") and len(s) > 6:
+        body = s[3:-3]
+        s = body[4:] if body.lower().startswith("json") else body
+    return s.strip()
+
+
+def bedrock_family(model: str) -> str:
+    """Vendor of a Bedrock model id, ignoring a cross-region inference-profile prefix (us., eu., global., ...)."""
+    parts = model.split(".")
+    if len(parts) > 1 and parts[0] in {"us", "eu", "apac", "global", "jp", "au"}:
+        parts = parts[1:]
+    return parts[0] if len(parts) > 1 else "unknown"
+
+
 class BedrockConverseBackend(JudgeBackend):
     """AWS Bedrock Converse judge. Opt-in; needs boto3 and ambient AWS credentials."""
 
@@ -192,7 +209,7 @@ class BedrockConverseBackend(JudgeBackend):
         if not live_enabled("bedrock", environ):
             raise JudgeUnavailable("LIVE_JUDGE_DISABLED")
         model = model_id or environ.get("VOICE_HARNESS_BEDROCK_JUDGE_MODEL", "anthropic.claude-3-5-haiku-20241022-v1:0")
-        self.config = JudgeConfig("bedrock-" + model, "bedrock", "aws_bedrock", model, model.split(".")[1] if "." in model else "unknown")
+        self.config = JudgeConfig("bedrock-" + model, "bedrock", "aws_bedrock", model, bedrock_family(model))
         self.client = client
         if client is None:
             try:
@@ -216,7 +233,7 @@ class BedrockConverseBackend(JudgeBackend):
             if usage.get("inputTokens") is not None:
                 self.last_usage = {"input_tokens": usage.get("inputTokens"), "output_tokens": usage.get("outputTokens"),
                                    "cached_tokens": usage.get("cacheReadInputTokens")}
-            return out["output"]["message"]["content"][0]["text"]
+            return strip_json_fence(out["output"]["message"]["content"][0]["text"])
         except (KeyError, IndexError) as exc:
             raise JudgeInvalidOutput("JUDGE_RESPONSE_SHAPE") from exc
         except Exception as exc:  # noqa: BLE001 - botocore errors are mapped, not hidden

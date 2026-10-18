@@ -507,6 +507,17 @@ class Backends(unittest.TestCase):
         with self.assertRaises(JudgeUnavailable):
             build_backend({"backend": "nope"})
 
+    def test_bedrock_family_ignores_inference_profile_prefix(self):
+        from voice_harness.judges.backends import bedrock_family, strip_json_fence
+
+        self.assertEqual(strip_json_fence('```json\n{"a": 1}\n```'), '{"a": 1}')
+        self.assertEqual(strip_json_fence('{"a": 1}'), '{"a": 1}')
+
+        self.assertEqual(bedrock_family("anthropic.claude-3-5-haiku-20241022-v1:0"), "anthropic")
+        self.assertEqual(bedrock_family("us.anthropic.claude-haiku-4-5-20251001-v1:0"), "anthropic")
+        self.assertEqual(bedrock_family("global.amazon.nova-2-lite-v1:0"), "amazon")
+        self.assertEqual(bedrock_family("nomodel"), "unknown")
+
     def test_openai_backend_request_shape_and_failure_modes(self):
         calls = []
 
