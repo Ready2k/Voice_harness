@@ -241,9 +241,11 @@ Not done: the API-level consent regressions mock the engine's present/confirm st
   $0.08/min "STS" rate. The page does not name `grok-voice-3.0`, so that mapping is an assumption. The unpriced token
   meters share an exclusivity group, so they no longer make an xAI run partial. No rounding or minimum is applied
   (none documented); whether cut-off audio is billed is still not established.
-- Not priced: Google Gemini Live (modality
-  rates exist but the adapter reports unclassified totals; the page row is "Gemini 2.5 Flash Live API", matched by
-  name only); the Bedrock Haiku 4.5 judge (it uses the `us.` geo profile and only the global cross-region rate was
+- Google Gemini Live: usage is now split into audio and text tokens from `usageMetadata` modality details (any other
+  modality, or counts that do not sum to the total, stay unclassified and unpriced) and priced at the "Gemini 2.5
+  Flash Live API" rates ($3.00/$0.50 in, $12.00/$2.00 out audio/text). That row is matched to the model by name only.
+  Gemini Live re-bills the session context each turn, so every turn's reported total is billable.
+- Not priced: the Bedrock Haiku 4.5 judge (it uses the `us.` geo profile and only the global cross-region rate was
   readable). Quotas, rounding and minimum-billing rules are not established.
 - The shipped OpenAI rows use provider `openai`, but live runs record `openai_realtime`, so those rows would never
   match a live run. The vendor table uses the recorded identifiers.

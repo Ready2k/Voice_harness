@@ -72,6 +72,19 @@ def declare_expected_components(database, run_id, components, declared_by="orche
         return tx.event("orchestrator", "cost.expectation_declared", content)
 
 
+def _gemini_modality_details(entries):
+    """Audio/text split from Gemini per-modality counts; None for any other modality or malformed entry."""
+    if not isinstance(entries, list) or not entries:
+        return None
+    by = {}
+    for entry in entries:
+        count = entry.get("tokenCount") if isinstance(entry, dict) else None
+        if not isinstance(count, int) or isinstance(count, bool) or count < 0 or entry.get("modality") not in ("AUDIO", "TEXT"):
+            return None
+        by[entry["modality"]] = by.get(entry["modality"], 0) + count
+    return {"audio_tokens": by.get("AUDIO", 0), "text_tokens": by.get("TEXT", 0)}
+
+
 def reports_from_adapter_usage(provider, usage, *, scope_id, usage_date, revision=1, service=None, model=None,
                                region=None, component="voice", evidence_event_ids=(), generation_state=None,
                                assumptions=(), meter_map=None):
@@ -113,6 +126,8 @@ def reports_from_adapter_usage(provider, usage, *, scope_id, usage_date, revisio
             nova = ((raw.get("details") or {}).get("total") or {}).get(side)
             if isinstance(nova, dict) and "speechTokens" in nova and "textTokens" in nova:
                 details = {"audio_tokens": nova["speechTokens"], "text_tokens": nova["textTokens"]}
+        if details is None:  # Gemini usageMetadata: {prompt|candidates}TokensDetails[{modality, tokenCount}]
+            details = _gemini_modality_details(raw.get("promptTokensDetails" if side == "input" else "candidatesTokensDetails"))
         audio, text = (details or {}).get("audio_tokens"), (details or {}).get("text_tokens")
         cached_total = (details or {}).get("cached_tokens") or 0
         cached_by = (details or {}).get("cached_tokens_details") or {}

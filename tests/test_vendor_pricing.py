@@ -36,7 +36,7 @@ class VendorPricingTable(unittest.TestCase):
 
     def test_unpriced_families_stay_unknown(self):
         self.assertIsNone(self.find("google_gemini_live", "google_gemini_live", "gemini-live-2.5-flash-native-audio",
-                                    None, "input_tokens_unclassified"))
+                                    None, "input_tokens_unclassified"))  # unsplit totals cannot be priced
 
 
 class XaiPerMinuteMeter(unittest.TestCase):
@@ -72,6 +72,45 @@ class XaiPerMinuteMeter(unittest.TestCase):
         reports = cost.reports_from_adapter_usage(
             "xai_grok_voice", {"input_tokens": 1, "output_tokens": 2, "raw": {}}, scope_id="r", usage_date="2026-10-18")
         self.assertNotIn("billable_audio_seconds", [r["meter_id"] for r in reports])
+
+
+class GeminiModalitySplit(unittest.TestCase):
+    """Real Gemini usageMetadata shape (probe 2026-10-18): per-modality counts price at the Live API rates."""
+
+    USAGE = {"promptTokenCount": 249, "candidatesTokenCount": 20, "totalTokenCount": 269,
+             "promptTokensDetails": [{"modality": "AUDIO", "tokenCount": 118}, {"modality": "TEXT", "tokenCount": 131}],
+             "candidatesTokensDetails": [{"modality": "AUDIO", "tokenCount": 18}, {"modality": "TEXT", "tokenCount": 2}]}
+
+    def reports(self, usage):
+        return cost.reports_from_adapter_usage(
+            "google_gemini_live", {"input_tokens": usage["promptTokenCount"], "output_tokens": usage["candidatesTokenCount"],
+                                   "raw": usage}, scope_id="turn_1", usage_date="2026-10-18",
+            service="google_gemini_live", model="gemini-live-2.5-flash-native-audio", region="us-central1")
+
+    def test_split_reports_and_exact_total(self):
+        reports = self.reports(self.USAGE)
+        self.assertEqual({r["meter_id"]: r["quantity"] for r in reports},
+                         {"audio_input_tokens": "118", "text_input_tokens": "131",
+                          "audio_output_tokens": "18", "text_output_tokens": "2"})
+        table = load_table(TABLE)
+        amounts = [cost.price(r, table)[1] for r in reports]
+        self.assertEqual(str(sum(amounts)), "0.000640")  # 354 + 66 (65.5 half-up) + 216 + 4 micro-dollars
+
+    def test_text_only_turn_has_zero_audio_not_unknown(self):
+        usage = {"promptTokenCount": 33, "candidatesTokenCount": 13,
+                 "promptTokensDetails": [{"modality": "TEXT", "tokenCount": 33}],
+                 "candidatesTokensDetails": [{"modality": "TEXT", "tokenCount": 13}]}
+        quantities = {r["meter_id"]: r["quantity"] for r in self.reports(usage)}
+        self.assertEqual(quantities["audio_input_tokens"], "0")
+        self.assertEqual(quantities["text_input_tokens"], "33")
+
+    def test_unsplittable_usage_stays_unclassified(self):
+        image = {**self.USAGE, "promptTokensDetails": [{"modality": "IMAGE", "tokenCount": 249}]}
+        mismatch = {**self.USAGE, "candidatesTokenCount": 21}
+        for usage in (image, mismatch):
+            meters = {r["meter_id"] for r in self.reports(usage)}
+            self.assertTrue(any(m.endswith("_tokens_unclassified") for m in meters), meters)
+        self.assertNotIn("audio_input_tokens", {r["meter_id"] for r in self.reports(image)})
 
 
 if __name__ == "__main__":
