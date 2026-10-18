@@ -67,7 +67,8 @@ class LiveScenarioRunner:
         self.engine, self.run_id, self.adapter, self.entry = engine, run_id, adapter, entry
         self.caller_audio, self.seed, self.turn_timeout_s = caller_audio, seed, turn_timeout_s
         self.driver = AdapterTurnDriver(engine, run_id, assessor, cost_recorder=cost_recorder)
-        self.tool_calls, self._fault_profile = [], {}
+        self.tool_calls, self._fault_profile, self.interruptions = [], {}, 0
+        self.interrupt_results, self._cancelled_ends = [], 0
 
     def _faults(self, kind, turn=None, tool=None):
         return [
@@ -93,8 +94,8 @@ class LiveScenarioRunner:
             "elapsed_ms": round((time.monotonic() - started) * 1000), "delivery": receipt,
         })
 
-    async def _await_turn(self, bank):
-        """Pump adapter events until a turn_end (or fatal error / timeout)."""
+    async def _await_turn(self, bank, until_audio=False):
+        """Pump adapter events until a turn_end (or fatal error / timeout); ``until_audio`` stops at the first reply audio."""
         errors = []
 
         async def pump():
@@ -106,9 +107,20 @@ class LiveScenarioRunner:
                     errors.append({"code": event.code, "fatal": event.fatal})
                     if event.fatal:
                         return None
+                if event.type == "interrupted":
+                    self.interruptions += 1
                 outcome = self.driver.feed(event)
+                if until_audio and event.type == "audio_out":
+                    # Playback is simulated at real time: the caller cuts in 500 ms into the reply.
+                    await asyncio.sleep(0.5)
+                    self._cancelled_ends += 1
+                    self.interrupt_results.append(await self.adapter.interrupt(getattr(event, "item_id", None), 500))
+                    return {"approval": None, "strict_speech_approval": "barge_in_pending"}
                 if event.type == "turn_end" and outcome is not None:
                     return outcome
+                if event.type == "turn_end" and self._cancelled_ends:
+                    self._cancelled_ends -= 1  # the interrupted reply's own turn_end, not the new turn's
+                    continue
                 if event.type == "turn_end":
                     return {"approval": None, "strict_speech_approval": "no_audio"}
             return None
@@ -136,16 +148,16 @@ class LiveScenarioRunner:
             for index, turn in enumerate(definition["turns"][: definition["max_turns"]]):
                 pcm = apply_profile(self.caller_audio(turn["customer"]), definition["audio_profile"],
                                     self._faults("background_noise"), self.seed + index)
-                if self._faults("caller_interrupts", turn=index):
-                    pcm = bytes(RATE * 2 * 3 // 2) + pcm  # speech begins after 1.5 s of assistant audio
                 await self._stream(pcm)
-                outcome, errors = await self._await_turn(bank)
+                # The next turn interrupts: stop at the first reply audio and speak over it.
+                barge = self._faults("caller_interrupts", turn=index + 1)
+                outcome, errors = await self._await_turn(bank, until_audio=bool(barge))
                 outcomes.append({"turn": index, "strict_speech_approval": outcome["strict_speech_approval"]})
                 turn_errors.extend(errors)
         usage = self.driver.close()
         return {
             "scenario_id": definition["id"], "run_id": self.run_id,
             "scenario_hash": self.entry["content_hash"], "turns": outcomes,
-            "tool_calls": self.tool_calls, "adapter_errors": turn_errors,
+            "tool_calls": self.tool_calls, "adapter_errors": turn_errors, "interruptions": self.interruptions, "interrupt_results": self.interrupt_results,
             "faults_declared": self.entry["faults"], "usage_lines": len(usage or []),
         }

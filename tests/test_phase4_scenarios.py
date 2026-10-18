@@ -153,6 +153,33 @@ class LiveRunner(unittest.TestCase):
         self.assertIn("fault.injected", self.types())
         self.assertNotIn("verify_identity", self.engine.faults)  # restored after the call
 
+    def test_caller_interrupt_cuts_in_on_the_reply_and_next_turn_completes(self):
+        class Barge(ScriptedAdapter):
+            def __init__(self):
+                super().__init__()
+                self.interrupted, self.round = [], 0
+
+            async def interrupt(self, item_id, audio_end_ms):
+                self.interrupted.append(audio_end_ms)
+                return {"history_truncation": "acknowledged"}
+
+            async def receive(self):
+                self.round += 1
+                yield AudioOut(pcm=bytes(960), sample_rate=24000, sample_count=480, turn_id=f"t{self.round}", ts_ms=1)
+                if self.round == 1:
+                    yield TurnEnd(turn_id="t1", ts_ms=2)  # the interrupted reply's own end
+                    yield AudioOut(pcm=bytes(960), sample_rate=24000, sample_count=480, turn_id="t2", ts_ms=3)
+                yield TranscriptDelta(role="assistant", text="Please verify your identity.", ts_ms=4)
+                yield TurnEnd(turn_id=f"t{self.round + 1}", ts_ms=5)
+
+        adapter = Barge()
+        runner = self.runner("identity-fault-caller-interrupts-001", adapter)
+        summary = asyncio.run(runner.run())
+        self.assertEqual(adapter.interrupted, [500])
+        self.assertEqual(summary["turns"][0]["strict_speech_approval"], "barge_in_pending")
+        self.assertEqual(len(summary["interrupt_results"]), 1)
+        self.assertEqual(len(summary["turns"]), 2)
+
     def test_turn_timeout_is_reported_not_hidden(self):
         class Silent(ScriptedAdapter):
             async def receive(self):

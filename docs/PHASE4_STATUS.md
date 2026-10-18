@@ -25,15 +25,18 @@
   assistant reply passed independent ASR and was approved; the model did not call a tool, so the
   tool/fault paths are not yet exercised against a live provider.
 
-- Live, once each, synthetic data (OpenAI Realtime): `identity-fault-tool-error-001` — the model called
-  `verify_identity` through the gateway and the reply was approved; the call was refused `INVALID_ARGUMENT`
-  (the model's arguments failed validation before the injected timeout could apply), so the injected-fault
-  *outcome* is still not shown live. `identity-fault-caller-interrupts-001` — single turn, no real barge-in
-  observed. Live chooser: one real OpenAI call picked an eligible branch with no simulator failure.
+- Live, synthetic data (OpenAI Realtime), after giving the caller the challenge answer and the tool schema
+  required fields: `identity-fault-tool-error-001` — the model called `verify_identity`, the gateway returned
+  the injected `DEPENDENCY_TIMEOUT` (`fault_injected: true`) and the reply was approved. `identity-fault-
+  caller-interrupts-001` (now two turns) — the runner cut in 500 ms into the first reply with a client
+  `interrupt` (generation cancelled, history truncation acknowledged by the provider), then the second turn was
+  approved; a non-fatal `TOOL_ARGUMENTS_INVALID` adapter error from the model's own tool call is reported.
+  Interrupts are runner-initiated at a simulated playback position, not VAD-detected overlap.
+  Live chooser: one real OpenAI call picked an eligible branch with no simulator failure.
 
 ## Not yet established
 
-- Fault paths (`tool_error`, `tool_latency`, `caller_interrupts`) against a live provider; Nova runner use.
+- `tool_latency` against a live provider; Nova runner use; a live model proposing a commit.
 - Live-model chooser for the AC-16 simulator (`model_simulator.py` is offline-tested with an injected chooser: model picks branch, oracle rejected, bad output attributed to the simulator with fallback, hashed prompt/config recorded; `OpenAIChooser` (opt-in `VOICE_HARNESS_LIVE_JUDGES=openai`) added). Synthetic commit (AC-15) is tested through the real MCP gateway with a scripted adapter (`tests/test_phase4_commit.py`: denial before identity/confirmation, single-use consumption, changed-amount invalidation, restart idempotency); a live model has not been driven to propose a commit.
 - A first OpenAI vs Nova comparison on the catalogue (needs go-ahead for API spend).
 - The synthetic caller uses macOS `say`; the catalogue declares locales but `say` voice selection is not
