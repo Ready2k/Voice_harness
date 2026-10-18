@@ -1,9 +1,9 @@
-FROM public.ecr.aws/docker/library/node:24.9.0-bookworm-slim@sha256:3e69116c924bfcba6c6979aff60d966c37aef56d488ce091c69d442ebec9f103 AS nova-deps
+FROM mirror.gcr.io/library/node:24.9.0-bookworm-slim@sha256:3e69116c924bfcba6c6979aff60d966c37aef56d488ce091c69d442ebec9f103 AS nova-deps
 WORKDIR /probe
 COPY scripts/probe/package.json scripts/probe/package-lock.json ./
 RUN npm ci --omit=dev --ignore-scripts --no-audit --no-fund
 
-FROM public.ecr.aws/docker/library/python:3.13.9-slim-bookworm@sha256:b685a4fa58bb19d1814d78a1ec0f0208f351452724f78b20212c984d6e124a34 AS base
+FROM mirror.gcr.io/library/python:3.13.9-slim-bookworm@sha256:b685a4fa58bb19d1814d78a1ec0f0208f351452724f78b20212c984d6e124a34 AS base
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
@@ -30,7 +30,7 @@ ENV HARNESS_REQUIRE_NOVA_RUNTIME=1
 COPY --chown=harness:harness artifacts/phase0/ ./artifacts/phase0/
 CMD ["python", "-m", "unittest", "discover", "-s", "tests", "-v"]
 
-FROM public.ecr.aws/docker/library/node:24.9.0-bookworm-slim@sha256:3e69116c924bfcba6c6979aff60d966c37aef56d488ce091c69d442ebec9f103 AS browser-test
+FROM mirror.gcr.io/library/node:24.9.0-bookworm-slim@sha256:3e69116c924bfcba6c6979aff60d966c37aef56d488ce091c69d442ebec9f103 AS browser-test
 WORKDIR /app
 COPY apps/web/ ./apps/web/
 COPY tests/browser/ ./tests/browser/
