@@ -40,11 +40,14 @@ TOOLS = [
          "required": ["payment_id", "confirmation_id"]}},
 ]
 
-LIVE_PROVIDERS = {"openai-realtime-live": "openai_realtime", "nova-sonic-live": "aws_nova_sonic"}
+LIVE_PROVIDERS = {"openai-realtime-live": "openai_realtime", "nova-sonic-live": "aws_nova_sonic",
+                  "xai-voice-live": "xai_grok_voice"}
 # The model under test, as recorded for judge independence checks (a judge must not be the tested model).
 TESTED_MODELS = {
     "openai-realtime-live": {"provider": "openai", "model_id": "gpt-realtime-2.1", "family": "openai_realtime"},
     "nova-sonic-live": {"provider": "aws", "model_id": "amazon.nova-2-5-sonic", "family": "aws_nova_sonic"},
+    # pinned versioned name; the grok-voice-latest alias is never used for runs
+    "xai-voice-live": {"provider": "xai", "model_id": "grok-voice-3.0", "family": "xai_grok_voice"},
 }
 
 
@@ -96,12 +99,16 @@ def availability(provider_config_id, environ=None):
         return False, voice_reason
     if provider_config_id == "openai-realtime-live":
         return True, None
+    if provider_config_id == "xai-voice-live":
+        from .adapters.xai_voice import KEY_ENV
+
+        return (True, None) if environ.get(KEY_ENV) else (False, "NO_XAI_API_KEY")
     from .adapters.nova_sonic import SESSION_ENV
 
     return (True, None) if SESSION_ENV.exists() else (False, "NO_AWS_SESSION")
 
 
-FAMILIES = {"openai-realtime-live": "openai", "nova-sonic-live": "aws_nova_sonic"}
+FAMILIES = {"openai-realtime-live": "openai", "nova-sonic-live": "aws_nova_sonic", "xai-voice-live": "xai_grok_voice"}
 
 
 def capability_binding(provider_config_id, now=None):
@@ -156,6 +163,11 @@ def _adapter(provider_config_id):
 
         config.update(instructions=INSTRUCTIONS, turn_detection="server_vad")
         return OpenAIRealtimeAdapter(), config
+    if provider_config_id == "xai-voice-live":
+        from .adapters.xai_voice import XaiVoiceAdapter
+
+        config.update(instructions=INSTRUCTIONS, turn_detection="server_vad", model_id=TESTED_MODELS[provider_config_id]["model_id"])
+        return XaiVoiceAdapter(), config
     from .adapters.nova_sonic import NovaSonicAdapter
 
     config.update(system_prompt=INSTRUCTIONS, env=_nova_env())
@@ -174,7 +186,7 @@ async def run_live(engine, run_id, provider_config_id, scenario_id, *, seed=0):
     from .caller_voice import describe as describe_caller_voice
 
     metadata["caller_voice"] = describe_caller_voice()  # backend + voice/model ids only
-    openai = provider_config_id == "openai-realtime-live"
+    context_only = provider_config_id in ("openai-realtime-live", "xai-voice-live")  # send_text(respond=False) supported
     from .cost_recorder import UsageRecorder
 
     tested = TESTED_MODELS[provider_config_id]
@@ -203,7 +215,7 @@ async def run_live(engine, run_id, provider_config_id, scenario_id, *, seed=0):
             return  # stays unauthorised: the rejection is in the ledger and the model gets no confirmation_id
         text = ("[orchestrator] The customer confirmed the cancellation. confirmation_id="
                 + accepted["confirmation_id"] + " - use it with cancel_payment.")
-        if openai:
+        if context_only:
             await adapter.send_text(text, respond=False)
         else:
             await adapter.send_text(text)

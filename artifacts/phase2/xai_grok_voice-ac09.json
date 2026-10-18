@@ -1,0 +1,43 @@
+{
+  "provider": "xai_grok_voice",
+  "model_id": "grok-voice-3.0",
+  "dimensions": {
+    "audio_in": {
+      "status": "pass"
+    },
+    "audio_out": {
+      "status": "pass",
+      "chunks": 1
+    },
+    "tool_result_correlation": {
+      "status": "pass",
+      "call_id": "call-0b10058c-6ee5-4f60-becc-9b9aebf37225-0"
+    },
+    "interruption": {
+      "status": "pass",
+      "barge_in": {
+        "barge_in": "synthetic_speech",
+        "path": "provider_speech_detection",
+        "turn_detection": "manual",
+        "speech_ms": 4616,
+        "stream_s": 4.95
+      },
+      "audio_chunks_after_interrupt": 0,
+      "audio_stop_ms": 0,
+      "generated_audio_ms": 1406,
+      "interrupted_audio_end_ms": 246,
+      "truncate": {
+        "item_id": "3ce47753-6cef-422a-ba20-736db7a09369",
+        "audio_end_ms": 246,
+        "history_truncation": "acknowledged"
+      }
+    },
+    "error": {
+      "status": "pass"
+    }
+  },
+  "excluded": {},
+  "failures": [],
+  "passed": true,
+  "capability_report_id": "cap_xai_grok_voice_3_0_20261018"
+}

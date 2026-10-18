@@ -20,7 +20,8 @@
       "enum": [
         "mock-banking-v1",
         "openai-realtime-live",
-        "nova-sonic-live"
+        "nova-sonic-live",
+        "xai-voice-live"
       ],
       "title": "Provider Config Id",
       "type": "string"
