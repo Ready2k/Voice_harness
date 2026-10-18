@@ -237,7 +237,11 @@ Not done: the API-level consent regressions mock the engine's present/confirm st
 
 - Priced: OpenAI `gpt-realtime-2.1` (audio and text tokens), Amazon Nova 2.5 Sonic (us-east-1), OpenAI `gpt-4.1-mini`
   judge (listed as Deprecated by OpenAI), and `gpt-4o-mini-transcribe` ASR.
-- Not priced: xAI ($0.08/min is published, but the recorder has no per-minute meter); Google Gemini Live (modality
+- xAI: the recorder now emits a `billable_audio_seconds` meter (seconds, as xAI reports it) priced at the published
+  $0.08/min "STS" rate. The page does not name `grok-voice-3.0`, so that mapping is an assumption. The unpriced token
+  meters share an exclusivity group, so they no longer make an xAI run partial. No rounding or minimum is applied
+  (none documented); whether cut-off audio is billed is still not established.
+- Not priced: Google Gemini Live (modality
   rates exist but the adapter reports unclassified totals; the page row is "Gemini 2.5 Flash Live API", matched by
   name only); the Bedrock Haiku 4.5 judge (it uses the `us.` geo profile and only the global cross-region rate was
   readable). Quotas, rounding and minimum-billing rules are not established.

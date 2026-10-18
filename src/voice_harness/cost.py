@@ -124,6 +124,11 @@ def reports_from_adapter_usage(provider, usage, *, scope_id, usage_date, revisio
             add(f"text_{side}_tokens", text, cached_by.get("text_tokens") if cached_total else None)
         else:
             add(f"{side}_tokens_unclassified", total)
+    seconds = raw.get("billable_audio_seconds")  # xAI bills voice per minute; report as the provider stated it
+    if isinstance(seconds, int | float) and not isinstance(seconds, bool) and seconds >= 0:
+        out.append({**base, "report_id": f"{scope_id}:billable_audio_seconds:{revision}",
+                    "meter_id": meter_map.get("billable_audio_seconds", "billable_audio_seconds"),
+                    "unit": "second", "quantity": format(Decimal(str(seconds)), "f"), "unknown_reason": None})
     return out
 
 

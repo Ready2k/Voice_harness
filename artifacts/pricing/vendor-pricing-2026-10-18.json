@@ -2,7 +2,7 @@
   "table_id": "voice-harness-vendor-pricing",
   "version": "2026-10-18",
   "status": "primary_source_partial",
-  "note": "Public list prices read from the vendors' pricing pages on 2026-10-18, USD per 1M tokens, standard tier, no discounts, batch or regional uplift. Use with HARNESS_PRICING_TABLE. Not priced here (stay unknown): xAI Grok Voice ($0.08/min published, but the recorder has no per-minute meter and usage is not tied to grok-voice-3.0 on the page); Google Gemini Live (rates differ by modality but the adapter reports only unclassified totals, and the page row is 'Gemini 2.5 Flash Live API', matched to gemini-live-2.5-flash-native-audio by name only); Bedrock Claude Haiku 4.5 judge (the judge uses the us. geo profile; only the global cross-region rate of $1.00 in / $5.00 out was readable); and every quota. Rounding and minimum-billing rules are not documented on these pages and are not applied.",
+  "note": "Public list prices read from the vendors' pricing pages on 2026-10-18, USD per 1M tokens, standard tier, no discounts, batch or regional uplift. Use with HARNESS_PRICING_TABLE. Not priced here (stay unknown): Google Gemini Live (rates differ by modality but the adapter reports only unclassified totals, and the page row is 'Gemini 2.5 Flash Live API', matched to gemini-live-2.5-flash-native-audio by name only); Bedrock Claude Haiku 4.5 judge (the judge uses the us. geo profile; only the global cross-region rate of $1.00 in / $5.00 out was readable); and every quota. Rounding and minimum-billing rules are not documented on these pages and are not applied. xAI: $0.08/min is the 'STS' (speech-to-speech) Voice API rate; the page does not name grok-voice-3.0, so the mapping is an assumption. It is applied to the provider-reported billable_audio_seconds with no rounding or minimum (none documented); token meters are an unpriced alternative in the same exclusivity group, so they do not make a run partial.",
   "tariffs": [
     {
       "tariff_id": "openai-rt-audio-in",
@@ -483,6 +483,96 @@
         "openai:https://developers.openai.com/api/docs/pricing#2026-10-18"
       ],
       "unknown_reason": null
+    },
+    {
+      "provider": "xai_grok_voice",
+      "service": "xai_grok_voice",
+      "model": "grok-voice-3.0",
+      "region": null,
+      "component": "voice",
+      "exclusivity_group": "xai_voice_billing",
+      "effective_from": "2026-10-18",
+      "effective_to": null,
+      "currency": "USD",
+      "rate_unit_quantity": "60",
+      "unit_price": "0.08",
+      "cached_unit_price": null,
+      "cached_billing": "not_documented",
+      "quantity_increment": null,
+      "quantity_rounding": "none",
+      "minimum_billed_quantity": null,
+      "amount_scale": 6,
+      "amount_rounding": "ROUND_HALF_UP",
+      "tariff_id": "xai-voice-sts-minute",
+      "meter_id": "billable_audio_seconds",
+      "unit": "second",
+      "billing_model": "per_minute",
+      "exclusivity_priority": 1,
+      "source_status": "primary_source",
+      "evidence_ids": [
+        "xai:https://docs.x.ai/developers/models#2026-10-18"
+      ],
+      "unknown_reason": null
+    },
+    {
+      "provider": "xai_grok_voice",
+      "service": "xai_grok_voice",
+      "model": "grok-voice-3.0",
+      "region": null,
+      "component": "voice",
+      "exclusivity_group": "xai_voice_billing",
+      "effective_from": "2026-10-18",
+      "effective_to": null,
+      "currency": null,
+      "rate_unit_quantity": null,
+      "unit_price": null,
+      "cached_unit_price": null,
+      "cached_billing": "not_documented",
+      "quantity_increment": null,
+      "quantity_rounding": "none",
+      "minimum_billed_quantity": null,
+      "amount_scale": 6,
+      "amount_rounding": "ROUND_HALF_UP",
+      "tariff_id": "xai-voice-input_tokens_unclassified",
+      "meter_id": "input_tokens_unclassified",
+      "unit": "token",
+      "billing_model": "per_token",
+      "exclusivity_priority": 2,
+      "source_status": "unestablished",
+      "evidence_ids": [
+        "xai:https://docs.x.ai/developers/models#2026-10-18"
+      ],
+      "unknown_reason": "XAI_BILLED_PER_MINUTE_NOT_PER_TOKEN"
+    },
+    {
+      "provider": "xai_grok_voice",
+      "service": "xai_grok_voice",
+      "model": "grok-voice-3.0",
+      "region": null,
+      "component": "voice",
+      "exclusivity_group": "xai_voice_billing",
+      "effective_from": "2026-10-18",
+      "effective_to": null,
+      "currency": null,
+      "rate_unit_quantity": null,
+      "unit_price": null,
+      "cached_unit_price": null,
+      "cached_billing": "not_documented",
+      "quantity_increment": null,
+      "quantity_rounding": "none",
+      "minimum_billed_quantity": null,
+      "amount_scale": 6,
+      "amount_rounding": "ROUND_HALF_UP",
+      "tariff_id": "xai-voice-output_tokens_unclassified",
+      "meter_id": "output_tokens_unclassified",
+      "unit": "token",
+      "billing_model": "per_token",
+      "exclusivity_priority": 2,
+      "source_status": "unestablished",
+      "evidence_ids": [
+        "xai:https://docs.x.ai/developers/models#2026-10-18"
+      ],
+      "unknown_reason": "XAI_BILLED_PER_MINUTE_NOT_PER_TOKEN"
     }
   ]
 }
