@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import asyncio
 import os
+import shutil
 from contextlib import suppress
 
 from .asr import LIVE_FLAG, select_backend
@@ -69,6 +70,8 @@ def availability(provider_config_id, environ=None):
         return False, "NOT_A_LIVE_PROVIDER"
     if environ.get(LIVE_FLAG) != "openai" or not environ.get("OPENAI_API_KEY"):
         return False, "NO_ASR_BACKEND_CONFIGURED"
+    if not (shutil.which("say") and shutil.which("afconvert")):
+        return False, "NO_CALLER_VOICE_SYNTH"  # caller speech is synthesised with macOS say/afconvert
     if provider_config_id == "openai-realtime-live":
         return True, None
     from .adapters.nova_sonic import SESSION_ENV

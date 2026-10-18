@@ -5,6 +5,7 @@ import base64
 import contextvars
 import hashlib
 import hmac
+import logging
 import os
 import secrets
 import threading
@@ -105,6 +106,7 @@ def create_app(
             else:
                 run_scenario(engine, run_id, evidence)
         except Exception:  # noqa: BLE001 -- protected worker boundary fails closed
+            logging.getLogger("voice_harness.run").exception("run worker failed: %s", run_id)
             with database.transaction(run_id) as tx:
                 if tx.state["state"] not in {"cancelled", "recovery_required"}:
                     tx.state["state"] = "failed"

@@ -9,7 +9,7 @@ from pathlib import Path
 from unittest import mock
 
 from fastapi.testclient import TestClient
-from test_phase4_scenarios import ScriptedAdapter
+from test_phase4_scenarios import ScriptedAdapter, tone
 
 from voice_harness import live_providers
 from voice_harness.api import create_app
@@ -47,16 +47,22 @@ class LiveApi(unittest.TestCase):
         self.app = create_app(self.database, root, "operator")
         self.headers = {"Authorization": "Bearer operator", "Idempotency-Key": "live-" + root.name}
 
+    @staticmethod
+    def no_live_env():
+        """Drop only the live-provider settings; the database credentials must survive."""
+        stripped = {k: v for k, v in os.environ.items() if k not in ("VOICE_HARNESS_LIVE_ASR", "OPENAI_API_KEY")}
+        return mock.patch.dict(os.environ, stripped, clear=True)
+
     def launch(self, client, body, key="a"):
         return client.post("/api/v1/runs", headers={**self.headers, "Idempotency-Key": self.headers["Idempotency-Key"] + key}, json=body)
 
     def test_unconfigured_provider_is_refused_at_launch(self):
-        with mock.patch.dict(os.environ, {}, clear=True), TestClient(self.app) as client:
+        with self.no_live_env(), TestClient(self.app) as client:
             response = self.launch(client, {"scenario_id": LIVE, "provider_config_id": "openai-realtime-live"})
         self.assertEqual((response.status_code, response.json()["error"]["code"]), (409, "PROVIDER_NOT_CONFIGURED"))
 
     def test_provider_availability_is_listed_with_reason_codes_only(self):
-        with mock.patch.dict(os.environ, {}, clear=True), TestClient(self.app) as client:
+        with self.no_live_env(), TestClient(self.app) as client:
             items = client.get("/api/v1/live-providers", headers=self.headers).json()["items"]
             scenario = next(i for i in client.get("/api/v1/scenarios", headers=self.headers).json()["items"] if i["scenario_id"] == LIVE)
         self.assertEqual({i["provider_config_id"] for i in items}, set(live_providers.LIVE_PROVIDERS))
@@ -79,6 +85,7 @@ class LiveApi(unittest.TestCase):
             mock.patch.object(live_providers, "availability", lambda provider_id, environ=None: (True, None)),
             mock.patch.object(live_providers, "_adapter", lambda provider_id: (adapter, {"tools": []})),
             mock.patch.object(live_providers, "select_backend", lambda: ScriptedAsr(queue=["x"])),
+            mock.patch("voice_harness.adapters.openai_realtime.synth_caller_pcm", lambda text, trail_ms=0: tone(200)),
         ]
         for patch in patches:
             patch.start()
@@ -108,6 +115,7 @@ class LiveApi(unittest.TestCase):
             mock.patch.object(live_providers, "availability", lambda provider_id, environ=None: (True, None)),
             mock.patch.object(live_providers, "_adapter", lambda provider_id: (adapter, {"tools": []})),
             mock.patch.object(live_providers, "select_backend", lambda: ScriptedAsr(queue=["Please verify your identity."] * 2)),
+            mock.patch("voice_harness.adapters.openai_realtime.synth_caller_pcm", lambda text, trail_ms=0: tone(200)),
         ]
         for patch in patches:
             patch.start()
@@ -121,7 +129,8 @@ class LiveApi(unittest.TestCase):
             events = client.get(f"/api/v1/runs/{run}/events?limit=1000", headers=self.headers).json()["items"]
             effective = client.get(f"/api/v1/runs/{run}/assurance", headers=self.headers).json()
         types = [e["type"] for e in events]
-        self.assertEqual(view["state"], "completed")
+        failure = [e["content"] for e in events if e["type"] == "run.failed"]
+        self.assertEqual(view["state"], "completed", failure)
         self.assertEqual(adapter.closed, "done")
         for expected in ("run.probing", "run.running", "run.live_binding", "input.caller_audio", "run.completed"):
             self.assertIn(expected, types)

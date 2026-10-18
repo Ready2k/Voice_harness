@@ -151,3 +151,9 @@ Browser check (Chrome, local dev server): the Runs page loads the catalogue and 
 - `POST /runs/{id}/cancel` still settles the ledger through `Engine.cancel` (epoch bump, tokens revoked, held audio discarded) and now also cancels the runner task, which closes the provider session with reason `cancelled`. A cancel that lands before the task registers is honoured at registration. A cancelled run emits no `run.completed`, no assessment and no assurance.
 - Verified: a hanging scripted session cancels and closes (test); real OpenAI and Nova runs cancelled mid-turn went to `cancelled` with no completion or assessment events. The Runs page shows a Cancel button for non-terminal runs (present in the browser on a running run; the click itself was not exercised there because the pane re-renders every 2 s and the automation's element references went stale).
 - Open: a cancel while an ASR worker thread is mid-call lets that call finish (its result is discarded), and the 2 s re-render replaces the Cancel button while a user is aiming at it.
+
+## CI fix after the live-run work
+
+- CI failed on `921013e`, `146a597` and `4b3d160` (container tests only). Cause: caller speech is synthesised with macOS `say`/`afconvert`, absent in the Linux container, so a live run failed in the worker; my tests also cleared the whole environment, dropping the PostgreSQL credentials. Fixes: `availability()` now refuses with `NO_CALLER_VOICE_SYNTH` where the synthesiser is missing, tests substitute a tone and strip only the live-provider variables, and the worker logs its exception before failing the run.
+- Lesson: these changes had been validated on SQLite only; the Compose/PostgreSQL suite (`make test`, 471 tests) now passes locally.
+- Consequence: live runs through the API work on a macOS host with credentials, not inside the container.
