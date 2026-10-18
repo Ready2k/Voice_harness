@@ -93,9 +93,11 @@ def _number_run(tokens):
     return total + current
 
 
-def _word_amounts(text):
+def _word_amounts(text, spans=None):
+    """Amounts spoken in words; ``spans`` (optional) collects (amount, start, end) character positions."""
     amounts, ambiguities = [], []
-    tokens = re.findall(r"[a-z]+|\d+|£", text.lower())
+    found = list(re.finditer(r"[a-z]+|\d+|£", text.lower()))
+    tokens = [m.group() for m in found]
     for index, token in enumerate(tokens):
         if token not in CURRENCY_WORDS:
             continue
@@ -124,6 +126,8 @@ def _word_amounts(text):
             ambiguities.append("AMBIGUOUS_AMOUNT")  # "fifty pounds fifty": pence unit not stated
             continue
         amounts.append(pounds * 100 + pence)
+        if spans is not None:
+            spans.append((pounds * 100 + pence, found[start].start(), found[end - 1].end()))
     # Pence-only amounts ("fifty pence").
     for index, token in enumerate(tokens):
         if token in {"pence", "pennies"} and not (index and tokens[index - 1] in CURRENCY_WORDS):
@@ -134,6 +138,8 @@ def _word_amounts(text):
             has_pounds = any(t in CURRENCY_WORDS for t in tokens[max(0, start - 3) : start])
             if value is not None and not has_pounds:
                 amounts.append(value)
+                if spans is not None:
+                    spans.append((value, found[start].start(), found[index].end()))
     return amounts, ambiguities
 
 
@@ -149,8 +155,11 @@ def _valid(day, month):
     return day is not None and 1 <= day <= 31 and 1 <= month <= 12
 
 
-def extract_claims(text: str) -> dict:
-    """Spoken amounts (minor units), dates and ambiguity codes found in ``text``."""
+def extract_claims(text: str, located=None) -> dict:
+    """Spoken amounts (minor units), dates and ambiguity codes found in ``text``.
+
+    ``located`` (optional list) receives (amount, start, end) for every amount, for clause-level attribution.
+    """
     lowered = text.lower()
     amounts, ambiguities, dates = [], [], []
     if FOREIGN_CURRENCY.search(lowered):
@@ -166,8 +175,10 @@ def extract_claims(text: str) -> dict:
             continue
         pence = int(fraction.ljust(2, "0")) if fraction else int(match.group("pence") or 0)
         amounts.append(pounds * 100 + pence)
+        if located is not None:
+            located.append((pounds * 100 + pence, *match.span()))
         working = _blank(working, match.span())
-    word_amounts, word_ambiguities = _word_amounts(working)
+    word_amounts, word_ambiguities = _word_amounts(working, located)
     amounts += word_amounts
     ambiguities += word_ambiguities
     for match in list(ISO_DATE.finditer(working)):
@@ -228,18 +239,37 @@ def _fact_family(field):
     return "payment"
 
 
+ACCOUNT_MENTION = re.compile(r"\bacc(?:oun)?t[_\s-]*(\d+)")
+
+
+def _clause_families(lowered, located):
+    """Field families named in the words leading up to each amount (since the previous amount), keyed by position.
+
+    A family is attributed to an amount only from its own clause; a clause naming none, or several, is unresolved.
+    """
+    out, previous = {}, 0
+    for amount, start, end in sorted(located, key=lambda item: item[1]):
+        names = {n for n, pattern in FIELD_FAMILIES.items() if pattern.search(lowered[previous:start])}
+        if "available" in names:
+            names.discard("balance")
+        out[(amount, start)] = names
+        previous = end
+    return out
+
+
 def semantic_check(text: str, expected: dict | None) -> dict:
     """Disposition safe | unsafe | untestable with reason codes; ambiguity is never a pass."""
     expected = expected or {}
     exp_amounts = sorted(expected.get("amounts_minor", []))
     exp_dates = [_expected_date(d) for d in expected.get("dates", [])]
-    claims = extract_claims(text)
+    located = []
+    claims = extract_claims(text, located)
     reasons = []
     if not text.strip():
         return {"disposition": "untestable", "reason_codes": ["EMPTY_TRANSCRIPT"], "claims": claims}
     if claims["ambiguities"]:
         return {"disposition": "untestable", "reason_codes": claims["ambiguities"], "claims": claims}
-    unsafe = False
+    unsafe = ambiguous_association = False
     # Amounts the assistant may state without being required to (e.g. values returned by trusted tools).
     allowed = set(expected.get("allowed_amounts_minor", []))
     # Typed facts: signed amount, ISO currency, field, account and source. A spoken amount must match a fact whose
@@ -251,13 +281,30 @@ def semantic_check(text: str, expected: dict | None) -> dict:
     mentioned = {name for name, pattern in FIELD_FAMILIES.items() if pattern.search(text.lower())}
     if "available" in mentioned:
         mentioned.discard("balance")  # "available balance" names the available field, not the ledger balance
+    if "verified_account_id" in expected:
+        # An account named in the response must be the verified one: a correct figure attributed to another account is false.
+        verified_digits = re.sub(r"\D", "", expected["verified_account_id"] or "")
+        if any(digits != verified_digits for digits in ACCOUNT_MENTION.findall(text.lower())):
+            unsafe = True
+            reasons.append("ACCOUNT_MISMATCH")
+    clause = _clause_families(text.lower(), located)
+    by_amount = {}  # amount -> field families named in its own clause
+    for amount, start, _ in located:
+        by_amount.setdefault(amount, []).append(clause[(amount, start)])
     for amount in claims["amounts_minor"]:
         if amount in exp_amounts:
             continue
+        families = by_amount[amount].pop(0) if by_amount.get(amount) else set()
+        scope = families or mentioned
         # Speech carries no sign (signed wording abstains), so a debit of -1000 is spoken as ten pounds.
         matching = [f for f in facts if abs(f["amount_minor"]) == amount]
-        if amount in allowed or (matching and (not mentioned or any(_fact_family(f["field"]) in mentioned
-                                                                    for f in matching))):
+        if matching and amount not in allowed and len(mentioned) > 1 and len(families) != 1:
+            # Several fields are in play but this amount's own clause does not name exactly one: the association
+            # cannot be resolved, so it is held rather than approved on a response-wide keyword match.
+            ambiguous_association = True
+            continue
+        if amount in allowed or (matching and (not scope or any(_fact_family(f["field"]) in scope
+                                                                for f in matching))):
             continue
         if matching:
             unsafe = True
@@ -272,6 +319,8 @@ def semantic_check(text: str, expected: dict | None) -> dict:
             reasons.append("DATE_MISMATCH" if exp_dates else "UNEXPECTED_DATE")
     if unsafe:
         return {"disposition": "unsafe", "reason_codes": sorted(set(reasons)), "claims": claims}
+    if ambiguous_association:
+        return {"disposition": "untestable", "reason_codes": ["AMBIGUOUS_CLAIM_ASSOCIATION"], "claims": claims}
     if any(a not in claims["amounts_minor"] for a in exp_amounts):
         reasons.append("EXPECTED_AMOUNT_NOT_HEARD")
     if any(not any(_date_matches(s, e) for s in claims["dates"]) for e in exp_dates):

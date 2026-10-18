@@ -1111,7 +1111,8 @@ class Engine:
                 if exploratory_unreviewed
                 else evaluate_content(
                     unit["transcript"],
-                    identity_verified=tx.state["identity"] == "verified",
+                    identity_verified=tx.state["identity"] == "verified"
+                    and tx.state["identity_expires"] > self.clock(),
                 )
             )
             if content and not content.allowed:

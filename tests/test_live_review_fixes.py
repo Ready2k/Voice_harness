@@ -476,3 +476,121 @@ class ComparisonProvenance(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ClaimAttribution(unittest.TestCase):
+    """89fa78f recheck finding 1: each amount is bound to its own clause's field and to the verified account."""
+
+    FACTS = {"verified_account_id": "acct_1001", "allowed_facts": [
+        {"account_id": "acct_1001", "field": "balance_minor", "amount_minor": 123456, "currency": "GBP",
+         "source_call_id": "c1", "source_ts_ms": 1},
+        {"account_id": "acct_1001", "field": "amount_minor", "amount_minor": 1000, "currency": "GBP",
+         "source_call_id": "c2", "source_ts_ms": 1}]}
+    BIG = "one thousand two hundred and thirty four pounds fifty six pence"
+
+    def test_swapped_clauses_are_never_safe(self):
+        swapped = semantic_check(f"Your balance is ten pounds and the payment is {self.BIG}.", self.FACTS)
+        self.assertNotEqual(swapped["disposition"], "safe")
+        digits = semantic_check("Your balance is £10.00 and the payment is £1,234.56.", self.FACTS)
+        self.assertNotEqual(digits["disposition"], "safe")
+
+    def test_correct_clauses_are_safe(self):
+        ok = semantic_check(f"Your balance is {self.BIG} and the payment is ten pounds.", self.FACTS)
+        self.assertEqual(ok["disposition"], "safe")
+
+    def test_correct_amount_attributed_to_another_account_is_unsafe(self):
+        other = semantic_check(f"The balance on acct_2002 is {self.BIG}.", self.FACTS)
+        self.assertEqual(other["disposition"], "unsafe")
+        self.assertIn("ACCOUNT_MISMATCH", other["reason_codes"])
+        own = semantic_check(f"The balance on acct_1001 is {self.BIG}.", self.FACTS)
+        self.assertEqual(own["disposition"], "safe")
+
+    def test_unresolvable_association_is_held(self):
+        held = semantic_check(f"Ten pounds is the payment, {self.BIG} is the balance.", self.FACTS)
+        self.assertNotEqual(held["disposition"], "safe")
+        mixed = semantic_check(f"Your balance is {self.BIG} and ten pounds.", self.FACTS)
+        self.assertNotEqual(mixed["disposition"], "safe")
+
+
+class ExpiredVerification(Base):
+    """89fa78f recheck finding 2: an expired verification is not a verified account."""
+
+    TEXT = "Your balance is one thousand two hundred and thirty four pounds fifty six pence."
+
+    def setUp(self):
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        self.now = [1000.0]
+        self.engine = Engine(Database(str(Path(directory.name) / "t.sqlite")), clock=lambda: self.now[0])
+        self.run = self.engine.create(RunConfig().model_dump())
+        with self.engine.database.transaction(self.run) as tx:
+            tx.state["identity"], tx.state["identity_expires"] = "verified", 1900
+        fact = {"account_id": "acct_1001", "field": "balance_minor", "amount_minor": 123456, "currency": "GBP",
+                "source_call_id": "c1", "source_ts_ms": 1}
+        self.facts = {"allowed_facts": [fact]}
+
+    def driver(self, text):
+        return AdapterTurnDriver(self.engine, self.run, IndependentAssessor(self.engine, ScriptedAsr(queue=[text])),
+                                 expected_claims=self.facts)
+
+    def test_expired_before_the_job_is_created(self):
+        driver = self.driver(self.TEXT)
+        driver.feed(frame())
+        self.now[0] = 1901
+        job, _ = driver.begin(TurnEnd(turn_id="t1", ts_ms=2))
+        self.assertIsNone(job.facts["verified_account_id"])
+        outcome = driver.commit(job, driver.analyse(job))
+        self.assertNotEqual(outcome["strict_speech_approval"], "approved")
+        self.assertFalse(self.events("playback.released"))
+
+    def test_expires_while_the_job_is_in_flight(self):
+        driver = self.driver(self.TEXT)
+        driver.feed(frame())
+        job, _ = driver.begin(TurnEnd(turn_id="t1", ts_ms=2))
+        self.assertEqual(job.facts["verified_account_id"], "acct_1001")
+        analysis = driver.analyse(job)
+        self.now[0] = 1901  # expiry passes during ASR
+        outcome = driver.commit(job, analysis)
+        self.assertNotEqual(outcome["strict_speech_approval"], "approved")
+        self.assertFalse(self.events("playback.released"))
+
+    def test_still_valid_verification_is_approved(self):
+        driver = self.driver(self.TEXT)
+        driver.feed(frame())
+        job, _ = driver.begin(TurnEnd(turn_id="t1", ts_ms=2))
+        self.assertEqual(driver.commit(job, driver.analyse(job))["strict_speech_approval"], "approved")
+
+
+class UnkeyedQuarantineBeforeFirstFrame(Base):
+    """89fa78f recheck finding 3: an unkeyed interruption before any frame still retires the unkeyed generation."""
+
+    runner, adapter, audio = RunnerConcurrency.runner, RunnerConcurrency.adapter, RunnerConcurrency.audio
+
+    def late(self):
+        return AudioOut(pcm=bytes(960), sample_rate=24000, sample_count=480, turn_id="old", ts_ms=1)
+
+    def test_runner_drops_late_unkeyed_frames_after_a_prefirst_frame_interruption(self):
+        events = [Interrupted(), self.late(), TurnEnd(turn_id="old", ts_ms=2)]
+        runner = self.runner(self.adapter(events), ScriptedAsr(queue=["Hello."] * 3))
+        asyncio.run(runner.run())
+        self.assertFalse(self.events("playback.released"))
+        self.assertFalse([r for r in runner.driver.results if r.get("strict_speech_approval") == "approved"])
+
+    def test_driver_quarantines_then_resumes_at_a_boundary(self):
+        driver = self.driver(ScriptedAsr(queue=["Hello."]))
+        driver.feed(Interrupted())
+        driver.feed(self.late())
+        self.assertEqual(driver._pcm_bytes, 0)
+        driver.feed(self.audio("new-item"))  # a keyed new item is still eligible
+        self.assertEqual(driver._pcm_bytes, 960)
+        driver.feed(TurnEnd(turn_id="x", ts_ms=3))
+        driver.feed(self.late())
+        self.assertEqual(driver._pcm_bytes, 960)  # accepted again after the boundary
+
+    def test_mixed_keyed_and_unkeyed_response_quarantines_on_interrupt(self):
+        driver = self.driver(ScriptedAsr(queue=["Hello."]))
+        driver.feed(self.audio("item-a"))
+        driver.feed(self.late())
+        driver.feed(Interrupted(item_id="item-a"))
+        driver.feed(self.late())
+        self.assertEqual(driver._pcm_bytes, 0)

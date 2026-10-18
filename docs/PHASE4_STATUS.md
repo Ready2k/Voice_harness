@@ -119,3 +119,11 @@ Still open: account/ownership binding beyond the fact's account id, a shared byt
 - **Tool-latency scenario:** now two turns (verify, then ask for the balance). With the tool description telling the model which account id to use, both providers call `get_account_summary`, the 4 s fault fires, and the spoken balance is approved through the typed-fact path (single samples).
 
 Deferred by decision: finding 8 (live scenarios through the API/UI/CLI) and a shared byte budget across adapter, driver and engine.
+
+## Response to the 89fa78f recheck
+
+| Finding | Change | Still open |
+|---|---|---|
+| 1 Amounts not bound to claim | `semantic_check` attributes each amount to the field family named in its own clause (words since the previous amount), so swapped balance/payment is `FIELD_MISMATCH`; with several fields in play and no single field in the clause it abstains (`AMBIGUOUS_CLAIM_ASSOCIATION`). An account named in the response (`acct_NNNN` / "account NNNN") other than the verified one is `ACCOUNT_MISMATCH`. | Clause attribution is lexical (field keywords, account-id mentions); amounts with no field keyword in a single-field response still bind to that field; no entity extraction for accounts named by other means (e.g. "your savings account"). |
+| 2 Expired verification | The driver's `verified_account_id` and the engine content layer (`identity_verified`) require `identity_expires` to be in the future, as the tool authoriser does. Expiry during ASR was already blocked at approval (regression kept). | Identity version is not frozen into the job; revoke/lock during ASR relies on the approval-time engine check. |
+| 3 Unkeyed interrupt before first frame | `_mark_dead` quarantines unkeyed audio whenever the retirement cannot be keyed (no item id given, buffered or in flight) or unkeyed frames were seen, including mixed keyed/unkeyed responses; cleared at the next response boundary. | Resume is at turn start/end, not a validated provider response id. |

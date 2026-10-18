@@ -194,6 +194,7 @@ class AssessmentJob:
     snapshot: dict
     end_event: object
     held_at: int
+    unkeyed: bool = False  # some of the response's frames carried no provider item id
 
     @property
     def facts(self):
@@ -255,6 +256,7 @@ class AdapterTurnDriver:
         self._text, self._turn_id, self._item_id = [], None, None
         self._item_ids = set()
         self._pcm_bytes, self._overflow = 0, None
+        self._unkeyed_frames = False
 
     def feed(self, event):
         if self.cost_recorder is not None:
@@ -290,6 +292,8 @@ class AdapterTurnDriver:
             self._item_id = getattr(event, "item_id", None) or self._item_id
             if getattr(event, "item_id", None):
                 self._item_ids.add(event.item_id)
+            else:
+                self._unkeyed_frames = True
             pcm = event.pcm
             if event.sample_rate != HARNESS_RATE:
                 pcm = resample(pcm, event.sample_rate, HARNESS_RATE)
@@ -322,10 +326,12 @@ class AdapterTurnDriver:
     def _mark_dead(self, item_id=None):
         """Output items are keyed by provider item id (Nova's turn id spans the whole session)."""
         self._dead_responses.update(i for i in (item_id, self._item_id, *self._item_ids) if i)
-        unkeyed = self._pcm_bytes > 0 and not (self._item_ids or self._item_id)
+        # Nothing to key the retirement on (no item id given, buffered or in flight), or unkeyed frames already seen:
+        # the retired response's late unkeyed frames cannot be told apart from a new one, even before its first frame.
+        unkeyed = self._unkeyed_frames or not (item_id or self._item_id or self._item_ids)
         for job in self._jobs.values():  # identities of responses still being assessed are retired too
             self._dead_responses.update(job.item_ids)
-            unkeyed = unkeyed or not job.item_ids
+            unkeyed = unkeyed or not job.item_ids or job.unkeyed
         if unkeyed:
             self._quarantine_unkeyed = True
         self._jobs.clear()  # every in-flight job is retired: its commit can only report 'superseded'
@@ -380,6 +386,7 @@ class AdapterTurnDriver:
         snapshot = {"turn_id": self._turn_id, "first_audio": self._first_audio,
                     "first_transcript": self._first_transcript, "text": "".join(self._text)}
         items = frozenset(self._item_ids | ({self._item_id} if self._item_id else set()))
+        unkeyed_frames = self._unkeyed_frames
         self._reset()  # the next response buffers while this one is assessed
         if not pcm:
             return None, None
@@ -398,13 +405,15 @@ class AdapterTurnDriver:
             return None, outcome
         state = self.engine.database.get(self.run_id)
         context = {**self.expected_claims,
-                   "verified_account_id": state["account_id"] if state.get("identity") == "verified" else None}
+                   "verified_account_id": state["account_id"]
+                   if state.get("identity") == "verified" and state["identity_expires"] > self.engine.clock() else None}
         facts_json = json.dumps(context, sort_keys=True, default=str)  # deep copy, frozen
         self._job_seq += 1
         job = AssessmentJob(
             job_id=self._job_seq, unit_id=unit_id, item_ids=items, turn_id=snapshot["turn_id"],
             epoch=state["generation_epoch"], facts_json=facts_json,
             facts_hash=_sha(facts_json), snapshot=snapshot, end_event=end_event, held_at=started,
+            unkeyed=unkeyed_frames,
         )
         self._jobs[job.job_id] = job
         return job, None
