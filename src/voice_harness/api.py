@@ -169,10 +169,14 @@ def create_app(
                 tx.event("orchestrator", "run.completed", {"assurance": None})
         if failed or summary["adapter_errors"]:
             return
-        # Deterministic rubric checks only: criteria that need a judge stay untestable until an operator runs
-        # POST /runs/{id}/assessments with independent judges. Any assessment failure fails the run closed.
+        # Deterministic rubric checks always run. Judges named in HARNESS_AUTO_JUDGES run too (the assessment
+        # decides eligibility against the tested model); a judge that cannot start is logged and the criteria
+        # that need one stay untestable. Any assessment failure fails the run closed.
+        backends, unavailable = live_providers.auto_judges()
+        for entry in unavailable:
+            logging.getLogger("voice_harness.run").warning("auto judge unavailable: %s", entry)
         result = judge_service.assess_run(
-            database, run_id, tested=live_providers.TESTED_MODELS[config["provider_config_id"]], backends=[]
+            database, run_id, tested=live_providers.TESTED_MODELS[config["provider_config_id"]], backends=backends
         )
         with database.transaction(run_id) as tx:
             tx.state["assurance"] = {
@@ -327,7 +331,10 @@ def create_app(
         for provider_config_id in live_providers.LIVE_PROVIDERS:
             ok, reason = live_providers.availability(provider_config_id)
             items.append({"provider_config_id": provider_config_id, "available": ok, "reason": reason})
-        return {"items": items}
+        backends, unavailable = live_providers.auto_judges()
+        judges = [{"backend": b.config.provider, "model_id": b.config.model_id, "available": True} for b in backends]
+        judges += [{"backend": u["backend"], "available": False, "reason": u["reason"]} for u in unavailable]
+        return {"items": items, "auto_judges": judges}
 
     @app.get("/api/v1/scenarios", dependencies=[Depends(auth)])
     def scenarios(cursor: int = 0, limit: int = 100):

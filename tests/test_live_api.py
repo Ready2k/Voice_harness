@@ -9,6 +9,7 @@ from pathlib import Path
 from unittest import mock
 
 from fastapi.testclient import TestClient
+from test_judges import cfg, reference_judge
 from test_phase4_scenarios import ScriptedAdapter, tone
 
 from voice_harness import live_providers
@@ -17,6 +18,7 @@ from voice_harness.asr import ScriptedAsr
 from voice_harness.storage import Database
 
 LIVE = "identity-impatient-en-gb-clean-001"
+CARE = "identity-bereaved-en-gb-clean-001"  # declares CARE-01, which only a judge can decide
 
 
 class FakeAdapter(ScriptedAdapter):
@@ -77,6 +79,50 @@ class LiveApi(unittest.TestCase):
         self.assertEqual(mock_with_live.json()["error"]["code"], "SCENARIO_PROVIDER_MISMATCH")
         self.assertEqual(live_with_builtin.json()["error"]["code"], "SCENARIO_PROVIDER_MISMATCH")
         self.assertEqual((unknown.status_code, unknown.json()["error"]["code"]), (422, "UNKNOWN_SCENARIO"))
+
+    def completed_run(self, scenario, judges):
+        adapter = FakeAdapter()
+        patches = [
+            mock.patch.object(live_providers, "availability", lambda provider_id, environ=None: (True, None)),
+            mock.patch.object(live_providers, "_adapter", lambda provider_id: (adapter, {"tools": []})),
+            mock.patch.object(live_providers, "select_backend", lambda: ScriptedAsr(queue=["Please verify your identity."] * 2)),
+            mock.patch("voice_harness.adapters.openai_realtime.synth_caller_pcm", lambda text, trail_ms=0: tone(200)),
+            mock.patch.object(live_providers, "auto_judges", lambda environ=None: judges),
+        ]
+        for patch in patches:
+            patch.start()
+            self.addCleanup(patch.stop)
+        with TestClient(self.app) as client:
+            created = self.launch(client, {"scenario_id": scenario, "provider_config_id": "openai-realtime-live"}, scenario)
+            run = created.json()["run_ids"][0]
+            self.app.state.jobs[run].result(timeout=60)
+            return client.get(f"/api/v1/runs/{run}/assurance", headers=self.headers).json()
+
+    def test_configured_auto_judge_decides_judge_criteria_and_is_bound_without_calibration(self):
+        judge = reference_judge(cfg("auto-ref"))  # a different provider and family from the tested model
+        assurance = self.completed_run(CARE, ([judge], []))
+        self.assertEqual(assurance["criteria"]["CARE-01"]["source"], "judges")
+        self.assertEqual(assurance["judge_calibration"][0]["status"], "no_calibration_report")
+        self.assertFalse(assurance["judge_calibration"][0]["approved"])
+        self.assertEqual(assurance["judge_calibration"][0]["blocking_enabled_criteria"], [])
+
+    def test_an_unavailable_auto_judge_leaves_judge_criteria_untestable(self):
+        assurance = self.completed_run(CARE, ([], [{"backend": "openai", "reason": "JUDGE_UNAVAILABLE"}]))
+        self.assertEqual(assurance["criteria"]["CARE-01"]["verdict"], "untestable")
+
+    def test_live_providers_lists_configured_auto_judges_and_failures(self):
+        with TestClient(self.app) as client, mock.patch.object(
+            live_providers, "auto_judges", lambda environ=None: ([reference_judge()], [{"backend": "openai", "reason": "JUDGE_UNAVAILABLE"}])
+        ):
+            payload = client.get("/api/v1/live-providers", headers=self.headers).json()
+        self.assertEqual([j["available"] for j in payload["auto_judges"]], [True, False])
+        self.assertEqual(payload["auto_judges"][1]["reason"], "JUDGE_UNAVAILABLE")
+
+    def test_auto_judges_reads_the_environment_and_reports_unstartable_backends(self):
+        backends, unavailable = live_providers.auto_judges({"HARNESS_AUTO_JUDGES": " openai ,nope"})
+        self.assertEqual(backends, [])
+        self.assertEqual([u["backend"] for u in unavailable], ["openai", "nope"])
+        self.assertEqual(live_providers.auto_judges({}), ([], []))
 
     def test_cancel_stops_an_in_flight_live_run_and_closes_the_provider_session(self):
         adapter = HangingAdapter()

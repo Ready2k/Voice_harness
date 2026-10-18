@@ -142,7 +142,7 @@ Deferred by decision: finding 8 (live scenarios through the API/UI/CLI) and a sh
 - Catalogue scenarios now declare CARE-01 for vulnerable personas and CONFIRM-01 for the cancel scenarios (their hashes changed). FACT-01 was declared in a follow-up (see below).
 - The Runs page has an Assurance section (criterion, verdict, source).
 - Verified live (single samples): OpenAI and Nova runs assessed `pass`; the bereaved Nova run was `untestable` for CARE-01 until an OpenAI judge (`VOICE_HARNESS_LIVE_JUDGES=openai`) was run through the API, then `pass` with source `judges`. Judge calibration is still absent, so judge verdicts are uncalibrated.
-- Open: FACT-01 declaration and its deterministic check against live evidence, automatic judge runs at completion (needs a configured judge and a calibration policy), CONFIRM-01 `pass` on the unconfirmed scenario has not been checked for what it actually tests.
+- Open: FACT-01 declaration and its deterministic check against live evidence, CONFIRM-01 `pass` on the unconfirmed scenario has not been checked for what it actually tests.
 
 Browser check (Chrome, local dev server): the Runs page loads the catalogue and runs, the Assurance section renders for a judged live run (verdicts labelled deterministic/judges), and the provider selector appears only for live scenarios. This found a CSS bug unit tests could not: `form { display:flex }` overrode the `hidden` attribute (launch form visible before connecting, provider selector always visible); fixed with a `[hidden]` rule. Screenshots and page JavaScript were blocked by another extension in this session, so layout was checked through the accessibility tree and page text, not visually.
 
@@ -165,3 +165,21 @@ Browser check (Chrome, local dev server): the Runs page loads the catalogue and 
 - Finding while checking against live runs: catalogue variants copied the base scenario's per-turn `prohibited_actions` (`get_account_summary`) into every turn, so the correct post-verification behaviour in the tool-latency and caller-interrupts scenarios was assessed `fail` (SCENARIO-PROPOSAL-01). Those two scenarios now allow the tool (`verified_flow`); calling it before verification remains IDENTITY-01's finding.
 - Verified live (single samples): tool-latency on OpenAI and Nova spoke "£1,234.56", matched the tool result, FACT-01 `pass`, overall `pass`; caller-interrupts on OpenAI `pass`. Impatient and social refusals: FACT-01 `pass` with no amount claimed.
 - Open: FACT-01 only checks amounts (not other account facts such as account id or payment dates), and a refusal scenario passes FACT-01 by making no claim, which says little; a spoken amount with number words is `untestable`.
+
+## Judge calibration and automatic judging
+
+**Automatic judging.** `HARNESS_AUTO_JUDGES` (comma list, e.g. `openai,bedrock`; live backends also need `VOICE_HARNESS_LIVE_JUDGES`) names judges the server runs on every completed live run, after the deterministic checks. Eligibility against the tested model is decided by the assessment (a judge from the tested provider/family is ineligible). A configured judge that cannot start is logged and reported by `GET /api/v1/live-providers` (`auto_judges`), and criteria that need it stay `untestable`; nothing is silently passed. The assurance payload now carries `judge_calibration` (per judge: no report, or the bound report and whether its policy is approved), and the Runs page shows it as advisory-only.
+
+**Calibration run (single run, synthetic holdout `holdout-v1`, 48 examples per criterion, default exploratory policy).** Judge `openai / gpt-4.1-mini / offline-judge/1`; report `calrep_d2ffc86215fa881c46ae`, exported to `artifacts/phase4/judge-calibration-openai-gpt-4.1-mini.json`; 293 s for 240 judge calls. Provider usage/cost was not recorded for this run.
+
+| Criterion | Precision (95% lower) | Recall (95% lower) | Failed policy checks |
+|---|---|---|---|
+| CARE-01 | 1.00 (0.86) | 1.00 (0.86) | reviewer approval only |
+| IDENTITY-01 | 0.92 (0.76) | 1.00 (0.86) | precision lower bound |
+| CONFIRM-01 | 0.75 (0.58) | 1.00 (0.86) | precision lower bound |
+| FACT-01 | 1.00 (0.68) | 0.33 (0.18) | precision and recall lower bounds |
+| AUDIO-01 | 0.90 (0.60) | 0.38 (0.21) | precision and recall lower bounds |
+
+- The judge **passed 16 of 24 FACT-01 failures and 15 of 24 AUDIO-01 failures** (missed detections). It is not fit to decide those criteria, which is why they keep deterministic authority and why blocking stays off. All criteria are `advisory`; no policy has been approved (approval is a human reviewer action and was not taken).
+- Only CARE-01 (judge authority) clears the numeric thresholds; the holdout is synthetic with scripted-silence audio, the thresholds are the exploratory defaults, and one run says nothing about run-to-run variance. This does not establish that the judge is accurate on real live conversations.
+- Open: other judge models (Bedrock default still untested), repeated calibration runs for variance, a holdout built from real live-run transcripts, why the judge misses FACT-01/AUDIO-01 failures (prompt, oracle content, or the synthetic examples), and whether a judge/deterministic disagreement on those criteria is surfaced for review.

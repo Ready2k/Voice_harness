@@ -159,3 +159,15 @@ test("assurance shows only applicable criteria with their verdict source", () =>
   assert.deepEqual(view.criteria.map((c) => [c.id, c.source]), [["CARE-01", "judges"]]);
   assert.equal(view.overall, "pass");
 });
+
+test("assurance labels each judge's calibration status and never implies calibrated blocking", () => {
+  const view = assuranceView({
+    status: "assessed", overall_assurance: "pass", reason_codes: [], judge_coverage: "complete", criteria: {},
+    judge_calibration: [
+      { judge_id: "a", status: "no_calibration_report", approved: false },
+      { judge_id: "b", status: "report_bound", report_id: "calrep_1", approved: false },
+    ],
+  });
+  assert.match(view.judges[0], /no calibration report \(advisory only\)/);
+  assert.match(view.judges[1], /calrep_1 \(not approved, advisory only\)/);
+});

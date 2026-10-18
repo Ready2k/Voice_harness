@@ -226,12 +226,13 @@ export function runHolds(payload, now = Date.now() / 1000) {
 
 /** Pure: ledger-derived assurance; verdicts from judges or humans are labelled by source, never merged silently. */
 export function assuranceView(payload) {
-  if (!payload || payload.status === "not_assessed") return { assessed: false, overall: "not assessed", reasons: payload?.reason_codes ?? [], coverage: null, criteria: [] };
+  if (!payload || payload.status === "not_assessed") return { assessed: false, overall: "not assessed", reasons: payload?.reason_codes ?? [], coverage: null, judges: [], criteria: [] };
   return {
     assessed: true,
     overall: payload.overall_assurance,
     reasons: payload.reason_codes ?? [],
     coverage: payload.judge_coverage ?? null,
+    judges: (payload.judge_calibration ?? []).map((j) => j.judge_id + ": " + (j.status === "report_bound" ? "calibration report " + j.report_id + (j.approved ? " (approved)" : " (not approved, advisory only)") : "no calibration report (advisory only)")),
     criteria: Object.entries(payload.criteria ?? {})
       .filter(([, c]) => c.applicable)
       .map(([id, c]) => ({ id, verdict: c.verdict, source: c.source, mandatory: c.mandatory, track: c.track })),
@@ -349,6 +350,7 @@ export function renderRun(root, view, onCancel = null) {
   const assurance = el("div");
   if (a.assessed) {
     assurance.append(el("p", "", "Overall: " + a.overall + (a.coverage ? " (judge coverage: " + a.coverage + ")" : "") + (a.reasons.length ? " - " + a.reasons.join(", ") : "")));
+    for (const j of a.judges) assurance.append(el("p", "muted", "Judge " + j));
     assurance.append(table(["Criterion", "Verdict", "Source", "Mandatory", "Track"], a.criteria.map((c) => [c.id, c.verdict, c.source, c.mandatory ? "yes" : "no", c.track])));
   } else {
     assurance.append(el("p", "muted", "Not assessed yet."));

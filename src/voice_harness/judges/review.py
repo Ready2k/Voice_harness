@@ -158,6 +158,7 @@ def effective_from_events(events: list[dict], run_id: str) -> dict:
                                 "reason_codes": e["reason_codes"]}
             for e in entries
         },
+        "judge_calibration": adjudication.get("judge_calibration", []),
         "human_adjudication": human, "open_reviews": open_reviews,
         "unresolved": bool(open_reviews) or verdicts["overall_assurance"] in {"review_required", "untestable"},
     }

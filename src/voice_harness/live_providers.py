@@ -51,6 +51,24 @@ class PreconditionFailed(Exception):
     """A scenario step could not be set up (e.g. identity was not established); not a provider defect."""
 
 
+def auto_judges(environ=None):
+    """Judge backends the server runs on every completed live run (``HARNESS_AUTO_JUDGES``, e.g. ``openai,bedrock``).
+
+    Returns (backends, unavailable): a configured judge that cannot start is reported, never silently dropped
+    into a pass. Independence from the tested model is decided by the assessment, not here.
+    """
+    from .judges.backends import JudgeError, build_backend
+
+    environ = os.environ if environ is None else environ
+    backends, unavailable = [], []
+    for name in [n.strip() for n in environ.get("HARNESS_AUTO_JUDGES", "").split(",") if n.strip()]:
+        try:
+            backends.append(build_backend({"backend": name}, environ=environ))
+        except JudgeError as exc:
+            unavailable.append({"backend": name, "reason": exc.code})
+    return backends, unavailable
+
+
 def _nova_env():
     from .adapters.nova_sonic import SESSION_ENV
 
@@ -132,4 +150,4 @@ async def run_live(engine, run_id, provider_config_id, scenario_id, *, seed=0):
             await adapter.close(reason)
 
 
-__all__ = ["LIVE_LIMITS", "LIVE_PROVIDERS", "TESTED_MODELS", "PreconditionFailed", "availability", "run_live"]
+__all__ = ["LIVE_LIMITS", "LIVE_PROVIDERS", "TESTED_MODELS", "auto_judges", "PreconditionFailed", "availability", "run_live"]
