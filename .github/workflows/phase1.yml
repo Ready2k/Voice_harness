@@ -11,6 +11,13 @@ jobs:
           cache-dependency-glob: requirements.lock
       - run: make lint
       - run: make audit
+      - name: Pre-pull images (public registries rate-limit anonymous pulls; retry)
+        run: |
+          for attempt in 1 2 3 4; do
+            docker compose --profile infra pull --ignore-buildable postgres otel-collector && exit 0
+            sleep $((attempt * 30))
+          done
+          exit 1
       - run: make test
         env:
           SECRET_MODE: "644"
