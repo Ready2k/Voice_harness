@@ -31,7 +31,11 @@
   caller-interrupts-001` (now two turns) — the runner cut in 500 ms into the first reply with a client
   `interrupt` (generation cancelled, history truncation acknowledged by the provider), then the second turn was
   approved; a non-fatal `TOOL_ARGUMENTS_INVALID` adapter error from the model's own tool call is reported.
-  Interrupts are runner-initiated at a simulated playback position, not VAD-detected overlap.
+  Provider-VAD barge-in (`interrupt_mode="vad"`, `barge_after_tool=True`): the next caller turn's speech
+  overlapped the model's post-tool reply and the adapter emitted `interrupted` (1 observed, no client
+  `interrupt` call). The following turn then reported `no_audio` (the cancelled reply's own turn_end was
+  drained and no new reply arrived before the next turn_end), so recovery after a VAD barge-in is not yet
+  shown. Overlap depended on timing after the tool result, not on a controlled playback position.
   Live chooser: one real OpenAI call picked an eligible branch with no simulator failure.
 
 ## Not yet established

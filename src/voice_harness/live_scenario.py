@@ -60,15 +60,17 @@ def apply_profile(pcm: bytes, profile: str, faults, seed=0) -> bytes:
 
 class LiveScenarioRunner:
     def __init__(self, engine, run_id, adapter, assessor, scenario_id, *, caller_audio, cost_recorder=None,
-                 seed=0, turn_timeout_s=TURN_TIMEOUT_S):
+                 seed=0, turn_timeout_s=TURN_TIMEOUT_S, interrupt_mode="client", barge_after_tool=False):
         entry = catalogue_entry(scenario_id)
         if entry is None:
             raise ValueError("SCENARIO_NOT_IN_CATALOGUE")
         self.engine, self.run_id, self.adapter, self.entry = engine, run_id, adapter, entry
         self.caller_audio, self.seed, self.turn_timeout_s = caller_audio, seed, turn_timeout_s
+        self.interrupt_mode = interrupt_mode  # "client": runner calls interrupt(); "vad": caller speech overlaps, provider VAD cuts in
         self.driver = AdapterTurnDriver(engine, run_id, assessor, cost_recorder=cost_recorder)
         self.tool_calls, self._fault_profile, self.interruptions = [], {}, 0
         self.interrupt_results, self._cancelled_ends = [], 0
+        self.tool_calls_expected = barge_after_tool  # barge in on the reply that follows a tool result
 
     def _faults(self, kind, turn=None, tool=None):
         return [
@@ -97,11 +99,14 @@ class LiveScenarioRunner:
     async def _await_turn(self, bank, until_audio=False):
         """Pump adapter events until a turn_end (or fatal error / timeout); ``until_audio`` stops at the first reply audio."""
         errors = []
+        tool_seen = False  # a tool-using reply speaks again after its result; that long reply is the barge-in target
 
         async def pump():
+            nonlocal tool_seen
             async for event in self.adapter.receive():
                 if event.type == "tool_call":
                     await self._tool(bank, event)
+                    tool_seen = True
                     continue
                 if event.type == "error":
                     errors.append({"code": event.code, "fatal": event.fatal})
@@ -110,11 +115,12 @@ class LiveScenarioRunner:
                 if event.type == "interrupted":
                     self.interruptions += 1
                 outcome = self.driver.feed(event)
-                if until_audio and event.type == "audio_out":
+                if until_audio and event.type == "audio_out" and (tool_seen or not self.tool_calls_expected):
                     # Playback is simulated at real time: the caller cuts in 500 ms into the reply.
                     await asyncio.sleep(0.5)
                     self._cancelled_ends += 1
-                    self.interrupt_results.append(await self.adapter.interrupt(getattr(event, "item_id", None), 500))
+                    if self.interrupt_mode == "client":
+                        self.interrupt_results.append(await self.adapter.interrupt(getattr(event, "item_id", None), 500))
                     return {"approval": None, "strict_speech_approval": "barge_in_pending"}
                 if event.type == "turn_end" and outcome is not None:
                     return outcome
