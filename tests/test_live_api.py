@@ -18,6 +18,7 @@ from voice_harness import live_providers
 from voice_harness.adapters import AudioOut, ToolCall, TranscriptDelta, TurnEnd
 from voice_harness.api import create_app
 from voice_harness.asr import ScriptedAsr
+from voice_harness.contracts import RunConfig
 from voice_harness.storage import Database
 
 LIVE = "identity-impatient-en-gb-clean-001"
@@ -41,6 +42,15 @@ class FakeAdapter(ScriptedAdapter):
 
 class XaiFakeAdapter(FakeAdapter):
     receipt = {"model_id": "grok-voice-3.0", "provider_session_id": "sess_xai"}
+
+
+class GeminiFakeAdapter(FakeAdapter):
+    receipt = {"model_id": None, "provider_session_id": "sess_gemini"}
+    region = "us-central1"
+
+    def connection_info(self):
+        return {"endpoint_host": "us-central1-aiplatform.googleapis.com", "region": "us-central1",
+                "sdk_versions": {"websockets": "17.2"}}
 
 
 class InterruptedThenBalance(FakeAdapter):
@@ -400,6 +410,54 @@ class LiveApi(unittest.TestCase):
         self.assertNotEqual(provider["capability_status"], "mock_only")
         self.assertTrue(verify_bundle(bundle))
         self.assertNotIn("xAI_API_KEY", json.dumps(bundle))
+
+    def test_gemini_availability_checks_adc_presence_without_revealing_it(self):
+        live = {"VOICE_HARNESS_LIVE_ASR": "openai", "OPENAI_API_KEY": "k"}
+        with mock.patch("voice_harness.caller_voice.available", lambda environ=None: (True, None)):
+            with mock.patch("voice_harness.adapters.google_gemini_live.credentials_available", lambda environ=None: (True, None)):
+                self.assertEqual(live_providers.availability("gemini-live", live), (True, None))
+            with mock.patch("voice_harness.adapters.google_gemini_live.credentials_available",
+                            lambda environ=None: (False, "NO_GOOGLE_ADC")):
+                self.assertEqual(live_providers.availability("gemini-live", live), (False, "NO_GOOGLE_ADC"))
+            self.assertEqual(live_providers.availability("gemini-live", {})[1], "NO_ASR_BACKEND_CONFIGURED")
+
+    def test_gemini_provider_is_registered_with_the_pinned_model_and_family(self):
+        self.assertEqual(live_providers.LIVE_PROVIDERS["gemini-live"], "google_gemini_live")
+        self.assertEqual(live_providers.TESTED_MODELS["gemini-live"],
+                         {"provider": "google", "model_id": "gemini-live-2.5-flash-native-audio", "family": "google_gemini_live"})
+        self.assertEqual(live_providers.FAMILIES["gemini-live"], "google_gemini_live")
+        self.assertIn("gemini-live", RunConfig.model_json_schema()["properties"]["provider_config_id"]["enum"])
+
+    def test_a_gemini_live_run_launches_through_the_api_with_google_session_binding_and_judge_independence(self):
+        same = reference_judge(cfg("gemini-self", provider="google", model="gemini-live-2.5-flash-native-audio", family="google_gemini_live"))
+        other = reference_judge(cfg("other"))
+        _, events = self.completed_run(CARE, ([same, other], []), provider="gemini-live", adapter=GeminiFakeAdapter(), events=True)
+        independence = next(e["content"] for e in events if e["type"] == "judge.independence_recorded")
+        self.assertEqual(independence["tested"], {"provider": "google", "model_id": "gemini-live-2.5-flash-native-audio",
+                                                  "family": "google_gemini_live"})
+        verdicts = {j["judge_id"]: j for j in independence["judges"]}
+        self.assertFalse(verdicts["gemini-self"]["eligible"])
+        self.assertIn("JUDGE_IS_TESTED_MODEL", verdicts["gemini-self"]["reason_codes"])
+        self.assertTrue(verdicts["other"]["eligible"])
+        probing = next(e["content"] for e in events if e["type"] == "run.probing")
+        self.assertEqual(probing["capability_report_id"], "cap_google_gemini_live_2_5_flash_native_audio_20261018")
+
+    def test_a_gemini_live_export_records_an_unresolved_version_and_verifies_offline(self):
+        from voice_harness.evidence import verify_bundle
+
+        bundle, _ = self.exported(LIVE, provider="gemini-live", adapter=GeminiFakeAdapter())
+        provider = bundle["manifest"]["provider"]
+        self.assertEqual((provider["provider_config_id"], provider["adapter"]), ("gemini-live", "google_gemini_live"))
+        self.assertEqual((provider["requested_model_id"], provider["returned_model_id"]),
+                         ("gemini-live-2.5-flash-native-audio", None))
+        self.assertEqual((provider["region"], provider["endpoint"]), ("us-central1", "us-central1-aiplatform.googleapis.com"))
+        self.assertEqual(provider["provider_session_id"], "sess_gemini")
+        self.assertEqual(provider["version_resolution"], "unresolved")
+        self.assertNotEqual(provider["capability_status"], "mock_only")
+        self.assertTrue(verify_bundle(bundle))
+        text = json.dumps(bundle)
+        for needle in ("ya29.", "refresh_token", "client_secret"):
+            self.assertNotIn(needle, text)
 
     def test_a_live_export_verifies_offline(self):
         from voice_harness.evidence import verify_bundle

@@ -3101,7 +3101,8 @@
               "mock-banking-v1",
               "openai-realtime-live",
               "nova-sonic-live",
-              "xai-voice-live"
+              "xai-voice-live",
+              "gemini-live"
             ],
             "title": "Provider Config Id",
             "default": "mock-banking-v1"

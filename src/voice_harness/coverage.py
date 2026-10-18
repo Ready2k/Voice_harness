@@ -86,6 +86,7 @@ ADAPTER_MODULES = {
     "openai": "voice_harness.adapters.openai_realtime",
     "aws_nova_sonic": "voice_harness.adapters.nova_sonic",
     "xai_grok_voice": "voice_harness.adapters.xai_voice",
+    "google_gemini_live": "voice_harness.adapters.google_gemini_live",
 }
 DEFAULT_REPORT_DIR = Path(
     os.environ.get("HARNESS_PHASE0_DIR")
