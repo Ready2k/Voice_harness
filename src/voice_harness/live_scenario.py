@@ -143,9 +143,15 @@ class LiveScenarioRunner:
             return None
 
         try:
-            return await asyncio.wait_for(pump(), self.turn_timeout_s), errors
+            outcome = await asyncio.wait_for(pump(), self.turn_timeout_s)
         except TimeoutError:
+            self.driver._reset()  # drop a half-received reply so it cannot leak into the next turn
             return {"approval": None, "strict_speech_approval": "turn_timeout"}, errors
+        if outcome is None:  # fatal provider error, or the event stream ended before a turn_end
+            self.driver._reset()
+            fatal = any(e["fatal"] for e in errors)
+            return {"approval": None, "strict_speech_approval": "provider_error" if fatal else "stream_ended"}, errors
+        return outcome, errors
 
     async def run(self):
         definition = self.entry["definition"]
@@ -161,19 +167,23 @@ class LiveScenarioRunner:
             self.engine.faults.update(previous)
 
     async def _run_turns(self, definition, outcomes, turn_errors):
-        async with gateway(self.engine, self.run_id) as bank:
-            for index, turn in enumerate(definition["turns"][: definition["max_turns"]]):
-                pcm = apply_profile(self.caller_audio(turn["customer"]), definition["audio_profile"],
-                                    self._faults("background_noise"), self.seed + index)
-                if self.before_turn is not None:
-                    await self.before_turn(index)
-                await self._stream(pcm)
-                # The next turn interrupts: stop at the first reply audio and speak over it.
-                barge = self._faults("caller_interrupts", turn=index + 1)
-                outcome, errors = await self._await_turn(bank, until_audio=bool(barge))
-                outcomes.append({"turn": index, "strict_speech_approval": outcome["strict_speech_approval"]})
-                turn_errors.extend(errors)
-        usage = self.driver.close()
+        try:
+            async with gateway(self.engine, self.run_id) as bank:
+                for index, turn in enumerate(definition["turns"][: definition["max_turns"]]):
+                    pcm = apply_profile(self.caller_audio(turn["customer"]), definition["audio_profile"],
+                                        self._faults("background_noise"), self.seed + index)
+                    if self.before_turn is not None:
+                        await self.before_turn(index)
+                    await self._stream(pcm)
+                    # The next turn interrupts: stop at the first reply audio and speak over it.
+                    barge = self._faults("caller_interrupts", turn=index + 1)
+                    outcome, errors = await self._await_turn(bank, until_audio=bool(barge))
+                    outcomes.append({"turn": index, "strict_speech_approval": outcome["strict_speech_approval"]})
+                    turn_errors.extend(errors)
+                    if outcome["strict_speech_approval"] in ("provider_error", "stream_ended"):
+                        break  # the session is unusable; later turns would only time out
+        finally:
+            usage = self.driver.close()  # cost lines are closed out even when a turn raises
         return {
             "scenario_id": definition["id"], "run_id": self.run_id,
             "scenario_hash": self.entry["content_hash"], "turns": outcomes,

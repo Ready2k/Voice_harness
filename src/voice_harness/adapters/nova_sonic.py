@@ -401,8 +401,14 @@ class NovaSonicAdapter:
             out.append(ToolCall(**base, turn_id=body.get("completionId"), call_id=body["toolUseId"],
                                 name=body["toolName"], arguments=args if isinstance(args, dict) else {"_value": args}))
         elif kind == "contentEnd":
+            info = self._contents.get(body.get("contentId"), {})
             if body.get("stopReason") == "INTERRUPTED":
                 out += self._interrupted(body.get("contentId"), body.get("completionId"))
+            elif (body.get("stopReason") == "END_TURN" and info.get("role") == "ASSISTANT"
+                  and info.get("type") == "TEXT"):
+                # One Nova completion spans the session, so completionEnd is not a per-reply boundary.
+                # The assistant's closing text content (after its audio) ends the reply.
+                out.append(TurnEnd(**base, turn_id=body.get("completionId")))
         elif kind == "usageEvent":
             out.append(Usage(**base, turn_id=body.get("completionId"),
                              input_tokens=body.get("totalInputTokens"), output_tokens=body.get("totalOutputTokens"),

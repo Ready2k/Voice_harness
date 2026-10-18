@@ -9,7 +9,7 @@ from pathlib import Path
 
 from fastapi.testclient import TestClient
 
-from voice_harness.adapters import AudioOut, ToolCall, TranscriptDelta, TurnEnd
+from voice_harness.adapters import AudioOut, ProviderError, ToolCall, TranscriptDelta, TurnEnd
 from voice_harness.api import create_app
 from voice_harness.asr import ScriptedAsr
 from voice_harness.contracts import RunConfig
@@ -206,6 +206,16 @@ class LiveRunner(unittest.TestCase):
         runner.turn_timeout_s = 0.3
         summary = asyncio.run(runner.run())
         self.assertEqual(summary["turns"][0]["strict_speech_approval"], "turn_timeout")
+
+    def test_fatal_provider_error_ends_run_with_typed_outcome_and_closes_usage(self):
+        class Fatal(ScriptedAdapter):
+            async def receive(self):
+                yield ProviderError(code="BOOM", fatal=True, ts_ms=1)
+
+        runner = self.runner("commit-cancel-unconfirmed-001", Fatal())  # two turns; the second must not run
+        summary = asyncio.run(runner.run())
+        self.assertEqual([t["strict_speech_approval"] for t in summary["turns"]], ["provider_error"])
+        self.assertEqual(summary["adapter_errors"], [{"code": "BOOM", "fatal": True}])
 
 
 if __name__ == "__main__":
