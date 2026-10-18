@@ -259,11 +259,16 @@ class ApiTests(unittest.TestCase):
         self.evidence.release(self.run, released["hold_id"], "resolved")
         self.evidence.purge(self.run)  # emits the notice as a ledger event
         with TestClient(self.app) as client:
-            listing = client.get("/api/v1/preservation-holds", headers=self.headers)
-            self.assertEqual(listing.status_code, 200)
             mine = {near["hold_id"], far["hold_id"], released["hold_id"]}
-            # the register is cross-run: other tests sharing the database may add holds
-            items = {h["hold_id"]: h for h in listing.json()["items"] if h["hold_id"] in mine}
+            # the register is cross-run and paginated: follow the cursor until this test's holds are found
+            items, cursor = {}, ""
+            while True:
+                listing = client.get(f"/api/v1/preservation-holds?limit=100&cursor={cursor}", headers=self.headers)
+                self.assertEqual(listing.status_code, 200)
+                items.update({h["hold_id"]: h for h in listing.json()["items"] if h["hold_id"] in mine})
+                cursor = listing.json()["next_cursor"]
+                if cursor is None or {near["hold_id"], far["hold_id"]} <= set(items):
+                    break
             self.assertEqual(set(items), {near["hold_id"], far["hold_id"]})
             self.assertTrue(items[near["hold_id"]]["expiry_notice_due"])
             self.assertFalse(items[far["hold_id"]]["expiry_notice_due"])

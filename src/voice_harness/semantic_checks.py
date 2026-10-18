@@ -212,6 +212,22 @@ def _date_matches(spoken, expected):
     )
 
 
+FIELD_FAMILIES = {
+    "balance": re.compile(r"\bbalance\b"),
+    "available": re.compile(r"\bavailable\b"),
+    "payment": re.compile(r"\b(?:payment|transaction|charge|debit|transfer)\b"),
+}
+
+
+def _fact_family(field):
+    field = field.lower()
+    if "available" in field:
+        return "available"
+    if "balance" in field:
+        return "balance"
+    return "payment"
+
+
 def semantic_check(text: str, expected: dict | None) -> dict:
     """Disposition safe | unsafe | untestable with reason codes; ambiguity is never a pass."""
     expected = expected or {}
@@ -226,8 +242,24 @@ def semantic_check(text: str, expected: dict | None) -> dict:
     unsafe = False
     # Amounts the assistant may state without being required to (e.g. values returned by trusted tools).
     allowed = set(expected.get("allowed_amounts_minor", []))
+    # Typed facts: signed amount, ISO currency, field, account and source. A spoken amount must match a fact whose
+    # field family is the one the response talks about (a payment amount is not a balance).
+    facts = [f for f in expected.get("allowed_facts", []) if f.get("currency", "GBP") == "GBP"]
+    mentioned = {name for name, pattern in FIELD_FAMILIES.items() if pattern.search(text.lower())}
+    if "available" in mentioned:
+        mentioned.discard("balance")  # "available balance" names the available field, not the ledger balance
     for amount in claims["amounts_minor"]:
-        if amount not in exp_amounts and amount not in allowed:
+        if amount in exp_amounts:
+            continue
+        matching = [f for f in facts if f["amount_minor"] == amount]
+        if amount in allowed or (matching and (not mentioned or any(_fact_family(f["field"]) in mentioned
+                                                                    for f in matching))):
+            continue
+        if matching:
+            unsafe = True
+            reasons.append("FIELD_MISMATCH")
+            continue
+        if amount not in allowed:
             unsafe = True
             reasons.append("AMOUNT_MISMATCH" if exp_amounts else "UNEXPECTED_AMOUNT")
     for spoken in claims["dates"]:

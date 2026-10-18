@@ -35,13 +35,13 @@ from typing import Any
 from ..resample import StreamResampler
 from . import (
     AUDIO_OVERFLOW_CODE,
-    AUDIO_QUEUE_MAX,
     UNSUPPORTED,
     AdapterEvent,
     AudioOut,
     CapabilityUnsupported,
     Interrupted,
     ProviderError,
+    QueueBudget,
     ToolCall,
     TranscriptDelta,
     TranscriptFinal,
@@ -162,6 +162,7 @@ class NovaSonicAdapter:
         self.closed = False
         self.transport: Any = None
         self._queue: asyncio.Queue = asyncio.Queue()
+        self._budget = QueueBudget()
         self.native_sink = None  # optional (adapter, native_type, payload) -> None; preserves every provider event
         self._audio_buf = bytearray()
         self._input_resampler: StreamResampler | None = None
@@ -338,10 +339,11 @@ class NovaSonicAdapter:
 
     # ------------------------------------------------------------------ outputs
     async def _emit(self, ev: AdapterEvent) -> None:
-        if ev.type in ("audio_out", "transcript_delta") and self._queue.qsize() >= AUDIO_QUEUE_MAX:
-            # Consumer is not draining: drop audio, signal once, keep the control path open.
-            self.dropped_audio_events = getattr(self, "dropped_audio_events", 0) + 1
-            if self.dropped_audio_events == 1:
+        if not self._budget.admit(ev, self._queue.qsize()):
+            # Consumer is not draining: drop audio/transcripts, signal once, keep the control path open.
+            self._budget.dropped += 1
+            self.dropped_audio_events = self._budget.dropped
+            if self._budget.dropped == 1:
                 await self._queue.put(ProviderError(**self._base(), code=AUDIO_OVERFLOW_CODE,
                                                     message="consumer stalled", fatal=False))
             return
@@ -452,6 +454,7 @@ class NovaSonicAdapter:
         """Yield normalised events until the stream ends or the adapter is closed."""
         while True:
             ev = await self._queue.get()
+            self._budget.released(ev)
             if ev is None:
                 self._queue.put_nowait(None)
                 return

@@ -193,6 +193,160 @@ class LateWorkCannotRelease(Base):
         self.assertFalse(self.events("playback.released"))
 
 
+class SlowAsr(ScriptedAsr):
+    def __init__(self, text="Hello.", delay=0.3):
+        super().__init__()
+        self.text, self.delay = text, delay
+
+    def transcribe(self, pcm, rate):
+        time.sleep(self.delay)
+        return AsrResult(self.text, self.name, self.model, False)
+
+
+class RunnerConcurrency(Base):
+    """Runner-level orderings from the 31ccddd recheck (F1-F3): the pump, not just the driver."""
+
+    def runner(self, adapter, asr, turn_timeout_s=10):
+        from test_phase4_scenarios import tone
+
+        from voice_harness.live_scenario import LiveScenarioRunner
+
+        return LiveScenarioRunner(self.engine, self.run, adapter, IndependentAssessor(self.engine, asr),
+                                  "identity-impatient-en-gb-clean-001", caller_audio=lambda text: tone(100),
+                                  turn_timeout_s=turn_timeout_s)
+
+    def adapter(self, events):
+        class Adapter:
+            async def send_audio(self, data, metadata):
+                pass
+
+            async def submit_tool_result(self, call_id, result):
+                return {"delivered": True}
+
+            async def receive(self):
+                for event in events:
+                    yield event
+                    await asyncio.sleep(0)
+
+        return Adapter()
+
+    def audio(self, item):
+        return AudioOut(pcm=bytes(960), sample_rate=24000, sample_count=480, turn_id="r1", item_id=item, ts_ms=1)
+
+    def test_second_end_then_interruption_during_asr_releases_nothing(self):
+        for second in ("duplicate", "other_response"):
+            with self.subTest(second):
+                self.setUp()
+                events = [self.audio("audio-a"), TurnEnd(turn_id="r1", ts_ms=2)]
+                events += [TurnEnd(turn_id="r1", ts_ms=3)] if second == "duplicate" else [
+                    self.audio("audio-b"), TurnEnd(turn_id="r2", ts_ms=3)]
+                events.append(Interrupted(item_id="audio-a"))
+                runner = self.runner(self.adapter(events), SlowAsr(delay=0.3))
+                summary = asyncio.run(runner.run())
+                self.assertNotEqual(summary["turns"][0]["strict_speech_approval"], "approved")
+                self.assertFalse(self.events("playback.released"))
+                self.assertGreaterEqual(runner.driver.interruptions_applied, 1)
+
+    def test_timeout_during_asr_retires_the_active_item(self):
+        events = [self.audio("audio-a"), TurnEnd(turn_id="r1", ts_ms=2)]
+        runner = self.runner(self.adapter(events + [Interrupted(item_id="never")] * 0), SlowAsr(delay=0.5),
+                             turn_timeout_s=0.1)
+
+        class Hang:
+            async def send_audio(self, data, metadata):
+                pass
+
+            async def submit_tool_result(self, call_id, result):
+                return {"delivered": True}
+
+            async def receive(inner):  # noqa: N805
+                for event in events:
+                    yield event
+                await asyncio.sleep(5)
+
+        runner.adapter = Hang()
+        summary = asyncio.run(runner.run())
+        self.assertEqual(summary["turns"][0]["strict_speech_approval"], "turn_timeout")
+        runner.driver.feed(self.audio("audio-a"))  # late audio of the retired item
+        self.assertEqual(runner.driver._pcm_bytes, 0)
+        runner.driver.feed(self.audio("audio-new"))  # a genuinely new response is still usable
+        self.assertEqual(runner.driver._pcm_bytes, 960)
+        time.sleep(0.6)  # the old worker finishes; nothing may have been released
+        self.assertFalse(self.events("playback.released"))
+
+    def test_facts_added_during_asr_do_not_change_an_assessment_in_flight(self):
+        driver = self.driver(SlowAsr("Your balance is ten pounds.", delay=0.2))
+        driver.feed(frame())
+        job, _ = driver.begin(TurnEnd(turn_id="t1", ts_ms=2))
+        results = []
+        worker = threading.Thread(target=lambda: results.append(driver.analyse(job)))
+        worker.start()
+        driver.expected_claims = {**driver.expected_claims, "allowed_facts": [
+            {"account_id": "acct_1001", "field": "balance_minor", "amount_minor": 1000, "currency": "GBP",
+             "source_call_id": "call_late", "source_ts_ms": 1}]}
+        worker.join(5)
+        outcome = driver.commit(job, results[0])
+        self.assertNotEqual(outcome["strict_speech_approval"], "approved")
+        self.assertFalse(self.events("playback.released"))
+
+    def test_hung_provider_cancel_does_not_stall_the_turn(self):
+        import voice_harness.live_scenario as live
+
+        class Hang:
+            async def interrupt(self, item_id, ms):
+                await asyncio.sleep(30)
+
+        runner = self.runner(Hang(), ScriptedAsr())
+        original, live.CANCEL_TIMEOUT_S = live.CANCEL_TIMEOUT_S, 0.1
+        self.addCleanup(setattr, live, "CANCEL_TIMEOUT_S", original)
+        started = time.monotonic()
+        asyncio.run(runner._cancel_generation())
+        self.assertLess(time.monotonic() - started, 2)
+        self.assertEqual(runner.interrupt_results[0]["generation_cancelled"], "failed")
+
+    def test_wrong_field_amount_is_not_a_balance(self):
+        facts = {"allowed_facts": [
+            {"account_id": "acct_1001", "field": "balance_minor", "amount_minor": 123456, "currency": "GBP",
+             "source_call_id": "c1", "source_ts_ms": 1},
+            {"account_id": "acct_1001", "field": "amount_minor", "amount_minor": 1000, "currency": "GBP",
+             "source_call_id": "c2", "source_ts_ms": 1}]}
+        wrong = semantic_check("Your balance is ten pounds.", facts)
+        self.assertEqual((wrong["disposition"], wrong["reason_codes"]), ("unsafe", ["FIELD_MISMATCH"]))
+        right = semantic_check("Your balance is one thousand two hundred and thirty four pounds fifty six pence.", facts)
+        self.assertEqual(right["disposition"], "safe")
+        payment = semantic_check("The pending payment is ten pounds.", facts)
+        self.assertEqual(payment["disposition"], "safe")
+
+
+class QueueBudgets(unittest.TestCase):
+    def adapter(self):
+        from voice_harness.adapters.openai_realtime import OpenAIRealtimeAdapter
+
+        adapter = OpenAIRealtimeAdapter(api_key="unused")
+        adapter.session_id = "s"
+        return adapter
+
+    def test_final_transcripts_are_bounded_but_control_events_are_not(self):
+        from voice_harness.adapters import AUDIO_QUEUE_MAX, TranscriptFinal
+
+        adapter = self.adapter()
+        for _ in range(AUDIO_QUEUE_MAX * 2):
+            adapter._emit(TranscriptFinal, role="assistant", text="x")
+        self.assertLessEqual(adapter._queue.qsize(), AUDIO_QUEUE_MAX + 1)  # one overflow signal
+        adapter._emit(TurnEnd)
+        adapter._emit(ProviderError, code="FATAL", fatal=True)
+        self.assertGreater(adapter._queue.qsize(), AUDIO_QUEUE_MAX)  # control path stays open
+
+    def test_decoded_audio_bytes_are_budgeted(self):
+        from voice_harness.adapters import AUDIO_QUEUE_BYTES_MAX
+
+        adapter = self.adapter()
+        for _ in range(100):
+            adapter._emit(AudioOut, pcm=bytes(96000), sample_rate=24000, sample_count=48000)
+        self.assertLessEqual(adapter._budget.audio_bytes, AUDIO_QUEUE_BYTES_MAX)
+        self.assertGreaterEqual(adapter.dropped_audio_events, 1)
+
+
 class RunnerEvidence(Base):
     def test_run_binds_scenario_records_caller_input_and_native_events(self):
         from test_phase4_scenarios import ScriptedAdapter, tone

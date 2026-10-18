@@ -33,8 +33,12 @@ TURN_TIMEOUT_S = 45.0
 PLAYED_MS_WHILE_HELD = 0
 NATIVE_FLUSH_EVERY = 100
 # Whole-response approval holds a full reply; live replies exceed the 2 s mock default.
-# Engines for live runs are built with these limits, which the run manifest records.
-LIVE_LIMITS = {"pending_audio_seconds": 15.0, "pending_audio_bytes": 15 * RATE * 2}
+# Headless runs never receive playback acknowledgements, so released audio stays "pending" in the engine's buffer
+# accounting for the whole session; the budget therefore covers a session of replies (a per-response cap of the
+# same size still applies at ingress). Engines for live runs are built with these limits, which the run manifest records.
+LIVE_LIMITS = {"pending_audio_seconds": 120.0, "pending_audio_bytes": 120 * RATE * 2,
+               "response_audio_seconds": 15.0, "response_audio_bytes": 15 * RATE * 2}
+CANCEL_TIMEOUT_S = 5.0
 
 
 def degrade(pcm: bytes, *, snr_db=None, narrowband=False, seed=0) -> bytes:
@@ -143,9 +147,15 @@ class LiveScenarioRunner:
         result = await bank.tool(event.call_id, event.name, event.arguments)
         if result["status"] == "success":
             # Amounts returned by a trusted tool may be spoken; they are allowed, not required.
-            allowed = self.driver.expected_claims.setdefault("allowed_amounts_minor", [])
-            allowed.extend(v for k, v in (result.get("structured_content") or {}).items()
-                           if k.endswith("_minor") and isinstance(v, int) and v not in allowed)
+            # Typed facts, rebuilt not mutated: jobs already frozen keep the context they were started with.
+            now = int(time.monotonic() * 1000)
+            facts = list(self.driver.expected_claims.get("allowed_facts", []))
+            facts.extend(
+                {"account_id": event.arguments.get("account_id"), "field": k, "amount_minor": v, "currency": "GBP",
+                 "source_call_id": event.call_id, "source_ts_ms": now}
+                for k, v in (result.get("structured_content") or {}).items()
+                if k.endswith("_minor") and isinstance(v, int))
+            self.driver.expected_claims = {**self.driver.expected_claims, "allowed_facts": facts}
         receipt = await self.adapter.submit_tool_result(event.call_id, result)
         self.tool_calls.append({
             "call_id": event.call_id, "name": event.name, "status": result["status"],
@@ -156,7 +166,8 @@ class LiveScenarioRunner:
     async def _cancel_generation(self):
         """Overflow or similar: stop the provider generating a reply nobody can release."""
         try:
-            self.interrupt_results.append(await self.adapter.interrupt(None, PLAYED_MS_WHILE_HELD))
+            self.interrupt_results.append(
+                await asyncio.wait_for(self.adapter.interrupt(None, PLAYED_MS_WHILE_HELD), CANCEL_TIMEOUT_S))
         except Exception as error:  # noqa: BLE001  # best effort; the failure is recorded, not hidden
             self.interrupt_results.append({"generation_cancelled": "failed", "error": type(error).__name__})
         self.driver.interrupt()
@@ -197,31 +208,31 @@ class LiveScenarioRunner:
         async def pump():
             nonlocal tool_seen, follow_up
             events = self.adapter.receive().__aiter__()
-            nxt, assessing = None, None  # assessing: (task, turn_end event) while a worker runs ASR
+            nxt, running, settled, exhausted = None, {}, None, False  # running: task -> (job, response-end event)
             try:
                 while True:
-                    if nxt is None:
+                    if nxt is None and not exhausted:
                         nxt = asyncio.ensure_future(events.__anext__())
-                    waiting = {nxt} | ({assessing[0]} if assessing else set())
+                    waiting = {*running, *([nxt] if nxt is not None else [])}
+                    if not waiting:  # stream closed and every assessment settled
+                        return settled
                     await asyncio.wait(waiting, return_when=asyncio.FIRST_COMPLETED)
-                    if assessing and assessing[0].done():
-                        task, ended = assessing
-                        assessing = None
-                        result = await step(ended, task.result())
-                        if result is not CONTINUE:
-                            return result
+                    # Commits and control events are both handled here, on this one thread, in arrival order.
+                    for task in [t for t in running if t.done()]:
+                        job, ended = running.pop(task)
+                        result = await step(ended, self.driver.commit(job, task.result()))
+                        if result is not CONTINUE and (settled is None or settled["strict_speech_approval"] == "no_audio"):
+                            settled = result
+                    if settled is not None and not running:
+                        return settled
+                    if nxt is None or not nxt.done():
                         continue
+                    finished, nxt = nxt, None
                     try:
-                        event = nxt.result()
+                        event = finished.result()
                     except StopAsyncIteration:
-                        if assessing is None:
-                            return None
-                        task, ended = assessing  # the stream closed while the last response was being assessed
-                        assessing = None
-                        result = await step(ended, await task)
-                        return None if result is CONTINUE else result
-                    finally:
-                        nxt = None
+                        exhausted = True
+                        continue
                     if event.type == "tool_call":
                         await self._tool(bank, event)
                         tool_seen = True
@@ -234,21 +245,27 @@ class LiveScenarioRunner:
                     if event.type == "interrupted":
                         self.interruptions += 1
                     if event.type == "turn_end":
-                        if assessing:  # a second response end while one is still being assessed: settle the first
-                            task, ended = assessing
-                            assessing = None
-                            result = await step(ended, await task)
-                            if result is not CONTINUE:
-                                return result
-                        # Assessment does blocking ASR/DB work on a worker; intake keeps running meanwhile.
-                        assessing = (asyncio.ensure_future(asyncio.to_thread(self.driver.feed, event)), event)
+                        job, immediate = self.driver.begin(event)
+                        if job is None:  # nothing to assess (no audio) or an immediate typed failure
+                            result = await step(event, immediate)
+                            if result is not CONTINUE and (settled is None or settled["strict_speech_approval"] == "no_audio"):
+                                settled = result
+                        else:  # keyed work item: assessed on a worker while intake and controls keep running
+                            running[asyncio.ensure_future(asyncio.to_thread(self.driver.analyse, job))] = (job, event)
                         continue
                     result = await step(event, self.driver.feed(event))
-                    if result is not CONTINUE:
-                        return result
+                    if result is not CONTINUE and (settled is None or settled["strict_speech_approval"] == "no_audio"):
+                        settled = result
+                    if settled is not None and not running:
+                        return settled
             finally:
-                for pending in (nxt, assessing[0] if assessing else None):
-                    if pending is not None and not pending.done():
+                for pending in (nxt, *running):
+                    if pending is None:
+                        continue
+                    if pending.done():
+                        if not pending.cancelled():
+                            pending.exception()  # mark retrieved (e.g. the stream closed as the turn settled)
+                    else:
                         pending.cancel()
 
         try:
@@ -284,7 +301,8 @@ class LiveScenarioRunner:
                     pcm = apply_profile(self.caller_audio(turn["customer"]), definition["audio_profile"],
                                         self._faults("background_noise"), self.seed + index)
                     # Trusted tool amounts are allowed for the response they were returned in, not for later turns.
-                    self.driver.expected_claims["allowed_amounts_minor"] = []
+                    self.driver.expected_claims = {k: v for k, v in self.driver.expected_claims.items()
+                                                   if k not in ("allowed_amounts_minor", "allowed_facts")}
                     if self.before_turn is not None:
                         await self.before_turn(index)
                     started_ms = int(time.monotonic() * 1000)

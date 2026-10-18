@@ -38,6 +38,33 @@ UNSUPPORTED = "unsupported"
 # Audio events queued ahead of the consumer; control events (errors, turn ends) are never bounded by this.
 AUDIO_QUEUE_MAX = 1500
 AUDIO_OVERFLOW_CODE = "AUDIO_QUEUE_OVERFLOW"
+AUDIO_QUEUE_BYTES_MAX = 20 * 24000 * 2  # decoded audio waiting in an adapter queue (20 s at 24 kHz)
+_DROPPABLE = ("audio_out", "transcript_delta", "transcript_final")
+
+
+class QueueBudget:
+    """Admission control for one adapter queue: event count and decoded audio bytes.
+
+    Only audio and transcripts are ever refused; errors, tool calls and turn boundaries (the control
+    path) are always admitted, so overload can still be reported and a session still shut down."""
+
+    def __init__(self):
+        self.audio_bytes, self.dropped = 0, 0
+
+    def admit(self, event, depth):
+        if event.type not in _DROPPABLE:
+            return True
+        if depth >= AUDIO_QUEUE_MAX:
+            return False
+        if event.type == "audio_out":
+            if self.audio_bytes + len(event.pcm) > AUDIO_QUEUE_BYTES_MAX:
+                return False
+            self.audio_bytes += len(event.pcm)
+        return True
+
+    def released(self, event):
+        if event is not None and getattr(event, "type", None) == "audio_out":
+            self.audio_bytes = max(0, self.audio_bytes - len(event.pcm))
 
 
 class _Ev(BaseModel):

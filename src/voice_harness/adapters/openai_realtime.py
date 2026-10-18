@@ -35,11 +35,11 @@ from typing import Any
 from ..mock_provider import CapabilityUnsupported  # noqa: F401  (re-exported contract)
 from . import (
     AUDIO_OVERFLOW_CODE,
-    AUDIO_QUEUE_MAX,
     SUPPORTED,
     AudioOut,
     Interrupted,
     ProviderError,
+    QueueBudget,
     ToolCall,
     TranscriptDelta,
     TranscriptFinal,
@@ -89,6 +89,7 @@ class OpenAIRealtimeAdapter:
         self._ws = None
         self._reader: asyncio.Task | None = None
         self._queue: asyncio.Queue = asyncio.Queue()
+        self._budget = QueueBudget()
         self.native_sink = None  # optional (adapter, native_type, payload) -> None; preserves every provider event
         self.session_id: str | None = None
         self.closed = False
@@ -298,6 +299,7 @@ class OpenAIRealtimeAdapter:
     async def receive(self) -> AsyncIterator[Any]:
         while True:
             ev = await self._queue.get()
+            self._budget.released(ev)
             if ev is _END:
                 self._queue.put_nowait(_END)
                 return
@@ -305,16 +307,18 @@ class OpenAIRealtimeAdapter:
 
     # ------------------------------------------------------------------ inbound
     def _emit(self, cls, **kw):
-        if cls in (AudioOut, TranscriptDelta) and self._queue.qsize() >= AUDIO_QUEUE_MAX:
+        ev = cls(session_id=self.session_id, turn_id=self._response_id,
+                 ts_ms=int(time.monotonic() * 1000), **kw)
+        if not self._budget.admit(ev, self._queue.qsize()):
             self._audio_overflow()
             return
-        self._queue.put_nowait(cls(session_id=self.session_id, turn_id=self._response_id,
-                                   ts_ms=int(time.monotonic() * 1000), **kw))
+        self._queue.put_nowait(ev)
 
     def _audio_overflow(self):
-        """Consumer is not draining: drop audio, signal once, keep the control path open."""
-        self.dropped_audio_events = getattr(self, "dropped_audio_events", 0) + 1
-        if self.dropped_audio_events == 1:
+        """Consumer is not draining: drop audio/transcripts, signal once, keep the control path open."""
+        self._budget.dropped += 1
+        self.dropped_audio_events = self._budget.dropped
+        if self._budget.dropped == 1:
             self._queue.put_nowait(ProviderError(session_id=self.session_id, code=AUDIO_OVERFLOW_CODE,
                                                  message="consumer stalled", fatal=False,
                                                  ts_ms=int(time.monotonic() * 1000)))

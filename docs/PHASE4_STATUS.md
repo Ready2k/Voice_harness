@@ -96,3 +96,17 @@ Missed by the review, noted by the review agent: `_cancelled_ends` is a counter 
 Nova fixes: caller lines no longer include the account id (the tool only takes the security answer, and the id was being misheard); `TOOL_CALL_ENDS_RESPONSE` is per adapter (OpenAI true, Nova false) so Nova's single post-tool reply is not skipped. Catalogue hashes for the fault/commit variants changed with the line.
 
 Single-sample comparison after these fixes: all seven catalogue scenarios approved on both OpenAI and Nova. In the tool-latency scenario neither model called `get_account_summary` this time, so the latency fault did not fire in that sample.
+
+## Response to the 31ccddd recheck (F1-F5)
+
+| Item | Change |
+|---|---|
+| F1 second end blocks interruption | Response ends are keyed work items: `AdapterTurnDriver.begin` freezes an immutable `AssessmentJob` (item ids, engine epoch, deep-frozen facts and their hash), `analyse` runs on a worker (bounded to 2 concurrent) and `commit` applies the result on the event-loop thread after a validity check. The runner pump never awaits an assessment inline, so interruptions and errors are handled while any number of assessments run; commits and controls are serialised in arrival order. A duplicate/no-audio end can no longer replace a real outcome. |
+| F2 item identity forgotten | Item identities are tombstoned from the whole buffered set and every in-flight job on interrupt or abandon, independent of buffer resets; late audio of a retired item is dropped, a new item is accepted. Events without an item id are accepted (no key to retire). |
+| F3 mutable facts | Facts are copied into the job at the response end and the runner rebuilds rather than mutates its context. Tool results become typed facts (account, field, signed minor amount, currency, source call and time); an amount must match a fact whose field family (balance / available / payment) is the one the response talks about (`FIELD_MISMATCH` otherwise). |
+| F4 queues | One budget per adapter queue: event count and decoded audio bytes (20 s) for audio, transcript deltas and finals; errors, tool calls and turn boundaries are always admitted; one `AUDIO_QUEUE_OVERFLOW` signal makes the driver discard the response. Provider cancellation after an overflow now has a 5 s timeout. |
+| F5 retention test | Follows the register cursor instead of assuming page one. |
+
+Found while verifying live: headless runs never receive playback acknowledgements, so released audio stays pending in the engine's buffer accounting; with the 15 s limit a long session overflowed on its fourth response and the provider cancel hung until the turn timeout (about 1 in 5 OpenAI confirmed-cancel runs). Live limits are now a 120 s session budget with a separate 15 s per-response cap. Six consecutive OpenAI runs and the Nova run approved afterwards (single samples).
+
+Still open: account/ownership binding beyond the fact's account id, a shared byte budget across adapter, driver and engine, unkeyed (no item id) late events, API/UI execution of live scenarios (finding 8).

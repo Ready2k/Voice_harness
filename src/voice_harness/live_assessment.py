@@ -20,7 +20,10 @@ from __future__ import annotations
 
 import base64
 import hashlib
+import json
+import threading
 import time
+from dataclasses import dataclass
 
 from .adapters import AUDIO_OVERFLOW_CODE
 from .asr import AsrUnavailable, strict_speech_status
@@ -31,6 +34,7 @@ from .semantic_checks import semantic_check
 
 BOUNDARY = "whole_response_no_alignment"
 HARNESS_RATE = 24000
+MAX_CONCURRENT_ASSESSMENTS = 2
 POLICY_ID = "banking.v1.playback_release"
 
 
@@ -47,13 +51,19 @@ class IndependentAssessor:
         return strict_speech_status(self.backend)
 
     def assess(self, run_id, unit_id, expected=None):
-        """Assess one pending unit; returns the outcome dict (token present only when approved)."""
+        """Analyse then commit one pending unit; returns the outcome dict (token present only when approved)."""
+        return self.commit(run_id, unit_id, self.analyse(run_id, unit_id, expected), expected)
+
+    def analyse(self, run_id, unit_id, expected=None):
+        """Read-only half, safe on a worker thread: ASR plus the semantic check over a frozen fact context.
+
+        Nothing is approved or released here; ``commit`` applies the result after a validity check."""
         unit = self.engine.database.get(run_id)["units"][unit_id]
         if unit["state"] != "pending" or "pcm" not in unit:
             raise ValueError("INVALID_ASSESSMENT_STATE")
         pcm = base64.b64decode(unit["pcm"])
         if self.backend is None:
-            return self._unavailable(run_id, unit, "NO_ASR_BACKEND_CONFIGURED")
+            return {"kind": "unavailable", "unit": unit, "reason": "NO_ASR_BACKEND_CONFIGURED"}
         try:
             ok, reason = self.backend.available()
             if not ok:
@@ -64,15 +74,23 @@ class IndependentAssessor:
             if self.cost_recorder and reason.startswith(("ASR_HTTP_", "ASR_TRANSPORT", "ASR_MALFORMED")):
                 # the request left the harness, so a charge cannot be ruled out: unknown, not zero
                 self.cost_recorder.record_asr(None, f"asr:{unit_id}", failed_reason="ASR_REQUEST_FAILED_USAGE_UNKNOWN")
-            return self._unavailable(run_id, unit, reason)
+            return {"kind": "unavailable", "unit": unit, "reason": reason}
         if self.cost_recorder:
             self.cost_recorder.record_asr(result, f"asr:{unit_id}")
+        return {"kind": "checked", "unit": unit, "result": result, "check": semantic_check(result.text, expected)}
+
+    def commit(self, run_id, unit_id, analysis, expected=None):
+        """Apply an analysis on the orchestration path; a unit no longer pending is superseded, never approved."""
+        unit = analysis["unit"]
         if self.engine.database.get(run_id)["units"][unit_id]["state"] != "pending":
             # Interrupted (or otherwise superseded) while the ASR ran: a late result must never approve.
+            live = analysis["result"].live if analysis["kind"] == "checked" else False
             return {"disposition": "untestable", "reason_codes": ["SUPERSEDED_DURING_ASSESSMENT"],
-                    "unit_id": unit_id, "approval": None, "live": result.live,
+                    "unit_id": unit_id, "approval": None, "live": live,
                     "strict_speech_approval": "superseded"}
-        check = semantic_check(result.text, expected)
+        if analysis["kind"] == "unavailable":
+            return self._unavailable(run_id, unit, analysis["reason"])
+        result, check = analysis["result"], analysis["check"]
         mapped = {"safe": "safe", "unsafe": "unsafe", "untestable": "unassessable"}[check["disposition"]]
         # The independent transcript becomes authoritative: new assessment epoch, replacement unit.
         replacement = self.engine.revise_audio(
@@ -162,6 +180,26 @@ class IndependentAssessor:
         }
 
 
+@dataclass(frozen=True)
+class AssessmentJob:
+    """Immutable per-response assessment: identity, generation, deadline origin and frozen fact context."""
+
+    job_id: int
+    unit_id: str
+    item_ids: frozenset
+    turn_id: str | None
+    epoch: int  # engine generation epoch when the response ended
+    facts_json: str  # deep-frozen assessment context
+    facts_hash: str
+    snapshot: dict
+    end_event: object
+    held_at: int
+
+    @property
+    def facts(self):
+        return json.loads(self.facts_json)
+
+
 def _metric(name, value, start, end, reason=None):
     if value is None and reason is None:
         raise ValueError("NULL_METRIC_REQUIRES_REASON")
@@ -196,7 +234,10 @@ class AdapterTurnDriver:
         self.results = []
         self.interruptions_applied, self.cancel_requested = 0, False
         self._fence = 0  # advanced on abandon/timeout: a worker started before it can never release
-        self._dead_responses = set()  # responses cut off by an interruption; their late audio is dropped
+        self._dead_responses = set()  # provider item ids retired by interruption/timeout; never accepted again
+        self._jobs = {}  # job_id -> AssessmentJob for responses whose assessment has not been committed
+        self._job_seq = 0
+        self._asr_slots = threading.BoundedSemaphore(MAX_CONCURRENT_ASSESSMENTS)
         # Provider usage -> cost.usage_reported; declares the expected components for this run.
         self.cost_recorder = cost_recorder
         if cost_recorder is not None:
@@ -209,6 +250,7 @@ class AdapterTurnDriver:
     def _reset(self):
         self._pcm, self._first_audio, self._first_transcript = [], None, None
         self._text, self._turn_id, self._item_id = [], None, None
+        self._item_ids = set()
         self._pcm_bytes, self._overflow = 0, None
 
     def feed(self, event):
@@ -241,13 +283,17 @@ class AdapterTurnDriver:
                 self._first_audio = event.ts_ms
             self._turn_id = event.turn_id or self._turn_id
             self._item_id = getattr(event, "item_id", None) or self._item_id
+            if getattr(event, "item_id", None):
+                self._item_ids.add(event.item_id)
             pcm = event.pcm
             if event.sample_rate != HARNESS_RATE:
                 pcm = resample(pcm, event.sample_rate, HARNESS_RATE)
             self._pcm_bytes += len(pcm)
             limits = self.engine.limits
-            if (self._pcm_bytes > limits["pending_audio_bytes"]
-                    or self._pcm_bytes / 2 / HARNESS_RATE > limits["pending_audio_seconds"]):
+            # one response is capped separately from the session-wide pending budget (which headless runs fill up)
+            if (self._pcm_bytes > limits.get("response_audio_bytes", limits["pending_audio_bytes"])
+                    or self._pcm_bytes / 2 / HARNESS_RATE
+                    > limits.get("response_audio_seconds", limits["pending_audio_seconds"])):
                 self._discard("PENDING_AUDIO_LIMIT_EXCEEDED")  # accounted from ingress, not at response end
             else:
                 self._pcm.append(pcm)
@@ -268,7 +314,10 @@ class AdapterTurnDriver:
 
     def _mark_dead(self, item_id=None):
         """Output items are keyed by provider item id (Nova's turn id spans the whole session)."""
-        self._dead_responses.update(i for i in (item_id, self._item_id) if i)
+        self._dead_responses.update(i for i in (item_id, self._item_id, *self._item_ids) if i)
+        for job in self._jobs.values():  # identities of responses still being assessed are retired too
+            self._dead_responses.update(job.item_ids)
+        self._jobs.clear()  # every in-flight job is retired: its commit can only report 'superseded'
 
     def abandon(self):
         """Timeout or fatal failure: drop buffers, revoke engine approvals and fence any assessment worker."""
@@ -292,26 +341,31 @@ class AdapterTurnDriver:
             self.cancel_requested = True  # the runner asks the provider to stop generating
 
     def _finish(self, end_event):
+        """Synchronous convenience path: begin, analyse and commit in one call."""
+        job, outcome = self.begin(end_event)
+        if job is None:
+            return outcome
+        return self.commit(job, self.analyse(job))
+
+    def begin(self, end_event):
+        """Response end: freeze identity, epoch and facts into an immutable job. Returns (job, immediate_outcome)."""
         if self._overflow:
             reason = self._overflow
             self._reset()
             outcome = {"approval": None, "strict_speech_approval": "audio_overflow", "reason_codes": [reason]}
             self.results.append(outcome)
-            return outcome
+            return None, outcome
         pcm = b"".join(self._pcm)
         snapshot = {"turn_id": self._turn_id, "first_audio": self._first_audio,
                     "first_transcript": self._first_transcript, "text": "".join(self._text)}
-        fence = self._fence
-        self._reset()  # the next response buffers while this one is assessed, even on a worker thread
+        items = frozenset(self._item_ids | ({self._item_id} if self._item_id else set()))
+        self._reset()  # the next response buffers while this one is assessed
         if not pcm:
-            return None
+            return None, None
         started = self.now_ms()
         try:
             unit_id = self.engine.hold_audio(
-                self.run_id,
-                pcm,
-                transcript=snapshot["text"],
-                response_id=snapshot["turn_id"],
+                self.run_id, pcm, transcript=snapshot["text"], response_id=snapshot["turn_id"],
             )
         except ValueError as error:
             if str(error) != "AUDIO_BACKPRESSURE":
@@ -320,16 +374,40 @@ class AdapterTurnDriver:
             outcome = {"approval": None, "strict_speech_approval": "audio_overflow",
                        "reason_codes": ["AUDIO_BACKPRESSURE"]}
             self.results.append(outcome)
+            return None, outcome
+        facts_json = json.dumps(self.expected_claims, sort_keys=True, default=str)  # deep copy, frozen
+        self._job_seq += 1
+        job = AssessmentJob(
+            job_id=self._job_seq, unit_id=unit_id, item_ids=items, turn_id=snapshot["turn_id"],
+            epoch=self.engine.database.get(self.run_id)["generation_epoch"], facts_json=facts_json,
+            facts_hash=_sha(facts_json), snapshot=snapshot, end_event=end_event, held_at=started,
+        )
+        self._jobs[job.job_id] = job
+        return job, None
+
+    def analyse(self, job):
+        """Worker-safe half: ASR and checks against the job's frozen facts. Never approves or releases."""
+        with self._asr_slots:
+            try:
+                return self.assessor.analyse(self.run_id, job.unit_id, job.facts)
+            except ValueError as error:  # the unit was discarded before ASR started
+                return {"kind": "error", "reason": str(error)}
+
+    def commit(self, job, analysis):
+        """Orchestration path (event-loop thread): validity check, then approve/release, then record."""
+        active = self._jobs.pop(job.job_id, None)
+        decided = self.now_ms()
+        if active is None or analysis.get("kind") == "error":
+            reason = "RETIRED_BEFORE_COMMIT" if active is None else analysis["reason"]
+            outcome = {"approval": None, "strict_speech_approval": "superseded", "reason_codes": [reason]}
+            self.results.append(outcome)
             return outcome
         try:
-            outcome = self.assessor.assess(self.run_id, unit_id, self.expected_claims)
-        except ValueError as error:  # the unit was discarded by an interruption/abandon while assessing
+            outcome = self.assessor.commit(self.run_id, job.unit_id, analysis, job.facts)
+        except ValueError as error:
             outcome = {"approval": None, "strict_speech_approval": "superseded", "reason_codes": [str(error)]}
-        decided = self.now_ms()
+        outcome["facts_hash"] = job.facts_hash
         released = None
-        if outcome["approval"] and fence != self._fence:
-            outcome = {**outcome, "approval": None, "strict_speech_approval": "superseded",
-                       "reason_codes": ["ABANDONED_BEFORE_RELEASE"]}
         if outcome["approval"]:
             try:
                 self.engine.release_audio(self.run_id, outcome["approval"])
@@ -337,7 +415,7 @@ class AdapterTurnDriver:
             except ValueError as error:  # superseded while assessing (interruption revoked the token)
                 outcome = {**outcome, "approval": None, "strict_speech_approval": "superseded",
                            "reason_codes": [str(error)]}
-        self._record(unit_id, outcome, end_event, started, decided, released, snapshot)
+        self._record(job.unit_id, outcome, job.end_event, job.held_at, decided, released, job.snapshot)
         self.results.append(outcome)
         return outcome
 
