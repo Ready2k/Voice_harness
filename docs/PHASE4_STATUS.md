@@ -206,3 +206,12 @@ Not done: an API-level interruption probe with a wrong second-turn balance (cove
 ## Post-497faeb work (six parallel branches, merged)
 
 Detail is in the per-branch notes: `PHASE4_NOTES_interrupt_probe.md` (API-level interruption probe), `PHASE4_NOTES_latency.md` (matched latency on 37732bb vs 89fa78f; component only, noisy control), `PHASE4_NOTES_signed_export.md` (keyring tests for live bundles; endpoint host, region and SDK versions in exports), `PHASE4_NOTES_fact_faults_confirm.md` (FACT-01 for dates and ids, typed fault dispositions, confirmation authorised only after observed speech), `PHASE4_NOTES_caller_voice.md` (opt-in `openai_tts` caller voice), `PHASE4_NOTES_bedrock_calibration.md` (Claude Haiku 4.5 judge: only CARE-01 clears numeric thresholds; no policy approved, no blocking).
+
+## Response to the 8e2b402 recheck
+
+| # | Finding | Fix |
+| --- | --- | --- |
+| 1 (P1) | "I cannot confirm the cancellation" authorised a cancellation | Consent now needs an explicit affirmative that opens the reply (yes, go ahead, I confirm, ...). `confirm` elsewhere in a sentence is not consent. Negation (including `cannot`, any `n't`, typographic apostrophes), hedges, conditionals, questions and mixed speech are refused as deny or ambiguous. Regressions: classifier phrasings and API-level runs for `cannot` and `can't ... yet`, asserting no accepted confirmation and no id delivered. |
+| 2 (P2) | A wrong transaction date passed by matching an unrelated `as_of` date | Returned dates keep their entity and field. A spoken date is checked only against the entity named in its sentence (or the field its cue word names). Several entities in one sentence, or a date that fits only some candidate entities with no owner named, is `untestable` (`DATE_ENTITY_UNRESOLVED`). Regressions: unrelated `as_of`, swapped transaction dates, unnamed owner. |
+
+Not done: the API-level consent regressions mock the engine's present/confirm step like the existing ones, so the review's real-engine cancellation probe is not reproduced here; there is no API-level date test through the local MCP.

@@ -461,6 +461,12 @@ class LiveApi(unittest.TestCase):
     def test_out_of_band_confirmation_is_withheld_when_the_caller_denies(self):
         self.assert_confirmation_withheld("No, do not cancel that.")
 
+    def test_out_of_band_confirmation_is_withheld_for_a_negated_confirm(self):
+        self.assert_confirmation_withheld("I cannot confirm the cancellation.")
+
+    def test_out_of_band_confirmation_is_withheld_for_a_contracted_negated_confirm(self):
+        self.assert_confirmation_withheld("I can\u2019t confirm yet.")
+
     def test_out_of_band_confirmation_is_withheld_when_the_transcript_is_blank(self):
         self.assert_confirmation_withheld("")
 

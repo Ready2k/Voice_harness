@@ -71,13 +71,22 @@ def spoken_facts(text):
     return claims, gaps
 
 
-def _walk(value, key, out):
+def _entity(value):
+    """(kind, digits) when a returned object names a payment or transaction."""
+    for key, kind in (("transaction_id", "txn"), ("payment_id", "payment")):
+        if isinstance(value.get(key), str):
+            return kind, re.sub(r"\D", "", value[key]).lstrip("0")
+    return None
+
+
+def _walk(value, key, out, entity=None):
     if isinstance(value, dict):
+        entity = _entity(value) or entity
         for k, v in value.items():
-            _walk(v, k, out)
+            _walk(v, k, out, entity)
     elif isinstance(value, list):
         for v in value:
-            _walk(v, key, out)
+            _walk(v, key, out, entity)
     elif isinstance(value, str):
         if key == "account_id":
             out["account"].add(re.sub(r"\D", "", value))
@@ -85,12 +94,13 @@ def _walk(value, key, out):
             out["payment" if value.startswith("payment") else "txn"].add(re.sub(r"\D", "", value))
         match = re.match(r"(\d{4})-(\d{2})-(\d{2})", value)
         if key and match and re.search(r"(_at|date|as_of|until)$", key):
-            out["date"].append(_expected_date(match.group(0)))
+            # A date is a fact about one entity's one field, never a free-floating value.
+            out["dates"].append({"entity": entity, "field": key, "value": _expected_date(match.group(0))})
 
 
 def returned_facts(ctx, before_sequence):
     """Values trusted tools returned (successful, executed) before ``before_sequence``."""
-    out = {"account": set(), "payment": set(), "txn": set(), "date": []}
+    out = {"account": set(), "payment": set(), "txn": set(), "dates": []}
     for call in ctx.calls().values():
         done = call.get("completed")
         if done and done["content"].get("status") == "success" and call.get("result") \
@@ -100,27 +110,60 @@ def returned_facts(ctx, before_sequence):
     return out
 
 
+_FIELD_CUES = (("booked", "booked_at"), ("as of", "as_of"), ("due", "due"), ("scheduled", "scheduled"))
+
+
+def _date_candidates(sentence, entity_claims, facts):
+    """(candidates, unresolved) for a spoken date: the returned dates it may legitimately refer to."""
+    dated = facts["dates"]
+    entities = {e for e in entity_claims}
+    if len(entities) > 1:
+        return [], True  # several entities in one clause: the date's owner is not recoverable
+    if entities:
+        return [d for d in dated if d["entity"] == next(iter(entities))], False
+    lowered = sentence.lower()
+    for cue, field in _FIELD_CUES:
+        if cue in lowered:
+            narrowed = [d for d in dated if d["field"].startswith(field)]
+            if narrowed:
+                return narrowed, False
+    if re.search(r"\b(payment|transaction|txn)\b", lowered):
+        return [d for d in dated if d["entity"]], False
+    return [d for d in dated if d["entity"] is None], False
+
+
 def check_unit(text, facts):
     """(failure codes, gap codes, verified count) for one independent transcript."""
-    claims, gaps = spoken_facts(text)
-    failures, verified = [], 0
-    for kind, value in claims:
-        if kind == "date":
-            if not facts["date"]:
-                gaps.append("DATE_SOURCE_UNAVAILABLE")
-            elif any(_date_matches(value, d) for d in facts["date"]):
+    failures, gaps, verified = [], [], 0
+    for sentence in [s for s in re.split(r"[.;!?]+(?:\s+|$)|\n", text) if s.strip()]:
+        claims, claim_gaps = spoken_facts(sentence)
+        gaps += claim_gaps
+        entity_claims = {(k, v.lstrip("0")) for k, v in claims if k in ("payment", "txn")}
+        for kind, value in claims:
+            if kind == "date":
+                candidates, unresolved = _date_candidates(sentence, entity_claims, facts)
+                if unresolved:
+                    gaps.append("DATE_ENTITY_UNRESOLVED")
+                elif not candidates:
+                    gaps.append("DATE_SOURCE_UNAVAILABLE")
+                elif not any(_date_matches(value, d["value"]) for d in candidates):
+                    failures.append("DATE_MISMATCH")
+                elif len({d["entity"] for d in candidates if _date_matches(value, d["value"])}) < \
+                        len({d["entity"] for d in candidates}) and not entity_claims:
+                    gaps.append("DATE_ENTITY_UNRESOLVED")  # matches only some candidate entities, owner unnamed
+                else:
+                    verified += 1
+                continue
+            known = facts[kind]
+            if not known:
+                gaps.append(_LABELS[kind] + "_SOURCE_UNAVAILABLE")
+            elif kind == "account":
+                if any(a.endswith(value) for a in known):
+                    verified += 1
+                else:
+                    failures.append("ACCOUNT_DIGITS_MISMATCH")
+            elif any(k.lstrip("0") == value.lstrip("0") for k in known):
                 verified += 1
             else:
-                failures.append("DATE_MISMATCH")
-            continue
-        known = facts[kind]
-        if not known:
-            gaps.append(_LABELS[kind] + "_SOURCE_UNAVAILABLE")
-        elif kind == "account":
-            verified, failures = (verified + 1, failures) if any(a.endswith(value) for a in known) \
-                else (verified, failures + ["ACCOUNT_DIGITS_MISMATCH"])
-        elif any(k.lstrip("0") == value.lstrip("0") for k in known):
-            verified += 1
-        else:
-            failures.append(_LABELS[kind] + "_MISMATCH")
+                failures.append(_LABELS[kind] + "_MISMATCH")
     return failures, gaps, verified

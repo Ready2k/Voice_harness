@@ -66,6 +66,26 @@ class NonAmountFacts(unittest.TestCase):
         self.assertEqual(ambiguous[0], "untestable")
         self.assertIn("DATE_AMBIGUOUS", ambiguous[1])
 
+    def test_a_transaction_date_cannot_match_an_unrelated_account_summary_date(self):
+        events = spoken(["Transaction 001 was booked on 18 October 2026."], results={
+            "account_id": "acct_1001", "balance_minor": 123456, "as_of": "2026-10-18T09:00:00Z",
+            "transactions": [{"transaction_id": "txn_001", "booked_at": "2026-10-16T09:00:00Z"}]})
+        self.assertEqual(fact(events), ("fail", ["DATE_MISMATCH"]))
+
+    def test_swapped_transaction_dates_fail_and_the_right_entity_date_passes(self):
+        results = {"transactions": [{"transaction_id": "txn_001", "booked_at": "2026-10-16T09:00:00Z"},
+                                    {"transaction_id": "txn_002", "booked_at": "2026-10-17T09:00:00Z"}]}
+        self.assertEqual(fact(spoken(["Transaction 001 was booked on 17 October 2026."], results)),
+                         ("fail", ["DATE_MISMATCH"]))
+        self.assertEqual(fact(spoken(["Transaction 002 was booked on 17 October 2026."], results)),
+                         ("pass", ["NON_AMOUNT_FACTS_MATCH"]))
+
+    def test_an_unnamed_owner_of_a_date_that_fits_only_some_entities_is_unresolved(self):
+        results = {"transactions": [{"transaction_id": "txn_001", "booked_at": "2026-10-16T09:00:00Z"},
+                                    {"transaction_id": "txn_002", "booked_at": "2026-10-17T09:00:00Z"}]}
+        self.assertEqual(fact(spoken(["One was booked on 17 October 2026."], results))[0], "untestable")
+        self.assertEqual(fact(spoken(["Something was booked on 20 October 2026."], results))[0], "fail")
+
     def test_a_date_with_no_returned_date_is_untestable(self):
         events = spoken(["Your next payment is on 3 November."], results={"account_id": "acct_1001"})
         self.assertEqual(fact(events), ("untestable", ["DATE_SOURCE_UNAVAILABLE"]))
@@ -179,6 +199,16 @@ class VoiceConfirmation(unittest.TestCase):
         for text, choice in (("No, don't cancel it", "deny"), ("Yes, no wait, stop", "ambiguous"),
                              ("Please verify me", "ambiguous"), ("", "ambiguous"), ("   ", "ambiguous")):
             self.assertEqual(classify_reply(text)[0], choice, text)
+
+    def test_negated_hedged_conditional_and_metalinguistic_uses_of_confirm_are_never_consent(self):
+        for text in ("I cannot confirm the cancellation.", "I can't confirm the cancellation.",
+                     "I can\u2019t confirm yet.", "I won't confirm that.", "Can you confirm what that does?",
+                     "The word confirm is on the screen.", "Please confirm it for me", "I'll confirm later",
+                     "Yes, but I can't confirm", "Confirm", "If you confirm it is fine", "I don't confirm",
+                     "Not confirmed", "Yes?", "I am unsure, maybe"):
+            self.assertNotEqual(classify_reply(text)[0], "affirm", text)
+        for text in ("Yes please, cancel payment payment_001 now.", "Yes.", "Go ahead", "I confirm", "That's right"):
+            self.assertEqual(classify_reply(text)[0], "affirm", text)
 
     def test_observation_needs_an_available_backend_and_audio(self):
         pcm = b"\x01\x00" * 100

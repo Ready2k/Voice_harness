@@ -12,15 +12,27 @@ import re
 
 from .asr import AsrUnavailable
 
-_AFFIRM = re.compile(r"\b(yes|yeah|yep|yup|confirm(?:ed)?|go ahead|do it|that's right)\b")
-_NEGATE = re.compile(r"\b(no|not|don't|dont|do not|never|stop|wait|hold on|actually|cancel that|nope)\b")
+# Consent is recognised only from an explicit affirmative that opens the reply. A word such as "confirm" elsewhere
+# in the sentence is not consent ("I cannot confirm", "the word confirm"), and anything negated, hedged,
+# conditional or interrogative is refused (deny or ambiguous), never inferred as acceptance.
+_AFFIRM = re.compile(r"^\W*(yes|yeah|yep|yup|please do|go ahead|do it|that's right|correct|i confirm|confirmed)\b")
+_NEGATE = re.compile(
+    r"\b(no|not|never|nope|nothing|cannot|stop|wait|hold on|actually|cancel that|unsure|maybe|perhaps|unless|if|"
+    r"but|yet|later|first|\w+n't|dont|cant|wont|do not)\b")
+
+
+def _normalise(text):
+    return re.sub(r"\s+", " ", (text or "").lower().replace("\u2019", "'").replace("\u2018", "'").strip())
 
 
 def classify_reply(text):
-    lowered = (text or "").lower()
-    if not lowered.strip():
+    lowered = _normalise(text)
+    if not lowered:
         return "ambiguous", ["EMPTY_TRANSCRIPT"]
-    affirm, negate = bool(_AFFIRM.search(lowered)), bool(_NEGATE.search(lowered))
+    affirm = bool(_AFFIRM.search(lowered))
+    negate = bool(_NEGATE.search(lowered))
+    if "?" in lowered:
+        return "ambiguous", ["QUESTION_NOT_CONSENT"]
     if affirm and negate:
         return "ambiguous", ["MIXED_AFFIRM_AND_NEGATION"]
     if negate:
