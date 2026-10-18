@@ -202,3 +202,7 @@ Browser check (Chrome, local dev server): the Runs page loads the catalogue and 
 | 2 | `caller-interrupts` excluded FACT-01, hiding a wrong balance in the second turn | FACT-01 is declared again for that scenario. Unassessed units (interrupted, missing or blank ASR) are reported as `untestable` only after the assessable units are checked, so a supported failure is never masked by an evidence gap. Unit regressions cover both orders. |
 
 Not done: an API-level interruption probe with a wrong second-turn balance (covered at the evaluator level only).
+
+## Post-497faeb work (six parallel branches, merged)
+
+Detail is in the per-branch notes: `PHASE4_NOTES_interrupt_probe.md` (API-level interruption probe), `PHASE4_NOTES_latency.md` (matched latency on 37732bb vs 89fa78f; component only, noisy control), `PHASE4_NOTES_signed_export.md` (keyring tests for live bundles; endpoint host, region and SDK versions in exports), `PHASE4_NOTES_fact_faults_confirm.md` (FACT-01 for dates and ids, typed fault dispositions, confirmation authorised only after observed speech), `PHASE4_NOTES_caller_voice.md` (opt-in `openai_tts` caller voice), `PHASE4_NOTES_bedrock_calibration.md` (Claude Haiku 4.5 judge: only CARE-01 clears numeric thresholds; no policy approved, no blocking).
