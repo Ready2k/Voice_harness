@@ -1158,6 +1158,100 @@
       }
     ]
   },
+  "run.live_binding": {
+    "scenario_id": "identity-impatient-en-gb-clean-001",
+    "scenario_hash": "2a9569d5160893662a5c3579f2531ac3250dcb5a42a2a4832c5503e28424b8d8",
+    "adapter": "openai_realtime",
+    "seed": 0,
+    "interrupt_mode": "client",
+    "audio_profile": "clean_studio",
+    "faults": [],
+    "limits": {
+      "pending_audio_seconds": 15.0
+    },
+    "harness_mechanics": [],
+    "provider": {
+      "provider_config_id": "openai-realtime-live",
+      "adapter": "openai_realtime",
+      "family": "openai",
+      "requested_model_id": "gpt-realtime-2.1",
+      "returned_model_id": "gpt-realtime-2.1",
+      "provider_session_id": "sess_001",
+      "capability_status": "diagnostic_unverified",
+      "capability_report_id": null,
+      "capability_reason_codes": [
+        "NO_CAPABILITY_REPORT"
+      ],
+      "endpoint_host": "api.openai.com",
+      "region": null,
+      "sdk_versions": {
+        "websockets": "15.0"
+      }
+    }
+  },
+  "input.caller_audio": {
+    "turn": 0,
+    "source_text_sha256": "982d9e3eb996f559e633f4d194def3761d909f5a3b647d1a851fead67c32c9d1",
+    "pcm_sha256": "2a9569d5160893662a5c3579f2531ac3250dcb5a42a2a4832c5503e28424b8d8",
+    "byte_count": 96000,
+    "sample_rate": 24000,
+    "audio_retained": false,
+    "transformations": [
+      "clean_studio"
+    ],
+    "stream_started_ms": 1000,
+    "stream_ended_ms": 3000,
+    "clock_domain_id": "process_fixture"
+  },
+  "assessment.abandoned": {
+    "reason": "TURN_TIMEOUT",
+    "retired_jobs": [
+      {
+        "job_id": 1,
+        "unit_id": "unit_001",
+        "item_ids": [
+          "item_a"
+        ]
+      }
+    ],
+    "buffered_item_ids": [
+      "item_b"
+    ],
+    "generation_epoch": 2,
+    "released": false,
+    "unkeyed_quarantine": false
+  },
+  "adapter.native_event": {
+    "adapter": "openai_realtime",
+    "native_type": "response.output_audio.delta",
+    "payload_sha256": "2a9569d5160893662a5c3579f2531ac3250dcb5a42a2a4832c5503e28424b8d8",
+    "payload_bytes": 4800,
+    "payload_retained": false,
+    "omission_reason": "AUDIO_AND_BULK_PAYLOAD_HASH_ONLY",
+    "received_ms": 1200,
+    "clock_domain_id": "process_fixture"
+  },
+  "fault.disposition": {
+    "fault_kind": "tool_error",
+    "at_turn": 0,
+    "tool": "verify_identity",
+    "disposition": "handled",
+    "reason_codes": [
+      "ERROR_NOT_FABRICATED"
+    ],
+    "evidence_event_ids": [
+      "evt_001"
+    ]
+  },
+  "confirmation.voice_observation": {
+    "request_id": "confirmation_request_001",
+    "observed_choice": "affirm",
+    "reason_codes": [],
+    "pcm_sha256": "2a9569d5160893662a5c3579f2531ac3250dcb5a42a2a4832c5503e28424b8d8",
+    "asr_backend": "scripted_offline",
+    "transcript_sha256": "2a9569d5160893662a5c3579f2531ac3250dcb5a42a2a4832c5503e28424b8d8",
+    "authorised": true
+  },
   "evidence-manifest": {
     "schema_version": "0.3",
     "run_id": "run_001",
@@ -1240,14 +1334,14 @@
     "provider_event_type": null,
     "provider_event": {},
     "sequence": 1,
-    "event_id": "evt_4ed5406ae60b4aae",
-    "occurred_at": "2026-10-17T10:57:28Z",
-    "monotonic_ns": 824942162464958,
+    "event_id": "evt_0000000000000001",
+    "occurred_at": "2026-10-16T10:00:00Z",
+    "monotonic_ns": 1,
     "schema_version": "0.3",
-    "clock_domain_id": "process_1ca2091b17c440608442f5eb83bbcd7d",
+    "clock_domain_id": "process_example",
     "prev_hash": null,
-    "event_hash": "426694f65eeba1e3ab070e87c1a258bca045a0fd04a09201cb6e3257a8e4e677",
-    "producer_id": "process_1ca2091b17c440608442f5eb83bbcd7d",
+    "event_hash": "d7bb6d66e60165776c1d520b0315d7c99aecfc44136cc0a7f999f40d8c06f222",
+    "producer_id": "process_example",
     "producer_sequence": 0,
     "connection_epoch": 1,
     "redaction": {

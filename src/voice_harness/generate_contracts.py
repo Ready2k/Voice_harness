@@ -304,11 +304,19 @@ def generate(root="contracts"):
         json.dumps(schema, indent=2) + "\n"
     )
     types["CanonicalEvent"] = schema
-    examples["canonical-event"] = example = Event(
-        "example", "orchestrator", "run.started", {}
-    ).to_dict()
-    example["sequence"] = 1
-    sealed = Event(**example)
+    # Pinned identity, clock and producer fields keep regeneration byte-identical.
+    sealed = Event(
+        "example",
+        "orchestrator",
+        "run.started",
+        {},
+        sequence=1,
+        event_id="evt_0000000000000001",
+        occurred_at="2026-10-16T10:00:00Z",
+        monotonic_ns=1,
+        clock_domain_id="process_example",
+        producer_id="process_example",
+    )
     sealed.seal(None)
     examples["canonical-event"] = sealed.to_dict()
     (root / "examples.json").write_text(json.dumps(examples, indent=2) + "\n")

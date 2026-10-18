@@ -1,5 +1,7 @@
 # Phase 1 acceptance status
 
+**Current local validation (18 October 2026, `f477615`, SQLite):** 603 Python tests OK (6 skipped, including the new contracts-in-sync test) and the browser tests passed. The Compose/PostgreSQL suite and lint were not re-run on this commit. The figures below are historical, labelled by commit.
+
 **Latest validation (18 October 2026, `89fa78f`):** CI passed; local Compose/PostgreSQL validation passed 455 Python tests (5 skipped) and 28 browser tests, plus lint. A matched rerun against `31ccddd` measured component-path p95 **9.29–13.17 ms before / 9.50–13.70 ms after** under the existing 8-vCPU / 1 GiB benchmark profile. The study and exact source/image hashes are in `artifacts/matched-latency-31ccddd-vs-89fa78f-2026-10-18.json`. Ten-session WebSocket p95 was higher on the current revision in both the main and reversed-order check; causal attribution remains unresolved. See [the current review](CODE_SPEC_RECHECK_89fa78f.md) for remaining approval gaps, deferred scope and full measurement limits. This supersedes the older component artifact below for current-source reporting; it is not a live-assurance pass.
 
 **Later commit (not re-benchmarked):** `1a96590` (recheck 89fa78f fixes: clause-level amount attribution, expiry-aware verified account, unkeyed quarantine) passed 465 local tests (6 skipped, SQLite) and lint; the Compose/PostgreSQL suite, browser tests and the matched latency study above were not re-run on it.

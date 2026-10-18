@@ -33,6 +33,8 @@ docker compose exec -T api python -m voice_harness verify-bundle /data/demo/RUN_
 
 Tests use `unittest` (not pytest). `tests/test_release.py` requires PostgreSQL, so it only fully runs under Compose. Browser tests are `tests/browser/*.test.mjs` (Node). The provider coverage panel (AC-20) is served at `/client/coverage.html` (needs the operator token).
 
+`tests/test_contracts_in_sync.py` fails if the checked-in `contracts/` differ from generator output. After changing pydantic models or API routes, rerun `generate_contracts` and commit the result; the generator is deterministic, so any diff is real drift.
+
 Dependencies are pinned in `pyproject.toml` and hash-locked in `requirements.lock`; Python and collector images are pinned by digest — update the lock, not just `pyproject.toml`.
 
 ## Architecture

@@ -59,7 +59,7 @@
 - A first OpenAI vs Nova comparison on the catalogue (needs go-ahead for API spend).
 - The synthetic caller uses macOS `say`; the catalogue declares locales but `say` voice selection is not
   yet locale-aware. Narrowband/noise are simple synthetic shaping, not measured telephony.
-- xAI and Google adapters remain blocked on API keys.
+- (Superseded: the xAI and Google adapters were merged later; see their sections below.)
 
 ## Response to the 2026-10-18 code/spec review
 
