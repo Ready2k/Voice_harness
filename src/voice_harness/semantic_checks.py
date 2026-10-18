@@ -49,7 +49,7 @@ NUMERIC_DATE = re.compile(r"\b(?P<a>\d{1,2})[/.](?P<b>\d{1,2})(?:[/.](?P<y>\d{4}
 
 # Constructs the rule engine cannot read faithfully: another currency, or a signed/overdrawn balance.
 FOREIGN_CURRENCY = re.compile(r"[$€¥]|\b(?:dollars?|euros?|usd|eur|cents?|bucks|yen)\b")
-SIGNED_AMOUNT = re.compile(r"\b(?:minus|negative|overdrawn|in the red)\b|-\s?£")
+SIGNED_AMOUNT = re.compile(r"\b(?:minus|negative|overdrawn|in the red)\b|-\s?£|£\s?-|-\s?\d[\d,.]*\s*(?:pounds?|quid|gbp)\b")
 
 
 def _blank(text, span):

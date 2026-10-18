@@ -195,6 +195,8 @@ class AdapterTurnDriver:
         self.adapter_clock_domain, self.now_ms = adapter_clock_domain, now_ms
         self.results = []
         self.interruptions_applied, self.cancel_requested = 0, False
+        self._fence = 0  # advanced on abandon/timeout: a worker started before it can never release
+        self._dead_responses = set()  # responses cut off by an interruption; their late audio is dropped
         # Provider usage -> cost.usage_reported; declares the expected components for this run.
         self.cost_recorder = cost_recorder
         if cost_recorder is not None:
@@ -206,7 +208,7 @@ class AdapterTurnDriver:
 
     def _reset(self):
         self._pcm, self._first_audio, self._first_transcript = [], None, None
-        self._text, self._turn_id = [], None
+        self._text, self._turn_id, self._item_id = [], None, None
         self._pcm_bytes, self._overflow = 0, None
 
     def feed(self, event):
@@ -231,11 +233,14 @@ class AdapterTurnDriver:
         elif kind == "error" and event.code == AUDIO_OVERFLOW_CODE:
             self._discard("ADAPTER_QUEUE_OVERFLOW")
         elif kind == "audio_out":
+            if getattr(event, "item_id", None) and event.item_id in self._dead_responses:
+                return None  # late audio of an interrupted response must not start a unit in the new epoch
             if self._overflow:
                 return None  # already over budget: unreleased audio is discarded, never buffered
             if self._first_audio is None:
                 self._first_audio = event.ts_ms
             self._turn_id = event.turn_id or self._turn_id
+            self._item_id = getattr(event, "item_id", None) or self._item_id
             pcm = event.pcm
             if event.sample_rate != HARNESS_RATE:
                 pcm = resample(pcm, event.sample_rate, HARNESS_RATE)
@@ -247,6 +252,7 @@ class AdapterTurnDriver:
             else:
                 self._pcm.append(pcm)
         elif kind == "interrupted":
+            self._mark_dead(getattr(event, "item_id", None))
             self._reset()  # unreleased audio is never flushed; the buffer is dropped
             self.interrupt()
         elif kind == "turn_end":
@@ -255,8 +261,21 @@ class AdapterTurnDriver:
 
     def interrupt(self, provider_receipt=None):
         """Provider or client interruption: advance the epoch, revoke tokens, discard unreleased units."""
+        self._mark_dead()
+        self._reset()
         self.engine.interrupt(self.run_id, provider_receipt)
         self.interruptions_applied += 1
+
+    def _mark_dead(self, item_id=None):
+        """Output items are keyed by provider item id (Nova's turn id spans the whole session)."""
+        self._dead_responses.update(i for i in (item_id, self._item_id) if i)
+
+    def abandon(self):
+        """Timeout or fatal failure: drop buffers, revoke engine approvals and fence any assessment worker."""
+        self._fence += 1
+        self._mark_dead()
+        self._reset()
+        self.interrupt()
 
     def _discard(self, reason):
         """Drop buffered audio and record the typed failure; the response is never assessed or released."""
@@ -280,29 +299,37 @@ class AdapterTurnDriver:
             self.results.append(outcome)
             return outcome
         pcm = b"".join(self._pcm)
+        snapshot = {"turn_id": self._turn_id, "first_audio": self._first_audio,
+                    "first_transcript": self._first_transcript, "text": "".join(self._text)}
+        fence = self._fence
+        self._reset()  # the next response buffers while this one is assessed, even on a worker thread
         if not pcm:
-            self._reset()
             return None
         started = self.now_ms()
         try:
             unit_id = self.engine.hold_audio(
                 self.run_id,
                 pcm,
-                transcript="".join(self._text),
-                response_id=self._turn_id,
+                transcript=snapshot["text"],
+                response_id=snapshot["turn_id"],
             )
         except ValueError as error:
             if str(error) != "AUDIO_BACKPRESSURE":
                 raise
-            self._reset()
             self.cancel_requested = True
             outcome = {"approval": None, "strict_speech_approval": "audio_overflow",
                        "reason_codes": ["AUDIO_BACKPRESSURE"]}
             self.results.append(outcome)
             return outcome
-        outcome = self.assessor.assess(self.run_id, unit_id, self.expected_claims)
+        try:
+            outcome = self.assessor.assess(self.run_id, unit_id, self.expected_claims)
+        except ValueError as error:  # the unit was discarded by an interruption/abandon while assessing
+            outcome = {"approval": None, "strict_speech_approval": "superseded", "reason_codes": [str(error)]}
         decided = self.now_ms()
         released = None
+        if outcome["approval"] and fence != self._fence:
+            outcome = {**outcome, "approval": None, "strict_speech_approval": "superseded",
+                       "reason_codes": ["ABANDONED_BEFORE_RELEASE"]}
         if outcome["approval"]:
             try:
                 self.engine.release_audio(self.run_id, outcome["approval"])
@@ -310,12 +337,11 @@ class AdapterTurnDriver:
             except ValueError as error:  # superseded while assessing (interruption revoked the token)
                 outcome = {**outcome, "approval": None, "strict_speech_approval": "superseded",
                            "reason_codes": [str(error)]}
-        self._record(unit_id, outcome, end_event, started, decided, released)
+        self._record(unit_id, outcome, end_event, started, decided, released, snapshot)
         self.results.append(outcome)
-        self._reset()
         return outcome
 
-    def _record(self, unit_id, outcome, end_event, held_at, decided_at, released_at):
+    def _record(self, unit_id, outcome, end_event, held_at, decided_at, released_at, snap):
         same = self.adapter_clock_domain == PROCESS_CLOCK_DOMAIN
         end = self.speech_end_ms
 
@@ -329,9 +355,9 @@ class AdapterTurnDriver:
             return _metric(name, float(point - origin), label_from, label_to)
 
         metrics = [
-            since(self.speech_start_ms, self._first_transcript, "input.speech_start",
+            since(self.speech_start_ms, snap["first_transcript"], "input.speech_start",
                   "first_nonempty_transcript", "first_transcript"),
-            since(end, self._first_audio, "input.speech_end", "first_provider_audio",
+            since(end, snap["first_audio"], "input.speech_end", "first_provider_audio",
                   "time_to_first_generated_audio"),
             since(end, released_at, "input.speech_end", "first_gate_release", "time_to_first_released_audio")
             if released_at is not None
@@ -346,7 +372,7 @@ class AdapterTurnDriver:
                 "orchestrator",
                 "benchmark.adapter_metrics",
                 {
-                    "response_id": self._turn_id,
+                    "response_id": snap["turn_id"],
                     "unit_id": unit_id,
                     "source": "adapter_events",
                     "clock_domain_id": PROCESS_CLOCK_DOMAIN,

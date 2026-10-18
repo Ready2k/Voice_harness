@@ -77,6 +77,9 @@ def redact(obj: Any) -> Any:
 
 
 class OpenAIRealtimeAdapter:
+    # Runner turn accounting: a tool-calling response ends (response.done) before the response that uses the tool result.
+    TOOL_CALL_ENDS_RESPONSE = True
+
     def __init__(self, *, api_key: str | None = None, url: str | None = None, model: str = DEFAULT_MODEL,
                  ack_timeout: float = 5.0):
         self._api_key = api_key if api_key is not None else os.environ.get("OPENAI_API_KEY")
@@ -302,7 +305,7 @@ class OpenAIRealtimeAdapter:
 
     # ------------------------------------------------------------------ inbound
     def _emit(self, cls, **kw):
-        if cls is AudioOut and self._queue.qsize() >= AUDIO_QUEUE_MAX:
+        if cls in (AudioOut, TranscriptDelta) and self._queue.qsize() >= AUDIO_QUEUE_MAX:
             self._audio_overflow()
             return
         self._queue.put_nowait(cls(session_id=self.session_id, turn_id=self._response_id,

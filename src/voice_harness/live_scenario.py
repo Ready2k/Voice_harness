@@ -31,6 +31,7 @@ RATE = 24000
 TURN_TIMEOUT_S = 45.0
 # Replies are held for whole-response assessment, so none of an interrupted reply was ever played.
 PLAYED_MS_WHILE_HELD = 0
+NATIVE_FLUSH_EVERY = 100
 # Whole-response approval holds a full reply; live replies exceed the 2 s mock default.
 # Engines for live runs are built with these limits, which the run manifest records.
 LIVE_LIMITS = {"pending_audio_seconds": 15.0, "pending_audio_bytes": 15 * RATE * 2}
@@ -63,6 +64,9 @@ def apply_profile(pcm: bytes, profile: str, faults, seed=0) -> bytes:
     return degrade(pcm, snr_db=snr, narrowband=spec["narrowband"], seed=seed)
 
 
+CONTINUE = object()  # sentinel: the event does not settle the turn
+
+
 class LiveScenarioRunner:
     def __init__(self, engine, run_id, adapter, assessor, scenario_id, *, caller_audio, cost_recorder=None,
                  seed=0, turn_timeout_s=TURN_TIMEOUT_S, interrupt_mode="client", barge_after_tool=False,
@@ -91,6 +95,8 @@ class LiveScenarioRunner:
             "payload_retained": False, "omission_reason": "HASH_ONLY_PAYLOAD_NOT_STORED",
             "received_ms": int(time.monotonic() * 1000), "clock_domain_id": PROCESS_CLOCK_DOMAIN,
         })
+        if len(self._native) >= NATIVE_FLUSH_EVERY:
+            self._flush_native()  # bounded memory, and a mid-turn crash loses at most this many records
 
     def _flush_native(self):
         pending, self._native = self._native, []
@@ -161,55 +167,98 @@ class LiveScenarioRunner:
         follow_up = False  # a tool result was submitted, so the provider's next response belongs to this same turn
         tool_seen = False  # a tool-using reply speaks again after its result; that long reply is the barge-in target
 
+        async def step(event, outcome):
+            """Decide what a fed event means for the turn; returns an outcome dict, or CONTINUE."""
+            nonlocal follow_up
+            if self.driver.cancel_requested:
+                self.driver.cancel_requested = False
+                await self._cancel_generation()
+            if until_audio and event.type == "audio_out" and (tool_seen or not self.tool_calls_expected):
+                # Playback is simulated at real time: the caller cuts in 500 ms into the reply.
+                await asyncio.sleep(0.5)
+                self._cancelled_ends += 1
+                if self.interrupt_mode == "client":
+                    receipt = await self.adapter.interrupt(getattr(event, "item_id", None), PLAYED_MS_WHILE_HELD)
+                    self.interrupt_results.append(receipt)
+                    self.driver.interrupt(receipt)  # engine epoch, tokens, queued tools and history state
+                return {"approval": None, "strict_speech_approval": "barge_in_not_assessed"}
+            if event.type == "turn_end" and follow_up:
+                follow_up = False  # end of the tool-calling response; wait for the one that uses the result
+                return CONTINUE
+            if event.type == "turn_end" and outcome is not None:
+                return outcome
+            if event.type == "turn_end" and self._cancelled_ends:
+                self._cancelled_ends -= 1  # the interrupted reply's own turn_end, not the new turn's
+                return CONTINUE
+            if event.type == "turn_end":
+                return {"approval": None, "strict_speech_approval": "no_audio"}
+            return CONTINUE
+
         async def pump():
             nonlocal tool_seen, follow_up
-            async for event in self.adapter.receive():
-                if event.type == "tool_call":
-                    await self._tool(bank, event)
-                    tool_seen = follow_up = True
-                    continue
-                if event.type == "error":
-                    errors.append({"code": event.code, "fatal": event.fatal})
-                    if event.fatal:
-                        return None
-                if event.type == "interrupted":
-                    self.interruptions += 1
-                if event.type == "turn_end":
-                    # Assessment does blocking ASR/DB work: keep the loop free for other tasks and timeouts.
-                    outcome = await asyncio.to_thread(self.driver.feed, event)
-                else:
-                    outcome = self.driver.feed(event)
-                if self.driver.cancel_requested:
-                    self.driver.cancel_requested = False
-                    await self._cancel_generation()
-                if until_audio and event.type == "audio_out" and (tool_seen or not self.tool_calls_expected):
-                    # Playback is simulated at real time: the caller cuts in 500 ms into the reply.
-                    await asyncio.sleep(0.5)
-                    self._cancelled_ends += 1
-                    if self.interrupt_mode == "client":
-                        receipt = await self.adapter.interrupt(getattr(event, "item_id", None), PLAYED_MS_WHILE_HELD)
-                        self.interrupt_results.append(receipt)
-                        self.driver.interrupt(receipt)  # engine epoch, tokens, queued tools and history state
-                    return {"approval": None, "strict_speech_approval": "barge_in_not_assessed"}
-                if event.type == "turn_end" and follow_up:
-                    follow_up = False  # end of the tool-calling response; wait for the one that uses the result
-                    continue
-                if event.type == "turn_end" and outcome is not None:
-                    return outcome
-                if event.type == "turn_end" and self._cancelled_ends:
-                    self._cancelled_ends -= 1  # the interrupted reply's own turn_end, not the new turn's
-                    continue
-                if event.type == "turn_end":
-                    return {"approval": None, "strict_speech_approval": "no_audio"}
-            return None
+            events = self.adapter.receive().__aiter__()
+            nxt, assessing = None, None  # assessing: (task, turn_end event) while a worker runs ASR
+            try:
+                while True:
+                    if nxt is None:
+                        nxt = asyncio.ensure_future(events.__anext__())
+                    waiting = {nxt} | ({assessing[0]} if assessing else set())
+                    await asyncio.wait(waiting, return_when=asyncio.FIRST_COMPLETED)
+                    if assessing and assessing[0].done():
+                        task, ended = assessing
+                        assessing = None
+                        result = await step(ended, task.result())
+                        if result is not CONTINUE:
+                            return result
+                        continue
+                    try:
+                        event = nxt.result()
+                    except StopAsyncIteration:
+                        if assessing is None:
+                            return None
+                        task, ended = assessing  # the stream closed while the last response was being assessed
+                        assessing = None
+                        result = await step(ended, await task)
+                        return None if result is CONTINUE else result
+                    finally:
+                        nxt = None
+                    if event.type == "tool_call":
+                        await self._tool(bank, event)
+                        tool_seen = True
+                        follow_up = getattr(self.adapter, "TOOL_CALL_ENDS_RESPONSE", True)
+                        continue
+                    if event.type == "error":
+                        errors.append({"code": event.code, "fatal": event.fatal})
+                        if event.fatal:
+                            return None
+                    if event.type == "interrupted":
+                        self.interruptions += 1
+                    if event.type == "turn_end":
+                        if assessing:  # a second response end while one is still being assessed: settle the first
+                            task, ended = assessing
+                            assessing = None
+                            result = await step(ended, await task)
+                            if result is not CONTINUE:
+                                return result
+                        # Assessment does blocking ASR/DB work on a worker; intake keeps running meanwhile.
+                        assessing = (asyncio.ensure_future(asyncio.to_thread(self.driver.feed, event)), event)
+                        continue
+                    result = await step(event, self.driver.feed(event))
+                    if result is not CONTINUE:
+                        return result
+            finally:
+                for pending in (nxt, assessing[0] if assessing else None):
+                    if pending is not None and not pending.done():
+                        pending.cancel()
 
         try:
             outcome = await asyncio.wait_for(pump(), self.turn_timeout_s)
         except TimeoutError:
-            self.driver._reset()  # drop a half-received reply so it cannot leak into the next turn
+            # A worker may still be running ASR: fence it, revoke approvals and drop the half-received reply.
+            self.driver.abandon()
             return {"approval": None, "strict_speech_approval": "turn_timeout"}, errors
         if outcome is None:  # fatal provider error, or the event stream ended before a turn_end
-            self.driver._reset()
+            self.driver.abandon()
             fatal = any(e["fatal"] for e in errors)
             return {"approval": None, "strict_speech_approval": "provider_error" if fatal else "stream_ended"}, errors
         return outcome, errors

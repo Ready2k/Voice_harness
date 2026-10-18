@@ -153,6 +153,9 @@ class NodeBridgeTransport:
 
 
 class NovaSonicAdapter:
+    # Runner turn accounting: one reply follows the tool result; the tool call has no response end of its own.
+    TOOL_CALL_ENDS_RESPONSE = False
+
     def __init__(self, pump_interval_s: float = CHUNK_MS / 1000):
         self.pump_interval_s = pump_interval_s
         self.session_id: str | None = None
@@ -335,7 +338,7 @@ class NovaSonicAdapter:
 
     # ------------------------------------------------------------------ outputs
     async def _emit(self, ev: AdapterEvent) -> None:
-        if ev.type == "audio_out" and self._queue.qsize() >= AUDIO_QUEUE_MAX:
+        if ev.type in ("audio_out", "transcript_delta") and self._queue.qsize() >= AUDIO_QUEUE_MAX:
             # Consumer is not draining: drop audio, signal once, keep the control path open.
             self.dropped_audio_events = getattr(self, "dropped_audio_events", 0) + 1
             if self.dropped_audio_events == 1:

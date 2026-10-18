@@ -1351,7 +1351,7 @@ class Engine:
                     "assessment_epoch": tx.state["assessment_epoch"],
                     "transcript": new_transcript,
                     "transcript_revision_id": revision_id,
-                    "created_at": self.clock(),
+                    "created_at": unit["created_at"],  # the decision deadline runs from the original hold
                 }
                 tx.state["units"][replacement] = new_unit
                 tx.event(

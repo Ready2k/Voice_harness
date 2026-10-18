@@ -80,3 +80,19 @@ Addressed (driver-to-engine tests in `tests/test_live_review_fixes.py`):
 
 Not started: finding 8 (live scenarios through the API/UI/CLI run lifecycle) and the provider-config registry. Live runs remain a library path.
 Missed by the review, noted by the review agent: `_cancelled_ends` is a counter heuristic for swallowing an interrupted reply's `turn_end`; the barge-in outcome is now `barge_in_not_assessed` so it is not read as an approval disposition.
+
+## Response to the 2026-10-18 recheck (R1-R7)
+
+| Item | Change | Still open |
+|---|---|---|
+| R1 late worker release | Timeout/fatal paths call `driver.abandon()`: advances a fence, marks the item dead, resets buffers and calls `Engine.interrupt` (units discarded, tokens revoked in one engine transaction). The worker snapshots and clears the driver's buffers before assessing, so it cannot clobber the next response, and a worker that finishes after the fence reports `superseded`. | A disposition event for the abandoned response; cancellable async ASR. |
+| R2 interruption behind assessment | The runner pump keeps reading provider events while assessment runs on a worker. Interrupted items are tracked by provider item id (Nova's turn id spans the session), and their late audio is dropped. | `_cancelled_ends` is still a counter heuristic. |
+| R3 deadline | `revise_audio` keeps the original `created_at`, so ASR time counts against the decision limit. | |
+| R4 queues | Audio and transcript deltas are bounded in both adapters (control events never are); the runner flushes native-event records every 100. | Shared byte/duration budget across all buffers. |
+| R5 claims | Signed-amount patterns cover "£-10" and "-10 pounds". | Typed facts bound to field/account/currency/turn. |
+| R6 evidence | Native records flush mid-turn (bounded loss on a crash). | Payload retention (kept hash-only by decision); manifest binding. |
+| R7 provenance | In GET and the export, covered by `provenance_hash`; tampering fails `verify_stored_export`. | |
+
+Nova fixes: caller lines no longer include the account id (the tool only takes the security answer, and the id was being misheard); `TOOL_CALL_ENDS_RESPONSE` is per adapter (OpenAI true, Nova false) so Nova's single post-tool reply is not skipped. Catalogue hashes for the fault/commit variants changed with the line.
+
+Single-sample comparison after these fixes: all seven catalogue scenarios approved on both OpenAI and Nova. In the tool-latency scenario neither model called `get_account_summary` this time, so the latency fault did not fire in that sample.

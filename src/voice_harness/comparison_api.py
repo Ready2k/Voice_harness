@@ -1,5 +1,7 @@
 """Comparison persistence (migration 13) and routes for AC-11 reports."""
 
+import hashlib
+import json
 import time
 
 from fastapi import Depends, HTTPException
@@ -68,8 +70,16 @@ class ComparisonStore:
         return [{k: r[k] for k in ("comparison_id", "created_at", "report_hash")} for r in rows]
 
 
+def provenance_hash(report_hash, provenance):
+    body = json.dumps({"report_hash": report_hash, "provenance": provenance}, sort_keys=True).encode()
+    return hashlib.sha256(body).hexdigest()
+
+
 def export_payload(stored):
+    provenance = stored.get("provenance")
     return {
+        "provenance": provenance,
+        "provenance_hash": provenance_hash(stored["report"]["report_hash"], provenance),
         "export_type": "provider_comparison",
         "comparison_id": stored["comparison_id"],
         "statement": STATEMENT,
@@ -80,6 +90,8 @@ def export_payload(stored):
 
 
 def verify_stored_export(export):
+    if export.get("provenance_hash") != provenance_hash(export["report"]["report_hash"], export.get("provenance")):
+        return False  # provenance (run-bound versus diagnostic counts) was altered or detached
     return verify_export(export, ComparisonRequest.model_validate(export["request"]))
 
 
@@ -105,7 +117,7 @@ def register_comparison_routes(app, database, auth):
             stored = store.get(comparison_id)
         except KeyError:
             raise HTTPException(404, "COMPARISON_NOT_FOUND") from None
-        return {"comparison_id": comparison_id, "report": stored["report"]}
+        return {"comparison_id": comparison_id, "report": stored["report"], "provenance": stored.get("provenance")}
 
     @app.get("/api/v1/comparisons/{comparison_id}/export", dependencies=[Depends(auth)])
     def export_comparison(comparison_id: str):

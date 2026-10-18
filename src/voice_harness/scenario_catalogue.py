@@ -76,7 +76,7 @@ def _build():
                 )
     # Fault-injected variants of the baseline identity scenario.
     # The caller supplies the challenge answer so a tool-using model has valid arguments to send.
-    base_line = "My account is acct_1001 and the answer to my security question is blue. Please verify me."
+    base_line = "The answer to my security question is blue. Please verify me."
     barge_line = [base_line, "Sorry, to be clear, the answer is blue. What can you tell me about my account?"]
     for name, faults in {
         "tool-error": [{"kind": "tool_error", "tool": "verify_identity", "error_code": "UPSTREAM_UNAVAILABLE"}],
@@ -94,7 +94,7 @@ def _build():
         )
     # Synthetic commit (AC-15): the caller verifies, then asks to cancel a pending payment.
     commit_lines = [
-        "My account is acct_1001 and the answer to my security question is blue. Please verify me.",
+        "The answer to my security question is blue. Please verify me.",
         "Yes please, cancel payment payment_001 now.",
     ]
     for name in ("unconfirmed", "confirmed"):

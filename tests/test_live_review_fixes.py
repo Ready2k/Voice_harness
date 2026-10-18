@@ -129,6 +129,8 @@ class MoneyClaims(unittest.TestCase):
         self.assertNotEqual(signed["disposition"], "safe")
         self.assertEqual(semantic_check("You are overdrawn by ten pounds.", {"amounts_minor": [1000]})["disposition"],
                          "untestable")
+        for spoken in ("Your balance is £-10.", "Your balance is -10 pounds."):
+            self.assertNotEqual(semantic_check(spoken, {"amounts_minor": [1000]})["disposition"], "safe", spoken)
         swapped = semantic_check("Your balance is one thousand pounds.", {"amounts_minor": [1000]})
         self.assertEqual(swapped["disposition"], "unsafe")  # 1,000 pounds is 100,000 minor, not 1,000
 
@@ -136,6 +138,59 @@ class MoneyClaims(unittest.TestCase):
         result = semantic_check("Happy to help with that.", {})
         self.assertEqual(result["disposition"], "safe")
         self.assertEqual(result["reason_codes"], ["NO_ASSESSABLE_CLAIMS"])
+
+
+class LateWorkCannotRelease(Base):
+    def test_late_asr_success_after_abandon_releases_nothing(self):
+        started, proceed = threading.Event(), threading.Event()
+
+        class Slow(ScriptedAsr):
+            def transcribe(inner, pcm, rate):  # noqa: N805
+                started.set()
+                proceed.wait(5)
+                return AsrResult("Hello.", inner.name, inner.model, False)
+
+        driver = self.driver(Slow())
+        driver.feed(frame())
+        driver.feed(TranscriptDelta(role="assistant", text="Hello.", ts_ms=1))
+        results = []
+        worker = threading.Thread(target=lambda: results.append(driver.feed(TurnEnd(turn_id="t1", ts_ms=2))))
+        worker.start()
+        self.assertTrue(started.wait(5))
+        driver.abandon()  # the turn timed out; the worker is still inside ASR
+        driver.feed(frame(turn="t2"))  # next response buffers while the old worker is alive
+        proceed.set()
+        worker.join(5)
+        self.assertNotEqual(results[0]["strict_speech_approval"], "approved")
+        self.assertFalse(self.events("playback.released"))
+        self.assertEqual(driver._pcm_bytes, 24 * 2 * 20)  # the worker did not clobber the new buffer
+
+    def test_late_audio_of_an_interrupted_item_is_dropped(self):
+        driver = self.driver(ScriptedAsr(queue=["Hello."]))
+        first = AudioOut(pcm=bytes(960), sample_rate=24000, sample_count=480, turn_id="t1", item_id="item_a", ts_ms=1)
+        driver.feed(first)
+        driver.feed(Interrupted(item_id="item_a"))
+        driver.feed(first)  # arrives after the interruption
+        self.assertEqual(driver._pcm_bytes, 0)
+        outcome = driver.feed(TurnEnd(turn_id="t1", ts_ms=2))
+        self.assertIsNone(outcome)
+        self.assertFalse(self.events("playback.released"))
+
+    def test_asr_time_counts_against_the_decision_deadline(self):
+        clock = [0.0]
+        self.engine.clock = lambda: clock[0]
+
+        class Slow(ScriptedAsr):
+            def transcribe(inner, pcm, rate):  # noqa: N805
+                clock[0] += 6.0  # longer than the 5 s decision limit
+                return AsrResult("Hello.", inner.name, inner.model, False)
+
+        driver = self.driver(Slow())
+        driver.feed(frame())
+        driver.feed(TranscriptDelta(role="assistant", text="Hello.", ts_ms=1))
+        outcome = driver.feed(TurnEnd(turn_id="t1", ts_ms=2))
+        self.assertNotEqual(outcome["strict_speech_approval"], "approved")
+        self.assertFalse(self.events("playback.released"))
 
 
 class RunnerEvidence(Base):
@@ -192,6 +247,24 @@ class ComparisonInputs(unittest.TestCase):
         clean = store.create(self.request(example_request()["observations"]))
         self.assertEqual(clean["provenance"]["run_id_resolved"], 0)  # unbound rows are labelled diagnostic
         self.assertEqual(clean["provenance"]["unbound_diagnostic"], len(clean["request"]["observations"]))
+
+
+class ComparisonProvenance(unittest.TestCase):
+    def test_provenance_is_in_the_export_and_covered_by_its_hash(self):
+        from voice_harness.comparison import example_request
+        from voice_harness.comparison_api import ComparisonStore, export_payload, verify_stored_export
+
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        store = ComparisonStore(Database(str(Path(directory.name) / "c.sqlite")))
+        from voice_harness.comparison import ComparisonRequest
+
+        stored = store.create(ComparisonRequest.model_validate(example_request()))
+        export = export_payload(store.get(stored["comparison_id"]))
+        self.assertIn("unbound_diagnostic", export["provenance"])
+        self.assertTrue(verify_stored_export(export))
+        tampered = {**export, "provenance": {**export["provenance"], "run_id_resolved": 99}}
+        self.assertFalse(verify_stored_export(tampered))
 
 
 if __name__ == "__main__":
