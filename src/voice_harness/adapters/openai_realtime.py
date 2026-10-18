@@ -57,6 +57,15 @@ FATAL_CODES = {"invalid_api_key", "authentication_error", "insufficient_quota", 
 _END = object()
 
 
+def _package_version(name: str) -> str | None:
+    from importlib import metadata
+
+    try:
+        return metadata.version(name)
+    except metadata.PackageNotFoundError:
+        return None
+
+
 def redact(obj: Any) -> Any:
     """Return a log-safe copy: audio payloads are reduced to their length."""
     if isinstance(obj, dict):
@@ -102,6 +111,17 @@ class OpenAIRealtimeAdapter:
         self._interrupt_emitted = False
         self._acks: dict[str, asyncio.Future] = {}
         self._pending_calls: set[str] = set()
+
+    def connection_info(self) -> dict[str, Any]:
+        """Endpoint host and client package versions for the evidence binding (never the URL path, query, userinfo or key)."""
+        from urllib.parse import urlsplit
+
+        host = None
+        try:
+            host = urlsplit(self._url).hostname
+        except ValueError:
+            pass
+        return {"endpoint_host": host, "region": None, "sdk_versions": {"websockets": _package_version("websockets")}}
 
     # ------------------------------------------------------------------ capabilities
     def capabilities(self) -> dict[str, Any]:

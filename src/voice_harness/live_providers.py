@@ -117,7 +117,23 @@ def capability_binding(provider_config_id, now=None):
     }
 
 
-def session_metadata(provider_config_id, requested_model_id, receipt):
+def connection_binding(adapter):
+    """Endpoint host, region and SDK/package versions as the adapter reports them; sanitised to identifiers."""
+    import re
+
+    try:
+        info = adapter.connection_info()
+    except Exception:  # noqa: BLE001 - provenance is best effort; unknown stays null
+        info = {}
+    host = info.get("endpoint_host")
+    host = host if isinstance(host, str) and re.fullmatch(r"[A-Za-z0-9.-]{1,253}", host) else None
+    region = info.get("region")
+    region = region if isinstance(region, str) and re.fullmatch(r"[a-z0-9-]{1,32}", region) else None
+    versions = {str(k)[:80]: (str(v)[:40] if v else None) for k, v in (info.get("sdk_versions") or {}).items()}
+    return {"endpoint_host": host, "region": region, "sdk_versions": versions}
+
+
+def session_metadata(provider_config_id, requested_model_id, receipt, connection=None):
     """Requested and provider-returned session metadata (identifiers only; never credentials)."""
     receipt = receipt if isinstance(receipt, dict) else {}
     tested = TESTED_MODELS[provider_config_id]
@@ -126,6 +142,7 @@ def session_metadata(provider_config_id, requested_model_id, receipt):
         "requested_model_id": requested_model_id, "returned_model_id": receipt.get("model_id"),
         "provider_session_id": receipt.get("provider_session_id"),
         **capability_binding(provider_config_id),
+        **(connection or {}),
     }
 
 
@@ -149,7 +166,8 @@ async def run_live(engine, run_id, provider_config_id, scenario_id, *, seed=0):
     adapter, config = _adapter(provider_config_id)
     config["session_id"] = engine.database.get(run_id)["session_id"]
     receipt = await adapter.open_session(config)
-    metadata = session_metadata(provider_config_id, TESTED_MODELS[provider_config_id]["model_id"], receipt)
+    metadata = session_metadata(provider_config_id, TESTED_MODELS[provider_config_id]["model_id"], receipt,
+                                 connection_binding(adapter))
     openai = provider_config_id == "openai-realtime-live"
     from .cost_recorder import UsageRecorder
 

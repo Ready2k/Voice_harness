@@ -213,6 +213,7 @@ def examples():
                     "requested_model_id": "gpt-realtime-2.1", "returned_model_id": "gpt-realtime-2.1",
                     "provider_session_id": "sess_001", "capability_status": "diagnostic_unverified",
                     "capability_report_id": None, "capability_reason_codes": ["NO_CAPABILITY_REPORT"],
+                    "endpoint_host": "api.openai.com", "region": None, "sdk_versions": {"websockets": "15.0"},
                 },
             },
             "assessment.abandoned": {
