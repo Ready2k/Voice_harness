@@ -12,7 +12,7 @@ export const UNIT_LABEL = {
   blocked: "Blocked",
   expired: "Expired (decision timeout)",
   discarded: "Discarded",
-  superseded: "Superseded by revision",
+  superseded: "Earlier version · transcript revised",
 };
 
 const BLOCKING_ACTIONS = new Set(["deny", "redact", "replace", "escalate"]);
@@ -119,9 +119,10 @@ export function unitStates(events) {
         }
         break;
       case "playback.released":
-        ensure(c.unit_id).state = "released";
+        Object.assign(ensure(c.unit_id), {state:"released",everReleased:true});
         break;
       case "playback.ack":
+        Object.assign(ensure(c.unit_id), {everAcknowledged:true});
         if (ensure(c.unit_id).state === "released") units.get(c.unit_id).state = "played";
         break;
       case "playback.stopped":
@@ -162,7 +163,7 @@ export function transcript(events) {
       let u = states.get(e.content.unit_id);
       let text = e.content.transcript;
       for (let hops = 0; u && hops < 10; hops++) {
-        const withheld = u.state === "blocked" || u.state === "expired" || u.state === "discarded";
+        const withheld = ["blocked","expired","discarded"].includes(u.state) && !u.everReleased;
         const next = u.state === "superseded" ? u.replacedBy : null;
         lines.push({
           sequence: e.sequence,
@@ -170,10 +171,11 @@ export function transcript(events) {
           text,
           state: u.state,
           stateLabel: u.label,
+          playbackLabel: u.everAcknowledged ? "Playback acknowledged" : u.everReleased ? "Released; playback not acknowledged" : "No release recorded",
           generatedButNotReleased: withheld,
           replacedBy: next,
           note: u.state === "blocked" ? (u.reasons.join(", ") + (u.safeText ? "; safe text: " + u.safeText : ""))
-            : next ? "Transcript was re-assessed; replacement shown below" : null,
+            : next ? "The transcript was revised. The replacement appears below; playback status is shown separately." : null,
         });
         if (!next) break;
         text = u.revised ?? text;
@@ -384,7 +386,8 @@ export function renderRun(root, view, onCancel = null) {
     row.append(el("span", "speaker", l.speaker));
     row.append(el("span", "text", l.text));
     if (l.stateLabel) row.append(el("span", "chip chip-" + l.state, l.stateLabel));
-    if (l.generatedButNotReleased) row.append(el("span", "muted", "generated, never played"));
+    if (l.generatedButNotReleased) row.append(el("span", "muted", "Not released in recorded events"));
+    if (l.playbackLabel && !["played","released"].includes(l.state)) row.append(el("span", "muted", l.playbackLabel));
     if (l.note) row.append(el("span", "muted", l.note));
     lines.append(row);
   }

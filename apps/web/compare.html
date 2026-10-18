@@ -4,10 +4,10 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
 <title>Voice Harness · Compare evaluations</title>
-<link rel="stylesheet" href="./ops.css?v=compare2">
+<link rel="stylesheet" href="./ops.css?v=ux-audit-20261018">
 </head>
 <body><main>
-<nav aria-label="Main navigation"><a href="./runs.html">Runs</a><a href="./compare.html" aria-current="page">Compare</a><a href="./review.html">Hold review</a><a href="./coverage.html">Provider coverage</a></nav>
+<nav aria-label="Main navigation"><a href="./runs.html">Runs</a><a href="./compare.html" aria-current="page">Compare</a><a href="./scenarios.html">Scenarios</a><a href="./review.html">Review & holds</a><a href="./coverage.html">Provider coverage</a></nav>
 <p class="eyebrow">Voice Harness / Comparison</p><h1>Compare X with Y</h1>
 <p class="sub">Compare providers or repeat runs on the same scenario. Inspect outcomes, metrics and execution traces without hiding configuration differences.</p>
 <form id="auth" class="panel"><input id="token" type="password" autocomplete="off" aria-label="Operator token" placeholder="Operator token" required><button>Connect</button></form>
@@ -26,6 +26,7 @@
 <button id="batch-launch" class="primary" type="submit">Launch matched runs</button><button id="batch-retry" type="button" hidden>Retry unfinished launches</button>
 <div id="batch-progress" role="status" aria-live="polite"></div>
 </form></details>
+<div id="stored-reports"></div>
 </section>
 <section id="results" hidden><div class="workspace-heading"><h2>Comparison results</h2><div class="actions"><button id="update" type="button">Refresh evidence</button><button id="export" type="button">Download comparison snapshot</button></div></div>
 <p id="comparability" class="trace-insight"></p><p id="snapshot" class="muted"></p>
@@ -35,4 +36,4 @@
 <div id="deltas" class="panel comparison-table"></div>
 <div class="compare-pair"><section><h2>X</h2><a id="left-link">Open X in Runs</a><div id="left-trace"></div></section><section><h2>Y</h2><a id="right-link">Open Y in Runs</a><div id="right-trace"></div></section></div>
 </section>
-</main><script type="module" src="./compare-page.mjs?v=compare2"></script></body></html>
+</main><script type="module" src="./compare-page.mjs?v=ux-audit-20261018"></script></body></html>

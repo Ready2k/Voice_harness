@@ -199,6 +199,6 @@ test("a superseded unit is followed by the replacement that was actually release
   assert.deepEqual(lines.map((l) => [l.speaker, l.state]), [["customer", null], ["assistant", "superseded"], ["assistant", "released"]]);
   assert.equal(lines[2].text, "Please verify yourself");
   assert.equal(lines[1].generatedButNotReleased, false);
-  assert.match(lines[1].note, /replacement shown below/);
+  assert.match(lines[1].note, /replacement.*below/i);
   assert.equal(transcript([...events, { sequence: 7, type: "simulator.utterance_generated", content: { output_text: "hi" } }]).filter((l) => l.speaker === "customer").length, 1);
 });

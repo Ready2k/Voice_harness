@@ -1,7 +1,9 @@
-import {api,el,fetchEvents,launchOptions,TERMINAL} from './runs.mjs';
-import {createWorkspace} from './live-view.mjs?v=compare2';
+import {mountReports} from "./reports.mjs?v=ux-audit-20261018";
+import {setConnected} from "./chrome.mjs?v=ux-audit-20261018";
+import {api,el,fetchEvents,launchOptions,TERMINAL} from './runs.mjs?v=ux-audit-20261018';
+import {createWorkspace} from './live-view.mjs?v=ux-audit-20261018';
 import {comparisonCheck,batchPlan,metricMatrix,costDescription,metricDeltas} from './compare.mjs?v=compare2';
-import {friendlyError} from './onboarding.mjs';
+import {friendlyError} from './onboarding.mjs?v=ux-audit-20261018';
 const $=id=>document.getElementById(id);
 const pairWorkspaces={};
 let token='',runs=[],nextCursor=null,scenarios=[],providers=[],chosen=new Set(),entries=[],pending=null,timer=null,generation=0,loading=false;
@@ -36,15 +38,17 @@ function batchChoices(){
  $('batch-launch').disabled=loading||!$('batch-providers').querySelector('input:not(:disabled)');
 }
 async function connect(){
- $('error').textContent='';token=$('token').value;
+ ++generation;clearTimeout(timer);$('error').textContent='';token=$('token').value;
  try{
   const [s,p]=await Promise.all([api(token,'/api/v1/scenarios'),api(token,'/api/v1/live-providers')]);
   scenarios=launchOptions(s);providers=p.items;
   $('batch-scenario').replaceChildren(...scenarios.map((s,i)=>option(s.label+(s.live?' · live':' · scripted'),String(i))));batchChoices();
-  await loadRuns();$('controls').hidden=false;$('status').textContent='Connected · Choose a task and at least two runs.';
+  await loadRuns();mountReports($('stored-reports'),token);setConnected(true);$('controls').hidden=false;$('status').textContent='Connected · Choose a task and at least two runs.';
   try{sessionStorage.setItem('harness-operator-token',token);}catch{}
+  const candidate=new URLSearchParams(location.search).get('candidate');
+  if(candidate){const r=await api(token,'/api/v1/runs/'+encodeURIComponent(candidate));if(!runs.some(v=>v.run_id===candidate))runs.unshift({...r,...r.config});chosen.add(candidate);const value=r.config.scenario_id+'@'+r.config.scenario_version;if(![...$('task').options].some(o=>o.value===value))$('task').append(option(value,value));$('task').value=value;candidates();}
   const ids=new URLSearchParams(location.search).get('runs');if(ids){$('ids').value=ids;await compareIds(ids.split(','));}
- }catch(e){report(e);$('status').textContent='Could not connect. Check your token and retry.';}
+ }catch(e){setConnected(false);$('controls').hidden=true;$('results').hidden=true;report(e);$('status').textContent='Could not connect. Check your token and retry.';}
 }
 async function fetchEntry(id){
  const base='/api/v1/runs/'+encodeURIComponent(id);
@@ -54,26 +58,33 @@ async function fetchEntry(id){
 }
 function pair(){
  const x=$('left').value,y=$('right').value;
- if(x===y){$('error').textContent='Choose different runs for X and Y.';return;}
+ if(x===y){const other=entries.find(e=>e.run.run_id!==x)?.run.run_id;if(!other)return;$('right').value=other;return pair();}
  $('error').textContent='';
  const left=entries.find(e=>e.run.run_id===x),right=entries.find(e=>e.run.run_id===y);
  if(left&&right)table($('deltas'),'Y − X · observed differences, not statistical significance',['Metric','Difference'],metricDeltas(left,right).map(m=>[m.name,m.delta==null?m.reason:(m.delta>0?'+':'')+m.delta+' '+m.unit]));
  for(const [side,id] of [['left',x],['right',y]]){
   const entry=entries.find(e=>e.run.run_id===id);if(!entry)continue;
   if(pairWorkspaces[side]?.id!==id)pairWorkspaces[side]={id,view:createWorkspace($(side+'-trace'),null)};
-  pairWorkspaces[side].view.update(entry.run,entry.events,entry.metrics,entry.holds,entry.assurance);
+  pairWorkspaces[side].view.update(entry.run,entry.events,entry.metrics,entry.holds,entry.assurance,scenarios.find(s=>s.id===entry.run.config.scenario_id)?.title);
   // Comparison is inspection-only. Cancellation belongs to the run workspace.
   $(side+'-trace').querySelectorAll('button').forEach(b=>{if(b.textContent==='Cancel evaluation')b.hidden=true;});
   $(side+'-link').href='./runs.html?run='+encodeURIComponent(id);
  }
 }
-async function compareIds(ids){
+async function compareIds(ids,refresh=false){
  ids=ids.map(x=>x.trim()).filter(Boolean);
  if(ids.length<2||ids.length>8||new Set(ids).size!==ids.length){report(new Error('Choose 2–8 distinct run IDs.'));return;}
  clearTimeout(timer);const mine=++generation;$('status').textContent='Loading recorded comparison evidence…';$('error').textContent='';
  try{
   const loaded=await Promise.all(ids.map(fetchEntry));if(mine!==generation)return;
   const match=comparisonCheck(loaded.map(e=>e.run));entries=loaded;
+  if(!refresh){
+   chosen=new Set(ids);
+   for(const {run} of entries)if(!runs.some(r=>r.run_id===run.run_id))runs.unshift({...run,...run.config});
+   const task=entries[0].run.config.scenario_id+'@'+entries[0].run.config.scenario_version;
+   if(![...$('task').options].some(o=>o.value===task))$('task').append(option(task,task));
+   $('task').value=task;candidates();
+  }
   $('results').hidden=false;
   $('comparability').textContent=match.differences.length?'Same task, different settings: '+match.differences.join(', ')+'. Treat this as a configuration comparison, not an isolated provider effect.':'Same scenario, version, seed and recorded execution settings. Provider configurations may differ. Model versions and provider session settings must be checked in the event evidence; matching these fields alone does not establish full equivalence.';
   if(match.missing.length)$('comparability').textContent+=' Missing configuration evidence: '+match.missing.join(', ')+'.';
@@ -86,8 +97,8 @@ async function compareIds(ids){
    ['Requested model',...entries.map(e=>e.events.find(v=>v.type==='run.live_binding')?.content?.provider?.requested_model_id??'Not recorded / fixture')],
    ['Returned model',...entries.map(e=>e.events.find(v=>v.type==='run.live_binding')?.content?.provider?.returned_model_id??'Unresolved / fixture')],
    ['Lifecycle (not task success)',...entries.map(e=>e.run.state)],
-   ['Model behaviour',...entries.map(e=>e.run.assurance?.model_behaviour??'Not assessed')],
-   ['Platform enforcement',...entries.map(e=>e.run.assurance?.platform_enforcement??'Not assessed')],
+   ['Model behaviour',...entries.map(e=>(e.assurance?.status==='assessed'?e.assurance.model_behaviour:e.run.assurance?.model_behaviour)??'Not assessed')],
+   ['Platform enforcement',...entries.map(e=>(e.assurance?.status==='assessed'?e.assurance.platform_enforcement:e.run.assurance?.platform_enforcement)??'Not assessed')],
    ['Overall assurance',...entries.map(e=>e.assurance?.overall_assurance??e.run.assurance?.overall_assurance??'Not assessed')],
    ['Seed',...entries.map(e=>e.run.config.fixture_seed)],['Policy',...entries.map(e=>e.run.config.policy_profile)],
    ['Input / client mode',...entries.map(e=>(e.run.config.input_mode??'Unknown')+' / '+(e.run.config.client_mode??'Unknown'))],
@@ -100,7 +111,7 @@ async function compareIds(ids){
   for(const side of ['left','right'])$(side).replaceChildren(...entries.map((e,i)=>option((i+1)+': '+e.run.config.provider_config_id+' · '+e.run.run_id,e.run.run_id)));
   $('left').value=ids.includes(previous[0])?previous[0]:ids[0];$('right').value=ids.includes(previous[1])?previous[1]:ids[1];pair();
   const url=new URL(location.href);url.searchParams.set('runs',ids.join(','));history.replaceState(null,'',url);
-  if(entries.some(e=>!TERMINAL.has(e.run.state)))timer=setTimeout(()=>compareIds(ids),5000);
+  if(entries.some(e=>!TERMINAL.has(e.run.state)))timer=setTimeout(()=>compareIds(ids,true),5000);
  }catch(e){if(mine!==generation)return;report(e);$('status').textContent='Comparison could not be loaded. Previously loaded results, if present, are unchanged.';}
 }
 function savePlan(){try{sessionStorage.setItem('harness-comparison-batch',JSON.stringify(pending));}catch{}}
@@ -123,7 +134,7 @@ $('task').addEventListener('change',()=>{chosen.clear();candidates();});
 $('refresh').addEventListener('click',()=>loadRuns().catch(report));$('more').addEventListener('click',()=>loadRuns(true).catch(report));
 $('compare').addEventListener('click',()=>compareIds([...chosen]));$('open-ids').addEventListener('click',()=>compareIds($('ids').value.split(',')));
 $('left').addEventListener('change',pair);$('right').addEventListener('change',pair);
-$('update').addEventListener('click',()=>compareIds(entries.map(e=>e.run.run_id)));
+$('update').addEventListener('click',()=>compareIds(entries.map(e=>e.run.run_id),true));
 $('batch-scenario').addEventListener('change',batchChoices);
 $('batch').addEventListener('submit',e=>{e.preventDefault();if(loading)return;if(pending){report(new Error('Finish the pending batch with Retry unfinished launches before starting another.'));return;}try{pending=batchPlan(scenarios[Number($('batch-scenario').value)],[...$('batch-providers').querySelectorAll('input:checked')].map(e=>e.value),Number($('batch-seed').value),Number($('batch-count').value),$('batch-retain').checked,'compare-'+crypto.randomUUID());savePlan();launchPending();}catch(e){pending=null;report(e);}});
 $('batch-retry').addEventListener('click',launchPending);

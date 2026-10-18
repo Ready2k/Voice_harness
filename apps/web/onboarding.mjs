@@ -1,4 +1,4 @@
-import { el } from "./runs.mjs";
+import { el } from "./runs.mjs?v=ux-audit-20261018";
 
 export const TOKEN_COMMAND = "make token";
 export const TOKEN_FALLBACK = "docker compose exec -T api cat /data/operator-token";
@@ -40,11 +40,19 @@ export function friendlyError(error) {
   if (code === "AUTH_REQUIRED" || code === "HTTP 401") {
     return "That token was not accepted. Copy it again with " + TOKEN_COMMAND + ". It changes only if the server's data volume is deleted.";
   }
-  if (code === "HTTP 403") return "That token is valid but its role is not allowed to do this. Use the operator token.";
+  if (code === "HTTP 403" || code === "FORBIDDEN") return "That token is valid but its role is not allowed to do this. Use the operator token.";
   if (/failed to fetch|networkerror|load failed/i.test(code)) {
     return "Could not reach the server. Check it is running (make up) and that you opened this page from its address.";
   }
-  return code;
+  const actions = {
+    REVIEW_CLAIMED_BY_OTHER: "This finding is claimed by another reviewer. Refresh the queue to see its current owner.",
+    INVALID_REVIEW_TRANSITION: "This review changed since it was loaded. Reopen the finding before continuing.",
+    SCENARIO_VERSION_CONFLICT: "This scenario version already exists with different content. Use a new version.",
+    RUN_NOT_FINISHED: "Wait for the run to finish before assessing it.",
+    LIVE_JUDGE_DISABLED: "This judge is not enabled on the server. Choose deterministic checks or configure the judge first.",
+    CONCURRENCY_LIMIT: "The server has reached its concurrent-run limit. Wait for active runs to finish, then retry.",
+  };
+  return actions[code] ? actions[code] + " (" + code + ")" : code;
 }
 
 function step(parts) {

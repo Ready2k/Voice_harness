@@ -1,8 +1,11 @@
-import { createWorkspace, renderOverview, renderRecent } from "./live-view.mjs?v=20261019-grouped";
-import { friendlyError, renderGetStarted, renderReadiness } from "./onboarding.mjs";
+import {setConnected} from "./chrome.mjs?v=ux-audit-20261018";
+import { renderCost } from "./cost-view.mjs?v=ux-audit-20261018";
+import { runActions } from "./workflow.mjs?v=ux-audit-20261018";
+import { createWorkspace, renderOverview, renderRecent } from "./live-view.mjs?v=ux-audit-20261018";
+import { friendlyError, renderGetStarted, renderReadiness } from "./onboarding.mjs?v=ux-audit-20261018";
 import {
   api, fetchEvents, groupedOptions, launchBody, launchOptions, mergeEvents, providerChoices, TERMINAL, el,
-} from "./runs.mjs";
+} from "./runs.mjs?v=ux-audit-20261018";
 
 const $ = (id) => document.getElementById(id);
 const error = $("error");
@@ -32,17 +35,20 @@ async function refreshList() {
 async function paint() {
   const selected = current;
   const runId = selected.runId;
-  const [run, metrics, holds, assurance] = await Promise.all([
+  const [run, metrics, holds, assurance, cost] = await Promise.all([
     api(token, "/api/v1/runs/" + encodeURIComponent(runId)),
     api(token, "/api/v1/metrics/" + encodeURIComponent(runId)),
     api(token, "/api/v1/holds-register?state=all&run_id=" + encodeURIComponent(runId)),
     api(token, "/api/v1/runs/" + encodeURIComponent(runId) + "/assurance"),
+    api(token, "/api/v1/runs/" + encodeURIComponent(runId) + "/cost").catch(e=>({unavailable_reason:e.message})),
   ]);
   const after = selected.events.length ? selected.events[selected.events.length - 1].sequence : 0;
   const incoming = await fetchEvents(token, runId, after);
   if (current !== selected) return true;
   selected.events = mergeEvents(selected.events, incoming);
-  workspace.update(run, selected.events, metrics, holds, assurance);
+  selected.run=run;
+  renderCost(selected.costRoot,cost);
+  workspace.update(run, selected.events, metrics, holds, assurance, options.find(option=>option.id===run.scenario?.scenario_id)?.title);
   $("connection").textContent = TERMINAL.has(run.state) ? "Connected · Run finished. Review its assurance verdict below." : "Connected · Updating this run every two seconds.";
   return TERMINAL.has(run.state);
 }
@@ -69,8 +75,10 @@ async function openRun(runId) {
   if (current?.timer) clearTimeout(current.timer);
   current = { runId, events: [], timer: null };
   workspace = createWorkspace($("detail"), cancelRun);
-  addEvidenceAction(runId);
+  runActions($("detail"), {token,runId,getData:()=>current?.runId===runId&&current.run?{run:current.run,events:current.events}:null,onOpen:openRun,onRefresh:paint});
   $("detail").scrollIntoView({behavior:"smooth", block:"start"});
+  current.costRoot=el("section","panel");
+  $("detail").append(current.costRoot);
   const mine = current;
   const tick = async () => {
     try {
@@ -129,11 +137,18 @@ async function connect() {
     $("provider").replaceChildren(...providers.map((p) => Object.assign(el("option", "", p.label), { value: p.id, disabled: p.disabled })));
     const firstAvailable = providers.find((p) => !p.disabled);
     if (firstAvailable) $("provider").value = firstAvailable.id;
+    const requestedScenario = new URLSearchParams(location.search).get("scenario");
+    const requestedIndex = options.findIndex(option => option.id === requestedScenario);
+    if (requestedIndex >= 0) {
+      select.value = String(requestedIndex);
+      $("launch").closest("details").open = true;
+    }
     syncProvider();
     renderExpectation();
     $("launch").hidden = false;
     remember(token);
     connected = true;
+    setConnected(true);
     $("help").querySelector("details").open = false;
     $("connection").textContent = "Connected · Select a scenario to launch or inspect a recent run.";
     await refreshList();
@@ -147,6 +162,7 @@ async function connect() {
     if (wanted) await openRun(wanted);
   } catch (e) {
     connected = false;
+    setConnected(false);
     clearTimeout(overviewTimer);
     $("connection").textContent = "Not connected · Check your token and try again.";
     $("launch").hidden = true;
@@ -194,29 +210,4 @@ if (saved) {
   $("token").value = saved;
   token = saved;
   connect();
-}
-
-
-function addEvidenceAction(runId) {
-  const actions = el("div", "actions");
-  const download = el("button", "", "Download evidence bundle");
-  download.type = "button";
-  download.addEventListener("click", async () => {
-    download.disabled = true;
-    error.textContent = "";
-    try {
-      const bundle = await api(token, "/api/v1/runs/" + encodeURIComponent(runId) + "/evidence");
-      const url = URL.createObjectURL(new Blob([JSON.stringify(bundle, null, 2)], {type: "application/json"}));
-      const link = el("a");
-      link.href = url;
-      link.download = runId + "-evidence.json";
-      document.body.append(link);
-      link.click();
-      link.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
-    } catch (e) { error.textContent = "Could not export evidence: " + e.message; }
-    finally { download.disabled = false; }
-  });
-  actions.append(download);
-  $("detail").prepend(actions);
 }
