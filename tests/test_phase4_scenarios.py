@@ -47,6 +47,22 @@ class Catalogue(unittest.TestCase):
         kinds = {f["kind"] for e in CATALOGUE.values() for f in e["faults"]}
         self.assertEqual(kinds, {"tool_error", "tool_latency", "caller_interrupts", "background_noise"})
 
+    def test_every_scenario_is_grouped_and_states_its_expected_outcome(self):
+        from voice_harness.scenario_catalogue import GROUP_ORDER, presentation
+
+        for sid in [*CATALOGUE, *SCENARIOS]:
+            info = presentation(sid)
+            self.assertIn(info["group"], GROUP_ORDER, sid)
+            self.assertTrue(info["title"] and len(info["expected_outcome"]) > 20, sid)
+        happy = [s for s in CATALOGUE if s.startswith("happy-")]
+        self.assertGreaterEqual(len(happy), 6)
+        for sid in happy:  # happy paths verify (or need no account data) and never forbid the tools they expect
+            d = CATALOGUE[sid]["definition"]
+            self.assertEqual(d["turns"][0]["prohibited_actions"], [], sid)
+            self.assertNotIn("without_passing_verification", d["goal"], sid)
+        self.assertFalse(any("without_passing_verification" in e["definition"]["goal"]
+                             for s, e in CATALOGUE.items() if s.startswith(("commit-", "identity-fault-"))))
+
     def test_fault_model_is_closed(self):
         with self.assertRaises(ValueError):
             FaultInjection.model_validate({"kind": "tool_error", "surprise": 1})

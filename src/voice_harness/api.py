@@ -43,7 +43,7 @@ from .judges import service as judge_service
 from .live_scenario import LIVE_LIMITS
 from .metrics import derive as derive_metrics
 from .review_api import register_review_routes
-from .scenario_catalogue import CATALOGUE
+from .scenario_catalogue import CATALOGUE, presentation
 from .scenario_defs import SCENARIOS, ScenarioDefinition, definition_hash
 from .scenarios import run_scenario
 from .shutdown import graceful_shutdown
@@ -369,6 +369,7 @@ def create_app(
                 "execution": "live_adapter" if key[0] in CATALOGUE else "mock",
                 **({"faults": CATALOGUE[key[0]]["faults"], "mechanics": CATALOGUE[key[0]]["mechanics"]}
                    if key[0] in CATALOGUE else {}),
+                "presentation": presentation(key[0]),
                 "definition": value[1],
             }
             for key, value in sorted(merged.items())

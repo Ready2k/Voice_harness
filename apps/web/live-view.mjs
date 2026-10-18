@@ -112,7 +112,7 @@ export function createWorkspace(root, onCancel) {
     const denied=trace.stages.find(s=>s.id==='tools').items.filter(e=>e.type==='tool.denied').length;
     story.textContent=denied||view.tally.blocked?`${denied} tool denials and ${view.tally.blocked} blocked audio units recorded. Enforcement activity is evidence, not an overall model or platform verdict.`:'No tool denial or blocked audio unit is recorded in this view. Absence of a block is not an assurance pass.';
     transcript.replaceChildren(el('h3','','Conversation & audio disposition'));
-    for(const line of view.transcript){const row=el('div','conversation-line');row.append(el('span','speaker',line.speaker),el('p','',line.text));if(line.stateLabel)row.append(el('span','chip chip-'+line.state,line.stateLabel));if(line.generatedButNotReleased)row.append(el('span','muted','Generated, never played'));transcript.append(row);}
+    for(const line of view.transcript){const row=el('div','conversation-line');row.append(el('span','speaker',line.speaker),el('p','',line.text));if(line.stateLabel)row.append(el('span','chip chip-'+line.state,line.stateLabel));if(line.generatedButNotReleased)row.append(el('span','muted','Generated, never played'));if(line.note&&!line.generatedButNotReleased)row.append(el('span','muted',line.note));transcript.append(row);}
     if(!view.transcript.length)transcript.append(el('p','muted','Waiting for transcript evidence.'));
     if(disclosure.open)renderRun(detail,view,onCancel);
     drawInspector();

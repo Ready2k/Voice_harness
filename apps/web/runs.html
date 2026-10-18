@@ -24,6 +24,7 @@
   <form id="launch" class="panel" hidden>
     <label>Scenario<select id="scenario" aria-label="Scenario"></select></label>
     <label id="provider-field" hidden>Provider configuration<select id="provider" aria-label="Live provider"></select></label>
+    <div id="expectation" class="muted" aria-live="polite"></div>
     <p id="readiness" class="muted"></p>
     <div id="checklist"></div>
     <label>Fixture seed<input id="seed" type="number" value="42" step="1" required></label>
@@ -40,6 +41,6 @@
   </div>
   <p class="note">Live view polls the events endpoint every two seconds while a run is not terminal.</p>
 </main>
-<script type="module" src="./runs-page.mjs?v=20261019-redesign2"></script>
+<script type="module" src="./runs-page.mjs?v=20261019-grouped"></script>
 </body>
 </html>

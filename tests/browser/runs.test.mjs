@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { readFileSync } from "node:fs";
 import {
-  confirmations, decisions, assuranceView, launchBody, launchOptions, providerChoices, mergeEvents, metricRows, runRows, runView, toolCalls, transcript, unitStates,
+  confirmations, decisions, assuranceView, groupedOptions, launchBody, launchOptions, providerChoices, mergeEvents, metricRows, runRows, runView, toolCalls, transcript, unitStates,
 } from "../../apps/web/runs.mjs";
 import { describeHold, view as reviewView } from "../../apps/web/review.mjs";
 
@@ -170,4 +170,35 @@ test("assurance labels each judge's calibration status and never implies calibra
   });
   assert.match(view.judges[0], /no calibration report \(advisory only\)/);
   assert.match(view.judges[1], /calrep_1 \(not approved, advisory only\)/);
+});
+
+test("launch options carry group, title and expected outcome, and group in server order", () => {
+  const options = launchOptions({ items: [
+    { scenario_id: "b", version: 1, runnable: true, definition: { goal: "g", applicable_criteria: ["X"], expected_tool_sequence: ["t"] },
+      presentation: { group: "Second", group_order: 1, title: "B", expected_outcome: "does b" } },
+    { scenario_id: "a", version: 1, runnable: true, definition: {}, presentation: { group: "First", group_order: 0, title: "A", expected_outcome: "does a" } },
+    { scenario_id: "c", version: 1, runnable: true, definition: {} },
+  ] });
+  assert.deepEqual(options[0].tools, ["t"]);
+  assert.equal(options[2].group, "Other scenarios");
+  const groups = groupedOptions(options);
+  assert.deepEqual(groups.map((g) => g.group), ["First", "Second", "Other scenarios"]);
+  assert.deepEqual(groups[1].items.map((i) => i.index), [0]);
+});
+
+test("a superseded unit is followed by the replacement that was actually released", () => {
+  const events = [
+    { sequence: 1, type: "input.caller_audio", content: { turn: 1 } },
+    { sequence: 2, type: "audio.output", content: { unit_id: "old", transcript: "Please verify", response_id: "r" } },
+    { sequence: 3, type: "transcript.revised", content: { unit_id: "old", new: "Please verify yourself" } },
+    { sequence: 4, type: "audio.approval_replaced", content: { old_unit_id: "old", new_unit_id: "new" } },
+    { sequence: 5, type: "decision", content: { target: "audio_chunk", unit_id: "new", action: "allow", reason_codes: [] } },
+    { sequence: 6, type: "playback.released", content: { unit_id: "new", token_id: "t" } },
+  ];
+  const lines = transcript(events);
+  assert.deepEqual(lines.map((l) => [l.speaker, l.state]), [["customer", null], ["assistant", "superseded"], ["assistant", "released"]]);
+  assert.equal(lines[2].text, "Please verify yourself");
+  assert.equal(lines[1].generatedButNotReleased, false);
+  assert.match(lines[1].note, /replacement shown below/);
+  assert.equal(transcript([...events, { sequence: 7, type: "simulator.utterance_generated", content: { output_text: "hi" } }]).filter((l) => l.speaker === "customer").length, 1);
 });

@@ -1,7 +1,7 @@
-import { createWorkspace, renderOverview, renderRecent } from "./live-view.mjs?v=20261019-redesign2";
+import { createWorkspace, renderOverview, renderRecent } from "./live-view.mjs?v=20261019-grouped";
 import { friendlyError, renderGetStarted, renderReadiness } from "./onboarding.mjs";
 import {
-  api, fetchEvents, launchBody, launchOptions, mergeEvents, providerChoices, TERMINAL, el,
+  api, fetchEvents, groupedOptions, launchBody, launchOptions, mergeEvents, providerChoices, TERMINAL, el,
 } from "./runs.mjs";
 
 const $ = (id) => document.getElementById(id);
@@ -98,12 +98,28 @@ function syncProvider() {
     : "Scripted fixture · No live provider calls. Checks enforcement mechanics rather than voice quality.";
 }
 
+function renderExpectation() {
+  const option = options[Number($("scenario").value)];
+  const box = $("expectation");
+  if (!option) { box.replaceChildren(); return; }
+  box.replaceChildren(
+    el("strong", "", option.title),
+    el("p", "", option.expected ?? "No expected-outcome note is recorded for this scenario."),
+    el("p", "muted", "Goal: " + option.summary + (option.tools.length ? " · Expected tools: " + option.tools.join(" → ") : " · No tool calls expected")
+      + (option.criteria.length ? " · Assessed on: " + option.criteria.join(", ") : "")),
+  );
+}
+
 async function connect() {
   error.textContent = "";
   try {
     options = launchOptions(await api(token, "/api/v1/scenarios"));
     const select = $("scenario");
-    select.replaceChildren(...options.map((o, i) => Object.assign(el("option", "", o.label + (o.summary ? " - " + o.summary : "")), { value: String(i) })));
+    select.replaceChildren(...groupedOptions(options).map(({ group, items }) => {
+      const optgroup = Object.assign(document.createElement("optgroup"), { label: group + " (" + items.length + ")" });
+      optgroup.append(...items.map(({ option, index }) => Object.assign(el("option", "", option.title + (option.live ? "" : " · scripted")), { value: String(index) })));
+      return optgroup;
+    }));
     const scripted = options.findIndex((o) => !o.live);
     if (scripted >= 0) select.value = String(scripted); // start on a fixture that needs no provider setup
     const liveProviders = await api(token, "/api/v1/live-providers");
@@ -114,6 +130,7 @@ async function connect() {
     const firstAvailable = providers.find((p) => !p.disabled);
     if (firstAvailable) $("provider").value = firstAvailable.id;
     syncProvider();
+    renderExpectation();
     $("launch").hidden = false;
     remember(token);
     connected = true;
@@ -142,7 +159,7 @@ $("auth").addEventListener("submit", (event) => {
   token = $("token").value;
   connect();
 });
-$("scenario").addEventListener("change", syncProvider);
+$("scenario").addEventListener("change", () => { syncProvider(); renderExpectation(); });
 $("refresh").addEventListener("click", () => connect());
 $("launch").addEventListener("submit", async (event) => {
   event.preventDefault();

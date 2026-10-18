@@ -29,11 +29,29 @@ export function runRows(payload) {
   }));
 }
 
-/** Pure: scenarios payload -> launchable options (only runnable definitions). */
+/** Pure: scenarios payload -> launchable options (only runnable definitions), with grouping and expected outcome. */
 export function launchOptions(payload) {
   return payload.items
     .filter((s) => s.runnable)
-    .map((s) => ({ id: s.scenario_id, version: s.version, label: s.scenario_id + " v" + s.version, summary: s.definition?.goal ?? "", live: s.execution === "live_adapter" }));
+    .map((s) => ({
+      id: s.scenario_id, version: s.version, label: s.scenario_id + " v" + s.version, summary: s.definition?.goal ?? "",
+      live: s.execution === "live_adapter",
+      group: s.presentation?.group ?? "Other scenarios", groupOrder: s.presentation?.group_order ?? 99,
+      title: s.presentation?.title ?? s.scenario_id,
+      expected: s.presentation?.expected_outcome ?? null,
+      criteria: s.definition?.applicable_criteria ?? [],
+      tools: s.definition?.expected_tool_sequence ?? [],
+    }));
+}
+
+/** Pure: options -> [{ group, items: [{ option, index }] }] in group order, keeping each option's index into `options`. */
+export function groupedOptions(options) {
+  const groups = new Map();
+  options.forEach((option, index) => {
+    if (!groups.has(option.group)) groups.set(option.group, { group: option.group, order: option.groupOrder, items: [] });
+    groups.get(option.group).items.push({ option, index });
+  });
+  return [...groups.values()].sort((a, b) => a.order - b.order);
 }
 
 /** Pure: body of POST /api/v1/runs. A live scenario needs a live provider config; mock scenarios never take one. */
@@ -117,7 +135,7 @@ export function unitStates(events) {
         for (const id of c.discarded_unit_ids ?? []) ensure(id).state = "discarded";
         break;
       case "audio.approval_replaced":
-        ensure(c.old_unit_id).state = "superseded";
+        Object.assign(ensure(c.old_unit_id), { state: "superseded", replacedBy: c.new_unit_id });
         break;
       case "transcript.revised":
         if (units.has(c.unit_id)) units.get(c.unit_id).revised = c.new;
@@ -132,21 +150,35 @@ export function unitStates(events) {
 export function transcript(events) {
   const states = new Map(unitStates(events).map((u) => [u.unitId, u]));
   const lines = [];
+  const simulated = events.some((e) => e.type === "simulator.utterance_generated");
   for (const e of events) {
     if (e.type === "simulator.utterance_generated") {
       lines.push({ sequence: e.sequence, speaker: "customer", text: e.content.output_text, state: null });
+    } else if (e.type === "input.caller_audio" && !simulated) {
+      // The ledger stores only a hash of the caller's words, so show that the turn happened, not what was said.
+      lines.push({ sequence: e.sequence, speaker: "customer", text: "Synthetic caller audio (turn " + (e.content.turn ?? "?") + "; words are in the scenario definition, not the ledger)", state: null });
     } else if (e.type === "audio.output") {
-      const u = states.get(e.content.unit_id);
-      const withheld = u.state === "blocked" || u.state === "expired" || u.state === "discarded";
-      lines.push({
-        sequence: e.sequence,
-        speaker: "assistant",
-        text: e.content.transcript,
-        state: u.state,
-        stateLabel: u.label,
-        generatedButNotReleased: withheld,
-        note: u.state === "blocked" ? (u.reasons.join(", ") + (u.safeText ? "; safe text: " + u.safeText : "")) : null,
-      });
+      // A superseded unit is followed by the unit that replaced it, so the line that was actually released is visible.
+      let u = states.get(e.content.unit_id);
+      let text = e.content.transcript;
+      for (let hops = 0; u && hops < 10; hops++) {
+        const withheld = u.state === "blocked" || u.state === "expired" || u.state === "discarded";
+        const next = u.state === "superseded" ? u.replacedBy : null;
+        lines.push({
+          sequence: e.sequence,
+          speaker: "assistant",
+          text,
+          state: u.state,
+          stateLabel: u.label,
+          generatedButNotReleased: withheld,
+          replacedBy: next,
+          note: u.state === "blocked" ? (u.reasons.join(", ") + (u.safeText ? "; safe text: " + u.safeText : ""))
+            : next ? "Transcript was re-assessed; replacement shown below" : null,
+        });
+        if (!next) break;
+        text = u.revised ?? text;
+        u = states.get(next) ?? { state: "pending", label: UNIT_LABEL.pending, reasons: [] };
+      }
     }
   }
   return lines;
