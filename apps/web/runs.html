@@ -4,21 +4,23 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
-<title>Runs</title>
-<link rel="stylesheet" href="./ops.css?v=20261019-ui2">
+<title>Voice Harness · Evaluation workspace</title>
+<link rel="stylesheet" href="./ops.css?v=20261019-redesign2">
 </head>
 <body>
 <main>
-  <nav aria-label="Main navigation"><a href="./runs.html" aria-current="page">Runs</a><a href="./review.html">Hold review</a><a href="./coverage.html">Provider coverage</a></nav>
+  <nav aria-label="Main navigation"><a href="./runs.html" aria-current="page">Runs</a><a href="./compare.html">Compare</a><a href="./review.html">Hold review</a><a href="./coverage.html">Provider coverage</a></nav>
   <p class="eyebrow">Voice Harness / Evaluations</p>
-  <h1>Run an evaluation</h1>
-  <p class="sub">Choose a scripted fixture to check the harness, or a live scenario to evaluate a configured provider. Follow the transcript, safety decisions and assessment, then download the evidence.</p>
+  <h1>Evaluation workspace</h1>
+  <p class="sub">Follow what the model generates, what policy permits, and what reaches playback. Inspect every decision in its recorded evidence.</p>
   <form id="auth" class="panel">
     <input id="token" type="password" autocomplete="off" placeholder="Operator token" aria-label="Operator token" required>
     <button type="submit">Connect</button>
   </form>
   <div id="help"></div>
   <p id="connection" role="status" aria-live="polite">Connect with your operator token to load scenarios and runs.</p>
+  <section id="overview" class="insight-grid" aria-label="Recent run overview"></section>
+  <details class="launch-drawer"><summary>New evaluation · scenario & configuration</summary>
   <form id="launch" class="panel" hidden>
     <label>Scenario<select id="scenario" aria-label="Scenario"></select></label>
     <label id="provider-field" hidden>Provider configuration<select id="provider" aria-label="Live provider"></select></label>
@@ -30,13 +32,14 @@
     <button id="launch-button" class="primary" type="submit">Launch evaluation</button>
     <button type="button" id="refresh">Refresh runs / reconnect</button>
   </form>
+  </details>
   <p id="error" role="alert"></p>
-  <div class="layout two">
+  <div class="workspace-layout">
     <div><section class="panel"><h2>Recent runs (latest 50)</h2><div id="list"><p class="muted">Connect to see recent runs.</p></div></section></div>
-    <div id="detail"><p class="muted">Select a run to inspect its results and evidence. Your selection gets a shareable local URL.</p></div>
+    <div id="detail"><section class="panel empty-workspace"><h2>Follow an evaluation as it happens</h2><p>Select a recent run to explore its execution graph, conversation and evidence. Or open New evaluation to launch a scripted fixture.</p></section></div>
   </div>
   <p class="note">Live view polls the events endpoint every two seconds while a run is not terminal.</p>
 </main>
-<script type="module" src="./runs-page.mjs?v=20261019-ui2"></script>
+<script type="module" src="./runs-page.mjs?v=20261019-redesign2"></script>
 </body>
 </html>

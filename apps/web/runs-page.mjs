@@ -1,6 +1,7 @@
+import { createWorkspace, renderOverview, renderRecent } from "./live-view.mjs?v=20261019-redesign2";
 import { friendlyError, renderGetStarted, renderReadiness } from "./onboarding.mjs";
 import {
-  api, fetchEvents, launchBody, launchOptions, mergeEvents, providerChoices, renderRun, renderRunList, runRows, runView, TERMINAL, el,
+  api, fetchEvents, launchBody, launchOptions, mergeEvents, providerChoices, TERMINAL, el,
 } from "./runs.mjs";
 
 const $ = (id) => document.getElementById(id);
@@ -8,6 +9,9 @@ const error = $("error");
 let token = "";
 let options = [];
 let providers = [];
+let liveProvidersPayload = {items:[]};
+let workspace = null;
+let overviewTimer = null;
 let connected = false;
 let launching = false;
 let current = null; // {runId, events, timer}
@@ -20,7 +24,9 @@ function recall() {
 }
 
 async function refreshList() {
-  renderRunList($("list"), runRows(await api(token, "/api/v1/runs?limit=50")), openRun);
+  const payload = await api(token, "/api/v1/runs?limit=50");
+  renderRecent($("list"), payload, openRun);
+  renderOverview($("overview"), payload, liveProvidersPayload.items);
 }
 
 async function paint() {
@@ -36,8 +42,7 @@ async function paint() {
   const incoming = await fetchEvents(token, runId, after);
   if (current !== selected) return true;
   selected.events = mergeEvents(selected.events, incoming);
-  renderRun($("detail"), runView(run, selected.events, metrics, holds, assurance), cancelRun);
-  addEvidenceAction(runId);
+  workspace.update(run, selected.events, metrics, holds, assurance);
   $("connection").textContent = TERMINAL.has(run.state) ? "Connected · Run finished. Review its assurance verdict below." : "Connected · Updating this run every two seconds.";
   return TERMINAL.has(run.state);
 }
@@ -63,6 +68,9 @@ async function openRun(runId) {
   error.textContent = "";
   if (current?.timer) clearTimeout(current.timer);
   current = { runId, events: [], timer: null };
+  workspace = createWorkspace($("detail"), cancelRun);
+  addEvidenceAction(runId);
+  $("detail").scrollIntoView({behavior:"smooth", block:"start"});
   const mine = current;
   const tick = async () => {
     try {
@@ -99,6 +107,7 @@ async function connect() {
     const scripted = options.findIndex((o) => !o.live);
     if (scripted >= 0) select.value = String(scripted); // start on a fixture that needs no provider setup
     const liveProviders = await api(token, "/api/v1/live-providers");
+    liveProvidersPayload = liveProviders;
     providers = providerChoices(liveProviders);
     renderReadiness($("checklist"), liveProviders);
     $("provider").replaceChildren(...providers.map((p) => Object.assign(el("option", "", p.label), { value: p.id, disabled: p.disabled })));
@@ -111,10 +120,17 @@ async function connect() {
     $("help").querySelector("details").open = false;
     $("connection").textContent = "Connected · Select a scenario to launch or inspect a recent run.";
     await refreshList();
+    clearTimeout(overviewTimer);
+    const refreshOverview = async () => {
+      try { await refreshList(); } catch (e) { error.textContent = "Overview update interrupted: " + friendlyError(e); }
+      if (connected) overviewTimer = setTimeout(refreshOverview, 5000);
+    };
+    overviewTimer = setTimeout(refreshOverview, 5000);
     const wanted = new URLSearchParams(location.search).get("run");
     if (wanted) await openRun(wanted);
   } catch (e) {
     connected = false;
+    clearTimeout(overviewTimer);
     $("connection").textContent = "Not connected · Check your token and try again.";
     $("launch").hidden = true;
     error.textContent = "Could not connect: " + friendlyError(e);
@@ -148,6 +164,7 @@ $("launch").addEventListener("submit", async (event) => {
       body: JSON.stringify(body),
     });
     await refreshList();
+    $("launch").closest("details").open = false;
     await openRun(launched.run_ids[0]);
   } catch (e) {
     error.textContent = "Could not launch: " + e.message;
