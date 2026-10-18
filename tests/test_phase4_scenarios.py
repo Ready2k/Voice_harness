@@ -69,6 +69,14 @@ class Catalogue(unittest.TestCase):
         self.assertTrue(all(i["execution"] == "mock" for i in items if i["scenario_id"] in SCENARIOS))
 
 
+class CatalogueCriteria(unittest.TestCase):
+    def test_vulnerable_personas_and_commit_scenarios_declare_the_criteria_they_exercise(self):
+        for sid, entry in CATALOGUE.items():
+            criteria = entry["definition"]["applicable_criteria"]
+            self.assertEqual("CARE-01" in criteria, entry["definition"]["customer"]["vulnerability"] != "none", sid)
+            self.assertEqual("CONFIRM-01" in criteria, sid.startswith("commit-cancel-"), sid)
+
+
 class AllowedAmounts(unittest.TestCase):
     def test_tool_returned_amount_is_allowed_but_others_and_silence_are_judged_as_before(self):
         from voice_harness.semantic_checks import semantic_check

@@ -38,6 +38,7 @@ from .engine import Engine
 from .evidence import Evidence
 from .exports import download_links
 from .inbound_queue import InboundQueue
+from .judges import service as judge_service
 from .live_scenario import LIVE_LIMITS
 from .metrics import derive as derive_metrics
 from .review_api import register_review_routes
@@ -133,8 +134,21 @@ def create_app(
                 tx.event("orchestrator", "run.failed", {"reason": "PROVIDER_FAILURE"})
             else:
                 tx.state["state"] = "completed"
-                # Live speech decisions are in the ledger; no overall assurance is claimed without a judge run.
+                # The overall assurance is derived by the assessment below, from the ledger.
                 tx.event("orchestrator", "run.completed", {"assurance": None})
+        if failed or summary["adapter_errors"]:
+            return
+        # Deterministic rubric checks only: criteria that need a judge stay untestable until an operator runs
+        # POST /runs/{id}/assessments with independent judges. Any assessment failure fails the run closed.
+        result = judge_service.assess_run(
+            database, run_id, tested=live_providers.TESTED_MODELS[config["provider_config_id"]], backends=[]
+        )
+        with database.transaction(run_id) as tx:
+            tx.state["assurance"] = {
+                "model_behaviour": result["model_behaviour"],
+                "platform_enforcement": result["platform_enforcement"],
+                "overall_assurance": result["overall_assurance"],
+            }
 
     @asynccontextmanager
     async def lifespan(app):

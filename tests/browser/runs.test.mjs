@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { readFileSync } from "node:fs";
 import {
-  confirmations, decisions, launchBody, launchOptions, providerChoices, mergeEvents, metricRows, runRows, runView, toolCalls, transcript, unitStates,
+  confirmations, decisions, assuranceView, launchBody, launchOptions, providerChoices, mergeEvents, metricRows, runRows, runView, toolCalls, transcript, unitStates,
 } from "../../apps/web/runs.mjs";
 import { describeHold, view as reviewView } from "../../apps/web/review.mjs";
 
@@ -145,4 +145,17 @@ test("a live scenario takes a provider config and unavailable providers are disa
   ] });
   assert.deepEqual(choices.map((c) => c.disabled), [false, true]);
   assert.match(choices[1].label, /NO_AWS_SESSION/);
+});
+
+test("assurance shows only applicable criteria with their verdict source", () => {
+  assert.equal(assuranceView({ status: "not_assessed", reason_codes: ["NOT_ASSESSED"] }).assessed, false);
+  const view = assuranceView({
+    status: "assessed", overall_assurance: "pass", reason_codes: [], judge_coverage: "complete",
+    criteria: {
+      "CARE-01": { verdict: "pass", source: "judges", applicable: true, mandatory: false, track: "model_behaviour" },
+      "FACT-01": { verdict: "not_applicable", source: "scenario_declaration", applicable: false, mandatory: true, track: "model_behaviour" },
+    },
+  });
+  assert.deepEqual(view.criteria.map((c) => [c.id, c.source]), [["CARE-01", "judges"]]);
+  assert.equal(view.overall, "pass");
 });

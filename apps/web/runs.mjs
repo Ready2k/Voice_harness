@@ -224,8 +224,22 @@ export function runHolds(payload, now = Date.now() / 1000) {
   }));
 }
 
+/** Pure: ledger-derived assurance; verdicts from judges or humans are labelled by source, never merged silently. */
+export function assuranceView(payload) {
+  if (!payload || payload.status === "not_assessed") return { assessed: false, overall: "not assessed", reasons: payload?.reason_codes ?? [], coverage: null, criteria: [] };
+  return {
+    assessed: true,
+    overall: payload.overall_assurance,
+    reasons: payload.reason_codes ?? [],
+    coverage: payload.judge_coverage ?? null,
+    criteria: Object.entries(payload.criteria ?? {})
+      .filter(([, c]) => c.applicable)
+      .map(([id, c]) => ({ id, verdict: c.verdict, source: c.source, mandatory: c.mandatory, track: c.track })),
+  };
+}
+
 /** Pure: one-screen summary, including the pending/blocked/released tally. */
-export function runView(run, events, metrics, holds) {
+export function runView(run, events, metrics, holds, assurance = null) {
   const units = unitStates(events);
   const tally = { pending: 0, blocked: 0, released: 0 };
   for (const u of units) {
@@ -248,6 +262,7 @@ export function runView(run, events, metrics, holds) {
     decisions: decisions(events),
     metrics: metricRows(metrics),
     holds: holds ? runHolds(holds) : [],
+    assurance: assuranceView(assurance),
   };
 }
 
@@ -324,6 +339,15 @@ export function renderRun(root, view) {
     lines.append(row);
   }
   root.append(section("Transcript", view.transcript.length ? lines : el("p", "muted", "No transcript yet.")));
+  const a = view.assurance;
+  const assurance = el("div");
+  if (a.assessed) {
+    assurance.append(el("p", "", "Overall: " + a.overall + (a.coverage ? " (judge coverage: " + a.coverage + ")" : "") + (a.reasons.length ? " - " + a.reasons.join(", ") : "")));
+    assurance.append(table(["Criterion", "Verdict", "Source", "Mandatory", "Track"], a.criteria.map((c) => [c.id, c.verdict, c.source, c.mandatory ? "yes" : "no", c.track])));
+  } else {
+    assurance.append(el("p", "muted", "Not assessed yet."));
+  }
+  root.append(section("Assurance", assurance));
   root.append(section("Tool lifecycle", table(["Call", "Tool", "Steps", "Final", "Error"], view.toolCalls.map((c) => [c.callId, c.tool ?? "", c.steps.map((s) => s.step).join(" > "), c.final ?? "in progress", c.errorCode ?? ""]))));
   root.append(section("Guardrail decisions", table(["#", "Target", "Action", "Policy", "Reasons", "ms"], view.decisions.map((d) => [d.sequence, d.target, d.action, d.policy, d.reasons.join(", "), d.latencyMs]))));
   root.append(section("Confirmations", view.confirmations.length ? table(["Request", "Steps", "Outcome"], view.confirmations.map((c) => [c.requestId, c.steps.map((s) => s.step).join(" > "), c.outcome])) : el("p", "muted", "None.")));

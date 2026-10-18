@@ -46,6 +46,12 @@ def _variant(base_id, scenario_id, persona, vulnerability, locale, audio_profile
     base = SCENARIOS[base_id]
     lines = [utterance] if isinstance(utterance, str) else utterance
     turns = [{**base["turns"][0], "customer": line} for line in lines]
+    # Judge-authority and commit criteria apply where the scenario exercises them.
+    criteria = list(base["applicable_criteria"])
+    if vulnerability != "none":
+        criteria.append("CARE-01")
+    if scenario_id.startswith("commit-cancel-"):
+        criteria.append("CONFIRM-01")
     definition = ScenarioDefinition.model_validate(
         {
             **base,
@@ -54,6 +60,7 @@ def _variant(base_id, scenario_id, persona, vulnerability, locale, audio_profile
             "audio_profile": audio_profile,
             "customer": {"persona": persona, "vulnerability": vulnerability},
             "turns": turns,
+            "applicable_criteria": criteria,
             "reference_transcript": None,
         }
     ).model_dump()

@@ -10,7 +10,7 @@ from __future__ import annotations
 import time
 import uuid
 
-from ..scenario_defs import SCENARIOS
+from ..scenario_catalogue import scenario_definition
 from . import adjudicate, calibration, independence, rubric, store
 from .backends import JudgeBackend
 from .events import JUDGE_EVENT_CONTRACTS
@@ -32,6 +32,13 @@ def _plain(events):
     return [e for e in events if not e["type"].startswith(JUDGING_PREFIXES)]
 
 
+def scenario_for(state: dict):
+    try:
+        return scenario_definition(state["config"].get("scenario_id"))
+    except KeyError:
+        return None
+
+
 def fixture_for(state: dict) -> dict:
     return {
         "fixture_snapshot_id": state.get("fixture_snapshot_id"), "account_id": state.get("account_id", "acct_1001"),
@@ -48,7 +55,7 @@ def assess_run(database, run_id: str, *, tested: dict, backends: list[JudgeBacke
         raise ValueError("RUN_NOT_FINISHED")
     all_events = database.events(run_id)
     events = _plain(all_events)
-    scenario = SCENARIOS.get(state["config"].get("scenario_id"))
+    scenario = scenario_for(state)
     evaluation_id = "eval_" + uuid.uuid4().hex[:12]
     applicable, not_applicable, unknown = rubric.applicability(scenario, extra_applicable)
     ctx = EvalContext(events, scenario, fixture_for(state))
@@ -147,7 +154,7 @@ def assess_online(database, run_id: str, backend: JudgeBackend, *, tested: dict 
         raise ValueError("EMPTY_WINDOW")
     if tested and tested["provider"] == backend.config.provider and tested["model_id"] == backend.config.model_id:
         raise ValueError("JUDGE_IS_TESTED_MODEL")
-    ctx = EvalContext(window, SCENARIOS.get(state["config"].get("scenario_id")), fixture_for(state))
+    ctx = EvalContext(window, scenario_for(state), fixture_for(state))
     oracle = build_oracle(
         window, scenario=ctx.scenario, fixture=ctx.fixture, policy_version=state.get("policy_version", "strict-v1"),
         criteria=[c for c in rubric.CRITERIA if rubric.CRITERIA[c].judge_eligible],

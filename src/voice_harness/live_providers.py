@@ -38,6 +38,11 @@ TOOLS = [
 ]
 
 LIVE_PROVIDERS = {"openai-realtime-live": "openai_realtime", "nova-sonic-live": "aws_nova_sonic"}
+# The model under test, as recorded for judge independence checks (a judge must not be the tested model).
+TESTED_MODELS = {
+    "openai-realtime-live": {"provider": "openai", "model_id": "gpt-realtime-2.1", "family": "openai_realtime"},
+    "nova-sonic-live": {"provider": "aws", "model_id": "amazon.nova-2-5-sonic", "family": "aws_nova_sonic"},
+}
 
 
 class PreconditionFailed(Exception):
@@ -119,4 +124,4 @@ async def run_live(engine, run_id, provider_config_id, scenario_id, *, seed=0):
             await adapter.close("done")
 
 
-__all__ = ["LIVE_LIMITS", "LIVE_PROVIDERS", "PreconditionFailed", "availability", "run_live"]
+__all__ = ["LIVE_LIMITS", "LIVE_PROVIDERS", "TESTED_MODELS", "PreconditionFailed", "availability", "run_live"]

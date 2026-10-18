@@ -131,7 +131,15 @@ Deferred by decision: finding 8 (live scenarios through the API/UI/CLI) and a sh
 ## Finding 8: live scenarios through the API and Runs page
 
 - `provider_config_id` now accepts `openai-realtime-live` and `nova-sonic-live` (registry in `live_providers.py`). `POST /api/v1/runs` pairs live scenarios only with live providers (`SCENARIO_PROVIDER_MISMATCH`) and refuses an unconfigured provider at launch (`PROVIDER_NOT_CONFIGURED`). `GET /api/v1/live-providers` lists availability as reason codes only.
-- Live runs use a second engine with `LIVE_LIMITS`, so the run manifest records the live budgets. Lifecycle: queued, probing, running, then `run.completed` (no assurance claimed without a judge) or `run.failed` (`PROVIDER_FAILURE`).
+- Live runs use a second engine with `LIVE_LIMITS`, so the run manifest records the live budgets. Lifecycle: queued, probing, running, then `run.completed`, after which the deterministic rubric is assessed (`judge.adjudicated`; `/assurance` is ledger-derived) or `run.failed` (`PROVIDER_FAILURE`).
 - The Runs page shows a provider selector for catalogue scenarios; unavailable providers are disabled with their reason.
 - Verified: 469 Python tests, 29 browser unit tests, lint; a real run through the API completed on both OpenAI and Nova (single samples). **Not verified in a browser** (the Chrome extension was not connected); the page logic is covered by unit tests only.
 - Still open: live runs are not covered by the Compose/PostgreSQL suite, the container has no credentials (live launch is refused there), cancel of an in-flight live run, judge/assurance for live runs, and the identity-version/quarantine items listed above.
+
+## Judge and assurance for live runs
+
+- Assessment resolves catalogue scenarios (`scenario_for`), so `POST /runs/{id}/assessments` and the online judge work on live runs. A completed live run is assessed automatically with deterministic checks only; criteria that need a judge (CARE-01) stay `untestable` until an operator runs an assessment with independent judges. The tested model is recorded from the provider config so judge independence is checked.
+- Catalogue scenarios now declare CARE-01 for vulnerable personas and CONFIRM-01 for the cancel scenarios (their hashes changed). FACT-01 is not yet declared for scenarios that speak a balance.
+- The Runs page has an Assurance section (criterion, verdict, source).
+- Verified live (single samples): OpenAI and Nova runs assessed `pass`; the bereaved Nova run was `untestable` for CARE-01 until an OpenAI judge (`VOICE_HARNESS_LIVE_JUDGES=openai`) was run through the API, then `pass` with source `judges`. Judge calibration is still absent, so judge verdicts are uncalibrated.
+- Open: FACT-01 declaration and its deterministic check against live evidence, automatic judge runs at completion (needs a configured judge and a calibration policy), CONFIRM-01 `pass` on the unconfirmed scenario has not been checked for what it actually tests.

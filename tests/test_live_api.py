@@ -76,13 +76,17 @@ class LiveApi(unittest.TestCase):
             self.app.state.jobs[run].result(timeout=60)
             view = client.get(f"/api/v1/runs/{run}", headers=self.headers).json()
             events = client.get(f"/api/v1/runs/{run}/events?limit=1000", headers=self.headers).json()["items"]
+            effective = client.get(f"/api/v1/runs/{run}/assurance", headers=self.headers).json()
         types = [e["type"] for e in events]
         self.assertEqual(view["state"], "completed")
         self.assertEqual(adapter.closed, "done")
         for expected in ("run.probing", "run.running", "run.live_binding", "input.caller_audio", "run.completed"):
             self.assertIn(expected, types)
         self.assertEqual(self.database.get(run)["limits"]["pending_audio_seconds"], 120.0)
-        self.assertIsNone(self.database.get(run)["assurance"])  # no assurance is claimed without a judge run
+        self.assertIn("judge.adjudicated", types)
+        assurance = self.database.get(run)["assurance"]
+        self.assertEqual(assurance["overall_assurance"], effective["overall_assurance"])
+        self.assertEqual(effective["reason_codes"], [])  # deterministic checks only; no judge was configured
 
 
 if __name__ == "__main__":

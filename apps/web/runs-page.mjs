@@ -21,14 +21,15 @@ async function refreshList() {
 }
 
 async function paint() {
-  const [run, metrics, holds] = await Promise.all([
+  const [run, metrics, holds, assurance] = await Promise.all([
     api(token, "/api/v1/runs/" + encodeURIComponent(current.runId)),
     api(token, "/api/v1/metrics/" + encodeURIComponent(current.runId)),
     api(token, "/api/v1/holds-register?state=all&run_id=" + encodeURIComponent(current.runId)),
+    api(token, "/api/v1/runs/" + encodeURIComponent(current.runId) + "/assurance"),
   ]);
   const after = current.events.length ? current.events[current.events.length - 1].sequence : 0;
   current.events = mergeEvents(current.events, await fetchEvents(token, current.runId, after));
-  renderRun($("detail"), runView(run, current.events, metrics, holds));
+  renderRun($("detail"), runView(run, current.events, metrics, holds, assurance));
   return TERMINAL.has(run.state);
 }
 
