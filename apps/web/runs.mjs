@@ -312,11 +312,17 @@ export function renderRunList(root, rows, onOpen) {
   root.append(t);
 }
 
-export function renderRun(root, view) {
+export function renderRun(root, view, onCancel = null) {
   root.replaceChildren();
   const head = el("div", "run-head");
   head.append(el("h2", "", "Run " + view.runId), el("span", "badge state-" + view.state, view.state));
   if (view.termination) head.append(el("span", "muted", "ended: " + view.termination));
+  if (onCancel && !view.terminal) {
+    const cancel = el("button", "", "Cancel run");
+    cancel.type = "button";
+    cancel.addEventListener("click", () => onCancel(view.runId));
+    head.append(cancel);
+  }
   root.append(head);
   const tally = el("div", "tally");
   for (const [name, value] of Object.entries(view.tally)) {

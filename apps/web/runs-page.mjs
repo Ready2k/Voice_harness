@@ -29,8 +29,22 @@ async function paint() {
   ]);
   const after = current.events.length ? current.events[current.events.length - 1].sequence : 0;
   current.events = mergeEvents(current.events, await fetchEvents(token, current.runId, after));
-  renderRun($("detail"), runView(run, current.events, metrics, holds, assurance));
+  renderRun($("detail"), runView(run, current.events, metrics, holds, assurance), cancelRun);
   return TERMINAL.has(run.state);
+}
+
+async function cancelRun(runId) {
+  error.textContent = "";
+  try {
+    await api(token, "/api/v1/runs/" + encodeURIComponent(runId) + "/cancel", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ reason: "operator_cancelled" }),
+    });
+    await openRun(runId);
+  } catch (e) {
+    error.textContent = "Could not cancel: " + e.message;
+  }
 }
 
 async function openRun(runId) {

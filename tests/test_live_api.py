@@ -1,7 +1,9 @@
 """Live scenarios launched through the API run lifecycle (finding 8); provider traffic is scripted."""
 
+import asyncio
 import os
 import tempfile
+import threading
 import unittest
 from pathlib import Path
 from unittest import mock
@@ -23,6 +25,17 @@ class FakeAdapter(ScriptedAdapter):
 
     async def close(self, reason):
         self.closed = reason
+
+
+class HangingAdapter(FakeAdapter):
+    """A provider session that never answers, so the run is in flight until it is cancelled."""
+
+    opened = None
+
+    async def receive(self):
+        self.opened.set()
+        await asyncio.Event().wait()
+        yield  # pragma: no cover
 
 
 class LiveApi(unittest.TestCase):
@@ -58,6 +71,36 @@ class LiveApi(unittest.TestCase):
         self.assertEqual(mock_with_live.json()["error"]["code"], "SCENARIO_PROVIDER_MISMATCH")
         self.assertEqual(live_with_builtin.json()["error"]["code"], "SCENARIO_PROVIDER_MISMATCH")
         self.assertEqual((unknown.status_code, unknown.json()["error"]["code"]), (422, "UNKNOWN_SCENARIO"))
+
+    def test_cancel_stops_an_in_flight_live_run_and_closes_the_provider_session(self):
+        adapter = HangingAdapter()
+        adapter.opened = threading.Event()
+        patches = [
+            mock.patch.object(live_providers, "availability", lambda provider_id, environ=None: (True, None)),
+            mock.patch.object(live_providers, "_adapter", lambda provider_id: (adapter, {"tools": []})),
+            mock.patch.object(live_providers, "select_backend", lambda: ScriptedAsr(queue=["x"])),
+        ]
+        for patch in patches:
+            patch.start()
+            self.addCleanup(patch.stop)
+        with TestClient(self.app) as client:
+            created = self.launch(client, {"scenario_id": LIVE, "provider_config_id": "nova-sonic-live"}, "f")
+            run = created.json()["run_ids"][0]
+            self.assertTrue(adapter.opened.wait(30))
+            self.assertEqual(client.get(f"/api/v1/runs/{run}", headers=self.headers).json()["state"], "running")
+            cancel = client.post(f"/api/v1/runs/{run}/cancel", headers=self.headers, json={"reason": "operator"})
+            self.assertEqual((cancel.status_code, cancel.json()["state"]), (202, "cancelled"))
+            self.app.state.jobs[run].result(timeout=30)  # the worker unwinds instead of waiting for the provider
+            events = client.get(f"/api/v1/runs/{run}/events?limit=1000", headers=self.headers).json()["items"]
+            view = client.get(f"/api/v1/runs/{run}", headers=self.headers).json()
+        types = [e["type"] for e in events]
+        self.assertEqual(adapter.closed, "cancelled")
+        self.assertEqual(view["state"], "cancelled")
+        self.assertIn("run.cancelled", types)
+        self.assertNotIn("run.completed", types)
+        self.assertNotIn("run.failed", types)
+        self.assertNotIn("judge.adjudicated", types)  # a cancelled run is not assessed
+        self.assertIsNone(self.database.get(run)["assurance"])
 
     def test_live_run_goes_through_the_lifecycle_with_live_budgets(self):
         adapter = FakeAdapter()

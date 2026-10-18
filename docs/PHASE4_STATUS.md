@@ -145,3 +145,9 @@ Deferred by decision: finding 8 (live scenarios through the API/UI/CLI) and a sh
 - Open: FACT-01 declaration and its deterministic check against live evidence, automatic judge runs at completion (needs a configured judge and a calibration policy), CONFIRM-01 `pass` on the unconfirmed scenario has not been checked for what it actually tests.
 
 Browser check (Chrome, local dev server): the Runs page loads the catalogue and runs, the Assurance section renders for a judged live run (verdicts labelled deterministic/judges), and the provider selector appears only for live scenarios. This found a CSS bug unit tests could not: `form { display:flex }` overrode the `hidden` attribute (launch form visible before connecting, provider selector always visible); fixed with a `[hidden]` rule. Screenshots and page JavaScript were blocked by another extension in this session, so layout was checked through the accessibility tree and page text, not visually.
+
+## Cancelling in-flight live runs
+
+- `POST /runs/{id}/cancel` still settles the ledger through `Engine.cancel` (epoch bump, tokens revoked, held audio discarded) and now also cancels the runner task, which closes the provider session with reason `cancelled`. A cancel that lands before the task registers is honoured at registration. A cancelled run emits no `run.completed`, no assessment and no assurance.
+- Verified: a hanging scripted session cancels and closes (test); real OpenAI and Nova runs cancelled mid-turn went to `cancelled` with no completion or assessment events. The Runs page shows a Cancel button for non-terminal runs (present in the browser on a running run; the click itself was not exercised there because the pane re-renders every 2 s and the automation's element references went stale).
+- Open: a cancel while an ASR worker thread is mid-call lets that call finish (its result is discarded), and the 2 s re-render replaces the Cancel button while a user is aiming at it.

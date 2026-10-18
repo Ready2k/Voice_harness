@@ -118,13 +118,42 @@ def create_app(
         finally:
             evidence.save_manifest(run_id)
 
-    def run_live_work(run_id, config):
-        """A live adapter run: provider failures are recorded in the ledger, never silently completed."""
-        summary = asyncio.run(
+    live_tasks = {}  # run_id -> (loop, task) for runs whose provider session is open
+
+    async def live_task(run_id, config):
+        """Run the live scenario as a cancellable task; returns None if the run was cancelled."""
+        task = asyncio.ensure_future(
             live_providers.run_live(
                 live_engine, run_id, config["provider_config_id"], config["scenario_id"], seed=config["fixture_seed"]
             )
         )
+        with job_lock:
+            live_tasks[run_id] = (asyncio.get_running_loop(), task)
+        try:
+            # A cancel that landed before registration has already settled the state; honour it now.
+            if database.get(run_id)["state"] in {"cancelled", "cancel_requested"}:
+                task.cancel()
+            return await task
+        except asyncio.CancelledError:
+            if database.get(run_id)["state"] in {"cancelled", "cancel_requested", "failed"}:
+                return None
+            raise
+        finally:
+            with job_lock:
+                live_tasks.pop(run_id, None)
+
+    def stop_live(run_id):
+        with job_lock:
+            entry = live_tasks.get(run_id)
+        if entry is not None:
+            loop, task = entry
+            loop.call_soon_threadsafe(task.cancel)
+
+    def run_live_work(run_id, config):
+        """A live adapter run: provider failures are recorded in the ledger, never silently completed."""
+        summary = asyncio.run(live_task(run_id, config))
+        if summary is None:  # cancelled: Engine.cancel already settled the ledger and discarded held audio
+            return
         failed = [t for t in summary["turns"] if t["strict_speech_approval"] in ("provider_error", "stream_ended")]
         with database.transaction(run_id) as tx:
             if tx.state["state"] != "running":
@@ -490,6 +519,7 @@ def create_app(
     )
     def cancel(run_id: str, body: CancelRun):
         state = engine.cancel(run_id, body.reason)
+        stop_live(run_id)  # closes the provider session; the worker re-saves the manifest when it unwinds
         evidence.save_manifest(run_id)
         return {"state": state}
 

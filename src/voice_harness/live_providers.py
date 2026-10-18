@@ -7,6 +7,7 @@ instead of queueing something that can only fail. Credentials are never read int
 
 from __future__ import annotations
 
+import asyncio
 import os
 from contextlib import suppress
 
@@ -117,11 +118,15 @@ async def run_live(engine, run_id, provider_config_id, scenario_id, *, seed=0):
     runner = LiveScenarioRunner(
         engine, run_id, adapter, IndependentAssessor(engine, select_backend()), scenario_id,
         caller_audio=lambda text: synth_caller_pcm(text, trail_ms=1200), before_turn=before_turn, seed=seed)
+    reason = "done"
     try:
         return await runner.run()
+    except asyncio.CancelledError:
+        reason = "cancelled"
+        raise
     finally:
         with suppress(Exception):  # closing a failed session must not mask the run outcome
-            await adapter.close("done")
+            await adapter.close(reason)
 
 
 __all__ = ["LIVE_LIMITS", "LIVE_PROVIDERS", "TESTED_MODELS", "PreconditionFailed", "availability", "run_live"]
