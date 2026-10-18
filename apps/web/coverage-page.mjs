@@ -1,5 +1,6 @@
-import { api, el } from "./runs.mjs";
+import { api } from "./runs.mjs";
 import { load, render } from "./coverage.mjs";
+import { friendlyError, renderGetStarted, renderReadiness } from "./onboarding.mjs";
 
 const form = document.getElementById("auth");
 const error = document.getElementById("error");
@@ -14,17 +15,18 @@ async function show() {
     readiness.replaceChildren();
     try {
       const providers = await api(token, "/api/v1/live-providers");
-      for (const p of providers.items) {
-        const reasons = {NO_ASR_BACKEND_CONFIGURED: "Configure independent ASR and its API credentials on the server.", NO_CALLER_VOICE_SYNTH: "Caller voice synthesis is unavailable on this server.", NO_AWS_SESSION: "Configure an active AWS session on the server."};
-        readiness.append(el("p", "meta", p.provider_config_id + " · " + (p.available ? "Ready to run" : "Unavailable: " + (reasons[p.reason] ?? p.reason))));
-      }
+      renderReadiness(readiness, providers);
     } catch (e) { readiness.textContent = "Could not check server readiness: " + e.message; }
     try { sessionStorage.setItem("harness-operator-token", token); } catch {}
+    document.querySelector("#help details").open = false;
   } catch (e) {
     root.replaceChildren();
-    error.textContent = "Could not load coverage: " + e.message;
+    error.textContent = "Could not load coverage: " + friendlyError(e);
   }
 }
+let hadToken = false;
+try { hadToken = Boolean(sessionStorage.getItem("harness-operator-token")); } catch {}
+renderGetStarted(document.getElementById("help"), !hadToken);
 form.addEventListener("submit", (event) => { event.preventDefault(); show(); });
 try {
   const saved = sessionStorage.getItem("harness-operator-token");

@@ -36,6 +36,13 @@ button { padding:8px 14px; border:1px solid var(--line); border-radius:6px; back
 .readiness a { color:var(--info) }
 nav a[aria-current="page"] { font-weight:700; text-underline-offset:6px }
 .note { color:var(--muted); font-size:.8rem; margin-top:16px }
+.help { border:1px solid var(--line); border-radius:8px; padding:12px 16px; margin-bottom:16px; background:var(--card) }
+.help summary { cursor:pointer; font-weight:600 }
+.help code { font-family:ui-monospace,monospace }
+.muted { color:var(--muted); font-size:.85rem }
+.checklist { list-style:none; padding:0; margin:8px 0 }
+.checklist li { display:flex; flex-direction:column; padding:4px 0 }
+.checklist .ready strong { color:var(--ok) } .checklist .missing strong { color:var(--warn) }
 </style>
 </head>
 <body>
@@ -47,11 +54,12 @@ nav a[aria-current="page"] { font-weight:700; text-underline-offset:6px }
     <input id="token" type="password" autocomplete="off" placeholder="Operator token" aria-label="Operator token" required>
     <button type="submit">Load coverage</button>
   </form>
+  <div id="help"></div>
   <p id="error" role="alert"></p>
   <section class="readiness"><h2>Ready to run on this server</h2><p>Capability verification and current server readiness are separate checks. A verified provider can still need credentials or supporting services before a run can start.</p><div id="readiness" role="status">Connect to check current readiness.</div><p><a href="./runs.html">Launch an evaluation →</a></p></section>
   <div id="root"></div>
   <p class="note">Coverage reflects capability reports (7-day expiry) and AC-09 conformance results. Scripted fixtures and probes are not production quality measurements.</p>
 </main>
-<script type="module" src="./coverage-page.mjs?v=20261018-ui1"></script>
+<script type="module" src="./coverage-page.mjs?v=20261019-ui2"></script>
 </body>
 </html>

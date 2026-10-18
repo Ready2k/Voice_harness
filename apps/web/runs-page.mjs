@@ -1,3 +1,4 @@
+import { friendlyError, renderGetStarted, renderReadiness } from "./onboarding.mjs";
 import {
   api, fetchEvents, launchBody, launchOptions, mergeEvents, providerChoices, renderRun, renderRunList, runRows, runView, TERMINAL, el,
 } from "./runs.mjs";
@@ -95,7 +96,9 @@ async function connect() {
     options = launchOptions(await api(token, "/api/v1/scenarios"));
     const select = $("scenario");
     select.replaceChildren(...options.map((o, i) => Object.assign(el("option", "", o.label + (o.summary ? " - " + o.summary : "")), { value: String(i) })));
-    providers = providerChoices(await api(token, "/api/v1/live-providers"));
+    const liveProviders = await api(token, "/api/v1/live-providers");
+    providers = providerChoices(liveProviders);
+    renderReadiness($("checklist"), liveProviders);
     $("provider").replaceChildren(...providers.map((p) => Object.assign(el("option", "", p.label), { value: p.id, disabled: p.disabled })));
     const firstAvailable = providers.find((p) => !p.disabled);
     if (firstAvailable) $("provider").value = firstAvailable.id;
@@ -103,6 +106,7 @@ async function connect() {
     $("launch").hidden = false;
     remember(token);
     connected = true;
+    $("help").querySelector("details").open = false;
     $("connection").textContent = "Connected · Select a scenario to launch or inspect a recent run.";
     await refreshList();
     const wanted = new URLSearchParams(location.search).get("run");
@@ -111,7 +115,7 @@ async function connect() {
     connected = false;
     $("connection").textContent = "Not connected · Check your token and try again.";
     $("launch").hidden = true;
-    error.textContent = "Could not connect: " + e.message;
+    error.textContent = "Could not connect: " + friendlyError(e);
   }
 }
 
@@ -149,6 +153,7 @@ $("launch").addEventListener("submit", async (event) => {
 });
 
 const saved = recall();
+renderGetStarted($("help"), !saved);
 if (saved) {
   $("token").value = saved;
   token = saved;

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
 <title>Runs</title>
-<link rel="stylesheet" href="./ops.css?v=20261018-ui1">
+<link rel="stylesheet" href="./ops.css?v=20261019-ui2">
 </head>
 <body>
 <main>
@@ -17,11 +17,13 @@
     <input id="token" type="password" autocomplete="off" placeholder="Operator token" aria-label="Operator token" required>
     <button type="submit">Connect</button>
   </form>
+  <div id="help"></div>
   <p id="connection" role="status" aria-live="polite">Connect with your operator token to load scenarios and runs.</p>
   <form id="launch" class="panel" hidden>
     <label>Scenario<select id="scenario" aria-label="Scenario"></select></label>
     <label id="provider-field" hidden>Provider configuration<select id="provider" aria-label="Live provider"></select></label>
     <p id="readiness" class="muted"></p>
+    <div id="checklist"></div>
     <label>Fixture seed<input id="seed" type="number" value="42" step="1" required></label>
     <label class="check"><input id="retain" type="checkbox"> Retain audio in evidence</label>
     <p class="muted">Policy: strict-v1 · One run per launch. Lifecycle completion does not mean the evaluation passed.</p>
@@ -35,6 +37,6 @@
   </div>
   <p class="note">Live view polls the events endpoint every two seconds while a run is not terminal.</p>
 </main>
-<script type="module" src="./runs-page.mjs?v=20261018-ui1"></script>
+<script type="module" src="./runs-page.mjs?v=20261019-ui2"></script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 # Secret file mode: 600 locally; CI runners need 644 so the non-root test container (different uid) can read it.
 SECRET_MODE ?= 600
 
-.PHONY: nova-live-container lint audit build test golden recovery infra stop up init benchmark demo
+.PHONY: token nova-live-container lint audit build test golden recovery infra stop up init benchmark demo
 
 init:
 	@mkdir -p .local
@@ -10,6 +10,12 @@ init:
 
 up: init
 	docker compose --profile infra up --build -d api otel-collector
+
+# Copies the operator token to the clipboard without printing it (the API must be up: make up).
+token:
+	@command -v pbcopy >/dev/null 2>&1 || { echo "no pbcopy: run 'docker compose exec -T api cat /data/operator-token' and copy the output yourself" >&2; exit 2; }
+	@t=$$(docker compose exec -T api cat /data/operator-token 2>/dev/null) && test -n "$$t" || { echo "could not read the token: is the API running? try 'make up'" >&2; exit 1; }; \
+	printf %s "$$t" | pbcopy && echo "Operator token copied to the clipboard. Paste it into the web page."
 
 demo:
 	docker compose exec -T api python -m voice_harness demo

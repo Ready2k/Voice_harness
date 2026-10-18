@@ -75,3 +75,12 @@ button:disabled { opacity:.55; cursor:not-allowed }
 #list th { position:sticky; top:0; background:var(--card) }
 #detail { min-width:0 }
 @media (max-width:600px) { .config { grid-template-columns:1fr; gap:3px } .config dd { margin-bottom:8px } }
+
+/* First-run guide and readiness checklist */
+.help summary { cursor:pointer; font-weight:600 }
+.help code { font-family:ui-monospace,monospace }
+.help ol { margin:8px 0; padding-left:22px }
+.checklist { list-style:none; padding:0; margin:8px 0; flex-basis:100% }
+.checklist li { display:flex; flex-direction:column; padding:4px 0 }
+.checklist .ready strong { color:var(--ok) } .checklist .missing strong { color:var(--warn) }
+#checklist { flex-basis:100% }

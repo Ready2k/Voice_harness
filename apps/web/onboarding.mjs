@@ -1,0 +1,71 @@
+import { el } from "./runs.mjs";
+
+export const TOKEN_COMMAND = "make token";
+export const TOKEN_FALLBACK = "docker compose exec -T api cat /data/operator-token";
+
+const FIXES = {
+  NO_ASR_BACKEND_CONFIGURED: "Set VOICE_HARNESS_LIVE_ASR=openai and OPENAI_API_KEY in the server's .env, then restart the server.",
+  NO_CALLER_VOICE_SYNTH: "No caller voice. Run the server on macOS (say and afconvert), or set VOICE_HARNESS_CALLER_VOICE=openai_tts.",
+  NO_AWS_SESSION: "Start an AWS session on the server host: ./scripts/aws-session.sh <MFA code>.",
+  NO_XAI_API_KEY: "Set xAI_API_KEY in the server's .env, then restart the server.",
+  NO_GOOGLE_ADC: "Sign in on the server host: gcloud auth application-default login.",
+  NO_GOOGLE_PROJECT: "Set GOOGLE_CLOUD_PROJECT on the server, or use ADC that carries a quota project.",
+};
+
+/** Pure: what to show for each live provider; an unknown reason code is shown as the code, never hidden. */
+export function readinessItems(payload) {
+  return (payload?.items ?? []).map((p) => ({
+    id: p.provider_config_id,
+    ready: Boolean(p.available),
+    fix: p.available ? null : (FIXES[p.reason] ?? "Unavailable: " + p.reason),
+  }));
+}
+
+/** Pure: a plain-language message for a failed request; the raw code is kept so nothing is hidden. */
+export function friendlyError(error) {
+  const code = String(error?.message ?? error ?? "");
+  if (code === "AUTH_REQUIRED" || code === "HTTP 401") {
+    return "That token was not accepted. Copy it again with " + TOKEN_COMMAND + ". It changes only if the server's data volume is deleted.";
+  }
+  if (code === "HTTP 403") return "That token is valid but its role is not allowed to do this. Use the operator token.";
+  if (/failed to fetch|networkerror|load failed/i.test(code)) {
+    return "Could not reach the server. Check it is running (make up) and that you opened this page from its address.";
+  }
+  return code;
+}
+
+function step(parts) {
+  const li = el("li");
+  for (const part of parts) li.append(typeof part === "string" ? document.createTextNode(part) : part);
+  return li;
+}
+
+/** The first-run guide. `open` expands it until the user has connected once. */
+export function renderGetStarted(root, open) {
+  const details = el("details", "panel help");
+  details.open = Boolean(open);
+  details.append(el("summary", "", "Get started: what the operator token is and how to get it"));
+  details.append(el("p", "", "The operator token is this harness's own password for its API. It is not an OpenAI, xAI, AWS or Google key, and provider keys never reach this page."));
+  const list = el("ol");
+  list.append(
+    step(["In a terminal in the project folder, start the harness: ", el("code", "", "make up")]),
+    step(["Copy the token to your clipboard without printing it: ", el("code", "", TOKEN_COMMAND)]),
+    step(["Paste it into the token box above and choose Connect. It is kept for this browser tab only."]),
+  );
+  details.append(list);
+  details.append(el("p", "muted", "No clipboard tool? Run: " + TOKEN_FALLBACK + " and copy the output. Scripted fixtures need no provider setup. Live providers need keys or sessions on the server, and the checklist below shows what is missing once you connect."));
+  root.replaceChildren(details);
+}
+
+/** Readiness checklist for live providers; text only. */
+export function renderReadiness(root, payload) {
+  const items = readinessItems(payload);
+  const list = el("ul", "checklist");
+  for (const item of items) {
+    const li = el("li", item.ready ? "ready" : "missing");
+    li.append(el("strong", "", (item.ready ? "Ready · " : "Needs setup · ") + item.id));
+    if (item.fix) li.append(el("span", "muted", item.fix));
+    list.append(li);
+  }
+  root.replaceChildren(items.length ? list : el("p", "muted", "No live providers are registered on this server."));
+}
