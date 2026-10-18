@@ -19,7 +19,7 @@
     "transcription": "inputAudioTranscription and outputAudioTranscription enabled",
     "credentials": "Application Default Credentials OAuth access token (never recorded)"
   },
-  "operator_terms_attestation": null,
+  "operator_terms_attestation": "2026-10-18, James Cregeen (operator): reviewed the current retention, quota and pricing terms for xAI Grok Voice and Google Gemini Live (Vertex AI) and accepts them for testing with synthetic data only; no real customer data.",
   "rows": [
     {
       "name": "input_codecs_rates",

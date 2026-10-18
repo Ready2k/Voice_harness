@@ -37,7 +37,7 @@ The first table above is the original baseline. Approved state, from `artifacts/
 | Usage granularity | verified | verified | verified (top-level `usage` on `response.done`; text/audio token split, audio seconds; no prices recorded) | observed (`usageMetadata` on `turnComplete`: token counts by modality; no prices recorded) |
 | Reconnect / resume | unknown | unknown | unknown (fresh connection works; documented history replay untested) | unknown (resumption handle issued; reconnect not exercised) |
 | Direct MCP | unknown | unknown | unknown (session accepts an `mcp` tool and the server tries discovery itself; no reachable MCP server to exercise it) | unknown (not exercised) |
-| Terms attestation | recorded 2026-10-16 (synthetic data only) | recorded 2026-10-16 (synthetic data only) | none (the 2026-10-16 attestation does not cover xAI; left unattested) | none (the 2026-10-16 attestation does not cover Google; left unattested) |
+| Terms attestation | recorded 2026-10-16 (synthetic data only) | recorded 2026-10-16 (synthetic data only) | recorded 2026-10-18 (operator statement; synthetic data only) | recorded 2026-10-18 (operator statement; synthetic data only) |
 
 Google column: added 2026-10-18 from `scripts/probe/google_gemini_probe.py` (`artifacts/phase0/google_gemini-observations-*.json`, report `artifacts/phase0/google_gemini-capability-report.json`, expires 2026-10-25), observed values only; no row is `verified` because the Vertex Live pages could only be read in part. See `docs/PHASE4_NOTES_google.md`.
 
