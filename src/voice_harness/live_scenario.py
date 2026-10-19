@@ -20,6 +20,7 @@ import json
 import random
 import time
 
+from .adapters import CapabilityUnsupported
 from .events import PROCESS_CLOCK_DOMAIN
 from .fault_dispositions import classify
 from .live_assessment import AdapterTurnDriver
@@ -205,7 +206,12 @@ class LiveScenarioRunner:
                 await asyncio.sleep(0.5)
                 self._cancelled_ends += 1
                 if self.interrupt_mode == "client":
-                    receipt = await self.adapter.interrupt(getattr(event, "item_id", None), PLAYED_MS_WHILE_HELD)
+                    try:
+                        receipt = await self.adapter.interrupt(getattr(event, "item_id", None), PLAYED_MS_WHILE_HELD)
+                    except CapabilityUnsupported:
+                        # No cancel/truncate primitive (Gemini, Nova): local playback still stops and the
+                        # receipt says so, so the history is recorded as diverged rather than the run failing.
+                        receipt = {"generation_cancelled": "unsupported", "history_truncation": "unsupported"}
                     self.interrupt_results.append(receipt)
                     self.driver.interrupt(receipt)  # engine epoch, tokens, queued tools and history state
                 return {"approval": None, "strict_speech_approval": "barge_in_not_assessed"}

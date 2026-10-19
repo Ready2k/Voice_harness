@@ -231,6 +231,31 @@ class LiveRunner(unittest.TestCase):
         self.assertEqual(len(summary["interrupt_results"]), 1)
         self.assertEqual(len(summary["turns"]), 2)
 
+    def test_a_provider_without_interrupt_records_unsupported_instead_of_failing_the_run(self):
+        from voice_harness.adapters import CapabilityUnsupported
+
+        class NoCancel(ScriptedAdapter):
+            round = 0
+
+            async def interrupt(self, item_id, audio_end_ms):
+                raise CapabilityUnsupported("no cancel or truncate message")
+
+            async def receive(self):
+                self.round += 1
+                yield AudioOut(pcm=bytes(960), sample_rate=24000, sample_count=480, turn_id=f"t{self.round}", ts_ms=1)
+                if self.round == 1:
+                    yield TurnEnd(turn_id="t1", ts_ms=2)
+                    yield AudioOut(pcm=bytes(960), sample_rate=24000, sample_count=480, turn_id="t2", ts_ms=3)
+                yield TranscriptDelta(role="assistant", text="Please verify your identity.", ts_ms=4)
+                yield TurnEnd(turn_id=f"t{self.round + 1}", ts_ms=5)
+
+        summary = asyncio.run(self.runner("identity-fault-caller-interrupts-001", NoCancel()).run())
+        self.assertEqual(summary["interrupt_results"], [{"generation_cancelled": "unsupported",
+                                                         "history_truncation": "unsupported"}])
+        self.assertEqual(len(summary["turns"]), 2)
+        interrupted = [e["content"] for e in self.database.events(self.run) if e["type"] == "session.interrupted"]
+        self.assertIn("unsupported", [i["interruption_receipt"]["history_truncation"] for i in interrupted])
+
     def test_turn_timeout_is_reported_not_hidden(self):
         class Silent(ScriptedAdapter):
             async def receive(self):
