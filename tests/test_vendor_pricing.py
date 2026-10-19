@@ -4,9 +4,13 @@ import unittest
 from pathlib import Path
 
 from voice_harness import cost
+from voice_harness.adapters.nova_sonic import NovaSonicAdapter
+from voice_harness.cost_recorder import SERVICES
+from voice_harness.live_providers import FAMILIES, TESTED_MODELS
 from voice_harness.pricing import load_table
 
-TABLE = Path(__file__).parent.parent / "artifacts" / "pricing" / "vendor-pricing-2026-10-18.json"
+PRICING = Path(__file__).parent.parent / "artifacts" / "pricing"
+TABLE = PRICING / "vendor-pricing-2026-10-19.json"
 
 
 class VendorPricingTable(unittest.TestCase):
@@ -27,11 +31,30 @@ class VendorPricingTable(unittest.TestCase):
                 self.assertEqual(tariff.source_status, "primary_source")
                 self.assertEqual(tariff.currency, "USD")
 
+    def recorded(self, config_id, meter, region=None, usage_date="2026-10-19"):
+        """The tariff for the identifiers a live run of ``config_id`` records (as live_providers builds the recorder)."""
+        provider = FAMILIES[config_id]
+        return self.table.find(provider=provider, service=SERVICES.get(provider, provider),
+                               model=TESTED_MODELS[config_id]["model_id"], region=region, meter_id=meter,
+                               usage_date=usage_date)
+
     def test_rows_match_recorder_identifiers(self):
-        self.assertEqual(self.find("openai_realtime", "openai_realtime", "gpt-realtime-2.1", None,
-                                   "audio_output_tokens").unit_price, "64.00")
-        self.assertEqual(self.find("aws_nova_sonic", "bedrock", "amazon.nova-2-5-sonic", "us-east-1",
-                                   "text_input_tokens").unit_price, "0.33")
+        self.assertEqual(self.recorded("openai-realtime-live", "audio_output_tokens").unit_price, "64.00")
+        self.assertEqual(self.recorded("nova-sonic-live", "text_input_tokens", NovaSonicAdapter().region).unit_price,
+                         "0.33")
+        self.assertEqual(self.recorded("xai-voice-live", "billable_audio_seconds").unit_price, "0.08")
+        self.assertEqual(self.find("openai", "judge", "gpt-4.1-mini", None, "judge_output_tokens").unit_price, "1.60")
+
+    def test_gemini_3_8_is_an_explicit_unknown_not_the_2_5_rate(self):
+        tariff = self.recorded("gemini-live", "audio_output_tokens", "us-central1")
+        self.assertIsNone(tariff.unit_price)
+        self.assertEqual(tariff.unknown_reason, "GEMINI_3_8_LIVE_PRICE_NOT_PUBLISHED_ON_READ_PAGES")
+
+    def test_the_2026_10_18_table_is_kept_unchanged_for_earlier_exports(self):
+        old = load_table(PRICING / "vendor-pricing-2026-10-18.json")
+        self.assertEqual(old.version, "2026-10-18")
+        self.assertIsNotNone(old.find(provider="openai_realtime", service="openai_realtime", model="gpt-realtime-2.1",
+                                      region=None, meter_id="audio_output_tokens", usage_date="2026-10-18"))
         self.assertEqual(self.find("openai", "judge", "gpt-4.1-mini", None, "judge_output_tokens").unit_price, "1.60")
 
     def test_unpriced_families_stay_unknown(self):
@@ -67,6 +90,15 @@ class XaiPerMinuteMeter(unittest.TestCase):
         self.assertEqual([x["meter_id"] for x in active], ["billable_audio_seconds"])
         self.assertEqual(summary["completeness"], "complete")
         self.assertEqual(summary["summaries"][0]["total_cost"], "0.080000")
+
+    def test_modality_split_token_meters_are_superseded_too(self):
+        # The adapter now reports audio/text token meters; they are unpriced alternatives of the per-minute line.
+        reports = [r for r in self.reports(60) if r["meter_id"] == "billable_audio_seconds"]
+        reports += [{**reports[0], "report_id": f"resp_1:{m}:1", "meter_id": m, "unit": "token", "quantity": "10"}
+                    for m in ("audio_input_tokens", "text_input_tokens", "audio_output_tokens", "text_output_tokens")]
+        lines, summary, _ = cost.derive("run1", self.events(reports), load_table(TABLE))
+        self.assertEqual([x["meter_id"] for x in lines if not x["superseded_by"]], ["billable_audio_seconds"])
+        self.assertEqual(summary["completeness"], "complete")
 
     def test_no_seconds_reported_adds_no_report(self):
         reports = cost.reports_from_adapter_usage(

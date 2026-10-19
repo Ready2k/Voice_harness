@@ -10,12 +10,15 @@ from pathlib import Path
 
 from pydantic import ValidationError
 
-from voice_harness import bakeoff
+from voice_harness import bakeoff, cost
 from voice_harness.bakeoff_export import render
+from voice_harness.pricing import load_table
+
+VENDOR_TABLE = Path(__file__).parent.parent / "artifacts" / "pricing" / "vendor-pricing-2026-10-19.json"
 
 
 def obs(provider, scenario, outcome="pass", *, repetition=0, audio="clean_studio", attempts=1, criteria=None,
-        assessed=2, unsafe=0, latencies=(900,), tool_first=False, prohibited=0):
+        assessed=2, unsafe=0, latencies=(900,), tool_first=False, prohibited=0, run_cost=None):
     completed = outcome != "run_failed"
     return {
         "scenario_id": scenario, "provider": provider, "repetition": repetition, "scenario": scenario.title(),
@@ -27,6 +30,7 @@ def obs(provider, scenario, outcome="pass", *, repetition=0, audio="clean_studio
         "prohibited_executed": prohibited, "replies_assessed": assessed if completed else 0, "replies_unsafe": unsafe,
         "turns": [{"turn": i, "overlapped": False, "first_audio_ms": ms, "tool_first": tool_first, "estimated": False}
                   for i, ms in enumerate(latencies)] if completed else [],
+        **({"cost": run_cost} if run_cost else {}),
     }
 
 
@@ -124,6 +128,75 @@ class Report(unittest.TestCase):
         report = bakeoff.report(p)
         self.assertEqual(report["progress"], {"cells": 3, "observed": 2, "pending": 1})
         self.assertFalse(report["verdict"]["final"])
+
+
+def priced(usd):
+    return {"known_usd": usd, "priced": True, "voice_lines": 2, "unknown_lines": 0, "unknown_reasons": [],
+            "pricing_table": "t@1"}
+
+
+def unpriced(usd=None, reason="NO_TARIFF_FOR_METER_DATE"):
+    return {"known_usd": usd, "priced": False, "voice_lines": 2, "unknown_lines": 1, "unknown_reasons": [reason],
+            "pricing_table": "t@1"}
+
+
+class Cost(unittest.TestCase):
+    """Voice cost per run: priced only when every voice line is, never folded into the composite."""
+
+    def usage_events(self, provider, model, usage, region=None, service=None):
+        reports = cost.reports_from_adapter_usage(provider, usage, scope_id="resp_1", usage_date="2026-10-19",
+                                                  service=service, model=model, region=region)
+        asr = {**reports[0], "report_id": "asr:1", "component": "asr", "provider": "openai_audio_transcription",
+               "service": "transcription", "model": "gpt-4o-mini-transcribe", "billing_scope_id": "asr:1"}
+        return [{"type": "cost.usage_reported", "content": r, "event_id": f"e{i}"} for i, r in enumerate([*reports, asr])] + [
+            {"type": "cost.expectation_declared", "content": {"components": ["voice", "asr"], "declared_by": "t"},
+             "event_id": "x"}]
+
+    def test_recorded_openai_usage_is_priced_and_asr_is_left_out(self):
+        usage = {"input_tokens": 100, "output_tokens": 50, "raw": {
+            "input_token_details": {"audio_tokens": 100, "text_tokens": 0, "cached_tokens": 0},
+            "output_token_details": {"audio_tokens": 50, "text_tokens": 0}}}
+        events = self.usage_events("openai", "gpt-realtime-2.1", usage, service="realtime")
+        result = bakeoff.voice_cost("run1", events, load_table(VENDOR_TABLE))
+        self.assertTrue(result["priced"], result)
+        self.assertEqual(result["known_usd"], "0.006400")  # 100 * $32/1M + 50 * $64/1M; ASR is not a voice line
+        self.assertEqual(result["pricing_table"], "voice-harness-vendor-pricing@2026-10-19")
+
+    def test_gemini_3_8_voice_usage_is_unpriced_with_its_reason(self):
+        usage = {"input_tokens": 10, "output_tokens": 5, "raw": {
+            "promptTokenCount": 10, "candidatesTokenCount": 5,
+            "promptTokensDetails": [{"modality": "AUDIO", "tokenCount": 10}],
+            "candidatesTokensDetails": [{"modality": "AUDIO", "tokenCount": 5}]}}
+        events = self.usage_events("google_gemini_live", "gemini-3.8-live", usage, region="us-central1",
+                                   service="google_gemini_live")
+        result = bakeoff.voice_cost("run1", events, load_table(VENDOR_TABLE))
+        self.assertFalse(result["priced"])
+        self.assertIsNone(result["known_usd"])
+        self.assertIn("GEMINI_3_8_LIVE_PRICE_NOT_PUBLISHED_ON_READ_PAGES", result["unknown_reasons"])
+
+    def test_cost_rows_separate_priced_partial_and_unrecorded_providers(self):
+        observations = [obs("openai-realtime-live", "s0", run_cost=priced("0.010000")),
+                        obs("openai-realtime-live", "s1", run_cost=priced("0.030000")),
+                        obs("openai-realtime-live", "s2", "run_failed", run_cost=priced("0.020000")),
+                        obs("nova-sonic-live", "s0", run_cost=priced("0.005000")),
+                        obs("nova-sonic-live", "s1", run_cost=unpriced("0.001000")),
+                        obs("xai-voice-live", "s0")]
+        report = bakeoff.report(payload(observations, providers=("openai-realtime-live", "nova-sonic-live", "xai-voice-live")))
+        rows = {r["provider"]: r for r in report["cost"]}
+        openai, nova, xai = rows["openai-realtime-live"], rows["nova-sonic-live"], rows["xai-voice-live"]
+        self.assertEqual((openai["status"], openai["runs_priced"], openai["median_usd"], openai["mean_usd"]),
+                         ("priced", 3, "0.020000", "0.020000"))  # failed runs are billed, so they are costed
+        self.assertEqual((nova["status"], nova["runs_priced"], nova["median_usd"], nova["known_usd_all_runs"]),
+                         ("partial", 1, "0.005000", "0.006000"))
+        self.assertEqual(nova["unpriced_reasons"], {"NO_TARIFF_FOR_METER_DATE": 1})
+        self.assertEqual(xai["status"], "not_recorded")
+        self.assertEqual(report["limits"]["pricing_tables"], ["t@1"])
+
+    def test_cost_does_not_change_the_composite(self):
+        base = [obs("openai-realtime-live", "s0"), obs("nova-sonic-live", "s0")]
+        costed = [obs("openai-realtime-live", "s0", run_cost=priced("9")), obs("nova-sonic-live", "s0", run_cost=priced("0"))]
+        self.assertEqual([s["composite"] for s in bakeoff.report(payload(base))["scores"]],
+                         [s["composite"] for s in bakeoff.report(payload(costed))["scores"]])
 
 
 class Requests(unittest.TestCase):

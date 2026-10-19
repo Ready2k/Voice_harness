@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {conditionRows, intervalFloor, ms, outcomeClass, outcomeLabel, pct, planSize, scenarioGroups, verdictText} from "../../apps/web/bakeoff-report.mjs";
+import {conditionRows, costLimit, costRows, intervalFloor, ms, outcomeClass, outcomeLabel, pct, planSize, scenarioGroups, usd, verdictText} from "../../apps/web/bakeoff-report.mjs";
 
 const NAMES = {a: "Alpha Voice", b: "Beta Voice"};
 const rate = (value, lo = null, hi = null) => ({value, lo, hi, k: null, n: null});
@@ -76,4 +76,22 @@ test("formatting and outcome labels", () => {
   assert.equal(outcomeLabel({outcome: "review_required"}), "Review required");
   assert.equal(outcomeClass({outcome: "fail"}), "bk-fail");
   assert.equal(outcomeLabel(undefined), "Not run");
+});
+
+test("cost rows label each provider's pricing status and list why runs are unpriced", () => {
+  const r = report({cost: [
+    {name: "Alpha Voice", status: "priced", runs: 3, runs_priced: 3, median_usd: "0.0123", mean_usd: "0.0150", known_usd_all_runs: "0.045", unpriced_reasons: {}},
+    {name: "Beta Voice", status: "partial", runs: 3, runs_priced: 1, median_usd: "0.002", mean_usd: "0.002", known_usd_all_runs: "0.003",
+      unpriced_reasons: {NO_TARIFF_FOR_METER_DATE: 2}}],
+    limits: {pricing_tables: ["vendor@2026-10-19"]}});
+  const [a, b] = costRows(r);
+  assert.deepEqual([a.status[0], a.priced, a.median, a.known, a.reasons], ["Priced", "3/3", "$0.0123", "$0.0450", "—"]);
+  assert.deepEqual([b.status[0], b.priced, b.reasons], ["Partly priced", "1/3", "No tariff for meter date (2)"]);
+  assert.match(costLimit(r), /voice usage only.*vendor@2026-10-19\. Not every run is priced for Beta Voice; their known amounts are lower bounds/);
+  assert.equal(usd(null), "—");
+});
+
+test("reports observed before cost was recorded say so instead of claiming no tariff", () => {
+  assert.match(costLimit(report({limits: {}})), /observed before cost was recorded/);
+  assert.match(costLimit(report({cost: [{status: "not_recorded"}], limits: {pricing_tables: []}})), /observed before cost was recorded/);
 });

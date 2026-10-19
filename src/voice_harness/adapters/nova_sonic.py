@@ -218,10 +218,14 @@ class NovaSonicAdapter:
             "capability_rows": rows,
         }
 
+    @property
+    def region(self) -> str:
+        """Bedrock region of the session (the transport's, else the default); cost lines are priced by region."""
+        return (getattr(self.transport, "region", None) if getattr(self, "transport", None) else None) or REGION
+
     def connection_info(self) -> dict[str, Any]:
         """Region, derived Bedrock runtime host and the bridge's AWS SDK version (no credentials)."""
-        region = getattr(self.transport, "region", None) if getattr(self, "transport", None) else None
-        region = region or REGION
+        region = self.region
         versions: dict[str, str | None] = {}
         try:
             package = BRIDGE_SCRIPT.parent / "node_modules" / "@aws-sdk" / "client-bedrock-runtime" / "package.json"

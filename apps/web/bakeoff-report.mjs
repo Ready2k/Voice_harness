@@ -8,6 +8,7 @@ const PALETTE = ["var(--bk-c0)", "var(--bk-c1)", "var(--bk-c2)", "var(--bk-c3)"]
 
 export const pct = v => (v == null ? "—" : Math.round(v * 100) + "%");
 export const dec = v => (v == null ? "—" : v.toFixed(3));
+export const usd = v => (v == null ? "—" : "$" + Number(v).toFixed(4));
 export const ms = v => (v == null ? "—" : v >= 1000 ? (v / 1000).toFixed(2) + " s" : Math.round(v) + " ms");
 export const words = v => String(v ?? "").replaceAll("_", " ").toLowerCase().replace(/^./, c => c.toUpperCase());
 export const outcomeLabel = o => (!o ? "Not run" : o.outcome === "run_failed" ? "Run failed" : words(o.outcome));
@@ -29,6 +30,26 @@ export function verdictText(report, names) {
     + (fastest ? `Fastest to first audio: ${names[fastest.provider]} (median ${ms(fastest.median_ms)}).` : "")
     + (v.final ? "" : ` ${report.progress.pending} runs still pending: results are provisional.`);
   return {lead: text, sub};
+}
+
+const COST_STATUS = {priced: ["Priced", "bk-ok"], partial: ["Partly priced", "bk-muted"], unpriced: ["Not priced", "bk-bad"],
+  not_recorded: ["Not recorded", "bk-muted"]};
+
+/** Rows of the cost table: provider, status pill label/class, runs priced, median, mean, known spend, reasons. */
+export function costRows(report) {
+  return (report.cost ?? []).map(c => ({name: c.name, status: COST_STATUS[c.status] ?? [words(c.status), "bk-muted"],
+    priced: `${c.runs_priced}/${c.runs}`, median: usd(c.median_usd), mean: usd(c.mean_usd), known: usd(c.known_usd_all_runs),
+    reasons: Object.entries(c.unpriced_reasons ?? {}).map(([r, n]) => `${words(r)} (${n})`).join("; ") || "—"}));
+}
+
+/** The limits sentence about cost: what was compared and against which pricing table. */
+export function costLimit(report) {
+  const rows = report.cost ?? [], tables = report.limits.pricing_tables ?? [];
+  if (!rows.length || rows.every(c => c.status === "not_recorded")) return "Cost is not compared: these runs were observed before cost was recorded in the bake-off.";
+  const unpriced = rows.filter(c => c.status !== "priced");
+  return `Cost compares the provider's voice usage only (independent ASR and judges are the same harness overhead for every provider), priced with ${tables.join(", ") || "the shipped table"}. `
+    + (unpriced.length ? `Not every run is priced for ${unpriced.map(c => c.name).join(", ")}; their known amounts are lower bounds, not totals.` : "Every run is priced.")
+    + " List prices only: no discounts, quotas or minimum-billing rules.";
 }
 
 /** Lower bound of the interval axis: the lowest bound rounded down to 10%, less 10%, so overlaps stay visible. */
@@ -107,7 +128,7 @@ export function renderReport(root, data, {heading: showHeading = true} = {}) {
   for (const [t, d] of [["1 · Safety gates", "Pass/fail. A provider that executes a prohibited tool, fails an identity, confirmation or audio-gate check, or completes too few runs is eliminated whatever it scores."],
     ["2 · Weighted scorecard", "Six dimensions from 0 to 1, each with a 95% Wilson interval. The composite is the weighted sum."],
     ["3 · Head-to-head", "Each pair compared scenario by scenario. An exact McNemar test says whether a difference could be chance."],
-    ["4 · Tie-break", "Where the leaders can't be separated, choose on responsiveness and conduct, then on cost once priced."]]) {
+    ["4 · Tie-break", "Where the leaders can't be separated, choose on responsiveness and conduct, then on cost per run where every run is priced."]]) {
     const li = el("li"); li.append(el("strong", null, t), d); steps.append(li);
   }
   views.bakeoff.append(card(heading(null, "How the bake-off decides"), steps,
@@ -137,6 +158,10 @@ export function renderReport(root, data, {heading: showHeading = true} = {}) {
     table(["Provider", "Median", "90th percentile", "Direct reply median", "Tool-first median", "Turns tool-first", "Turns measured"],
       R.latency.map(l => [l.name + (l.estimated ? " *" : ""), ms(l.median_ms), ms(l.p90_ms), ms(l.direct_median_ms), ms(l.tool_first_median_ms), pct(l.tool_first_share), String(l.turns_measured)]),
       [1, 2, 3, 4, 5, 6])));
+  views.bakeoff.append(card(heading("Tie-break", "Voice cost per run"),
+    note("Provider-reported usage priced at list rates. Median and mean are over fully priced runs; known spend adds every run's priced lines, so it is a lower bound when any run is partly priced. Cost does not enter the composite."),
+    table(["Provider", "Status", "Runs priced", "Median per run", "Mean per run", "Known spend, all runs", "Why not priced"],
+      costRows(R).map(c => [c.name, pill(c.status[0], c.status[1]), c.priced, c.median, c.mean, c.known, c.reasons]), [2, 3, 4, 5])));
   const pair = el("div", "bk-two");
   for (const [kind, title, label] of [["group", "Pass rate by scenario group", "Scenario group"], ["audio", "Pass rate by audio condition", "Audio"]]) {
     const rows = conditionRows(R, P, kind);
@@ -154,10 +179,10 @@ export function renderReport(root, data, {heading: showHeading = true} = {}) {
     : `Each scenario ran ${R.limits.repetitions} times per provider; head-to-heads pair runs by scenario and repetition.`);
   add("The caller is synthetic speech, with noise and telephone shaping added. Real callers with accents, hesitations and crosstalk are not covered.");
   add("Criteria that only an independent judge can decide (such as CARE-01, empathy with vulnerable callers) are untestable unless judges are configured; deterministic checks decided every verdict shown.");
-  add("Cost is not compared: no provider tariff is configured in the harness.");
+  add(costLimit(R));
   if (R.limits.latency_estimated_for.length) add(`* First-audio time for ${R.limits.latency_estimated_for.map(p => NAMES[p]).join(", ")} is estimated from message size, because audio and transcript messages share one type and are stored as hashes.`);
   add("Turns where a previous reply was still playing when the caller spoke are left out of latency for every provider.");
-  add("To decide with confidence: repeat each scenario five or more times, configure two independent judges and price the providers.");
+  add("To decide with confidence: repeat each scenario five or more times, configure two independent judges and price every provider.");
   views.bakeoff.append(card(heading(null, "What this evidence can and can't tell you"), limits));
 
   // ---- Matrix view

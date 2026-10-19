@@ -9,8 +9,13 @@ The report is computed from the runs' ledgers:
 2. Weighted scorecard: task success, factual accuracy, safe speech, reliability, responsiveness and robustness,
    each a rate in [0, 1] with a 95% Wilson interval (responsiveness is relative, so it has none).
 3. Head-to-head: paired outcomes per (scenario, repetition) and the exact two-sided McNemar p-value.
-4. Tie-break evidence: time to first response audio, split by whether a tool was called first, and pass rate by
-   scenario group and audio condition.
+4. Tie-break evidence: time to first response audio, split by whether a tool was called first, pass rate by
+   scenario group and audio condition, and the provider's voice cost per run.
+
+Cost is derived from each run's `cost.usage_reported` events and the pricing table in force (`HARNESS_PRICING_TABLE`,
+else the shipped table). Only the `voice` component is compared: independent ASR and judges are harness overhead,
+the same for every provider. A run is priced only when every voice line has a price; otherwise its known amount is
+a partial lower bound and the reasons are reported. Cost never enters the composite.
 
 First-audio time is measured on the harness process clock shared by `input.caller_audio`, `adapter.native_event`
 and event `monotonic_ns`: from the end of the caller's speech (the streamed audio's end less the synthetic
@@ -24,14 +29,18 @@ from __future__ import annotations
 
 import math
 import time
+from collections import Counter
+from decimal import Decimal
 from typing import Annotated, Literal
 
 from pydantic import Field, model_validator
 
+from . import cost
 from .contracts import Closed, Identifier
 from .engine import identifier
 from .judges.review import effective_from_events
 from .live_providers import CALLER_TRAIL_MS, LIVE_PROVIDERS
+from .pricing import load_table
 from .scenario_catalogue import CATALOGUE, catalogue_entry
 
 MIGRATION_ID = 14
@@ -262,7 +271,20 @@ def _is_audio(provider, native):
     return native["native_type"] in AUDIO_TYPES
 
 
-def observe(database, cell):
+def voice_cost(run_id, events, table=None):
+    """The provider's voice cost for one run: known USD, whether every voice line is priced, and why not."""
+    table = table or load_table()
+    lines, _summary, _extra = cost.derive(run_id, events, table)
+    voice = [x for x in lines if not x["superseded_by"] and x["component"] == "voice"]
+    known = [x for x in voice if x["amount"] is not None and x["currency"] == "USD"]
+    unknown = [x for x in voice if x["amount"] is None or x["currency"] != "USD"]
+    return {"known_usd": str(sum((Decimal(x["amount"]) for x in known), Decimal(0))) if known else None,
+            "priced": bool(voice) and not unknown, "voice_lines": len(voice), "unknown_lines": len(unknown),
+            "unknown_reasons": sorted({x["unknown_reason"] or "NON_USD_CURRENCY" for x in unknown}),
+            "pricing_table": f'{table.table_id}@{table.version}'}
+
+
+def observe(database, cell, table=None):
     """What the report needs from a finished cell, read from the final attempt's ledger."""
     provider, scenario_id = cell["provider_config_id"], cell["scenario_id"]
     entry = catalogue_entry(scenario_id)
@@ -311,6 +333,7 @@ def observe(database, cell):
         "prohibited_executed": sum(t in prohibited for t in executed),
         "replies_assessed": len(assessed), "replies_unsafe": sum(a["disposition"] == "unsafe" for a in assessed),
         "turns": turns,
+        "cost": voice_cost(run_id, events, table),  # failed runs are billed too, so they are costed
     }
 
 
@@ -358,7 +381,7 @@ def report(payload, weights=None):
     observed = [c["observation"] for c in payload["cells"] if c.get("observation")]
     pending = sum(not c.get("observation") for c in payload["cells"])
 
-    gates, scores, latency = [], [], []
+    gates, scores, latency, costs = [], [], [], []
     for provider in providers:
         mine = [o for o in observed if o["provider"] == provider]
         completed = [o for o in mine if o["completed"]]
@@ -398,6 +421,7 @@ def report(payload, weights=None):
                         "tool_first_share": len(tool) / len(timed) if timed else None, "turns_measured": len(timed),
                         "turns_excluded": sum(t["overlapped"] for t in turns),
                         "estimated": any(t["estimated"] for t in timed)})
+        costs.append(_cost_row(provider, mine))
 
     by_provider = {row["provider"]: row for row in latency}
     medians = [r["median_ms"] for r in latency if r["median_ms"]]
@@ -452,7 +476,7 @@ def report(payload, weights=None):
         "weights": weights, "dimensions": [{"dimension": d[0], "label": d[1], "weight": weights[d[0]], "measures": d[3]}
                                            for d in DIMENSIONS],
         "progress": {"cells": len(payload["cells"]), "observed": len(observed), "pending": pending},
-        "gates": gates, "scores": ranked, "pairs": pairs, "latency": latency,
+        "gates": gates, "scores": ranked, "pairs": pairs, "latency": latency, "cost": costs,
         "conditions": sorted(conditions.values(), key=lambda r: (r["kind"], r["order"], r["value"], r["provider"])),
         "verdict": {
             "leader": leader and leader["provider"], "runner_up": runner_up and runner_up["provider"],
@@ -465,5 +489,30 @@ def report(payload, weights=None):
         },
         "limits": {"repetitions": payload.get("repetitions"),
                    "single_repetition": (payload.get("repetitions") or 1) < 2,
-                   "latency_estimated_for": [r["provider"] for r in latency if r["estimated"]]},
+                   "latency_estimated_for": [r["provider"] for r in latency if r["estimated"]],
+                   "pricing_tables": sorted({o["cost"]["pricing_table"] for o in observed if o.get("cost")})},
     }
+
+
+def _median(sorted_amounts):
+    n = len(sorted_amounts)
+    middle = sorted_amounts[n // 2]
+    return middle if n % 2 else ((sorted_amounts[n // 2 - 1] + middle) / 2).quantize(Decimal("0.000001"))
+
+
+def _cost_row(provider, mine):
+    """Voice cost per run for one provider. ``status``: priced (every run), partial, unpriced or not_recorded."""
+    costed = [o["cost"] for o in mine if o.get("cost")]
+    priced = [c for c in costed if c["priced"]]
+    amounts = sorted(Decimal(c["known_usd"]) for c in priced)
+    known = [Decimal(c["known_usd"]) for c in costed if c["known_usd"] is not None]
+    reasons = Counter(r for c in costed if not c["priced"] for r in (c["unknown_reasons"] or ["NO_VOICE_USAGE_RECORDED"]))
+    status = ("not_recorded" if not costed else "priced" if len(priced) == len(costed)
+              else "unpriced" if not priced and not known else "partial")
+    return {"provider": provider, "name": NAMES[provider], "status": status, "runs": len(mine), "runs_costed": len(costed),
+            "runs_priced": len(priced),
+            "median_usd": str(_median(amounts)) if amounts else None,
+            "mean_usd": str((sum(amounts) / len(amounts)).quantize(Decimal("0.000001"))) if amounts else None,
+            "total_priced_usd": str(sum(amounts)) if amounts else None,
+            "known_usd_all_runs": str(sum(known)) if known else None,  # None, not $0, when nothing was priced
+            "unpriced_reasons": dict(reasons.most_common())}

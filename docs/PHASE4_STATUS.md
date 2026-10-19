@@ -13,6 +13,7 @@
   timeout injections).
 - Local validation at `dbbe37a`: 642 Python tests OK (8 skipped, SQLite), 71 browser tests. Compose/PostgreSQL not
   re-run on this commit.
+- Bake-off reports show voice cost per run (see "Voice cost in the bake-off"); Gemini 3.8 has no readable price yet.
 - Still open: repeated samples (every live result is one sample per cell), locale-aware caller voice, judge
   calibration policy approval (blocking stays off), live runs inside the container (no credentials or `say` there),
   and the per-section "Still open" items below.
@@ -268,8 +269,25 @@ Superseded by the Gemini 3.8 migration below: the model, capability report (now 
   Gemini Live re-bills the session context each turn, so every turn's reported total is billable.
 - Not priced: the Bedrock Haiku 4.5 judge (it uses the `us.` geo profile and only the global cross-region rate was
   readable). Quotas, rounding and minimum-billing rules are not established.
-- The shipped OpenAI rows use provider `openai`, but live runs record `openai_realtime`, so those rows would never
-  match a live run. The vendor table uses the recorded identifiers.
+- Correction (2026-10-19): this said live runs record `openai_realtime`. They record provider `openai` and service
+  `realtime`, so the 2026-10-18 OpenAI rows (`openai_realtime`) never matched a live run. See below.
+
+## Voice cost in the bake-off (2026-10-19)
+
+- `artifacts/pricing/vendor-pricing-2026-10-19.json` is the 2026-10-18 table with the same prices and corrected
+  identifiers (the 2026-10-18 file is kept unchanged for earlier exports): OpenAI rows use `openai`/`realtime`; xAI's
+  modality-split token meters join the unpriced alternative to the per-minute line; Gemini 3.8 Live has explicit
+  unpriced rows (`GEMINI_3_8_LIVE_PRICE_NOT_PUBLISHED_ON_READ_PAGES`: its model page, GA 2026-09-24 in `us-central1`,
+  links to pricing but no rate could be read, so the 2.5 rate is not borrowed). `make serve-live` loads it by default.
+- Nova runs now record their Bedrock region (`NovaSonicAdapter.region`), so new runs match the `us-east-1` rows.
+  Earlier Nova runs recorded no region and stay unpriced (`NO_TARIFF_FOR_METER_DATE`); ledgers are append-only.
+- The bake-off (`bakeoff.observe`) prices each run's voice usage; the report has a "Voice cost per run" table
+  (priced / partly priced / not priced, runs priced, median and mean over fully priced runs, known spend, reasons).
+  ASR and judge cost are excluded as shared harness overhead; failed runs are costed; cost never enters the composite.
+  `scripts/benchmark_report.py --pricing-table` re-renders an existing matrix with cost.
+- Re-rendered 5350e4a benchmark (`reports/voice-provider-benchmark-5350e4a-2026-10-19-cost.html`, list prices, one
+  sample per cell): OpenAI priced 33/33, median $0.0140 per run; xAI 32/33, median $0.0107 (one run reported no
+  usage); Nova and Gemini not priced for the reasons above. Not yet a cost comparison of all four providers.
 
 ## Gemini 3.8 migration (2026-10-19)
 
