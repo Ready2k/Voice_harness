@@ -1,0 +1,59 @@
+/* Bake-off report: shared by bakeoff.html (with ops.css tokens) and the standalone export (which defines them). */
+.bk { --bk-c0:#2563c9; --bk-c1:#d1632a; --bk-c2:#2e8b57; --bk-c3:#8e44ad; --bk-c5:#c2410c; --bk-grid:color-mix(in srgb, var(--line) 70%, transparent);
+  display:flex; flex-direction:column; gap:18px; min-width:0 }
+@media (prefers-color-scheme: dark) { .bk { --bk-c0:#6ea2ff; --bk-c1:#ff9d66; --bk-c2:#5fd394; --bk-c3:#c58df0; --bk-c5:#ffb070 } }
+.bk h1 { margin:0 }
+.bk h2 { margin:0; font-size:1.1rem }
+.bk h3 { margin:0; font-size:.95rem }
+.bk-head { display:flex; flex-direction:column; gap:4px }
+.bk-eyebrow { color:var(--muted); font-size:.75rem; text-transform:uppercase; letter-spacing:.08em; margin:0 }
+.bk-note { color:var(--muted); font-size:.85rem; margin:0; max-width:90ch }
+.bk-lead { font-size:1.05rem; margin:0; max-width:75ch }
+.bk-card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:20px; display:flex; flex-direction:column; gap:12px; min-width:0 }
+.bk-view { display:flex; flex-direction:column; gap:18px; min-width:0 }
+.bk-tabs { display:flex; gap:6px; border-bottom:1px solid var(--line); flex-wrap:wrap }
+.bk-tabs button { font:inherit; background:none; border:0; border-bottom:3px solid transparent; border-radius:0; padding:10px 14px; cursor:pointer; color:var(--muted) }
+.bk-tabs button[aria-selected="true"] { color:var(--fg); border-bottom-color:var(--info); font-weight:600 }
+.bk-two { display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 26rem), 1fr)); gap:18px }
+.bk-cards { display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); gap:14px }
+.bk-row { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:end; gap:10px }
+.bk-big { font-size:2rem; font-weight:600; font-variant-numeric:tabular-nums; line-height:1.1 }
+.bk-steps { list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap:14px }
+.bk-steps li { border-left:3px solid var(--info); padding-left:12px; font-size:.88rem; color:var(--muted) }
+.bk-steps strong { display:block; color:var(--fg); font-size:.95rem }
+.bk-scroll { overflow-x:auto }
+.bk-table { width:100%; border-collapse:collapse; font-size:.86rem; font-variant-numeric:tabular-nums }
+.bk-table th { text-align:left; color:var(--muted); font-weight:600; padding:6px 8px; border-bottom:1px solid var(--line); white-space:nowrap }
+.bk-table td { padding:6px 8px; border-bottom:1px solid var(--line); vertical-align:top }
+.bk-table .num { text-align:right }
+.bk-leadrow td { font-weight:600 }
+.bk-pill { display:inline-block; padding:1px 9px; border-radius:999px; border:1px solid currentColor; font-size:.78rem; white-space:nowrap }
+.bk-ok { color:var(--ok) } .bk-bad { color:var(--bad) } .bk-muted { color:var(--muted) }
+.bk-heat-ok { background:color-mix(in srgb, var(--ok) 12%, transparent) }
+.bk-heat-warn { background:color-mix(in srgb, var(--warn) 22%, transparent) }
+.bk-heat-bad { background:color-mix(in srgb, var(--bad) 22%, transparent) }
+.bk-legend { display:flex; flex-wrap:wrap; gap:14px; font-size:.8rem; color:var(--muted) }
+.bk-legend span { display:inline-flex; align-items:center; gap:6px }
+.bk-dot { width:10px; height:10px; border-radius:50%; display:inline-block }
+.bk-chart { position:relative }
+.bk-chart svg { display:block; width:100%; height:auto; overflow:visible }
+.bk-chart text { fill:var(--muted); font-size:11px; font-family:inherit }
+.bk-chart .bk-svg-label { fill:var(--fg); font-weight:600 }
+.bk-tip { position:absolute; pointer-events:none; background:var(--card); border:1px solid var(--line); border-radius:8px; padding:6px 9px; font-size:.78rem; box-shadow:0 6px 20px rgba(0,0,0,.15); white-space:nowrap; z-index:3 }
+.bk-matrix th { text-align:center } .bk-matrix th:first-child { text-align:left }
+.bk-matrix td { border:0; padding:2px 3px }
+.bk-matrix tr.bk-group td { padding-top:14px; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; font-size:.72rem }
+.bk-chip { width:100%; min-width:4.6rem; min-height:1.8rem; padding:2px 6px; border-radius:6px; border:1px solid transparent; font:inherit; font-size:.78rem; cursor:pointer; background:none; color:var(--fg) }
+.bk-chip[aria-pressed="true"] { outline:2px solid var(--fg); outline-offset:1px }
+.bk-pass { background:color-mix(in srgb, var(--ok) 20%, transparent); color:var(--ok) }
+.bk-fail { background:color-mix(in srgb, var(--bad) 20%, transparent); color:var(--bad) }
+.bk-review { background:color-mix(in srgb, var(--warn) 20%, transparent); color:var(--warn) }
+.bk-runfail { background:repeating-linear-gradient(135deg, transparent 0 5px, color-mix(in srgb, var(--muted) 20%, transparent) 5px 10px); color:var(--muted); border-color:var(--line) }
+.bk-detail { display:grid; grid-template-columns:max-content minmax(0,1fr); gap:4px 14px; font-size:.84rem; border-top:1px solid var(--line); padding-top:12px; margin:0 }
+.bk-detail.bk-plain { border-top:0; padding-top:0 }
+.bk-detail dt { color:var(--muted) } .bk-detail dd { margin:0; overflow-wrap:anywhere }
+.bk select { font:inherit; color:var(--fg); background:var(--card); border:1px solid var(--line); border-radius:6px; padding:4px 8px; max-width:100% }
+.bk-limits { margin:0; padding-left:18px; display:flex; flex-direction:column; gap:6px; font-size:.88rem; max-width:95ch }
+@media print {
+  .bk-tabs { display:none } .bk-view { display:flex !important } .bk-card { break-inside:avoid } .bk-view + .bk-view { break-before:page }
+}

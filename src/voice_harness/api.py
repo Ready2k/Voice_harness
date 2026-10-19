@@ -24,13 +24,18 @@ from fastapi import (
     WebSocketDisconnect,
 )
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import ValidationError
 
 from . import live_providers
 from .approvals import public_key
 from .auth import bearer_matches, load_token, restrict_bundle, reviewer_may, role_for, tls_options
+from .bakeoff import BakeoffRequest, BakeoffStore, Weights
+from .bakeoff import summary as bakeoff_summary
+from .bakeoff import tick as bakeoff_step
+from .bakeoff_export import render as render_bakeoff
+from .bakeoff_export import report_data as bakeoff_report_data
 from .clock_runtime import ClockSyncSession, invalidate_prior_connection
 from .contracts import AudioInputPayload, CancelRun, HoldRequest, ManualSessionConfig, RenewHold, RunConfig
 from .cost_api import register_cost_routes
@@ -154,6 +159,32 @@ def create_app(
             with job_lock:
                 live_tasks.pop(run_id, None)
 
+    bakeoffs = BakeoffStore(database)
+    bakeoff_lock = threading.Lock()  # one scheduler pass at a time (background loop and launch requests)
+    BAKEOFF_CONCURRENCY = 6  # leaves executor room for manual sessions and single runs
+
+    def start_live_run(config, request_key):
+        """Queue one live catalogue run, as POST /api/v1/runs does for a single repetition."""
+        body = RunConfig(**config)
+        if not live_providers.availability(body.provider_config_id)[0]:
+            raise ValueError("PROVIDER_NOT_CONFIGURED")
+        run_id = live_engine.create(body.model_dump(), request_key)
+        with job_lock:
+            if database.get(run_id)["state"] == "queued" and run_id not in jobs:
+                job_links[run_id] = telemetry_module.capture_link()
+                jobs[run_id] = executor.submit(contextvars.copy_context().run, work, run_id)
+        return run_id
+
+    def bakeoff_capacity():
+        with job_lock:
+            return BAKEOFF_CONCURRENCY - sum(not job.done() for job in jobs.values())
+
+    def bakeoff_tick():
+        if not app.state.accepting:
+            return 0
+        with bakeoff_lock:
+            return bakeoff_step(bakeoffs, database, start_live_run, capacity=bakeoff_capacity)
+
     def stop_live(run_id):
         with job_lock:
             entry = live_tasks.get(run_id)
@@ -247,10 +278,22 @@ def create_app(
                     await asyncio.to_thread(evidence.purge_metadata, run_id)
                 cursor = ids[-1] if ids else ""
 
+        async def bakeoff_scheduler():
+            while True:
+                await asyncio.sleep(3)
+                try:
+                    await asyncio.to_thread(bakeoff_tick)
+                except Exception:  # noqa: BLE001 -- a failed pass is logged and retried on the next one
+                    logging.getLogger("voice_harness.bakeoff").exception("bake-off scheduler pass failed")
+
         maintenance = asyncio.create_task(retention())
+        scheduler = asyncio.create_task(bakeoff_scheduler())
         yield
         app.state.accepting = False  # stop intake before anything else
         maintenance.cancel()
+        scheduler.cancel()
+        with suppress(asyncio.CancelledError):
+            await scheduler
         with suppress(asyncio.CancelledError):
             await maintenance
         await asyncio.to_thread(
@@ -683,6 +726,74 @@ def create_app(
     from .comparison_api import register_comparison_routes
 
     register_comparison_routes(app, database, auth)
+    app.state.bakeoff_tick = bakeoff_tick
+
+    def bakeoff_payload(bakeoff_id):
+        try:
+            return bakeoffs.get(bakeoff_id)
+        except KeyError:
+            raise HTTPException(404, "BAKEOFF_NOT_FOUND") from None
+
+    @app.post("/api/v1/bakeoffs", status_code=201, dependencies=[Depends(auth)])
+    def create_bakeoff(body: BakeoffRequest):
+        """Launch a bake-off (scenarios x providers x repetitions), or wrap finished runs (``runs``)."""
+        if not app.state.accepting:
+            raise HTTPException(503, "SHUTTING_DOWN")
+        for provider_config_id in body.provider_config_ids:
+            if not live_providers.availability(provider_config_id)[0]:
+                raise ValueError("PROVIDER_NOT_CONFIGURED:" + provider_config_id)
+        try:
+            payload = bakeoffs.create(body)
+        except KeyError:
+            raise HTTPException(404, "RUN_NOT_FOUND") from None
+        bakeoff_tick()  # start the first runs (or settle imported ones) now rather than on the next pass
+        return bakeoff_summary(bakeoffs.get(payload["bakeoff_id"]))
+
+    @app.get("/api/v1/bakeoffs", dependencies=[Depends(auth)])
+    def list_bakeoffs():
+        return {"items": bakeoffs.list()}
+
+    @app.get("/api/v1/bakeoffs/{bakeoff_id}", dependencies=[Depends(auth)])
+    def get_bakeoff(bakeoff_id: str):
+        payload = bakeoff_payload(bakeoff_id)
+        cells = [{"scenario_id": c["scenario_id"], "provider_config_id": c["provider_config_id"], "repetition": c["repetition"],
+                  "done": c.get("done", False), "attempts": [{k: a.get(k) for k in ("run_id", "state", "failure")}
+                                                             for a in c["attempts"] if not a.get("pending")]}
+                 for c in payload["cells"]]
+        return {"bakeoff": bakeoff_summary(payload), "weights": payload["weights"], "cells": cells,
+                "data": bakeoff_report_data(payload, source=bakeoff_id)}
+
+    @app.post("/api/v1/bakeoffs/{bakeoff_id}/report", dependencies=[Depends(auth)])
+    def bakeoff_what_if(bakeoff_id: str, weights: Weights):
+        """The report recomputed with other weights; nothing is stored."""
+        payload = bakeoff_payload(bakeoff_id)
+        return {"data": bakeoff_report_data(payload, weights=weights.model_dump(), source=bakeoff_id)}
+
+    @app.get("/api/v1/bakeoffs/{bakeoff_id}/report.html", dependencies=[Depends(auth)])
+    def bakeoff_export(bakeoff_id: str):
+        """A self-contained, interactive HTML report to share (data embedded; prints to PDF)."""
+        payload = bakeoff_payload(bakeoff_id)
+        filename = "bakeoff-" + bakeoff_id + ".html"
+        return HTMLResponse(render_bakeoff(payload, source=bakeoff_id),
+                            headers={"Content-Disposition": f'attachment; filename="{filename}"'})
+
+    @app.post("/api/v1/bakeoffs/{bakeoff_id}/cancel", dependencies=[Depends(auth)])
+    def cancel_bakeoff(bakeoff_id: str):
+        """Stop launching, cancel runs in flight; finished runs stay in the report."""
+        with bakeoff_lock:
+            payload = bakeoff_payload(bakeoff_id)
+            if payload["state"] != "running":
+                raise ValueError("BAKEOFF_NOT_RUNNING")
+            for cell in payload["cells"]:
+                latest = cell["attempts"][-1] if cell["attempts"] else None
+                if latest and latest.get("run_id") and not cell.get("done"):
+                    with suppress(ValueError, KeyError):  # already terminal
+                        engine.cancel(latest["run_id"], "BAKEOFF_CANCELLED")
+                        stop_live(latest["run_id"])
+                cell["attempts"] = [a for a in cell["attempts"] if not a.get("pending")]
+            payload["state"] = "cancelled"
+            bakeoffs.save(payload)
+        return bakeoff_summary(payload)
 
     @app.post("/api/v1/runs/{run_id}/ws-ticket", dependencies=[Depends(auth)])
     def ws_ticket(run_id: str):

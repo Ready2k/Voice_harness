@@ -218,3 +218,22 @@ button.danger{border-color:var(--bad);color:var(--bad);margin-left:auto}button.d
 .error-text{color:var(--bad)}
 @media(max-width:1000px){.session-layout{grid-template-columns:1fr}.side-panel{position:static;max-height:none}.manual-setup{grid-template-columns:1fr}}
 @media(max-width:600px){button.danger{margin-left:0}.bubble{max-width:100%}.conversation{max-height:none}}
+
+/* Provider bake-off */
+.bakeoff-layout{display:grid;grid-template-columns:320px minmax(0,1fr);gap:22px;align-items:start}
+.bakeoff-side,.bakeoff-detail{min-width:0}
+.bakeoff-new>summary{cursor:pointer;font-weight:600;color:var(--info)}
+.bakeoff-form{display:flex;flex-direction:column;gap:12px;margin-top:12px}
+.bakeoff-form>label{flex:initial}
+.bakeoff-form fieldset{border:1px solid var(--line);border-radius:8px;padding:8px 12px;margin:0}
+.bakeoff-form legend{font-size:.85rem;font-weight:600;padding:0 4px}
+.bakeoff-checks{display:flex;flex-direction:column;gap:2px}
+.bakeoff-checks label{font-weight:500;flex:initial;min-height:32px}
+.bakeoff-list{display:flex;flex-direction:column}
+.bakeoff-list .queue-item{display:flex;flex-direction:column;align-items:flex-start;gap:2px}
+.bakeoff-status{display:flex;flex-direction:column;gap:8px}
+.bakeoff-progress{height:8px;border-radius:99px;background:var(--line);overflow:hidden}
+.bakeoff-progress span{display:block;height:100%;width:0;background:var(--info);transition:width .4s}
+.bakeoff-weights{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+#bo-report{margin-top:18px}
+@media(max-width:900px){.bakeoff-layout{grid-template-columns:1fr}}

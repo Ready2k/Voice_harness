@@ -2392,6 +2392,328 @@
         }
       }
     },
+    "/api/v1/bakeoffs": {
+      "post": {
+        "summary": "Create Bakeoff",
+        "description": "Launch a bake-off (scenarios x providers x repetitions), or wrap finished runs (``runs``).",
+        "operationId": "create_bakeoff_api_v1_bakeoffs_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BakeoffRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "List Bakeoffs",
+        "operationId": "list_bakeoffs_api_v1_bakeoffs_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/bakeoffs/{bakeoff_id}": {
+      "get": {
+        "summary": "Get Bakeoff",
+        "operationId": "get_bakeoff_api_v1_bakeoffs__bakeoff_id__get",
+        "parameters": [
+          {
+            "name": "bakeoff_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Bakeoff Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/bakeoffs/{bakeoff_id}/report": {
+      "post": {
+        "summary": "Bakeoff What If",
+        "description": "The report recomputed with other weights; nothing is stored.",
+        "operationId": "bakeoff_what_if_api_v1_bakeoffs__bakeoff_id__report_post",
+        "parameters": [
+          {
+            "name": "bakeoff_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Bakeoff Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Weights"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/bakeoffs/{bakeoff_id}/report.html": {
+      "get": {
+        "summary": "Bakeoff Export",
+        "description": "A self-contained, interactive HTML report to share (data embedded; prints to PDF).",
+        "operationId": "bakeoff_export_api_v1_bakeoffs__bakeoff_id__report_html_get",
+        "parameters": [
+          {
+            "name": "bakeoff_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Bakeoff Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/bakeoffs/{bakeoff_id}/cancel": {
+      "post": {
+        "summary": "Cancel Bakeoff",
+        "description": "Stop launching, cancel runs in flight; finished runs stay in the report.",
+        "operationId": "cancel_bakeoff_api_v1_bakeoffs__bakeoff_id__cancel_post",
+        "parameters": [
+          {
+            "name": "bakeoff_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Bakeoff Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/runs/{run_id}/ws-ticket": {
       "post": {
         "summary": "Ws Ticket",
@@ -2633,6 +2955,77 @@
           "tested"
         ],
         "title": "AssessBody"
+      },
+      "BakeoffRequest": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "provider_config_ids": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "openai-realtime-live",
+                "nova-sonic-live",
+                "xai-voice-live",
+                "gemini-live"
+              ]
+            },
+            "type": "array",
+            "maxItems": 4,
+            "minItems": 2,
+            "title": "Provider Config Ids",
+            "default": []
+          },
+          "scenario_ids": {
+            "items": {
+              "type": "string",
+              "maxLength": 200,
+              "minLength": 1
+            },
+            "type": "array",
+            "maxItems": 200,
+            "title": "Scenario Ids",
+            "default": []
+          },
+          "repetitions": {
+            "type": "integer",
+            "maximum": 10.0,
+            "minimum": 1.0,
+            "title": "Repetitions",
+            "default": 1
+          },
+          "weights": {
+            "$ref": "#/components/schemas/Weights",
+            "default": {
+              "task_success": 0.3,
+              "factual": 0.2,
+              "safe_speech": 0.15,
+              "reliability": 0.15,
+              "responsiveness": 0.15,
+              "robustness": 0.05
+            }
+          },
+          "runs": {
+            "items": {
+              "$ref": "#/components/schemas/ImportedRun"
+            },
+            "type": "array",
+            "maxItems": 600,
+            "title": "Runs",
+            "default": []
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "BakeoffRequest",
+        "description": "Launch a plan (scenarios x providers x repetitions), or wrap runs that already exist (``runs``)."
       },
       "CalibrateBody": {
         "properties": {
@@ -2940,6 +3333,33 @@
         ],
         "title": "HoldRequest",
         "description": "Preservation hold: exactly one of finding_ids or an explicit run-wide scope."
+      },
+      "ImportedRun": {
+        "properties": {
+          "run_id": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Run Id"
+          },
+          "earlier_attempts": {
+            "items": {
+              "type": "string",
+              "maxLength": 200,
+              "minLength": 1
+            },
+            "type": "array",
+            "maxItems": 5,
+            "title": "Earlier Attempts",
+            "default": []
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "run_id"
+        ],
+        "title": "ImportedRun"
       },
       "ManualSessionConfig": {
         "properties": {
@@ -3645,6 +4065,55 @@
           "type"
         ],
         "title": "ValidationError"
+      },
+      "Weights": {
+        "properties": {
+          "task_success": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Task Success",
+            "default": 0.3
+          },
+          "factual": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Factual",
+            "default": 0.2
+          },
+          "safe_speech": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Safe Speech",
+            "default": 0.15
+          },
+          "reliability": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Reliability",
+            "default": 0.15
+          },
+          "responsiveness": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Responsiveness",
+            "default": 0.15
+          },
+          "robustness": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Robustness",
+            "default": 0.05
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "Weights"
       }
     }
   }
