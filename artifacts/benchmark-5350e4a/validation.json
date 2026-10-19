@@ -1,0 +1,33 @@
+{
+  "checked_at": "2026-10-19T12:17:29.421716+00:00",
+  "source_commit": "5350e4a0784f857fc90c2dee5c4fea3a24a6413b",
+  "source_hash_unchanged": true,
+  "live_runs": 132,
+  "assessment_complete": false,
+  "assessment_limitation": "9 runs untestable: independent ASR HTTP 429; availability check confirms credit_balance_exhausted",
+  "fault_audit": "5 injected timeout events in 4 declared tool-error cells; 0 outside declared scope",
+  "slow_lookup": "4/4 assurance passes",
+  "prohibited_tool_executions": 0,
+  "component_profiles": 12,
+  "source_revision_ci": {
+    "conclusion": "success",
+    "url": "https://github.com/Ready2k/Voice_harness/actions/runs/39249079147"
+  },
+  "html_javascript_errors": [],
+  "pdf": {
+    "pages": 11,
+    "visual_review": "pass"
+  },
+  "artifact_sha256": {
+    "artifacts/provider-matrix/matrix-5350e4a-2026-10-19.json": "583ae281d3dac43c84b8330d7d229b75076d446c260cd3d73709e5514e28ba58",
+    "reports/voice-provider-benchmark-5350e4a-2026-10-19.html": "1b66b8b27f163619b801c3402e4bde128b38006c4afcef7f4716a1b082b904d6",
+    "reports/voice-provider-benchmark-5350e4a-2026-10-19.pdf": "84c8ac2669e172bdf273c9c1e2433e884ec21bd079dbefc344ad9cfd2ff14e73",
+    "artifacts/benchmark-5350e4a/annotate_report.py": "66dbd619e362845b0b294d64b2947405688616c03a549c9c1eeb6e3d4822270c",
+    "artifacts/benchmark-5350e4a/asr-availability-check.json": "8387e0393126ccee70542457f94f9e7e7337e95e07c87d1c6cbb4125654ef541",
+    "artifacts/benchmark-5350e4a/asr-limited-runs.json": "227d71f0e753e961440c64aa7b0f822c6de70745c49848577f2dc065b8b53ce3",
+    "artifacts/benchmark-5350e4a/component-benchmark.json": "3b34f38ce66f4708483c66c86d1915cbcebc63bd09fd025076ea35c4a312c527",
+    "artifacts/benchmark-5350e4a/provenance.json": "fecc41de647c29f48827a07b951827394f13b8da9ae8e9227dc8674bde68509b",
+    "artifacts/benchmark-5350e4a/summary.json": "86b374028393cae0f4b3034f4a4c14e26385226f86789d719718cdd5c090f8ab",
+    "artifacts/benchmark-5350e4a/prior-fault-audit.json": "8b018a8cf382226b7d71f345d77197de724461e1e9da5d40f9a8aa2e1c9d4b59"
+  }
+}

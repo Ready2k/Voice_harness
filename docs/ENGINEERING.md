@@ -70,6 +70,11 @@ all four providers, with one sample per cell and at most two simultaneous runs p
 Keep failed attempts visible; any retry must preserve its first attempt. Component benchmarks
 (`make benchmark`) measure harness stages separately from conversational provider latency.
 
+The latest rerun on revision `5350e4a` uses port 8768 and
+`.local/benchmark-5350e4a/development.sqlite`. See
+[BENCHMARK_5350E4A_2026-10-19.md](BENCHMARK_5350E4A_2026-10-19.md) for results, fault-isolation
+verification and the ASR credit limitation.
+
 ## Test strategy
 
 | Layer | What it establishes | Where |

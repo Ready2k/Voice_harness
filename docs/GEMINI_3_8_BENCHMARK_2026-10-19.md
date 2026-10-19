@@ -1,5 +1,9 @@
 # Gemini 3.8 migration and benchmark rerun
 
+Historical batch: a later audit found eight undeclared timeout-injection events across seven
+cells. See the [rerun on revision 5350e4a](BENCHMARK_5350E4A_2026-10-19.md), which verifies
+fault isolation but is itself limited by exhausted independent-ASR credits.
+
 New `gemini-live` sessions request `gemini-3.8-live` on Vertex AI in `us-central1` using
 Application Default Credentials. All 33 Gemini runs in this batch record that exact requested
 model. The server does not echo a model version, so returned-version resolution remains unknown.

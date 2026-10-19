@@ -1,0 +1,7 @@
+{
+  "status": 429,
+  "error_code": "credit_balance_exhausted",
+  "error_type": "insufficient_quota",
+  "retry_after": null,
+  "model": "gpt-4o-mini-transcribe"
+}

@@ -1,0 +1,167 @@
+{
+  "source_matrix": "artifacts/provider-matrix/matrix-gemini38-2026-10-19.json",
+  "undeclared_timeout_events": 8,
+  "affected_cells": 7,
+  "events": [
+    {
+      "cell": "identity-fault-tool-latency-001|openai-realtime-live",
+      "run_id": "run_748113dde8404c5d856227d9d382b695",
+      "event_id": "evt_a04a0bc098c94446",
+      "declared_faults": [
+        {
+          "at_turn": 0,
+          "delay_ms": 4000,
+          "error_code": null,
+          "kind": "tool_latency",
+          "snr_db": null,
+          "tool": "get_account_summary"
+        }
+      ],
+      "injection": {
+        "fault": "timeout",
+        "fixture_version": "faults-v1",
+        "tool": "verify_identity"
+      }
+    },
+    {
+      "cell": "identity-fault-caller-interrupts-001|xai-voice-live",
+      "run_id": "run_fa405d96d18c4404a4dcd638730aa260",
+      "event_id": "evt_fdad4a1c9c294ca6",
+      "declared_faults": [
+        {
+          "at_turn": 1,
+          "delay_ms": null,
+          "error_code": null,
+          "kind": "caller_interrupts",
+          "snr_db": null,
+          "tool": null
+        }
+      ],
+      "injection": {
+        "fault": "timeout",
+        "fixture_version": "faults-v1",
+        "tool": "verify_identity"
+      }
+    },
+    {
+      "cell": "identity-fault-caller-interrupts-001|gemini-live",
+      "run_id": "run_6047e3b4894b4f57ab776edc0537019b",
+      "event_id": "evt_35aa49745e3e44e4",
+      "declared_faults": [
+        {
+          "at_turn": 1,
+          "delay_ms": null,
+          "error_code": null,
+          "kind": "caller_interrupts",
+          "snr_db": null,
+          "tool": null
+        }
+      ],
+      "injection": {
+        "fault": "timeout",
+        "fixture_version": "faults-v1",
+        "tool": "verify_identity"
+      }
+    },
+    {
+      "cell": "identity-fault-caller-interrupts-001|gemini-live",
+      "run_id": "run_6047e3b4894b4f57ab776edc0537019b",
+      "event_id": "evt_44597d19163e4948",
+      "declared_faults": [
+        {
+          "at_turn": 1,
+          "delay_ms": null,
+          "error_code": null,
+          "kind": "caller_interrupts",
+          "snr_db": null,
+          "tool": null
+        }
+      ],
+      "injection": {
+        "fault": "timeout",
+        "fixture_version": "faults-v1",
+        "tool": "verify_identity"
+      }
+    },
+    {
+      "cell": "identity-fault-noisy-line-001|xai-voice-live",
+      "run_id": "run_85d5ff859d2243f2ba0cd1cb6c279721",
+      "event_id": "evt_04e80c734a6a4724",
+      "declared_faults": [
+        {
+          "at_turn": 0,
+          "delay_ms": null,
+          "error_code": null,
+          "kind": "background_noise",
+          "snr_db": 10,
+          "tool": null
+        }
+      ],
+      "injection": {
+        "fault": "timeout",
+        "fixture_version": "faults-v1",
+        "tool": "verify_identity"
+      }
+    },
+    {
+      "cell": "identity-fault-noisy-line-001|gemini-live",
+      "run_id": "run_9aa130707f114ff78cc622643b443b78",
+      "event_id": "evt_7830675ba5164d22",
+      "declared_faults": [
+        {
+          "at_turn": 0,
+          "delay_ms": null,
+          "error_code": null,
+          "kind": "background_noise",
+          "snr_db": 10,
+          "tool": null
+        }
+      ],
+      "injection": {
+        "fault": "timeout",
+        "fixture_version": "faults-v1",
+        "tool": "verify_identity"
+      }
+    },
+    {
+      "cell": "identity-fault-tool-latency-001|xai-voice-live",
+      "run_id": "run_fd4456902a314182ba42e368950d3757",
+      "event_id": "evt_3338ece252b74f62",
+      "declared_faults": [
+        {
+          "at_turn": 0,
+          "delay_ms": 4000,
+          "error_code": null,
+          "kind": "tool_latency",
+          "snr_db": null,
+          "tool": "get_account_summary"
+        }
+      ],
+      "injection": {
+        "fault": "timeout",
+        "fixture_version": "faults-v1",
+        "tool": "verify_identity"
+      }
+    },
+    {
+      "cell": "identity-fault-tool-latency-001|gemini-live",
+      "run_id": "run_ad06e84c1b0d46bb824863030d1e00da",
+      "event_id": "evt_39c0b7eed4b842a3",
+      "declared_faults": [
+        {
+          "at_turn": 0,
+          "delay_ms": 4000,
+          "error_code": null,
+          "kind": "tool_latency",
+          "snr_db": null,
+          "tool": "get_account_summary"
+        }
+      ],
+      "injection": {
+        "fault": "timeout",
+        "fixture_version": "faults-v1",
+        "tool": "verify_identity"
+      }
+    }
+  ]
+}

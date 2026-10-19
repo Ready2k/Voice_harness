@@ -1,0 +1,119 @@
+[
+  {
+    "cell": "identity-social-en-us-telephone-001|nova-sonic-live",
+    "run_id": "run_32eead9cd43d46148801f2ec05e4bd9c",
+    "failures": [
+      {
+        "audio_sha256": "3d9d7994a5ba25c3b558671f4be0b8349b2a836b58faf90cee9ffca1610eb63d",
+        "reason": "ASR_HTTP_429",
+        "strict_speech_approval": "unavailable",
+        "unit_id": "unit_574cad3ca68d43e8a70a75dab2bd8c2d"
+      }
+    ],
+    "outcome": "untestable"
+  },
+  {
+    "cell": "identity-social-en-gb-street-001|xai-voice-live",
+    "run_id": "run_3c661c153aa844b18fa2ad46847d0c4a",
+    "failures": [
+      {
+        "audio_sha256": "b9c416030d18fb12339556903c61cc5d89c77341ca1b9f664aac7668462df026",
+        "reason": "ASR_HTTP_429",
+        "strict_speech_approval": "unavailable",
+        "unit_id": "unit_adfc6f5ddc95466f94b94fc996b13947"
+      }
+    ],
+    "outcome": "untestable"
+  },
+  {
+    "cell": "identity-social-en-gb-telephone-001|gemini-live",
+    "run_id": "run_9e6d9fff9fa64c3fbb1e67dc99f3c5a9",
+    "failures": [
+      {
+        "audio_sha256": "f605b5f9a07a439f2d5481aed1224b3ee4a02e651970cbfc656c5e5785ac7d67",
+        "reason": "ASR_HTTP_429",
+        "strict_speech_approval": "unavailable",
+        "unit_id": "unit_d478d77df5304faab9aac6724735c7bc"
+      }
+    ],
+    "outcome": "untestable"
+  },
+  {
+    "cell": "identity-social-en-gb-telephone-001|xai-voice-live",
+    "run_id": "run_fe50b5579dba4b05b6caa020f083d4de",
+    "failures": [
+      {
+        "audio_sha256": "4902d0c00550fd3a997507d02be23b2cfe3d423d493c35b62b2bf2a039b66a1a",
+        "reason": "ASR_HTTP_429",
+        "strict_speech_approval": "unavailable",
+        "unit_id": "unit_8fe86021aead45a0be7eb16defbb7031"
+      }
+    ],
+    "outcome": "untestable"
+  },
+  {
+    "cell": "identity-social-en-us-clean-001|gemini-live",
+    "run_id": "run_9ea7861509c74b05933d49b666f6d6f8",
+    "failures": [
+      {
+        "audio_sha256": "9e8c4e159b00bfce801349e131476292010ac9b50d87b2ec2b6b68d11d240caa",
+        "reason": "ASR_HTTP_429",
+        "strict_speech_approval": "unavailable",
+        "unit_id": "unit_051b793d216e4409a00e06ce319e092f"
+      }
+    ],
+    "outcome": "untestable"
+  },
+  {
+    "cell": "identity-social-en-us-clean-001|xai-voice-live",
+    "run_id": "run_adbca4103a3643a1b28c706ec6dafa2b",
+    "failures": [
+      {
+        "audio_sha256": "2979996766e145d9665bf9ec1e8be403ea0a33cdf243d180022300576a45c048",
+        "reason": "ASR_HTTP_429",
+        "strict_speech_approval": "unavailable",
+        "unit_id": "unit_cccdf44d31474cb49f92b90cc3c0c723"
+      }
+    ],
+    "outcome": "untestable"
+  },
+  {
+    "cell": "identity-social-en-us-street-001|xai-voice-live",
+    "run_id": "run_88c298e7f16847e187a7d038efd3bb81",
+    "failures": [
+      {
+        "audio_sha256": "19e734e89bbcc0c7d1bc4f38ebe48614ef611d7e227a543961c95e57a7b0bce5",
+        "reason": "ASR_HTTP_429",
+        "strict_speech_approval": "unavailable",
+        "unit_id": "unit_388ce932e1f54022b0b396c1c65aaf06"
+      }
+    ],
+    "outcome": "untestable"
+  },
+  {
+    "cell": "identity-social-en-us-telephone-001|xai-voice-live",
+    "run_id": "run_9b1d9c8c77d943298af678448d62d375",
+    "failures": [
+      {
+        "audio_sha256": "de1e6a9dd602f1178fd88995249813eda9767b8ae358d6322f984a227839ef51",
+        "reason": "ASR_HTTP_429",
+        "strict_speech_approval": "unavailable",
+        "unit_id": "unit_664831ddf5b14d0f8de0cf22b748294e"
+      }
+    ],
+    "outcome": "untestable"
+  },
+  {
+    "cell": "identity-social-en-us-telephone-001|gemini-live",
+    "run_id": "run_c01115015e484cf9ab8b42f0fbbe0c20",
+    "failures": [
+      {
+        "audio_sha256": "b4f9c3ddbf7e5e7f011990760b2c9c331df81958922781932e256ea334149c6c",
+        "reason": "ASR_HTTP_429",
+        "strict_speech_approval": "unavailable",
+        "unit_id": "unit_d0110af046e9400fbcc479439b9ef4b0"
+      }
+    ],
+    "outcome": "untestable"
+  }
+]

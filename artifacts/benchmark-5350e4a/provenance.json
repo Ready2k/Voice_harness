@@ -1,0 +1,24 @@
+{
+  "started_at": "2026-10-19T12:05:36.652522+00:00",
+  "source_commit": "5350e4a0784f857fc90c2dee5c4fea3a24a6413b",
+  "source_hash": "fbd6f0d9a16d5e6f054013455d96c8740a47c211cb2c9a8c26e70f80fb0c1ae6",
+  "tracked_changes": [],
+  "base": "http://127.0.0.1:8768",
+  "database": ".local/benchmark-5350e4a/development.sqlite",
+  "matrix": "artifacts/provider-matrix/matrix-5350e4a-2026-10-19.json",
+  "concurrency": 8,
+  "per_provider": 2,
+  "repetitions": 1,
+  "retries": 0,
+  "automatic_judges": [],
+  "conditions": [
+    "Fresh API process started at this revision",
+    "No test suite or component benchmark launched during the provider matrix",
+    "Gemini uses the configured server automatic activity detection; the manual activity fix does not change this mode"
+  ],
+  "finished_at": "2026-10-19T12:11:58Z",
+  "source_hash_after": "fbd6f0d9a16d5e6f054013455d96c8740a47c211cb2c9a8c26e70f80fb0c1ae6",
+  "runtime_tree_unchanged": true,
+  "assessment_status": "limited_by_exhausted_asr_credits",
+  "component_conditions": "Run after the provider matrix; report authoring overlapped part of the component run."
+}
