@@ -1,13 +1,32 @@
 # Phase 4 status (in progress)
 
+## Current position (2026-10-19, `dbbe37a`)
+
+- Four live providers run through the API, Runs page, manual sessions and bake-offs: `openai-realtime-live`
+  (`gpt-realtime-2.1`), `nova-sonic-live` (`amazon.nova-2-5-sonic`), `xai-voice-live` (`grok-voice-3.0`) and
+  `gemini-live` (`gemini-3.8-live`). All four are `implemented_and_verified` in coverage (see `PHASE2_STATUS.md`).
+- The catalogue has 33 live scenarios in five groups: 9 happy path, 12 identity protection, 6 vulnerable customers,
+  4 fault tolerance, 2 payment actions. 25 declare FACT-01.
+- Latest provider benchmark: `BENCHMARK_5350E4A_2026-10-19.md` (132 runs, one per scenario per provider, fault
+  isolation verified). It makes no provider recommendation because nine assessments were untestable after
+  independent-ASR credits ran out. The earlier `GEMINI_3_8_BENCHMARK_2026-10-19.md` batch is historical (undeclared
+  timeout injections).
+- Local validation at `dbbe37a`: 642 Python tests OK (8 skipped, SQLite), 71 browser tests. Compose/PostgreSQL not
+  re-run on this commit.
+- Still open: repeated samples (every live result is one sample per cell), locale-aware caller voice, judge
+  calibration policy approval (blocking stays off), live runs inside the container (no credentials or `say` there),
+  and the per-section "Still open" items below.
+
+The sections below are a chronological log; earlier counts and open items are superseded where later sections say so.
+
 ## Delivered
 
-- **Scenario catalogue** (`scenario_catalogue.py`): 18 persona/locale/profile live-adapter scenarios built as ordinary
+- **Scenario catalogue** (`scenario_catalogue.py`): initially 18 persona/locale/profile live-adapter scenarios built as ordinary
   `ScenarioDefinition` records (personas: impatient, bereaved/vulnerable, social engineer; locales
-  en-GB/en-US; audio profiles clean, street noise 10 dB, telephone narrowband) plus 4 fault-injected (22 entries)
-  identity variants. `FaultInjection` is a separate closed model kept outside the definition, so the
+  en-GB/en-US; audio profiles clean, street noise 10 dB, telephone narrowband) plus 4 fault-injected
+  identity variants; now 33 with happy-path and payment scenarios (see Current position). `FaultInjection` is a separate closed model kept outside the definition, so the
   three mock built-ins keep their content hashes. `GET /api/v1/scenarios` lists them with
-  `execution: "live_adapter"`, `runnable: false` (the mock runner does not execute them) and their faults.
+  `execution: "live_adapter"`, `runnable: true` (live runs launch through the API since finding 8) and their faults.
 - **Live scenario runner** (`live_scenario.py`): synthetic caller speech -> 20 ms chunks -> adapter ->
   `AdapterTurnDriver` (independent ASR, strict speech approval) with tool calls through the MCP gateway.
   Faults: `tool_error` (engine `timeout` fault for the session, `fault.injected` recorded; set before the
@@ -54,9 +73,9 @@
 
 ## Not yet established
 
-- Nova runner use; the live runs are single samples, not repeated.
+- Repeated samples: every live run is a single sample. (Nova runner use was listed here and is now done; see later sections.)
 - Live-model chooser for the AC-16 simulator (`model_simulator.py` is offline-tested with an injected chooser: model picks branch, oracle rejected, bad output attributed to the simulator with fallback, hashed prompt/config recorded; `OpenAIChooser` (opt-in `VOICE_HARNESS_LIVE_JUDGES=openai`) added). Synthetic commit (AC-15) is tested through the real MCP gateway with a scripted adapter (`tests/test_phase4_commit.py`: denial before identity/confirmation, single-use consumption, changed-amount invalidation, restart idempotency); a live model has not been driven to propose a commit.
-- A first OpenAI vs Nova comparison on the catalogue (needs go-ahead for API spend).
+- (Superseded: OpenAI vs Nova comparisons were run, then four-provider bake-offs; see Current position.)
 - The synthetic caller uses macOS `say`; the catalogue declares locales but `say` voice selection is not
   yet locale-aware. Narrowband/noise are simple synthetic shaping, not measured telephony.
 - (Superseded: the xAI and Google adapters were merged later; see their sections below.)
@@ -130,7 +149,7 @@ Deferred by decision: finding 8 (live scenarios through the API/UI/CLI) and a sh
 
 ## Finding 8: live scenarios through the API and Runs page
 
-- `provider_config_id` now accepts `openai-realtime-live` and `nova-sonic-live` (registry in `live_providers.py`). `POST /api/v1/runs` pairs live scenarios only with live providers (`SCENARIO_PROVIDER_MISMATCH`) and refuses an unconfigured provider at launch (`PROVIDER_NOT_CONFIGURED`). `GET /api/v1/live-providers` lists availability as reason codes only.
+- `provider_config_id` now accepts `openai-realtime-live` and `nova-sonic-live` (registry in `live_providers.py`; `xai-voice-live` and `gemini-live` were added later). `POST /api/v1/runs` pairs live scenarios only with live providers (`SCENARIO_PROVIDER_MISMATCH`) and refuses an unconfigured provider at launch (`PROVIDER_NOT_CONFIGURED`). `GET /api/v1/live-providers` lists availability as reason codes only.
 - Live runs use a second engine with `LIVE_LIMITS`, so the run manifest records the live budgets. Lifecycle: queued, probing, running, then `run.completed`, after which the deterministic rubric is assessed (`judge.adjudicated`; `/assurance` is ledger-derived) or `run.failed` (`PROVIDER_FAILURE`).
 - The Runs page shows a provider selector for catalogue scenarios; unavailable providers are disabled with their reason.
 - Verified: 469 Python tests, 29 browser unit tests, lint; a real run through the API completed on both OpenAI and Nova (single samples). **Not verified in a browser** (the Chrome extension was not connected); the page logic is covered by unit tests only.
@@ -161,7 +180,7 @@ Browser check (Chrome, local dev server): the Runs page loads the catalogue and 
 ## FACT-01 for live runs
 
 - `eval_fact` now takes the independent ASR revision (`transcript.revised`, authoritative, source `independent_asr`) as the text of a spoken unit, falling back to the provider transcript. A wrong amount in the ASR text fails (`BALANCE_MISMATCH`) even if the provider transcript was right, and the reverse passes.
-- The catalogue declares FACT-01 for every scenario whose caller asks about the balance or account (20 of 24; hashes changed).
+- The catalogue declares FACT-01 for every scenario whose caller asks about the balance or account (20 of 24 at the time; 25 of 33 now; hashes changed).
 - Finding while checking against live runs: catalogue variants copied the base scenario's per-turn `prohibited_actions` (`get_account_summary`) into every turn, so the correct post-verification behaviour in the tool-latency and caller-interrupts scenarios was assessed `fail` (SCENARIO-PROPOSAL-01). Those two scenarios now allow the tool (`verified_flow`); calling it before verification remains IDENTITY-01's finding.
 - Verified live (single samples): tool-latency on OpenAI and Nova spoke "£1,234.56", matched the tool result, FACT-01 `pass`, overall `pass`; caller-interrupts on OpenAI `pass`. Impatient and social refusals: FACT-01 `pass` with no amount claimed.
 - Open: FACT-01 only checks amounts (not other account facts such as account id or payment dates), and a refusal scenario passes FACT-01 by making no claim, which says little; a spoken amount with number words is `untestable`.
@@ -222,6 +241,8 @@ Not done: the API-level consent regressions mock the engine's present/confirm st
 
 ## Google Gemini Live (merged eb6a32d)
 
+Superseded by the Gemini 3.8 migration below: the model, capability report (now expiring 2026-10-26) and AC-09 result have changed; the 2.5 observations are kept as history.
+
 `gemini-live` adapter for `gemini-live-2.5-flash-native-audio` on Vertex AI (`us-central1`, authorized-user ADC, no new dependency), capability probe (expires 2026-10-25), live AC-09 (audio in/out, tool correlation, error pass; interruption excluded because truncation is unsupported) and one live smoke run on `identity-impatient-en-gb-clean-001` (single sample, no tool calls, overall `pass`). Coverage: `google_gemini_live` is `implemented_and_verified` while its report is current. Compose suite: 592 tests OK, 5 skipped.
 
 - Observed, not verified: every capability row is Observed from one probe run; no row cites documentation. Output sample rate (24 kHz) is inferred from byte count, not stated by the server.
@@ -258,4 +279,7 @@ current 2.5 capability binding; the historical baseline is preserved under
 `artifacts/gemini38/baseline/`. AC-09 passed its supported dimensions; client truncation
 remains excluded and the server does not echo a model version. The full four-provider
 scenario rerun, report and validation results are recorded in
-[GEMINI_3_8_BENCHMARK_2026-10-19.md](GEMINI_3_8_BENCHMARK_2026-10-19.md).
+[GEMINI_3_8_BENCHMARK_2026-10-19.md](GEMINI_3_8_BENCHMARK_2026-10-19.md). That batch had eight undeclared
+timeout injections; the fault-isolation fix (`5350e4a`) and its rerun are in
+[BENCHMARK_5350E4A_2026-10-19.md](BENCHMARK_5350E4A_2026-10-19.md), which is limited by exhausted
+independent-ASR credits.

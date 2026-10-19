@@ -1,12 +1,12 @@
 # Phase 3 status
 
-Merged 2026-10-17: manifest signing (AC-08), cost accounting (AC-12, AC-19), judges/calibration/human review (AC-10), comparison reports and independent-ASR assessment (AC-11, AC-14 live). Compose on PostgreSQL: 381 Python tests OK, 28 Node tests OK; ruff, bandit and pip-audit clean.
+Merged 2026-10-17: manifest signing (AC-08), cost accounting (AC-12, AC-19), judges/calibration/human review (AC-10), comparison reports and independent-ASR assessment (AC-11, AC-14 live). At merge, Compose on PostgreSQL: 381 Python tests OK, 28 Node tests OK; ruff, bandit and pip-audit clean. The sections below were written at merge; where Phase 4 has since changed the position, this summary says so.
 
-**Not yet established (read before claiming Phase 3 complete):**
-- No live judge has been calibrated; all AI findings are advisory and blocking is off. The shipped holdout is tiny and synthetic, so the 0.80 thresholds are exploratory.
-- No live ASR or live judge (OpenAI/Bedrock) call has been exercised: smoke tests were skipped for lack of a key in the agents' shells. Live paths are covered only by fakes.
-- Pricing table has null prices for every real meter; real run costs export as `unknown` until tariffs are verified. Provider usage is recorded into cost lines by `cost_recorder.UsageRecorder` when a driver is given one (see Cost accounting); real-price runs still export `unknown`.
-- Comparison input is caller-supplied observations; no live-provider study has been run.
+**Position as of 2026-10-19 (read before claiming Phase 3 complete):**
+- Judge calibration has been run once each for an OpenAI judge (`gpt-4.1-mini`) and a Bedrock Claude Haiku 4.5 judge on the synthetic holdout (see `PHASE4_STATUS.md` and `PHASE4_NOTES_bedrock_calibration.md`). Only CARE-01 clears the numeric thresholds; no calibration policy has been approved, so all AI findings remain advisory and blocking is off. The holdout is tiny and synthetic, so the 0.80 thresholds are exploratory.
+- Live independent ASR (`gpt-4o-mini-transcribe`) and a live OpenAI judge have been exercised on live adapter runs (Phase 4). The latest benchmark rerun (`BENCHMARK_5350E4A_2026-10-19.md`) was limited by exhausted ASR credits (HTTP 429), so strict speech approval depends on ASR quota.
+- The shipped pricing table still has null prices for every real meter, so default exports say `unknown`. A vendor list-price table (`artifacts/pricing/vendor-pricing-2026-10-18.json`, loaded with `HARNESS_PRICING_TABLE`) prices OpenAI, Nova, xAI and Gemini meters; live runs record provider usage through `UsageRecorder`. Mock runs still export no cost lines.
+- Comparison reports still take caller-supplied observations. Live provider comparisons now run through the bake-off (`bakeoff.py`, `/client/bakeoff.html`), which computes its report from the ledgers; see `GEMINI_3_8_BENCHMARK_2026-10-19.md` and `BENCHMARK_5350E4A_2026-10-19.md`.
 - Signature trust root is distributed out of band; revocation is not time-scoped; private key is on disk.
 
 ## Signing (AC-08 signature gate)
@@ -36,13 +36,13 @@ Spec section 11 (cost export contract and reconciliation), section 12 `cost_line
 **Caveats / left**
 - Usage recording (`cost_recorder.py`): `UsageRecorder` turns adapter `Usage` events into `cost.usage_reported` events. OpenAI `response.done` usage is incremental per response (scope = response id; cached subsets and audio/text breakdowns used only when consistent, else `*_unclassified` meters). Nova `usageEvent` totals are cumulative per provider session: each is a new revision (`revision` = provider `totalTokens`) of one session report, so later totals supersede and never add; distinct provider sessions add. Cancelled/failed responses record the usage the provider returned with `generation_state` cancelled/discarded and a `BILLED_STATUS_UNKNOWN` assumption (billing treatment is not guessed). A turn (or cumulative session, via `close()`) with no usage records an unknown line (`PROVIDER_RETURNED_NO_USAGE`), never zero. Duplicate delivery and reconnect replays append nothing (keys are seeded from the ledger).
 - Wiring: `AdapterTurnDriver(..., cost_recorder=...)` feeds every event to the recorder and declares expected components (`voice`, plus `asr` when a live-capable ASR backend is set; `cost.ensure_expected_components` unions with earlier declarations because the newest declaration replaces older ones). `IndependentAssessor` records ASR usage returned by the provider (`AsrResult.usage`: duration seconds or tokens), else unknown with a reason (`OFFLINE_FIXTURE_NO_USAGE`, `ASR_REQUEST_FAILED_USAGE_UNKNOWN` for HTTP/transport failures). `CostMeteredJudge` wraps any `JudgeBackend` (OpenAI chat and Bedrock Converse backends now expose `last_usage`) and records per-call judge usage or unknown, declaring `judge`. Tests: `tests/test_cost_recorder.py` (17, replaying real shapes from `artifacts/phase0` probe logs; fixture tariffs for exact totals; the shipped null-price table exports unknown).
-- Open: the driver path is wired, but `Engine.create` and the API do not construct recorders, so only callers that pass `cost_recorder` (and wrap judges with `CostMeteredJudge`) get lines; mock runs still export zero lines. Shipped tariffs remain null, so no real run has a known subtotal. The OpenAI/Nova modality meter names (`audio_input_tokens` ...) are the recorder's and need tariff rows when prices are established; Nova tariffs currently exist only for `*_unclassified` meters. Whether cancelled generations are billed is not established. OpenAI token usage for ASR depends on the transcription model returning `usage`; none is invented when absent.
+- Open: the driver path is wired, and live runs launched through the API now construct a `UsageRecorder` (`live_providers.py`); `Engine.create` and mock runs do not, so mock runs still export zero lines. Shipped tariffs remain null, so no real run has a known subtotal. The OpenAI/Nova modality meter names (`audio_input_tokens` ...) are the recorder's and need tariff rows when prices are established; Nova tariffs currently exist only for `*_unclassified` meters. Whether cancelled generations are billed is not established. OpenAI token usage for ASR depends on the transcription model returning `usage`; none is invented when absent.
 - Judge, simulator, TTS/ASR and storage components are supported by the schema (any `component`) but no producer exists.
 - Cancelled/discarded generation is included only when a report or labelled estimate covers it; there is no automatic inference of billed status.
 - FX conversion is not implemented (optional in the spec); currencies are never mixed.
 - Invoice import is manual via the API; no vendor invoice parser. Reconciliation records are not in any run ledger; a run's allocations are embedded in its exported section (hash-bound by the manifest) at export time.
-- PostgreSQL path (migration 11, JSONB writes in the export transaction) is untested here; `make test` under Compose is required.
-- Manifests remain unsigned until the signing workstream lands.
+- PostgreSQL path (migration 11, JSONB writes in the export transaction) was untested in this workstream; it has since run under the Compose suite (`make test`).
+- Manifests are signed since the signing workstream landed (see Signing above).
 
 ## Judges (AC-10, spec section 7)
 
@@ -141,7 +141,7 @@ fabricated citations fail validation (`CitationValidation`); unresolved disagree
   Fixture audio is silence with scripted transcripts, so nothing here measures ASR or audibility.
 - CARE-01 labels and the reference CARE heuristic used in tests are keyword-based toy data; they prove the pipeline, not LLM quality.
 - Online blocking is wired only as a flag on the finding (`blocking_enforced`); nothing in the engine consumes it yet, by design.
-- PostgreSQL was not exercised in this worktree (no containers); the SQL sticks to statements already used elsewhere in the project, but `tests/test_judges.py` should be run under `make test`.
+- PostgreSQL was not exercised in this worktree (no containers); `tests/test_judges.py` has since run under the Compose suite (`make test`).
 
 ## Comparison and live assessment
 
@@ -163,13 +163,13 @@ Scope of this section: AC-11 comparison reports, AC-14 live assessment (independ
 - `live_assessment.IndependentAssessor`: adapter PCM unit (whole response, boundary `whole_response_no_alignment`) -> ASR -> semantic check -> `Engine.revise_audio(source="independent_asr")` (new assessment epoch, replacement unit carrying the ASR transcript) -> `Engine.approve_audio(assessment_source="independent_asr")`. Decisions record `assessment_source=independent_asr` and reason `INDEPENDENT_ASR_ASSESSMENT_SAFE`; the deterministic content layer still runs on the ASR text. New events `assessment.independent_asr` (with `live` and `assessment_scope`: `offline_fixture_not_live_evidence` for scripted backends) and `assessment.asr_unavailable`.
 - Fail closed: with no usable backend the unit is blocked and `strict_speech_approval` is `unavailable` (`strict_speech_status()` also distinguishes `offline_fixture_only` from `available_live`). A scripted backend is never reported as live.
 - Not done: incremental semantic segmentation (`conservative-v1`, `segment.finalized/deferred`) stays disabled; boundary is whole-response only. The post-release 4-state revision protocol is exercised by the existing AC-14 fixtures plus one independent-ASR revocation test, not by live audio.
-- Live smoke: `tests/test_phase3_live_assessment.LiveAsrSmoke` (opt-in, needs the flag, key and macOS `say`). Not executed in this workstream: no `OPENAI_API_KEY` was present in the shell, so live ASR is unverified and strict speech approval on real adapter audio remains unproven.
+- Live smoke: `tests/test_phase3_live_assessment.LiveAsrSmoke` (opt-in, needs the flag, key and macOS `say`). Not executed in this workstream (no `OPENAI_API_KEY` in the shell). Since then, live ASR has assessed real adapter audio in the Phase 4 live runs and bake-offs; strict speech approval on real audio is exercised there.
 
 ### Adapter-run metric boundaries
 
 - `live_assessment.AdapterTurnDriver` consumes normalised adapter events (`audio_out`, transcripts, `turn_end`, `interrupted`), resamples to the harness rate, holds each completed response, assesses and releases, then emits `benchmark.adapter_metrics`: `first_transcript`, `time_to_first_generated_audio`, `time_to_first_released_audio`, `turn_completion`, `adapter_assessment_hold_duration`. Values need caller-supplied `speech_start_ms`/`speech_end_ms` in the adapter's monotonic domain; otherwise they are null with reasons (`NO_INPUT_BOUNDARY_SUPPLIED`, `CROSS_CLOCK_DOMAIN`, `NOT_RELEASED_*`). An interruption drops the unreleased buffer.
 - `metrics.derive` now fills `time_to_first_generated_audio` / `time_to_first_released_audio` (and the extra metrics) from these events when present; the fixture-run reason is kept otherwise. These are software-boundary measurements; ASR time is observed only when a live backend is used.
-- Not done: no benchmark runs against live providers were executed in this workstream; `benchmark.py` is unchanged.
+- Not done in this workstream: live-provider benchmarks. These now run as bake-offs (Phase 4: 33 scenarios across four providers); `benchmark.py` remains the component benchmark.
 
 ### Conformance audit rows
 

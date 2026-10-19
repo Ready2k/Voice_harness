@@ -1,6 +1,6 @@
 # Phase 0 adapter capability / unknown matrix
 
-Status: **APPROVED by user 2026-10-16 as the Phase 0 baseline (all cells unknown; approval does not verify anything).** Every cell is `unknown` (spec §2). No provider was contacted; no model ID is verified.
+Status: the first table is the **original Phase 0 baseline** (approved 2026-10-16, all cells unknown, no provider contacted). It is superseded by the post-probe table below; the current capability reports are `artifacts/phase0/*-capability-report.json` (Google now `gemini-3.8-live`, report `cap_google_gemini_3_8_live_20261019`; the Google column below records the earlier 2.5 probe).
 Cells move to `verified` only with documentation evidence AND a passing account/region probe (`python -m voice_harness.probe`). Candidate IDs are discovery seeds, not configured IDs.
 
 | Row | OpenAI (`gpt-realtime` seed) | Amazon Nova Sonic (Bedrock ID TBD) | xAI (`grok-voice-latest` seed) | Google Gemini Live (TBD) |
@@ -19,7 +19,7 @@ Cells move to `verified` only with documentation evidence AND a passing account/
 | Retention terms (operator attestation) | unknown | unknown | unknown | unknown |
 
 Open items needing the user: provider accounts/keys, target regions, Gemini Developer API vs Vertex AI.
-Coverage state for all four families stays `not_implemented` (`coverage.py`) until Phase 2.
+(Baseline note, superseded: coverage for all four families was `not_implemented` until Phase 2; all four are now `implemented_and_verified`, see `docs/PHASE2_STATUS.md`.)
 
 ## Update after live probes (2026-10-16): APPROVED by user 2026-10-16
 The first table above is the original baseline. Approved state, from `artifacts/phase0/*-capability-report.json`:

@@ -1,6 +1,8 @@
 # Phase 1 acceptance status
 
-**Current local validation (18 October 2026, `f477615`, SQLite):** 603 Python tests OK (6 skipped, including the new contracts-in-sync test) and the browser tests passed. The Compose/PostgreSQL suite and lint were not re-run on this commit. The figures below are historical, labelled by commit.
+**Current local validation (19 October 2026, `dbbe37a`, SQLite):** 642 Python tests OK (8 skipped) and 71 browser tests passed. The Compose/PostgreSQL suite and lint were not re-run on this commit, and no component benchmark has been run since `89fa78f`. The figures below are historical, labelled by commit. Phase 2–4 work (live adapters, signing, cost, judges, the operator UI and provider bake-offs) is tracked in `PHASE2_STATUS.md`, `PHASE3_STATUS.md` and `PHASE4_STATUS.md`.
+
+**Previous local validation (18 October 2026, `f477615`, SQLite):** 603 Python tests OK (6 skipped) and the browser tests passed.
 
 **Latest validation (18 October 2026, `89fa78f`):** CI passed; local Compose/PostgreSQL validation passed 455 Python tests (5 skipped) and 28 browser tests, plus lint. A matched rerun against `31ccddd` measured component-path p95 **9.29–13.17 ms before / 9.50–13.70 ms after** under the existing 8-vCPU / 1 GiB benchmark profile. The study and exact source/image hashes are in `artifacts/matched-latency-31ccddd-vs-89fa78f-2026-10-18.json`. Ten-session WebSocket p95 was higher on the current revision in both the main and reversed-order check; causal attribution remains unresolved. See [the current review](CODE_SPEC_RECHECK_89fa78f.md) for remaining approval gaps, deferred scope and full measurement limits. This supersedes the older component artifact below for current-source reporting; it is not a live-assurance pass.
 
@@ -10,11 +12,11 @@ The latest component measurement artifact is `artifacts/phase1-recheck-baseline-
 
 Previous measurement artifacts are historical: `artifacts/phase1-post-gap-baseline.json` (2026-10-17, path p95 **5.84–11.25 ms**), `artifacts/phase1-post-audit-baseline.json` (**9.54–14.08 ms**) and the pre-audit `artifacts/phase1-final-baseline.json` (**6.22–12.08 ms**). The sections below retain earlier phase-specific acceptance history; use the linked recheck for the current review position.
 
-Phase 0 (verification and design) is tracked separately in `docs/phase0/`: capability report schema and probe CLI are implemented; the provider matrix is approved but every cell is `unknown` pending provider accounts.
+Phase 0 (verification and design) is tracked separately in `docs/phase0/`: capability report schema and probe CLI are implemented. The original all-`unknown` provider matrix was superseded by live probes; all four families now have capability reports in `artifacts/phase0/` (OpenAI and Nova from 2026-10-17, xAI from 2026-10-18, Gemini 3.8 from 2026-10-19). Reports expire after seven days.
 
 The deterministic core runs in Docker with PostgreSQL, FastAPI, stdio MCP, a mock adapter, PCM tokens and local object storage. Earlier SQLite/JSONL prototypes remain regression fixtures. Passing named tests alone does not establish full specification conformance.
 
-**Gate position (17 October 2026, after the requirement-by-requirement audit in `docs/PHASE1_CONFORMANCE_AUDIT.md`).** Every acceptance check in the Phase 1 gate (AC-01 through AC-08, AC-13 through AC-18 and AC-21, with the spec's Phase 1 qualifications) passes its executable oracle on SQLite and on PostgreSQL. The gate can be declared met for those checks, scoped to scripted fixtures and the software playback boundary, once the maintainer (1) commits the audit work and (2) re-runs `make benchmark` so the committed baseline matches the audited source. It is **not** a declaration that the whole of spec v0.3 is satisfied for Phase 1: the audit leaves 31 rows partially met and 3 not met (see "Remaining v0.3 conformance work"). Timing targets remain provisional. Physical browser/DAC playback is an explicit documented exclusion, not a failure.
+**Gate position (17 October 2026, after the requirement-by-requirement audit in `docs/PHASE1_CONFORMANCE_AUDIT.md`).** Every acceptance check in the Phase 1 gate (AC-01 through AC-08, AC-13 through AC-18 and AC-21, with the spec's Phase 1 qualifications) passes its executable oracle on SQLite and on PostgreSQL. The gate can be declared met for those checks, scoped to scripted fixtures and the software playback boundary: the audit work is committed and the post-audit benchmark was re-run (`artifacts/phase1-recheck-baseline-2026-10-18.json`, then the matched study at `89fa78f`). It is **not** a declaration that the whole of spec v0.3 is satisfied for Phase 1: the audit leaves 31 rows partially met and 3 not met (see "Remaining v0.3 conformance work"). Timing targets remain provisional. Physical browser/DAC playback is an explicit documented exclusion, not a failure.
 
 | Gate | Executable fixture coverage |
 |---|---|
@@ -70,14 +72,14 @@ Local SQLite: 150 Python tests OK (3 live-provider skips) plus ruff clean. Postg
 The whole Phase 1 release is not yet formally complete:
 
 - **Excluded (documented):** real-browser and physical-device playback verification. Node playback tests and Python WebSocket clients are not evidence of physical audibility or browser/DAC latency.
-- **Not met:** 30-day metadata retention purge; operator UI (the reference client is a playback scheduler only); Python per-sample resampler violates the native-library constraint (Phase 2 adapters only).
-- **Partially met, highest risk first:** per-call `cancel_requested` during execution; runtime browser clock-sync exchange and `clock_sync_samples`; operator/reviewer roles and TLS enforcement; relational shape of `runs`/`events`; OTel metrics/logs and span links; NDJSON/restricted export; guardrail content layer; MC error shape (`retryable`, `message`). Full list and proposed fixes are in the audit.
+- **Not met at the audit, since resolved:** 30-day metadata retention purge (now implemented: `evidence.py` RT-02 tombstoning with `retention.metadata_purged`); operator UI (now `apps/web/`: runs, live view, review, compare, coverage, manual and bake-off pages); per-sample Python resampler (`resample.py` now uses native libsoxr). The audit table in `PHASE1_CONFORMANCE_AUDIT.md` has not been re-scored for these.
+- **Partially met at the audit, highest risk first (not re-audited since):** per-call `cancel_requested` during execution; runtime browser clock-sync exchange and `clock_sync_samples`; operator/reviewer roles and TLS enforcement; relational shape of `runs`/`events`; OTel metrics/logs and span links; NDJSON/restricted export; guardrail content layer; MC error shape (`retryable`, `message`). Full list and proposed fixes are in the audit.
 - Hashes in ledger bundles created before the audit no longer verify (RFC 8785 canonicalization). `artifacts/golden-run.json` was regenerated and is checked by a test; any external exports must be regenerated. Bundles exported before the AC-20 coverage section (Phase 2) also fail `verify_bundle` and must be re-exported.
-- The measurement baseline predates the audit changes; re-run `make benchmark` before treating timing targets as established.
+- The post-audit baseline has been re-run (see the top of this file); timing targets remain provisional, and the latest benchmark (`89fa78f`) predates the Phase 4 and Gemini 3.8 changes.
 - Confirmation and semantic safety checks use labelled scripted fixtures, not live voice recognition or independently calibrated judges.
 
 ## Phase 2 adapter prerequisite
 
-Native (libsoxr) mismatched-rate resampling is implemented (2026-10-17); the reference playback path still requires 24 kHz. This is a Phase 2 adapter gap rather than a Phase 1 mock-rate blocker. Any adapter with a verified native rate other than 24 kHz must implement and validate the spec's resampling path before claiming support.
+Native (libsoxr) mismatched-rate resampling is implemented (2026-10-17) and used by the live adapters (for example Nova and Gemini input at 16 kHz); the reference playback path still requires 24 kHz.
 
-Live provider verification, live ASR/judge calibration, signing and provider costs are later-phase work. Scripted PCM fixtures must not be reported as live semantic-assessment success.
+Live provider verification, live ASR, judge calibration, signing and provider costs were later-phase work and are now tracked in the Phase 2–4 status files. Scripted PCM fixtures must not be reported as live semantic-assessment success.
