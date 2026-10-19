@@ -6,7 +6,7 @@ import os
 
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
-from mcp.types import CallToolResult, TextContent, Tool
+from mcp.types import CallToolResult, ListToolsResult, TextContent, Tool
 
 from .contracts import TOOLS
 from .engine import Engine, identifier
@@ -22,26 +22,24 @@ async def main():
     context = json.loads(os.environ["HARNESS_RUN_CONTEXT"])
     run_id = context["run_id"]
     engine._context(engine.database.get(run_id), run_id, context)
-    server = Server("synthetic-bank", version="0.3")
+    async def list_tools(ctx, params):
+        return ListToolsResult(
+            tools=[
+                Tool(
+                    name=name,
+                    description="Synthetic fixture tool: " + name,
+                    input_schema=model.model_json_schema(),
+                )
+                for name, model in TOOLS.items()
+            ]
+        )
 
-    @server.list_tools()
-    async def list_tools():
-        return [
-            Tool(
-                name=name,
-                description="Synthetic fixture tool: " + name,
-                inputSchema=model.model_json_schema(),
-            )
-            for name, model in TOOLS.items()
-        ]
-
-    @server.call_tool(validate_input=True)
-    async def call_tool(name, arguments):
-        meta = server.request_context.meta
-        call_id = meta.model_dump().get("harness_call_id") if meta else None
-        call_id = call_id or identifier("call")
+    async def call_tool(ctx, params):
+        # Arguments are validated by engine.tool against the same TOOLS models, so an
+        # invalid call still yields an evidenced INVALID_ARGUMENT result.
+        call_id = (ctx.meta or {}).get("harness_call_id") or identifier("call")
         result = await asyncio.to_thread(
-            engine.tool, run_id, context, call_id, name, arguments or {}
+            engine.tool, run_id, context, call_id, params.name, params.arguments or {}
         )
         # Native MCP envelope carries only the safe catalogue error; the canonical
         # ToolResult travels separately in structuredContent.
@@ -52,9 +50,13 @@ async def main():
         )
         return CallToolResult(
             content=[TextContent(type="text", text=json.dumps(native))],
-            structuredContent=result,
-            isError=result["status"] != "success",
+            structured_content=result,
+            is_error=result["status"] != "success",
         )
+
+    server = Server(
+        "synthetic-bank", version="0.3", on_list_tools=list_tools, on_call_tool=call_tool
+    )
 
     from opentelemetry.context import attach, detach
     from opentelemetry.propagate import extract

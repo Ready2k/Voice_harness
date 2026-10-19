@@ -4,7 +4,7 @@ import json
 import os
 import sys
 from contextlib import asynccontextmanager
-from datetime import timedelta
+from importlib.metadata import version
 
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
@@ -39,8 +39,8 @@ async def gateway(engine, run_id, limiter=None):
                     "mcp",
                     "mcp.initialized",
                     {
-                        "protocol_version": initialized.protocolVersion,
-                        "sdk_version": "1.30.0",
+                        "protocol_version": initialized.protocol_version,
+                        "sdk_version": version("mcp"),
                         "transport": "stdio",
                         "bridge": "gateway_bridge",
                     },
@@ -72,7 +72,7 @@ class Gateway:
             native = await self.session.call_tool(
                 name,
                 args,
-                read_timeout_seconds=timedelta(seconds=3),
+                read_timeout_seconds=3,
                 meta={"harness_call_id": call_id},
             )
         except Exception:  # noqa: BLE001 -- all delivery failures require outcome reconciliation
@@ -108,7 +108,7 @@ class Gateway:
                 tx.state["calls"][call_id]["result"] = result
                 tx.state["state"] = "recovery_required"
                 return result
-        result = Result.model_validate(native.structuredContent).model_dump()
+        result = Result.model_validate(native.structured_content).model_dump()
         if result["call_id"] != call_id:
             raise ValueError("TOOL_RESULT_CORRELATION_FAILED")
         with self.engine.database.transaction(self.run_id) as tx:

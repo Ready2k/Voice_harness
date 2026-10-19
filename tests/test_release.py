@@ -376,7 +376,7 @@ os.kill(os.getpid(), signal.SIGKILL)
 
         class LostConnection:
             async def call_tool(self, *args, **kwargs):
-                self.timeout = kwargs["read_timeout_seconds"].total_seconds()
+                self.timeout = kwargs["read_timeout_seconds"]
                 raise TimeoutError("injected")
 
         client = LostConnection()
@@ -918,15 +918,15 @@ os.kill(os.getpid(), signal.SIGKILL)
             async with stdio_client(parameters) as (read, write):  # noqa: SIM117 -- streams precede session creation
                 async with ClientSession(read, write) as session:
                     initialized = await session.initialize()
-                    self.assertTrue(initialized.protocolVersion)
+                    self.assertTrue(initialized.protocol_version)
                     tools = await session.list_tools()
                     self.assertEqual({t.name for t in tools.tools}, set(TOOLS))
                     result = await session.call_tool(
                         "get_account_summary", {"account_id": "acct_1001"}
                     )
-                    self.assertTrue(result.isError)
+                    self.assertTrue(result.is_error)
                     self.assertEqual(
-                        result.structuredContent["error_code"], "IDENTITY_REQUIRED"
+                        result.structured_content["error_code"], "IDENTITY_REQUIRED"
                     )
 
         asyncio.run(check())
