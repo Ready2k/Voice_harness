@@ -1,25 +1,25 @@
 {
   "schema_version": 1,
-  "report_id": "cap_google_gemini_live_2_5_flash_native_audio_20261018",
+  "report_id": "cap_google_gemini_3_8_live_20261019",
   "provider_family": "google_gemini_live",
   "api_surface": "Vertex AI Live websocket wss://us-central1-aiplatform.googleapis.com/ws/google.cloud.aiplatform.v1.LlmBidiService/BidiGenerateContent",
   "region": "us-central1",
-  "requested_model_id": "gemini-live-2.5-flash-native-audio",
+  "requested_model_id": "gemini-3.8-live",
   "returned_model_id": null,
   "version_unresolved": true,
-  "checked_at": "2026-10-18T19:38:28.191784+00:00",
-  "expires_at": "2026-10-25T19:38:28.191784+00:00",
+  "checked_at": "2026-10-19T11:21:44.456582+00:00",
+  "expires_at": "2026-10-26T11:21:44.456582+00:00",
   "adapter_version": "google_gemini_probe.py/0",
-  "sdk_version": "websockets 17.2 python 3.11.13",
+  "sdk_version": "websockets 17.2 python 3.12.12",
   "effective_session_config": {
-    "raw_event_log": "artifacts/phase0/google_gemini-probe-2026-10-18T19-36-31-115Z.jsonl",
+    "raw_event_log": "artifacts/phase0/google_gemini-probe-2026-10-19T11-19-49-451Z.jsonl",
     "audio": "16 kHz PCM in, 24 kHz PCM out (inferred)",
     "response_modalities": "AUDIO",
     "turn_detection": "automatic activity detection (server) used for speech; text turns via clientContent",
     "transcription": "inputAudioTranscription and outputAudioTranscription enabled",
     "credentials": "Application Default Credentials OAuth access token (never recorded)"
   },
-  "operator_terms_attestation": "2026-10-18, James Cregeen (operator): reviewed the current retention, quota and pricing terms for xAI Grok Voice and Google Gemini Live (Vertex AI) and accepts them for testing with synthetic data only; no real customer data.",
+  "operator_terms_attestation": null,
   "rows": [
     {
       "name": "input_codecs_rates",
@@ -29,7 +29,7 @@
         "doc_retrieved_at": null,
         "probe_event_ids": [
           "gem_ev_6",
-          "gem_ev_70"
+          "gem_ev_95"
         ]
       },
       "limitations": [
@@ -50,7 +50,7 @@
         ]
       },
       "limitations": [
-        "audio/pcm without a rate in the mime type; 24 kHz inferred from byte count against the reported audio token count (4.71 s vs 4.72 s), not declared by the server"
+        "audio/pcm; 282722 bytes imply 5.89 seconds at 24 kHz versus 6.2 seconds from 155 audio tokens; rate is inferred."
       ],
       "tool_mode": null
     },
@@ -61,14 +61,14 @@
         "doc_url": null,
         "doc_retrieved_at": null,
         "probe_event_ids": [
-          "gem_ev_305",
-          "gem_ev_391"
+          "gem_ev_361",
+          "gem_ev_414"
         ]
       },
       "limitations": [
         "synthetic speech streamed under automatic activity detection was transcribed and answered",
-        "speech transcribed (1 inputTranscription messages, 5121 ms to the first); text: 'Hello. Can you hear me? Please tell me which bank this is.'",
-        "model replied to streamed speech (audio_out count 19 chunks)"
+        "speech transcribed (1 inputTranscription messages, 5794 ms to the first); text: 'Hello, can you hear me? Please tell me which bank this is.'",
+        "model replied to streamed speech (audio_out count 27 chunks)"
       ],
       "tool_mode": null
     },
@@ -95,7 +95,7 @@
         "doc_url": null,
         "doc_retrieved_at": null,
         "probe_event_ids": [
-          "gem_ev_8",
+          "gem_ev_9",
           "gem_ev_12"
         ]
       },
@@ -116,14 +116,14 @@
         "doc_url": null,
         "doc_retrieved_at": null,
         "probe_event_ids": [
-          "gem_ev_13",
-          "gem_ev_305"
+          "gem_ev_14",
+          "gem_ev_361"
         ]
       },
       "limitations": [
         "input and output transcripts arrive as incremental text fragments with an empty finished=true marker; no per-fragment finality otherwise",
-        "outputTranscription fragments (6) then an empty one with finished=true; text is incremental, not cumulative",
-        "input transcription arrives as fragments; finished=true marker: True"
+        "outputTranscription fragments (4) then an empty one with finished=true; text is incremental, not cumulative",
+        "input transcription arrives as fragments; finished=true marker: False"
       ],
       "tool_mode": null
     },
@@ -149,8 +149,8 @@
         "doc_retrieved_at": null,
         "probe_event_ids": [
           "gem_ev_11",
-          "gem_ev_42",
-          "gem_ev_391"
+          "gem_ev_53",
+          "gem_ev_414"
         ]
       },
       "limitations": [
@@ -168,12 +168,12 @@
         "doc_url": null,
         "doc_retrieved_at": null,
         "probe_event_ids": [
-          "gem_ev_454"
+          "gem_ev_457"
         ]
       },
       "limitations": [
         "serverContent.interrupted on barge-in; there is no client cancel or truncate message, so audio_end_ms cannot be reported to the server",
-        "serverContent.interrupted 649 ms after speech began streaming",
+        "serverContent.interrupted 580 ms after speech began streaming",
         "the protocol has no cancel or truncate client message (message types: setup, clientContent, realtimeInput, toolResponse)"
       ],
       "tool_mode": null
@@ -185,12 +185,12 @@
         "doc_url": null,
         "doc_retrieved_at": null,
         "probe_event_ids": [
-          "gem_ev_42"
+          "gem_ev_53"
         ]
       },
       "limitations": [
         "usageMetadata on the turnComplete message: prompt and candidate token counts split by modality; no prices recorded",
-        "usageMetadata with the turnComplete message: keys ['candidatesTokenCount', 'candidatesTokensDetails', 'promptTokenCount', 'promptTokensDetails', 'totalTokenCount']; prompt=[{'modality': 'TEXT', 'tokenCount': 79}]; candidates=[{'modality': 'AUDIO', 'tokenCount': 118}, {'modality': 'TEXT', 'tokenCount': 20}]"
+        "usageMetadata with the turnComplete message: keys ['candidatesTokenCount', 'candidatesTokensDetails', 'promptTokenCount', 'promptTokensDetails', 'thoughtsTokenCount', 'totalTokenCount']; prompt=[{'modality': 'TEXT', 'tokenCount': 94}]; candidates=[{'modality': 'AUDIO', 'tokenCount': 155}, {'modality': 'TEXT', 'tokenCount': 20}]"
       ],
       "tool_mode": null
     },
@@ -201,12 +201,12 @@
         "doc_url": null,
         "doc_retrieved_at": null,
         "probe_event_ids": [
-          "gem_ev_56"
+          "gem_ev_69"
         ]
       },
       "limitations": [
         "sessionResumptionUpdate with a handle was issued; reconnecting with it was not exercised",
-        "sessionResumptionUpdate seen: resumable=True, handle present=True; reconnecting with a handle was not exercised",
+        "no sessionResumptionUpdate received",
         "fresh connection works; handle-based resume not exercised"
       ],
       "tool_mode": null
@@ -227,12 +227,11 @@
     }
   ],
   "limitations": [
-    "Pinned gemini-live-2.5-flash-native-audio; the server returns no model version, so the version is unresolved",
-    "Only region us-central1 was used for runs; the global endpoint refused this model at connect (setupComplete=False, closed=null)",
-    "Server speech detection ends the in-flight answer; audio arrives faster than real time (about 4x in one sample)",
-    "Barge-in was exercised with one synthetic (macOS say) phrase only",
-    "No cancel or truncate client message exists, so AC-09 excludes the interruption dimension (detection only)",
-    "No row cites documentation: the Vertex Live pages were only partly readable",
-    "Terms, retention, quotas and pricing need operator attestation; the existing operator attestation does not cover Google"
+    "Pinned gemini-3.8-live; setupComplete returns no model version, so resolution is unresolved.",
+    "Only us-central1 accepted setup; global rejected this model for the current project.",
+    "One synthetic speech and interruption probe; no client truncate support. Audio continued after the interruption marker; see probe observations for counts.",
+    "Audio output inferred as 24 kHz from bytes and usage; no per-chunk timing alignment.",
+    "Handle-based session resume was not exercised.",
+    "No new operator terms attestation was made; see the historical operator attestation separately."
   ]
 }

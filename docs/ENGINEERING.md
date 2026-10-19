@@ -42,16 +42,47 @@ PYTHONPATH=src .venv/bin/python -m voice_harness.generate_contracts   # after mo
 
 Tests use `unittest`, not pytest. After regenerating contracts, check `git diff contracts/` is intended.
 
+## Live provider benchmark
+
+New Gemini sessions use the pinned model `gemini-3.8-live` on Vertex AI in `us-central1`,
+with Application Default Credentials. The adapter resamples harness audio to 16 kHz mono PCM;
+output remains 24 kHz. `DEFAULT_MODEL` in `adapters/google_gemini_live.py` and the
+`gemini-live` entry in `live_providers.TESTED_MODELS` must agree. Earlier evidence naming
+`gemini-live-2.5-flash-native-audio` describes historical 2.5 runs.
+
+Run a fresh API process after a model change (`make serve-live`). Use a new matrix filename:
+the batch runner resumes completed cells when its output already exists.
+
+```bash
+.venv/bin/python scripts/provider_matrix.py --base http://127.0.0.1:8766 \
+  --token-file .local/host-data/operator-token \
+  --out artifacts/provider-matrix/matrix-gemini38-2026-10-19.json
+PYTHONPATH=src .venv/bin/python scripts/benchmark_report.py \
+  artifacts/provider-matrix/matrix-gemini38-2026-10-19.json \
+  reports/voice-provider-benchmark-gemini38-2026-10-19.html \
+  --database .local/host-data/development.sqlite
+```
+
+The database must be the one used by that API process. The 2026-10-19 Gemini 3.8 rerun uses
+an isolated server on port 8767 and `.local/gemini38-data/development.sqlite`; substitute
+its token path and database when reproducing that report. All 33 live scenarios run against
+all four providers, with one sample per cell and at most two simultaneous runs per provider.
+Keep failed attempts visible; any retry must preserve its first attempt. Component benchmarks
+(`make benchmark`) measure harness stages separately from conversational provider latency.
+
 ## Test strategy
 
 | Layer | What it establishes | Where |
 |---|---|---|
 | Deterministic core | Enforcement mechanics: approvals, replay, races, tampering, retention, isolation, abrupt termination | `test_core`, `test_phase1`, `test_gaps*`, `test_release` (PostgreSQL) |
-| Adapter conformance | Event mapping per provider against recorded provider shapes; AC-09 harness | `test_openai_adapter`, `test_nova_*`, `test_xai_adapter`, `adapter_conformance.py` |
+| Adapter conformance | Event mapping per provider against recorded provider shapes; AC-09 harness | `test_openai_adapter`, `test_nova_*`, `test_xai_adapter`, `test_google_adapter`, `adapter_conformance.py` |
 | Live pipeline, scripted | Real API, runner, gateway and assessment with scripted adapter events and ASR | `test_live_api`, `test_phase4_*`, `test_live_review_fixes` |
 | Judges and evidence | Rubric, FACT/CONFIRM/fault evaluation, calibration, signing, cost, export | `test_judges`, `test_fact_faults_confirm`, `test_signing`, `test_cost*`, `test_signed_live_export` |
 | Browser | View-models and playback scheduling | `tests/browser/*.test.mjs` |
 | Live | Opt-in provider calls | `VOICE_HARNESS_LIVE_ADAPTERS=...`; skipped by default |
+
+PostgreSQL schema initialisation takes a transaction-scoped advisory lock so API and MCP
+workers starting together cannot race while replacing the append-only evidence trigger function.
 
 Scripted tests prove behaviour, not live recognition accuracy. A UI change is not done until it has been checked in
 a running app, because unit tests have missed layout bugs before.

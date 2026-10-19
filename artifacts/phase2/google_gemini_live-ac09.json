@@ -1,6 +1,6 @@
 {
   "provider": "google_gemini_live",
-  "model_id": "gemini-live-2.5-flash-native-audio",
+  "model_id": "gemini-3.8-live",
   "dimensions": {
     "audio_in": {
       "status": "pass"
@@ -11,7 +11,7 @@
     },
     "tool_result_correlation": {
       "status": "pass",
-      "call_id": "6ee9bfe0-feca-42bd-920c-3b101039f3e5"
+      "call_id": "call_273162"
     },
     "interruption": {
       "status": "excluded",
@@ -26,5 +26,5 @@
   },
   "failures": [],
   "passed": true,
-  "capability_report_id": "cap_google_gemini_live_2_5_flash_native_audio_20261018"
+  "capability_report_id": "cap_google_gemini_3_8_live_20261019"
 }

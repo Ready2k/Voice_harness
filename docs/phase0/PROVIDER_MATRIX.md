@@ -42,3 +42,11 @@ The first table above is the original baseline. Approved state, from `artifacts/
 Google column: added 2026-10-18 from `scripts/probe/google_gemini_probe.py` (`artifacts/phase0/google_gemini-observations-*.json`, report `artifacts/phase0/google_gemini-capability-report.json`, expires 2026-10-25), observed values only; no row is `verified` because the Vertex Live pages could only be read in part. See `docs/PHASE4_NOTES_google.md`.
 
 xAI column: added 2026-10-18 from `scripts/probe/xai_probe.py` (`artifacts/phase0/xai-observations-*.json`, report `artifacts/phase0/xai-capability-report.json`, expires 2026-10-25), observed values only; see `docs/PHASE4_NOTES_xai.md` for what stays unknown. Coverage for `xai_grok_voice` is derived by `coverage.py` like the other families.
+
+## Gemini 3.8 update (2026-10-19)
+
+The configured Gemini model is now `gemini-3.8-live` on Vertex AI `us-central1`. A fresh
+probe accepted setup, returned PCM audio and transcripts, and completed a tool round trip.
+The global endpoint rejected this model for the current project. The table above retains
+the historical 2.5 observations; refreshed evidence and benchmark results are recorded in
+`../GEMINI_3_8_BENCHMARK_2026-10-19.md`.

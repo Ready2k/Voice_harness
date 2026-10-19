@@ -114,7 +114,7 @@ class GeminiAdapterTests(unittest.IsolatedAsyncioTestCase):
                              ("google_gemini_live", "gateway_bridge", 16000, 24000))
             self.assertEqual((caps["interrupt_truncate"], caps["interrupt_detection"]), ("unsupported", "supported"))
             self.assertIsInstance(a, LiveAdapter)
-            self.assertEqual(DEFAULT_MODEL, "gemini-live-2.5-flash-native-audio")
+            self.assertEqual(DEFAULT_MODEL, "gemini-3.8-live")
             self.assertEqual(a.connection_info()["region"], "us-central1")
 
     async def test_endpoint_host_follows_the_region(self):

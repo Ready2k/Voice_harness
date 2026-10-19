@@ -9,7 +9,7 @@ It is not a production banking service, and passing it is not a certification.
 
 - **Contains** the model under test: every tool call passes an independent guardrail, and every spoken reply is
   held as pending audio until policy releases it.
-- **Exercises** live providers (OpenAI Realtime, Amazon Nova Sonic, xAI Grok Voice, Google Gemini Live)
+- **Exercises** live providers (OpenAI Realtime, Amazon Nova Sonic, xAI Grok Voice, Google Gemini Live 3.8 (`gemini-3.8-live`))
   with a catalogue of 24 scenarios: personas, locales, noise and narrowband audio, injected faults, interruptions.
 - **Judges** with deterministic checks first (identity, factual accuracy against independent ASR, consent,
   audio), then advisory AI judges that are calibrated before they are trusted. Missing evidence is `untestable`,

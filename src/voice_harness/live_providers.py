@@ -49,7 +49,7 @@ TESTED_MODELS = {
     # pinned versioned name; the grok-voice-latest alias is never used for runs
     "xai-voice-live": {"provider": "xai", "model_id": "grok-voice-3.0", "family": "xai_grok_voice"},
     # Vertex AI publisher model; setupComplete returns no version, so the pinned name is all there is
-    "gemini-live": {"provider": "google", "model_id": "gemini-live-2.5-flash-native-audio", "family": "google_gemini_live"},
+    "gemini-live": {"provider": "google", "model_id": "gemini-3.8-live", "family": "google_gemini_live"},
 }
 
 
@@ -143,6 +143,13 @@ def capability_binding(provider_config_id, now=None):
 
     family = FAMILIES[provider_config_id]
     entry = next((c for c in build_registry(now=now) if c.provider_family == family), None)
+    if entry is not None and entry.model_id != TESTED_MODELS[provider_config_id]["model_id"]:
+        return {
+            "capability_status": "diagnostic_unverified",
+            "capability_report_id": None,
+            "capability_checked_at": entry.checked_at,
+            "capability_reason_codes": ["CAPABILITY_MODEL_MISMATCH"],
+        }
     verified = entry is not None and entry.coverage_state == "implemented_and_verified"
     return {
         "capability_status": "verified" if verified else "diagnostic_unverified",

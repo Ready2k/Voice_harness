@@ -43,6 +43,10 @@ class Database:
         self.lock = threading.RLock()
         self.fail_writes = False
         with self.connection() as db:
+            if self.postgres:
+                # API and MCP workers can start together. Serialize schema DDL across
+                # processes; PostgreSQL cannot concurrently replace the same function.
+                db.execute("SELECT pg_advisory_xact_lock(782104319)")
             payload_type = "JSONB" if self.postgres else "TEXT"
             for statement in [
                 f"CREATE TABLE IF NOT EXISTS harness_runs (run_id TEXT PRIMARY KEY, state TEXT NOT NULL, payload {payload_type} NOT NULL)",

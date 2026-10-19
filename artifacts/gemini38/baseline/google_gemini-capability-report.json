@@ -1,0 +1,238 @@
+{
+  "schema_version": 1,
+  "report_id": "cap_google_gemini_live_2_5_flash_native_audio_20261018",
+  "provider_family": "google_gemini_live",
+  "api_surface": "Vertex AI Live websocket wss://us-central1-aiplatform.googleapis.com/ws/google.cloud.aiplatform.v1.LlmBidiService/BidiGenerateContent",
+  "region": "us-central1",
+  "requested_model_id": "gemini-live-2.5-flash-native-audio",
+  "returned_model_id": null,
+  "version_unresolved": true,
+  "checked_at": "2026-10-18T19:38:28.191784+00:00",
+  "expires_at": "2026-10-25T19:38:28.191784+00:00",
+  "adapter_version": "google_gemini_probe.py/0",
+  "sdk_version": "websockets 17.2 python 3.11.13",
+  "effective_session_config": {
+    "raw_event_log": "artifacts/phase0/google_gemini-probe-2026-10-18T19-36-31-115Z.jsonl",
+    "audio": "16 kHz PCM in, 24 kHz PCM out (inferred)",
+    "response_modalities": "AUDIO",
+    "turn_detection": "automatic activity detection (server) used for speech; text turns via clientContent",
+    "transcription": "inputAudioTranscription and outputAudioTranscription enabled",
+    "credentials": "Application Default Credentials OAuth access token (never recorded)"
+  },
+  "operator_terms_attestation": "2026-10-18, James Cregeen (operator): reviewed the current retention, quota and pricing terms for xAI Grok Voice and Google Gemini Live (Vertex AI) and accepts them for testing with synthetic data only; no real customer data.",
+  "rows": [
+    {
+      "name": "input_codecs_rates",
+      "status": "observed",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": [
+          "gem_ev_6",
+          "gem_ev_70"
+        ]
+      },
+      "limitations": [
+        "audio/pcm;rate=16000 accepted as realtimeInput.audio; other rates untested",
+        "audio in is documented as 16 kHz PCM; exercised below",
+        "realtimeInput.audio audio/pcm;rate=16000 accepted"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "output_codecs_rates",
+      "status": "observed",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": [
+          "gem_ev_14"
+        ]
+      },
+      "limitations": [
+        "audio/pcm without a rate in the mime type; 24 kHz inferred from byte count against the reported audio token count (4.71 s vs 4.72 s), not declared by the server"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "audio_in",
+      "status": "observed",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": [
+          "gem_ev_305",
+          "gem_ev_391"
+        ]
+      },
+      "limitations": [
+        "synthetic speech streamed under automatic activity detection was transcribed and answered",
+        "speech transcribed (1 inputTranscription messages, 5121 ms to the first); text: 'Hello. Can you hear me? Please tell me which bank this is.'",
+        "model replied to streamed speech (audio_out count 19 chunks)"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "audio_out",
+      "status": "observed",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": [
+          "gem_ev_14"
+        ]
+      },
+      "limitations": [
+        "serverContent.modelTurn inlineData audio/pcm chunks",
+        "modelTurn inlineData audio/pcm"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "tool_arguments_and_results",
+      "status": "observed",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": [
+          "gem_ev_8",
+          "gem_ev_12"
+        ]
+      },
+      "limitations": [
+        "toolCall with id, toolResponse by id, spoken answer used the result; no explicit acknowledgement message; text-only context (turnComplete=false) was accepted without a reply",
+        "toolCall get_account_summary {\"account_id\": \"ACC-001\"}; id present=True",
+        "tool declared with lower-case JSON-schema types and a required list: accepted",
+        "toolResponse by id then audio/transcript that uses the result (no explicit acknowledgement message)",
+        "toolCallCancellation not exercised",
+        "context-only text (clientContent turnComplete=false): replied=False, later recalled=True"
+      ],
+      "tool_mode": "gateway_bridge"
+    },
+    {
+      "name": "transcript_finality",
+      "status": "observed",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": [
+          "gem_ev_13",
+          "gem_ev_305"
+        ]
+      },
+      "limitations": [
+        "input and output transcripts arrive as incremental text fragments with an empty finished=true marker; no per-fragment finality otherwise",
+        "outputTranscription fragments (6) then an empty one with finished=true; text is incremental, not cumulative",
+        "input transcription arrives as fragments; finished=true marker: True"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "audio_alignment",
+      "status": "unknown",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": []
+      },
+      "limitations": [
+        "no timing or alignment fields were seen",
+        "no timing or alignment fields were seen on audio or transcript messages"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "turn_signalling",
+      "status": "observed",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": [
+          "gem_ev_11",
+          "gem_ev_42",
+          "gem_ev_391"
+        ]
+      },
+      "limitations": [
+        "no turn-start message; serverContent.turnComplete ends a turn (also the tool-calling turn); automatic activity detection starts replies without a client turn message",
+        "a tool-calling turn ends with serverContent.turnComplete before the tool result is sent",
+        "serverContent.turnComplete ends the post-tool turn",
+        "automatic activity detection: model reply and turnComplete follow the caller's speech without any client turn message"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "cancel_truncate",
+      "status": "observed",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": [
+          "gem_ev_454"
+        ]
+      },
+      "limitations": [
+        "serverContent.interrupted on barge-in; there is no client cancel or truncate message, so audio_end_ms cannot be reported to the server",
+        "serverContent.interrupted 649 ms after speech began streaming",
+        "the protocol has no cancel or truncate client message (message types: setup, clientContent, realtimeInput, toolResponse)"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "usage_granularity",
+      "status": "observed",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": [
+          "gem_ev_42"
+        ]
+      },
+      "limitations": [
+        "usageMetadata on the turnComplete message: prompt and candidate token counts split by modality; no prices recorded",
+        "usageMetadata with the turnComplete message: keys ['candidatesTokenCount', 'candidatesTokensDetails', 'promptTokenCount', 'promptTokensDetails', 'totalTokenCount']; prompt=[{'modality': 'TEXT', 'tokenCount': 79}]; candidates=[{'modality': 'AUDIO', 'tokenCount': 118}, {'modality': 'TEXT', 'tokenCount': 20}]"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "reconnect_resume",
+      "status": "unknown",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": [
+          "gem_ev_56"
+        ]
+      },
+      "limitations": [
+        "sessionResumptionUpdate with a handle was issued; reconnecting with it was not exercised",
+        "sessionResumptionUpdate seen: resumable=True, handle present=True; reconnecting with a handle was not exercised",
+        "fresh connection works; handle-based resume not exercised"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "direct_mcp",
+      "status": "unknown",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": []
+      },
+      "limitations": [
+        "not exercised; tools are function declarations bridged by the harness gateway",
+        "not exercised: tools are function declarations bridged by the harness gateway"
+      ],
+      "tool_mode": null
+    }
+  ],
+  "limitations": [
+    "Pinned gemini-live-2.5-flash-native-audio; the server returns no model version, so the version is unresolved",
+    "Only region us-central1 was used for runs; the global endpoint refused this model at connect (setupComplete=False, closed=null)",
+    "Server speech detection ends the in-flight answer; audio arrives faster than real time (about 4x in one sample)",
+    "Barge-in was exercised with one synthetic (macOS say) phrase only",
+    "No cancel or truncate client message exists, so AC-09 excludes the interruption dimension (detection only)",
+    "No row cites documentation: the Vertex Live pages were only partly readable",
+    "Terms, retention, quotas and pricing need operator attestation; the existing operator attestation does not cover Google"
+  ]
+}

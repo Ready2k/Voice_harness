@@ -1,4 +1,4 @@
-"""Google Gemini Live adapter (Vertex AI, ``gemini-live-2.5-flash-native-audio``).
+"""Google Gemini Live adapter (Vertex AI, ``gemini-3.8-live``).
 
 Protocol facts come from the Phase 0 probe (``artifacts/phase0/google_gemini-*``) and
 ``docs/PHASE4_NOTES_google.md``:
@@ -54,7 +54,7 @@ from .openai_realtime import _package_version, redact, synth_caller_pcm
 
 log = logging.getLogger("voice_harness.adapters.google_gemini_live")
 
-DEFAULT_MODEL = "gemini-live-2.5-flash-native-audio"  # pinned; the only native-audio S2S Gemini model Vertex listed
+DEFAULT_MODEL = "gemini-3.8-live"  # pinned model for new live sessions
 DEFAULT_REGION = "us-central1"
 REGION_ENV = "VOICE_HARNESS_GOOGLE_REGION"
 PROJECT_ENV = "GOOGLE_CLOUD_PROJECT"
@@ -191,7 +191,7 @@ class GeminiLiveAdapter:
             "audio_alignment": "unknown",
             "reconnect_resume": "unknown",
             "semantic_safety": "not_measured",
-            "capability_report_id": "cap_google_gemini_live_2_5_flash_native_audio_20261018",
+            "capability_report_id": "cap_google_gemini_3_8_live_20261019",
         }
 
     # ------------------------------------------------------------------ session

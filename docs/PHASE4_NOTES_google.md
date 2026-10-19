@@ -1,5 +1,12 @@
 # Phase 4 notes: Google Gemini Live adapter (Vertex AI)
 
+Current configuration (2026-10-19): new live sessions request `gemini-3.8-live` on
+Vertex AI `us-central1`, using the same ADC authentication and PCM formats. The global
+endpoint rejected 3.8; `us-central1` accepted it. See `GEMINI_3_8_BENCHMARK_2026-10-19.md`
+for the fresh probe, conformance, scenario matrix and report.
+
+The notes below record the historical 2.5 baseline.
+
 Date 2026-10-18. Model pinned to `gemini-live-2.5-flash-native-audio`, region `us-central1`. Credentials: Application Default Credentials (authorized-user refresh) read in process; no token, key or ADC content is logged, written or emitted (a scan of every changed file and artifact for the ADC client secret, refresh token and the OpenAI/xAI keys found no match).
 
 ## Model choice

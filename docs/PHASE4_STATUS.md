@@ -249,3 +249,13 @@ Not done: the API-level consent regressions mock the engine's present/confirm st
   readable). Quotas, rounding and minimum-billing rules are not established.
 - The shipped OpenAI rows use provider `openai`, but live runs record `openai_realtime`, so those rows would never
   match a live run. The vendor table uses the recorded identifiers.
+
+## Gemini 3.8 migration (2026-10-19)
+
+The active `gemini-live` configuration now requests `gemini-3.8-live` on Vertex AI
+`us-central1`. Fresh speech, tool and interruption probes and AC-09 results replace the
+current 2.5 capability binding; the historical baseline is preserved under
+`artifacts/gemini38/baseline/`. AC-09 passed its supported dimensions; client truncation
+remains excluded and the server does not echo a model version. The full four-provider
+scenario rerun, report and validation results are recorded in
+[GEMINI_3_8_BENCHMARK_2026-10-19.md](GEMINI_3_8_BENCHMARK_2026-10-19.md).

@@ -56,4 +56,9 @@
 .bk-limits { margin:0; padding-left:18px; display:flex; flex-direction:column; gap:6px; font-size:.88rem; max-width:95ch }
 @media print {
   .bk-tabs { display:none } .bk-view { display:flex !important } .bk-card { break-inside:avoid } .bk-view + .bk-view { break-before:page }
+  .bk-scroll { overflow:visible }
+  .bk-table { table-layout:fixed; font-size:11px }
+  .bk-table th, .bk-table td { white-space:normal; overflow-wrap:anywhere; padding:5px 4px }
+  .bk-matrix th:first-child { width:48% }
+  .bk-pill { white-space:normal; font-size:inherit; padding:1px 4px; max-width:100% }
 }

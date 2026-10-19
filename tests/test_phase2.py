@@ -151,8 +151,8 @@ class CoverageTests(unittest.TestCase):
         r = self.reg()
         rid = r["google_gemini_live"].capability_report_id
         self.assertEqual((r["google_gemini_live"].model_id, r["google_gemini_live"].region),
-                         ("gemini-live-2.5-flash-native-audio", "us-central1"))
-        self.assertTrue(rid.startswith("cap_google_gemini_live_2_5"))
+                         ("gemini-3.8-live", "us-central1"))
+        self.assertTrue(rid.startswith("cap_google_gemini_3_8"))
         ok = self.reg({"google_gemini_live": {"passed": True, "capability_report_id": rid}})
         self.assertEqual(ok["google_gemini_live"].coverage_state, "implemented_and_verified")
         for ac09 in ({"passed": True, "capability_report_id": "other"},

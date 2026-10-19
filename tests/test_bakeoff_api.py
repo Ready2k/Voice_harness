@@ -98,7 +98,11 @@ class BakeoffApi(unittest.TestCase):
                                        json={"scenario_id": SCENARIOS[0], "provider_config_id": provider})
                 runs.append(launched.json()["run_ids"][0])
             for run_id in runs:
-                self.app.state.jobs[run_id].result(timeout=60)
+                # Completed workers are removed from jobs by their callback.
+                job = self.app.state.jobs.get(run_id)
+                if job is not None:
+                    job.result(timeout=60)
+                self.assertIn(self.database.get(run_id)["state"], ("completed", "failed"))
             created = client.post("/api/v1/bakeoffs", headers=self.headers,
                                   json={"name": "Imported", "runs": [{"run_id": r} for r in runs]})
             body = client.get(f"/api/v1/bakeoffs/{created.json()['bakeoff_id']}", headers=self.headers).json()

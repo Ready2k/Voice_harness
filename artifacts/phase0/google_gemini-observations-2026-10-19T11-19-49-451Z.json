@@ -1,0 +1,136 @@
+{
+  "meta": {
+    "modelId": "gemini-3.8-live",
+    "region": "us-central1",
+    "startedAt": "2026-10-19T11:19:49.451428+00:00",
+    "python": "3.12.12",
+    "websockets": "17.2",
+    "globalEndpoint": {
+      "setupComplete": false,
+      "closed": {
+        "error": "ConnectionClosedError",
+        "code": 1008,
+        "reason": "Publisher model `projects/696762117239/locations/global/publishers/google/models/gemini-3.8-live` was not found or your pro"
+      }
+    },
+    "setupComplete": {
+      "sessionId": "<id>"
+    },
+    "outputAudioCheck": {
+      "bytes": 282722,
+      "audio_tokens": 155,
+      "seconds_if_24k": 5.89,
+      "seconds_if_16k": 8.84,
+      "seconds_from_25_tokens_per_s": 6.2,
+      "generation_wall_s": 5.74
+    },
+    "contextOnlyText": {
+      "replied": false,
+      "recalled_teal": true
+    },
+    "bargeIn": {
+      "interrupted_after_ms": 580,
+      "audio_bytes_before_speech": 24960,
+      "audio_chunks_after_interrupted_before_wait": 5,
+      "audio_chunks_after_interrupted_total_3s": 21
+    }
+  },
+  "evidence": {
+    "model_discovery": [
+      "gem_ev_6"
+    ],
+    "input_codecs_rates": [
+      "gem_ev_6",
+      "gem_ev_95"
+    ],
+    "tool_arguments_and_results": [
+      "gem_ev_9",
+      "gem_ev_12"
+    ],
+    "turn_signalling": [
+      "gem_ev_11",
+      "gem_ev_53",
+      "gem_ev_414"
+    ],
+    "usage_granularity": [
+      "gem_ev_53"
+    ],
+    "audio_out": [
+      "gem_ev_14"
+    ],
+    "transcript_finality": [
+      "gem_ev_14",
+      "gem_ev_361"
+    ],
+    "error_handling": [
+      "gem_ev_6"
+    ],
+    "reconnect_resume": [
+      "gem_ev_69"
+    ],
+    "audio_in": [
+      "gem_ev_361",
+      "gem_ev_414"
+    ],
+    "cancel_truncate": [
+      "gem_ev_457"
+    ]
+  },
+  "notes": {
+    "model_discovery": [
+      "global endpoint setup did not complete for the pinned model (closed {'error': 'ConnectionClosedError', 'code': 1008, 'reason': 'Publisher model `projects/696762117239/locations/global/publishers/google/models/gemini-3.8-live` was not found or your pro'})",
+      "setupComplete received for the pinned model; it carries a session id and no model echo"
+    ],
+    "input_codecs_rates": [
+      "audio in is documented as 16 kHz PCM; exercised below",
+      "realtimeInput.audio audio/pcm;rate=16000 accepted"
+    ],
+    "tool_arguments_and_results": [
+      "toolCall get_account_summary {\"account_id\": \"ACC-001\"}; id present=True",
+      "tool declared with lower-case JSON-schema types and a required list: accepted",
+      "toolResponse by id then audio/transcript that uses the result (no explicit acknowledgement message)",
+      "toolCallCancellation not exercised",
+      "context-only text (clientContent turnComplete=false): replied=False, later recalled=True"
+    ],
+    "turn_signalling": [
+      "a tool-calling turn ends with serverContent.turnComplete before the tool result is sent",
+      "serverContent.turnComplete ends the post-tool turn",
+      "automatic activity detection: model reply and turnComplete follow the caller's speech without any client turn message"
+    ],
+    "usage_granularity": [
+      "usageMetadata with the turnComplete message: keys ['candidatesTokenCount', 'candidatesTokensDetails', 'promptTokenCount', 'promptTokensDetails', 'thoughtsTokenCount', 'totalTokenCount']; prompt=[{'modality': 'TEXT', 'tokenCount': 94}]; candidates=[{'modality': 'AUDIO', 'tokenCount': 155}, {'modality': 'TEXT', 'tokenCount': 20}]"
+    ],
+    "audio_out": [
+      "modelTurn inlineData audio/pcm"
+    ],
+    "transcript_finality": [
+      "outputTranscription fragments (4) then an empty one with finished=true; text is incremental, not cumulative",
+      "input transcription arrives as fragments; finished=true marker: False"
+    ],
+    "audio_alignment": [
+      "no timing or alignment fields were seen on audio or transcript messages"
+    ],
+    "error_handling": [
+      "unknown client message: connection closed {'error': 'ConnectionClosedError', 'code': 1007, 'reason': 'Invalid JSON payload received. Unknown name \"bogusMessage\": Cannot find field.'}"
+    ],
+    "reconnect_resume": [
+      "no sessionResumptionUpdate received",
+      "fresh connection works; handle-based resume not exercised"
+    ],
+    "audio_in": [
+      "speech transcribed (1 inputTranscription messages, 5794 ms to the first); text: 'Hello, can you hear me? Please tell me which bank this is.'",
+      "model replied to streamed speech (audio_out count 27 chunks)"
+    ],
+    "cancel_truncate": [
+      "serverContent.interrupted 580 ms after speech began streaming",
+      "the protocol has no cancel or truncate client message (message types: setup, clientContent, realtimeInput, toolResponse)"
+    ],
+    "direct_mcp": [
+      "not exercised: tools are function declarations bridged by the harness gateway"
+    ]
+  },
+  "log_file": "artifacts/phase0/google_gemini-probe-2026-10-19T11-19-49-451Z.jsonl",
+  "flags": {
+    "sdk": "websockets 17.2 python 3.12.12"
+  }
+}

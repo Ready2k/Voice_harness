@@ -425,23 +425,34 @@ class LiveApi(unittest.TestCase):
     def test_gemini_provider_is_registered_with_the_pinned_model_and_family(self):
         self.assertEqual(live_providers.LIVE_PROVIDERS["gemini-live"], "google_gemini_live")
         self.assertEqual(live_providers.TESTED_MODELS["gemini-live"],
-                         {"provider": "google", "model_id": "gemini-live-2.5-flash-native-audio", "family": "google_gemini_live"})
+                         {"provider": "google", "model_id": "gemini-3.8-live", "family": "google_gemini_live"})
         self.assertEqual(live_providers.FAMILIES["gemini-live"], "google_gemini_live")
         self.assertIn("gemini-live", RunConfig.model_json_schema()["properties"]["provider_config_id"]["enum"])
 
+    def test_gemini_cannot_claim_verification_from_another_model(self):
+        from types import SimpleNamespace
+
+        previous = SimpleNamespace(provider_family="google_gemini_live", model_id="gemini-live-2.5-flash-native-audio",
+                                   checked_at="2026-10-18", coverage_state="implemented_and_verified")
+        with mock.patch("voice_harness.coverage.build_registry", return_value=[previous]):
+            binding = live_providers.capability_binding("gemini-live")
+        self.assertEqual(binding["capability_status"], "diagnostic_unverified")
+        self.assertIsNone(binding["capability_report_id"])
+        self.assertEqual(binding["capability_reason_codes"], ["CAPABILITY_MODEL_MISMATCH"])
+
     def test_a_gemini_live_run_launches_through_the_api_with_google_session_binding_and_judge_independence(self):
-        same = reference_judge(cfg("gemini-self", provider="google", model="gemini-live-2.5-flash-native-audio", family="google_gemini_live"))
+        same = reference_judge(cfg("gemini-self", provider="google", model="gemini-3.8-live", family="google_gemini_live"))
         other = reference_judge(cfg("other"))
         _, events = self.completed_run(CARE, ([same, other], []), provider="gemini-live", adapter=GeminiFakeAdapter(), events=True)
         independence = next(e["content"] for e in events if e["type"] == "judge.independence_recorded")
-        self.assertEqual(independence["tested"], {"provider": "google", "model_id": "gemini-live-2.5-flash-native-audio",
+        self.assertEqual(independence["tested"], {"provider": "google", "model_id": "gemini-3.8-live",
                                                   "family": "google_gemini_live"})
         verdicts = {j["judge_id"]: j for j in independence["judges"]}
         self.assertFalse(verdicts["gemini-self"]["eligible"])
         self.assertIn("JUDGE_IS_TESTED_MODEL", verdicts["gemini-self"]["reason_codes"])
         self.assertTrue(verdicts["other"]["eligible"])
         probing = next(e["content"] for e in events if e["type"] == "run.probing")
-        self.assertEqual(probing["capability_report_id"], "cap_google_gemini_live_2_5_flash_native_audio_20261018")
+        self.assertEqual(probing["capability_report_id"], "cap_google_gemini_3_8_live_20261019")
 
     def test_a_gemini_live_export_records_an_unresolved_version_and_verifies_offline(self):
         from voice_harness.evidence import verify_bundle
@@ -450,7 +461,7 @@ class LiveApi(unittest.TestCase):
         provider = bundle["manifest"]["provider"]
         self.assertEqual((provider["provider_config_id"], provider["adapter"]), ("gemini-live", "google_gemini_live"))
         self.assertEqual((provider["requested_model_id"], provider["returned_model_id"]),
-                         ("gemini-live-2.5-flash-native-audio", None))
+                         ("gemini-3.8-live", None))
         self.assertEqual((provider["region"], provider["endpoint"]), ("us-central1", "us-central1-aiplatform.googleapis.com"))
         self.assertEqual(provider["provider_session_id"], "sess_gemini")
         self.assertEqual(provider["version_resolution"], "unresolved")

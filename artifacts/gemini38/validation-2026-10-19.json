@@ -1,0 +1,43 @@
+{
+  "checked_at": "2026-10-19T11:32:42.718467+00:00",
+  "python": {
+    "command": "make test",
+    "tests": 639,
+    "skipped": 5,
+    "result": "pass"
+  },
+  "browser": {
+    "tests": 36,
+    "result": "pass"
+  },
+  "lint": "pass",
+  "audit": "No known vulnerabilities found",
+  "diff_check": "pass",
+  "live_matrix": {
+    "runs": 132,
+    "providers": 4,
+    "scenarios": 33,
+    "retries": 0
+  },
+  "gemini_ac09": {
+    "result": "pass",
+    "excluded": [
+      "interruption: client truncation unsupported"
+    ]
+  },
+  "component_profiles": 12,
+  "pdf": {
+    "pages": 10,
+    "visual_review": "pass",
+    "javascript_errors": []
+  },
+  "artifact_sha256": {
+    "reports/voice-provider-benchmark-gemini38-2026-10-19.html": "0ace6d18f25cf6bfc90e8d0ee07ef775cd188c4d2e247983330f5753ba57706f",
+    "reports/voice-provider-benchmark-gemini38-2026-10-19.pdf": "e4d352c0e3599617461521d58ac208d3521894ec1c774ac0b7c2baf59774f080",
+    "artifacts/provider-matrix/matrix-gemini38-2026-10-19.json": "5c4da47e42868e34eed6bc44736d4d2480b6dbed47bef79a912585dd2f9589ce",
+    "artifacts/gemini38/component-benchmark-2026-10-19.json": "bacc346d474ce3f7b7eae25f442d5232b3a7a1d5240fff5906f98be276173a45",
+    "artifacts/phase0/google_gemini-capability-report.json": "5aca1815381964a70bd824bd65543e26eb9c3ffd5b960cbc067f21fbcd294e13",
+    "artifacts/phase2/google_gemini_live-ac09.json": "4b3b2d748c6077a2ad772d41e2c7dab14397bea8f947d44a7937696c44f2fd10"
+  },
+  "final_code_diff_sha256": "178531be7193eaf2a121a0dcf605b9054ab68750871f3fc977ba999c7baac5f1"
+}

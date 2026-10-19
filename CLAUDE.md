@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-Voice Harness is a container-first, deterministic core for a Voice AI Evaluation & Assurance Platform (spec: `docs/voice_evals_spec_v0.3.md`). It provides synthetic banking fixtures, a mock provider, PostgreSQL-backed evidence, an authenticated FastAPI service, a stdio MCP server and a PCM playback gate. The deterministic core and CI need no provider credentials; live adapters (OpenAI, Nova, xAI, Gemini verified) are opt-in and need keys. See `docs/ARCHITECTURE.md`, `docs/ENGINEERING.md`, `docs/VISION.md`. Acceptance-gate coverage (AC-01…AC-21) is mapped in `docs/PHASE1_STATUS.md`. Fixture audio is PCM silence with scripted metadata, so tests prove enforcement mechanics, not ASR/audibility.
+Voice Harness is a container-first, deterministic core for a Voice AI Evaluation & Assurance Platform (spec: `docs/voice_evals_spec_v0.3.md`). It provides synthetic banking fixtures, a mock provider, PostgreSQL-backed evidence, an authenticated FastAPI service, a stdio MCP server and a PCM playback gate. The deterministic core and CI need no provider credentials; live adapters (OpenAI, Nova, xAI, Gemini 3.8 configured as `gemini-3.8-live`) are opt-in and need keys. See `docs/ARCHITECTURE.md`, `docs/ENGINEERING.md`, `docs/VISION.md`. Acceptance-gate coverage (AC-01…AC-21) is mapped in `docs/PHASE1_STATUS.md`. Fixture audio is PCM silence with scripted metadata, so tests prove enforcement mechanics, not ASR/audibility.
 
 ## Commands
 

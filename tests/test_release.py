@@ -23,6 +23,23 @@ from voice_harness.storage import Database
 
 
 class ReleaseTests(unittest.TestCase):
+    def test_concurrent_postgres_initialisation_preserves_the_ledger(self):
+        url = os.environ.get("HARNESS_TEST_DATABASE_URL", "")
+        if not url.startswith("postgresql://"):
+            self.skipTest("requires PostgreSQL")
+        import threading
+
+        barrier = threading.Barrier(8)
+
+        def initialise(_):
+            barrier.wait(timeout=10)
+            database = Database(url)
+            return database.get(self.run)["session_id"]
+
+        with ThreadPoolExecutor(max_workers=8) as pool:
+            self.assertEqual(list(pool.map(initialise, range(8))),
+                             [self.database.get(self.run)["session_id"]] * 8)
+
     def setUp(self):
         self.directory = tempfile.TemporaryDirectory()
         self.addCleanup(self.directory.cleanup)
