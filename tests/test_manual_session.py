@@ -102,6 +102,7 @@ class ManualSessions(unittest.TestCase):
         self.database = Database(os.environ.get("HARNESS_TEST_DATABASE_URL", str(root / "t.sqlite")))
         self.app = create_app(self.database, root, "operator")
         self.headers = {"Authorization": "Bearer operator"}
+        self.key_prefix = "manual-test-" + root.name
         self.key = 0
 
     def patch(self, adapter, asr):
@@ -116,7 +117,7 @@ class ManualSessions(unittest.TestCase):
 
     def create(self, client, journey="balance", path="happy", playback="gated"):
         self.key += 1
-        return client.post("/api/v1/manual-sessions", headers={**self.headers, "Idempotency-Key": f"m{self.key}"},
+        return client.post("/api/v1/manual-sessions", headers={**self.headers, "Idempotency-Key": f"{self.key_prefix}-{self.key}"},
                            json={"provider_config_id": "openai-realtime-live", "journey_id": journey, "path": path,
                                  "playback_mode": playback})
 
