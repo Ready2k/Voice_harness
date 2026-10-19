@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "turn": {
+      "minimum": 0,
+      "title": "Turn",
+      "type": "integer"
+    },
+    "text": {
+      "maxLength": 1000,
+      "minLength": 1,
+      "title": "Text",
+      "type": "string"
+    },
+    "text_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Text Sha256",
+      "type": "string"
+    },
+    "char_count": {
+      "minimum": 0,
+      "title": "Char Count",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "turn",
+    "text",
+    "text_sha256",
+    "char_count"
+  ],
+  "title": "InputManualText",
+  "type": "object"
+}

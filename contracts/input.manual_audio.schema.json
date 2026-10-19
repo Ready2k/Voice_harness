@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "turn": {
+      "minimum": 0,
+      "title": "Turn",
+      "type": "integer"
+    },
+    "pcm_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Pcm Sha256",
+      "type": "string"
+    },
+    "byte_count": {
+      "minimum": 0,
+      "title": "Byte Count",
+      "type": "integer"
+    },
+    "sample_rate": {
+      "minimum": 0,
+      "title": "Sample Rate",
+      "type": "integer"
+    },
+    "audio_retained": {
+      "const": false,
+      "title": "Audio Retained",
+      "type": "boolean"
+    },
+    "transformations": {
+      "items": {
+        "maxLength": 200,
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Transformations",
+      "type": "array"
+    },
+    "segmentation": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Segmentation",
+      "type": "string"
+    },
+    "stream_started_ms": {
+      "minimum": 0,
+      "title": "Stream Started Ms",
+      "type": "integer"
+    },
+    "stream_ended_ms": {
+      "minimum": 0,
+      "title": "Stream Ended Ms",
+      "type": "integer"
+    },
+    "clock_domain_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Clock Domain Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "turn",
+    "pcm_sha256",
+    "byte_count",
+    "sample_rate",
+    "audio_retained",
+    "transformations",
+    "segmentation",
+    "stream_started_ms",
+    "stream_ended_ms",
+    "clock_domain_id"
+  ],
+  "title": "InputManualAudio",
+  "type": "object"
+}

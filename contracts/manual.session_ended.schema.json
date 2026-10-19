@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "reason": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Reason",
+      "type": "string"
+    },
+    "duration_ms": {
+      "minimum": 0,
+      "title": "Duration Ms",
+      "type": "integer"
+    },
+    "turns": {
+      "minimum": 0,
+      "title": "Turns",
+      "type": "integer"
+    },
+    "voice_turns": {
+      "minimum": 0,
+      "title": "Voice Turns",
+      "type": "integer"
+    },
+    "text_turns": {
+      "minimum": 0,
+      "title": "Text Turns",
+      "type": "integer"
+    },
+    "responses_assessed": {
+      "minimum": 0,
+      "title": "Responses Assessed",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "reason",
+    "duration_ms",
+    "turns",
+    "voice_turns",
+    "text_turns",
+    "responses_assessed"
+  ],
+  "title": "ManualSessionEnded",
+  "type": "object"
+}

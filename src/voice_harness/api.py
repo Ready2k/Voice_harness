@@ -4,6 +4,7 @@ import asyncio
 import base64
 import contextvars
 import hashlib
+import json
 import logging
 import os
 import secrets
@@ -31,7 +32,7 @@ from . import live_providers
 from .approvals import public_key
 from .auth import bearer_matches, load_token, restrict_bundle, reviewer_may, role_for, tls_options
 from .clock_runtime import ClockSyncSession, invalidate_prior_connection
-from .contracts import AudioInputPayload, CancelRun, HoldRequest, RenewHold, RunConfig
+from .contracts import AudioInputPayload, CancelRun, HoldRequest, ManualSessionConfig, RenewHold, RunConfig
 from .cost_api import register_cost_routes
 from .coverage import build_registry, summarize
 from .engine import Engine
@@ -40,6 +41,9 @@ from .exports import download_links
 from .inbound_queue import InboundQueue
 from .judges import service as judge_service
 from .live_scenario import LIVE_LIMITS
+from .manual_session import MANUAL_LIMITS, Bridge
+from .manual_session import journeys as manual_journeys
+from .manual_session import scenario_for as manual_scenario
 from .metrics import derive as derive_metrics
 from .review_api import register_review_routes
 from .scenario_catalogue import CATALOGUE, presentation
@@ -66,6 +70,8 @@ def create_app(
     keystore = KeyStore(root)
     engine = Engine(database)
     live_engine = Engine(database, limits=LIVE_LIMITS)  # live runs record, and are bound by, the live budgets
+    manual_engine = Engine(database, limits=MANUAL_LIMITS)  # human-driven sessions run for up to 15 minutes
+    manual_bridges = {}  # run_id -> Bridge while the page's WebSocket is attached
     evidence = Evidence(database, root / "objects", signer=keystore.signer())
     from . import telemetry as telemetry_module
 
@@ -103,7 +109,9 @@ def create_app(
                 tx.state["state"] = "running"
                 tx.event("orchestrator", "run.running", {})
             config = database.get(run_id)["config"]
-            if config["provider_config_id"] in live_providers.LIVE_PROVIDERS:
+            if config.get("input_mode") == "manual":
+                run_manual_work(run_id, config)
+            elif config["provider_config_id"] in live_providers.LIVE_PROVIDERS:
                 run_live_work(run_id, config)
             else:
                 run_scenario(engine, run_id, evidence)
@@ -124,10 +132,10 @@ def create_app(
 
     live_tasks = {}  # run_id -> (loop, task) for runs whose provider session is open
 
-    async def live_task(run_id, config):
-        """Run the live scenario as a cancellable task; returns None if the run was cancelled."""
+    async def live_task(run_id, config, session=None):
+        """Run the live scenario (or ``session``) as a cancellable task; returns None if the run was cancelled."""
         task = asyncio.ensure_future(
-            live_providers.run_live(
+            session if session is not None else live_providers.run_live(
                 live_engine, run_id, config["provider_config_id"], config["scenario_id"], seed=config["fixture_seed"]
             )
         )
@@ -165,6 +173,20 @@ def create_app(
             failure = "PROVIDER_FAILURE"
         else:
             failure = None
+        evaluate_live(run_id, config, failure)
+
+    def run_manual_work(run_id, config):
+        """A human-driven session over the page's WebSocket, then the same assessment as a live run."""
+        bridge = manual_bridges.get(run_id)
+        if bridge is None:
+            raise RuntimeError("MANUAL_SESSION_NOT_ATTACHED")
+        summary = asyncio.run(live_task(run_id, config, live_providers.run_manual(manual_engine, run_id, config, bridge)))
+        if summary is None:
+            return
+        bridge.emit({"type": "status", "stage": "evaluating"})
+        evaluate_live(run_id, config, "PROVIDER_FAILURE" if summary["fatal"] else None)
+
+    def evaluate_live(run_id, config, failure):
         with database.transaction(run_id) as tx:
             if tx.state["state"] != "running":
                 return
@@ -675,22 +697,132 @@ def create_app(
             tickets[ticket_id] = {"run_id": run_id, "expires_at": time.time() + 30}
         return {"ticket": ticket_id, "expires_in_seconds": 30}
 
-    @app.websocket("/api/v1/runs/{run_id}/ws")
-    async def websocket(socket: WebSocket, run_id: str):
-        authorization = socket.headers.get("authorization", "")
-        protocols = [
-            p.strip()
-            for p in socket.headers.get("sec-websocket-protocol", "").split(",")
-        ]
-        ticket_id = next((p[7:] for p in protocols if p.startswith("ticket.")), None)
+    def ws_protocols(socket):
+        return [p.strip() for p in socket.headers.get("sec-websocket-protocol", "").split(",")]
+
+    def ws_admitted(socket, run_id):
+        """Bearer token or a single-use ticket for this run, from an allowed origin."""
+        ticket_id = next((p[7:] for p in ws_protocols(socket) if p.startswith("ticket.")), None)
         with job_lock:
             ticket = tickets.pop(ticket_id, None) if ticket_id else None
-        ticket_ok = (
-            ticket and ticket["run_id"] == run_id and ticket["expires_at"] > time.time()
-        )
-        if (
-            not bearer_matches(authorization, token) and not ticket_ok
-        ) or socket.headers.get("origin") not in origins:
+        ticket_ok = ticket and ticket["run_id"] == run_id and ticket["expires_at"] > time.time()
+        return bool(bearer_matches(socket.headers.get("authorization", ""), token) or ticket_ok) and (
+            socket.headers.get("origin") in origins)
+
+    @app.get("/api/v1/manual/journeys", dependencies=[Depends(auth)])
+    def manual_journey_list():
+        """Journeys for manual testing (happy and failure path, with prompts) and which providers can run them."""
+        providers = []
+        for provider_config_id in live_providers.LIVE_PROVIDERS:
+            missing = live_providers.requirements(provider_config_id, manual=True)
+            providers.append({"provider_config_id": provider_config_id, "available": not missing,
+                              "reason": missing[0] if missing else None, "reasons": missing})
+        return {"items": manual_journeys(), "providers": providers, "playback_modes": ["gated", "streamed"]}
+
+    manual_pending = {}  # run_id -> created_at for sessions whose page has not connected yet
+
+    @app.post("/api/v1/manual-sessions", status_code=201, dependencies=[Depends(auth)])
+    def create_manual_session(
+        body: ManualSessionConfig, idempotency_key: str = Header(min_length=1, max_length=200)
+    ):
+        if not app.state.accepting:
+            raise HTTPException(503, "SHUTTING_DOWN")
+        scenario_id = manual_scenario(body.journey_id, body.path)
+        if not live_providers.availability(body.provider_config_id, manual=True)[0]:
+            raise ValueError("PROVIDER_NOT_CONFIGURED")
+        with job_lock:
+            for stale in [r for r, at in manual_pending.items() if at < time.time() - 120]:
+                del manual_pending[stale]
+                if database.get(stale)["state"] == "queued":  # the page never connected
+                    manual_engine.cancel(stale, "MANUAL_SESSION_NOT_STARTED")
+            if sum(not job.done() for job in jobs.values()) + len(manual_pending) >= 10:
+                raise HTTPException(429, "CONCURRENCY_LIMIT")
+        config = {
+            **RunConfig(scenario_id=scenario_id, provider_config_id=body.provider_config_id).model_dump(),
+            "input_mode": "manual", "client_mode": "manual_browser", "playback_mode": body.playback_mode,
+            "journey_id": body.journey_id, "path": body.path,
+        }
+        run_id = manual_engine.create(config, "manual:" + idempotency_key)
+        with job_lock:
+            if database.get(run_id)["state"] == "queued" and run_id not in jobs:
+                manual_pending[run_id] = time.time()
+        return {"run_id": run_id, "scenario_id": scenario_id, "state": database.get(run_id)["state"],
+                "websocket": "/api/v1/manual-sessions/" + run_id + "/ws", "schema_version": "0.3"}
+
+    @app.websocket("/api/v1/manual-sessions/{run_id}/ws")
+    async def manual_websocket(socket: WebSocket, run_id: str):
+        if not ws_admitted(socket, run_id):
+            await socket.close(code=1008)
+            return
+        try:
+            state = await asyncio.to_thread(database.get, run_id)
+        except KeyError:
+            await socket.close(code=1008)
+            return
+        with job_lock:
+            startable = (state["config"].get("input_mode") == "manual" and state["state"] == "queued"
+                         and run_id not in jobs and run_id not in manual_bridges)
+            if startable:
+                bridge = manual_bridges[run_id] = Bridge(asyncio.get_running_loop())
+                manual_pending.pop(run_id, None)
+        if not startable:  # one page per session; a finished or running session cannot be re-attached
+            await socket.close(code=1008)
+            return
+        await socket.accept(subprotocol="manual.v1" if "manual.v1" in ws_protocols(socket) else None)
+        job_links[run_id] = telemetry_module.capture_link()
+        with job_lock:
+            job = jobs[run_id] = executor.submit(contextvars.copy_context().run, work, run_id)
+        finished = asyncio.wrap_future(job)
+
+        async def read():
+            try:
+                while True:
+                    message = await socket.receive()
+                    if message["type"] == "websocket.disconnect":
+                        break
+                    if message.get("bytes") is not None:
+                        bridge.deliver(("audio", message["bytes"]))
+                        continue
+                    text = message.get("text") or ""
+                    try:
+                        payload = json.loads(text) if len(text) <= 8000 else None
+                    except ValueError:
+                        payload = None
+                    if isinstance(payload, dict):
+                        bridge.deliver(("message", payload))
+                    else:
+                        await socket.send_json({"type": "error", "code": "INVALID_MESSAGE"})
+            except (WebSocketDisconnect, RuntimeError):
+                pass
+            bridge.deliver(("disconnect", None))
+
+        async def write():
+            while True:
+                await socket.send_json(await bridge.outbound.get())
+
+        reader, writer = asyncio.create_task(read()), asyncio.create_task(write())
+        try:
+            with suppress(Exception):  # the worker records its own failure in the ledger
+                await finished
+        finally:
+            reader.cancel()
+            while not bridge.outbound.empty():
+                await asyncio.sleep(0.05)  # let queued feedback reach the page before the final message
+                if writer.done():
+                    break
+            writer.cancel()
+            await asyncio.gather(reader, writer, return_exceptions=True)
+            with job_lock:
+                manual_bridges.pop(run_id, None)
+        final = await asyncio.to_thread(database.get, run_id)
+        with suppress(Exception):  # the page may already have gone
+            await socket.send_json({"type": "ended", "state": final["state"], "assurance": final.get("assurance")})
+            await socket.close()
+
+    @app.websocket("/api/v1/runs/{run_id}/ws")
+    async def websocket(socket: WebSocket, run_id: str):
+        protocols = ws_protocols(socket)
+        if not ws_admitted(socket, run_id):
             await socket.close(code=1008)
             return
         try:

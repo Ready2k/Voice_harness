@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "unit_id": {
+      "anyOf": [
+        {
+          "maxLength": 200,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Unit Id"
+    },
+    "pcm_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Pcm Sha256",
+      "type": "string"
+    },
+    "byte_count": {
+      "minimum": 0,
+      "title": "Byte Count",
+      "type": "integer"
+    },
+    "sample_count": {
+      "minimum": 0,
+      "title": "Sample Count",
+      "type": "integer"
+    },
+    "delivered_before_assessment": {
+      "const": true,
+      "title": "Delivered Before Assessment",
+      "type": "boolean"
+    },
+    "interrupted": {
+      "title": "Interrupted",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "unit_id",
+    "pcm_sha256",
+    "byte_count",
+    "sample_count",
+    "delivered_before_assessment",
+    "interrupted"
+  ],
+  "title": "PlaybackStreamedUnassessed",
+  "type": "object"
+}

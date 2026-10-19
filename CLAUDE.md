@@ -31,7 +31,7 @@ PYTHONPATH=src .venv/bin/python -m voice_harness.generate_contracts             
 docker compose exec -T api python -m voice_harness verify-bundle /data/demo/RUN_ID.json
 ```
 
-Tests use `unittest` (not pytest). `tests/test_release.py` requires PostgreSQL, so it only fully runs under Compose. Browser tests are `tests/browser/*.test.mjs` (Node). The provider coverage panel (AC-20) is served at `/client/coverage.html` (needs the operator token).
+Tests use `unittest` (not pytest). `tests/test_release.py` requires PostgreSQL, so it only fully runs under Compose. Browser tests are `tests/browser/*.test.mjs` (Node). The provider coverage panel (AC-20) is served at `/client/coverage.html` (needs the operator token). Manual (human-driven) testing is at `/client/manual.html`: mic/text sessions against a live adapter, recorded and assessed as ordinary runs (`manual_session.py`, `/api/v1/manual-sessions`).
 
 `tests/test_contracts_in_sync.py` fails if the checked-in `contracts/` differ from generator output. After changing pydantic models or API routes, rerun `generate_contracts` and commit the result; the generator is deterministic, so any diff is real drift.
 

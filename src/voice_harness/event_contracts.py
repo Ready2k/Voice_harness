@@ -706,3 +706,79 @@ EVENT_CONTENT_CONTRACTS.update(
         "confirmation.voice_observation": ConfirmationVoiceObservation,
     }
 )
+
+
+# --- Manual (human-driven) live sessions ---
+class ManualSessionStarted(Closed):
+    journey_id: Identifier | None
+    path: Literal["happy", "failure"]
+    scenario_id: Identifier
+    playback_mode: Literal["gated", "streamed"]
+    input_modes: list[Literal["voice", "text"]]
+    segmentation: Identifier
+    max_session_seconds: Count
+    reproducible: Literal[False]
+
+
+class ManualControl(Closed):
+    action: Literal["pause", "resume", "mute", "unmute", "mode_voice", "mode_text", "barge_in"]
+    at_ms: Count
+    clock_domain_id: Identifier
+
+
+class ManualSessionEnded(Closed):
+    reason: Identifier
+    duration_ms: Count
+    turns: Count
+    voice_turns: Count
+    text_turns: Count
+    responses_assessed: Count
+
+
+class InputManualAudio(Closed):
+    turn: Count
+    pcm_sha256: Hex64
+    byte_count: Count
+    sample_rate: Count
+    audio_retained: Literal[False]
+    transformations: list[Identifier]
+    segmentation: Identifier
+    stream_started_ms: Count
+    stream_ended_ms: Count
+    clock_domain_id: Identifier
+
+
+class InputManualText(Closed):
+    turn: Count
+    text: Annotated[str, Field(min_length=1, max_length=1000)]
+    text_sha256: Hex64
+    char_count: Count
+
+
+class InputCallerTranscript(Closed):
+    source: Literal["provider_input_transcription"]
+    item_id: str | None
+    text: str
+    text_sha256: Hex64
+
+
+class PlaybackStreamedUnassessed(Closed):
+    unit_id: Identifier | None
+    pcm_sha256: Hex64
+    byte_count: Count
+    sample_count: Count
+    delivered_before_assessment: Literal[True]
+    interrupted: bool
+
+
+EVENT_CONTENT_CONTRACTS.update(
+    {
+        "manual.session_started": ManualSessionStarted,
+        "manual.control": ManualControl,
+        "manual.session_ended": ManualSessionEnded,
+        "input.manual_audio": InputManualAudio,
+        "input.manual_text": InputManualText,
+        "input.caller_transcript": InputCallerTranscript,
+        "playback.streamed_unassessed": PlaybackStreamedUnassessed,
+    }
+)

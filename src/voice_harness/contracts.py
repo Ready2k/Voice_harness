@@ -26,6 +26,16 @@ class RunConfig(Closed):
     client_mode: Literal["software_fixture", "websocket"] = "software_fixture"
 
 
+class ManualSessionConfig(Closed):
+    """A human-driven live session: one journey path, evaluated with that path's catalogue scenario."""
+
+    provider_config_id: Literal["openai-realtime-live", "nova-sonic-live", "xai-voice-live", "gemini-live"]
+    journey_id: Identifier
+    path: Literal["happy", "failure"] = "happy"
+    # gated: only assessed, approved audio is played. streamed: audio plays as generated, assessed afterwards.
+    playback_mode: Literal["gated", "streamed"] = "gated"
+
+
 class IdentityArgs(Closed):
     challenge_id: Identifier
     answer: Annotated[str, Field(min_length=1, max_length=200)]

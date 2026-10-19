@@ -53,6 +53,11 @@ TESTED_MODELS = {
 }
 
 
+# Silence after each synthetic caller utterance (lets provider VAD end the turn). Latency is measured from the end
+# of speech, so the bake-off subtracts this from the end of the streamed audio.
+CALLER_TRAIL_MS = 1200
+
+
 class PreconditionFailed(Exception):
     """A scenario step could not be set up (e.g. identity was not established); not a provider defect."""
 
@@ -87,9 +92,10 @@ def _nova_env():
     return env
 
 
-def requirements(provider_config_id, environ=None):
+def requirements(provider_config_id, environ=None, *, manual=False):
     """Every reason code this config cannot run (empty when it can). Strict speech approval needs a live ASR backend
-    and a caller voice as well as the provider itself, so a provider can miss several things at once."""
+    and a caller voice as well as the provider itself, so a provider can miss several things at once. A manual
+    session's caller is a person at the microphone, so it needs no synthetic caller voice."""
     environ = os.environ if environ is None else environ
     if provider_config_id not in LIVE_PROVIDERS:
         return ["NOT_A_LIVE_PROVIDER"]
@@ -98,7 +104,7 @@ def requirements(provider_config_id, environ=None):
         missing.append("NO_ASR_BACKEND_CONFIGURED")
     from .caller_voice import available as caller_voice_available
 
-    voice_ok, voice_reason = caller_voice_available(environ)  # macOS say/afconvert default, or opt-in openai_tts
+    voice_ok, voice_reason = (True, None) if manual else caller_voice_available(environ)  # say/afconvert or openai_tts
     if not voice_ok:
         missing.append(voice_reason)
     if provider_config_id == "xai-voice-live":
@@ -120,9 +126,9 @@ def requirements(provider_config_id, environ=None):
     return missing
 
 
-def availability(provider_config_id, environ=None):
+def availability(provider_config_id, environ=None, *, manual=False):
     """(ok, reason): the first missing requirement, in the order ASR, caller voice, provider."""
-    missing = requirements(provider_config_id, environ)
+    missing = requirements(provider_config_id, environ, manual=manual)
     return (False, missing[0]) if missing else (True, None)
 
 
@@ -246,7 +252,7 @@ async def run_live(engine, run_id, provider_config_id, scenario_id, *, seed=0):
 
     runner = LiveScenarioRunner(
         engine, run_id, adapter, assessor, scenario_id,
-        caller_audio=lambda text: synth_caller_pcm(text, trail_ms=1200), before_turn=before_turn, seed=seed,
+        caller_audio=lambda text: synth_caller_pcm(text, trail_ms=CALLER_TRAIL_MS), before_turn=before_turn, seed=seed,
         provider_session=metadata, cost_recorder=recorder)
     reason = "done"
     try:
@@ -259,4 +265,40 @@ async def run_live(engine, run_id, provider_config_id, scenario_id, *, seed=0):
             await adapter.close(reason)
 
 
-__all__ = ["LIVE_LIMITS", "LIVE_PROVIDERS", "TESTED_MODELS", "auto_judges", "PreconditionFailed", "availability", "run_live"]
+async def run_manual(engine, run_id, config, bridge):
+    """Open the provider session and serve a manual (human-driven) session over ``bridge``; returns the summary."""
+    from .cost_recorder import UsageRecorder
+    from .manual_session import ManualSession
+
+    provider_config_id = config["provider_config_id"]
+    adapter, adapter_config = _adapter(provider_config_id)
+    adapter_config["session_id"] = engine.database.get(run_id)["session_id"]
+    bridge.emit({"type": "status", "stage": "opening_provider"})
+    try:
+        receipt = await adapter.open_session(adapter_config)
+    except ValueError as exc:  # typed provider codes (auth, unreachable); the worker fails the run closed
+        bridge.emit({"type": "error", "code": str(exc).split(":")[0], "fatal": True})
+        raise
+    metadata = session_metadata(provider_config_id, TESTED_MODELS[provider_config_id]["model_id"], receipt,
+                                connection_binding(adapter))
+    metadata["caller_voice"] = {"backend": "human_microphone"}
+    tested = TESTED_MODELS[provider_config_id]
+    recorder = UsageRecorder(engine.database, run_id, provider=metadata["family"], model=tested["model_id"],
+                             region=getattr(adapter, "region", None))
+    session = ManualSession(
+        engine, run_id, adapter, IndependentAssessor(engine, select_backend()), config["scenario_id"], bridge=bridge,
+        playback_mode=config["playback_mode"], journey_id=config.get("journey_id"), path=config.get("path", "happy"),
+        provider_session=metadata, cost_recorder=recorder, seed=config["fixture_seed"],
+        context_only=provider_config_id in ("openai-realtime-live", "xai-voice-live", "gemini-live"))
+    reason = "done"
+    try:
+        return await session.run()
+    except asyncio.CancelledError:
+        reason = "cancelled"
+        raise
+    finally:
+        with suppress(Exception):  # closing a failed session must not mask the run outcome
+            await adapter.close(reason)
+
+
+__all__ = ["LIVE_LIMITS", "LIVE_PROVIDERS", "TESTED_MODELS", "auto_judges", "PreconditionFailed", "availability", "run_live", "run_manual"]

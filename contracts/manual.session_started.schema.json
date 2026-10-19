@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "journey_id": {
+      "anyOf": [
+        {
+          "maxLength": 200,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Journey Id"
+    },
+    "path": {
+      "enum": [
+        "happy",
+        "failure"
+      ],
+      "title": "Path",
+      "type": "string"
+    },
+    "scenario_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Scenario Id",
+      "type": "string"
+    },
+    "playback_mode": {
+      "enum": [
+        "gated",
+        "streamed"
+      ],
+      "title": "Playback Mode",
+      "type": "string"
+    },
+    "input_modes": {
+      "items": {
+        "enum": [
+          "voice",
+          "text"
+        ],
+        "type": "string"
+      },
+      "title": "Input Modes",
+      "type": "array"
+    },
+    "segmentation": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Segmentation",
+      "type": "string"
+    },
+    "max_session_seconds": {
+      "minimum": 0,
+      "title": "Max Session Seconds",
+      "type": "integer"
+    },
+    "reproducible": {
+      "const": false,
+      "title": "Reproducible",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "journey_id",
+    "path",
+    "scenario_id",
+    "playback_mode",
+    "input_modes",
+    "segmentation",
+    "max_session_seconds",
+    "reproducible"
+  ],
+  "title": "ManualSessionStarted",
+  "type": "object"
+}

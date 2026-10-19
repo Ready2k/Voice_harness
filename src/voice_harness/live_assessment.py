@@ -252,6 +252,8 @@ class AdapterTurnDriver:
         self._quarantine_unkeyed = False
         # Provider usage -> cost.usage_reported; declares the expected components for this run.
         self.cost_recorder = cost_recorder
+        # Called as (outcome, pcm) after the gate releases a unit, for a client that plays released audio.
+        self.on_release = None
         if cost_recorder is not None:
             if assessor.cost_recorder is None:
                 assessor.cost_recorder = cost_recorder
@@ -452,8 +454,10 @@ class AdapterTurnDriver:
         released = None
         if outcome["approval"]:
             try:
-                self.engine.release_audio(self.run_id, outcome["approval"])
+                pcm = self.engine.release_audio(self.run_id, outcome["approval"])
                 released = self.now_ms()
+                if self.on_release is not None:
+                    self.on_release(outcome, pcm)
             except ValueError as error:  # superseded while assessing (interruption revoked the token)
                 outcome = {**outcome, "approval": None, "strict_speech_approval": "superseded",
                            "reason_codes": [str(error)]}

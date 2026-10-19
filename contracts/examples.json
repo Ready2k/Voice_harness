@@ -1252,6 +1252,66 @@
     "transcript_sha256": "2a9569d5160893662a5c3579f2531ac3250dcb5a42a2a4832c5503e28424b8d8",
     "authorised": true
   },
+  "manual.session_started": {
+    "journey_id": "balance",
+    "path": "happy",
+    "scenario_id": "happy-balance-clean-001",
+    "playback_mode": "gated",
+    "input_modes": [
+      "voice",
+      "text"
+    ],
+    "segmentation": "client_energy_vad",
+    "max_session_seconds": 900,
+    "reproducible": false
+  },
+  "manual.control": {
+    "action": "pause",
+    "at_ms": 4200,
+    "clock_domain_id": "process_fixture"
+  },
+  "manual.session_ended": {
+    "reason": "OPERATOR_STOPPED",
+    "duration_ms": 61000,
+    "turns": 3,
+    "voice_turns": 2,
+    "text_turns": 1,
+    "responses_assessed": 3
+  },
+  "input.manual_audio": {
+    "turn": 0,
+    "pcm_sha256": "2a9569d5160893662a5c3579f2531ac3250dcb5a42a2a4832c5503e28424b8d8",
+    "byte_count": 96000,
+    "sample_rate": 24000,
+    "audio_retained": false,
+    "transformations": [
+      "clean_studio"
+    ],
+    "segmentation": "client_energy_vad",
+    "stream_started_ms": 1000,
+    "stream_ended_ms": 3000,
+    "clock_domain_id": "process_fixture"
+  },
+  "input.manual_text": {
+    "turn": 1,
+    "text": "What is my balance?",
+    "text_sha256": "982d9e3eb996f559e633f4d194def3761d909f5a3b647d1a851fead67c32c9d1",
+    "char_count": 19
+  },
+  "input.caller_transcript": {
+    "source": "provider_input_transcription",
+    "item_id": "item_001",
+    "text": "The answer is blue.",
+    "text_sha256": "54e6289e14c7b0e7ad9acc2dfc4c1e3d027d0eef7f5c4c3fe7c292761d0e06a6"
+  },
+  "playback.streamed_unassessed": {
+    "unit_id": "unit_001",
+    "pcm_sha256": "2a9569d5160893662a5c3579f2531ac3250dcb5a42a2a4832c5503e28424b8d8",
+    "byte_count": 48000,
+    "sample_count": 24000,
+    "delivered_before_assessment": true,
+    "interrupted": false
+  },
   "evidence-manifest": {
     "schema_version": "0.3",
     "run_id": "run_001",

@@ -239,6 +239,30 @@ def examples():
                 "payload_bytes": 4800, "payload_retained": False, "omission_reason": "AUDIO_AND_BULK_PAYLOAD_HASH_ONLY",
                 "received_ms": 1200, "clock_domain_id": "process_fixture",
             },
+            "manual.session_started": {
+                "journey_id": "balance", "path": "happy", "scenario_id": "happy-balance-clean-001",
+                "playback_mode": "gated", "input_modes": ["voice", "text"], "segmentation": "client_energy_vad",
+                "max_session_seconds": 900, "reproducible": False,
+            },
+            "manual.control": {"action": "pause", "at_ms": 4200, "clock_domain_id": "process_fixture"},
+            "manual.session_ended": {
+                "reason": "OPERATOR_STOPPED", "duration_ms": 61000, "turns": 3, "voice_turns": 2, "text_turns": 1,
+                "responses_assessed": 3,
+            },
+            "input.manual_audio": {
+                "turn": 0, "pcm_sha256": pcm, "byte_count": 96000, "sample_rate": 24000, "audio_retained": False,
+                "transformations": ["clean_studio"], "segmentation": "client_energy_vad",
+                "stream_started_ms": 1000, "stream_ended_ms": 3000, "clock_domain_id": "process_fixture",
+            },
+            "input.manual_text": {"turn": 1, "text": "What is my balance?", "text_sha256": _h("text"), "char_count": 19},
+            "input.caller_transcript": {
+                "source": "provider_input_transcription", "item_id": "item_001", "text": "The answer is blue.",
+                "text_sha256": _h("transcript"),
+            },
+            "playback.streamed_unassessed": {
+                "unit_id": "unit_001", "pcm_sha256": pcm, "byte_count": 48000, "sample_count": 24000,
+                "delivered_before_assessment": True, "interrupted": False,
+            },
             "benchmark.adapter_metrics": {
                 "response_id": "response_001", "unit_id": "unit_001", "source": "adapter_events",
                 "clock_domain_id": "process_fixture", "adapter_clock_domain_id": "process_fixture",

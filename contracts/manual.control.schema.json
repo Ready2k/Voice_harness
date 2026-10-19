@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "action": {
+      "enum": [
+        "pause",
+        "resume",
+        "mute",
+        "unmute",
+        "mode_voice",
+        "mode_text",
+        "barge_in"
+      ],
+      "title": "Action",
+      "type": "string"
+    },
+    "at_ms": {
+      "minimum": 0,
+      "title": "At Ms",
+      "type": "integer"
+    },
+    "clock_domain_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Clock Domain Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "action",
+    "at_ms",
+    "clock_domain_id"
+  ],
+  "title": "ManualControl",
+  "type": "object"
+}

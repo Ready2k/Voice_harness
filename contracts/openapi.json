@@ -2444,6 +2444,116 @@
           }
         }
       }
+    },
+    "/api/v1/manual/journeys": {
+      "get": {
+        "summary": "Manual Journey List",
+        "description": "Journeys for manual testing (happy and failure path, with prompts) and which providers can run them.",
+        "operationId": "manual_journey_list_api_v1_manual_journeys_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/manual-sessions": {
+      "post": {
+        "summary": "Create Manual Session",
+        "operationId": "create_manual_session_api_v1_manual_sessions_post",
+        "parameters": [
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200,
+              "title": "Idempotency-Key"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ManualSessionConfig"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -2830,6 +2940,52 @@
         ],
         "title": "HoldRequest",
         "description": "Preservation hold: exactly one of finding_ids or an explicit run-wide scope."
+      },
+      "ManualSessionConfig": {
+        "properties": {
+          "provider_config_id": {
+            "type": "string",
+            "enum": [
+              "openai-realtime-live",
+              "nova-sonic-live",
+              "xai-voice-live",
+              "gemini-live"
+            ],
+            "title": "Provider Config Id"
+          },
+          "journey_id": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Journey Id"
+          },
+          "path": {
+            "type": "string",
+            "enum": [
+              "happy",
+              "failure"
+            ],
+            "title": "Path",
+            "default": "happy"
+          },
+          "playback_mode": {
+            "type": "string",
+            "enum": [
+              "gated",
+              "streamed"
+            ],
+            "title": "Playback Mode",
+            "default": "gated"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "provider_config_id",
+          "journey_id"
+        ],
+        "title": "ManualSessionConfig",
+        "description": "A human-driven live session: one journey path, evaluated with that path's catalogue scenario."
       },
       "Observation": {
         "properties": {
