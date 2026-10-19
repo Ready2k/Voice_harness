@@ -15,7 +15,8 @@ from .ratelimit import RateLimiter
 
 
 @asynccontextmanager
-async def gateway(engine, run_id, limiter=None):
+async def gateway(engine, run_id, limiter=None, faults=None):
+    """``faults`` overrides ``engine.faults`` for this run's MCP worker only."""
     from opentelemetry.propagate import inject
 
     carrier = {}
@@ -27,7 +28,7 @@ async def gateway(engine, run_id, limiter=None):
             **os.environ,
             "HARNESS_DATABASE_URL": engine.database.url,
             "HARNESS_RUN_CONTEXT": json.dumps(engine.context(run_id)),
-            "HARNESS_FAULT_PROFILE": json.dumps(engine.faults),
+            "HARNESS_FAULT_PROFILE": json.dumps(engine.faults if faults is None else faults),
             "HARNESS_TRACE_CONTEXT": json.dumps(carrier),
         },
     )

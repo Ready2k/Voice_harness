@@ -138,6 +138,18 @@ class GeminiAdapterTests(unittest.IsolatedAsyncioTestCase):
             await asyncio.sleep(0.05)
             self.assertEqual(srv.received[-1], {"realtimeInput": {"activityEnd": {}}})
 
+    async def test_manual_turn_wraps_caller_audio_in_activity_start_and_end(self):
+        async with FakeServer(noop) as srv:
+            a, _ = await self._open(srv, turn_detection="manual")
+            pcm = bytes(640)  # 20 ms at 16 kHz
+            for _turn in range(2):
+                for _ in range(3):
+                    await a.send_audio(pcm, {"sample_count": 320, "sample_rate": 16000})
+                await a.request_turn()
+            await asyncio.sleep(0.05)
+            kinds = [next(iter(m["realtimeInput"])) for m in srv.received[1:]]
+            self.assertEqual(kinds, ["activityStart", "audio", "audio", "audio", "activityEnd"] * 2)
+
     async def test_audio_is_resampled_to_16k_and_wrongly_sized_audio_is_refused(self):
         async with FakeServer(noop) as srv:
             a, _ = await self._open(srv)

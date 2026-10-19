@@ -204,6 +204,24 @@ class LiveRunner(unittest.TestCase):
         self.assertIn("fault.injected", self.types())
         self.assertNotIn("verify_identity", self.engine.faults)  # restored after the call
 
+    def test_fault_profile_does_not_leak_into_a_concurrent_run_on_the_shared_engine(self):
+        adapter = ScriptedAdapter("verify_identity")
+        runner = self.runner("identity-fault-tool-error-001", adapter)
+        during = []
+
+        async def receive():
+            during.append(dict(self.engine.faults))  # what a concurrent run's gateway would launch with
+            yield ToolCall(call_id="call_v", name="verify_identity",
+                           arguments={"challenge_id": "challenge_001", "answer": "blue"}, ts_ms=1)
+            yield TurnEnd(turn_id="t1", ts_ms=2)
+            yield TurnEnd(turn_id="t2", ts_ms=3)
+
+        adapter.receive = receive
+        summary = asyncio.run(runner.run())
+        self.assertEqual(summary["tool_calls"][0]["error_code"], "DEPENDENCY_TIMEOUT")  # still injected for this run
+        self.assertTrue(during)
+        self.assertNotIn("verify_identity", during[0])
+
     def test_caller_interrupt_cuts_in_on_the_reply_and_next_turn_completes(self):
         class Barge(ScriptedAdapter):
             def __init__(self):

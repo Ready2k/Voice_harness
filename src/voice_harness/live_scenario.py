@@ -307,18 +307,14 @@ class LiveScenarioRunner:
         outcomes, turn_errors = [], []
         # The MCP server process reads the fault profile once at launch, so it is set before the gateway starts.
         self._fault_profile = {f["tool"]: "timeout" for f in self._faults("tool_error")}
-        previous = dict(self.engine.faults)
-        self.engine.faults.update(self._fault_profile)
-        try:
-            return await self._run_turns(definition, outcomes, turn_errors)
-        finally:
-            self.engine.faults.clear()
-            self.engine.faults.update(previous)
+        # Per run, never written to the engine: live runs share one engine, and a concurrent run's gateway would
+        # otherwise launch with this run's faults.
+        return await self._run_turns(definition, outcomes, turn_errors)
 
     async def _run_turns(self, definition, outcomes, turn_errors):
         self._bind(definition)
         try:
-            async with gateway(self.engine, self.run_id) as bank:
+            async with gateway(self.engine, self.run_id, faults={**self.engine.faults, **self._fault_profile}) as bank:
                 for index, turn in enumerate(definition["turns"][: definition["max_turns"]]):
                     pcm = apply_profile(self.caller_audio(turn["customer"]), definition["audio_profile"],
                                         self._faults("background_noise"), self.seed + index)

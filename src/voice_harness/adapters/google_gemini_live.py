@@ -152,6 +152,7 @@ class GeminiLiveAdapter:
         self._pending_calls: dict[str, str] = {}  # call id -> function name
         self._resampler: StreamResampler | None = None
         self._manual = False
+        self._activity_open = False  # manual mode: activityStart sent, activityEnd not yet
 
     def __repr__(self) -> str:
         return f"GeminiLiveAdapter(model={self._model!r}, region={self.region!r}, closed={self.closed})"
@@ -266,6 +267,9 @@ class GeminiLiveAdapter:
             data = self._resampler.process(data)
             if not data:
                 return
+        if self._manual and not self._activity_open:  # manual mode: the server hears nothing outside activityStart/End
+            await self._send({"realtimeInput": {"activityStart": {}}})
+            self._activity_open = True
         await self._send({"realtimeInput": {"audio": {
             "data": base64.b64encode(data).decode(), "mimeType": f"audio/pcm;rate={INPUT_RATE}"}}})
 
@@ -278,6 +282,7 @@ class GeminiLiveAdapter:
         """Manual turn mode: end the caller's activity. With automatic activity detection the server decides."""
         if self._manual:
             await self._send({"realtimeInput": {"activityEnd": {}}})
+            self._activity_open = False
 
     async def submit_tool_result(self, call_id: str, result: dict[str, Any]) -> dict[str, Any]:
         if call_id != result.get("call_id") or call_id not in self._pending_calls:
