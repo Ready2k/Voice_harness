@@ -1,8 +1,12 @@
 """Provider bake-off: statistics, gates, ranking and the standalone report export."""
 
 import json
+import os
 import re
+import subprocess
+import tempfile
 import unittest
+from pathlib import Path
 
 from pydantic import ValidationError
 
@@ -142,6 +146,17 @@ class Requests(unittest.TestCase):
 
 
 class Export(unittest.TestCase):
+    @unittest.skipUnless(os.environ.get("HARNESS_REPORT_BROWSER_TEST") == "1", "opt-in real browser export check")
+    def test_standalone_tabs_filter_details_and_print_restore(self):
+        observations = [obs(p, s) for p in ("openai-realtime-live", "nova-sonic-live") for s in ("s0", "s1")]
+        for o in observations:
+            if o["scenario_id"] == "s1":
+                o.update(group="Fault tolerance", group_order=3)
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "report.html"
+            path.write_text(render(payload(observations)))
+            subprocess.run(["node", "tests/browser/report-export-check.cjs", str(path)], check=True)
+
     def test_the_report_is_one_self_contained_file_and_embedded_text_cannot_close_its_script(self):
         o = obs("openai-realtime-live", "s0")
         o["scenario"] = "</script><script>alert(1)</script>"

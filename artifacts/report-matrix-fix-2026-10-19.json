@@ -1,0 +1,30 @@
+{
+  "checked_at": "2026-10-19T12:26:15.007700+00:00",
+  "root_cause": "Standalone export omitted hidden-element styling supplied by ops.css in the app; display:flex overrode the browser hidden attribute.",
+  "checks": [
+    "newly generated report: real-browser tab, filter, detail and print-restoration regression",
+    "all 3 shipped exports: same real-browser checks; no JavaScript errors",
+    "15 bake-off Python tests passed with browser test enabled",
+    "lint and security checks passed"
+  ],
+  "exports": [
+    {
+      "path": "reports/voice-provider-benchmark-2026-10-19.html",
+      "before": "6531021ea57bbe05868cea18da161059d39404205a90f8a4c9afe4c878c7214d",
+      "after": "52c588126fe0480ed11a1e97e00d883b5b91a404de9a1e155748bf47a6ad0452",
+      "embedded_data_unchanged": true
+    },
+    {
+      "path": "reports/voice-provider-benchmark-5350e4a-2026-10-19.html",
+      "before": "1b66b8b27f163619b801c3402e4bde128b38006c4afcef7f4716a1b082b904d6",
+      "after": "0a2df17e3e7653126fd0e244da54da43c7a37fa12a69c581c8c55ee25135ed1a",
+      "embedded_data_unchanged": true
+    },
+    {
+      "path": "reports/voice-provider-benchmark-gemini38-2026-10-19.html",
+      "before": "0ace6d18f25cf6bfc90e8d0ee07ef775cd188c4d2e247983330f5753ba57706f",
+      "after": "05944b0f8cbb2067912cca5ca054a61032c11047b24759036453702ab80ee76c",
+      "embedded_data_unchanged": true
+    }
+  ]
+}

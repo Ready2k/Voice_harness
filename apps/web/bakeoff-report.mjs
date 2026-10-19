@@ -282,7 +282,15 @@ export function renderReport(root, data, {heading: showHeading = true} = {}) {
   }
   function redraw() { if (!views.bakeoff.hidden) { drawIntervals(); drawLatency(); } }
   redraw();
-  return {redraw, showAll() { for (const v of Object.values(views)) v.hidden = false; drawIntervals(); drawLatency(); }};
+  return {
+    redraw,
+    showAll() { for (const v of Object.values(views)) v.hidden = false; drawIntervals(); drawLatency(); },
+    restoreView() {
+      const selected = tabs.querySelector('[aria-selected="true"]').dataset.view;
+      for (const [id, v] of Object.entries(views)) v.hidden = id !== selected;
+      redraw();
+    },
+  };
 }
 
 /** Live catalogue scenarios grouped for the launch form: [{group, order, ids}]. */
