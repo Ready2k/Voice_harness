@@ -2,7 +2,7 @@
   "table_id": "voice-harness-vendor-pricing",
   "version": "2026-10-19",
   "status": "primary_source_partial",
-  "note": "Version 2026-10-19 of the 2026-10-18 table: the same list prices, with identifiers corrected to match what live runs record. OpenAI Realtime rows use provider 'openai' and service 'realtime' (the 2026-10-18 rows used 'openai_realtime' and matched no live run). Gemini 3.8 Live (gemini-3.8-live, us-central1, GA 2026-09-24) has unestablished placeholder rows: its model page links to pricing but no rate could be read, so its usage stays unknown rather than borrowing the 2.5 rate. Nova rows remain us-east-1; runs record the adapter's region from 2026-10-19 (earlier Nova runs recorded no region and stay unpriced). xAI modality-split token meters (audio/text input/output), which the adapter now reports, join the unpriced per-token alternative in the xai_voice_billing group, so the per-minute line supersedes them. Original note: Public list prices read from the vendors' pricing pages on 2026-10-18, USD per 1M tokens, standard tier, no discounts, batch or regional uplift. Use with HARNESS_PRICING_TABLE. Not priced here (stay unknown): Bedrock Claude Haiku 4.5 judge (the judge uses the us. geo profile; only the global cross-region rate of $1.00 in / $5.00 out was readable); and every quota. Rounding and minimum-billing rules are not documented on these pages and are not applied. xAI: $0.08/min is the 'STS' (speech-to-speech) Voice API rate; the page does not name grok-voice-3.0, so the mapping is an assumption. It is applied to the provider-reported billable_audio_seconds with no rounding or minimum (none documented); token meters are an unpriced alternative in the same exclusivity group, so they do not make a run partial. Google: rates are the 'Gemini 2.5 Flash Live API' row, matched to gemini-live-2.5-flash-native-audio by name only; the 2.5 table has no regional column, so region is not constrained. Audio/text token counts come from usageMetadata modality details; Gemini Live re-bills the session context on every turn, so each turn's reported total is a separate billable amount. Image/video modalities are not priced (they stay unclassified).",
+  "note": "Version 2026-10-19 of the 2026-10-18 table: the same list prices, with identifiers corrected to match what live runs record. OpenAI Realtime rows use provider 'openai' and service 'realtime' (the 2026-10-18 rows used 'openai_realtime' and matched no live run). Gemini 3.8 Live (gemini-3.8-live, us-central1) is priced from the Gemini Developer API page https://ai.google.dev/gemini-api/docs/pricing (paid tier, standard, per 1M tokens: text $0.75 in / $4.50 out, audio $3.00 in / $12.00 out), supplied by the operator on 2026-10-19. The harness runs Gemini on Vertex AI, whose own pricing page could not be read, so the Vertex rate is assumed equal to the Developer API rate. Image/video input ($1.00) is not priced and stays unclassified. Nova rows remain us-east-1; runs record the adapter's region from 2026-10-19 (earlier Nova runs recorded no region and stay unpriced). xAI modality-split token meters (audio/text input/output), which the adapter now reports, join the unpriced per-token alternative in the xai_voice_billing group, so the per-minute line supersedes them. Original note: Public list prices read from the vendors' pricing pages on 2026-10-18, USD per 1M tokens, standard tier, no discounts, batch or regional uplift. Use with HARNESS_PRICING_TABLE. Not priced here (stay unknown): Bedrock Claude Haiku 4.5 judge (the judge uses the us. geo profile; only the global cross-region rate of $1.00 in / $5.00 out was readable); and every quota. Rounding and minimum-billing rules are not documented on these pages and are not applied. xAI: $0.08/min is the 'STS' (speech-to-speech) Voice API rate; the page does not name grok-voice-3.0, so the mapping is an assumption. It is applied to the provider-reported billable_audio_seconds with no rounding or minimum (none documented); token meters are an unpriced alternative in the same exclusivity group, so they do not make a run partial. Google: rates are the 'Gemini 2.5 Flash Live API' row, matched to gemini-live-2.5-flash-native-audio by name only; the 2.5 table has no regional column, so region is not constrained. Audio/text token counts come from usageMetadata modality details; Gemini Live re-bills the session context on every turn, so each turn's reported total is a separate billable amount. Image/video modalities are not priced (they stay unclassified).",
   "tariffs": [
     {
       "tariff_id": "openai-rt-audio-in",
@@ -700,12 +700,13 @@
       "model": "gemini-3.8-live",
       "region": "us-central1",
       "component": "voice",
-      "exclusivity_group": "gemini-3-8-live-audio-input-tokens",
+      "unit": "token",
+      "billing_model": "per_token",
+      "exclusivity_priority": 1,
       "effective_from": "2026-10-19",
       "effective_to": null,
-      "currency": null,
-      "rate_unit_quantity": null,
-      "unit_price": null,
+      "currency": "USD",
+      "rate_unit_quantity": "1000000",
       "cached_unit_price": null,
       "cached_billing": "not_documented",
       "quantity_increment": null,
@@ -713,16 +714,15 @@
       "minimum_billed_quantity": null,
       "amount_scale": 6,
       "amount_rounding": "ROUND_HALF_UP",
+      "source_status": "primary_source",
+      "evidence_ids": [
+        "google:https://ai.google.dev/gemini-api/docs/pricing#2026-10-19"
+      ],
+      "unknown_reason": null,
       "tariff_id": "gemini-3-8-live-audio-input-tokens",
       "meter_id": "audio_input_tokens",
-      "unit": "token",
-      "billing_model": "per_token",
-      "exclusivity_priority": 1,
-      "source_status": "unestablished",
-      "evidence_ids": [
-        "google:https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-8-live#2026-10-19"
-      ],
-      "unknown_reason": "GEMINI_3_8_LIVE_PRICE_NOT_PUBLISHED_ON_READ_PAGES"
+      "exclusivity_group": "gemini-3-8-live-audio-input-tokens",
+      "unit_price": "3.00"
     },
     {
       "provider": "google_gemini_live",
@@ -730,12 +730,13 @@
       "model": "gemini-3.8-live",
       "region": "us-central1",
       "component": "voice",
-      "exclusivity_group": "gemini-3-8-live-text-input-tokens",
+      "unit": "token",
+      "billing_model": "per_token",
+      "exclusivity_priority": 1,
       "effective_from": "2026-10-19",
       "effective_to": null,
-      "currency": null,
-      "rate_unit_quantity": null,
-      "unit_price": null,
+      "currency": "USD",
+      "rate_unit_quantity": "1000000",
       "cached_unit_price": null,
       "cached_billing": "not_documented",
       "quantity_increment": null,
@@ -743,16 +744,15 @@
       "minimum_billed_quantity": null,
       "amount_scale": 6,
       "amount_rounding": "ROUND_HALF_UP",
+      "source_status": "primary_source",
+      "evidence_ids": [
+        "google:https://ai.google.dev/gemini-api/docs/pricing#2026-10-19"
+      ],
+      "unknown_reason": null,
       "tariff_id": "gemini-3-8-live-text-input-tokens",
       "meter_id": "text_input_tokens",
-      "unit": "token",
-      "billing_model": "per_token",
-      "exclusivity_priority": 1,
-      "source_status": "unestablished",
-      "evidence_ids": [
-        "google:https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-8-live#2026-10-19"
-      ],
-      "unknown_reason": "GEMINI_3_8_LIVE_PRICE_NOT_PUBLISHED_ON_READ_PAGES"
+      "exclusivity_group": "gemini-3-8-live-text-input-tokens",
+      "unit_price": "0.75"
     },
     {
       "provider": "google_gemini_live",
@@ -760,12 +760,13 @@
       "model": "gemini-3.8-live",
       "region": "us-central1",
       "component": "voice",
-      "exclusivity_group": "gemini-3-8-live-audio-output-tokens",
+      "unit": "token",
+      "billing_model": "per_token",
+      "exclusivity_priority": 1,
       "effective_from": "2026-10-19",
       "effective_to": null,
-      "currency": null,
-      "rate_unit_quantity": null,
-      "unit_price": null,
+      "currency": "USD",
+      "rate_unit_quantity": "1000000",
       "cached_unit_price": null,
       "cached_billing": "not_documented",
       "quantity_increment": null,
@@ -773,16 +774,15 @@
       "minimum_billed_quantity": null,
       "amount_scale": 6,
       "amount_rounding": "ROUND_HALF_UP",
+      "source_status": "primary_source",
+      "evidence_ids": [
+        "google:https://ai.google.dev/gemini-api/docs/pricing#2026-10-19"
+      ],
+      "unknown_reason": null,
       "tariff_id": "gemini-3-8-live-audio-output-tokens",
       "meter_id": "audio_output_tokens",
-      "unit": "token",
-      "billing_model": "per_token",
-      "exclusivity_priority": 1,
-      "source_status": "unestablished",
-      "evidence_ids": [
-        "google:https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-8-live#2026-10-19"
-      ],
-      "unknown_reason": "GEMINI_3_8_LIVE_PRICE_NOT_PUBLISHED_ON_READ_PAGES"
+      "exclusivity_group": "gemini-3-8-live-audio-output-tokens",
+      "unit_price": "12.00"
     },
     {
       "provider": "google_gemini_live",
@@ -790,12 +790,13 @@
       "model": "gemini-3.8-live",
       "region": "us-central1",
       "component": "voice",
-      "exclusivity_group": "gemini-3-8-live-text-output-tokens",
+      "unit": "token",
+      "billing_model": "per_token",
+      "exclusivity_priority": 1,
       "effective_from": "2026-10-19",
       "effective_to": null,
-      "currency": null,
-      "rate_unit_quantity": null,
-      "unit_price": null,
+      "currency": "USD",
+      "rate_unit_quantity": "1000000",
       "cached_unit_price": null,
       "cached_billing": "not_documented",
       "quantity_increment": null,
@@ -803,16 +804,15 @@
       "minimum_billed_quantity": null,
       "amount_scale": 6,
       "amount_rounding": "ROUND_HALF_UP",
+      "source_status": "primary_source",
+      "evidence_ids": [
+        "google:https://ai.google.dev/gemini-api/docs/pricing#2026-10-19"
+      ],
+      "unknown_reason": null,
       "tariff_id": "gemini-3-8-live-text-output-tokens",
       "meter_id": "text_output_tokens",
-      "unit": "token",
-      "billing_model": "per_token",
-      "exclusivity_priority": 1,
-      "source_status": "unestablished",
-      "evidence_ids": [
-        "google:https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-8-live#2026-10-19"
-      ],
-      "unknown_reason": "GEMINI_3_8_LIVE_PRICE_NOT_PUBLISHED_ON_READ_PAGES"
+      "exclusivity_group": "gemini-3-8-live-text-output-tokens",
+      "unit_price": "4.50"
     },
     {
       "provider": "xai_grok_voice",

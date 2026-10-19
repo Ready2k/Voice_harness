@@ -45,10 +45,12 @@ class VendorPricingTable(unittest.TestCase):
         self.assertEqual(self.recorded("xai-voice-live", "billable_audio_seconds").unit_price, "0.08")
         self.assertEqual(self.find("openai", "judge", "gpt-4.1-mini", None, "judge_output_tokens").unit_price, "1.60")
 
-    def test_gemini_3_8_is_an_explicit_unknown_not_the_2_5_rate(self):
-        tariff = self.recorded("gemini-live", "audio_output_tokens", "us-central1")
-        self.assertIsNone(tariff.unit_price)
-        self.assertEqual(tariff.unknown_reason, "GEMINI_3_8_LIVE_PRICE_NOT_PUBLISHED_ON_READ_PAGES")
+    def test_gemini_3_8_is_priced_from_the_developer_api_page(self):
+        prices = {m: self.recorded("gemini-live", m, "us-central1").unit_price for m in
+                  ("audio_input_tokens", "text_input_tokens", "audio_output_tokens", "text_output_tokens")}
+        self.assertEqual(prices, {"audio_input_tokens": "3.00", "text_input_tokens": "0.75",
+                                  "audio_output_tokens": "12.00", "text_output_tokens": "4.50"})
+        self.assertIsNone(self.recorded("gemini-live", "input_tokens_unclassified", "us-central1"))  # unsplit stays unknown
 
     def test_the_2026_10_18_table_is_kept_unchanged_for_earlier_exports(self):
         old = load_table(PRICING / "vendor-pricing-2026-10-18.json")

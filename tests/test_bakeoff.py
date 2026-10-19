@@ -162,17 +162,16 @@ class Cost(unittest.TestCase):
         self.assertEqual(result["known_usd"], "0.006400")  # 100 * $32/1M + 50 * $64/1M; ASR is not a voice line
         self.assertEqual(result["pricing_table"], "voice-harness-vendor-pricing@2026-10-19")
 
-    def test_gemini_3_8_voice_usage_is_unpriced_with_its_reason(self):
-        usage = {"input_tokens": 10, "output_tokens": 5, "raw": {
-            "promptTokenCount": 10, "candidatesTokenCount": 5,
-            "promptTokensDetails": [{"modality": "AUDIO", "tokenCount": 10}],
-            "candidatesTokensDetails": [{"modality": "AUDIO", "tokenCount": 5}]}}
+    def test_gemini_3_8_audio_usage_is_priced(self):
+        usage = {"input_tokens": 1000, "output_tokens": 500, "raw": {
+            "promptTokenCount": 1000, "candidatesTokenCount": 500,
+            "promptTokensDetails": [{"modality": "AUDIO", "tokenCount": 1000}],
+            "candidatesTokensDetails": [{"modality": "AUDIO", "tokenCount": 500}]}}
         events = self.usage_events("google_gemini_live", "gemini-3.8-live", usage, region="us-central1",
                                    service="google_gemini_live")
         result = bakeoff.voice_cost("run1", events, load_table(VENDOR_TABLE))
-        self.assertFalse(result["priced"])
-        self.assertIsNone(result["known_usd"])
-        self.assertIn("GEMINI_3_8_LIVE_PRICE_NOT_PUBLISHED_ON_READ_PAGES", result["unknown_reasons"])
+        self.assertTrue(result["priced"], result)
+        self.assertEqual(result["known_usd"], "0.009000")  # 1000 * $3/1M + 500 * $12/1M
 
     def test_cost_rows_separate_priced_partial_and_unrecorded_providers(self):
         observations = [obs("openai-realtime-live", "s0", run_cost=priced("0.010000")),
