@@ -5,13 +5,16 @@
 
 Each cell is read from the run ledger (the runs must be in that database); retried cells keep their first attempt.
 Voice cost is priced with --pricing-table (default: HARNESS_PRICING_TABLE, else the shipped table).
+--cost-from RESULTS:DATABASE (repeatable) takes a cell's cost from a later run of the same scenario and provider
+(for example after a pricing or region fix); the cell's outcome and latency stay those of the original run, and the
+report says its cost comes from a separate run.
 """
 
 import argparse
 import json
 from pathlib import Path
 
-from voice_harness.bakeoff import DEFAULT_WEIGHTS, observe
+from voice_harness.bakeoff import DEFAULT_WEIGHTS, observe, voice_cost
 from voice_harness.bakeoff_export import render
 from voice_harness.pricing import load_table
 from voice_harness.storage import Database
@@ -24,6 +27,7 @@ def main():
     parser.add_argument("--database", default=".local/host-data/development.sqlite")
     parser.add_argument("--title", default="Voice provider benchmark and bake-off")
     parser.add_argument("--pricing-table", default=None)
+    parser.add_argument("--cost-from", action="append", default=[], metavar="RESULTS:DATABASE")
     args = parser.parse_args()
     results = json.loads(Path(args.results).read_text())
     database = Database(args.database)
@@ -37,6 +41,15 @@ def main():
                       "attempts": [*attempts, {"run_id": cell.get("run_id"), "failure": cell.get("failure")}]})
     for cell in cells:
         cell["observation"], cell["done"] = observe(database, cell, table), True
+    by_key = {(c["scenario_id"], c["provider_config_id"]): c for c in cells}
+    for spec in args.cost_from:
+        results_path, _, database_path = spec.rpartition(":")
+        later, later_db = json.loads(Path(results_path).read_text()), Database(database_path)
+        for cell in later["cells"].values():
+            target = by_key.get((cell["scenario_id"], cell["provider"]))
+            if target and cell.get("run_id") and target["observation"]:
+                target["observation"]["cost"] = {**voice_cost(cell["run_id"], later_db.events(cell["run_id"]), table),
+                                                 "separate_run": True, "cost_run_id": cell["run_id"]}
     payload = {"name": args.title, "providers": sorted({c["provider_config_id"] for c in cells}),
                "weights": DEFAULT_WEIGHTS, "cells": cells, "repetitions": 1}
     Path(args.out).parent.mkdir(parents=True, exist_ok=True)

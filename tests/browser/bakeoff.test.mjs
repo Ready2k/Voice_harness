@@ -95,3 +95,8 @@ test("reports observed before cost was recorded say so instead of claiming no ta
   assert.match(costLimit(report({limits: {}})), /observed before cost was recorded/);
   assert.match(costLimit(report({cost: [{status: "not_recorded"}], limits: {pricing_tables: []}})), /observed before cost was recorded/);
 });
+
+test("the cost limit says when a provider's cost comes from a later run", () => {
+  const r = report({cost: [{provider: "a", name: "Alpha Voice", status: "priced"}], limits: {pricing_tables: ["t@1"], cost_from_separate_runs: ["a"]}});
+  assert.match(costLimit(r), /For Alpha Voice the cost comes from a later run of each scenario/);
+});

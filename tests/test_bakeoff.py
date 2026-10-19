@@ -191,6 +191,12 @@ class Cost(unittest.TestCase):
         self.assertEqual(xai["status"], "not_recorded")
         self.assertEqual(report["limits"]["pricing_tables"], ["t@1"])
 
+    def test_cost_from_a_later_run_is_flagged_in_the_limits(self):
+        later = {**priced("0.003000"), "separate_run": True, "cost_run_id": "run_later"}
+        report = bakeoff.report(payload([obs("openai-realtime-live", "s0", run_cost=priced("0.01")),
+                                         obs("nova-sonic-live", "s0", run_cost=later)]))
+        self.assertEqual(report["limits"]["cost_from_separate_runs"], ["nova-sonic-live"])
+
     def test_cost_does_not_change_the_composite(self):
         base = [obs("openai-realtime-live", "s0"), obs("nova-sonic-live", "s0")]
         costed = [obs("openai-realtime-live", "s0", run_cost=priced("9")), obs("nova-sonic-live", "s0", run_cost=priced("0"))]

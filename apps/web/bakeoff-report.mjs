@@ -49,6 +49,7 @@ export function costLimit(report) {
   const unpriced = rows.filter(c => c.status !== "priced");
   return `Cost compares the provider's voice usage only (independent ASR and judges are the same harness overhead for every provider), priced with ${tables.join(", ") || "the shipped table"}. `
     + (unpriced.length ? `Not every run is priced for ${unpriced.map(c => c.name).join(", ")}; their known amounts are lower bounds, not totals.` : "Every run is priced.")
+    + (report.limits.cost_from_separate_runs?.length ? ` For ${report.limits.cost_from_separate_runs.map(p => rows.find(c => c.provider === p)?.name ?? p).join(", ")} the cost comes from a later run of each scenario, not the run whose outcome is shown.` : "")
     + " List prices only: no discounts, quotas or minimum-billing rules.";
 }
 

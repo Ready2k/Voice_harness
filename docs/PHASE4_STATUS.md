@@ -289,9 +289,17 @@ modality-split token meters join the unpriced alternative to the per-minute line
   ASR and judge cost are excluded as shared harness overhead; failed runs are costed; cost never enters the composite.
   `scripts/benchmark_report.py --pricing-table` re-renders an existing matrix with cost.
 - Re-rendered 5350e4a benchmark (`reports/voice-provider-benchmark-5350e4a-2026-10-19-cost.html`, list prices, one
-  sample per cell): OpenAI priced 33/33, median $0.0140 per run; xAI 32/33, median $0.0107 and Gemini 31/33, median
-  $0.0022 (one and two runs reported no usage); Nova not priced (those runs recorded no region). Gemini's lower cost
-  rests on the assumed Vertex rate and its token counts; not yet a cost comparison of all four providers.
+  sample per cell), median voice cost per run: OpenAI $0.0140 (33/33 priced), xAI $0.0107 (32/33), Gemini $0.0022
+  (31/33), Nova $0.0029 (33/33). One xAI and two Gemini runs reported no usage and stay unpriced.
+- Nova's cost comes from a second batch (`artifacts/provider-matrix/matrix-nova-cost-2026-10-19.json`, 33 scenarios, run
+  with fresh AWS session credentials after the region fix; the original Nova runs recorded no region). The report keeps
+  the original runs' outcomes and latency and takes cost from the later run of each scenario
+  (`benchmark_report.py --cost-from`); it says so in its limits. Most of the later Nova runs ended `untestable` because
+  the independent-ASR credits were still exhausted, which does not affect voice usage.
+- Why the costs differ: token counts per run are similar across providers; the rates are not. OpenAI charges $32/$64
+  per 1M audio in/out tokens against $3/$12 for Gemini and Nova, and xAI bills $0.08 per audio minute (about 18.5
+  billable seconds per run). Gemini's rate is the Developer API rate assumed for Vertex. Providers count audio
+  tokens differently, so compare dollars, not token counts.
 
 ## Gemini 3.8 migration (2026-10-19)
 
