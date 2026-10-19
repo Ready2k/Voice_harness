@@ -1,0 +1,370 @@
+<style>
+/* Layout: header + takeaway, four provider cards, then the scenario grid, criteria bars and the problem list. */
+.pm { display: flex; flex-direction: column; gap: var(--cds-gap-lg); font-family: var(--font-anthropic-sans); color: var(--color-fg); }
+.pm-head { display: flex; flex-direction: column; gap: var(--cds-gap-xs); }
+.pm-title { margin: 0; font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); text-wrap: balance; }
+.pm-take { margin: 0; color: var(--color-fg-muted); font-size: var(--cds-font-size-body); max-width: 70ch; }
+.pm-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr)); gap: var(--cds-gap-md); }
+.pm-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: flex; flex-direction: column; gap: var(--cds-gap-sm); min-width: 0; }
+.pm-card h2, .pm-panel h2 { margin: 0; font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); }
+.pm-big { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); font-variant-numeric: tabular-nums; line-height: 1.1; min-height: 1.1em; }
+.pm-sub { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); margin: 0; }
+.pm-stats { display: grid; grid-template-columns: 1fr auto; gap: var(--cds-gap-xs) var(--cds-gap-md); font-size: var(--cds-font-size-caption); margin: 0; }
+.pm-stats dt { color: var(--color-fg-muted); }
+.pm-stats dd { margin: 0; font-variant-numeric: tabular-nums; text-align: right; }
+.pm-panel { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: flex; flex-direction: column; gap: var(--cds-gap-md); min-width: 0; }
+.pm-panel-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: var(--cds-gap-sm); }
+.pm-panel-head p { margin: 0; }
+.pm-filter { display: flex; align-items: center; gap: var(--cds-gap-sm); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.pm-filter select { font: inherit; color: var(--color-fg); background: var(--color-bg); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-xs) var(--cds-pad-sm); max-width: 100%; }
+.pm-legend { display: flex; flex-wrap: wrap; gap: var(--cds-gap-md); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.pm-legend span { display: inline-flex; align-items: center; gap: var(--cds-gap-xs); }
+.pm-swatch { width: 0.75rem; height: 0.75rem; border-radius: 3px; display: inline-block; }
+.pm-grid-wrap { overflow-x: auto; min-height: 12rem; }
+.pm-grid { width: 100%; border-collapse: separate; border-spacing: 0 3px; font-size: var(--cds-font-size-caption); }
+.pm-grid th { text-align: center; font-weight: var(--cds-font-weight-medium); color: var(--color-fg-muted); padding: var(--cds-pad-xs); white-space: nowrap; }
+.pm-grid th:first-child { text-align: left; }
+.pm-grid td { padding: 2px 3px; vertical-align: middle; }
+.pm-grid td.pm-scn { min-width: 11rem; padding-right: var(--cds-pad-sm); }
+.pm-grid tr.pm-group td { padding-top: var(--cds-pad-md); color: var(--color-fg-muted); text-transform: uppercase; letter-spacing: .05em; font-size: var(--cds-font-size-caption); }
+.pm-chip { display: flex; align-items: center; justify-content: center; width: 100%; min-width: 4.5rem; height: 1.75rem; border-radius: 6px; border: 1px solid transparent; font: inherit; cursor: pointer; color: var(--color-fg); background: transparent; }
+.pm-chip:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 1px; }
+.v-pass { background: color-mix(in srgb, var(--color-ok) 22%, transparent); color: var(--color-ok); }
+.v-fail { background: color-mix(in srgb, var(--color-bad) 22%, transparent); color: var(--color-bad); }
+.v-review { background: color-mix(in srgb, var(--color-warn) 22%, transparent); color: var(--color-warn); }
+.v-runfail { background: repeating-linear-gradient(135deg, transparent 0 5px, color-mix(in srgb, var(--color-fg-muted) 18%, transparent) 5px 10px); color: var(--color-fg-muted); border-color: var(--color-border-line); }
+.v-none { color: var(--color-fg-muted); border: 1px dashed var(--color-border-line); }
+.pm-chip[aria-pressed="true"] { outline: 2px solid var(--color-fg); outline-offset: 1px; }
+.pm-detail { border-top: 1px solid var(--color-border-line); padding-top: var(--cds-pad-md); display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: var(--cds-gap-xs) var(--cds-gap-md); font-size: var(--cds-font-size-caption); }
+.pm-detail dt { color: var(--color-fg-muted); }
+.pm-detail dd { margin: 0; overflow-wrap: anywhere; }
+.pm-crit { display: flex; flex-direction: column; gap: var(--cds-gap-md); min-height: 10rem; }
+.pm-crit-row { display: grid; grid-template-columns: minmax(7rem, 12rem) minmax(0, 1fr); gap: var(--cds-gap-sm); align-items: start; }
+.pm-crit-name { font-size: var(--cds-font-size-caption); font-weight: var(--cds-font-weight-medium); padding-top: 2px; }
+.pm-crit-bars { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.pm-bar-line { display: grid; grid-template-columns: 4.5rem minmax(0, 1fr) 3.5rem; gap: var(--cds-gap-sm); align-items: center; font-size: var(--cds-font-size-caption); }
+.pm-bar-line span:first-child { color: var(--color-fg-muted); }
+.pm-bar-line span:last-child { text-align: right; font-variant-numeric: tabular-nums; color: var(--color-fg-muted); }
+.pm-bar { display: flex; height: 0.7rem; border-radius: 4px; overflow: hidden; background: var(--cds-chart-grid); }
+.pm-bar i { display: block; height: 100%; }
+.pm-table-wrap { overflow: auto; max-height: 26rem; }
+.pm-table { width: 100%; border-collapse: collapse; font-size: var(--cds-font-size-caption); }
+.pm-table th { position: sticky; top: 0; background: var(--color-panel); text-align: left; color: var(--color-fg-muted); font-weight: var(--cds-font-weight-medium); padding: var(--cds-pad-xs) var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); }
+.pm-table td { padding: var(--cds-pad-xs) var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); vertical-align: top; overflow-wrap: anywhere; }
+.pm-empty { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); margin: 0; }
+.pm-failed { display: flex; align-items: center; justify-content: center; gap: var(--cds-gap-sm); min-height: 8rem; color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+.pm-failed::before { content: ""; width: .375rem; height: .375rem; border-radius: 50%; background: var(--color-bad); }
+[data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
+@media (max-width: 40rem) { .pm-crit-row { grid-template-columns: 1fr; } }
+</style>
+
+<div class="pm">
+  <header class="pm-head" id="summary">
+    <h1 class="pm-title">Voice provider matrix</h1>
+    <p class="pm-take dash-skeleton" id="takeaway" data-source="by_provider">—</p>
+  </header>
+
+  <section class="pm-cards" id="providers" aria-label="Providers">
+    <article class="pm-card" id="card-openai">
+      <h2>OpenAI Realtime</h2>
+      <div class="pm-big dash-skeleton" data-source="by_provider" data-field="pass_rate" data-where="provider=openai-realtime-live">—</div>
+      <p class="pm-sub dash-skeleton" data-source="by_provider" data-field="summary" data-where="provider=openai-realtime-live">—</p>
+      <dl class="pm-stats">
+        <dt>Model behaviour passed</dt><dd data-source="by_provider" data-field="model_pass" data-where="provider=openai-realtime-live">—</dd>
+        <dt>Platform enforcement passed</dt><dd data-source="by_provider" data-field="platform_pass" data-where="provider=openai-realtime-live">—</dd>
+        <dt>Runs that failed</dt><dd data-source="by_provider" data-field="run_failures" data-where="provider=openai-realtime-live">—</dd>
+      </dl>
+    </article>
+    <article class="pm-card" id="card-gemini">
+      <h2>Google Gemini Live</h2>
+      <div class="pm-big dash-skeleton" data-source="by_provider" data-field="pass_rate" data-where="provider=gemini-live">—</div>
+      <p class="pm-sub dash-skeleton" data-source="by_provider" data-field="summary" data-where="provider=gemini-live">—</p>
+      <dl class="pm-stats">
+        <dt>Model behaviour passed</dt><dd data-source="by_provider" data-field="model_pass" data-where="provider=gemini-live">—</dd>
+        <dt>Platform enforcement passed</dt><dd data-source="by_provider" data-field="platform_pass" data-where="provider=gemini-live">—</dd>
+        <dt>Runs that failed</dt><dd data-source="by_provider" data-field="run_failures" data-where="provider=gemini-live">—</dd>
+      </dl>
+    </article>
+    <article class="pm-card" id="card-xai">
+      <h2>xAI Grok Voice</h2>
+      <div class="pm-big dash-skeleton" data-source="by_provider" data-field="pass_rate" data-where="provider=xai-voice-live">—</div>
+      <p class="pm-sub dash-skeleton" data-source="by_provider" data-field="summary" data-where="provider=xai-voice-live">—</p>
+      <dl class="pm-stats">
+        <dt>Model behaviour passed</dt><dd data-source="by_provider" data-field="model_pass" data-where="provider=xai-voice-live">—</dd>
+        <dt>Platform enforcement passed</dt><dd data-source="by_provider" data-field="platform_pass" data-where="provider=xai-voice-live">—</dd>
+        <dt>Runs that failed</dt><dd data-source="by_provider" data-field="run_failures" data-where="provider=xai-voice-live">—</dd>
+      </dl>
+    </article>
+    <article class="pm-card" id="card-nova">
+      <h2>Amazon Nova Sonic</h2>
+      <div class="pm-big dash-skeleton" data-source="by_provider" data-field="pass_rate" data-where="provider=nova-sonic-live">—</div>
+      <p class="pm-sub dash-skeleton" data-source="by_provider" data-field="summary" data-where="provider=nova-sonic-live">—</p>
+      <dl class="pm-stats">
+        <dt>Model behaviour passed</dt><dd data-source="by_provider" data-field="model_pass" data-where="provider=nova-sonic-live">—</dd>
+        <dt>Platform enforcement passed</dt><dd data-source="by_provider" data-field="platform_pass" data-where="provider=nova-sonic-live">—</dd>
+        <dt>Runs that failed</dt><dd data-source="by_provider" data-field="run_failures" data-where="provider=nova-sonic-live">—</dd>
+      </dl>
+    </article>
+  </section>
+
+  <section class="pm-panel" id="matrix">
+    <div class="pm-panel-head">
+      <div>
+        <h2>Scenario by provider</h2>
+        <p class="pm-sub">Overall assurance for each live run. Select a cell to see what happened.</p>
+      </div>
+      <label class="pm-filter" for="group-filter">Scenario group
+        <select id="group-filter" data-source="cells"></select>
+      </label>
+    </div>
+    <div class="pm-legend" aria-hidden="true">
+      <span><i class="pm-swatch v-pass"></i>Pass</span>
+      <span><i class="pm-swatch v-fail"></i>Fail</span>
+      <span><i class="pm-swatch v-review"></i>Untestable or needs review</span>
+      <span><i class="pm-swatch v-runfail"></i>Run did not complete</span>
+      <span><i class="pm-swatch v-none"></i>Not run</span>
+    </div>
+    <div class="pm-grid-wrap dash-skeleton" id="grid" data-source="cells"></div>
+    <dl class="pm-detail" id="cell-detail" hidden></dl>
+  </section>
+
+  <section class="pm-panel" id="criteria">
+    <div>
+      <h2>Criteria verdicts</h2>
+      <p class="pm-sub">How each rubric criterion came out across completed runs, per provider. A criterion only counts where the scenario applies it.</p>
+    </div>
+    <div class="pm-legend" aria-hidden="true">
+      <span><i class="pm-swatch" style="background: var(--color-ok)"></i>Pass</span>
+      <span><i class="pm-swatch" style="background: var(--color-bad)"></i>Fail</span>
+      <span><i class="pm-swatch" style="background: var(--color-warn)"></i>Untestable or review</span>
+    </div>
+    <div class="pm-crit dash-skeleton" id="crit-bars" data-source="criteria_summary"></div>
+  </section>
+
+  <section class="pm-panel" id="problems">
+    <div>
+      <h2>Failures to look at</h2>
+      <p class="pm-sub">Runs that did not complete, and completed runs whose overall assurance failed.</p>
+    </div>
+    <div class="pm-table-wrap">
+      <table class="pm-table" data-source="problems" data-row-key="key">
+        <thead><tr><th data-field="scenario">Scenario</th><th data-field="provider_name">Provider</th><th data-field="outcome">Outcome</th><th data-field="detail">Detail</th></tr></thead>
+        <tbody id="problem-rows"></tbody>
+      </table>
+    </div>
+    <p class="pm-empty" id="no-problems" hidden>No failed runs or failed verdicts.</p>
+  </section>
+</div>
+
+<script>
+window.PM_PROVIDERS = [
+  ['openai-realtime-live', 'OpenAI'], ['gemini-live', 'Gemini'], ['xai-voice-live', 'xAI'], ['nova-sonic-live', 'Nova'],
+];
+window.PM_NAMES = Object.fromEntries(window.PM_PROVIDERS);
+window.PM_LONG = {'openai-realtime-live': 'OpenAI Realtime', 'gemini-live': 'Google Gemini Live',
+  'xai-voice-live': 'xAI Grok Voice', 'nova-sonic-live': 'Amazon Nova Sonic'};
+
+dash.calc('by_provider', {
+  title: 'Results per provider',
+  description: 'Counts each provider’s runs by outcome; pass rate is passed scenarios over scenarios run.',
+  inputs: ['cells'],
+  fn: (cells) => ['openai-realtime-live', 'gemini-live', 'xai-voice-live', 'nova-sonic-live'].map((provider) => {
+    const mine = cells.filter((c) => c.provider === provider);
+    const completed = mine.filter((c) => c.state === 'completed');
+    const pass = completed.filter((c) => c.outcome === 'pass').length;
+    return {
+      provider, runs: mine.length, completed: completed.length, pass,
+      fail: completed.filter((c) => c.outcome === 'fail').length,
+      model_pass: completed.filter((c) => c.model_behaviour === 'pass').length,
+      platform_pass: completed.filter((c) => c.platform_enforcement === 'pass').length,
+      run_failures: mine.length - completed.length,
+      pass_rate: mine.length ? pass / mine.length : null,
+      summary: mine.length ? `${pass} of ${mine.length} scenarios passed` : 'Not run yet',
+    };
+  }),
+});
+
+dash.calc('criteria_summary', {
+  title: 'Criterion verdicts per provider',
+  description: 'Counts pass, fail and other verdicts for each criterion and provider.',
+  inputs: ['criteria'],
+  fn: (criteria) => {
+    const out = new Map();
+    for (const c of criteria) {
+      const key = c.criterion + '|' + c.provider;
+      if (!out.has(key)) out.set(key, {key, criterion: c.criterion, provider: c.provider, pass: 0, fail: 0, other: 0});
+      const row = out.get(key);
+      if (c.verdict === 'pass') row.pass += 1; else if (c.verdict === 'fail' || c.verdict === 'partial') row.fail += 1; else row.other += 1;
+    }
+    return [...out.values()];
+  },
+});
+
+dash.calc('problems', {
+  title: 'Failed runs and verdicts',
+  description: 'Runs that did not complete, and completed runs whose overall assurance is fail.',
+  inputs: ['cells'],
+  fn: (cells) => cells
+    .filter((c) => c.outcome === 'run_failed' || c.outcome === 'fail')
+    .map((c) => ({
+      key: c.key, scenario: c.scenario,
+      provider_name: {'openai-realtime-live': 'OpenAI Realtime', 'gemini-live': 'Google Gemini Live',
+        'xai-voice-live': 'xAI Grok Voice', 'nova-sonic-live': 'Amazon Nova Sonic'}[c.provider] ?? c.provider, outcome: c.outcome === 'run_failed' ? 'Run did not complete' : 'Fail',
+      detail: c.outcome === 'run_failed' ? (c.failure || 'Unknown failure')
+        : [c.model_behaviour === 'fail' ? 'Model behaviour failed' : null, c.platform_enforcement === 'fail' ? 'Platform enforcement failed' : null,
+          c.replies_unsafe ? c.replies_unsafe + ' unsafe repl' + (c.replies_unsafe === 1 ? 'y' : 'ies') + ' held' : null].filter(Boolean).join(' · '),
+    })),
+});
+</script>
+
+<script>
+(() => {
+  const pct = d3.format('.0%');
+  const words = (v) => String(v ?? '').replaceAll('_', ' ').toLowerCase().replace(/^./, (c) => c.toUpperCase());
+  const verdictClass = (o) => o === 'pass' ? 'v-pass' : o === 'fail' ? 'v-fail' : o === 'run_failed' ? 'v-runfail' : o ? 'v-review' : 'v-none';
+  const verdictText = (o) => o === 'run_failed' ? 'Run failed' : o ? words(o) : '—';
+  let selected = null;
+
+  const groupSelect = document.getElementById('group-filter');
+  groupSelect.addEventListener('change', () => dash.setParams({group: groupSelect.value}));
+
+  const failedLine = (el) => { el.replaceChildren(); const p = document.createElement('div'); p.className = 'pm-failed'; p.textContent = 'Failed to load'; el.append(p); };
+
+  function showDetail(cell) {
+    const box = document.getElementById('cell-detail');
+    box.replaceChildren();
+    if (!cell) { box.hidden = true; return; }
+    const rows = [
+      ['Scenario', cell.scenario], ['Provider', window.PM_LONG[cell.provider] ?? cell.provider],
+      ['Overall', verdictText(cell.outcome)],
+      ['Model behaviour', cell.model_behaviour ? words(cell.model_behaviour) : '—'],
+      ['Platform enforcement', cell.platform_enforcement ? words(cell.platform_enforcement) : '—'],
+      ['Tool calls', cell.tools || 'None'],
+      ['Replies', `${cell.replies_assessed} assessed · ${cell.replies_unsafe} held as unsafe`],
+    ];
+    if (cell.failure) rows.push(['Failure', words(cell.failure)]);
+    if (cell.attempts > 1) rows.push(['Attempts', `${cell.attempts} (first attempt: ${words(cell.first_attempt_failure)})`]);
+    if (cell.wall_s != null) rows.push(['Duration', cell.wall_s.toFixed(1) + ' s']);
+    rows.push(['Run', cell.run_id ?? '—']);
+    for (const [k, v] of rows) { const dt = document.createElement('dt'); dt.textContent = k; const dd = document.createElement('dd'); dd.textContent = v; box.append(dt, dd); }
+    box.hidden = false;
+  }
+
+  function drawGrid(cells) {
+    const wrap = document.getElementById('grid');
+    const group = dash.params().group || 'all';
+    const groups = [...new Map(cells.map((c) => [c.group, c.group_order])).entries()].sort((a, b) => a[1] - b[1]).map((g) => g[0]);
+    groupSelect.replaceChildren(new Option('All groups', 'all'), ...groups.map((g) => new Option(g, g)));
+    groupSelect.value = groups.includes(group) ? group : 'all';
+    const byKey = new Map(cells.map((c) => [c.key, c]));
+    const scenarios = [...new Map(cells.map((c) => [c.scenario_id, c])).values()]
+      .filter((c) => groupSelect.value === 'all' || c.group === groupSelect.value)
+      .sort((a, b) => a.group_order - b.group_order || a.scenario.localeCompare(b.scenario));
+    const table = document.createElement('table'); table.className = 'pm-grid';
+    const head = table.createTHead().insertRow();
+    for (const label of ['Scenario', ...window.PM_PROVIDERS.map((p) => p[1])]) { const th = document.createElement('th'); th.textContent = label; head.append(th); }
+    const body = table.createTBody();
+    let last = null;
+    for (const s of scenarios) {
+      if (s.group !== last) {
+        last = s.group;
+        const tr = body.insertRow(); tr.className = 'pm-group';
+        const td = tr.insertCell(); td.colSpan = window.PM_PROVIDERS.length + 1; td.textContent = s.group;
+      }
+      const tr = body.insertRow();
+      const name = tr.insertCell(); name.className = 'pm-scn'; name.textContent = s.scenario;
+      for (const [provider, short] of window.PM_PROVIDERS) {
+        const cell = byKey.get(s.scenario_id + '|' + provider);
+        const td = tr.insertCell();
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'pm-chip ' + verdictClass(cell?.outcome);
+        chip.textContent = cell ? verdictText(cell.outcome) : 'Not run';
+        chip.setAttribute('aria-label', `${s.scenario}, ${short}: ${chip.textContent}`);
+        chip.setAttribute('aria-pressed', String(!!cell && selected === cell.key));
+        chip.disabled = !cell;
+        chip.addEventListener('click', () => { selected = cell.key; drawGrid(cells); showDetail(cell); });
+        td.append(chip);
+      }
+    }
+    wrap.replaceChildren(table);
+    showDetail(selected ? byKey.get(selected) : null);
+  }
+
+  function drawCriteria(rows) {
+    const root = document.getElementById('crit-bars');
+    root.replaceChildren();
+    const names = [...new Set(rows.map((r) => r.criterion))].sort();
+    if (!names.length) { const p = document.createElement('p'); p.className = 'pm-empty'; p.textContent = 'No completed runs yet.'; root.append(p); return; }
+    const max = d3.max(rows, (r) => r.pass + r.fail + r.other) || 1;
+    for (const criterion of names) {
+      const row = document.createElement('div'); row.className = 'pm-crit-row'; row.id = 'crit-' + criterion;
+      const label = document.createElement('div'); label.className = 'pm-crit-name'; label.textContent = criterion;
+      const bars = document.createElement('div'); bars.className = 'pm-crit-bars';
+      for (const [provider, short] of window.PM_PROVIDERS) {
+        const r = rows.find((x) => x.criterion === criterion && x.provider === provider);
+        const line = document.createElement('div'); line.className = 'pm-bar-line';
+        const name = document.createElement('span'); name.textContent = short;
+        const bar = document.createElement('div'); bar.className = 'pm-bar';
+        const total = r ? r.pass + r.fail + r.other : 0;
+        for (const [n, color] of [[r?.pass, 'var(--color-ok)'], [r?.fail, 'var(--color-bad)'], [r?.other, 'var(--color-warn)']]) {
+          if (!n) continue;
+          const seg = document.createElement('i'); seg.style.width = (n / max * 100) + '%'; seg.style.background = color; bar.append(seg);
+        }
+        const count = document.createElement('span'); count.textContent = total ? `${r.pass}/${total}` : '—';
+        line.append(name, bar, count); bars.append(line);
+      }
+      row.append(label, bars); root.append(row);
+    }
+  }
+
+  function drawProblems(rows) {
+    const body = document.getElementById('problem-rows');
+    body.replaceChildren();
+    document.getElementById('no-problems').hidden = rows.length > 0;
+    for (const r of rows) {
+      const tr = body.insertRow(); tr.dataset.key = r.key;
+      for (const v of [r.scenario, r.provider_name, r.outcome, r.detail]) tr.insertCell().textContent = v;
+    }
+  }
+
+  dash.onData(() => {
+    const cells = dash.data('cells'), byProvider = dash.data('by_provider');
+    const crit = dash.data('criteria_summary'), problems = dash.data('problems');
+
+    const take = document.getElementById('takeaway');
+    if (byProvider.status === 'ok') {
+      take.classList.remove('dash-skeleton');
+      const ran = byProvider.data.filter((p) => p.runs);
+      const best = [...ran].sort((a, b) => b.pass_rate - a.pass_rate)[0];
+      const waiting = byProvider.data.filter((p) => !p.runs).map((p) => window.PM_LONG[p.provider]);
+      take.textContent = best
+        ? `${window.PM_LONG[best.provider]} passed the most scenarios (${pct(best.pass_rate)} of those run). `
+          + ran.filter((p) => p !== best).map((p) => `${window.PM_NAMES[p.provider]} ${pct(p.pass_rate)}`).join(', ')
+          + (waiting.length ? `. Not run yet: ${waiting.join(', ')}.` : '.')
+        : 'No runs yet.';
+      for (const p of byProvider.data) {
+        const card = document.querySelector(`[data-field="pass_rate"][data-where="provider=${p.provider}"]`);
+        card.classList.remove('dash-skeleton'); card.textContent = p.pass_rate == null ? '—' : pct(p.pass_rate);
+        const sub = document.querySelector(`[data-field="summary"][data-where="provider=${p.provider}"]`);
+        sub.classList.remove('dash-skeleton'); sub.textContent = p.summary;
+        for (const f of ['model_pass', 'platform_pass', 'run_failures']) {
+          document.querySelector(`[data-field="${f}"][data-where="provider=${p.provider}"]`).textContent = p.runs ? d3.format(',')(p[f]) : '—';
+        }
+      }
+    } else {
+      take.textContent = byProvider.status === 'error' ? 'Results failed to load.' : '—';
+    }
+
+    const grid = document.getElementById('grid');
+    if (cells.status === 'ok') { grid.classList.remove('dash-skeleton'); drawGrid(cells.data); }
+    else if (cells.status === 'error') { grid.classList.remove('dash-skeleton'); failedLine(grid); }
+
+    const bars = document.getElementById('crit-bars');
+    if (crit.status === 'ok') { bars.classList.remove('dash-skeleton'); drawCriteria(crit.data); }
+    else if (crit.status === 'error') { bars.classList.remove('dash-skeleton'); failedLine(bars); }
+
+    if (problems.status === 'ok') drawProblems(problems.data);
+  });
+})();
+</script>
