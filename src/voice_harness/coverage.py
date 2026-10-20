@@ -21,6 +21,7 @@ class Coverage:
     capability_report_id: str | None = None
     reason_codes: tuple[str, ...] = ()
     evidence_ids: tuple[str, ...] = ()
+    expires_at: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -191,6 +192,7 @@ def build_registry(
                 r.report_id,
                 tuple(reasons),
                 evidence if not reasons else (),
+                r.expires_at,
             )
         )
     return items
@@ -205,4 +207,42 @@ def summarize(items: list[Coverage]) -> dict[str, Any]:
         "requested_count": len(items),
         "statement": f"verified for {verified} of {len(items)} requested provider families",
         "ranking": None,
+    }
+
+
+def probe_events(family: str, report_dir: Path | str | None = None) -> dict[str, Any] | None:
+    """Read-only: the stored probe events a family's current capability report cites.
+
+    Events live in <prefix>-probe-*.jsonl beside the report (written by scripts/probe, no
+    provider call is made here). Event IDs restart per probe run, so an ID can match one event
+    in several runs; every match is returned with its source run. None = no report for family.
+    """
+    directory = Path(report_dir or DEFAULT_REPORT_DIR)
+    entry = _load_reports(directory).get(family)
+    if entry is None:
+        return None
+    report = entry["report"]
+    wanted = {e for row in report.rows for e in row.evidence.probe_event_ids}
+    prefix = entry["path"].removesuffix("-capability-report.json")
+    events: list[dict[str, Any]] = []
+    found: set[str] = set()
+    for path in sorted(directory.glob(f"{prefix}-probe-*.jsonl")):
+        try:
+            lines = path.read_text().splitlines()
+        except OSError:
+            continue
+        for line in lines:
+            try:
+                event = json.loads(line)
+            except ValueError:
+                continue
+            if isinstance(event, dict) and event.get("id") in wanted:
+                found.add(event["id"])
+                events.append({"source": path.name, "event": event})
+    return {
+        "provider_family": family,
+        "capability_report_id": report.report_id,
+        "cited_count": len(wanted),
+        "missing_ids": sorted(wanted - found),
+        "events": events,
     }

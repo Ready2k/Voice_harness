@@ -39,7 +39,7 @@ from .bakeoff_export import report_data as bakeoff_report_data
 from .clock_runtime import ClockSyncSession, invalidate_prior_connection
 from .contracts import AudioInputPayload, CancelRun, HoldRequest, ManualSessionConfig, RenewHold, RunConfig
 from .cost_api import register_cost_routes
-from .coverage import build_registry, summarize
+from .coverage import FAMILIES, build_registry, probe_events, summarize
 from .engine import Engine
 from .evidence import Evidence
 from .exports import download_links
@@ -394,6 +394,13 @@ def create_app(
     def providers():
         return summarize(build_registry())
 
+    @app.get("/api/v1/providers/{family}/probe-events", dependencies=[Depends(auth)])
+    def provider_probe_events(family: str):
+        result = probe_events(family) if family in FAMILIES else None
+        if result is None:
+            raise HTTPException(404, "PROBE_EVENTS_NOT_FOUND")
+        return result
+
     @app.get("/api/v1/providers/export", dependencies=[Depends(auth)])
     def providers_export():
         return {"export_type": "provider_coverage", **summarize(build_registry())}
@@ -543,12 +550,20 @@ def create_app(
             raise HTTPException(422, "INVALID_PAGINATION")
         with database.connection() as db:
             rows = db.execute(
-                "SELECT r.run_id, r.state, r.session_id, r.scenario_id, r.scenario_version, r.policy_profile, r.provider_config_id, e.occurred_at AS started_at "
+                "SELECT r.run_id, r.state, r.session_id, r.scenario_id, r.scenario_version, r.policy_profile, r.provider_config_id, e.occurred_at AS started_at, r.payload AS payload, "
+                "(SELECT MAX(l.occurred_at) FROM harness_events l WHERE l.run_id=r.run_id) AS last_event_at "
                 "FROM harness_runs r LEFT JOIN harness_events e ON e.run_id=r.run_id AND e.sequence=1 "
-                "ORDER BY e.occurred_at DESC, r.run_id LIMIT ? OFFSET ?",
+                "ORDER BY e.occurred_at DESC NULLS LAST, r.run_id LIMIT ? OFFSET ?",
                 (limit + 1, cursor),
             ).fetchall()
-        items = [dict(row) for row in rows[:limit]]
+        items = []
+        for row in rows[:limit]:
+            item = dict(row)
+            payload = database.decoded(item.pop("payload"))
+            item["assurance"] = payload.get("assurance")  # ledger-derived verdicts; null until assessed
+            if item["state"] not in {"completed", "cancelled", "failed"}:
+                item["last_event_at"] = None
+            items.append(item)
         return {
             "items": items,
             "next_cursor": cursor + limit if len(rows) > limit else None,
@@ -848,6 +863,39 @@ def create_app(
         return {"items": manual_journeys(), "providers": providers, "playback_modes": ["gated", "streamed"]}
 
     manual_pending = {}  # run_id -> created_at for sessions whose page has not connected yet
+
+    @app.get("/api/v1/manual-sessions", dependencies=[Depends(auth)])
+    def list_manual_sessions(limit: int = 10):
+        """Recent human-driven sessions, newest first, with their stored verdicts (read-only)."""
+        if not 1 <= limit <= 50:
+            raise HTTPException(422, "INVALID_PAGINATION")
+        with database.connection() as db:
+            manual = (
+                "r.payload->'config'->>'input_mode'" if database.postgres
+                else "json_extract(r.payload, '$.config.input_mode')"
+            )
+            rows = db.execute(
+                "SELECT r.run_id, r.state, r.provider_config_id, r.payload AS payload, e.occurred_at AS started_at "
+                "FROM harness_runs r LEFT JOIN harness_events e ON e.run_id=r.run_id AND e.sequence=1 "
+                f"WHERE {manual}='manual' ORDER BY e.occurred_at DESC NULLS LAST, r.run_id LIMIT ?",
+                (limit,),
+            ).fetchall()
+        items = []
+        for row in rows:
+            payload = database.decoded(row["payload"])
+            config = payload.get("config") or {}
+            if config.get("input_mode") != "manual":
+                continue
+            assurance = payload.get("assurance") or {}
+            items.append({
+                "run_id": row["run_id"], "state": row["state"], "provider_config_id": row["provider_config_id"],
+                "started_at": row["started_at"], "journey_id": config.get("journey_id"), "path": config.get("path"),
+                "playback_mode": config.get("playback_mode"), "overall_assurance": assurance.get("overall_assurance"),
+                "model_behaviour": assurance.get("model_behaviour"), "platform_enforcement": assurance.get("platform_enforcement"),
+            })
+            if len(items) >= limit:
+                break
+        return {"items": items}
 
     @app.post("/api/v1/manual-sessions", status_code=201, dependencies=[Depends(auth)])
     def create_manual_session(
