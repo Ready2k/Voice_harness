@@ -1,0 +1,258 @@
+[
+  {
+    "condition": "automatic-45s",
+    "turn_detection": "server_vad",
+    "turn_timeout_seconds": 45,
+    "run_id": "run_4b2e9dcc4f51435a85737f5e3d2fc951",
+    "state": "failed",
+    "termination_reason": "TURN_TIMEOUT",
+    "assurance": null,
+    "wall_seconds": 63.28,
+    "input_pcm_sha256": [
+      "051619575fd33929e114555f4c3d606a4f60fdc47dc845f4acc928795ed54a97",
+      "bd8d77aaec686a5b77c06ec633dd366032f143ba3251cb87c43aaa906732b343"
+    ],
+    "manual_boundary_messages": [],
+    "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+    "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+    "timeline": [
+      {
+        "seconds": 7.732,
+        "type": "input.caller_audio",
+        "content": {
+          "turn": 0
+        }
+      },
+      {
+        "seconds": 7.739,
+        "type": "tool.requested",
+        "content": {
+          "tool": "verify_identity"
+        }
+      },
+      {
+        "seconds": 7.75,
+        "type": "tool.completed",
+        "content": {
+          "error_code": null,
+          "status": "success"
+        }
+      },
+      {
+        "seconds": 13.279,
+        "type": "transcript.revised",
+        "content": {
+          "new": "Thank you for that. You are now verified. How can I help you today?"
+        }
+      },
+      {
+        "seconds": 13.282,
+        "type": "assessment.independent_asr",
+        "content": {
+          "disposition": "safe",
+          "reason_codes": [
+            "NO_ASSESSABLE_CLAIMS"
+          ]
+        }
+      },
+      {
+        "seconds": 17.994,
+        "type": "input.caller_audio",
+        "content": {
+          "turn": 1
+        }
+      },
+      {
+        "seconds": 63.205,
+        "type": "run.failed",
+        "content": {
+          "reason": "TURN_TIMEOUT"
+        }
+      }
+    ],
+    "audio_file": "automatic-45s.wav",
+    "audio_note": "Released replies only, with short joining gaps. Actual response/timeout waits omitted."
+  },
+  {
+    "condition": "explicit-45s",
+    "turn_detection": "manual",
+    "turn_timeout_seconds": 45,
+    "run_id": "run_9d67454f50b4452eb2359bff4c4c7741",
+    "state": "completed",
+    "termination_reason": "completed",
+    "assurance": {
+      "model_behaviour": "pass",
+      "overall_assurance": "pass",
+      "platform_enforcement": "pass"
+    },
+    "wall_seconds": 27.55,
+    "input_pcm_sha256": [
+      "051619575fd33929e114555f4c3d606a4f60fdc47dc845f4acc928795ed54a97",
+      "bd8d77aaec686a5b77c06ec633dd366032f143ba3251cb87c43aaa906732b343"
+    ],
+    "manual_boundary_messages": [
+      "activityStart",
+      "activityEnd",
+      "activityStart",
+      "activityEnd"
+    ],
+    "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+    "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+    "timeline": [
+      {
+        "seconds": 7.604,
+        "type": "input.caller_audio",
+        "content": {
+          "turn": 0
+        }
+      },
+      {
+        "seconds": 8.169,
+        "type": "tool.requested",
+        "content": {
+          "tool": "verify_identity"
+        }
+      },
+      {
+        "seconds": 8.18,
+        "type": "tool.completed",
+        "content": {
+          "error_code": null,
+          "status": "success"
+        }
+      },
+      {
+        "seconds": 14.539,
+        "type": "transcript.revised",
+        "content": {
+          "new": "Thank you, you've been successfully verified. How can I help you with your account today?"
+        }
+      },
+      {
+        "seconds": 14.544,
+        "type": "assessment.independent_asr",
+        "content": {
+          "disposition": "safe",
+          "reason_codes": [
+            "NO_ASSESSABLE_CLAIMS"
+          ]
+        }
+      },
+      {
+        "seconds": 19.217,
+        "type": "input.caller_audio",
+        "content": {
+          "turn": 1
+        }
+      },
+      {
+        "seconds": 19.829,
+        "type": "tool.requested",
+        "content": {
+          "tool": "get_account_summary"
+        }
+      },
+      {
+        "seconds": 19.851,
+        "type": "tool.completed",
+        "content": {
+          "error_code": null,
+          "status": "success"
+        }
+      },
+      {
+        "seconds": 27.292,
+        "type": "transcript.revised",
+        "content": {
+          "new": "Your account balance is \u00a31,234.56."
+        }
+      },
+      {
+        "seconds": 27.296,
+        "type": "assessment.independent_asr",
+        "content": {
+          "disposition": "safe",
+          "reason_codes": [
+            "CLAIMS_MATCH_EXPECTED"
+          ]
+        }
+      }
+    ],
+    "audio_file": "explicit-45s.wav",
+    "audio_note": "Released replies only, with short joining gaps. Actual response/timeout waits omitted."
+  },
+  {
+    "condition": "automatic-120s",
+    "turn_detection": "server_vad",
+    "turn_timeout_seconds": 120,
+    "run_id": "run_618b21ffb2704dada1ec71f5fda671db",
+    "state": "failed",
+    "termination_reason": "TURN_TIMEOUT",
+    "assurance": null,
+    "wall_seconds": 137.93,
+    "input_pcm_sha256": [
+      "051619575fd33929e114555f4c3d606a4f60fdc47dc845f4acc928795ed54a97",
+      "bd8d77aaec686a5b77c06ec633dd366032f143ba3251cb87c43aaa906732b343"
+    ],
+    "manual_boundary_messages": [],
+    "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+    "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+    "timeline": [
+      {
+        "seconds": 7.596,
+        "type": "input.caller_audio",
+        "content": {
+          "turn": 0
+        }
+      },
+      {
+        "seconds": 7.603,
+        "type": "tool.requested",
+        "content": {
+          "tool": "verify_identity"
+        }
+      },
+      {
+        "seconds": 7.612,
+        "type": "tool.completed",
+        "content": {
+          "error_code": null,
+          "status": "success"
+        }
+      },
+      {
+        "seconds": 13.027,
+        "type": "transcript.revised",
+        "content": {
+          "new": "Thank you, you've been successfully verified. How can I help you today?"
+        }
+      },
+      {
+        "seconds": 13.029,
+        "type": "assessment.independent_asr",
+        "content": {
+          "disposition": "safe",
+          "reason_codes": [
+            "NO_ASSESSABLE_CLAIMS"
+          ]
+        }
+      },
+      {
+        "seconds": 17.724,
+        "type": "input.caller_audio",
+        "content": {
+          "turn": 1
+        }
+      },
+      {
+        "seconds": 137.892,
+        "type": "run.failed",
+        "content": {
+          "reason": "TURN_TIMEOUT"
+        }
+      }
+    ],
+    "audio_file": "automatic-120s.wav",
+    "audio_note": "Released replies only, with short joining gaps. Actual response/timeout waits omitted."
+  }
+]
