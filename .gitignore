@@ -10,3 +10,4 @@ artifacts/local/
 node_modules/
 .claude/worktrees/
 .ci-images
+.DS_Store
