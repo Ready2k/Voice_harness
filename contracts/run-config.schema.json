@@ -1,5 +1,69 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "CallerConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "default": "fixed",
+          "enum": [
+            "fixed",
+            "live_ai"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "fixed_backend": {
+          "default": "system",
+          "enum": [
+            "system",
+            "macos",
+            "openai_tts"
+          ],
+          "title": "Fixed Backend",
+          "type": "string"
+        },
+        "voice": {
+          "default": "cedar",
+          "enum": [
+            "marin",
+            "cedar",
+            "alloy",
+            "coral",
+            "sage"
+          ],
+          "title": "Voice",
+          "type": "string"
+        },
+        "persona": {
+          "default": "calm",
+          "enum": [
+            "calm",
+            "anxious",
+            "frustrated"
+          ],
+          "title": "Persona",
+          "type": "string"
+        },
+        "max_turns": {
+          "default": 6,
+          "maximum": 12,
+          "minimum": 1,
+          "title": "Max Turns",
+          "type": "integer"
+        },
+        "max_duration_seconds": {
+          "default": 120,
+          "maximum": 300,
+          "minimum": 10,
+          "title": "Max Duration Seconds",
+          "type": "integer"
+        }
+      },
+      "title": "CallerConfig",
+      "type": "object"
+    }
+  },
   "additionalProperties": false,
   "properties": {
     "scenario_id": {
@@ -67,6 +131,9 @@
       ],
       "title": "Client Mode",
       "type": "string"
+    },
+    "caller": {
+      "$ref": "#/$defs/CallerConfig"
     }
   },
   "title": "RunConfig",

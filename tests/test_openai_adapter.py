@@ -32,6 +32,33 @@ def logged(session, first_type, last_type):
     return out
 
 
+class SetupDisconnect(unittest.IsolatedAsyncioTestCase):
+    async def test_credit_exhaustion_during_setup_fails_promptly_with_a_stable_code(self):
+        async def exhausted(ws):
+            await ws.send(json.dumps({"type": "error", "error": {"code": "credit_balance_exhausted"}}))
+            await ws.wait_closed()
+
+        async with websockets.serve(exhausted, "127.0.0.1", 0) as server:
+            adapter = OpenAIRealtimeAdapter(api_key="test", url=f"ws://127.0.0.1:{server.sockets[0].getsockname()[1]}")
+            try:
+                with self.assertRaisesRegex(ValueError, "PROVIDER_CREDIT_BALANCE_EXHAUSTED"):
+                    await asyncio.wait_for(adapter.open_session({}), 3)
+            finally:
+                await adapter.close("test_done")
+
+    async def test_setup_disconnect_is_a_provider_failure_not_task_cancellation(self):
+        async def closed(ws):
+            await ws.close()
+
+        async with websockets.serve(closed, "127.0.0.1", 0) as server:
+            adapter = OpenAIRealtimeAdapter(api_key="test", url=f"ws://127.0.0.1:{server.sockets[0].getsockname()[1]}")
+            try:
+                with self.assertRaisesRegex(ValueError, "PROVIDER_CONNECTION_CLOSED"):
+                    await asyncio.wait_for(adapter.open_session({}), 3)
+            finally:
+                await adapter.close("test_done")
+
+
 class FakeServer:
     """Scriptable fake Realtime endpoint; records every client event."""
 

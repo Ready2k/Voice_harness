@@ -99,7 +99,8 @@ export function createWorkspace(root, onCancel) {
     const view=runView(data.run,trace.visible,data.metrics,data.holds,data.assurance);
     heading.textContent=data.displayTitle??data.run.scenario?.scenario_id??data.run.run_id;
     const provider=events.find(e=>e.type==='run.live_binding')?.content?.provider;
-    context.textContent=(data.run.config?.provider_config_id??'Unknown provider')+' · seed '+(data.run.config?.fixture_seed??'unknown')+' · '+(data.run.config?.policy_profile??'Unknown policy')+(provider?' · requested model: '+(provider.requested_model_id??'unknown')+' · returned: '+(provider.returned_model_id??'unresolved'):'');
+    const caller = data.run.config?.caller;
+    context.textContent=(data.run.config?.provider_config_id??'Unknown provider')+' · seed '+(data.run.config?.fixture_seed??'unknown')+' · '+(data.run.config?.policy_profile??'Unknown policy')+(provider?' · requested model: '+(provider.requested_model_id??'unknown')+' · returned: '+(provider.returned_model_id??'unresolved'):'') + (data.run.config?.input_mode === 'manual' ? ' · Human caller' : caller?.mode === 'live_ai' ? ' · Live AI caller · '+caller.persona+' · '+caller.voice+' · caller fidelity requires review' : ' · Fixed caller');
     status.textContent=data.run.state+' · '+(follow?'Latest evidence':'History inspection');
     graphButton.setAttribute('aria-pressed',String(mode==='graph'));timelineButton.setAttribute('aria-pressed',String(mode==='timeline'));
     followButton.textContent=follow?'Pause live following':'Resume latest';followButton.setAttribute('aria-pressed',String(follow));

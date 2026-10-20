@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import asyncio
 import os
+import time
 from contextlib import suppress
 
 from .asr import LIVE_FLAG, select_backend
@@ -92,11 +93,14 @@ def _nova_env():
     return env
 
 
-def requirements(provider_config_id, environ=None, *, manual=False):
+def requirements(provider_config_id, environ=None, *, manual=False, caller=None):
     """Every reason code this config cannot run (empty when it can). Strict speech approval needs a live ASR backend
     and a caller voice as well as the provider itself, so a provider can miss several things at once. A manual
     session's caller is a person at the microphone, so it needs no synthetic caller voice."""
     environ = os.environ if environ is None else environ
+    caller = caller or {}
+    if caller.get("fixed_backend", "system") != "system":
+        environ = {**environ, "VOICE_HARNESS_CALLER_VOICE": caller["fixed_backend"]}
     if provider_config_id not in LIVE_PROVIDERS:
         return ["NOT_A_LIVE_PROVIDER"]
     missing = []
@@ -104,7 +108,7 @@ def requirements(provider_config_id, environ=None, *, manual=False):
         missing.append("NO_ASR_BACKEND_CONFIGURED")
     from .caller_voice import available as caller_voice_available
 
-    voice_ok, voice_reason = (True, None) if manual else caller_voice_available(environ)  # say/afconvert or openai_tts
+    voice_ok, voice_reason = (True, None) if manual or caller.get("mode") == "live_ai" else caller_voice_available(environ)
     if not voice_ok:
         missing.append(voice_reason)
     if provider_config_id == "xai-voice-live":
@@ -126,9 +130,9 @@ def requirements(provider_config_id, environ=None, *, manual=False):
     return missing
 
 
-def availability(provider_config_id, environ=None, *, manual=False):
+def availability(provider_config_id, environ=None, *, manual=False, caller=None):
     """(ok, reason): the first missing requirement, in the order ASR, caller voice, provider."""
-    missing = requirements(provider_config_id, environ, manual=manual)
+    missing = requirements(provider_config_id, environ, manual=manual, caller=caller)
     return (False, missing[0]) if missing else (True, None)
 
 
@@ -211,18 +215,32 @@ def _adapter(provider_config_id):
     return NovaSonicAdapter(), config
 
 
-async def run_live(engine, run_id, provider_config_id, scenario_id, *, seed=0):
+async def run_live(engine, run_id, provider_config_id, scenario_id, *, seed=0, caller=None, evidence=None):
     """Open the provider session, run the catalogue scenario and close the session; returns the runner summary."""
     from .adapters.openai_realtime import synth_caller_pcm
+    from .contracts import CallerConfig
+
+    caller = CallerConfig.model_validate(caller or {}).model_dump()
+    if caller["mode"] == "live_ai":
+        return await _run_interactive(engine, run_id, provider_config_id, scenario_id, caller, evidence, seed)
 
     adapter, config = _adapter(provider_config_id)
     config["session_id"] = engine.database.get(run_id)["session_id"]
-    receipt = await adapter.open_session(config)
+    try:
+        receipt = await adapter.open_session(config)
+    except BaseException:
+        with suppress(Exception):
+            await asyncio.wait_for(adapter.close("setup_failed"), 5)
+        raise
     metadata = session_metadata(provider_config_id, TESTED_MODELS[provider_config_id]["model_id"], receipt,
                                  connection_binding(adapter))
     from .caller_voice import describe as describe_caller_voice
 
-    metadata["caller_voice"] = describe_caller_voice()  # backend + voice/model ids only
+    voice_env = dict(os.environ)
+    if caller["fixed_backend"] != "system":
+        voice_env["VOICE_HARNESS_CALLER_VOICE"] = caller["fixed_backend"]
+    metadata["caller_mode"] = "fixed"
+    metadata["caller_voice"] = describe_caller_voice(voice_env)
     context_only = provider_config_id in ("openai-realtime-live", "xai-voice-live", "gemini-live")  # send_text(respond=False) supported
     from .cost_recorder import UsageRecorder
 
@@ -259,7 +277,7 @@ async def run_live(engine, run_id, provider_config_id, scenario_id, *, seed=0):
 
     runner = LiveScenarioRunner(
         engine, run_id, adapter, assessor, scenario_id,
-        caller_audio=lambda text: synth_caller_pcm(text, trail_ms=CALLER_TRAIL_MS), before_turn=before_turn, seed=seed,
+        caller_audio=lambda text: synth_caller_pcm(text, trail_ms=CALLER_TRAIL_MS, environ=voice_env), before_turn=before_turn, seed=seed,
         provider_session=metadata, cost_recorder=recorder)
     reason = "done"
     try:
@@ -270,6 +288,79 @@ async def run_live(engine, run_id, provider_config_id, scenario_id, *, seed=0):
     finally:
         with suppress(Exception):  # closing a failed session must not mask the run outcome
             await adapter.close(reason)
+
+
+async def _run_interactive(engine, run_id, provider_config_id, scenario_id, caller_config, evidence, seed):
+    from .adapters.openai_realtime import OpenAIRealtimeAdapter
+    from .cost_recorder import UsageRecorder
+    from .interactive_caller import MODEL, SCENARIOS, InteractiveScenarioRunner, RealtimeCaller, configuration
+
+    if scenario_id not in SCENARIOS:
+        raise ValueError("LIVE_CALLER_SCENARIO_UNSUPPORTED")
+    adapter, config = _adapter(provider_config_id)
+    if provider_config_id == "nova-sonic-live":
+        # Nova requires continuous audio and provider endpointing; LOW tolerates caller pauses.
+        config["endpointing"] = "LOW"
+    else:
+        config["turn_detection"] = "manual"
+    if provider_config_id == "openai-realtime-live":
+        config["voice"] = "coral" if caller_config["voice"] == "marin" else "marin"
+    config["session_id"] = engine.database.get(run_id)["session_id"]
+    caller = RealtimeCaller(OpenAIRealtimeAdapter(), caller_config,
+                            UsageRecorder(engine.database, run_id, provider="openai", model=MODEL, component="caller"))
+    reason = "failed"
+    deadline = time.monotonic() + caller_config["max_duration_seconds"]
+    runner = None
+    setup_stage = "TARGET"
+    try:
+        async with asyncio.timeout_at(deadline):
+            receipt = await adapter.open_session(config)
+            setup_stage = "CALLER"
+            caller_receipt = await caller.open(config["session_id"])
+        metadata = session_metadata(provider_config_id, TESTED_MODELS[provider_config_id]["model_id"], receipt,
+                                    connection_binding(adapter))
+        metadata["caller_mode"] = "live_ai"
+        metadata["caller_turn_control"] = "provider_vad_low" if provider_config_id == "nova-sonic-live" else "manual"
+        metadata["requested_voice"] = config.get("voice") or {
+            "nova-sonic-live": "matthew", "xai-voice-live": "ara"}.get(provider_config_id)
+        metadata["caller_voice"] = {**configuration(caller_config), "session": caller_receipt}
+        recorder = UsageRecorder(engine.database, run_id, provider=metadata["family"],
+                                 model=TESTED_MODELS[provider_config_id]["model_id"])
+        runner = InteractiveScenarioRunner(
+            engine, run_id, adapter, IndependentAssessor(engine, select_backend()), scenario_id,
+            caller=caller, caller_config=caller_config, evidence=evidence, seed=seed,
+            duration_budget=max(0, deadline - time.monotonic()),
+            provider_session=metadata, cost_recorder=recorder)
+        result = await runner.run()
+        reason = result["caller_stop_reason"]
+        return result
+    except TimeoutError:
+        reason = "CALLER_SETUP_TIMEOUT"
+        with engine.database.transaction(run_id) as tx:
+            tx.event("orchestrator", "caller.session_ended", {"reason": reason, "failure": reason,
+                     "turns": 0, "fidelity": "not_independently_assessed"})
+        return {"turns": [], "adapter_errors": [], "caller_failure": reason, "caller_stop_reason": reason}
+    except ValueError as exc:
+        if runner is not None:
+            raise
+        # Only stable adapter codes are public; never include provider response bodies or credentials.
+        code = str(exc).split(":")[0]
+        known = {"PROVIDER_CONNECTION_CLOSED", "PROVIDER_AUTH_FAILED", "PROVIDER_AUTH_MISSING",
+                 "PROVIDER_CREDIT_BALANCE_EXHAUSTED", "PROVIDER_INSUFFICIENT_QUOTA", "PROVIDER_UNREACHABLE"}
+        reason = setup_stage + "_SETUP_" + (code if code in known else "FAILED")
+        failure = reason if setup_stage == "CALLER" else None
+        with engine.database.transaction(run_id) as tx:
+            tx.event("orchestrator", "caller.session_ended", {"reason": reason, "failure": failure,
+                     "turns": 0, "fidelity": "not_independently_assessed"})
+        return {"turns": [], "adapter_errors": [], "caller_failure": failure,
+                "setup_failure": reason, "caller_stop_reason": reason}
+    except asyncio.CancelledError:
+        reason = "cancelled"
+        raise
+    finally:
+        for session in (caller, adapter):
+            with suppress(Exception):
+                await asyncio.wait_for(session.close(reason), 5)
 
 
 async def run_manual(engine, run_id, config, bridge):

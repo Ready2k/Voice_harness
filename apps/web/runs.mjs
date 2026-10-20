@@ -55,19 +55,25 @@ export function groupedOptions(options) {
 }
 
 /** Pure: body of POST /api/v1/runs. A live scenario needs a live provider config; mock scenarios never take one. */
-export function launchBody(option, policyProfile = "strict-v1", providerConfigId = null) {
+export function launchBody(option, policyProfile = "strict-v1", providerConfigId = null, caller = null) {
   const body = { scenario_id: option.id, scenario_version: option.version, policy_profile: policyProfile };
   if (option.live) body.provider_config_id = providerConfigId;
+  if (option.live && caller) body.caller = caller;
   return body;
 }
 
 /** Pure: live provider choices; an unavailable config is listed but disabled with its reason code. */
-export function providerChoices(payload) {
-  return payload.items.map((p) => ({
+export function providerChoices(payload, caller = {}) {
+  return payload.items.map((p) => {
+    const readiness = caller.mode === "live_ai" ? p.caller_modes?.live_ai
+      : p.fixed_backends?.[caller.fixed_backend ?? "system"];
+    const available = readiness?.available ?? p.available;
+    const reason = readiness?.reasons?.[0] ?? p.reason;
+    return ({
     id: p.provider_config_id,
-    label: p.provider_config_id + (p.available ? "" : " (unavailable: " + p.reason + ")"),
-    disabled: !p.available,
-  }));
+    label: p.provider_config_id + (available ? "" : " (unavailable: " + reason + ")"),
+    disabled: !available,
+  }); });
 }
 
 /** Pure: append a page of events without duplicates, ordered by sequence. */
@@ -151,9 +157,12 @@ export function unitStates(events) {
 export function transcript(events) {
   const states = new Map(unitStates(events).map((u) => [u.unitId, u]));
   const lines = [];
-  const simulated = events.some((e) => e.type === "simulator.utterance_generated");
+  const simulated = events.some((e) => ["simulator.utterance_generated", "caller.utterance"].includes(e.type));
   for (const e of events) {
-    if (e.type === "simulator.utterance_generated") {
+    if (e.type === "caller.utterance") {
+      lines.push({sequence: e.sequence, speaker: "customer", text: e.content.text || "Caller audio · transcript unavailable", state: null,
+        note: "Live AI caller · provider transcript"});
+    } else if (e.type === "simulator.utterance_generated") {
       lines.push({ sequence: e.sequence, speaker: "customer", text: e.content.output_text, state: null });
     } else if (e.type === "input.caller_audio" && !simulated) {
       // The ledger stores only a hash of the caller's words, so show that the turn happened, not what was said.

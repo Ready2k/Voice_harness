@@ -271,4 +271,15 @@ def examples():
             },
         }
     )
+    from .contracts import CallerConfig
+    from .interactive_caller import configuration
+
+    out.update({
+        "caller.session_started": configuration(CallerConfig(mode="live_ai").model_dump()),
+        "caller.session_ended": {"reason": "objective_response_delivered", "failure": None,
+                                 "turns": 2, "fidelity": "not_independently_assessed"},
+        "caller.utterance": {"turn": 0, "text": "Could you check my balance?", "transcript_source": "caller_provider",
+                             "pcm_sha256": pcm, "audio_retained": True, "sample_rate": 24000},
+        "caller.agent_audio": {"unit_id": "unit_001", "pcm_sha256": pcm, "audio_retained": True, "sample_rate": 24000},
+    })
     return out

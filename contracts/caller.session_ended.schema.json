@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "reason": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Reason",
+      "type": "string"
+    },
+    "failure": {
+      "anyOf": [
+        {
+          "maxLength": 200,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Failure"
+    },
+    "turns": {
+      "minimum": 0,
+      "title": "Turns",
+      "type": "integer"
+    },
+    "fidelity": {
+      "const": "not_independently_assessed",
+      "title": "Fidelity",
+      "type": "string"
+    }
+  },
+  "required": [
+    "reason",
+    "failure",
+    "turns",
+    "fidelity"
+  ],
+  "title": "CallerSessionEnded",
+  "type": "object"
+}

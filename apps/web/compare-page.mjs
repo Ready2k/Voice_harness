@@ -88,6 +88,7 @@ async function compareIds(ids,refresh=false){
   $('results').hidden=false;
   $('comparability').textContent=match.differences.length?'Same task, different settings: '+match.differences.join(', ')+'. Treat this as a configuration comparison, not an isolated provider effect.':'Same scenario, version, seed and recorded execution settings. Provider configurations may differ. Model versions and provider session settings must be checked in the event evidence; matching these fields alone does not establish full equivalence.';
   if(match.missing.length)$('comparability').textContent+=' Missing configuration evidence: '+match.missing.join(', ')+'.';
+  if(match.adaptiveCaller)$('comparability').textContent+=' Live AI callers generate different dialogues even with matching settings. Use repeated runs and review caller fidelity.';
   $('snapshot').textContent='Evidence fetched '+new Date().toISOString()+'. Descriptive comparison; no winner, statistical significance or population-level claim. Counts reflect selected runs only.';
   const counts=new Map();entries.forEach(e=>{const k=e.run.config.provider_config_id;counts.set(k,(counts.get(k)??0)+1);});
   $('status').textContent='Selected samples: '+[...counts].map(([p,n])=>p+' n='+n).join(' · ');

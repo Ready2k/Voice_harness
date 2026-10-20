@@ -141,7 +141,8 @@ def create_app(
         """Run the live scenario (or ``session``) as a cancellable task; returns None if the run was cancelled."""
         task = asyncio.ensure_future(
             session if session is not None else live_providers.run_live(
-                live_engine, run_id, config["provider_config_id"], config["scenario_id"], seed=config["fixture_seed"]
+                live_engine, run_id, config["provider_config_id"], config["scenario_id"], seed=config["fixture_seed"],
+                caller=config.get("caller"), evidence=evidence,
             )
         )
         with job_lock:
@@ -154,7 +155,7 @@ def create_app(
         except asyncio.CancelledError:
             if database.get(run_id)["state"] in {"cancelled", "cancel_requested", "failed"}:
                 return None
-            raise
+            raise RuntimeError("UNEXPECTED_PROVIDER_CANCELLATION") from None
         finally:
             with job_lock:
                 live_tasks.pop(run_id, None)
@@ -166,7 +167,7 @@ def create_app(
     def start_live_run(config, request_key):
         """Queue one live catalogue run, as POST /api/v1/runs does for a single repetition."""
         body = RunConfig(**config)
-        if not live_providers.availability(body.provider_config_id)[0]:
+        if not live_providers.availability(body.provider_config_id, caller=body.caller.model_dump())[0]:
             raise ValueError("PROVIDER_NOT_CONFIGURED")
         run_id = live_engine.create(body.model_dump(), request_key)
         with job_lock:
@@ -198,7 +199,9 @@ def create_app(
         if summary is None:  # cancelled: Engine.cancel already settled the ledger and discarded held audio
             return
         outcomes = {t["strict_speech_approval"] for t in summary["turns"]}
-        if "turn_timeout" in outcomes:
+        if summary.get("caller_failure") or summary.get("setup_failure"):
+            failure = summary.get("caller_failure") or summary["setup_failure"]
+        elif "turn_timeout" in outcomes:
             failure = "TURN_TIMEOUT"
         elif outcomes & {"provider_error", "stream_ended"} or summary["adapter_errors"]:
             failure = "PROVIDER_FAILURE"
@@ -412,11 +415,22 @@ def create_app(
         for provider_config_id in live_providers.LIVE_PROVIDERS:
             missing = live_providers.requirements(provider_config_id)
             items.append({"provider_config_id": provider_config_id, "available": not missing,
-                          "reason": missing[0] if missing else None, "reasons": missing})
+                          "reason": missing[0] if missing else None, "reasons": missing,
+                          "caller_modes": {mode: {"available": not reasons, "reasons": reasons}
+                                           for mode in ("fixed", "live_ai")
+                                           for reasons in [live_providers.requirements(provider_config_id, caller={"mode": mode})]},
+                          "fixed_backends": {backend: {"available": not reasons, "reasons": reasons}
+                                             for backend in ("system", "macos", "openai_tts")
+                                             for reasons in [live_providers.requirements(provider_config_id, caller={"fixed_backend": backend})]}})
         backends, unavailable = live_providers.auto_judges()
         judges = [{"backend": b.config.provider, "model_id": b.config.model_id, "available": True} for b in backends]
         judges += [{"backend": u["backend"], "available": False, "reason": u["reason"]} for u in unavailable]
-        return {"items": items, "auto_judges": judges}
+        from .interactive_caller import MODEL, PERSONAS
+        from .interactive_caller import SCENARIOS as CALLER_SCENARIOS
+
+        return {"items": items, "auto_judges": judges,
+                "interactive_caller": {"scenario_ids": list(CALLER_SCENARIOS), "personas": list(PERSONAS),
+                                       "provider": "openai", "model_id": MODEL, "delivery_mode": "gated"}}
 
     @app.get("/api/v1/scenarios", dependencies=[Depends(auth)])
     def scenarios(cursor: int = 0, limit: int = 100):
@@ -479,7 +493,7 @@ def create_app(
             raise ValueError("SCENARIO_PROVIDER_MISMATCH")
         if not is_live and config.scenario_id not in SCENARIOS:
             raise HTTPException(422, "UNKNOWN_SCENARIO")
-        if is_live and not live_providers.availability(config.provider_config_id)[0]:
+        if is_live and not live_providers.availability(config.provider_config_id, caller=config.caller.model_dump())[0]:
             raise ValueError("PROVIDER_NOT_CONFIGURED")
         run_ids = []
         with job_lock:

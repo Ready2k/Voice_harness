@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; media-src blob:; base-uri 'none'; form-action 'none'">
 <title>Voice Harness · Evaluation workspace</title>
 <link rel="stylesheet" href="./ops.css?v=ux-audit-20261018">
 </head>
@@ -24,6 +24,20 @@
   <form id="launch" class="panel" hidden>
     <label>Scenario<select id="scenario" aria-label="Scenario"></select></label>
     <label id="provider-field" hidden>Provider configuration<select id="provider" aria-label="Live provider"></select></label>
+    <fieldset id="caller-fields" hidden><legend>Caller</legend>
+      <label>Caller mode<select id="caller-mode"><option value="fixed">Fixed caller · scripted dialogue</option><option value="live_ai">Live AI caller · adaptive conversation</option></select></label>
+      <label id="fixed-voice-field">Fixed voice<select id="fixed-voice"><option value="system">Server default</option><option value="openai_tts">Natural AI speech · OpenAI TTS</option><option value="macos">macOS system speech</option></select></label>
+      <div id="interactive-fields" hidden>
+        <label>Persona<select id="caller-persona"><option value="calm">Calm and cooperative</option><option value="anxious">Anxious and uncertain</option><option value="frustrated">Frustrated and impatient</option></select></label>
+        <label>Customer voice<select id="caller-voice"><option value="cedar">Cedar · male (default)</option><option value="marin">Marin</option><option value="coral">Coral</option><option value="sage">Sage</option><option value="alloy">Alloy</option></select></label>
+        <p class="muted">The OpenAI agent uses a different voice automatically: Marin by default.</p>
+        <label>Maximum caller turns<input id="caller-turns" type="number" min="1" max="12" value="6"></label>
+        <label>Maximum duration (seconds)<input id="caller-duration" type="number" min="10" max="300" value="120"></label>
+        <p>Caller goal: ask for the balance, answer verification when asked, and clarify confusing replies. The caller knows the synthetic security answer but does not know the balance.</p>
+        <p class="muted">Pilot · OpenAI Realtime caller · Alternating turns with assessed audio. Both voice sessions incur usage. Caller fidelity needs review; a seed does not reproduce dialogue.</p>
+      </div>
+      <p id="caller-support" role="status"></p>
+    </fieldset>
     <div id="expectation" class="muted" aria-live="polite"></div>
     <p id="readiness" class="muted"></p>
     <div id="checklist"></div>

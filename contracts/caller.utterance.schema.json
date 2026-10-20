@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "turn": {
+      "minimum": 0,
+      "title": "Turn",
+      "type": "integer"
+    },
+    "text": {
+      "title": "Text",
+      "type": "string"
+    },
+    "transcript_source": {
+      "const": "caller_provider",
+      "title": "Transcript Source",
+      "type": "string"
+    },
+    "pcm_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Pcm Sha256",
+      "type": "string"
+    },
+    "audio_retained": {
+      "title": "Audio Retained",
+      "type": "boolean"
+    },
+    "sample_rate": {
+      "minimum": 0,
+      "title": "Sample Rate",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "turn",
+    "text",
+    "transcript_source",
+    "pcm_sha256",
+    "audio_retained",
+    "sample_rate"
+  ],
+  "title": "CallerUtterance",
+  "type": "object"
+}

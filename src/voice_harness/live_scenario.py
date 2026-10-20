@@ -123,12 +123,12 @@ class LiveScenarioRunner:
                 "harness_mechanics": list(self.entry.get("mechanics", [])), "provider": self.provider_session,
             })
 
-    def _record_input(self, index, turn, pcm, started_ms, ended_ms):
+    def _record_input(self, index, turn, pcm, started_ms, ended_ms, *, retained=False):
         with self.engine.database.transaction(self.run_id) as tx:
             tx.event("orchestrator", "input.caller_audio", {
                 "turn": index, "source_text_sha256": hashlib.sha256(turn["customer"].encode()).hexdigest(),
                 "pcm_sha256": hashlib.sha256(pcm).hexdigest(), "byte_count": len(pcm), "sample_rate": RATE,
-                "audio_retained": False, "transformations": [self.entry["definition"]["audio_profile"]],
+                "audio_retained": retained, "transformations": [self.entry["definition"]["audio_profile"]],
                 "stream_started_ms": started_ms, "stream_ended_ms": ended_ms,
                 "clock_domain_id": PROCESS_CLOCK_DOMAIN,
             })
@@ -195,9 +195,8 @@ class LiveScenarioRunner:
         follow_up = False  # a tool result was submitted, so the provider's next response belongs to this same turn
         tool_seen = False  # a tool-using reply speaks again after its result; that long reply is the barge-in target
 
-        async def step(event, outcome):
+        async def step(event, outcome, *, continues=False):
             """Decide what a fed event means for the turn; returns an outcome dict, or CONTINUE."""
-            nonlocal follow_up
             if self.driver.cancel_requested:
                 self.driver.cancel_requested = False
                 await self._cancel_generation()
@@ -215,8 +214,7 @@ class LiveScenarioRunner:
                     self.interrupt_results.append(receipt)
                     self.driver.interrupt(receipt)  # engine epoch, tokens, queued tools and history state
                 return {"approval": None, "strict_speech_approval": "barge_in_not_assessed"}
-            if event.type == "turn_end" and follow_up:
-                follow_up = False  # end of the tool-calling response; wait for the one that uses the result
+            if event.type == "turn_end" and continues:
                 return CONTINUE
             if event.type == "turn_end" and outcome is not None:
                 return outcome
@@ -231,6 +229,7 @@ class LiveScenarioRunner:
             nonlocal tool_seen, follow_up
             events = self.adapter.receive().__aiter__()
             nxt, running, settled, exhausted = None, {}, None, False  # running: task -> (job, response-end event)
+            response_active = False
             try:
                 while True:
                     if nxt is None and not exhausted:
@@ -241,11 +240,11 @@ class LiveScenarioRunner:
                     await asyncio.wait(waiting, return_when=asyncio.FIRST_COMPLETED)
                     # Commits and control events are both handled here, on this one thread, in arrival order.
                     for task in [t for t in running if t.done()]:
-                        job, ended = running.pop(task)
-                        result = await step(ended, self.driver.commit(job, task.result()))
+                        job, ended, continues = running.pop(task)
+                        result = await step(ended, self.driver.commit(job, task.result()), continues=continues)
                         if result is not CONTINUE and (settled is None or settled["strict_speech_approval"] == "no_audio"):
                             settled = result
-                    if settled is not None and not running:
+                    if settled is not None and not running and not follow_up and not response_active:
                         return settled
                     if nxt is None or not nxt.done():
                         continue
@@ -256,6 +255,7 @@ class LiveScenarioRunner:
                         exhausted = True
                         continue
                     if event.type == "tool_call":
+                        settled = None
                         await self._tool(bank, event)
                         tool_seen = True
                         follow_up = getattr(self.adapter, "TOOL_CALL_ENDS_RESPONSE", True)
@@ -266,19 +266,27 @@ class LiveScenarioRunner:
                             return None
                     if event.type == "interrupted":
                         self.interruptions += 1
+                    if event.type == "turn_start":
+                        response_active = True
+                        settled = None
                     if event.type == "turn_end":
+                        response_active = False
+                        # Bind continuation to this response before ASR can finish out of order.
+                        continues, follow_up = follow_up, False
                         job, immediate = self.driver.begin(event)
                         if job is None:  # nothing to assess (no audio) or an immediate typed failure
-                            result = await step(event, immediate)
+                            result = await step(event, immediate, continues=continues)
                             if result is not CONTINUE and (settled is None or settled["strict_speech_approval"] == "no_audio"):
                                 settled = result
                         else:  # keyed work item: assessed on a worker while intake and controls keep running
-                            running[asyncio.ensure_future(asyncio.to_thread(self.driver.analyse, job))] = (job, event)
+                            running[asyncio.ensure_future(asyncio.to_thread(self.driver.analyse, job))] = (job, event, continues)
                         continue
                     result = await step(event, self.driver.feed(event))
                     if result is not CONTINUE and (settled is None or settled["strict_speech_approval"] == "no_audio"):
                         settled = result
-                    if settled is not None and not running:
+                    if settled is not None and settled["strict_speech_approval"] == "barge_in_not_assessed":
+                        return settled
+                    if settled is not None and not running and not follow_up and not response_active:
                         return settled
             finally:
                 for pending in (nxt, *running):

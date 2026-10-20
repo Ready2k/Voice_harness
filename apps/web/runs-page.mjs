@@ -1,4 +1,5 @@
 import {setConnected} from "./chrome.mjs?v=ux-audit-20261018";
+import {callerRecordings} from "./caller-recordings.mjs";
 import { renderCost } from "./cost-view.mjs?v=ux-audit-20261018";
 import { runActions } from "./workflow.mjs?v=ux-audit-20261018";
 import { createWorkspace, renderOverview, renderRecent } from "./live-view.mjs?v=ux-audit-20261018";
@@ -18,6 +19,12 @@ let overviewTimer = null;
 let connected = false;
 let launching = false;
 let current = null; // {runId, events, timer}
+
+function callerConfig() {
+  return {mode: $("caller-mode").value, fixed_backend: $("fixed-voice").value,
+    persona: $("caller-persona").value, voice: $("caller-voice").value,
+    max_turns: Number($("caller-turns").value), max_duration_seconds: Number($("caller-duration").value)};
+}
 
 function remember(value) {
   try { sessionStorage.setItem("harness-operator-token", value); } catch { /* storage may be blocked */ }
@@ -47,6 +54,7 @@ async function paint() {
   if (current !== selected) return true;
   selected.events = mergeEvents(selected.events, incoming);
   selected.run=run;
+  selected.recordingsRoot.hidden = run.config?.caller?.mode !== "live_ai";
   renderCost(selected.costRoot,cost);
   workspace.update(run, selected.events, metrics, holds, assurance, options.find(option=>option.id===run.scenario?.scenario_id)?.title);
   $("connection").textContent = TERMINAL.has(run.state) ? "Connected · Run finished. Review its assurance verdict below." : "Connected · Updating this run every two seconds.";
@@ -73,12 +81,18 @@ async function openRun(runId) {
   history.replaceState(null, "", url);
   error.textContent = "";
   if (current?.timer) clearTimeout(current.timer);
+  current?.disposeRecordings?.();
   current = { runId, events: [], timer: null };
   workspace = createWorkspace($("detail"), cancelRun);
   runActions($("detail"), {token,runId,getData:()=>current?.runId===runId&&current.run?{run:current.run,events:current.events}:null,onOpen:openRun,onRefresh:paint});
   $("detail").scrollIntoView({behavior:"smooth", block:"start"});
   current.costRoot=el("section","panel");
   $("detail").append(current.costRoot);
+  const recordings = el("section", "panel");
+  recordings.hidden = true;
+  current.recordingsRoot = recordings;
+  $("detail").append(recordings);
+  current.disposeRecordings = callerRecordings(recordings, token, runId);
   const mine = current;
   const tick = async () => {
     try {
@@ -97,9 +111,19 @@ async function openRun(runId) {
 
 function syncProvider() {
   const option = options[Number($("scenario").value)];
+  const caller = callerConfig();
+  const selectedProvider = $("provider").value;
+  providers = providerChoices(liveProvidersPayload, caller);
+  $("provider").replaceChildren(...providers.map((p) => Object.assign(el("option", "", p.label), {value: p.id, disabled: p.disabled})));
+  $("provider").value = providers.find(p => p.id === selectedProvider && !p.disabled)?.id ?? providers.find(p => !p.disabled)?.id ?? "";
   $("provider-field").hidden = !option?.live;
+  $("caller-fields").hidden = !option?.live;
+  $("interactive-fields").hidden = caller.mode !== "live_ai";
+  $("fixed-voice-field").hidden = caller.mode !== "fixed";
+  const supported = caller.mode !== "live_ai" || (liveProvidersPayload.interactive_caller?.scenario_ids ?? []).includes(option?.id);
+  $("caller-support").textContent = !supported ? "Live AI caller is available for Balance after verification · clean studio. Choose that scenario or use a fixed caller." : "";
   const available = providers.some((p) => !p.disabled);
-  $("launch-button").disabled = launching || !option || (option.live && !available);
+  $("launch-button").disabled = launching || !option || (option.live && (!available || !supported));
   $("readiness").textContent = option?.live
     ? available ? "Live evaluation · Uses the selected server configuration. Provider usage may incur charges."
       : "Live evaluation unavailable. Configure provider credentials, independent ASR and caller voice synthesis on the server, then reconnect. Scripted fixtures remain available."
@@ -176,6 +200,8 @@ $("auth").addEventListener("submit", (event) => {
   connect();
 });
 $("scenario").addEventListener("change", () => { syncProvider(); renderExpectation(); });
+$("caller-mode").addEventListener("change", syncProvider);
+$("fixed-voice").addEventListener("change", syncProvider);
 $("refresh").addEventListener("click", () => connect());
 $("launch").addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -187,7 +213,7 @@ $("launch").addEventListener("submit", async (event) => {
     const option = options[Number($("scenario").value)];
     const choice = providers.find((p) => p.id === $("provider").value);
     if (option.live && (!choice || choice.disabled)) throw new Error("no live provider is configured on the server");
-    const body = launchBody(option, "strict-v1", option.live ? choice.id : null);
+    const body = launchBody(option, "strict-v1", option.live ? choice.id : null, callerConfig());
     body.fixture_seed = Number($("seed").value);
     body.retain_audio = $("retain").checked;
     const key = "ui-" + Date.now() + "-" + Math.random().toString(36).slice(2);

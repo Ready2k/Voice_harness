@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "mode": {
+      "const": "live_ai",
+      "title": "Mode",
+      "type": "string"
+    },
+    "provider": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Provider",
+      "type": "string"
+    },
+    "model_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Model Id",
+      "type": "string"
+    },
+    "voice": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Voice",
+      "type": "string"
+    },
+    "persona": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Persona",
+      "type": "string"
+    },
+    "profile_version": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Profile Version",
+      "type": "string"
+    },
+    "prompt_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Prompt Sha256",
+      "type": "string"
+    },
+    "profile_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Profile Sha256",
+      "type": "string"
+    },
+    "max_turns": {
+      "minimum": 0,
+      "title": "Max Turns",
+      "type": "integer"
+    },
+    "max_duration_seconds": {
+      "minimum": 0,
+      "title": "Max Duration Seconds",
+      "type": "integer"
+    },
+    "delivery_mode": {
+      "const": "gated",
+      "title": "Delivery Mode",
+      "type": "string"
+    },
+    "interruptions": {
+      "const": "not_supported_in_pilot",
+      "title": "Interruptions",
+      "type": "string"
+    },
+    "fidelity": {
+      "const": "not_independently_assessed",
+      "title": "Fidelity",
+      "type": "string"
+    },
+    "seed_reproducibility": {
+      "const": false,
+      "title": "Seed Reproducibility",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "mode",
+    "provider",
+    "model_id",
+    "voice",
+    "persona",
+    "profile_version",
+    "prompt_sha256",
+    "profile_sha256",
+    "max_turns",
+    "max_duration_seconds",
+    "delivery_mode",
+    "interruptions",
+    "fidelity",
+    "seed_reproducibility"
+  ],
+  "title": "CallerSessionStarted",
+  "type": "object"
+}

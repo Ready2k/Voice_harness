@@ -6,8 +6,14 @@ export function comparisonCheck(runs){
  const first=runs[0].config;
  if(runs.some(r=>r.config.scenario_id!==first.scenario_id||r.config.scenario_version!==first.scenario_version))throw new Error('Runs must use the same scenario and version.');
  const differences=MATCH_FIELDS.filter(k=>runs.some(r=>r.config[k]!==first[k]));
+ const callerKey = config => {
+  const c = config.caller ?? {mode:'fixed',fixed_backend:'system'};
+  return c.mode === 'live_ai' ? JSON.stringify([c.mode,c.persona,c.voice,c.max_turns,c.max_duration_seconds])
+    : JSON.stringify(['fixed',c.fixed_backend??'system']);
+ };
+ if(runs.some(r=>callerKey(r.config)!==callerKey(first)))differences.push('caller');
  const missing=MATCH_FIELDS.filter(k=>runs.some(r=>r.config[k]==null));
- return {differences,missing,providers:[...new Set(runs.map(r=>r.config.provider_config_id))]};
+ return {differences,missing,adaptiveCaller:runs.some(r=>r.config.caller?.mode==='live_ai'),providers:[...new Set(runs.map(r=>r.config.provider_config_id))]};
 }
 export function batchPlan(option, providers, seed, count, retain, batchId){
  if(!Number.isSafeInteger(seed)||!Number.isSafeInteger(seed+count-1))throw new Error('Use a safe integer fixture seed.');

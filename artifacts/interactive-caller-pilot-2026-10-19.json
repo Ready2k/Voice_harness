@@ -1,0 +1,13 @@
+{
+  "run_id": "run_1891b31dd2a6400da571cbecf64f0c8e",
+  "state": "cancelled",
+  "termination_reason": "pilot_stopped_credit_balance_exhausted",
+  "assurance": null,
+  "caller_end": [],
+  "caller_turns": [],
+  "agent_turns": [],
+  "recorded_clips": 0,
+  "retained_artifacts": 0,
+  "live_validation": "blocked",
+  "provider_error_code": "credit_balance_exhausted"
+}

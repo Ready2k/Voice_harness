@@ -29,10 +29,10 @@ class BakeoffApi(unittest.TestCase):
         self.app = create_app(self.database, root, "operator")
         self.headers = {"Authorization": "Bearer operator"}
         for patch in (
-            mock.patch.object(live_providers, "availability", lambda provider_id, environ=None, manual=False: (True, None)),
+            mock.patch.object(live_providers, "availability", lambda provider_id, environ=None, manual=False, **kw: (True, None)),
             mock.patch.object(live_providers, "_adapter", lambda provider_id: (FakeAdapter(), {"tools": []})),
             mock.patch.object(live_providers, "select_backend", lambda: ScriptedAsr(queue=["Please verify your identity."] * 4)),
-            mock.patch("voice_harness.adapters.openai_realtime.synth_caller_pcm", lambda text, trail_ms=0: tone(200)),
+            mock.patch("voice_harness.adapters.openai_realtime.synth_caller_pcm", lambda text, trail_ms=0, **kw: tone(200)),
             mock.patch.object(live_providers, "auto_judges", lambda environ=None: ([], [])),
         ):
             patch.start()
@@ -114,7 +114,7 @@ class BakeoffApi(unittest.TestCase):
 
     def test_unconfigured_providers_and_bad_plans_are_refused(self):
         with TestClient(self.app) as client, mock.patch.object(
-                live_providers, "availability", lambda provider_id, environ=None, manual=False: (provider_id != "gemini-live", "NO_ADC")):
+                live_providers, "availability", lambda provider_id, environ=None, manual=False, **kw: (provider_id != "gemini-live", "NO_ADC")):
             missing = client.post("/api/v1/bakeoffs", headers=self.headers,
                                   json={"name": "x", "provider_config_ids": ["openai-realtime-live", "gemini-live"]})
             single = client.post("/api/v1/bakeoffs", headers=self.headers, json={"name": "x", "provider_config_ids": ["openai-realtime-live"]})

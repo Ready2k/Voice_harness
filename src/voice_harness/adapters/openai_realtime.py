@@ -53,7 +53,7 @@ log = logging.getLogger("voice_harness.adapters.openai_realtime")
 DEFAULT_URL = "wss://api.openai.com/v1/realtime"
 DEFAULT_MODEL = "gpt-realtime-2.1"
 SAMPLE_RATE = 24000
-FATAL_CODES = {"invalid_api_key", "authentication_error", "insufficient_quota", "session_expired"}
+FATAL_CODES = {"invalid_api_key", "authentication_error", "insufficient_quota", "credit_balance_exhausted", "session_expired"}
 _END = object()
 
 
@@ -194,8 +194,14 @@ class OpenAIRealtimeAdapter:
         if tools:
             session["tools"] = tools
             session["tool_choice"] = config.get("tool_choice", "auto")
-        await self._send({"type": "session.update", "session": session})
-        updated = await self._wait_for("session.updated", 15)
+        waiter = asyncio.ensure_future(self._wait_for("session.updated", 15))
+        await asyncio.sleep(0)
+        try:
+            await self._send({"type": "session.update", "session": session})
+            updated = await waiter
+        finally:
+            if not waiter.done():
+                waiter.cancel()
         return {
             "session_id": self.session_id,
             "provider_session_id": (updated.get("session") or created.get("session") or {}).get("id"),
@@ -367,7 +373,7 @@ class OpenAIRealtimeAdapter:
         finally:
             for f in self._acks.values():
                 if not f.done():
-                    f.cancel()
+                    f.set_exception(ValueError("PROVIDER_CONNECTION_CLOSED"))
             if not self.closed:
                 self._queue.put_nowait(_END)
 
@@ -445,6 +451,10 @@ class OpenAIRealtimeAdapter:
             code = err.get("code") or err.get("type") or "provider_error"
             self._emit(ProviderError, code=str(code), message=str(err.get("message", ""))[:300],
                        fatal=code in FATAL_CODES)
+            if code in FATAL_CODES:
+                for future in self._acks.values():
+                    if not future.done():
+                        future.set_exception(ValueError("PROVIDER_" + code.upper()))
 
 
 def wav_data(buf: bytes) -> bytes:
@@ -459,17 +469,17 @@ def wav_data(buf: bytes) -> bytes:
 
 
 def synth_caller_pcm(text: str = "Stop. Please stop talking, I have a question.", *, lead_ms: int = 200,
-                     trail_ms: int = 1000) -> bytes:
+                     trail_ms: int = 1000, environ=None) -> bytes:
     """Synthetic caller utterance as 24 kHz s16le mono with silence padding. Backend per
     ``VOICE_HARNESS_CALLER_VOICE`` (macOS say/afconvert by default, or opt-in openai_tts).
     Raises RuntimeError when no synthesiser is usable."""
     from .. import caller_voice
 
-    name, reason = caller_voice.backend()
+    name, reason = caller_voice.backend(environ)
     if name is None:
         raise caller_voice.CallerVoiceUnavailable(reason)
     if name == "openai_tts":
-        pcm = caller_voice.openai_tts_pcm(text)
+        pcm = caller_voice.openai_tts_pcm(text, environ=environ)
         return bytes(SAMPLE_RATE * 2 * lead_ms // 1000) + pcm + bytes(SAMPLE_RATE * 2 * trail_ms // 1000)
     return _synth_macos(text, lead_ms=lead_ms, trail_ms=trail_ms)
 

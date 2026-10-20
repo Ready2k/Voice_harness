@@ -83,6 +83,12 @@ def known_limitations(config, events):
             "Confirmation was authorised out of band by the harness: this run tests tool/confirmation mechanics, "
             "not spoken consent, and is excluded from voice-confirmation assurance"
         )
+    if config.get("caller", {}).get("mode") == "live_ai":
+        limits.extend([
+            "Live AI caller pilot: adaptive dialogue is not reproducible from a seed; compare repeated runs with matching caller profiles",
+            "Caller fidelity is not independently assessed; provider-reported caller transcripts are not independent ASR",
+            "Alternating turns with whole-response gating; natural barge-in is not supported in this pilot",
+        ])
     return limits
 
 

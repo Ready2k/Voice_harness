@@ -107,7 +107,7 @@ class ManualSessions(unittest.TestCase):
 
     def patch(self, adapter, asr):
         for patch in (
-            mock.patch.object(live_providers, "availability", lambda provider_id, environ=None, manual=False: (True, None)),
+            mock.patch.object(live_providers, "availability", lambda provider_id, environ=None, manual=False, **kw: (True, None)),
             mock.patch.object(live_providers, "_adapter", lambda provider_id: (adapter, {"tools": []})),
             mock.patch.object(live_providers, "select_backend", lambda: ScriptedAsr(queue=list(asr))),
             mock.patch.object(live_providers, "auto_judges", lambda environ=None: ([], [])),
@@ -167,7 +167,7 @@ class ManualSessions(unittest.TestCase):
     def test_unknown_journey_and_unconfigured_provider_are_refused(self):
         with TestClient(self.app) as client:
             unknown = self.create(client, journey="nope")
-            with mock.patch.object(live_providers, "availability", lambda p, environ=None, manual=False: (False, "X")):
+            with mock.patch.object(live_providers, "availability", lambda p, environ=None, manual=False, **kw: (False, "X")):
                 missing = self.create(client)
         self.assertEqual(unknown.json()["error"]["code"], "UNKNOWN_JOURNEY")
         self.assertEqual(missing.json()["error"]["code"], "PROVIDER_NOT_CONFIGURED")

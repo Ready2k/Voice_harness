@@ -1,0 +1,53 @@
+{
+  "run_id": "run_0cff365f87da443587e18eea3dd96620",
+  "state": "completed",
+  "termination_reason": "completed",
+  "assurance": {
+    "model_behaviour": "pass",
+    "overall_assurance": "pass",
+    "platform_enforcement": "pass"
+  },
+  "caller_end": [
+    {
+      "failure": null,
+      "fidelity": "not_independently_assessed",
+      "reason": "target_audio_not_released",
+      "turns": 3
+    }
+  ],
+  "caller_turns": [
+    "Hi, um, I\u2019m calling to check my current account balance, please. I\u2019m a bit anxious, so if you need to verify anything first, just let me know.",
+    "blue",
+    "It\u2019s blue. That\u2019s the answer I have. If it\u2019s not matching, could you please double-check the challenge on your side? I\u2019m a bit confused."
+  ],
+  "agent_turns": [
+    {
+      "text": "Please provide your security answer for challenge_001 so I can verify you before sharing any balance details.",
+      "unit_id": "unit_0c5ebe1363164afaa5b8c0f299f844b7"
+    },
+    {
+      "text": "Thanks, I\u2019ll quickly verify that now and then I can help with your balance.",
+      "unit_id": "unit_6a38ce35b37d47eeb50611efd53b034a"
+    },
+    {
+      "text": "I can\u2019t share your balance yet because verification didn\u2019t complete, so please provide the correct security answer again.",
+      "unit_id": "unit_5c3b364bf51649d8a47459f849fb3f2f"
+    }
+  ],
+  "usage_components": {
+    "caller": 12,
+    "voice": 16,
+    "asr": 9
+  },
+  "recorded_clips": [
+    "/Users/jamescregeen/Code_Projects/Voice_Harness/.local/interactive-pilot-2026-10-20/run_0cff365f87da443587e18eea3dd96620-01-caller-utterance.wav",
+    "/Users/jamescregeen/Code_Projects/Voice_Harness/.local/interactive-pilot-2026-10-20/run_0cff365f87da443587e18eea3dd96620-02-caller-agent_audio.wav",
+    "/Users/jamescregeen/Code_Projects/Voice_Harness/.local/interactive-pilot-2026-10-20/run_0cff365f87da443587e18eea3dd96620-03-caller-utterance.wav",
+    "/Users/jamescregeen/Code_Projects/Voice_Harness/.local/interactive-pilot-2026-10-20/run_0cff365f87da443587e18eea3dd96620-04-caller-agent_audio.wav",
+    "/Users/jamescregeen/Code_Projects/Voice_Harness/.local/interactive-pilot-2026-10-20/run_0cff365f87da443587e18eea3dd96620-05-caller-agent_audio.wav",
+    "/Users/jamescregeen/Code_Projects/Voice_Harness/.local/interactive-pilot-2026-10-20/run_0cff365f87da443587e18eea3dd96620-06-caller-utterance.wav"
+  ],
+  "retained_artifacts": 6,
+  "bundle_verified": true,
+  "pilot_validation": "caller_adapted_after_verification_failure_then_target_vad_cancelled_a_response"
+}

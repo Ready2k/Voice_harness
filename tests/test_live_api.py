@@ -181,10 +181,10 @@ class LiveApi(unittest.TestCase):
                       provider="openai-realtime-live"):
         adapter = adapter or FakeAdapter()
         patches = [
-            mock.patch.object(live_providers, "availability", lambda provider_id, environ=None: (True, None)),
+            mock.patch.object(live_providers, "availability", lambda provider_id, environ=None, **kw: (True, None)),
             mock.patch.object(live_providers, "_adapter", lambda provider_id: (adapter, {"tools": []})),
             mock.patch.object(live_providers, "select_backend", lambda: ScriptedAsr(queue=list(asr))),
-            mock.patch("voice_harness.adapters.openai_realtime.synth_caller_pcm", lambda text, trail_ms=0: tone(200)),
+            mock.patch("voice_harness.adapters.openai_realtime.synth_caller_pcm", lambda text, trail_ms=0, **kw: tone(200)),
             mock.patch.object(live_providers, "auto_judges", lambda environ=None: judges),
         ]
         for patch in patches:
@@ -270,10 +270,10 @@ class LiveApi(unittest.TestCase):
     def test_a_run_without_independent_asr_is_never_a_factual_pass(self):
         adapter = FakeAdapter()
         patches = [
-            mock.patch.object(live_providers, "availability", lambda provider_id, environ=None: (True, None)),
+            mock.patch.object(live_providers, "availability", lambda provider_id, environ=None, **kw: (True, None)),
             mock.patch.object(live_providers, "_adapter", lambda provider_id: (adapter, {"tools": []})),
             mock.patch.object(live_providers, "select_backend", lambda: None),  # strict speech unavailable
-            mock.patch("voice_harness.adapters.openai_realtime.synth_caller_pcm", lambda text, trail_ms=0: tone(200)),
+            mock.patch("voice_harness.adapters.openai_realtime.synth_caller_pcm", lambda text, trail_ms=0, **kw: tone(200)),
             mock.patch.object(live_providers, "auto_judges", lambda environ=None: ([], [])),
         ]
         for patch in patches:
@@ -289,11 +289,11 @@ class LiveApi(unittest.TestCase):
         self.assertNotEqual(assurance["overall_assurance"], "pass")  # the scripted adapter also proposes the tool early
 
     def injected_run(self, summary=None, assess_error=None):
-        async def run_live(engine, run_id, provider_config_id, scenario_id, seed=0):
+        async def run_live(engine, run_id, provider_config_id, scenario_id, seed=0, **kw):
             return summary
 
         patches = [
-            mock.patch.object(live_providers, "availability", lambda provider_id, environ=None: (True, None)),
+            mock.patch.object(live_providers, "availability", lambda provider_id, environ=None, **kw: (True, None)),
             mock.patch.object(live_providers, "run_live", run_live),
             mock.patch.object(live_providers, "auto_judges", lambda environ=None: ([], [])),
         ]
@@ -328,10 +328,10 @@ class LiveApi(unittest.TestCase):
     def exported(self, scenario, provider="openai-realtime-live", adapter=None):
         adapter = adapter or FakeAdapter()
         patches = [
-            mock.patch.object(live_providers, "availability", lambda provider_id, environ=None: (True, None)),
+            mock.patch.object(live_providers, "availability", lambda provider_id, environ=None, **kw: (True, None)),
             mock.patch.object(live_providers, "_adapter", lambda provider_id: (adapter, {"tools": []})),
             mock.patch.object(live_providers, "select_backend", lambda: ScriptedAsr(queue=["Please verify your identity."] * 3)),
-            mock.patch("voice_harness.adapters.openai_realtime.synth_caller_pcm", lambda text, trail_ms=0: tone(200)),
+            mock.patch("voice_harness.adapters.openai_realtime.synth_caller_pcm", lambda text, trail_ms=0, **kw: tone(200)),
             mock.patch.object(live_providers, "auto_judges", lambda environ=None: ([], [])),
         ]
         for patch in patches:
@@ -527,10 +527,10 @@ class LiveApi(unittest.TestCase):
         adapter = HangingAdapter()
         adapter.opened = threading.Event()
         patches = [
-            mock.patch.object(live_providers, "availability", lambda provider_id, environ=None: (True, None)),
+            mock.patch.object(live_providers, "availability", lambda provider_id, environ=None, **kw: (True, None)),
             mock.patch.object(live_providers, "_adapter", lambda provider_id: (adapter, {"tools": []})),
             mock.patch.object(live_providers, "select_backend", lambda: ScriptedAsr(queue=["x"])),
-            mock.patch("voice_harness.adapters.openai_realtime.synth_caller_pcm", lambda text, trail_ms=0: tone(200)),
+            mock.patch("voice_harness.adapters.openai_realtime.synth_caller_pcm", lambda text, trail_ms=0, **kw: tone(200)),
         ]
         for patch in patches:
             patch.start()
@@ -557,10 +557,10 @@ class LiveApi(unittest.TestCase):
     def test_live_run_goes_through_the_lifecycle_with_live_budgets(self):
         adapter = FakeAdapter()
         patches = [
-            mock.patch.object(live_providers, "availability", lambda provider_id, environ=None: (True, None)),
+            mock.patch.object(live_providers, "availability", lambda provider_id, environ=None, **kw: (True, None)),
             mock.patch.object(live_providers, "_adapter", lambda provider_id: (adapter, {"tools": []})),
             mock.patch.object(live_providers, "select_backend", lambda: ScriptedAsr(queue=["Please verify your identity."] * 2)),
-            mock.patch("voice_harness.adapters.openai_realtime.synth_caller_pcm", lambda text, trail_ms=0: tone(200)),
+            mock.patch("voice_harness.adapters.openai_realtime.synth_caller_pcm", lambda text, trail_ms=0, **kw: tone(200)),
         ]
         for patch in patches:
             patch.start()
@@ -592,10 +592,10 @@ class LiveApi(unittest.TestCase):
         self.launches = getattr(self, "launches", 0) + 1
         adapter = FakeAdapter()
         active = [
-            mock.patch.object(live_providers, "availability", lambda provider_id, environ=None: (True, None)),
+            mock.patch.object(live_providers, "availability", lambda provider_id, environ=None, **kw: (True, None)),
             mock.patch.object(live_providers, "_adapter", lambda provider_id: (adapter, {"tools": []})),
             mock.patch.object(live_providers, "select_backend", lambda: backend),
-            mock.patch("voice_harness.adapters.openai_realtime.synth_caller_pcm", lambda text, trail_ms=0: tone(200)),
+            mock.patch("voice_harness.adapters.openai_realtime.synth_caller_pcm", lambda text, trail_ms=0, **kw: tone(200)),
             mock.patch.object(live_providers, "auto_judges", lambda environ=None: ([], [])),
             *patches,
         ]

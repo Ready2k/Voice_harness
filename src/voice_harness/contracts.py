@@ -4,13 +4,22 @@ import base64
 import binascii
 from typing import Annotated, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, model_serializer, model_validator
 
 Identifier = Annotated[str, Field(min_length=1, max_length=200)]
 
 
 class Closed(BaseModel):
     model_config = ConfigDict(extra="forbid", strict=True)
+
+
+class CallerConfig(Closed):
+    mode: Literal["fixed", "live_ai"] = "fixed"
+    fixed_backend: Literal["system", "macos", "openai_tts"] = "system"
+    voice: Literal["marin", "cedar", "alloy", "coral", "sage"] = "cedar"
+    persona: Literal["calm", "anxious", "frustrated"] = "calm"
+    max_turns: Annotated[int, Field(ge=1, le=12)] = 6
+    max_duration_seconds: Annotated[int, Field(ge=10, le=300)] = 120
 
 
 class RunConfig(Closed):
@@ -24,6 +33,24 @@ class RunConfig(Closed):
     repetitions: Annotated[int, Field(ge=1, le=20)] = 1
     retain_audio: bool = False
     client_mode: Literal["software_fixture", "websocket"] = "software_fixture"
+    caller: CallerConfig = Field(default_factory=CallerConfig)
+
+    @model_serializer(mode="wrap")
+    def serialize_config(self, handler):
+        data = handler(self)
+        # Keep legacy fixed-run hashes/idempotency stable when no caller settings changed.
+        if self.caller == CallerConfig():
+            data.pop("caller", None)
+        return data
+
+    @model_validator(mode="after")
+    def caller_pairing(self):
+        if self.caller.mode == "live_ai":
+            if self.provider_config_id == "mock-banking-v1":
+                raise ValueError("LIVE_CALLER_REQUIRES_LIVE_PROVIDER")
+            if self.scenario_id != "happy-balance-clean-001":
+                raise ValueError("LIVE_CALLER_SCENARIO_UNSUPPORTED")
+        return self
 
 
 class ManualSessionConfig(Closed):

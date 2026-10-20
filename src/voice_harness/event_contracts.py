@@ -666,6 +666,46 @@ class InputCallerAudio(Closed):
     clock_domain_id: Identifier
 
 
+class CallerSessionStarted(Closed):
+    mode: Literal["live_ai"]
+    provider: Identifier
+    model_id: Identifier
+    voice: Identifier
+    persona: Identifier
+    profile_version: Identifier
+    prompt_sha256: Hex64
+    profile_sha256: Hex64
+    max_turns: Count
+    max_duration_seconds: Count
+    delivery_mode: Literal["gated"]
+    interruptions: Literal["not_supported_in_pilot"]
+    fidelity: Literal["not_independently_assessed"]
+    seed_reproducibility: Literal[False]
+
+
+class CallerSessionEnded(Closed):
+    reason: Identifier
+    failure: Identifier | None
+    turns: Count
+    fidelity: Literal["not_independently_assessed"]
+
+
+class CallerAgentAudio(Closed):
+    unit_id: Identifier
+    pcm_sha256: Hex64
+    audio_retained: bool
+    sample_rate: Count
+
+
+class CallerUtterance(Closed):
+    turn: Count
+    text: str
+    transcript_source: Literal["caller_provider"]
+    pcm_sha256: Hex64
+    audio_retained: bool
+    sample_rate: Count
+
+
 class FaultDisposition(Closed):
     fault_kind: Identifier
     at_turn: Count
@@ -700,6 +740,10 @@ EVENT_CONTENT_CONTRACTS.update(
     {
         "run.live_binding": RunLiveBinding,
         "input.caller_audio": InputCallerAudio,
+        "caller.session_started": CallerSessionStarted,
+        "caller.session_ended": CallerSessionEnded,
+        "caller.utterance": CallerUtterance,
+        "caller.agent_audio": CallerAgentAudio,
         "assessment.abandoned": AssessmentAbandoned,
         "adapter.native_event": AdapterNativeEvent,
         "fault.disposition": FaultDisposition,

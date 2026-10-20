@@ -19,6 +19,8 @@ It is not a production banking service, and passing it is not a certification.
 
 Read next: [Vision](docs/VISION.md) · [Architecture](docs/ARCHITECTURE.md) · [Engineering guide](docs/ENGINEERING.md)
 
+Runs supports **Fixed caller** scripts and a **Live AI caller** pilot for the clean balance enquiry. The live caller listens and replies with a selected persona and natural voice; its OpenAI session is independent of the agent under test. See [setup, limits and API example](docs/INTERACTIVE_CALLER_SCOPE.md#using-the-pilot). Enable audio retention to replay both speakers from run details.
+
 ## Status
 
 Phases 0-3 are complete. Phase 4 (provider breadth, scenarios, live runs) is in progress: all four provider

@@ -1,0 +1,53 @@
+{
+  "run_id": "run_2d168181bbcf4d879bdb6237602f89f3",
+  "state": "completed",
+  "termination_reason": "completed",
+  "assurance": {
+    "model_behaviour": "pass",
+    "overall_assurance": "pass",
+    "platform_enforcement": "pass"
+  },
+  "caller_end": [
+    {
+      "failure": null,
+      "fidelity": "not_independently_assessed",
+      "reason": "objective_response_delivered",
+      "turns": 2
+    }
+  ],
+  "caller_turns": [
+    "Hello, I\u2019m calling to check my current account balance, please. I\u2019m a bit anxious, so I\u2019d really appreciate a quick recap once you\u2019ve got me verified.",
+    "My security answer is blue."
+  ],
+  "agent_turns": [
+    {
+      "text": "Please provide the answer to your security challenge for verification, and then I can give a quick balance recap.",
+      "unit_id": "unit_e76d804997184f8b826c6d0ad32b7b21"
+    },
+    {
+      "text": "Thanks for that\u2014I'll quickly verify your identity before sharing a recap.",
+      "unit_id": "unit_15ebce3f4e274271bd463a8f7fe9db79"
+    },
+    {
+      "text": "Your current balance is 1,234.56 GBP.",
+      "unit_id": "unit_e09c915bf53e482ab56cb4588923da43"
+    }
+  ],
+  "usage_components": {
+    "caller": 8,
+    "voice": 16,
+    "asr": 9
+  },
+  "recorded_clips": [
+    "/Users/jamescregeen/Code_Projects/Voice_Harness/.local/interactive-pilot-2026-10-20/run_2d168181bbcf4d879bdb6237602f89f3-01-caller-utterance.wav",
+    "/Users/jamescregeen/Code_Projects/Voice_Harness/.local/interactive-pilot-2026-10-20/run_2d168181bbcf4d879bdb6237602f89f3-02-caller-agent_audio.wav",
+    "/Users/jamescregeen/Code_Projects/Voice_Harness/.local/interactive-pilot-2026-10-20/run_2d168181bbcf4d879bdb6237602f89f3-03-caller-utterance.wav",
+    "/Users/jamescregeen/Code_Projects/Voice_Harness/.local/interactive-pilot-2026-10-20/run_2d168181bbcf4d879bdb6237602f89f3-04-caller-agent_audio.wav",
+    "/Users/jamescregeen/Code_Projects/Voice_Harness/.local/interactive-pilot-2026-10-20/run_2d168181bbcf4d879bdb6237602f89f3-05-caller-agent_audio.wav"
+  ],
+  "retained_artifacts": 5,
+  "bundle_verified": true,
+  "pilot_validation": "completed_with_independently_assessed_spoken_balance",
+  "audio_export": "/Users/jamescregeen/Code_Projects/Voice_Harness/artifacts/interactive-caller-demo-2026-10-20.wav",
+  "audio_export_note": "Recorded turns concatenated with short pauses; harness assessment and generation waits are excluded."
+}

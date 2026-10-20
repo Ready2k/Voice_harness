@@ -1,0 +1,61 @@
+{
+  "run_id": "run_83f4aebbc90241f0a9794e02f27ce7d8",
+  "state": "completed",
+  "termination_reason": "completed",
+  "assurance": {
+    "model_behaviour": "pass",
+    "overall_assurance": "pass",
+    "platform_enforcement": "pass"
+  },
+  "caller_end": [
+    {
+      "failure": null,
+      "fidelity": "not_independently_assessed",
+      "reason": "objective_response_delivered",
+      "turns": 2
+    }
+  ],
+  "caller_turns": [
+    "Hi, I\u2019m calling to check my current account balance, please. I\u2019m a bit anxious, so could you walk me through whatever you need from me to verify things?",
+    "My security answer is blue."
+  ],
+  "agent_turns": [
+    {
+      "text": "Please say your security answer exactly as you set it, and then I can verify you and continue.",
+      "unit_id": "unit_3bee34eaff9d40558236d420d6d85f85"
+    },
+    {
+      "text": "Okay, thanks for that answer\u2014let me check your verification and then we\u2019ll continue.",
+      "unit_id": "unit_0eeaace61be74a3d8eb4c114f98efb20"
+    },
+    {
+      "text": "Thanks for waiting\u2014I'll pull up your account summary now.",
+      "unit_id": "unit_4e53caebf7bd44bf853bfc2c20958d1e"
+    },
+    {
+      "text": "Your current balance is 1,234 pounds and 56 pence.",
+      "unit_id": "unit_8fea7ed0125c4f97b1cfaaecc545a098"
+    }
+  ],
+  "usage_components": {
+    "caller": 8,
+    "voice": 16,
+    "asr": 12
+  },
+  "recorded_clips": [
+    "/Users/jamescregeen/Code_Projects/Voice_Harness/.local/interactive-pilot-2026-10-20/run_83f4aebbc90241f0a9794e02f27ce7d8-01-caller-utterance.wav",
+    "/Users/jamescregeen/Code_Projects/Voice_Harness/.local/interactive-pilot-2026-10-20/run_83f4aebbc90241f0a9794e02f27ce7d8-02-caller-agent_audio.wav",
+    "/Users/jamescregeen/Code_Projects/Voice_Harness/.local/interactive-pilot-2026-10-20/run_83f4aebbc90241f0a9794e02f27ce7d8-03-caller-utterance.wav",
+    "/Users/jamescregeen/Code_Projects/Voice_Harness/.local/interactive-pilot-2026-10-20/run_83f4aebbc90241f0a9794e02f27ce7d8-04-caller-agent_audio.wav",
+    "/Users/jamescregeen/Code_Projects/Voice_Harness/.local/interactive-pilot-2026-10-20/run_83f4aebbc90241f0a9794e02f27ce7d8-05-caller-agent_audio.wav",
+    "/Users/jamescregeen/Code_Projects/Voice_Harness/.local/interactive-pilot-2026-10-20/run_83f4aebbc90241f0a9794e02f27ce7d8-06-caller-agent_audio.wav"
+  ],
+  "retained_artifacts": 6,
+  "bundle_verified": true,
+  "voices": {
+    "customer": "cedar",
+    "agent": "marin"
+  },
+  "audio_export": "/Users/jamescregeen/Code_Projects/Voice_Harness/artifacts/interactive-caller-demo-cedar-2026-10-20.wav",
+  "audio_export_note": "Recorded turns joined with short gaps; generation and assessment waits excluded."
+}

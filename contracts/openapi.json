@@ -3053,6 +3053,68 @@
         ],
         "title": "CalibrateBody"
       },
+      "CallerConfig": {
+        "properties": {
+          "mode": {
+            "type": "string",
+            "enum": [
+              "fixed",
+              "live_ai"
+            ],
+            "title": "Mode",
+            "default": "fixed"
+          },
+          "fixed_backend": {
+            "type": "string",
+            "enum": [
+              "system",
+              "macos",
+              "openai_tts"
+            ],
+            "title": "Fixed Backend",
+            "default": "system"
+          },
+          "voice": {
+            "type": "string",
+            "enum": [
+              "marin",
+              "cedar",
+              "alloy",
+              "coral",
+              "sage"
+            ],
+            "title": "Voice",
+            "default": "cedar"
+          },
+          "persona": {
+            "type": "string",
+            "enum": [
+              "calm",
+              "anxious",
+              "frustrated"
+            ],
+            "title": "Persona",
+            "default": "calm"
+          },
+          "max_turns": {
+            "type": "integer",
+            "maximum": 12.0,
+            "minimum": 1.0,
+            "title": "Max Turns",
+            "default": 6
+          },
+          "max_duration_seconds": {
+            "type": "integer",
+            "maximum": 300.0,
+            "minimum": 10.0,
+            "title": "Max Duration Seconds",
+            "default": 120
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "CallerConfig"
+      },
       "CancelRun": {
         "properties": {
           "reason": {
@@ -3723,6 +3785,9 @@
             ],
             "title": "Client Mode",
             "default": "software_fixture"
+          },
+          "caller": {
+            "$ref": "#/components/schemas/CallerConfig"
           }
         },
         "additionalProperties": false,

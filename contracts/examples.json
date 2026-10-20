@@ -1203,6 +1203,42 @@
     "stream_ended_ms": 3000,
     "clock_domain_id": "process_fixture"
   },
+  "caller.session_started": {
+    "mode": "live_ai",
+    "provider": "openai",
+    "model_id": "gpt-realtime-2.1",
+    "voice": "cedar",
+    "persona": "calm",
+    "profile_version": "balance-caller-v2",
+    "prompt_sha256": "3ddb1d4e5e9d59093a3711927bd926d11419dd8642afeade5438cb5ee98df975",
+    "profile_sha256": "0cda349acdc1e18d8ecb217df3b5f0c45829863cdeb97038f160b3b241f25ec7",
+    "max_turns": 6,
+    "max_duration_seconds": 120,
+    "delivery_mode": "gated",
+    "interruptions": "not_supported_in_pilot",
+    "fidelity": "not_independently_assessed",
+    "seed_reproducibility": false
+  },
+  "caller.session_ended": {
+    "reason": "objective_response_delivered",
+    "failure": null,
+    "turns": 2,
+    "fidelity": "not_independently_assessed"
+  },
+  "caller.utterance": {
+    "turn": 0,
+    "text": "Could you check my balance?",
+    "transcript_source": "caller_provider",
+    "pcm_sha256": "2a9569d5160893662a5c3579f2531ac3250dcb5a42a2a4832c5503e28424b8d8",
+    "audio_retained": true,
+    "sample_rate": 24000
+  },
+  "caller.agent_audio": {
+    "unit_id": "unit_001",
+    "pcm_sha256": "2a9569d5160893662a5c3579f2531ac3250dcb5a42a2a4832c5503e28424b8d8",
+    "audio_retained": true,
+    "sample_rate": 24000
+  },
   "assessment.abandoned": {
     "reason": "TURN_TIMEOUT",
     "retired_jobs": [
