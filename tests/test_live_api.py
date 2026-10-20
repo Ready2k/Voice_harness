@@ -178,11 +178,11 @@ class LiveApi(unittest.TestCase):
         self.assertEqual((unknown.status_code, unknown.json()["error"]["code"]), (422, "UNKNOWN_SCENARIO"))
 
     def completed_run(self, scenario, judges, asr=("Please verify your identity.",) * 2, adapter=None, events=False,
-                      provider="openai-realtime-live"):
+                      provider="openai-realtime-live", prompt_profile="standardised-v2"):
         adapter = adapter or FakeAdapter()
         patches = [
             mock.patch.object(live_providers, "availability", lambda provider_id, environ=None, **kw: (True, None)),
-            mock.patch.object(live_providers, "_adapter", lambda provider_id: (adapter, {"tools": []})),
+            mock.patch.object(live_providers, "_adapter", lambda provider_id, prompt_profile="standardised-v2": (adapter, {"tools": []})),
             mock.patch.object(live_providers, "select_backend", lambda: ScriptedAsr(queue=list(asr))),
             mock.patch("voice_harness.adapters.openai_realtime.synth_caller_pcm", lambda text, trail_ms=0, **kw: tone(200)),
             mock.patch.object(live_providers, "auto_judges", lambda environ=None: judges),
@@ -191,13 +191,19 @@ class LiveApi(unittest.TestCase):
             patch.start()
             self.addCleanup(patch.stop)
         with TestClient(self.app) as client:
-            created = self.launch(client, {"scenario_id": scenario, "provider_config_id": provider}, scenario)
+            created = self.launch(client, {"scenario_id": scenario, "provider_config_id": provider, "prompt_profile": prompt_profile}, scenario)
             run = created.json()["run_ids"][0]
             self.app.state.jobs[run].result(timeout=60)
             assurance = client.get(f"/api/v1/runs/{run}/assurance", headers=self.headers).json()
             if not events:
                 return assurance
             return assurance, client.get(f"/api/v1/runs/{run}/events?limit=1000", headers=self.headers).json()["items"]
+
+    def test_selected_prompt_profile_reaches_recorded_live_binding(self):
+        _, events = self.completed_run(LIVE, ([], []), events=True, prompt_profile="legacy-v1")
+        binding = next(e["content"]["provider"] for e in events if e["type"] == "run.live_binding")
+        self.assertEqual(binding["target_prompt"]["profile"], "legacy-v1")
+        self.assertEqual(binding["target_prompt"]["instructions"], live_providers.LEGACY_INSTRUCTIONS)
 
     def test_configured_auto_judge_decides_judge_criteria_and_is_bound_without_calibration(self):
         judge = reference_judge(cfg("auto-ref"))  # a different provider and family from the tested model
@@ -271,7 +277,7 @@ class LiveApi(unittest.TestCase):
         adapter = FakeAdapter()
         patches = [
             mock.patch.object(live_providers, "availability", lambda provider_id, environ=None, **kw: (True, None)),
-            mock.patch.object(live_providers, "_adapter", lambda provider_id: (adapter, {"tools": []})),
+            mock.patch.object(live_providers, "_adapter", lambda provider_id, prompt_profile="standardised-v2": (adapter, {"tools": []})),
             mock.patch.object(live_providers, "select_backend", lambda: None),  # strict speech unavailable
             mock.patch("voice_harness.adapters.openai_realtime.synth_caller_pcm", lambda text, trail_ms=0, **kw: tone(200)),
             mock.patch.object(live_providers, "auto_judges", lambda environ=None: ([], [])),
@@ -329,7 +335,7 @@ class LiveApi(unittest.TestCase):
         adapter = adapter or FakeAdapter()
         patches = [
             mock.patch.object(live_providers, "availability", lambda provider_id, environ=None, **kw: (True, None)),
-            mock.patch.object(live_providers, "_adapter", lambda provider_id: (adapter, {"tools": []})),
+            mock.patch.object(live_providers, "_adapter", lambda provider_id, prompt_profile="standardised-v2": (adapter, {"tools": []})),
             mock.patch.object(live_providers, "select_backend", lambda: ScriptedAsr(queue=["Please verify your identity."] * 3)),
             mock.patch("voice_harness.adapters.openai_realtime.synth_caller_pcm", lambda text, trail_ms=0, **kw: tone(200)),
             mock.patch.object(live_providers, "auto_judges", lambda environ=None: ([], [])),
@@ -528,7 +534,7 @@ class LiveApi(unittest.TestCase):
         adapter.opened = threading.Event()
         patches = [
             mock.patch.object(live_providers, "availability", lambda provider_id, environ=None, **kw: (True, None)),
-            mock.patch.object(live_providers, "_adapter", lambda provider_id: (adapter, {"tools": []})),
+            mock.patch.object(live_providers, "_adapter", lambda provider_id, prompt_profile="standardised-v2": (adapter, {"tools": []})),
             mock.patch.object(live_providers, "select_backend", lambda: ScriptedAsr(queue=["x"])),
             mock.patch("voice_harness.adapters.openai_realtime.synth_caller_pcm", lambda text, trail_ms=0, **kw: tone(200)),
         ]
@@ -558,7 +564,7 @@ class LiveApi(unittest.TestCase):
         adapter = FakeAdapter()
         patches = [
             mock.patch.object(live_providers, "availability", lambda provider_id, environ=None, **kw: (True, None)),
-            mock.patch.object(live_providers, "_adapter", lambda provider_id: (adapter, {"tools": []})),
+            mock.patch.object(live_providers, "_adapter", lambda provider_id, prompt_profile="standardised-v2": (adapter, {"tools": []})),
             mock.patch.object(live_providers, "select_backend", lambda: ScriptedAsr(queue=["Please verify your identity."] * 2)),
             mock.patch("voice_harness.adapters.openai_realtime.synth_caller_pcm", lambda text, trail_ms=0, **kw: tone(200)),
         ]
@@ -593,7 +599,7 @@ class LiveApi(unittest.TestCase):
         adapter = FakeAdapter()
         active = [
             mock.patch.object(live_providers, "availability", lambda provider_id, environ=None, **kw: (True, None)),
-            mock.patch.object(live_providers, "_adapter", lambda provider_id: (adapter, {"tools": []})),
+            mock.patch.object(live_providers, "_adapter", lambda provider_id, prompt_profile="standardised-v2": (adapter, {"tools": []})),
             mock.patch.object(live_providers, "select_backend", lambda: backend),
             mock.patch("voice_harness.adapters.openai_realtime.synth_caller_pcm", lambda text, trail_ms=0, **kw: tone(200)),
             mock.patch.object(live_providers, "auto_judges", lambda environ=None: ([], [])),
@@ -652,7 +658,7 @@ class LiveApi(unittest.TestCase):
     def real_engine_cancellation(self, transcript):
         """Run the confirmed scenario through the real confirmation engine and cancel_payment (nothing mocked)."""
         adapter = VerifyThenCancel()
-        patches = [mock.patch.object(live_providers, "_adapter", lambda provider_id: (adapter, {"tools": []}))]
+        patches = [mock.patch.object(live_providers, "_adapter", lambda provider_id, prompt_profile="standardised-v2": (adapter, {"tools": []}))]
         _, events, assurance = self.live_events("commit-cancel-confirmed-001", ScriptedAsr(queue=[transcript] * 8), patches)
         cancelled = [e for e in events if e["type"] == "tool.completed" and e["content"].get("call_id") == "call_c"
                      and e["content"].get("status") == "success"]

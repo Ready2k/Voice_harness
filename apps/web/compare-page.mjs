@@ -95,6 +95,7 @@ async function compareIds(ids,refresh=false){
   const names=entries.map((e,i)=>(i+1)+': '+e.run.run_id);
   table($('summary'),'Outcomes & configuration',['Measure',...names],[
    ['Provider configuration',...entries.map(e=>e.run.config.provider_config_id)],
+   ['Agent prompt',...entries.map(e=>e.run.config.prompt_profile??'Original / not recorded')],
    ['Requested model',...entries.map(e=>e.events.find(v=>v.type==='run.live_binding')?.content?.provider?.requested_model_id??'Not recorded / fixture')],
    ['Returned model',...entries.map(e=>e.events.find(v=>v.type==='run.live_binding')?.content?.provider?.returned_model_id??'Unresolved / fixture')],
    ['Lifecycle (not task success)',...entries.map(e=>e.run.state)],

@@ -373,6 +373,7 @@ export function renderRun(root, view, onCancel = null) {
   const config = el("dl", "config");
   for (const [label, value] of [
     ["Scenario", view.scenario], ["Provider configuration", view.config?.provider_config_id ?? "Unknown"],
+    ["Agent prompt", view.config?.prompt_profile ?? "Original / not recorded"],
     ["Policy", view.config?.policy_profile ?? "Unknown"], ["Fixture seed", view.config?.fixture_seed ?? "Unknown"],
     ["Audio retention requested", view.config?.retain_audio == null ? "Unknown" : view.config.retain_audio ? "Yes" : "No"],
     ["Evidence manifest", view.evidence?.manifest ?? "Unknown"],

@@ -12,7 +12,7 @@ test('hold creation uses exactly one scope and validates expiry',()=>{
  assert.throws(()=>holdBody({...input,expiry:'2020-01-01T12:00'}),/future/);
 });
 test('rerun copies execution settings, forces one repetition, and does not forward unrelated state',()=>{
- assert.deepEqual(cloneRunConfig({scenario_id:'task',fixture_seed:7,policy_profile:'strict-v1',repetitions:20,secret:'never forward'}),{scenario_id:'task',fixture_seed:7,policy_profile:'strict-v1',repetitions:1});
+ assert.deepEqual(cloneRunConfig({scenario_id:'task',fixture_seed:7,policy_profile:'strict-v1',repetitions:20,secret:'never forward'}),{scenario_id:'task',fixture_seed:7,policy_profile:'strict-v1',prompt_profile:'legacy-v1',repetitions:1});
 });
 test('unknown live model identity is not fabricated for judge independence',()=>{
  assert.equal(testedIdentity({config:{provider_config_id:'unknown'}},[]),null);
@@ -31,4 +31,8 @@ test('stored report pairs retain the backend provider ordering without confusing
  const {pairedLabels}=await import('../../apps/web/reports.mjs');
  assert.deepEqual(pairedLabels(['a','b','c'],[{},{},{}]),['a vs b','a vs c','b vs c']);
  assert.deepEqual(pairedLabels(['a','b','c'],[{}]),['Pair 1 (see source report)']);
+});
+
+test('rerun preserves an explicit prompt profile',()=>{
+ assert.equal(cloneRunConfig({prompt_profile:'standardised-v2'}).prompt_profile,'standardised-v2');
 });

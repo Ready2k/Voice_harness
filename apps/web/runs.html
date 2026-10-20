@@ -24,6 +24,7 @@
   <form id="launch" class="panel" hidden>
     <label>Scenario<select id="scenario" aria-label="Scenario"></select></label>
     <label id="provider-field" hidden>Provider configuration<select id="provider" aria-label="Live provider"></select></label>
+    <label>Agent prompt<select id="prompt-profile"><option value="standardised-v2">Standardised · natural conversation</option><option value="legacy-v1">Original · reproduce earlier tests</option></select></label>
     <fieldset id="caller-fields" hidden><legend>Caller</legend>
       <label>Caller mode<select id="caller-mode"><option value="fixed">Fixed caller · scripted dialogue</option><option value="live_ai">Live AI caller · adaptive conversation</option></select></label>
       <label id="fixed-voice-field">Fixed voice<select id="fixed-voice"><option value="system">Server default</option><option value="openai_tts">Natural AI speech · OpenAI TTS</option><option value="macos">macOS system speech</option></select></label>

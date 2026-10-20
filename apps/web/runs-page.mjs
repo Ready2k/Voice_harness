@@ -214,6 +214,7 @@ $("launch").addEventListener("submit", async (event) => {
     const choice = providers.find((p) => p.id === $("provider").value);
     if (option.live && (!choice || choice.disabled)) throw new Error("no live provider is configured on the server");
     const body = launchBody(option, "strict-v1", option.live ? choice.id : null, callerConfig());
+    if (option.live) body.prompt_profile = $("prompt-profile").value;
     body.fixture_seed = Number($("seed").value);
     body.retain_audio = $("retain").checked;
     const key = "ui-" + Date.now() + "-" + Math.random().toString(36).slice(2);

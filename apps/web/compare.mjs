@@ -1,5 +1,5 @@
 import { metricRows } from './runs.mjs';
-export const MATCH_FIELDS=['scenario_id','scenario_version','fixture_seed','policy_profile','input_mode','client_mode','retain_audio'];
+export const MATCH_FIELDS=['scenario_id','scenario_version','fixture_seed','policy_profile','prompt_profile','input_mode','client_mode','retain_audio'];
 export function comparisonCheck(runs){
  if(runs.length<2||runs.length>8)throw new Error('Choose between 2 and 8 distinct runs.');
  if(new Set(runs.map(r=>r.run_id)).size!==runs.length)throw new Error('Choose distinct runs for comparison.');

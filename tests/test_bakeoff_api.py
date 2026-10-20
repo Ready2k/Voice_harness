@@ -30,7 +30,7 @@ class BakeoffApi(unittest.TestCase):
         self.headers = {"Authorization": "Bearer operator"}
         for patch in (
             mock.patch.object(live_providers, "availability", lambda provider_id, environ=None, manual=False, **kw: (True, None)),
-            mock.patch.object(live_providers, "_adapter", lambda provider_id: (FakeAdapter(), {"tools": []})),
+            mock.patch.object(live_providers, "_adapter", lambda provider_id, prompt_profile="standardised-v2": (FakeAdapter(), {"tools": []})),
             mock.patch.object(live_providers, "select_backend", lambda: ScriptedAsr(queue=["Please verify your identity."] * 4)),
             mock.patch("voice_harness.adapters.openai_realtime.synth_caller_pcm", lambda text, trail_ms=0, **kw: tone(200)),
             mock.patch.object(live_providers, "auto_judges", lambda environ=None: ([], [])),

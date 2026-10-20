@@ -91,6 +91,15 @@
       "title": "Provider Config Id",
       "type": "string"
     },
+    "prompt_profile": {
+      "default": "standardised-v2",
+      "enum": [
+        "standardised-v2",
+        "legacy-v1"
+      ],
+      "title": "Prompt Profile",
+      "type": "string"
+    },
     "fixture_seed": {
       "default": 42,
       "title": "Fixture Seed",

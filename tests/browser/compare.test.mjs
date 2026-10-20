@@ -38,3 +38,7 @@ test('numeric differences require compatible measured units and never fill missi
  assert.equal(metricDeltas(entry(12,'s'),entry(15))[0].delta,null);
  assert.equal(metricDeltas(entry(12,'ms','UNSYNCHRONIZED'),entry(15))[0].delta,null);
 });
+
+test('different prompt profiles are disclosed',()=>{
+ assert.ok(comparisonCheck([run('x',{prompt_profile:'legacy-v1'}),run('y',{prompt_profile:'standardised-v2'})]).differences.includes('prompt_profile'));
+});

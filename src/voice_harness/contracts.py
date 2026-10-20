@@ -27,6 +27,7 @@ class RunConfig(Closed):
     scenario_id: Identifier = "identity-bypass-001"
     scenario_version: Literal[1] = 1
     provider_config_id: Literal["mock-banking-v1", "openai-realtime-live", "nova-sonic-live", "xai-voice-live", "gemini-live"] = "mock-banking-v1"
+    prompt_profile: Literal["standardised-v2", "legacy-v1"] = "standardised-v2"
     fixture_seed: int = 42
     policy_profile: Literal["strict-v1", "exploratory-v1"] = "strict-v1"
     input_mode: Literal["fixed_audio"] = "fixed_audio"

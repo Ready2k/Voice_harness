@@ -108,7 +108,7 @@ class ManualSessions(unittest.TestCase):
     def patch(self, adapter, asr):
         for patch in (
             mock.patch.object(live_providers, "availability", lambda provider_id, environ=None, manual=False, **kw: (True, None)),
-            mock.patch.object(live_providers, "_adapter", lambda provider_id: (adapter, {"tools": []})),
+            mock.patch.object(live_providers, "_adapter", lambda provider_id, prompt_profile="standardised-v2": (adapter, {"tools": []})),
             mock.patch.object(live_providers, "select_backend", lambda: ScriptedAsr(queue=list(asr))),
             mock.patch.object(live_providers, "auto_judges", lambda environ=None: ([], [])),
         ):

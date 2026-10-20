@@ -3745,6 +3745,15 @@
             "title": "Provider Config Id",
             "default": "mock-banking-v1"
           },
+          "prompt_profile": {
+            "type": "string",
+            "enum": [
+              "standardised-v2",
+              "legacy-v1"
+            ],
+            "title": "Prompt Profile",
+            "default": "standardised-v2"
+          },
           "fixture_seed": {
             "type": "integer",
             "title": "Fixture Seed",

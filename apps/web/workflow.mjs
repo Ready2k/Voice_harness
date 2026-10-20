@@ -31,8 +31,8 @@ export function holdForm(root,token,runId,onSaved){
  root.append(form);
 }
 export function cloneRunConfig(config){
- const keys=['scenario_id','scenario_version','provider_config_id','fixture_seed','policy_profile','input_mode','retain_audio','client_mode'];
- return {...Object.fromEntries(keys.filter(k=>config[k]!=null).map(k=>[k,config[k]])),repetitions:1};
+ const keys=['scenario_id','scenario_version','provider_config_id','fixture_seed','policy_profile','prompt_profile','input_mode','retain_audio','client_mode'];
+ return {...Object.fromEntries(keys.filter(k=>config[k]!=null).map(k=>[k,config[k]])),prompt_profile:config.prompt_profile??'legacy-v1',repetitions:1};
 }
 export function testedIdentity(run,events){
  const binding=events.find(e=>e.type==='run.live_binding')?.content?.provider;

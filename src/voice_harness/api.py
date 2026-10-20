@@ -143,6 +143,7 @@ def create_app(
             session if session is not None else live_providers.run_live(
                 live_engine, run_id, config["provider_config_id"], config["scenario_id"], seed=config["fixture_seed"],
                 caller=config.get("caller"), evidence=evidence,
+                prompt_profile=config.get("prompt_profile", "standardised-v2"),
             )
         )
         with job_lock:
