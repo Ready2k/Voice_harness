@@ -172,8 +172,11 @@ class InteractiveScenarioRunner(LiveScenarioRunner):
                     self.record("caller.utterance", {"turn": index, "text": text,
                                 "transcript_source": "caller_provider", "pcm_sha256": hashlib.sha256(pcm).hexdigest(),
                                 "audio_retained": retained, "sample_rate": RATE})
+                    # A customer acknowledgement can separate a successful lookup from its spoken answer.
+                    # Keep typed tool facts for this conversation; assessment still binds them to the
+                    # currently verified account and freezes each job's context independently.
                     self.driver.expected_claims = {k: v for k, v in self.driver.expected_claims.items()
-                                                   if k not in ("allowed_amounts_minor", "allowed_facts")}
+                                                   if k != "allowed_amounts_minor"}
                     self._released = []
                     started = int(time.monotonic() * 1000)
                     await self._stream(pcm)

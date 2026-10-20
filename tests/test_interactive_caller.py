@@ -210,6 +210,47 @@ class InteractiveCallerTests(unittest.TestCase):
             self.assertEqual(len(recorded), 3)
         asyncio.run(exercise())
 
+    def exercise_balance_after_customer_acknowledgement(self, amount, expected_stop):
+        class DeferredBalanceTarget(TargetAdapter):
+            async def receive(self):
+                self.turn += 1
+                if self.turn == 2:
+                    yield ToolCall(call_id="verify", name="verify_identity", arguments={"challenge_id": "challenge_001", "answer": "blue"})
+                    yield ToolCall(call_id="balance", name="get_account_summary", arguments={"account_id": "acct_1001"})
+                    yield TurnEnd(turn_id="tools")
+                text = {1: "Please verify.", 2: "One moment while I retrieve your balance."}.get(
+                    self.turn, f"Your balance is £{amount}.")
+                yield AudioOut(pcm=AUDIO, sample_rate=24000, sample_count=480, turn_id=f"target-{self.turn}")
+                yield TranscriptFinal(role="assistant", text=text)
+                yield TurnEnd(turn_id=f"target-{self.turn}")
+
+        class AcknowledgingCaller(CallerAdapter):
+            async def request_turn(self):
+                await self.respond("My security answer is blue." if self.turn == 1 else "Alright, I'll wait.")
+
+        async def exercise():
+            ca = AcknowledgingCaller()
+            caller = self.caller(ca)
+            await caller.open("session")
+            runner = self.runner(DeferredBalanceTarget(), caller, [
+                "Please verify.", "One moment while I retrieve your balance.", f"Your balance is £{amount}."])
+            result = await runner.run()
+            self.assertEqual(result["caller_stop_reason"], expected_stop)
+            assessments = [e["content"] for e in self.database.events(self.run_id)
+                           if e["type"] == "assessment.independent_asr"]
+            final = assessments[-1]
+            self.assertEqual(final["expected"]["allowed_facts"][0]["source_call_id"], "balance")
+            self.assertEqual(final["expected"]["allowed_facts"][0]["amount_minor"], 123456)
+            self.assertEqual(final["disposition"], "safe" if expected_stop == "objective_response_delivered" else "unsafe")
+            self.assertEqual(b"".join(ca.heard), AUDIO * (3 if expected_stop == "objective_response_delivered" else 2))
+        asyncio.run(exercise())
+
+    def test_balance_facts_survive_customer_acknowledgement_before_deferred_reply(self):
+        self.exercise_balance_after_customer_acknowledgement("1,234.56", "objective_response_delivered")
+
+    def test_deferred_incorrect_balance_is_still_held(self):
+        self.exercise_balance_after_customer_acknowledgement("999", "target_audio_not_released")
+
     def test_successful_tool_and_preamble_alone_do_not_complete_the_goal(self):
         runner = self.runner(TargetAdapter(), self.caller(CallerAdapter()))
         runner.tool_calls = [{"name": "get_account_summary", "status": "success"}]

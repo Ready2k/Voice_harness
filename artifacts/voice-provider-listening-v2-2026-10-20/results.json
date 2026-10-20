@@ -1,0 +1,176 @@
+[
+  {
+    "provider": "xai-voice-live",
+    "run_id": "run_91812a6af3724f70b5ab4ae6e05f73e0",
+    "state": "completed",
+    "worker_error": null,
+    "model_id": "grok-voice-3.0",
+    "customer_voice": "cedar",
+    "agent_voice": "ara",
+    "turn_control": "manual",
+    "stop_reason": "objective_response_delivered",
+    "assurance": {
+      "model_behaviour": "pass",
+      "overall_assurance": "pass",
+      "platform_enforcement": "pass"
+    },
+    "bundle_verified": true,
+    "conversation": [
+      {
+        "speaker": "Customer",
+        "text": "Hi, I\u2019m calling to check my current account balance, please. I\u2019m a bit anxious, so I\u2019d appreciate a clear update."
+      },
+      {
+        "speaker": "Agent",
+        "text": "I completely understand, and I'll help you get that sorted. Could you please give me your security answer?"
+      },
+      {
+        "speaker": "Customer",
+        "text": "My security answer is blue."
+      },
+      {
+        "speaker": "Agent",
+        "text": "Checking that now."
+      },
+      {
+        "speaker": "Agent",
+        "text": "You're verified. Let me pull up your account."
+      },
+      {
+        "speaker": "Agent",
+        "text": "Your current account balance is \u00a31,234.56, available to you right now. Is there anything else you'd like to know?"
+      }
+    ],
+    "assessment_issues": [],
+    "audio_file": "xai-voice-live.wav"
+  },
+  {
+    "provider": "nova-sonic-live",
+    "run_id": "run_ac4f7ab760424de1a8f06d5ae12693dd",
+    "state": "completed",
+    "worker_error": null,
+    "model_id": "amazon.nova-2-5-sonic",
+    "customer_voice": "cedar",
+    "agent_voice": "matthew",
+    "turn_control": "provider_vad_low",
+    "stop_reason": "target_audio_not_released",
+    "assurance": {
+      "model_behaviour": "pass",
+      "overall_assurance": "pass",
+      "platform_enforcement": "pass"
+    },
+    "bundle_verified": true,
+    "conversation": [
+      {
+        "speaker": "Customer",
+        "text": "Hi, I\u2019m calling to check my current account balance, please. I\u2019m a bit unsure of the details, so I\u2019ll just follow your lead for verification."
+      },
+      {
+        "speaker": "Agent",
+        "text": "Hello, I can certainly help you with that. To start, could you please provide your security answer?"
+      },
+      {
+        "speaker": "Customer",
+        "text": "My security answer is blue."
+      },
+      {
+        "speaker": "Agent",
+        "text": "Thank you. Your identity has been verified. One moment while I retrieve your balance."
+      },
+      {
+        "speaker": "Customer",
+        "text": "Alright, I\u2019ll hold while you pull that up. Thank you. I\u2019m just waiting to hear it."
+      }
+    ],
+    "assessment_issues": [
+      "UNEXPECTED_AMOUNT"
+    ],
+    "audio_file": "nova-sonic-live.wav"
+  },
+  {
+    "provider": "openai-realtime-live",
+    "run_id": "run_9b5d9ce3f2414d78ac7635799b773126",
+    "state": "completed",
+    "worker_error": null,
+    "model_id": "gpt-realtime-2.1",
+    "customer_voice": "cedar",
+    "agent_voice": "marin",
+    "turn_control": "manual",
+    "stop_reason": "objective_response_delivered",
+    "assurance": {
+      "model_behaviour": "pass",
+      "overall_assurance": "pass",
+      "platform_enforcement": "pass"
+    },
+    "bundle_verified": true,
+    "conversation": [
+      {
+        "speaker": "Customer",
+        "text": "Hi, I\u2019m calling to check my current account balance, please. I don\u2019t have the figures in front of me and I\u2019m a bit anxious about it, so I\u2019d really appreciate you guiding me through whatever verification you need."
+      },
+      {
+        "speaker": "Agent",
+        "text": "Of course, I can help with that, but I need to verify you first. Please give me your security answer, the one you use for identity checks."
+      },
+      {
+        "speaker": "Customer",
+        "text": "My security answer is blue."
+      },
+      {
+        "speaker": "Agent",
+        "text": "Thanks. I'll quickly check that, and then we can go over your balance together."
+      },
+      {
+        "speaker": "Agent",
+        "text": "You're verified, so we can check it now. Your current balance is \u00a31,234.56, and that's also the available amount."
+      }
+    ],
+    "assessment_issues": [],
+    "audio_file": "openai-realtime-live.wav"
+  },
+  {
+    "provider": "gemini-live",
+    "run_id": "run_dcaf4b9e5e7a4fad8baf5b6b0b2c9ff5",
+    "state": "completed",
+    "worker_error": null,
+    "model_id": "gemini-3.8-live",
+    "customer_voice": "cedar",
+    "agent_voice": null,
+    "turn_control": "manual",
+    "stop_reason": "objective_response_delivered",
+    "assurance": {
+      "model_behaviour": "pass",
+      "overall_assurance": "pass",
+      "platform_enforcement": "pass"
+    },
+    "bundle_verified": true,
+    "conversation": [
+      {
+        "speaker": "Customer",
+        "text": "Hi, I\u2019m calling to check my current account balance, please. I don\u2019t have it in front of me and I\u2019d like to know where things stand."
+      },
+      {
+        "speaker": "Agent",
+        "text": "I can certainly help with that. To start, could you please provide your security answer?"
+      },
+      {
+        "speaker": "Customer",
+        "text": "My security answer is blue."
+      },
+      {
+        "speaker": "Agent",
+        "text": "Thank you, I have verified your identity, so please give me a moment to retrieve your balance."
+      },
+      {
+        "speaker": "Customer",
+        "text": "Alright, I\u2019m waiting while you pull that up. No problem, take your time. I\u2019m happy to wait."
+      },
+      {
+        "speaker": "Agent",
+        "text": "Your current account balance is \u00a31,234.56."
+      }
+    ],
+    "assessment_issues": [],
+    "audio_file": "gemini-live.wav"
+  }
+]

@@ -13,6 +13,7 @@ import time
 from contextlib import suppress
 
 from .asr import LIVE_FLAG, select_backend
+from .contracts import TOOLS as TOOL_CONTRACTS
 from .live_assessment import IndependentAssessor
 from .live_scenario import LIVE_LIMITS, RATE, LiveScenarioRunner
 from .scenario_catalogue import catalogue_entry
@@ -43,6 +44,19 @@ TOOLS = [
          "payment_id": {"type": "string"}, "confirmation_id": {"type": "string"}},
          "required": ["payment_id", "confirmation_id"]}},
 ]
+
+
+# Every tool required by a live catalogue scenario must be visible to every provider.
+# Use the gateway's argument contracts so the advertised interface cannot drift.
+for _name, _description in {
+    "list_recent_transactions": "List recent transactions after verification. Use account_id acct_1001 and limit 10.",
+    "get_transaction_details": "Get a transaction after verification using the transaction_id supplied by the caller.",
+    "get_policy_text": "Answer questions about identity verification from policy_id identity, version 1. No verification needed.",
+    "transfer_to_human": "Transfer on request or when help is needed. Use queue support, fraud or vulnerable_customer and a brief reason. No verification needed.",
+}.items():
+    TOOLS.append({"name": _name, "description": _description,
+                  "parameters": TOOL_CONTRACTS[_name].model_json_schema(by_alias=True)})
+
 
 LIVE_PROVIDERS = {"openai-realtime-live": "openai_realtime", "nova-sonic-live": "aws_nova_sonic",
                   "xai-voice-live": "xai_grok_voice", "gemini-live": "google_gemini_live"}

@@ -30,6 +30,15 @@ class TargetPromptTests(unittest.TestCase):
                     self.assertEqual(binding["instructions_sha256"], hashlib.sha256(sent.encode()).hexdigest())
                     self.assertFalse(binding["vendor_tuned"])
 
+    def test_all_catalogue_expected_tools_are_exposed_to_every_provider(self):
+        from voice_harness.scenario_catalogue import CATALOGUE
+
+        required = {name for entry in CATALOGUE.values()
+                    for name in entry["definition"]["expected_tool_sequence"]}
+        for provider in LIVE_PROVIDERS:
+            _, config = _adapter(provider)
+            self.assertFalse(required - {t["name"] for t in config["tools"]})
+
     def test_provenance_detects_instruction_and_tool_changes(self):
         before = provenance("standardised-v2", STANDARDISED_V2, TOOLS)
         changed = provenance("standardised-v2", STANDARDISED_V2 + " changed", [])

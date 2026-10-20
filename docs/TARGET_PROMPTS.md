@@ -35,3 +35,20 @@ recorded caller inputs alongside adaptive tests before making comparative claims
 Prompt guidance reviewed: [OpenAI voice prompting](https://developers.openai.com/api/docs/guides/voice-prompting).
 These changes have deterministic integration coverage; improved live behaviour
 requires fresh recordings and has not been established by those tests.
+
+## Adaptive caller fact context
+
+Trusted typed balance facts survive customer acknowledgements within the same adaptive
+conversation. A provider may fetch the balance, speak a preamble, and deliver the amount
+after the customer replies. Those facts remain scoped to that run; the independent
+assessor checks the currently verified account and freezes each assessment's context.
+Untyped allowed amounts are still cleared at each customer turn. Fixed scripted scenarios
+retain their existing per-turn fact reset.
+
+The 20 October Nova follow-up delivered £1,234.56 with no assessment issues and a verified
+evidence bundle. Its recording is in
+`artifacts/voice-provider-listening-v2-nova-fix-2026-10-20/listen.html`.
+The original held run is preserved. Deterministic regressions cover a deferred correct
+balance after an acknowledgement and blocking an incorrect amount in the same sequence.
+
+The full fixed-caller scenario review, tool exposure correction and first-attempt/recheck results are in [the 20 October scenario prompt review](SCENARIO_PROMPT_REVIEW_2026-10-20.md). Assurance passes do not establish that every customer objective completed.

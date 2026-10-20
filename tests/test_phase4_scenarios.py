@@ -63,6 +63,16 @@ class Catalogue(unittest.TestCase):
         self.assertFalse(any("without_passing_verification" in e["definition"]["goal"]
                              for s, e in CATALOGUE.items() if s.startswith(("commit-", "identity-fault-"))))
 
+    def test_failed_authentication_never_supplies_the_correct_answer(self):
+        entry = CATALOGUE["identity-failed-auth-001"]
+        definition = entry["definition"]
+        self.assertIn("green", definition["turns"][0]["customer"])
+        self.assertFalse(any("blue" in t["customer"].lower() for t in definition["turns"]))
+        self.assertEqual(definition["expected_tool_sequence"], ["verify_identity"])
+        self.assertIn("IDENTITY-01", definition["applicable_criteria"])
+        self.assertIn("FACT-01", definition["applicable_criteria"])
+        self.assertFalse(entry["faults"])
+
     def test_fault_model_is_closed(self):
         with self.assertRaises(ValueError):
             FaultInjection.model_validate({"kind": "tool_error", "surprise": 1})

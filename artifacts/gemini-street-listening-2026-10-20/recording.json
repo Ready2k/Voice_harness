@@ -1,0 +1,39 @@
+{
+  "run_id": "run_7a267c25a8db4b7b88c644f7222872b0",
+  "scenario_id": "happy-balance-street-001",
+  "state": "failed",
+  "termination_reason": "TURN_TIMEOUT",
+  "assurance": null,
+  "transcripts_provider_reported": [
+    "Thank you. You've been successfully verified. How can I help you today?"
+  ],
+  "generated_segments": [
+    {
+      "speaker": "Customer with street noise",
+      "seconds": 5.670375
+    },
+    {
+      "speaker": "Agent",
+      "seconds": 4.2000416666666665
+    },
+    {
+      "speaker": "Customer with street noise",
+      "seconds": 4.190833333333333
+    }
+  ],
+  "released_segments": [
+    {
+      "speaker": "Customer with street noise",
+      "seconds": 5.670375
+    },
+    {
+      "speaker": "Agent",
+      "seconds": 4.2000416666666665
+    },
+    {
+      "speaker": "Customer with street noise",
+      "seconds": 4.190833333333333
+    }
+  ],
+  "note": "Fresh diagnostic recording, not the earlier failed attempt. Generated track includes agent audio before assessment; released track includes only gate-released replies. 10 dB synthetic street noise; static macOS caller; short joining gaps, not original wall-clock timing."
+}

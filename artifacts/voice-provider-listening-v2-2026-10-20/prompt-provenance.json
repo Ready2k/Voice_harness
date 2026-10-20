@@ -1,0 +1,30 @@
+[
+  {
+    "provider": "xai-voice-live",
+    "run_id": "run_91812a6af3724f70b5ab4ae6e05f73e0",
+    "profile": "standardised-v2",
+    "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+    "tools_sha256": "57bd496417ecbe0eb6af535f58f54e4490fc24404ad71b05e7bc0aacf6652984"
+  },
+  {
+    "provider": "nova-sonic-live",
+    "run_id": "run_ac4f7ab760424de1a8f06d5ae12693dd",
+    "profile": "standardised-v2",
+    "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+    "tools_sha256": "57bd496417ecbe0eb6af535f58f54e4490fc24404ad71b05e7bc0aacf6652984"
+  },
+  {
+    "provider": "openai-realtime-live",
+    "run_id": "run_9b5d9ce3f2414d78ac7635799b773126",
+    "profile": "standardised-v2",
+    "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+    "tools_sha256": "57bd496417ecbe0eb6af535f58f54e4490fc24404ad71b05e7bc0aacf6652984"
+  },
+  {
+    "provider": "gemini-live",
+    "run_id": "run_dcaf4b9e5e7a4fad8baf5b6b0b2c9ff5",
+    "profile": "standardised-v2",
+    "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+    "tools_sha256": "57bd496417ecbe0eb6af535f58f54e4490fc24404ad71b05e7bc0aacf6652984"
+  }
+]
