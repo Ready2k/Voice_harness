@@ -151,11 +151,15 @@ class ScriptedAdapter:
     async def send_audio(self, data, metadata):
         self.sent.append(len(data))
 
+    async def request_turn(self):
+        self.committed_turns = getattr(self, "committed_turns", 0) + 1
+
     async def submit_tool_result(self, call_id, result):
         self.results.append((call_id, result))
         return {"delivered": True}
 
     async def receive(self):
+        assert getattr(self, "committed_turns", 0), "caller input was not committed"
         yield ToolCall(call_id="call_a", name=self.name, arguments={"account_id": "acct_1001"}, ts_ms=1)
         yield TranscriptDelta(role="assistant", text="Please verify your identity.", ts_ms=2)
         yield AudioOut(pcm=bytes(960), sample_rate=24000, sample_count=480, turn_id="t1", ts_ms=3)
@@ -189,6 +193,7 @@ class LiveRunner(unittest.TestCase):
         adapter = ScriptedAdapter()
         summary = asyncio.run(self.runner("identity-impatient-en-gb-clean-001", adapter).run())
         self.assertGreater(len(adapter.sent), 5)
+        self.assertEqual(adapter.committed_turns, len(summary["turns"]))
         self.assertEqual(summary["tool_calls"][0]["name"], "get_account_summary")
         self.assertNotEqual(summary["tool_calls"][0]["status"], "success")  # unverified: refused by policy
         self.assertFalse(summary["tool_calls"][0]["fault_injected"])

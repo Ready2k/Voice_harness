@@ -25,6 +25,7 @@ class BakeoffApi(unittest.TestCase):
         directory = tempfile.TemporaryDirectory()
         self.addCleanup(directory.cleanup)
         root = Path(directory.name)
+        self.key_prefix = "imp-" + root.name  # the shared PostgreSQL keeps idempotency keys between runs
         self.database = Database(os.environ.get("HARNESS_TEST_DATABASE_URL", str(root / "t.sqlite")))
         self.app = create_app(self.database, root, "operator")
         self.headers = {"Authorization": "Bearer operator"}
@@ -94,7 +95,7 @@ class BakeoffApi(unittest.TestCase):
         with TestClient(self.app) as client:
             runs = []
             for provider in PROVIDERS:
-                launched = client.post("/api/v1/runs", headers={**self.headers, "Idempotency-Key": "imp-" + provider},
+                launched = client.post("/api/v1/runs", headers={**self.headers, "Idempotency-Key": f"{self.key_prefix}-{provider}"},
                                        json={"scenario_id": SCENARIOS[0], "provider_config_id": provider})
                 runs.append(launched.json()["run_ids"][0])
             for run_id in runs:

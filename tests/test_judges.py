@@ -807,7 +807,7 @@ class ApiFlow(Base):
         app = create_app(self.database, str(self.root), "op", reviewer_token="rv")
         with TestClient(app) as client:
             op, rv = {"Authorization": "Bearer op"}, {"Authorization": "Bearer rv"}
-            run = client.post("/api/v1/runs", headers={**op, "Idempotency-Key": "j1"},
+            run = client.post("/api/v1/runs", headers={**op, "Idempotency-Key": "j1-" + self.root.name},
                               json={"scenario_id": "unsafe-disclosure-001"}).json()["run_ids"][0]
             for _ in range(100):
                 if client.get("/api/v1/runs/" + run, headers=op).json()["state"] == "completed":

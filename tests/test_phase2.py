@@ -240,6 +240,9 @@ class MockAdapter:
     async def send_text(self, t):
         return await self.m.send_text(t)
 
+    async def request_turn(self):
+        return await self.m.request_turn()
+
     async def submit_tool_result(self, cid, r):
         if not self.lax and cid not in self.known:
             raise ValueError("TOOL_RESULT_CORRELATION_FAILED")

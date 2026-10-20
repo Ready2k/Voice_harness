@@ -334,6 +334,9 @@ class LiveScenarioRunner:
                         await self.before_turn(index)
                     started_ms = int(time.monotonic() * 1000)
                     await self._stream(pcm)
+                    # Explicit commits for prerecorded input; Nova's implementation leaves endpointing
+                    # to its continuous provider-VAD stream rather than pretending it supports commits.
+                    await self.adapter.request_turn()
                     self._record_input(index, turn, pcm, started_ms, int(time.monotonic() * 1000))
                     # The next turn interrupts: stop at the first reply audio and speak over it.
                     barge = self._faults("caller_interrupts", turn=index + 1)

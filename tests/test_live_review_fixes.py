@@ -224,6 +224,9 @@ class RunnerConcurrency(Base):
             async def send_audio(self, data, metadata):
                 pass
 
+            async def request_turn(self):
+                pass
+
             async def submit_tool_result(self, call_id, result):
                 return {"delivered": True}
 
@@ -258,6 +261,9 @@ class RunnerConcurrency(Base):
 
         class Hang:
             async def send_audio(self, data, metadata):
+                pass
+
+            async def request_turn(self):
                 pass
 
             async def submit_tool_result(self, call_id, result):

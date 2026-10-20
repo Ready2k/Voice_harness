@@ -204,6 +204,9 @@ class LiveApi(unittest.TestCase):
         binding = next(e["content"]["provider"] for e in events if e["type"] == "run.live_binding")
         self.assertEqual(binding["target_prompt"]["profile"], "legacy-v1")
         self.assertEqual(binding["target_prompt"]["instructions"], live_providers.LEGACY_INSTRUCTIONS)
+        self.assertEqual(binding["harness_transport"]["caller_mode"], "fixed")
+        self.assertEqual(binding["harness_transport"]["turn_commit"], "explicit")
+        self.assertEqual(binding["harness_transport"]["turn_timeout_seconds"], 45)
 
     def test_configured_auto_judge_decides_judge_criteria_and_is_bound_without_calibration(self):
         judge = reference_judge(cfg("auto-ref"))  # a different provider and family from the tested model

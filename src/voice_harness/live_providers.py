@@ -15,7 +15,7 @@ from contextlib import suppress
 from .asr import LIVE_FLAG, select_backend
 from .contracts import TOOLS as TOOL_CONTRACTS
 from .live_assessment import IndependentAssessor
-from .live_scenario import LIVE_LIMITS, RATE, LiveScenarioRunner
+from .live_scenario import LIVE_LIMITS, RATE, TURN_TIMEOUT_S, LiveScenarioRunner
 from .scenario_catalogue import catalogue_entry
 from .target_prompts import instructions as target_instructions
 from .target_prompts import provenance as prompt_provenance
@@ -102,6 +102,8 @@ def _nova_env():
     from .adapters.nova_sonic import SESSION_ENV
 
     env = {}
+    if not SESSION_ENV.exists():  # building a config needs no credentials; requirements() reports NO_AWS_SESSION
+        return env
     for line in SESSION_ENV.read_text().splitlines():
         line = line.strip().removeprefix("export ")
         if "=" in line and not line.startswith("#"):
@@ -234,6 +236,33 @@ def _adapter(provider_config_id, prompt_profile="standardised-v2"):
     return NovaSonicAdapter(), config
 
 
+def configure_transport(provider_config_id, config, caller_mode):
+    """Select native turn controls for the input source, without changing task or judge prompts."""
+    if provider_config_id not in LIVE_PROVIDERS:
+        raise ValueError("NOT_A_LIVE_PROVIDER")
+    if caller_mode not in {"fixed", "live_ai", "human_microphone"}:
+        raise ValueError("UNKNOWN_CALLER_MODE")
+    nova = provider_config_id == "nova-sonic-live"
+    if nova:
+        # Nova owns endpointing and requires its existing continuous silence pump.
+        config.pop("turn_detection", None)
+        config["endpointing"] = "LOW" if caller_mode == "live_ai" else "MEDIUM"
+        detection = "provider_vad"
+    else:
+        detection = "server_vad" if caller_mode == "human_microphone" else "manual"
+        config["turn_detection"] = detection
+    return {
+        "profile_version": "provider-transport-v1", "caller_mode": caller_mode,
+        "turn_detection": detection, "endpointing": config.get("endpointing") if nova else None,
+        "turn_commit": "provider_vad" if nova else ("automatic" if detection == "server_vad" else "explicit"),
+        "harness_input_rate": RATE, "provider_input_rate": 16000 if provider_config_id in {
+            "gemini-live", "nova-sonic-live"} else RATE,
+        "output_rate": RATE, "chunk_ms": 20, "caller_trailing_silence_ms": CALLER_TRAIL_MS if caller_mode == "fixed" else None,
+        "client_truncation": provider_config_id in {"openai-realtime-live", "xai-voice-live"},
+        "turn_timeout_seconds": TURN_TIMEOUT_S if caller_mode != "human_microphone" else None,
+    }
+
+
 async def run_live(engine, run_id, provider_config_id, scenario_id, *, seed=0, caller=None, evidence=None, prompt_profile="standardised-v2"):
     """Open the provider session, run the catalogue scenario and close the session; returns the runner summary."""
     from .adapters.openai_realtime import synth_caller_pcm
@@ -244,6 +273,7 @@ async def run_live(engine, run_id, provider_config_id, scenario_id, *, seed=0, c
         return await _run_interactive(engine, run_id, provider_config_id, scenario_id, caller, evidence, seed, prompt_profile)
 
     adapter, config = _adapter(provider_config_id, prompt_profile)
+    transport = configure_transport(provider_config_id, config, "fixed")
     config["session_id"] = engine.database.get(run_id)["session_id"]
     try:
         receipt = await adapter.open_session(config)
@@ -258,6 +288,7 @@ async def run_live(engine, run_id, provider_config_id, scenario_id, *, seed=0, c
     voice_env = dict(os.environ)
     if caller["fixed_backend"] != "system":
         voice_env["VOICE_HARNESS_CALLER_VOICE"] = caller["fixed_backend"]
+    metadata["harness_transport"] = transport
     metadata["caller_mode"] = "fixed"
     metadata["caller_voice"] = describe_caller_voice(voice_env)
     context_only = provider_config_id in ("openai-realtime-live", "xai-voice-live", "gemini-live")  # send_text(respond=False) supported
@@ -317,11 +348,7 @@ async def _run_interactive(engine, run_id, provider_config_id, scenario_id, call
     if scenario_id not in SCENARIOS:
         raise ValueError("LIVE_CALLER_SCENARIO_UNSUPPORTED")
     adapter, config = _adapter(provider_config_id, prompt_profile)
-    if provider_config_id == "nova-sonic-live":
-        # Nova requires continuous audio and provider endpointing; LOW tolerates caller pauses.
-        config["endpointing"] = "LOW"
-    else:
-        config["turn_detection"] = "manual"
+    transport = configure_transport(provider_config_id, config, "live_ai")
     if provider_config_id == "openai-realtime-live":
         config["voice"] = "coral" if caller_config["voice"] == "marin" else "marin"
     config["session_id"] = engine.database.get(run_id)["session_id"]
@@ -338,6 +365,7 @@ async def _run_interactive(engine, run_id, provider_config_id, scenario_id, call
             caller_receipt = await caller.open(config["session_id"])
         metadata = session_metadata(provider_config_id, TESTED_MODELS[provider_config_id]["model_id"], receipt,
                                     connection_binding(adapter), prompt_profile=prompt_profile)
+        metadata["harness_transport"] = transport
         metadata["caller_mode"] = "live_ai"
         metadata["caller_turn_control"] = "provider_vad_low" if provider_config_id == "nova-sonic-live" else "manual"
         metadata["requested_voice"] = config.get("voice") or {
@@ -390,6 +418,7 @@ async def run_manual(engine, run_id, config, bridge):
     provider_config_id = config["provider_config_id"]
     prompt_profile = "standardised-v2"
     adapter, adapter_config = _adapter(provider_config_id, prompt_profile)
+    transport = configure_transport(provider_config_id, adapter_config, "human_microphone")
     adapter_config["session_id"] = engine.database.get(run_id)["session_id"]
     bridge.emit({"type": "status", "stage": "opening_provider"})
     try:
@@ -399,6 +428,7 @@ async def run_manual(engine, run_id, config, bridge):
         raise
     metadata = session_metadata(provider_config_id, TESTED_MODELS[provider_config_id]["model_id"], receipt,
                                 connection_binding(adapter), prompt_profile=prompt_profile)
+    metadata["harness_transport"] = transport
     metadata["caller_voice"] = {"backend": "human_microphone"}
     tested = TESTED_MODELS[provider_config_id]
     recorder = UsageRecorder(engine.database, run_id, provider=metadata["family"], model=tested["model_id"],
