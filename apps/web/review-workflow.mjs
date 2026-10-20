@@ -2,6 +2,7 @@ import {api,el,fetchEvents} from './runs.mjs?v=ux-audit-20261018';
 import {field,action,formAction,post,words,holdForm} from './workflow.mjs?v=ux-audit-20261018';
 
 export function reviewDecision({reviewer,disposition,rationale,evidence}){
+ if(!['confirm_fail','confirm_pass','confirm_untestable','overturn_fail'].includes(disposition))throw new Error('Choose a disposition explicitly.');
  if(!reviewer.trim()||!rationale.trim())throw new Error('Add your reviewer ID and explain the decision.');
  const ids=evidence.split(/[\s,]+/).filter(Boolean);
  return {reviewer_id:reviewer.trim(),disposition,rationale:rationale.trim(),evidence_event_ids:ids};
@@ -21,13 +22,26 @@ export async function renderReviewQueue(root,token){
    const evidence=el('details');evidence.append(el('summary','','Finding details & cited evidence'),el('pre','event-json',JSON.stringify(r,null,2)));detail.append(evidence);
    if(r.state==='decided'){detail.append(el('p','', 'Decision: '+words(r.decision?.disposition)+' · '+words(r.decision?.effect)));status.textContent='Decision is recorded as human evidence.';return;}
    const form=el('form','workflow-form');const reviewer=field('Reviewer ID',{value:r.claimed_by??''});const rationale=field('Decision rationale',{type:'textarea'});rationale.input.maxLength=4000;
-   const disposition=field('Disposition',{value:'confirm_fail',options:[['confirm_fail','Confirm failure'],['confirm_pass','Confirm pass'],['confirm_untestable','Confirm untestable'],['overturn_fail','Overturn failure (requires supporting evidence)']]});const cited=field('Supporting event IDs (comma separated)',{required:false});
+   const disposition=field('Disposition',{value:'',options:[['','Choose a disposition…'],['confirm_fail','Confirm failure'],['confirm_pass','Confirm pass'],['confirm_untestable','Confirm untestable'],['overturn_fail','Overturn failure (requires supporting evidence)']]});const cited=field('Supporting event IDs (comma separated)',{required:false});
    const correct=field('Correction evidence / check version',{required:false});correct.input.placeholder='Recorded check version, e.g. 1';const correction=el('input');correction.type='checkbox';const correctionLabel=el('label','check');correctionLabel.append(correction,document.createTextNode('Include a deterministic check correction'));
    const submit=el('button','primary',r.state==='open'?'Claim this review':'Record decision');submit.type='submit';form.append(reviewer.wrapper);
    if(r.state==='in_review')form.append(disposition.wrapper,rationale.wrapper,cited.wrapper,el('p','muted','Missing evidence cannot be overridden by assertion. Changing a deterministic failure requires a check correction with the recorded version and supporting evidence. The server determines whether the decision applies.'));
    if(r.state==='in_review')form.append(correctionLabel,correct.wrapper);correct.wrapper.hidden=true;correction.addEventListener('change',()=>{correct.wrapper.hidden=!correction.checked;correct.input.required=correction.checked;});
    const formStatus=el("p","muted");formStatus.setAttribute("role","status");form.append(submit,formStatus);detail.append(form);
    const preserve=el('details');preserve.append(el('summary','','Preserve evidence while reviewing'));holdForm(preserve,token,r.run_id);detail.append(preserve);
+   if(r.state==='in_review'){
+    const picker=el('details','evidence-picker');picker.append(el('summary','','Select supporting events from this run'));
+    const events=await fetchEvents(token,r.run_id);
+    picker.append(el('p','muted','Most recent '+Math.min(events.length,100)+' events. Select evidence to fill the event IDs above.'));
+    for(const event of events.slice(-100)){
+     if(!event.event_id)continue;
+     const label=el('label','check');const input=el('input');input.type='checkbox';input.value=event.event_id;
+     label.append(input,el('span','', '#'+event.sequence+' · '+words(event.type)+' · '+event.event_id));
+     input.addEventListener('change',()=>{const ids=new Set(cited.input.value.split(/[\s,]+/).filter(Boolean));input.checked?ids.add(event.event_id):ids.delete(event.event_id);cited.input.value=[...ids].join(', ');});
+     picker.append(label);
+    }
+    form.insertBefore(picker,submit);
+   }
    formAction(form,submit,async()=>{
     if(r.state==='open'){await post(token,'/api/v1/reviews/'+encodeURIComponent(id)+'/claim',{reviewer_id:reviewer.input.value.trim()});await load();await open(id);}
     else{const body=reviewDecision({reviewer:reviewer.input.value,disposition:disposition.input.value,rationale:rationale.input.value,evidence:cited.input.value});

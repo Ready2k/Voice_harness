@@ -48,7 +48,7 @@ function renderPreview() {
   root.replaceChildren(el('p', 'eyebrow', 'You will evaluate'), el('strong', '', path.title), el('p', 'muted', path.expected_outcome ?? ''));
   $('playback-note').textContent = radio('playback') === 'streamed'
     ? 'Streamed: you hear the agent as it speaks, and replies are assessed afterwards. Unsafe speech can reach you, so the audio gate check (AUDIO-01) cannot pass.'
-    : 'Gated: each reply is independently assessed before you hear any of it. It is safe, but there is a pause of about one reply before audio starts.';
+    : 'Each reply is independently assessed before playback. Assessment can miss issues; approval is not a guarantee of safety. You will hear a pause while the reply is checked.';
 }
 
 // ---------------------------------------------------------------- audio

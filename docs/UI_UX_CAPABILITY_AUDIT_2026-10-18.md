@@ -1,5 +1,6 @@
 # UI / UX capability audit — 18 October 2026
 
+Latest follow-up: [20 October consultant review and verification](UI_UX_REVIEW_2026-10-20.md).
 Scope: specification v0.3, the current FastAPI routes and contracts, browser modules, and real local API/browser checks. This is a UI capability audit, not certification of provider safety or full backend conformance.
 
 ## Findings addressed

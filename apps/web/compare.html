@@ -30,10 +30,11 @@
 </section>
 <section id="results" hidden><div class="workspace-heading"><h2>Comparison results</h2><div class="actions"><button id="update" type="button">Refresh evidence</button><button id="export" type="button">Download comparison snapshot</button></div></div>
 <p id="comparability" class="trace-insight"></p><p id="snapshot" class="muted"></p>
-<div id="summary" class="panel comparison-table"></div><div id="metrics" class="panel comparison-table"></div><div id="costs" class="panel comparison-table"></div>
 <div class="compare-pickers"><label>X<select id="left" aria-label="Run X"></select></label><label>Y<select id="right" aria-label="Run Y"></select></label></div>
 <p class="muted">Execution stages align across X and Y. History controls inspect each run independently; timestamps are not assumed synchronized.</p>
 <div id="deltas" class="panel comparison-table"></div>
 <div class="compare-pair"><section><h2>X</h2><a id="left-link">Open X in Runs</a><div id="left-trace"></div></section><section><h2>Y</h2><a id="right-link">Open Y in Runs</a><div id="right-trace"></div></section></div>
+<details class="panel"><summary>All selected runs · outcomes, configuration, metrics & costs</summary><div id="summary" class="panel comparison-table"></div><div id="metrics" class="panel comparison-table"></div><div id="costs" class="panel comparison-table"></div>
+</details>
 </section>
 </main><script type="module" src="./compare-page.mjs?v=ux-audit-20261018"></script></body></html>
