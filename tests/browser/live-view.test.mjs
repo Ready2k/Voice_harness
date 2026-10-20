@@ -25,3 +25,8 @@ test('empty and lifecycle-only evidence never fabricates stage activity',()=>{
 test('overview distinguishes lifecycle failures from assurance review',()=>{
  assert.deepEqual(overviewCounts([{state:'completed',assurance:'review_required'},{state:'running'},{state:'failed',assurance:'fail'}]),{shown:3,active:1,failed:1,review:1});
 });
+
+test('follow control is hidden for finished runs and shown for running ones',async()=>{
+ const src=readFileSync(new URL('../../apps/web/live-view.mjs',import.meta.url),'utf8');
+ assert.match(src,/followButton\.hidden=finished&&follow/);
+});

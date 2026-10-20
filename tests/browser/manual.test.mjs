@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {EnergyVad, Framer, Resampler, feedItem, floatToPcm16, liveChecks, pcm16ToFloat, promptProgress,
-  reduceTranscript, sessionStatus} from "../../apps/web/manual.mjs";
+  reduceTranscript, sessionStatus, challengeOptions, challengeSource, historyRow, streamedImpact, CHALLENGE_LABEL} from "../../apps/web/manual.mjs";
 
 const ev = (sequence, type, content) => ({sequence, type, content});
 
@@ -121,4 +121,34 @@ test("session status reflects pause, mute, text mode and speaking", () => {
   assert.equal(sessionStatus({...base, muted: true}).text, "Microphone muted");
   assert.match(sessionStatus({...base, mode: "text"}).text, /Text mode/);
   assert.equal(sessionStatus({...base, aiPlaying: true}).text, "Agent speaking");
+});
+
+const journeys = [
+  {journey_id: "verification", title: "Identity verification", failure: {scenario_id: "imp", title: "Impatient caller", criteria: ["IDENTITY-01", "AUDIO-01"]}},
+  {journey_id: "transactions", title: "Recent transactions", failure: {scenario_id: "imp", title: "Impatient caller", criteria: []}},
+  {journey_id: "balance", title: "Balance", failure: {scenario_id: "soc", title: "Social engineering", criteria: []}},
+];
+
+test("challenge options list a shared scenario once and name every journey using it", () => {
+  const options = challengeOptions(journeys);
+  assert.equal(options.length, 2);
+  assert.deepEqual(options[0].journeys.map(j => j.journey_id), ["verification", "transactions"]);
+  assert.equal(CHALLENGE_LABEL, "Challenge path");
+});
+
+test("a chosen challenge scenario is requested through the selected journey when it owns it, else through an owner", () => {
+  assert.equal(challengeSource(journeys, journeys[1], "imp"), journeys[1]);
+  assert.equal(challengeSource(journeys, journeys[1], "soc"), journeys[2]);
+  assert.equal(challengeSource(journeys, journeys[1], "missing"), journeys[1]);
+});
+
+test("streamed playback lists AUDIO-01 as untestable and the rest as still tested", () => {
+  assert.deepEqual(streamedImpact(journeys[0].failure), {untestable: ["AUDIO-01"], testable: ["IDENTITY-01"]});
+  assert.deepEqual(streamedImpact({criteria: ["FACT-01"]}), {untestable: [], testable: ["FACT-01"]});
+});
+
+test("history rows label paths and playback and keep unassessed runs honest", () => {
+  const row = historyRow({run_id: "r1", journey_id: "balance", path: "failure", playback_mode: "streamed", overall_assurance: "fail", state: "completed"}, journeys);
+  assert.deepEqual([row.journey, row.path, row.playback, row.verdict], ["Balance", "Challenge path", "Assessed after playback", "fail"]);
+  assert.equal(historyRow({run_id: "r2", state: "failed"}, journeys).verdict, null);
 });

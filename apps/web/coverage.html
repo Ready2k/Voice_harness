@@ -4,8 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
-<title>Provider coverage</title>
-<link rel="stylesheet" href="./ops.css?v=ux-audit-20261018">
+<title>Provider coverage · Voice Harness</title>
+<link rel="stylesheet" href="./ops.css?v=ux-final-20261023">
+<link rel="stylesheet" href="./coverage.css?v=ux-final-20261023">
 </head>
 <body>
 <main>
@@ -18,11 +19,12 @@
   </form>
   <div id="help"></div>
   <p id="error" role="alert"></p>
-  <section class="readiness"><h2>Ready to run on this server</h2><p>Capability verification and current server readiness are separate checks. A verified provider can still need credentials or supporting services before a run can start.</p><div id="readiness" role="status">Connect to check current readiness.</div><p><a href="./runs.html">Launch an evaluation →</a></p></section>
+  <div id="summary" role="status"></div>
+  <p class="muted">Capability verification and current server readiness are separate checks. A verified provider can still need credentials or supporting services before a run can start. <a href="./runs.html">Launch an evaluation →</a></p>
   <button id="export-coverage" type="button" hidden>Download coverage report</button>
   <div id="root"></div>
   <p class="note">Coverage reflects capability reports (7-day expiry) and AC-09 conformance results. Scripted fixtures and probes are not production quality measurements.</p>
 </main>
-<script type="module" src="./coverage-page.mjs?v=ux-audit-20261018"></script>
+<script type="module" src="./coverage-page.mjs?v=ux-final-20261023"></script>
 </body>
 </html>

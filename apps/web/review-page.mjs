@@ -1,28 +1,26 @@
-import {setConnected} from "./chrome.mjs?v=ux-audit-20261018";
-import { renderReviewQueue, renderHoldManagement } from "./review-workflow.mjs?v=ux-audit-20261018";
-import { load, render } from "./review.mjs";
-import { friendlyError, renderGetStarted } from "./onboarding.mjs?v=ux-audit-20261018";
+import {setConnected} from "./chrome.mjs?v=ux-final-20261023";
+import { renderReviewQueue, renderHoldManagement } from "./review-workflow.mjs?v=ux-final-20261023";
+import { api } from "./runs.mjs?v=ux-final-20261023";
+import { friendlyError, renderGetStarted } from "./onboarding.mjs?v=ux-final-20261023";
 
 const error = document.getElementById("error");
-const root = document.getElementById("root");
 
 async function show(token) {
   error.textContent = "";
   try {
-    render(root, await load(token));
+    await api(token, "/api/v1/holds-register?state=active");
     setConnected(true);
     document.getElementById("reviews").hidden=false;
     document.getElementById("hold-management").hidden=false;
-    await renderReviewQueue(document.getElementById("reviews"),token);
-    await renderHoldManagement(document.getElementById("hold-management"),token);
+    const holds = await renderHoldManagement(document.getElementById("hold-management"),token);
+    await renderReviewQueue(document.getElementById("reviews"),token,{onAddHold:holds.prefill});
     try { sessionStorage.setItem("harness-operator-token", token); } catch { /* storage may be blocked */ }
     document.querySelector("#help details").open = false;
   } catch (e) {
     setConnected(false);
     document.getElementById("reviews").hidden=true;
     document.getElementById("hold-management").hidden=true;
-    root.replaceChildren();
-    error.textContent = "Could not load holds: " + friendlyError(e);
+    error.textContent = "Could not load review & holds: " + friendlyError(e);
   }
 }
 

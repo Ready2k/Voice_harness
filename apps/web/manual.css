@@ -1,0 +1,12 @@
+/* Manual test setup: compact journey list on the left, configuration panel that stays in view on the right. */
+@media(min-width:1001px){.manual-setup{grid-template-columns:minmax(0,5fr) minmax(0,6fr)}.manual-setup>.panel:nth-child(2){position:sticky;top:12px}}
+.journey-list{gap:4px;margin-top:8px}
+.journey-card{align-items:center;padding:8px 12px;gap:10px}
+.journey-card input{margin-top:0}
+.journey-body{flex-direction:row;align-items:center}
+.journey-body strong{font-weight:600}
+.warning-box{border:1px solid var(--warn);border-left-width:4px;border-radius:8px;padding:10px 14px;margin:0 0 14px;background:color-mix(in srgb,var(--warn) 10%,var(--card))}
+.warning-box p{margin:4px 0}
+#challenge-row{display:flex;flex-direction:column;gap:4px;margin-bottom:6px}
+#history-section{margin-top:12px}
+#history table{width:100%}

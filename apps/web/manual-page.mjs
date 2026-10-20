@@ -1,14 +1,16 @@
-import {setConnected} from './chrome.mjs?v=ux-audit-20261018';
-import {api, el, mergeEvents} from './runs.mjs?v=ux-audit-20261018';
-import {words} from './workflow.mjs?v=ux-audit-20261018';
-import {friendlyError} from './onboarding.mjs?v=ux-audit-20261018';
+import {setConnected} from './chrome.mjs?v=ux-final-20261023';
+import {api, el, mergeEvents} from './runs.mjs?v=ux-final-20261023';
+import {words} from './workflow.mjs?v=ux-final-20261023';
+import {friendlyError} from './onboarding.mjs?v=ux-final-20261023';
 import {EnergyVad, Framer, HARNESS_RATE, Resampler, STATUS_LABEL, base64ToBytes, feedItem, floatToPcm16, formatClock,
-  liveChecks, pcm16ToFloat, promptProgress, reduceTranscript, rms, sessionStatus} from './manual.mjs?v=manual-20261019';
+  liveChecks, pcm16ToFloat, promptProgress, reduceTranscript, rms, sessionStatus, CHALLENGE_LABEL, challengeOptions, challengeSource, historyRow, streamedImpact} from './manual.mjs?v=ux-final-20261023';
 
 const $ = id => document.getElementById(id);
 const radio = name => document.querySelector(`input[name="${name}"]:checked`)?.value;
-const PROVIDER_NAMES = {'openai-realtime-live': 'OpenAI Realtime', 'nova-sonic-live': 'Amazon Nova Sonic', 'xai-voice-live': 'xAI Grok Voice', 'gemini-live': 'Google Gemini Live'};
-let token = '', catalogue = null, journeyId = null, s = null;
+import {providerName} from './providers.mjs?v=ux-final-20261023';
+import {revealResult} from './nav.mjs?v=ux-final-20261023';
+import {relativeTime, shortId, scrollRegion} from './format.mjs?v=ux-final-20261023';
+let token = '', catalogue = null, journeyId = null, challengeId = null, s = null;
 
 function button(text, fn, cls = '') { const b = el('button', cls, text); b.type = 'button'; b.addEventListener('click', fn); return b; }
 function journey() { return catalogue.items.find(j => j.journey_id === journeyId); }
@@ -21,16 +23,17 @@ function renderSetup() {
     const card = el('label', 'journey-card');
     const input = el('input'); input.type = 'radio'; input.name = 'journey'; input.value = j.journey_id;
     input.checked = j.journey_id === journeyId;
-    input.addEventListener('change', () => { journeyId = j.journey_id; renderPreview(); });
+    input.addEventListener('change', () => { journeyId = j.journey_id; challengeId = null; renderPreview(); });
     const body = el('span', 'journey-body');
-    body.append(el('strong', '', j.title), el('span', 'muted', 'Happy: ' + j.happy.title), el('span', 'muted', 'Failed: ' + j.failure.title));
+    body.append(el('strong', '', j.title));
+    body.title = 'Happy: ' + j.happy.title + '\n' + CHALLENGE_LABEL + ': ' + j.failure.title;
     card.append(input, body);
     list.append(card);
   }
   const select = $('provider');
   select.replaceChildren();
   for (const p of catalogue.providers) {
-    const option = el('option', '', (PROVIDER_NAMES[p.provider_config_id] ?? p.provider_config_id) + (p.available ? '' : ' · unavailable (' + words(p.reason) + ')'));
+    const option = el('option', '', providerName(p.provider_config_id) + (p.available ? '' : ' · unavailable (' + words(p.reason) + ')'));
     option.value = p.provider_config_id; option.disabled = !p.available;
     select.append(option);
   }
@@ -42,19 +45,49 @@ function renderSetup() {
   renderPreview();
 }
 
+/** The journey as run: its challenge path may come from another journey that owns the chosen scenario. */
+function effectiveJourney() {
+  const j = journey(), wanted = challengeId ?? j.failure.scenario_id, from = challengeSource(catalogue.items, j, wanted);
+  return from === j ? {...j, failureJourneyId: j.journey_id} : {...j, failure: from.failure, failureJourneyId: from.journey_id};
+}
+
+function renderChallenge() {
+  const j = journey(), isChallenge = radio('path') === 'failure', options = challengeOptions(catalogue.items);
+  $('challenge-row').hidden = $('challenge-note').hidden = !isChallenge;
+  if (!isChallenge) return;
+  const select = $('challenge'), current = challengeId ?? j.failure.scenario_id;
+  select.replaceChildren();
+  for (const o of options) {
+    const others = o.journeys.filter(x => x.journey_id !== j.journey_id).map(x => x.title);
+    const option = el('option', '', o.title + (o.journeys.some(x => x.journey_id === j.journey_id) ? ' (this journey)' : '') + (others.length ? ' · also used by ' + others.join(', ') : ''));
+    option.value = o.scenario_id; select.append(option);
+  }
+  select.value = current;
+  const shared = options.find(o => o.scenario_id === current)?.journeys ?? [];
+  $('challenge-note').textContent = shared.length > 1
+    ? 'This challenge scenario is shared by ' + shared.map(x => x.title).join(' and ') + '. Pick a different one above if it is not the adversarial caller you want to test.'
+    : 'This challenge scenario belongs to this journey only.';
+}
+
 function renderPreview() {
-  const j = journey(), path = radio('path') === 'failure' ? j.failure : j.happy;
+  const j = effectiveJourney(), path = radio('path') === 'failure' ? j.failure : j.happy;
+  renderChallenge();
   const root = $('path-preview');
   root.replaceChildren(el('p', 'eyebrow', 'You will evaluate'), el('strong', '', path.title), el('p', 'muted', path.expected_outcome ?? ''));
-  $('playback-note').textContent = radio('playback') === 'streamed'
-    ? 'Streamed: you hear the agent as it speaks, and replies are assessed afterwards. Unsafe speech can reach you, so the audio gate check (AUDIO-01) cannot pass.'
-    : 'Each reply is independently assessed before playback. Assessment can miss issues; approval is not a guarantee of safety. You will hear a pause while the reply is checked.';
+  const warning = $('playback-warning'), streamed = radio('playback') === 'streamed', impact = streamedImpact(path);
+  warning.hidden = !streamed; warning.replaceChildren();
+  if (streamed) {
+    warning.append(el('strong', '', 'Playback gate bypassed'), el('p', '', 'You hear the agent as it speaks, so unsafe speech can reach you. Replies are assessed afterwards.'));
+    warning.append(el('p', '', impact.untestable.length ? 'Untestable in this mode: ' + impact.untestable.join(', ') + ' (cannot pass). Still tested: ' + (impact.testable.join(', ') || 'none') + '.'
+      : 'No criterion on this path depends on the playback gate.'));
+  }
+  $('playback-note').textContent = streamed ? '' : 'Each reply is independently assessed before playback. Assessment can miss issues; approval is not a guarantee of safety. You will hear a pause while the reply is checked.';
 }
 
 // ---------------------------------------------------------------- audio
 async function openAudio(session) {
   session.playCtx = new AudioContext({sampleRate: HARNESS_RATE, latencyHint: 'interactive'});
-  await session.playCtx.audioWorklet.addModule(new URL('./manual-worklets.js?v=manual-20261019', import.meta.url));
+  await session.playCtx.audioWorklet.addModule(new URL('./manual-worklets.js?v=ux-final-20261023', import.meta.url));
   session.playNode = new AudioWorkletNode(session.playCtx, 'manual-playback', {numberOfInputs: 0, numberOfOutputs: 1, outputChannelCount: [1]});
   session.playNode.connect(session.playCtx.destination);
   session.playNode.port.onmessage = ({data}) => {
@@ -71,7 +104,7 @@ async function openMic(session) {
   if (session.capCtx) return;
   const stream = await navigator.mediaDevices.getUserMedia({audio: {channelCount: 1, echoCancellation: true, noiseSuppression: true, autoGainControl: true}});
   const ctx = new AudioContext({latencyHint: 'interactive'});
-  await ctx.audioWorklet.addModule(new URL('./manual-worklets.js?v=manual-20261019', import.meta.url));
+  await ctx.audioWorklet.addModule(new URL('./manual-worklets.js?v=ux-final-20261023', import.meta.url));
   const source = ctx.createMediaStreamSource(stream);
   const node = new AudioWorkletNode(ctx, 'manual-capture', {numberOfInputs: 1, numberOfOutputs: 1, outputChannelCount: [1]});
   const sink = ctx.createGain(); sink.gain.value = 0; // keeps the capture node pulled without monitoring the mic
@@ -112,7 +145,7 @@ function closeAudio(session) {
 function send(message) { if (s?.socket?.readyState === WebSocket.OPEN) s.socket.send(JSON.stringify(message)); }
 
 async function start(path = radio('path'), reuse = null) {
-  const j = journey(), provider = reuse?.provider ?? $('provider').value, playbackMode = reuse?.playbackMode ?? radio('playback');
+  const j = reuse?.journey ?? effectiveJourney(), provider = reuse?.provider ?? $('provider').value, playbackMode = reuse?.playbackMode ?? radio('playback');
   const mode = reuse?.mode ?? radio('input');
   $('start').disabled = true; $('start-status').textContent = 'Starting…'; $('error').textContent = '';
   const session = s = {journey: j, path, pathInfo: path === 'failure' ? j.failure : j.happy, provider, playbackMode, mode,
@@ -122,7 +155,7 @@ async function start(path = radio('path'), reuse = null) {
     await openAudio(session);
     if (mode === 'voice') await openMic(session);
     const created = await api(token, '/api/v1/manual-sessions', {method: 'POST', headers: {'Content-Type': 'application/json', 'Idempotency-Key': crypto.randomUUID()},
-      body: JSON.stringify({provider_config_id: provider, journey_id: j.journey_id, path, playback_mode: playbackMode})});
+      body: JSON.stringify({provider_config_id: provider, journey_id: path === 'failure' ? j.failureJourneyId ?? j.journey_id : j.journey_id, path, playback_mode: playbackMode})});
     session.runId = created.run_id;
     const {ticket} = await api(token, '/api/v1/runs/' + created.run_id + '/ws-ticket', {method: 'POST'});
     const url = new URL(created.websocket, location.origin); url.protocol = url.protocol === 'https:' ? 'wss:' : 'ws:';
@@ -232,7 +265,7 @@ function renderStatus() {
 function render() {
   if (!s) return;
   renderStatus();
-  $('session-label').textContent = s.journey.title + ' · ' + (s.path === 'failure' ? 'failed path' : 'happy path') + ' · ' + (s.playbackMode === 'streamed' ? 'streamed playback' : 'gated playback');
+  $('session-label').textContent = s.journey.title + ' · ' + (s.path === 'failure' ? 'challenge path' : 'happy path') + ' · ' + (s.playbackMode === 'streamed' ? 'streamed playback' : 'gated playback');
   $('pause').textContent = s.paused ? 'Resume' : 'Pause'; $('pause').setAttribute('aria-pressed', String(s.paused));
   $('mute').textContent = s.muted ? 'Unmute mic' : 'Mute mic'; $('mute').setAttribute('aria-pressed', String(s.muted));
   $('mute').disabled = s.mode !== 'voice' || s.ended;
@@ -266,7 +299,7 @@ function renderGuide() {
   for (const p of ['happy', 'failure']) {
     const tab = $('tab-' + p);
     tab.setAttribute('aria-selected', String(s.viewing === p));
-    tab.textContent = (p === 'happy' ? 'Happy path' : 'Failed path') + (s.path === p ? ' · evaluating' : '');
+    tab.textContent = (p === 'happy' ? 'Happy path' : CHALLENGE_LABEL) + (s.path === p ? ' · evaluating' : '');
   }
   const info = s.viewing === 'failure' ? s.journey.failure : s.journey.happy, active = s.viewing === s.path;
   const root = $('guide');
@@ -322,7 +355,7 @@ function renderResult(session, ended, assurance, run, problem) {
   const root = $('result');
   root.hidden = false; root.replaceChildren();
   const panel = el('section', 'panel');
-  panel.append(el('p', 'eyebrow', 'Session result'), el('h2', '', session.journey.title + ' · ' + (session.path === 'failure' ? 'failed path' : 'happy path')));
+  panel.append(el('p', 'eyebrow', 'Session result'), el('h2', '', session.journey.title + ' · ' + (session.path === 'failure' ? 'challenge path' : 'happy path')));
   if (problem) panel.append(el('p', 'error-text', problem));
   const state = ended?.state ?? run?.state ?? 'unknown';
   if (state === 'failed' && !problem) panel.append(el('p', 'error-text', 'The run failed and was not assessed. '
@@ -347,14 +380,37 @@ function renderResult(session, ended, assurance, run, problem) {
   const actions = el('div', 'actions');
   const open = el('a', '', 'Open full run evidence →'); open.href = './runs.html?run=' + encodeURIComponent(session.runId);
   const other = session.path === 'failure' ? 'happy' : 'failure';
-  actions.append(open, button('Test the ' + (other === 'failure' ? 'failed' : 'happy') + ' path', () => start(other, session), 'primary'),
-    button('Repeat this path', () => start(session.path, session)), button('New session', () => { s = null; root.hidden = true; $('session').hidden = true; $('setup').hidden = false; $('start').disabled = false; $('start-status').textContent = ''; }));
+  actions.append(open, button('Test the ' + (other === 'failure' ? 'challenge' : 'happy') + ' path', () => start(other, session), 'primary'),
+    button('Repeat this path', () => start(session.path, session)), button('New session', () => { s = null; root.hidden = true; $('session').hidden = true; $('setup').hidden = false; $('start').disabled = false; $('start-status').textContent = ''; loadHistory(); }));
   panel.append(actions);
   root.append(panel);
-  root.scrollIntoView({behavior: 'smooth', block: 'start'});
+  revealResult(root);
+}
+
+// ---------------------------------------------------------------- history
+async function loadHistory() {
+  const section = $('history-section'), root = $('history');
+  let items = [];
+  try { items = (await api(token, '/api/v1/manual-sessions?limit=10')).items ?? []; } catch { section.hidden = true; return; }
+  section.hidden = false; root.replaceChildren();
+  if (!items.length) { root.append(el('p', 'muted', 'No manual sessions yet. Finished sessions appear here with their verdicts.')); return; }
+  const table = el('table'), head = el('tr');
+  for (const h of ['When', 'Journey', 'Path', 'Provider', 'Playback', 'Verdict', 'Run']) head.append(el('th', '', h));
+  table.append(head);
+  for (const item of items) {
+    const r = historyRow(item, catalogue.items), tr = el('tr');
+    const when = el('td'); when.append(el('span', '', relativeTime(item.started_at) || 'Unknown'));
+    const verdict = el('td'); verdict.append(el('span', 'chip verdict-' + (r.verdict ?? r.state), r.verdict ? words(r.verdict) : words(r.state) + ' · not assessed'));
+    const run = el('td'), link = el('a', '', shortId(r.runId)); link.href = './runs.html?run=' + encodeURIComponent(r.runId); run.append(link);
+    tr.append(when, el('td', '', r.journey), el('td', '', r.path), el('td', '', providerName(item.provider_config_id)), el('td', '', r.playback), verdict, run);
+    table.append(tr);
+  }
+  root.append(scrollRegion(Object.assign(el('div', 'table-scroll'), {}), 'Manual session history table'));
+  root.lastChild.append(table);
 }
 
 // ---------------------------------------------------------------- wiring
+$('challenge').addEventListener('change', e => { challengeId = e.target.value; renderPreview(); });
 async function connect() {
   token = $('token').value;
   try {
@@ -362,7 +418,7 @@ async function connect() {
     journeyId = journeyId ?? catalogue.items[0]?.journey_id;
     setConnected(true); sessionStorage.setItem('harness-operator-token', token);
     $('error').textContent = ''; $('setup').hidden = false;
-    renderSetup();
+    renderSetup(); loadHistory();
   } catch (e) { setConnected(false); $('error').textContent = friendlyError(e); }
 }
 

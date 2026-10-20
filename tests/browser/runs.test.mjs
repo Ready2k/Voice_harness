@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { readFileSync } from "node:fs";
 import {
-  confirmations, decisions, assuranceView, groupedOptions, launchBody, launchOptions, providerChoices, mergeEvents, metricRows, runRows, runView, toolCalls, transcript, unitStates,
+  confirmations, decisions, durationLabel, filterRows, relativeTime, runResult, shortId, sortRows, summaryCounts, assuranceView, groupedOptions, launchBody, launchOptions, providerChoices, mergeEvents, metricRows, runRows, runView, toolCalls, transcript, unitStates,
 } from "../../apps/web/runs.mjs";
 import { describeHold, view as reviewView } from "../../apps/web/review.mjs";
 
@@ -201,4 +201,45 @@ test("a superseded unit is followed by the replacement that was actually release
   assert.equal(lines[1].generatedButNotReleased, false);
   assert.match(lines[1].note, /replacement.*below/i);
   assert.equal(transcript([...events, { sequence: 7, type: "simulator.utterance_generated", content: { output_text: "hi" } }]).filter((l) => l.speaker === "customer").length, 1);
+});
+
+test("a run's result is its recorded verdict, kept apart from lifecycle state", () => {
+  const res = (state, assurance) => runResult({ state, assurance }).key;
+  assert.equal(res("completed", { overall_assurance: "pass" }), "pass");
+  assert.equal(res("completed", { overall_assurance: "fail" }), "fail");
+  assert.equal(res("completed", { overall_assurance: "review_required" }), "review");
+  assert.equal(res("completed", { overall_assurance: "untestable" }), "review");
+  assert.equal(res("completed", null), "unassessed");
+  assert.equal(res("failed", null), "error");
+  assert.equal(res("running", null), "pending");
+});
+
+test("relative time, duration and short ids", () => {
+  const now = Date.parse("2026-10-20T12:00:00Z");
+  assert.equal(relativeTime("2026-10-20T11:48:00Z", now), "12m ago");
+  assert.equal(relativeTime("2026-10-18T12:00:00Z", now), "2d ago");
+  assert.equal(relativeTime(null, now), "");
+  assert.equal(durationLabel("2026-10-20T12:00:00Z", "2026-10-20T12:01:05Z"), "1m 05s");
+  assert.equal(durationLabel("2026-10-20T12:00:00Z", null), "");
+  assert.equal(shortId("run_6c1e0dc4a1b2c3d4"), "6c1e0dc4");
+});
+
+test("filters, card filters and attention sort work on result, provider and search", () => {
+  const rows = runRows({ items: [
+    { run_id: "run_a", state: "completed", scenario_id: "happy-balance-clean-001", provider_config_id: "p1", started_at: "2026-10-20T11:59:00Z", assurance: { overall_assurance: "pass" } },
+    { run_id: "run_b", state: "failed", scenario_id: "happy-balance-clean-001", provider_config_id: "p2", started_at: "2026-10-20T11:00:00Z" },
+    { run_id: "run_c", state: "completed", scenario_id: "identity-001", provider_config_id: "p2", started_at: "2026-10-01T11:00:00Z", assurance: { overall_assurance: "review_required" } },
+    { run_id: "run_d", state: "running", scenario_id: "identity-001", provider_config_id: "p1", started_at: "2026-10-20T11:59:30Z" },
+  ] });
+  const now = Date.parse("2026-10-20T12:00:00Z");
+  const ids = (f) => filterRows(rows, f, now).map((r) => r.runId);
+  assert.deepEqual(ids({ provider: "p2" }), ["run_b", "run_c"]);
+  assert.deepEqual(ids({ search: "IDENTITY" }), ["run_c", "run_d"]);
+  assert.deepEqual(ids({ since: "day" }), ["run_a", "run_b", "run_d"]);
+  assert.deepEqual(ids({ card: "failed" }), ["run_b"]);
+  assert.deepEqual(ids({ card: "active" }), ["run_d"]);
+  assert.deepEqual(ids({ card: "review" }), ["run_c"]);
+  assert.deepEqual(sortRows(rows, "attention").map((r) => r.runId), ["run_b", "run_c", "run_d", "run_a"]);
+  assert.deepEqual(sortRows(rows).map((r) => r.runId), rows.map((r) => r.runId));
+  assert.deepEqual(summaryCounts(rows), { shown: 4, active: 1, failed: 1, review: 1, pass: 1, assessed: 2 });
 });

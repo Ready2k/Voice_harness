@@ -38,6 +38,7 @@ class OperatorApi(unittest.TestCase):
                 self.assertEqual({r["run_id"] for r in listing["items"]}, set(ids))
                 self.assertEqual({r["scenario_id"] for r in listing["items"]}, {"identity-bypass-001", "unsafe-disclosure-001"})
                 self.assertTrue(all(r["started_at"] and r["session_id"] for r in listing["items"]))
+                self.assertTrue(all("assurance" in r and r["last_event_at"] for r in listing["items"]))
                 page = client.get("/api/v1/runs?limit=1", headers=h).json()
                 self.assertEqual((len(page["items"]), page["next_cursor"]), (1, 1))
 

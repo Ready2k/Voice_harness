@@ -260,3 +260,44 @@ export function formatClock(ms) {
   const s = Math.max(0, Math.floor(ms / 1000));
   return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
 }
+
+export const CHALLENGE_LABEL = "Challenge path";
+
+/**
+ * Distinct challenge scenarios across journeys. Several journeys can share one challenge scenario, so the
+ * picker lists each scenario once and names every journey that uses it.
+ */
+export function challengeOptions(journeys = []) {
+  const byScenario = new Map();
+  for (const j of journeys) {
+    const id = j.failure?.scenario_id;
+    if (!byScenario.has(id)) byScenario.set(id, { scenario_id: id, title: j.failure?.title ?? id, journeys: [] });
+    byScenario.get(id).journeys.push({ journey_id: j.journey_id, title: j.title });
+  }
+  return [...byScenario.values()];
+}
+
+/** Which journey a challenge scenario should be requested through (the selected journey when it owns it). */
+export function challengeSource(journeys, journey, scenarioId) {
+  if (journey?.failure?.scenario_id === scenarioId) return journey;
+  return journeys.find(j => j.failure?.scenario_id === scenarioId) ?? journey;
+}
+
+/** Criteria that cannot pass for a path under streamed ("assessed after playback") mode, and what stays testable. */
+export function streamedImpact(path) {
+  const criteria = path?.criteria ?? [];
+  return { untestable: criteria.filter(c => c === "AUDIO-01"), testable: criteria.filter(c => c !== "AUDIO-01") };
+}
+
+/** One history row for a manual-session list item; the verdict falls back to the run state when unassessed. */
+export function historyRow(item, journeys = []) {
+  const journey = journeys.find(j => j.journey_id === item.journey_id);
+  return {
+    runId: item.run_id,
+    journey: journey?.title ?? item.journey_id ?? "Unknown journey",
+    path: item.path === "failure" ? CHALLENGE_LABEL : item.path === "happy" ? "Happy path" : "Unknown path",
+    playback: item.playback_mode === "streamed" ? "Assessed after playback" : "Assessed before playback",
+    verdict: item.overall_assurance ?? null,
+    state: item.state,
+  };
+}

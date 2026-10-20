@@ -1,0 +1,27 @@
+/* Review & holds page only. Colours come from the shared tokens in ops.css. */
+.filter-bar{display:flex;flex-wrap:wrap;gap:14px;align-items:end;margin:8px 0}
+.filter-bar>label{min-width:200px;max-width:300px}
+.queue-item{display:flex;flex-direction:column;gap:3px;align-items:flex-start}
+.queue-item.selected{border-color:var(--info);background:color-mix(in srgb,var(--info) 8%,var(--card))}
+.qi-top{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.qi-meta{font-size:.8rem;color:var(--muted);font-weight:400}
+.sev{display:inline-block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:1px 8px;border-radius:999px;border:1px solid currentColor}
+.sev-critical{color:var(--bad)}.sev-high{color:var(--warn)}.sev-medium{color:var(--info)}.sev-low{color:var(--muted)}
+.detail-head{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:6px}.detail-head h3{margin:0}
+.review-columns{grid-template-columns:minmax(260px,340px) minmax(0,1fr)}
+.evidence-compare{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin:14px 0}
+.evidence-compare>.ev-col:last-child{grid-column:1/-1}
+.review-detail:focus-visible{outline:3px solid var(--info);outline-offset:3px}
+.ev-col{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--bg);min-width:0}
+.ev-col h4{margin:0 0 8px;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.ev-col p{margin:6px 0;overflow-wrap:anywhere}
+.ev-cited{padding-left:18px;margin:8px 0}.ev-cited li{margin:6px 0;overflow-wrap:anywhere}
+.ev-line .speaker{font-weight:600;font-size:.78rem;color:var(--info);margin-right:4px}
+.ev-cited-line{border-left:3px solid var(--warn);padding-left:8px}
+.link-button{margin:12px 0 4px}
+.hold-table-box{overflow-x:auto;max-width:100%}
+table.holds{width:100%;border-collapse:collapse}table.holds th,table.holds td{text-align:left;vertical-align:top;padding:10px 8px;border-bottom:1px solid var(--line)}
+table.holds .workflow-form{margin:4px 0}
+.flag-ok{color:var(--ok);font-weight:600}.flag-warn{color:var(--warn);font-weight:600}.flag-bad{color:var(--bad);font-weight:600}
+.add-hold>summary{cursor:pointer;font-weight:600;color:var(--info)}
+@media(max-width:1000px){.review-columns{grid-template-columns:1fr}}

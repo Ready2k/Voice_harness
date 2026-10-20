@@ -40,3 +40,81 @@ export function metricDeltas(x,y){
   return {name,delta:eligible?Number((right.value-left.value).toPrecision(8)):null,unit:eligible?left.unit??'':'',reason:eligible?null:'Unavailable: requires numeric measurements with matching units and no exclusions.'};
  });
 }
+
+// ---- Presentation helpers (no scoring: values are shown as recorded) ----
+const taskKey=r=>(r.scenario_id??'unknown')+'@'+(r.scenario_version??'?');
+const byNewest=(a,b)=>Date.parse(b.started_at??'')-Date.parse(a.started_at??'')||0;
+/** Pure: tasks with their run counts, tasks with 2+ runs first, then most runs, then newest. */
+export function taskGroups(runs){
+ const groups=new Map();
+ for(const r of runs){const k=taskKey(r);const g=groups.get(k)??{key:k,count:0,latest:0};g.count++;g.latest=Math.max(g.latest,Date.parse(r.started_at??'')||0);groups.set(k,g);}
+ return [...groups.values()].sort((a,b)=>(b.count>=2)-(a.count>=2)||b.count-a.count||b.latest-a.latest);
+}
+export function taskLabel(g){return g.key+' · '+g.count+' run'+(g.count===1?'':'s');}
+export function defaultTask(runs){return taskGroups(runs)[0]?.key??null;}
+/** Pure: newest run of each provider (at most `max`). */
+export function latestPerProvider(runs,max=8){
+ const seen=new Set();const out=[];
+ for(const r of [...runs].sort(byNewest)){const p=r.provider_config_id??'unknown';if(seen.has(p))continue;seen.add(p);out.push(r.run_id);}
+ return out.slice(0,max);
+}
+/** Pure: newest `max` runs of one provider. */
+export function repeatsOfProvider(runs,provider,max=8){
+ return [...runs].filter(r=>(r.provider_config_id??'unknown')===provider).sort(byNewest).slice(0,max).map(r=>r.run_id);
+}
+/** Pure: live controls only make sense while a run can still change. */
+export function isLive(run){return !['completed','cancelled','failed'].includes(run?.state);}
+
+const isLatency=n=>/latency|first_audio|ttfa|round_trip|response_time/i.test(n);
+function show(m){
+ if(!m)return null;
+ if(m.value==null)return null;
+ if(typeof m.value==='object'){return Object.entries(m.value).map(([k,v])=>k+' '+(typeof v==='number'?Number(v.toPrecision(4)):v)).join(' · ')+(m.unit?' '+m.unit:'');}
+ return (typeof m.value==='number'?String(Number(m.value.toPrecision(6))):String(m.value))+(m.unit&&m.unit!=='count'?' '+m.unit:'');
+}
+/** Pure: X / Y / delta rows. Rows where neither run has a value are returned in `hidden` (name + reason). Latency rows come first. */
+export function metricTable(x,y,label=n=>n){
+ const a=metricRows(x.metrics),b=metricRows(y.metrics);
+ const deltas=new Map(metricDeltas(x,y).map(d=>[d.name,d]));
+ const names=[...new Set([...a,...b].map(m=>m.name))];
+ const rows=[],hidden=[];
+ for(const name of names){
+  const l=a.find(m=>m.name===name),r=b.find(m=>m.name===name);
+  const rawL=(x.metrics?.observations??[]).find(m=>(m.metric??m.name)===name),rawR=(y.metrics?.observations??[]).find(m=>(m.metric??m.name)===name);
+  if(rawL?.value&&typeof rawL.value==='object'||rawR?.value&&typeof rawR.value==='object'){
+   const lo=rawL?.value&&typeof rawL.value==='object'?rawL.value:{},ro=rawR?.value&&typeof rawR.value==='object'?rawR.value:{};
+   const unit=rawL?.unit??rawR?.unit??'';const ok=!rawL?.exclusion_reason&&!rawR?.exclusion_reason&&(rawL?.unit??null)===(rawR?.unit??null);
+   for(const k of ['count','min','mean','p50','p95','max']){
+    const a1=lo[k],b1=ro[k];const na=typeof a1==='number'&&Number.isFinite(a1),nb=typeof b1==='number'&&Number.isFinite(b1);
+    if(!na&&!nb)continue;
+    const u=k==='count'?'':unit;const fmt=v=>typeof v==='number'?Number(v.toPrecision(6))+(u?' '+u:''):null;
+    const dl=ok&&na&&nb?Number((b1-a1).toPrecision(8)):null;
+    rows.push({name:name+'.'+k,label:label(name)+' · '+k,x:fmt(a1),y:fmt(b1),delta:dl,unit:u,direction:dl==null?null:dl>0?'up':dl<0?'down':'same',latency:isLatency(name)});
+   }
+   continue;
+  }
+  const xs=show(l),ys=show(r);
+  if(xs==null&&ys==null){hidden.push({name,label:label(name),reason:l?.reason??r?.reason??'not measured'});continue;}
+  const d=deltas.get(name);
+  rows.push({name,label:label(name),x:xs,y:ys,delta:d?.delta??null,unit:d?.unit??'',direction:d?.delta==null?null:d.delta>0?'up':d.delta<0?'down':'same',latency:isLatency(name)});
+ }
+ rows.sort((p,q)=>Number(q.latency)-Number(p.latency));
+ return {rows,hidden};
+}
+
+/** Pure: pair two transcripts turn by turn. A turn starts at each customer line; assistant lines belong to the latest turn.
+ *  Superseded (earlier-version) assistant lines are dropped unless `showRevisions`. */
+export function alignTurns(xLines,yLines,showRevisions=false){
+ const turns=lines=>{
+  const out=[];let cur=null;
+  for(const l of lines??[]){
+   if(l.speaker==='customer'||!cur){cur={customer:l.speaker==='customer'?l:null,assistant:[]};out.push(cur);if(l.speaker==='customer')continue;}
+   if(!showRevisions&&l.state==='superseded')continue;
+   cur.assistant.push(l);
+  }
+  return out;
+ };
+ const tx=turns(xLines),ty=turns(yLines);
+ return Array.from({length:Math.max(tx.length,ty.length)},(_,i)=>({turn:i+1,x:tx[i]??null,y:ty[i]??null}));
+}
+export function hasRevisions(lines){return (lines??[]).some(l=>l.state==='superseded');}

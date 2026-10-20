@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {conditionRows, costLimit, costRows, intervalFloor, ms, outcomeClass, outcomeLabel, pct, planSize, scenarioGroups, usd, verdictText} from "../../apps/web/bakeoff-report.mjs";
+import {conditionRows, confidenceNote, costIsEmpty, costLimit, costRows, estimateCost, intervalFloor, latencyCap, ms, normaliseWeights, outcomeClass, outcomeLabel, pct, planSize, scenarioDiffers, scenarioGroups, usd, usdEstimate, joinParts, mergeGroups, scoresInRankOrder, verdictText, weightPercents, weightsAreCustom, weightsTotal} from "../../apps/web/bakeoff-report.mjs";
 
 const NAMES = {a: "Alpha Voice", b: "Beta Voice"};
 const rate = (value, lo = null, hi = null) => ({value, lo, hi, k: null, n: null});
@@ -42,11 +42,76 @@ test("the verdict names eliminations, significant pairs and provisional results"
   assert.equal(verdictText(report({progress: {cells: 2, observed: 0, pending: 2}}), NAMES).lead, "No runs have finished yet.");
 });
 
-test("the interval axis starts just below the lowest bound so overlaps stay visible", () => {
-  assert.equal(intervalFloor(report()), 0.7);
+test("the interval axis starts below the lowest score, not the lowest wide interval bound", () => {
+  assert.equal(intervalFloor(report()), 0.9);  // both dimensions score 100%: the axis does not start at 40% or 0
+  const wide = report();
+  wide.scores[0].factual = rate(0.95, 0.15, 1);  // a wide interval no longer drags the axis down to 0
+  assert.equal(intervalFloor(wide), 0.8);
   const low = report();
   low.scores[0].factual = rate(0.4, 0.15, 0.7);
-  assert.equal(intervalFloor(low), 0);
+  assert.equal(intervalFloor(low), 0.3);
+  const perfect = report({scores: [report().scores[0]]});
+  for (const d of ["task_success", "factual", "safe_speech", "reliability", "responsiveness", "robustness"]) perfect.scores[0][d] = rate(1);
+  assert.equal(intervalFloor(perfect), 0.9);
+});
+
+test("the latency axis reports how many turns it clips and labels the cap", () => {
+  const values = [...Array(198).fill(800), 3000, 9000];
+  const {cap, clipped, label} = latencyCap(values);
+  assert.equal(cap, 1000);
+  assert.equal(clipped, 2);
+  assert.equal(label, "1 s");
+  assert.equal(latencyCap([4800, 4900, 5000, 5100]).label, "6 s");
+  assert.equal(latencyCap([]).cap, 2500);
+});
+
+test("the confidence note combines repetitions, separability, provisional state and untestable criteria", () => {
+  const single = confidenceNote(report({limits: {single_repetition: true, repetitions: 1}}), [{criteria: {"CARE-01": "untestable"}}]);
+  assert.equal(single.level, "low");
+  assert.equal(single.text, "Low confidence: n=1 per scenario, some criteria untestable without judges, leaders not separable");
+  const strong = confidenceNote(report({limits: {single_repetition: false, repetitions: 5},
+    verdict: {...report().verdict, separable: true}}), [{criteria: {"FACT-01": "pass"}}]);
+  assert.deepEqual([strong.level, strong.text], ["high", "High confidence: n=5 per scenario"]);
+  const middle = confidenceNote(report({limits: {single_repetition: false, repetitions: 3}}), []);
+  assert.deepEqual([middle.level, middle.text], ["medium", "Medium confidence: n=3 per scenario, leaders not separable"]);
+  assert.equal(confidenceNote(report({limits: {repetitions: 5}, verdict: {...report().verdict, final: false, separable: true}})).level, "low");
+});
+
+test("an empty cost section is detected so it can collapse to one line", () => {
+  assert.equal(costIsEmpty(report()), true);
+  assert.equal(costIsEmpty(report({cost: [{status: "not_recorded"}, {status: "not_recorded"}]})), true);
+  assert.equal(costIsEmpty(report({cost: [{status: "not_recorded"}, {status: "priced"}]})), false);
+});
+
+test("only rows that differ keeps scenarios where providers got different results", () => {
+  const o = (provider, scenario_id, outcome, repetition = 0) => ({provider, scenario_id, outcome, repetition});
+  const obs = [o("a", "s1", "pass"), o("b", "s1", "pass"), o("a", "s2", "pass"), o("b", "s2", "fail"),
+    o("a", "s3", "fail"), o("b", "s3", "fail"), o("a", "s4", "pass"), o("a", "s4", "fail", 1), o("b", "s4", "pass"), o("b", "s4", "pass", 1)];
+  const differs = id => scenarioDiffers(obs, id, ["a", "b"]);
+  assert.deepEqual(["s1", "s2", "s3", "s4"].map(differs), [false, true, false, true]);
+  assert.equal(scenarioDiffers(obs, "s2", ["a"]), false);  // a provider with no runs is ignored
+});
+
+test("weights are edited as percentages, normalised deterministically and flagged when custom", () => {
+  const stored = {task_success: 0.3, factual: 0.2, safe_speech: 0.15, reliability: 0.15, responsiveness: 0.1, robustness: 0.1};
+  const pc = weightPercents(stored);
+  assert.deepEqual(pc, {task_success: 30, factual: 20, safe_speech: 15, reliability: 15, responsiveness: 10, robustness: 10});
+  assert.equal(weightsTotal(pc), 100);
+  assert.equal(weightsAreCustom(stored, pc), false);
+  assert.equal(weightsAreCustom(stored, {...pc, factual: 25}), true);
+  const scaled = normaliseWeights({...pc, factual: 40});  // total 120
+  assert.ok(Math.abs(Object.values(scaled).reduce((a, v) => a + v, 0) - 1) < 1e-12);
+  assert.equal(scaled.factual, 40 / 120);
+  assert.deepEqual(normaliseWeights({...pc, factual: 40}), scaled);  // same inputs, same result
+  assert.equal(normaliseWeights({a: 0, b: "x"}), null);
+  assert.equal(weightsAreCustom(stored, {a: 0}), true);
+});
+
+test("the launch estimate uses recorded per-run medians and says which providers have none", () => {
+  const costs = [{provider: "a", median_usd: "0.05"}, {provider: "b", median_usd: null}];
+  assert.equal(estimateCost(costs, ["a"], 40).usd, 2);
+  assert.deepEqual(estimateCost(costs, ["a", "b"], 40).missing, ["b"]);
+  assert.deepEqual(estimateCost(null, ["a"], 1).missing, ["a"]);
 });
 
 test("condition rows label audio profiles and keep a cell per provider", () => {
@@ -99,4 +164,36 @@ test("reports observed before cost was recorded say so instead of claiming no ta
 test("the cost limit says when a provider's cost comes from a later run", () => {
   const r = report({cost: [{provider: "a", name: "Alpha Voice", status: "priced"}], limits: {pricing_tables: ["t@1"], cost_from_separate_runs: ["a"]}});
   assert.match(costLimit(r), /For Alpha Voice the cost comes from a later run of each scenario/);
+});
+
+test("launch estimates show whole cents or <$0.01", () => {
+  assert.equal(usdEstimate(4.08), "$4.08");
+  assert.equal(usdEstimate(0.004), "<$0.01");
+  assert.equal(usdEstimate(0), "$0.00");
+  assert.equal(usdEstimate(null), "—");
+});
+
+test("joined labels never have stray separators", () => {
+  assert.equal(joinParts(["", "Completed", "32/32 runs"]), "Completed · 32/32 runs");
+  assert.equal(joinParts([null, " ", "x"]), "x");
+});
+
+test("groups merge by name and order by the lowest group_order", () => {
+  const m = mergeGroups([{group: "Happy path", order: 3}, {group: "Edge", order: 2}, {group: "Happy path", order: 1}, {group: "Edge", order: 2}]);
+  assert.deepEqual(m, [{group: "Happy path", order: 1}, {group: "Edge", order: 2}]);
+  const live = scenarioGroups([{execution: "live_adapter", runnable: true, scenario_id: "a", presentation: {group: "G", group_order: 5}},
+    {execution: "live_adapter", runnable: true, scenario_id: "b", presentation: {group: "G", group_order: 2}}]);
+  assert.equal(live.length, 1); assert.equal(live[0].order, 2);
+});
+
+test("scorecard order is by rank, eliminated providers last", () => {
+  const out = scoresInRankOrder([{provider: "b", rank: 2}, {provider: "a", rank: 1}]);
+  assert.deepEqual(out.map(s => s.provider), ["a", "b"]);
+});
+
+test("an explicit light theme overrides the OS dark palette for provider colours", async () => {
+  const {readFileSync} = await import("node:fs");
+  const css = readFileSync(new URL("../../apps/web/bakeoff-report.css", import.meta.url), "utf8");
+  assert.match(css, /prefers-color-scheme: dark\)\s*\{\s*:root:not\(\[data-theme=light\]\) \.bk/);
+  assert.match(css, /:root\[data-theme=dark\] \.bk \{ --bk-c0/);
 });

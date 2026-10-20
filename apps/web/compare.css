@@ -1,0 +1,39 @@
+/* Compare page only. Colours come from the shared tokens in ops.css. */
+.quick-picks{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:8px 0 4px}
+.quick-picks label.inline{display:inline-flex;flex-direction:row;align-items:center;gap:6px;font-weight:400}
+.quick-picks select{width:auto;max-width:100%}
+.compare-candidates{display:block;max-height:none;overflow:visible;margin:12px 0}
+.run-picker{width:100%;border-collapse:collapse;font-size:.88rem}
+.run-picker th{text-align:left;font-weight:600;padding:8px 10px;border-bottom:1px solid var(--line)}
+.run-picker td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+.run-picker tbody tr{cursor:pointer}
+.run-picker tbody tr.selected{background:color-mix(in srgb,var(--info) 9%,var(--card))}
+.run-picker input[type=checkbox]{width:auto;margin:0}
+.verdict{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.78rem;border:1px solid var(--line)}
+.verdict-pass{color:var(--ok,#1a7f37);border-color:currentColor}
+.verdict-fail,.verdict-error{color:var(--bad,#b3261e);border-color:currentColor}
+.verdict-review{color:var(--warn,#9a6700);border-color:currentColor}
+.disclaimer{font-size:.85rem;color:var(--muted,inherit);margin:4px 0 12px}
+#deltas.compare-deltas{overflow:visible;max-height:none}
+#deltas.compare-deltas h3,.comparison-table h3{position:static}
+.delta-table{width:100%;border-collapse:collapse;font-size:.88rem;min-width:0}
+.delta-table th,.delta-table td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left}
+.delta-table .num{text-align:right;font-variant-numeric:tabular-nums;white-space:normal;overflow-wrap:anywhere}
+.delta-table th.num{white-space:nowrap}
+.delta-table .tag{font-size:.7rem;padding:1px 6px;border-radius:8px;border:1px solid var(--line)}
+.delta-up{color:var(--info,#0b5cad);font-weight:600}
+.delta-down{color:var(--warn,#9a6700);font-weight:600}
+.delta-same,.delta-none{color:var(--muted,inherit)}
+.unavailable{margin-top:10px;font-size:.85rem}
+.conv-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.conv-head .check{display:flex;flex-direction:row;align-items:center;gap:6px;font-weight:400}
+.conv-grid{display:grid;grid-template-columns:3rem minmax(0,1fr) minmax(0,1fr);gap:0 16px}
+.conv-col-head{font-weight:600;font-size:.82rem;padding:6px 0;border-bottom:1px solid var(--line)}
+.conv-turn{color:var(--muted,inherit);padding:10px 0;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+.turn-cell{padding:10px 0;border-bottom:1px solid var(--line);min-width:0;display:flex;flex-direction:column;gap:6px}
+.conv-line{display:flex;flex-direction:column;gap:2px;overflow-wrap:anywhere}
+.conv-line .cv-who{font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted,inherit)}
+.conv-line.earlier{opacity:.65}.conv-line.earlier .cv-text{text-decoration:line-through}
+.conv-line .chip{align-self:flex-start}
+@media(max-width:700px){.conv-grid{grid-template-columns:2rem minmax(0,1fr) minmax(0,1fr);gap:0 8px}.run-picker th:nth-child(5),.run-picker td:nth-child(5){display:none}}
+.delta-table td:first-child,.delta-table th:first-child{width:34%}

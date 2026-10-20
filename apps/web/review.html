@@ -4,24 +4,24 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
-<title>Review & preservation · Voice Harness</title>
-<link rel="stylesheet" href="./ops.css?v=ux-audit-20261018">
+<title>Review & holds · Voice Harness</title>
+<link rel="stylesheet" href="./ops.css?v=ux-final-20261023">
+<link rel="stylesheet" href="./review.css?v=ux-final-20261023">
 </head>
 <body>
 <main>
   <nav aria-label="Main navigation"><a href="./runs.html">Runs</a><a href="./manual.html">Manual test</a><a href="./bakeoff.html">Bake-off</a><a href="./compare.html">Compare</a><a href="./scenarios.html">Scenarios</a><a href="./review.html" aria-current="page">Review & holds</a><a href="./coverage.html">Provider coverage</a></nav>
-  <h1>Review & preservation</h1>
+  <h1>Review & holds</h1>
   <p class="sub">Resolve assurance findings with supporting evidence and manage preservation holds. Holds protect retained artifacts until their recorded expiry; they cannot restore purged evidence.</p>
   <form id="auth">
     <input id="token" type="password" autocomplete="off" placeholder="Operator token" aria-label="Operator token" required>
-    <button type="submit">Load holds</button>
+    <button type="submit">Load review & holds</button>
   </form>
   <div id="help"></div>
   <p id="error" role="alert"></p>
   <section id="reviews" class="panel"></section>
-  <details class="panel"><summary>Preservation holds · urgent first</summary><div id="root"></div></details>
   <section id="hold-management" class="panel"></section>
 </main>
-<script type="module" src="./review-page.mjs?v=ux-audit-20261018"></script>
+<script type="module" src="./review-page.mjs?v=ux-final-20261023"></script>
 </body>
 </html>

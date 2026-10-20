@@ -1,0 +1,21 @@
+.coverage-tally{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.coverage-table table{min-width:760px}
+.coverage-table td{padding:10px 8px;vertical-align:top}
+.coverage-table .nowrap{white-space:nowrap}
+.badge.ok{color:var(--ok)} .badge.warn{color:var(--warn)}
+.expiry{font-weight:600}
+.expiry-ok{color:var(--ok)}
+.expiry-soon{color:var(--warn);background:color-mix(in srgb,var(--warn) 14%,transparent);padding:2px 8px;border-radius:99px}
+.expiry-expired{color:var(--bad)}
+.reverify,.probes{margin-top:6px;white-space:normal;font-size:.85rem}
+.reverify summary,.probes summary{cursor:pointer;color:var(--info)}
+.probe-ids{margin:4px 0 0;padding-left:18px;font-family:ui-monospace,monospace;font-size:.75rem;max-height:160px;overflow:auto;overflow-wrap:anywhere}
+.expiry-skew{color:var(--info)}
+.linklike{background:none;border:0;padding:0;margin-top:6px;color:var(--info);text-decoration:underline;cursor:pointer;font:inherit;font-size:.85rem}
+.probe-dialog{width:min(960px,94vw);max-height:85vh;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:8px}
+.probe-scroll{max-height:55vh;overflow:auto}
+.probe-dialog table{width:100%;border-collapse:collapse;font-size:.8rem}
+.probe-dialog td,.probe-dialog th{padding:4px 6px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+.probe-dialog .mono{font-family:ui-monospace,monospace;overflow-wrap:anywhere}
+.probe-dialog pre{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font-size:.72rem}
+.raw-toggle{display:block;margin:6px 0}

@@ -1,7 +1,7 @@
-import {setConnected} from "./chrome.mjs?v=ux-audit-20261018";
-import { api } from "./runs.mjs?v=ux-audit-20261018";
-import { load, render } from "./coverage.mjs";
-import { friendlyError, renderGetStarted, renderReadiness } from "./onboarding.mjs?v=ux-audit-20261018";
+import {setConnected} from "./chrome.mjs?v=ux-final-20261023";
+import { api } from "./runs.mjs?v=ux-final-20261023";
+import { load, loadProbeEvents, render, renderSummary } from "./coverage.mjs";
+import { friendlyError, renderGetStarted, readinessItems } from "./onboarding.mjs?v=ux-final-20261023";
 
 const form = document.getElementById("auth");
 const error = document.getElementById("error");
@@ -11,21 +11,30 @@ async function show() {
   error.textContent = "";
   try {
     const token = document.getElementById("token").value;
-    render(root, await load(location.origin, token));
+    const model = await load(location.origin, token);
+    let readiness = null;
+    let note = "";
+    try { readiness = readinessItems(await api(token, "/api/v1/live-providers")); }
+    catch (e) { note = "Could not check server readiness: " + e.message; }
+    const summary = document.getElementById("summary");
+    renderSummary(summary, model, readiness);
+    if (note) { const p = document.createElement("p"); p.className = "muted"; p.textContent = note; summary.append(p); }
+    if (readiness?.shared.length) {
+      const box = document.createElement("div"); box.className = "panel";
+      const h = document.createElement("strong"); h.textContent = "This server needs first (applies to every provider)";
+      const ul = document.createElement("ul");
+      for (const x of readiness.shared) { const li = document.createElement("li"); li.textContent = x.fix; ul.append(li); }
+      box.append(h, ul); summary.append(box);
+    }
+    render(root, model, readiness, Date.now(), (family) => loadProbeEvents(location.origin, token, family));
     setConnected(true);
     document.getElementById("export-coverage").hidden=false;
-    const readiness = document.getElementById("readiness");
-    readiness.replaceChildren();
-    try {
-      const providers = await api(token, "/api/v1/live-providers");
-      renderReadiness(readiness, providers);
-    } catch (e) { readiness.textContent = "Could not check server readiness: " + e.message; }
     try { sessionStorage.setItem("harness-operator-token", token); } catch {}
     document.querySelector("#help details").open = false;
   } catch (e) {
     setConnected(false);
     document.getElementById("export-coverage").hidden=true;
-    document.getElementById("readiness").textContent="Connect to check current readiness.";
+    document.getElementById("summary").replaceChildren();
     root.replaceChildren();
     error.textContent = "Could not load coverage: " + friendlyError(e);
   }

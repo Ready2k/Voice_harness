@@ -1,6 +1,8 @@
 import {runExplanation,causationLinks,viewChanged} from './ux-insights.mjs';
-import { el, runView, renderRun, TERMINAL } from './runs.mjs?v=ux-audit-20261018';
-import { words } from './workflow.mjs?v=ux-audit-20261018';
+import { el, runView, renderRun, TERMINAL, summaryCounts, relativeTime, durationLabel, shortId } from './runs.mjs?v=ux-final-20261023';
+import { providerEl, providerName } from './providers.mjs?v=ux-final-20261023';
+import { copyButton, humanise, stateLabel } from './format.mjs?v=ux-final-20261023';
+import { words } from './workflow.mjs?v=ux-final-20261023';
 
 export const STAGES = [
   ['input', 'Customer input'], ['model', 'Model generation'], ['tools', 'Tool lifecycle'],
@@ -35,24 +37,63 @@ export function eventPresentation(event){
 }
 function button(text, action, cls='') { const b=el('button',cls,text); b.type='button'; b.addEventListener('click',action); return b; }
 function stat(label, value) {const box=el('div','insight-stat');box.append(el('span','muted',label),el('strong','',String(value)));return box;}
-export function renderRecent(root, payload, onOpen) {
-  if(!viewChanged(root,payload.items))return;
-  const listScroll=root.scrollTop;
-  const focusedRun=root.contains(document.activeElement)?document.activeElement?.dataset.runId:null;
-  root.replaceChildren();
-  for (const run of payload.items) {
-    const b=button('',()=>onOpen(run.run_id),'recent-run');b.dataset.runId=run.run_id;
-    b.append(el('strong','',run.scenario_id??run.run_id),el('span','muted',run.state+' · '+(run.provider_config_id??'Provider unknown')),el('span','muted',run.run_id));
-    b.setAttribute('aria-label','Open '+(run.scenario_id??run.run_id)+' '+run.run_id);
-    root.append(b);
-  }
-  if (!payload.items.length) root.append(el('p','muted','No evaluations yet. Open New evaluation to launch a fixture.'));
-  root.scrollTop=listScroll;
-  if(focusedRun)[...root.children].find(node=>node.dataset.runId===focusedRun)?.focus({preventScroll:true});
+const CARD_DEFS = [
+  ['active', 'Active', (c) => c.active],
+  ['failed', 'Execution failures', (c) => c.failed],
+  ['review', 'Needs review', (c) => c.review],
+  ['pass', 'Passed', (c) => c.assessed ? c.pass + ' of ' + c.assessed + ' assessed' : 'None assessed'],
+];
+/** Summary cards double as filters: pressing one narrows the runs table, pressing it again clears it. */
+export function renderOverview(root, rows, activeCard, onSelect) {
+  const c = summaryCounts(rows);
+  const cards = CARD_DEFS.map(([id, label, value]) => {
+    const b = button('', () => onSelect(activeCard === id ? null : id), 'insight-stat insight-filter');
+    b.setAttribute('aria-pressed', String(activeCard === id));
+    b.dataset.card = id;
+    b.append(el('span', 'muted', label), el('strong', '', String(value(c))));
+    return b;
+  });
+  if (viewChanged(root, [c, activeCard])) root.replaceChildren(...cards);
 }
-export function renderOverview(root, payload, providers) {
-  const c=overviewCounts(payload.items);
-  root.replaceChildren(stat('Active in recent runs',c.active),stat('Execution failures',c.failed),stat('Review status',payload.items.length && payload.items.every(r=>r.assurance!=null)?c.review:'Inspect a run'),stat('Live configurations ready',providers.filter(p=>p.available).length+' / '+providers.length));
+
+function providerCell(id) { const td = el('td'); td.append(providerEl(id)); return td; }
+
+const HEADINGS = ['Scenario', 'Provider', 'Result', 'Status', 'Started', 'Duration', 'Run'];
+/** The runs table: result first, lifecycle second, failed rows marked. `titles` maps scenario id to display title. */
+export function renderRunsTable(root, rows, { onOpen, selectedId = null, titles = new Map(), now = Date.now() }) {
+  if (!viewChanged(root, [rows.map((r) => [r.runId, r.state, r.result.key, r.endedAt]), selectedId, Math.floor(now / 30000)])) return;
+  const scroll = root.scrollTop;
+  const focused = root.contains(document.activeElement) ? document.activeElement?.dataset.runId : null;
+  root.replaceChildren();
+  if (!rows.length) { root.append(el('p', 'muted', 'No runs match. Clear a filter or open New evaluation to launch one.')); return; }
+  const table = el('table', 'runs-table');
+  table.setAttribute('aria-label', 'Evaluation runs');
+  const head = el('tr');
+  for (const h of HEADINGS) { const th = el('th', '', h); th.scope = 'col'; head.append(th); }
+  const thead = el('thead'); thead.append(head); table.append(thead);
+  const body = el('tbody');
+  for (const r of rows) {
+    const tr = el('tr', 'run-row result-' + r.result.key + (r.runId === selectedId ? ' selected' : ''));
+    const title = titles.get(r.scenarioId) ?? r.scenarioId ?? r.runId;
+    const open = button(title, () => onOpen(r.runId), 'link scenario-link');
+    open.dataset.runId = r.runId;
+    open.setAttribute('aria-label', 'Open ' + title + ' ' + r.runId);
+    if (r.runId === selectedId) open.setAttribute('aria-current', 'true');
+    const name = el('td'); name.append(open);
+    if (titles.has(r.scenarioId)) name.append(el('div', 'muted', r.scenarioId));
+    const result = el('td'); result.append(el('span', 'verdict verdict-' + r.result.key, r.result.label));
+    const started = el('td', 'nowrap', relativeTime(r.startedAt, now)); if (r.startedAt) started.title = r.startedAt;
+    const id = el('td', 'nowrap'); id.append(el('code', '', shortId(r.runId)), ' ', copyButton(r.runId, 'Copy run ID ' + r.runId));
+    tr.append(name, providerCell(r.provider), result, el('td', 'secondary state-' + r.state, stateLabel(r.state)),
+      started, el('td', 'nowrap', r.terminal ? durationLabel(r.startedAt, r.endedAt) : ''), id);
+    tr.addEventListener('click', (event) => { if (!event.target.closest('button')) onOpen(r.runId); });
+    [...tr.children].forEach((td, i) => { td.dataset.label = HEADINGS[i]; });
+    body.append(tr);
+  }
+  table.append(body);
+  root.append(table);
+  root.scrollTop = scroll;
+  if (focused) root.querySelector('[data-run-id="' + focused + '"]')?.focus({ preventScroll: true });
 }
 
 export function createWorkspace(root, onCancel) {
@@ -111,10 +152,10 @@ export function createWorkspace(root, onCancel) {
     heading.textContent=data.displayTitle??data.run.scenario?.scenario_id??data.run.run_id;
     const provider=events.find(e=>e.type==='run.live_binding')?.content?.provider;
     const caller = data.run.config?.caller;
-    context.textContent=(data.run.config?.provider_config_id??'Unknown provider')+' · seed '+(data.run.config?.fixture_seed??'unknown')+' · '+(data.run.config?.policy_profile??'Unknown policy')+(provider?' · requested model: '+(provider.requested_model_id??'unknown')+' · returned: '+(provider.returned_model_id??'unresolved'):'') + (data.run.config?.input_mode === 'manual' ? ' · Human caller' : caller?.mode === 'live_ai' ? ' · Live AI caller · '+caller.persona+' · '+caller.voice+' · caller fidelity requires review' : ' · Fixed caller');
-    status.textContent=data.run.state+' · '+(follow?'Latest evidence':'History inspection');
+    context.title=[data.run.config?.provider_config_id,data.run.config?.policy_profile&&'policy: '+data.run.config.policy_profile].filter(Boolean).join(' · ');context.textContent=providerName(data.run.config?.provider_config_id)+' · seed '+(data.run.config?.fixture_seed??'unknown')+' · '+(data.run.config?.policy_profile?'policy '+humanise(data.run.config.policy_profile):'Unknown policy')+(provider?' · requested model: '+(provider.requested_model_id??'unknown')+' · returned: '+(provider.returned_model_id??'unresolved'):'') + (data.run.config?.input_mode === 'manual' ? ' · Human caller' : caller?.mode === 'live_ai' ? ' · Live AI caller · '+caller.persona+' · '+caller.voice+' · caller fidelity requires review' : ' · Fixed caller');
+    status.replaceChildren(...(TERMINAL.has(data.run.state)?[]:[el('span','live-dot'),el('strong','live-label','Live · updating every 2s'),' · ']),stateLabel(data.run.state)+' · '+(follow?'Latest evidence':'History inspection'));
     graphButton.setAttribute('aria-pressed',String(mode==='graph'));timelineButton.setAttribute('aria-pressed',String(mode==='timeline'));
-    followButton.textContent=follow?'Pause live following':'Resume latest';followButton.setAttribute('aria-pressed',String(follow));
+    const finished=TERMINAL.has(data.run.state);followButton.textContent=follow?'Pause live following':(finished?'Show latest':'Resume latest');followButton.setAttribute('aria-pressed',String(follow));followButton.hidden=finished&&follow;
     summary.replaceChildren(stat('Model · latest verdict',(data.assurance?.status==='assessed'?data.assurance.model_behaviour:data.run.assurance?.model_behaviour)??'Not assessed'),stat('Platform · latest verdict',(data.assurance?.status==='assessed'?data.assurance.platform_enforcement:data.run.assurance?.platform_enforcement)??'Not assessed'),stat('Audio · viewed events',view.tally.blocked+' blocked / '+view.tally.released+' released'));
     graph.hidden=mode!=='graph';timeline.hidden=mode!=='timeline';
     for(const stage of trace.stages){

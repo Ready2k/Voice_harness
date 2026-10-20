@@ -3,18 +3,20 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
-<title>Voice Harness · Compare evaluations</title>
-<link rel="stylesheet" href="./ops.css?v=ux-audit-20261018">
+<title>Compare · Voice Harness</title>
+<link rel="stylesheet" href="./ops.css?v=ux-final-20261023">
+<link rel="stylesheet" href="./compare.css?v=ux-final-20261023">
 </head>
 <body><main>
 <nav aria-label="Main navigation"><a href="./runs.html">Runs</a><a href="./manual.html">Manual test</a><a href="./bakeoff.html">Bake-off</a><a href="./compare.html" aria-current="page">Compare</a><a href="./scenarios.html">Scenarios</a><a href="./review.html">Review & holds</a><a href="./coverage.html">Provider coverage</a></nav>
-<p class="eyebrow">Voice Harness / Comparison</p><h1>Compare X with Y</h1>
-<p class="sub">Compare providers or repeat runs on the same scenario. Inspect outcomes, metrics and execution traces without hiding configuration differences.</p>
+<p class="eyebrow">Voice Harness / Compare</p><h1>Compare X with Y</h1>
+<p class="sub">Compare providers or repeat runs of the same task, side by side.</p>
 <form id="auth" class="panel"><input id="token" type="password" autocomplete="off" aria-label="Operator token" placeholder="Operator token" required><button>Connect</button></form>
 <p id="status" role="status" aria-live="polite">Connect to select recorded evaluations.</p><p id="error" role="alert"></p>
 <section id="controls" hidden>
-<div class="panel"><h2>Choose existing runs</h2><div class="actions"><label>Task<select id="task" aria-label="Comparison task"></select></label><button id="refresh" type="button">Refresh runs</button><button id="more" type="button" hidden>Load more runs</button></div>
-<p class="muted">Select 2–8 runs. All selections must use the same scenario and version. X and Y open side by side; every selected run appears in the summary.</p><div id="candidates" class="compare-candidates"></div>
+<div class="panel"><h2>Choose runs</h2><div class="actions"><label>Task<select id="task" aria-label="Comparison task"></select></label><button id="refresh" type="button">Refresh runs</button><button id="more" type="button" hidden>Load more runs</button></div>
+<div class="quick-picks" role="group" aria-label="Quick picks"><span class="muted">Quick picks</span><button id="pick-latest" type="button">Latest per provider</button><label class="inline">All repeats of<select id="pick-provider" aria-label="Provider for repeats"></select></label><button id="pick-repeats" type="button">Select repeats</button><button id="pick-clear" type="button" class="link">Clear</button></div>
+<div id="candidates" class="compare-candidates"></div>
 <div class="actions"><button id="compare" class="primary" type="button">Compare selected runs</button><span id="selection" role="status"></span></div>
 <details><summary>Open runs directly by ID</summary><label>Run IDs, separated by commas<input id="ids" placeholder="run_…, run_…"></label><button id="open-ids" type="button">Compare these IDs</button></details></div>
 <details class="launch-drawer"><summary>Launch a matched comparison batch</summary><form id="batch" class="panel">
@@ -29,12 +31,13 @@
 <div id="stored-reports"></div>
 </section>
 <section id="results" hidden><div class="workspace-heading"><h2>Comparison results</h2><div class="actions"><button id="update" type="button">Refresh evidence</button><button id="export" type="button">Download comparison snapshot</button></div></div>
-<p id="comparability" class="trace-insight"></p><p id="snapshot" class="muted"></p>
+<p class="disclaimer">Descriptive comparison of recorded evidence: no ranking or significance. <a href="#stored-reports">Statistical reports</a> are saved separately.</p>
+<p id="comparability" class="trace-insight" hidden></p>
 <div class="compare-pickers"><label>X<select id="left" aria-label="Run X"></select></label><label>Y<select id="right" aria-label="Run Y"></select></label></div>
-<p class="muted">Execution stages align across X and Y. History controls inspect each run independently; timestamps are not assumed synchronized.</p>
-<div id="deltas" class="panel comparison-table"></div>
+<div id="deltas" class="panel compare-deltas"></div>
+<div id="conversation" class="panel"></div>
 <div class="compare-pair"><section><h2>X</h2><a id="left-link">Open X in Runs</a><div id="left-trace"></div></section><section><h2>Y</h2><a id="right-link">Open Y in Runs</a><div id="right-trace"></div></section></div>
 <details class="panel"><summary>All selected runs · outcomes, configuration, metrics & costs</summary><div id="summary" class="panel comparison-table"></div><div id="metrics" class="panel comparison-table"></div><div id="costs" class="panel comparison-table"></div>
 </details>
 </section>
-</main><script type="module" src="./compare-page.mjs?v=ux-audit-20261018"></script></body></html>
+</main><script type="module" src="./compare-page.mjs?v=ux-final-20261023"></script></body></html>
