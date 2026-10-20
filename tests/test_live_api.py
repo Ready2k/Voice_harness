@@ -208,6 +208,18 @@ class LiveApi(unittest.TestCase):
         self.assertEqual(binding["harness_transport"]["turn_commit"], "explicit")
         self.assertEqual(binding["harness_transport"]["turn_timeout_seconds"], 45)
 
+    def test_audio_limit_failure_reaches_run_status_instead_of_timeout_or_pass(self):
+        class TooLong(FakeAdapter):
+            async def receive(self):
+                yield AudioOut(pcm=bytes(21 * 24000 * 2), sample_rate=24000,
+                               sample_count=21 * 24000, turn_id="long", ts_ms=1)
+                await asyncio.sleep(30)
+
+        assurance, events = self.completed_run(LIVE, ([], []), adapter=TooLong(), events=True)
+        failure = next(e["content"]["reason"] for e in events if e["type"] == "run.failed")
+        self.assertEqual(failure, "AUDIO_BACKPRESSURE")
+        self.assertNotEqual(assurance.get("overall_assurance"), "pass")
+
     def test_configured_auto_judge_decides_judge_criteria_and_is_bound_without_calibration(self):
         judge = reference_judge(cfg("auto-ref"))  # a different provider and family from the tested model
         assurance = self.completed_run(CARE, ([judge], []))

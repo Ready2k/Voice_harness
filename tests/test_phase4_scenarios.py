@@ -300,6 +300,19 @@ class LiveRunner(unittest.TestCase):
         summary = asyncio.run(runner.run())
         self.assertEqual(summary["turns"][0]["strict_speech_approval"], "turn_timeout")
 
+    def test_response_overflow_is_preserved_after_cancellation_not_reported_as_timeout(self):
+        class TooLong(ScriptedAdapter):
+            async def receive(self):
+                # This test engine has the small two-second default; the stream never ends naturally.
+                yield AudioOut(pcm=tone(2100), sample_rate=24000, sample_count=50400, turn_id="long")
+                await asyncio.sleep(30)
+
+        runner = self.runner("identity-impatient-en-gb-clean-001", TooLong())
+        runner.turn_timeout_s = 1
+        summary = asyncio.run(runner.run())
+        self.assertEqual(summary["turns"][0]["strict_speech_approval"], "audio_overflow")
+        self.assertFalse(any(e["type"] == "playback.released" for e in self.database.events(self.run)))
+
     def test_fatal_provider_error_ends_run_with_typed_outcome_and_closes_usage(self):
         class Fatal(ScriptedAdapter):
             async def receive(self):

@@ -1,0 +1,20 @@
+{
+  "run_id": "run_8c2b0fe13e3744d99c0dc675c4d33977",
+  "response_audio_seconds": 30,
+  "state": "completed",
+  "termination_reason": "completed",
+  "assurance": {
+    "model_behaviour": "pass",
+    "overall_assurance": "pass",
+    "platform_enforcement": "pass"
+  },
+  "transcripts": [
+    "I'll quickly check the policy details so I can explain it clearly.",
+    "Identity verification is required before you can access account information. In practice, that means I'll ask you for your security answer. Then, I'll run a verification check. Only after that succeeds can I discuss balances, payments, or other account details."
+  ],
+  "response_audio_lengths_seconds": [
+    4.1,
+    15.35
+  ],
+  "backpressure": []
+}

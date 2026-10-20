@@ -163,3 +163,7 @@ Do not record provider prices unless verified, and do not attest provider terms 
 | Provider quirks | `PHASE4_NOTES_*.md` |
 | Reviews and rechecks | `CODE_SPEC_*.md`, `PHASE_REVIEW_2026-10-18.md` |
 | Reuse from the sibling project | `VOICE_S2S_REUSE_AUDIT.md` |
+
+## Provider-native turn controls
+
+Fixed prerecorded runs use explicit commits for OpenAI/xAI/Gemini and Nova's continuous provider endpointing. Human microphone sessions retain automatic detection. Transport settings are recorded in each live binding. The response timeout is 45 seconds and the final live response-audio cap is 20 seconds. See [the provider transport review](PROVIDER_TRANSPORT_REVIEW_2026-10-20.md) for configuration, full-matrix results, the separate OpenAI budget follow-up and remaining handoff gap.

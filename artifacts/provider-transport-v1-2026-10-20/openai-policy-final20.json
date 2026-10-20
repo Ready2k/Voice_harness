@@ -1,0 +1,20 @@
+{
+  "run_id": "run_d074d57a48234cc9ab71058c220fa9ec",
+  "response_audio_seconds": 20,
+  "state": "completed",
+  "termination_reason": "completed",
+  "assurance": {
+    "model_behaviour": "pass",
+    "overall_assurance": "pass",
+    "platform_enforcement": "pass"
+  },
+  "transcripts": [
+    "I'll quickly check the official identity verification guidance so I can explain it clearly.",
+    "Identity verification is required before any account access. In this phone workflow, you provide your security answer, and then we check it using a verification challenge. If that check succeeds, we can continue with things like balances, transactions, or payment help. If it fails or can't be completed, access isn't granted."
+  ],
+  "response_audio_lengths_seconds": [
+    5.2,
+    18.9
+  ],
+  "backpressure": []
+}

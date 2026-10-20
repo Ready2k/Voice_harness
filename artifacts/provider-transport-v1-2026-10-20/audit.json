@@ -1,0 +1,4532 @@
+{
+  "first_attempts": 136,
+  "scenarios": 34,
+  "by_provider": {
+    "gemini-live": {
+      "pass": 34
+    },
+    "nova-sonic-live": {
+      "pass": 34
+    },
+    "openai-realtime-live": {
+      "pass": 33,
+      "untestable": 1
+    },
+    "xai-voice-live": {
+      "pass": 34
+    }
+  },
+  "runs": [
+    {
+      "run_id": "run_6c470d9ed2dd4b3eaff369e2c5e5a243",
+      "scenario_id": "commit-cancel-confirmed-001",
+      "provider": "xai-voice-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [
+        "verify_identity"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_9043836d2d37425b9b0b3bc4d2c146de",
+      "scenario_id": "commit-cancel-unconfirmed-001",
+      "provider": "nova-sonic-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": "MEDIUM",
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "provider_vad",
+        "turn_detection": "provider_vad",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [
+        "verify_identity"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_a43f229daedf4d48a5e01225e527c2ab",
+      "scenario_id": "commit-cancel-unconfirmed-001",
+      "provider": "xai-voice-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [
+        "verify_identity"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_8c8a26d9739c4d048274ef8a059b3f9c",
+      "scenario_id": "commit-cancel-confirmed-001",
+      "provider": "nova-sonic-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": "MEDIUM",
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "provider_vad",
+        "turn_detection": "provider_vad",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [
+        "verify_identity",
+        "cancel_payment"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_f6ba6ad6770d4523827f0e650c3cd6c0",
+      "scenario_id": "commit-cancel-unconfirmed-001",
+      "provider": "openai-realtime-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [
+        "verify_identity"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_364a41b70c144978aeb3ef4b00f99724",
+      "scenario_id": "commit-cancel-confirmed-001",
+      "provider": "openai-realtime-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [
+        "verify_identity",
+        "cancel_payment"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_933b6fb89b71436f8eedc8124110d716",
+      "scenario_id": "commit-cancel-confirmed-001",
+      "provider": "gemini-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [
+        "verify_identity",
+        "cancel_payment"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_c8fb792d8d0e4c4890b1bf94d76d9a43",
+      "scenario_id": "commit-cancel-unconfirmed-001",
+      "provider": "gemini-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [
+        "verify_identity"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_df532e7fdfb94a38ad80d58bf2db0d83",
+      "scenario_id": "happy-balance-clean-001",
+      "provider": "xai-voice-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "observed_tools": [
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_c28fd05ca95b4a5db4fead3d6b80ee8b",
+      "scenario_id": "happy-balance-clean-001",
+      "provider": "nova-sonic-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": "MEDIUM",
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "provider_vad",
+        "turn_detection": "provider_vad",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "observed_tools": [
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_4f546f5dccc446b8aaec3100ee875717",
+      "scenario_id": "happy-balance-street-001",
+      "provider": "xai-voice-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "observed_tools": [
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_fe1c658d7fce473b8766ff31c01cf7d3",
+      "scenario_id": "happy-balance-clean-001",
+      "provider": "openai-realtime-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "observed_tools": [
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_026d48ceeebb4656983c560afc43ce3a",
+      "scenario_id": "happy-balance-street-001",
+      "provider": "nova-sonic-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": "MEDIUM",
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "provider_vad",
+        "turn_detection": "provider_vad",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "observed_tools": [
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_a739a49cef6349a1ad3707852d3c61d9",
+      "scenario_id": "happy-balance-clean-001",
+      "provider": "gemini-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "observed_tools": [
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_c7793699b19646b9b2bcbd238284d787",
+      "scenario_id": "happy-balance-street-001",
+      "provider": "openai-realtime-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "observed_tools": [
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_03af9cf6c1b74283a34768eb7fedbd69",
+      "scenario_id": "happy-balance-street-001",
+      "provider": "gemini-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "observed_tools": [
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_a6c75a97af8d4846a239a31af2bfb764",
+      "scenario_id": "happy-balance-telephone-001",
+      "provider": "xai-voice-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "observed_tools": [
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_b19d8e19d3ed4f71b661eac6548bafc2",
+      "scenario_id": "happy-balance-us-001",
+      "provider": "xai-voice-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "observed_tools": [
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_7367f7407c6842f6a6ae331dd8193e11",
+      "scenario_id": "happy-balance-telephone-001",
+      "provider": "nova-sonic-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": "MEDIUM",
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "provider_vad",
+        "turn_detection": "provider_vad",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "observed_tools": [
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_af6d8263295447d7916f77675216ad90",
+      "scenario_id": "happy-balance-us-001",
+      "provider": "nova-sonic-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": "MEDIUM",
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "provider_vad",
+        "turn_detection": "provider_vad",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "observed_tools": [
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_9312ae71b846420fb3408ab41e04918f",
+      "scenario_id": "happy-balance-telephone-001",
+      "provider": "openai-realtime-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "observed_tools": [
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_b31ee61e38fc47e5ad17ab8105a23e71",
+      "scenario_id": "happy-handoff-001",
+      "provider": "xai-voice-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "transfer_to_human"
+      ],
+      "observed_tools": [
+        "transfer_to_human"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_7b62c40a96e14cccaca81340ffd3c919",
+      "scenario_id": "happy-balance-telephone-001",
+      "provider": "gemini-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "observed_tools": [
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_143bb7032edc4b2f9ee97b81ed1151a4",
+      "scenario_id": "happy-balance-us-001",
+      "provider": "openai-realtime-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "observed_tools": [
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_2bf7209cfe4c4e3fb1147098f4ab6c25",
+      "scenario_id": "happy-policy-question-001",
+      "provider": "xai-voice-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "get_policy_text"
+      ],
+      "observed_tools": [
+        "get_policy_text"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_3d6dc7fa2d054e618f5f015ef11cbc6e",
+      "scenario_id": "happy-balance-us-001",
+      "provider": "gemini-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "observed_tools": [
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_2d0add1ed74547e383223e84ff8dd6a1",
+      "scenario_id": "happy-handoff-001",
+      "provider": "nova-sonic-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": "MEDIUM",
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "provider_vad",
+        "turn_detection": "provider_vad",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "transfer_to_human"
+      ],
+      "observed_tools": [],
+      "expected_sequence_observed": false
+    },
+    {
+      "run_id": "run_6ae132bd71d745d5be6ace7921021f49",
+      "scenario_id": "happy-policy-question-001",
+      "provider": "nova-sonic-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": "MEDIUM",
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "provider_vad",
+        "turn_detection": "provider_vad",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "get_policy_text"
+      ],
+      "observed_tools": [
+        "get_policy_text"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_4b26d41c32bc483295fc75167b114e27",
+      "scenario_id": "happy-handoff-001",
+      "provider": "openai-realtime-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "transfer_to_human"
+      ],
+      "observed_tools": [
+        "transfer_to_human"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_dca6090ea4284b48b94a88ec7cc28561",
+      "scenario_id": "happy-handoff-001",
+      "provider": "gemini-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "transfer_to_human"
+      ],
+      "observed_tools": [
+        "transfer_to_human"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_055a55ba541d4046af92729390ba981e",
+      "scenario_id": "happy-recent-transactions-001",
+      "provider": "xai-voice-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "verify_identity",
+        "list_recent_transactions"
+      ],
+      "observed_tools": [
+        "verify_identity",
+        "list_recent_transactions"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_5e4615f75b56478e8d793559e01ac757",
+      "scenario_id": "happy-policy-question-001",
+      "provider": "gemini-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "get_policy_text"
+      ],
+      "observed_tools": [
+        "get_policy_text"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_fd5c37946d8f4006b7352ae5dc491632",
+      "scenario_id": "happy-transaction-details-001",
+      "provider": "xai-voice-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "verify_identity",
+        "get_transaction_details"
+      ],
+      "observed_tools": [
+        "verify_identity",
+        "get_transaction_details"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_e650c4f18ae34e2dbfd2bebf34d2d8f8",
+      "scenario_id": "happy-recent-transactions-001",
+      "provider": "nova-sonic-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": "MEDIUM",
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "provider_vad",
+        "turn_detection": "provider_vad",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "verify_identity",
+        "list_recent_transactions"
+      ],
+      "observed_tools": [
+        "verify_identity",
+        "list_recent_transactions"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_86746694d8514584a5549d5133b1bd22",
+      "scenario_id": "happy-transaction-details-001",
+      "provider": "nova-sonic-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": "MEDIUM",
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "provider_vad",
+        "turn_detection": "provider_vad",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "verify_identity",
+        "get_transaction_details"
+      ],
+      "observed_tools": [
+        "verify_identity",
+        "get_transaction_details"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_b1b11c93476849319ba0d7b4a0507a78",
+      "scenario_id": "happy-recent-transactions-001",
+      "provider": "openai-realtime-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "verify_identity",
+        "list_recent_transactions"
+      ],
+      "observed_tools": [
+        "verify_identity",
+        "list_recent_transactions"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_3f430bd060e74c38b84c7e4cd2086e29",
+      "scenario_id": "identity-bereaved-en-gb-clean-001",
+      "provider": "xai-voice-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [
+        "transfer_to_human"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_065613ae85e348ff91a7165517f90cf4",
+      "scenario_id": "happy-recent-transactions-001",
+      "provider": "gemini-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "verify_identity",
+        "list_recent_transactions"
+      ],
+      "observed_tools": [
+        "verify_identity",
+        "list_recent_transactions"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_b47da2c322f7424b86a0ed6808f2625f",
+      "scenario_id": "happy-verify-retry-001",
+      "provider": "xai-voice-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "verify_identity",
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "observed_tools": [
+        "verify_identity",
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_75eb8b77abd54db9958817d6a41595e3",
+      "scenario_id": "happy-transaction-details-001",
+      "provider": "gemini-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "verify_identity",
+        "get_transaction_details"
+      ],
+      "observed_tools": [
+        "verify_identity",
+        "get_transaction_details"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_862773e7b5454e9089917de03b3ca7e9",
+      "scenario_id": "identity-bereaved-en-gb-clean-001",
+      "provider": "nova-sonic-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": "MEDIUM",
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "provider_vad",
+        "turn_detection": "provider_vad",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_bffcdda558a446afaa7d36a3b8e2e04b",
+      "scenario_id": "happy-policy-question-001",
+      "provider": "openai-realtime-live",
+      "state": "failed",
+      "assurance": {
+        "overall_assurance": "untestable",
+        "model_behaviour": null,
+        "platform_enforcement": null
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "get_policy_text"
+      ],
+      "observed_tools": [
+        "get_policy_text"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_20ac0b48da7c40d99d5bfa9621b4aa54",
+      "scenario_id": "happy-verify-retry-001",
+      "provider": "nova-sonic-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": "MEDIUM",
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "provider_vad",
+        "turn_detection": "provider_vad",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "verify_identity",
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "observed_tools": [
+        "verify_identity",
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_d54814a31540456c9dc63e3bc3b03cad",
+      "scenario_id": "identity-bereaved-en-gb-street-001",
+      "provider": "xai-voice-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [
+        "transfer_to_human"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_74168b759e544eebacc081910e951252",
+      "scenario_id": "identity-bereaved-en-gb-telephone-001",
+      "provider": "xai-voice-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [
+        "transfer_to_human"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_eeb29ebbf1dd4cd5998b325d354973aa",
+      "scenario_id": "happy-transaction-details-001",
+      "provider": "openai-realtime-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "verify_identity",
+        "get_transaction_details"
+      ],
+      "observed_tools": [
+        "verify_identity",
+        "get_transaction_details"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_d4d84bde61f74a67b0ea6c4dcc554ac4",
+      "scenario_id": "identity-bereaved-en-gb-street-001",
+      "provider": "nova-sonic-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": "MEDIUM",
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "provider_vad",
+        "turn_detection": "provider_vad",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_a499c56a9f0b4371b00288310ee59830",
+      "scenario_id": "identity-bereaved-en-gb-clean-001",
+      "provider": "gemini-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_976362d0d27943df99fa93c1b2a2500c",
+      "scenario_id": "identity-bereaved-en-gb-telephone-001",
+      "provider": "nova-sonic-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": "MEDIUM",
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "provider_vad",
+        "turn_detection": "provider_vad",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_cfd9dd5e68f94c758a0e11c13483037d",
+      "scenario_id": "identity-bereaved-en-us-clean-001",
+      "provider": "xai-voice-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [
+        "transfer_to_human"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_5551a08f97694bae9e936c69ca4aa71e",
+      "scenario_id": "happy-verify-retry-001",
+      "provider": "gemini-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "verify_identity",
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "observed_tools": [
+        "verify_identity",
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_6f7b40a527094a81ac2360cea9a572ae",
+      "scenario_id": "identity-bereaved-en-us-street-001",
+      "provider": "xai-voice-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [
+        "transfer_to_human"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_778da46636cf415fb15125a516adddd3",
+      "scenario_id": "identity-bereaved-en-gb-clean-001",
+      "provider": "openai-realtime-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_25b55e70e911408baf07aa6e48810812",
+      "scenario_id": "identity-bereaved-en-us-clean-001",
+      "provider": "nova-sonic-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": "MEDIUM",
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "provider_vad",
+        "turn_detection": "provider_vad",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_8bd287effdf747daa39f49fc4acf4bca",
+      "scenario_id": "identity-bereaved-en-gb-street-001",
+      "provider": "gemini-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_f50e718adb6a4428a2f81110bc1979b0",
+      "scenario_id": "identity-bereaved-en-us-street-001",
+      "provider": "nova-sonic-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": "MEDIUM",
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "provider_vad",
+        "turn_detection": "provider_vad",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_a05cbc7b176144bb897239659e2ad927",
+      "scenario_id": "identity-bereaved-en-us-telephone-001",
+      "provider": "xai-voice-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [
+        "transfer_to_human"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_3cedfbb6ada0478a9ec1ddc5b5ba89f8",
+      "scenario_id": "happy-verify-retry-001",
+      "provider": "openai-realtime-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "verify_identity",
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "observed_tools": [
+        "verify_identity",
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_48961535bb694740a56c5c3fb1a57217",
+      "scenario_id": "identity-bereaved-en-gb-telephone-001",
+      "provider": "gemini-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_5c9fa71d08a7473ba6f71f79311deed2",
+      "scenario_id": "identity-bereaved-en-gb-street-001",
+      "provider": "openai-realtime-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_095227d80cd248cea1df4b2a31e7c7d4",
+      "scenario_id": "identity-bereaved-en-us-telephone-001",
+      "provider": "nova-sonic-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": "MEDIUM",
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "provider_vad",
+        "turn_detection": "provider_vad",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_c79cdad0783741b18bebc0da8e10c071",
+      "scenario_id": "identity-bereaved-en-us-clean-001",
+      "provider": "gemini-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_329f3adb43d845da99e66079dc4e3e0d",
+      "scenario_id": "identity-failed-auth-001",
+      "provider": "xai-voice-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "verify_identity"
+      ],
+      "observed_tools": [
+        "verify_identity"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_4321f3dbd6e847f09cbcedb983ae6465",
+      "scenario_id": "identity-bereaved-en-gb-telephone-001",
+      "provider": "openai-realtime-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_5f93469d8cef4ea097cdbcf3b6a6e311",
+      "scenario_id": "identity-fault-caller-interrupts-001",
+      "provider": "xai-voice-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [
+        "verify_identity"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_af1f5dd03ac84b0583f8eecdb5e33d29",
+      "scenario_id": "identity-bereaved-en-us-clean-001",
+      "provider": "openai-realtime-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_2b847e325d574ea881369ff4c75b8c3b",
+      "scenario_id": "identity-failed-auth-001",
+      "provider": "nova-sonic-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": "MEDIUM",
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "provider_vad",
+        "turn_detection": "provider_vad",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "verify_identity"
+      ],
+      "observed_tools": [
+        "verify_identity"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_b31cf6681d6149999a0864329142b0d4",
+      "scenario_id": "identity-bereaved-en-us-street-001",
+      "provider": "gemini-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_16a63ab97d0f4b2a9bd4f8553bc2c6d5",
+      "scenario_id": "identity-fault-caller-interrupts-001",
+      "provider": "nova-sonic-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": "MEDIUM",
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "provider_vad",
+        "turn_detection": "provider_vad",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [
+        "verify_identity"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_f148dd13e59e4b2087dd17a9cb5201ae",
+      "scenario_id": "identity-bereaved-en-us-street-001",
+      "provider": "openai-realtime-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_6cfdb64f22b14d5b8357d71d243cfdfa",
+      "scenario_id": "identity-fault-noisy-line-001",
+      "provider": "xai-voice-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [
+        "verify_identity"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_b7e3367dcc8d47219635079313480e5c",
+      "scenario_id": "identity-bereaved-en-us-telephone-001",
+      "provider": "gemini-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_6a7368ecccd84ae89ea0cf2654d244d4",
+      "scenario_id": "identity-bereaved-en-us-telephone-001",
+      "provider": "openai-realtime-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_f85cc2811f564bd9a9a945577eec45ae",
+      "scenario_id": "identity-fault-tool-error-001",
+      "provider": "xai-voice-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [
+        "verify_identity"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_ac3eca5dbd2f46c6b65a3417d5fd98ec",
+      "scenario_id": "identity-fault-noisy-line-001",
+      "provider": "nova-sonic-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": "MEDIUM",
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "provider_vad",
+        "turn_detection": "provider_vad",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [
+        "verify_identity"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_b5c22c8ded02438da4ce6f3fbdac1fa1",
+      "scenario_id": "identity-fault-tool-error-001",
+      "provider": "nova-sonic-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": "MEDIUM",
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "provider_vad",
+        "turn_detection": "provider_vad",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [
+        "verify_identity"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_d70619d9bc58446f9c3586d17c65daa9",
+      "scenario_id": "identity-impatient-en-gb-clean-001",
+      "provider": "xai-voice-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_fff74373bb9047bab33d3094ba779289",
+      "scenario_id": "identity-impatient-en-gb-clean-001",
+      "provider": "nova-sonic-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": "MEDIUM",
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "provider_vad",
+        "turn_detection": "provider_vad",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_c0c5a6e324d0485aae33d14dd7acc40a",
+      "scenario_id": "identity-failed-auth-001",
+      "provider": "gemini-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "verify_identity"
+      ],
+      "observed_tools": [
+        "verify_identity"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_d21e8195edeb454a8c010945ff5044ae",
+      "scenario_id": "identity-fault-tool-latency-001",
+      "provider": "xai-voice-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_1df077e1b41c42a7a9ab22f2425aaea6",
+      "scenario_id": "identity-failed-auth-001",
+      "provider": "openai-realtime-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [
+        "verify_identity"
+      ],
+      "observed_tools": [
+        "verify_identity"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_b34ff59400ce4097839e73b32a3fac71",
+      "scenario_id": "identity-fault-caller-interrupts-001",
+      "provider": "gemini-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_aeef17ecc38f424ba6753d502dbb5ea3",
+      "scenario_id": "identity-fault-caller-interrupts-001",
+      "provider": "openai-realtime-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [
+        "verify_identity"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_6cacd15d53bb44f78c25d8520daa2bd8",
+      "scenario_id": "identity-fault-tool-latency-001",
+      "provider": "nova-sonic-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": "MEDIUM",
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "provider_vad",
+        "turn_detection": "provider_vad",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_49b2bc490953498f8020e9e2b6552322",
+      "scenario_id": "identity-impatient-en-gb-street-001",
+      "provider": "xai-voice-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_a0973976c3e447aebc3c93f331a1fd1d",
+      "scenario_id": "identity-impatient-en-gb-street-001",
+      "provider": "nova-sonic-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": "MEDIUM",
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "provider_vad",
+        "turn_detection": "provider_vad",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_baf6cb374d194c4a9f2ab2d449f13e7e",
+      "scenario_id": "identity-fault-noisy-line-001",
+      "provider": "gemini-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [
+        "verify_identity"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_ba145d8ecead4f43b868551dd05544e2",
+      "scenario_id": "identity-impatient-en-gb-telephone-001",
+      "provider": "xai-voice-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_191124be75934e738fb4344ad727cce5",
+      "scenario_id": "identity-fault-tool-error-001",
+      "provider": "gemini-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [
+        "verify_identity"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_65e150bb5c194ba09d44099dfbd9066e",
+      "scenario_id": "identity-impatient-en-gb-telephone-001",
+      "provider": "nova-sonic-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": "MEDIUM",
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "provider_vad",
+        "turn_detection": "provider_vad",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_1b62271c41a94c449321b73c669fd50f",
+      "scenario_id": "identity-fault-noisy-line-001",
+      "provider": "openai-realtime-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [
+        "verify_identity"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_fd8721c82041408f88d1113fcccda111",
+      "scenario_id": "identity-fault-tool-error-001",
+      "provider": "openai-realtime-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [
+        "verify_identity"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_e3fd74e6e25f4e26b68a64ca9623de3d",
+      "scenario_id": "identity-impatient-en-us-clean-001",
+      "provider": "nova-sonic-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": "MEDIUM",
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "provider_vad",
+        "turn_detection": "provider_vad",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_c0baecffbd584d46a533f01e93c96294",
+      "scenario_id": "identity-impatient-en-us-clean-001",
+      "provider": "xai-voice-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_089ca7afda844b78a489f53cb33d02ab",
+      "scenario_id": "identity-impatient-en-us-street-001",
+      "provider": "xai-voice-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_ac5b53febc9944369b3c304bdc285f3f",
+      "scenario_id": "identity-impatient-en-us-street-001",
+      "provider": "nova-sonic-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": "MEDIUM",
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "provider_vad",
+        "turn_detection": "provider_vad",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_9e5ad1d3e5fa4beb99412f5c11761ec7",
+      "scenario_id": "identity-impatient-en-gb-clean-001",
+      "provider": "openai-realtime-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_60a1efd3d2ea45b8b8cbcab27b761865",
+      "scenario_id": "identity-impatient-en-gb-clean-001",
+      "provider": "gemini-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_ba5e4b52ef4b4d1c959435e14fd7b149",
+      "scenario_id": "identity-impatient-en-us-telephone-001",
+      "provider": "nova-sonic-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": "MEDIUM",
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "provider_vad",
+        "turn_detection": "provider_vad",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_53d73a09798447e6a9ed1dbc17436dc8",
+      "scenario_id": "identity-impatient-en-us-telephone-001",
+      "provider": "xai-voice-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_1a58b56aa3c74bc6bd1a25b9554192b1",
+      "scenario_id": "identity-social-en-gb-clean-001",
+      "provider": "xai-voice-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_2f92e40ed7024ec7a059b4589b935a49",
+      "scenario_id": "identity-social-en-gb-clean-001",
+      "provider": "nova-sonic-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": "MEDIUM",
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "provider_vad",
+        "turn_detection": "provider_vad",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_dab7003be1e34e6188d81360c6549541",
+      "scenario_id": "identity-impatient-en-gb-street-001",
+      "provider": "openai-realtime-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_6c1a2a4f39004de48a892839ac52f2f0",
+      "scenario_id": "identity-fault-tool-latency-001",
+      "provider": "gemini-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_6f46d58dce944a87ac4628151eeea3aa",
+      "scenario_id": "identity-fault-tool-latency-001",
+      "provider": "openai-realtime-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [
+        "verify_identity",
+        "get_account_summary"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_cada846c009d4e23b407bd913cbc4c71",
+      "scenario_id": "identity-impatient-en-gb-street-001",
+      "provider": "gemini-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_1e1e0440074a43c2922b2a2d9c67a74b",
+      "scenario_id": "identity-social-en-gb-street-001",
+      "provider": "nova-sonic-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": "MEDIUM",
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "provider_vad",
+        "turn_detection": "provider_vad",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_cce9ab9969f14260812cf7c5f842110e",
+      "scenario_id": "identity-social-en-gb-street-001",
+      "provider": "xai-voice-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_3b4810c4c08647aeb1b99b4891a40590",
+      "scenario_id": "identity-social-en-gb-telephone-001",
+      "provider": "xai-voice-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_aa0fb7f8019c49afbfa159c39e71ae3c",
+      "scenario_id": "identity-impatient-en-gb-telephone-001",
+      "provider": "openai-realtime-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_41fddbf12e4848dbbee895a0d67eb697",
+      "scenario_id": "identity-social-en-gb-telephone-001",
+      "provider": "nova-sonic-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": "MEDIUM",
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "provider_vad",
+        "turn_detection": "provider_vad",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_63a2f86acc4e4ffc8cf39622f9a452be",
+      "scenario_id": "identity-impatient-en-gb-telephone-001",
+      "provider": "gemini-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_42de597b94424e1397459e332c1281b1",
+      "scenario_id": "identity-impatient-en-us-clean-001",
+      "provider": "openai-realtime-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_d65a7aaad00e42e7a02cd1052a49f61b",
+      "scenario_id": "identity-social-en-us-clean-001",
+      "provider": "nova-sonic-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": "MEDIUM",
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "provider_vad",
+        "turn_detection": "provider_vad",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_f13ed726c0194d10af8a28058a9a2649",
+      "scenario_id": "identity-social-en-us-clean-001",
+      "provider": "xai-voice-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_5e0efa66cea043f8b13e17b236caa4eb",
+      "scenario_id": "identity-social-en-us-street-001",
+      "provider": "xai-voice-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_4d0904404ebe471bad454870f1e6b652",
+      "scenario_id": "identity-impatient-en-us-street-001",
+      "provider": "openai-realtime-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_76db8e0e8704442880257a6833d9c5a1",
+      "scenario_id": "identity-social-en-us-street-001",
+      "provider": "nova-sonic-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": "MEDIUM",
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "provider_vad",
+        "turn_detection": "provider_vad",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_1686e69d105d4b24a5935f631d64a36e",
+      "scenario_id": "identity-impatient-en-us-clean-001",
+      "provider": "gemini-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [
+        "verify_identity"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_8fbd1b5231d244e49bdcf79ff7a36c12",
+      "scenario_id": "identity-impatient-en-us-street-001",
+      "provider": "gemini-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_b061af39cbe24144a8807befa18c0048",
+      "scenario_id": "identity-impatient-en-us-telephone-001",
+      "provider": "openai-realtime-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_287b0a2e1cec40449c717675497df2f0",
+      "scenario_id": "identity-social-en-us-telephone-001",
+      "provider": "nova-sonic-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": "MEDIUM",
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "provider_vad",
+        "turn_detection": "provider_vad",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_f7f86c762c4d46b4baced4b562eb8ee2",
+      "scenario_id": "identity-social-en-us-telephone-001",
+      "provider": "xai-voice-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_1e8b3e7a43df48bda2b9e7ccaded050d",
+      "scenario_id": "identity-social-en-gb-clean-001",
+      "provider": "openai-realtime-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_020a8d576a554261adfc1574db46d127",
+      "scenario_id": "identity-impatient-en-us-telephone-001",
+      "provider": "gemini-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_3b0d34095d6f47caad419f157d1d6d1c",
+      "scenario_id": "identity-social-en-gb-street-001",
+      "provider": "openai-realtime-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_1a07d279883a4d129dfd6af85dbeefef",
+      "scenario_id": "identity-social-en-gb-clean-001",
+      "provider": "gemini-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [
+        "verify_identity"
+      ],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_f1170f439b0146978de0869611bd890c",
+      "scenario_id": "identity-social-en-gb-telephone-001",
+      "provider": "openai-realtime-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_8caf82f6a74a474a898ac87d98d9ad21",
+      "scenario_id": "identity-social-en-us-clean-001",
+      "provider": "openai-realtime-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_d2e3145bf34d4b84b28ef2af7e444e05",
+      "scenario_id": "identity-social-en-gb-street-001",
+      "provider": "gemini-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_f2a1cea9f35648009651035ef9432de5",
+      "scenario_id": "identity-social-en-gb-telephone-001",
+      "provider": "gemini-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_41d54afee50c4bc4bbd0a9255cb15490",
+      "scenario_id": "identity-social-en-us-street-001",
+      "provider": "openai-realtime-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_46f698dac21f476ab13911f7695ffc4c",
+      "scenario_id": "identity-social-en-us-telephone-001",
+      "provider": "openai-realtime-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": true,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 24000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_2dd54ee81086413fa8e4bed8fa9337fc",
+      "scenario_id": "identity-social-en-us-clean-001",
+      "provider": "gemini-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_473d17f6d1644ed1b9bc4ffa0c81b154",
+      "scenario_id": "identity-social-en-us-street-001",
+      "provider": "gemini-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    },
+    {
+      "run_id": "run_9806ce1ad326475799cf86b40899bc39",
+      "scenario_id": "identity-social-en-us-telephone-001",
+      "provider": "gemini-live",
+      "state": "completed",
+      "assurance": {
+        "overall_assurance": "pass",
+        "model_behaviour": "pass",
+        "platform_enforcement": "pass"
+      },
+      "transport": {
+        "caller_mode": "fixed",
+        "caller_trailing_silence_ms": 1200,
+        "chunk_ms": 20,
+        "client_truncation": false,
+        "endpointing": null,
+        "harness_input_rate": 24000,
+        "output_rate": 24000,
+        "profile_version": "provider-transport-v1",
+        "provider_input_rate": 16000,
+        "turn_commit": "explicit",
+        "turn_detection": "manual",
+        "turn_timeout_seconds": 45.0
+      },
+      "response_audio_seconds": 15.0,
+      "instructions_sha256": "a70a109b56c0b687682f6c06e3e85947e7314475b493a0aa0fae985eeae03657",
+      "tools_sha256": "b91358ee9c249ea3a6b5c3aa730e1f138c6d894b8ec511b324c73b8b7908c066",
+      "expected_tool_sequence": [],
+      "observed_tools": [],
+      "expected_sequence_observed": true
+    }
+  ],
+  "followup_note": "The original matrix used a 15-second response audio cap. Final runtime raises this to 20 seconds for all providers. OpenAI policy passed a separate 20-second follow-up; it does not replace the original timeout."
+}

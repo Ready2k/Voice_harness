@@ -370,7 +370,10 @@ class AdapterTurnDriver:
             with self.engine.database.transaction(self.run_id) as tx:
                 tx.event("orchestrator", "audio.backpressure", {
                     "failure_code": "AUDIO_BACKPRESSURE", "buffered_bytes": buffered, "incoming_bytes": 0,
-                    "limit_bytes": self.engine.limits["pending_audio_bytes"], "discarded_unit_ids": [],
+                    "limit_bytes": min(self.engine.limits["pending_audio_bytes"],
+                                       self.engine.limits.get("response_audio_bytes", self.engine.limits["pending_audio_bytes"]))
+                    if reason == "PENDING_AUDIO_LIMIT_EXCEEDED" else self.engine.limits["pending_audio_bytes"],
+                    "discarded_unit_ids": [],
                     "generation_epoch": tx.state["generation_epoch"], "provider_cancellation": "requested",
                     "fallback_audio": "none_configured",
                 })

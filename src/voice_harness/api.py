@@ -202,6 +202,8 @@ def create_app(
         outcomes = {t["strict_speech_approval"] for t in summary["turns"]}
         if summary.get("caller_failure") or summary.get("setup_failure"):
             failure = summary.get("caller_failure") or summary["setup_failure"]
+        elif "audio_overflow" in outcomes:
+            failure = "AUDIO_BACKPRESSURE"
         elif "turn_timeout" in outcomes:
             failure = "TURN_TIMEOUT"
         elif outcomes & {"provider_error", "stream_ended"} or summary["adapter_errors"]:

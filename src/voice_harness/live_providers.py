@@ -260,6 +260,7 @@ def configure_transport(provider_config_id, config, caller_mode):
         "output_rate": RATE, "chunk_ms": 20, "caller_trailing_silence_ms": CALLER_TRAIL_MS if caller_mode == "fixed" else None,
         "client_truncation": provider_config_id in {"openai-realtime-live", "xai-voice-live"},
         "turn_timeout_seconds": TURN_TIMEOUT_S if caller_mode != "human_microphone" else None,
+        "response_audio_seconds": LIVE_LIMITS["response_audio_seconds"],
     }
 
 

@@ -38,8 +38,9 @@ NATIVE_FLUSH_EVERY = 100
 # Headless runs never receive playback acknowledgements, so released audio stays "pending" in the engine's buffer
 # accounting for the whole session; the budget therefore covers a session of replies (a per-response cap of the
 # same size still applies at ingress). Engines for live runs are built with these limits, which the run manifest records.
+# A verified OpenAI policy reply lasted 15.35 s; allow bounded short explanations across all providers.
 LIVE_LIMITS = {"pending_audio_seconds": 120.0, "pending_audio_bytes": 120 * RATE * 2,
-               "response_audio_seconds": 15.0, "response_audio_bytes": 15 * RATE * 2}
+               "response_audio_seconds": 20.0, "response_audio_bytes": 20 * RATE * 2}
 CANCEL_TIMEOUT_S = 5.0
 
 
@@ -200,6 +201,10 @@ class LiveScenarioRunner:
             if self.driver.cancel_requested:
                 self.driver.cancel_requested = False
                 await self._cancel_generation()
+                # Cancellation resets the driver's buffer, so retain the ingress failure here.
+                # Do not wait for another provider turn boundary and mislabel it as a timeout.
+                return {"approval": None, "strict_speech_approval": "audio_overflow",
+                        "reason_codes": ["AUDIO_BACKPRESSURE"]}
             if until_audio and event.type == "audio_out" and (tool_seen or not self.tool_calls_expected):
                 # Playback is simulated at real time: the caller cuts in 500 ms into the reply.
                 await asyncio.sleep(0.5)
@@ -284,7 +289,7 @@ class LiveScenarioRunner:
                     result = await step(event, self.driver.feed(event))
                     if result is not CONTINUE and (settled is None or settled["strict_speech_approval"] == "no_audio"):
                         settled = result
-                    if settled is not None and settled["strict_speech_approval"] == "barge_in_not_assessed":
+                    if settled is not None and settled["strict_speech_approval"] in {"barge_in_not_assessed", "audio_overflow"}:
                         return settled
                     if settled is not None and not running and not follow_up and not response_active:
                         return settled
