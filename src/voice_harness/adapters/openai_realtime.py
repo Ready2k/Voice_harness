@@ -255,7 +255,7 @@ class OpenAIRealtimeAdapter:
     async def _create_response(self) -> None:
         await self._send({"type": "response.create"})
 
-    async def submit_tool_result(self, call_id: str, result: dict[str, Any]) -> dict[str, Any]:
+    async def submit_tool_result(self, call_id: str, result: dict[str, Any], *, respond: bool = True) -> dict[str, Any]:
         if call_id != result.get("call_id"):
             raise ValueError("TOOL_RESULT_CORRELATION_FAILED")
         if self._response_id is not None:  # the tool-calling response must finish first
@@ -273,7 +273,8 @@ class OpenAIRealtimeAdapter:
         finally:
             self._acks.pop(f"output:{call_id}", None)
         self._pending_calls.discard(call_id)
-        await self._create_response()
+        if respond:
+            await self._create_response()
         return {"local_send": "accepted", "provider_acknowledgement": ack, "call_id": call_id}
 
     async def cancel_tool(self, call_id: str, reason: str) -> dict[str, Any]:

@@ -2,7 +2,24 @@
 
 Status: proposed implementation specification v0.2, 19 October 2026. No runtime integration is implemented by this document.
 
+Implementation update, 21 October 2026: a bounded CLI telephone pilot is implemented in `telephony_demo.py` and `scripts/delegate_phone_demo.py`; see [the runbook](DELEGATE_PHONE_RUNBOOK.md) and [live proof report](../reports/delegate-phone-proof-2026-10-21.md). Following explicit user approval for the tunnel/AI/ASR data flow, a live call received remote audio, let the agent send `770022`, reconnected on the same CallSid and sent approved spoken phrases with playback acknowledgements. The IVR read back the accepted ID, then requested a sub-test number that has not yet been supplied, so the balance task remains incomplete. Sixteen offline telephony checks currently pass, including a missing-sub-test stop rule and optional operator-bound sub-test DTMF. This pilot is not the complete specification: the general setup UI, arbitrary credential-based scenarios, adaptive speech-release integration, independent platform oracle and signed evaluation exports remain future work.
+
+## Recorded setup — 20 October 2026
+
+- Selected outbound caller ID (`From`): **+441483694454** — UK display **01483 694454**, Woking. The operator requested this number with Voice capability. Provisioning/active status must be verified before use; selection does not establish that it is already available.
+- Planned configuration: `TWILIO_FROM_NUMBER=+441483694454`. This records the intended value; it has not been added to runtime configuration by this documentation change.
+- Twilio account upgrade was confirmed through the API as `Full` and `active` on 20 October. The restricted API key successfully accessed Calls List.
+- The operator submitted a regulatory bundle and received an awaiting-review notification. Approval and assignment to the selected number remain to be checked.
+- Last API check on 20 October returned UK low-risk dialing disabled and no provisioned numbers or verified caller IDs. Recheck after provisioning; enable the required UK destination permissions before the outbound test.
+- Authorised automated test destination: **+441617683858**. Use **770022** for the automatic balance flow; **770004** is an alternative open-question/reason-for-call flow. The earlier value `770005` was corrected by the operator and must not be used. These are test-system routing IDs, not Twilio verification codes.
+- A call to the operator's verified mobile succeeded through the Twilio trial interface, as reported by the operator. This proves neither harness audio bridging nor DTMF delivery.
+- Runtime Twilio integration remains to be built. Next steps: verify number activation and geographic permissions, implement the M1 voice/DTMF transport test, then connect the delegate agent under M2.
+
 ## First build: number + scenario + supporting details
+
+Outbound smoke test, 21 October 2026: restricted API key created call `CAb6f5feb37dfeb0d7756f29aeedb0fcd3` from `+441483694454` to `+441617683858`. Twilio reported `completed`, duration 23 seconds (07:04:13–07:04:36 UTC). Inline TwiML requested a five-second pause, `Play digits="770022"`, a fifteen-second pause and hangup; the call also had a 35-second time limit. This confirms outbound connection and call creation permission. No audio was captured, so keypad acceptance, the balance response and agent conversation remain unverified. Price was not yet available on the status response. This was a standalone API smoke test, not an integrated harness run.
+
+Setup update, 21 October 2026: the operator confirmed regulatory-bundle approval by email. The latest read-only API check confirmed UK low-risk dialing is enabled; high-risk categories remain disabled. The selected caller number `+441483694454` is now provisioned on the configured account with `status=in-use`, Voice capability enabled and a regulatory bundle assigned. This supersedes the earlier empty number lookup. Caller-number provisioning and UK low-risk dialing prerequisites are satisfied; outbound connectivity, media bridging and DTMF still require runtime tests. No call was placed during this check.
 
 The first deliverable is a telephone demo. The operator enters a number, writes a task in plain language, supplies supporting demo details (including account/passcode when needed), then presses Start. The harness dials that number, connects the AI delegate, and lets it listen, speak and choose keypad digits dynamically. The operator sees progress, can stop the call, and receives the result and redacted evidence afterward.
 
