@@ -100,6 +100,11 @@ class CallReviewTests(unittest.TestCase):
         self.assertIn("Capture-clock alignment", page)
         self.assertIn("&lt;/script&gt;&lt;script&gt;bad()", page)
         self.assertNotIn("Question </script>", page)
+        combined = page.split('<section id="originals"')[0]
+        self.assertIn('id="full-transcript"', combined)
+        self.assertIn("An independent transcript.", combined)
+        self.assertIn("Live conversation events — may be incomplete", combined)
+        self.assertIn("no sentence timestamps", combined)
         (self.root / "conversation.wav").write_bytes(b"tampered")
         self.assertFalse(verify_review(self.root))
 

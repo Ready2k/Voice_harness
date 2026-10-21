@@ -15,6 +15,8 @@ const {chromium} = require('playwright');
     await tabs.first().waitFor();
     assert.equal(await tabs.count(),3);
     assert.equal(await page.locator('#combined').isVisible(),true);
+    assert.equal(await page.locator('#full-transcript').isVisible(),true);
+    assert.ok((await page.locator('#full-transcript pre').textContent()).trim().length > 20);
     await page.waitForFunction(() => document.getElementById('conversation').readyState >= 1);
     const duration = await page.locator('#conversation').evaluate(audio => audio.duration);
     assert.ok(duration > 100 && duration < 115);
