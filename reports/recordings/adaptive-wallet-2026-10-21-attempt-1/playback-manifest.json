@@ -11,9 +11,9 @@
   "alignment_mode": "capture_clock",
   "mix": "mono_equal_half_gain; stereo_left_service_right_delegate",
   "sha256": {
-    "alignment.json": "51efebde9ba97190a49dc90c535a517d903dbbdbaa74f00b6b8b2faf129d9771",
-    "conversation.wav": "ac197e55c5c10951bf86dbf374d22853d866522192d579a956da9f0ec9215b42",
-    "conversation-stereo.wav": "29c7323c37821fbe208e1173af24413fdaa08e59fdea43d8814c885d9145b5cf",
-    "index.html": "e5dd9e66bada09fc91abe7cab732e1fd82e306a6dd6ce25d8084fc1b42d9d27f"
+    "alignment.json": "e68296cc36e4a4cf2fcfe50da4679c4ce4466a9feafffc4b326b7b2ef9907adb",
+    "conversation.wav": "185d3c1fd049f6baf53e77f0f7829059f48bedaf3c4a21dfbefbf54912a9299c",
+    "conversation-stereo.wav": "87fbdf756ba865de9e25bbf7d6e2870e21f2af8d2806149c6893abfb61a83ce9",
+    "index.html": "39f51dc1ca9fdbc92807d47c4aaae9e57631e6fe39d9deb79209488a3cf0d1c9"
   }
 }

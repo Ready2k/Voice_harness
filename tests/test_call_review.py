@@ -73,6 +73,20 @@ class CallReviewTests(unittest.TestCase):
         np.testing.assert_array_equal(stereo[28000:32000, 1], 4000)
         self.assertEqual(len(mono), 32000)
 
+    def test_outbound_packet_jitter_does_not_insert_silence_into_speech(self):
+        samples = np.arange(480, dtype="<i2") + 1000
+        self.sources["sent"] = samples
+        write_audio(self.root / "sent.wav", samples)
+        chunks = [{"track": "remote", "source_frame": 0, "frames": 16000, "at_ns": self.origin, "generation": 0}]
+        chunks += [{"track": "sent", "source_frame": n * 160, "frames": 160,
+                    "at_ns": self.origin + 3_500_000_000 + n * 22_000_000, "generation": 1} for n in range(3)]
+        (self.root / "audio-timing.json").write_text(json.dumps({"schema_version": 1, "clock": "local_monotonic_ns", "chunks": chunks}))
+        self.seal()
+        alignment = make_alignment(self.root, self.sources, self.events)
+        _, stereo, _ = mix_tracks(self.sources, alignment)
+        np.testing.assert_array_equal(stereo[28000:28480, 1], samples)
+        self.assertEqual(len([s for s in alignment["segments"] if s["track"] == "sent"]), 1)
+
     def test_invalid_source_ranges_are_rejected_rather_than_repeated_or_dropped(self):
         alignment = self.captured_alignment()
         alignment["segments"][0]["source_frame"] = 1

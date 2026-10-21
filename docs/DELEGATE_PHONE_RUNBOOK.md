@@ -91,7 +91,7 @@ Each attempt gets a private directory under `.local/delegate-calls/` (git-ignore
 | `conversation.wav` / `conversation-stereo.wav` | One mixed playback, or service-left/delegate-right stereo on the same timeline |
 | `alignment.json` / `playback-manifest.json` | Derived sample placement, timing-quality label and source/output hash bindings |
 
-New calls automatically create combined playback after source evidence finalisation. Remote frame positions use Twilio stream presentation timestamps anchored to the first packet's local receive clock; sent frames use local send times. This aligns transport capture, not unknown remote acoustic latency. Twilio describes its timestamp in the [Media Streams message contract](https://www.twilio.com/docs/voice/media-streams/websocket-messages).
+New calls automatically create combined playback after source evidence finalisation. Remote frame positions use Twilio stream presentation timestamps anchored to the first packet's local receive clock. Each delegate reply uses its first local send time as its start, then preserves its original PCM continuously: Twilio buffers outbound chunks sequentially, so local packet scheduling jitter must not become tiny silences inside speech. Reply boundaries and inter-reply gaps remain on the recorded timeline. This aligns transport capture, not unknown remote acoustic latency. Twilio describes its timestamp in the [Media Streams message contract](https://www.twilio.com/docs/voice/media-streams/websocket-messages).
 
 Older recordings without per-frame capture timing can be reconstructed from stream and speech events with an explicit **Estimated alignment** label. Their lost audio cannot be recovered. To render/re-render a review page:
 

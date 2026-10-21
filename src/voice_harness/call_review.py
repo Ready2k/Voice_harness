@@ -5,6 +5,7 @@ import hashlib
 import html
 import json
 import wave
+from bisect import bisect_right
 from pathlib import Path
 
 import numpy as np
@@ -76,9 +77,32 @@ def make_alignment(root, sources, events, *, speech_cache=None):
         origin = min([origin, *[r["at_ns"] for r in rows]])
         segments = [{"track": r["track"], "source_frame": r["source_frame"], "frames": r["frames"],
                      "timeline_frame": _frame_offset(r["at_ns"], origin), "generation": r["generation"]} for r in rows]
+        # Twilio buffers outbound media for sequential playback. Local websocket
+        # scheduling jitter is not silence inside a spoken reply. Anchor each
+        # release's first chunk, then preserve its source PCM without packet gaps.
+        releases = sorted(e["monotonic_ns"] for e in events if e["type"] == "speech.release")
+        sent = []
+        previous = None
+        for row in (r for r in rows if r["track"] == "sent"):
+            release = bisect_right(releases, row["at_ns"])
+            same_reply = (previous is not None and row["generation"] == previous["generation"]
+                          and row["source_frame"] == previous["source_frame"] + previous["frames"]
+                          and release == bisect_right(releases, previous["at_ns"]))
+            # Older timing fixtures without release events use only nearby packets.
+            if not releases and previous is not None:
+                same_reply = same_reply and row["at_ns"] - previous["at_ns"] <= 100_000_000
+            if same_reply:
+                sent[-1]["frames"] += row["frames"]
+            else:
+                sent.append({"track": "sent", "source_frame": row["source_frame"], "frames": row["frames"],
+                             "timeline_frame": _frame_offset(row["at_ns"], origin), "generation": row["generation"]})
+            previous = row
+        segments = [s for s in segments if s["track"] != "sent"] + sent
         result = {"schema_version": 1, "mode": "capture_clock", "sample_rate": RATE, "origin_ns": origin,
                   "source_sha256": hashes, "segments": segments,
+                  "delegate_timing": "first_send_anchor_per_release; continuous_source_pcm_within_reply",
                   "limitations": ["Aligned to the local transport clock; remote acoustic/playback latency is unknown.",
+                                  "Delegate replies preserve continuous source audio; local send-packet jitter is not rendered as silence.",
                                   "Missing audio during stream reconnection is silence, not recovered speech."]}
     else:
         existing = root / "alignment.json"

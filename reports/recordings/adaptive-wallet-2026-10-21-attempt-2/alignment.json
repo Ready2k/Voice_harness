@@ -15285,24 +15285,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 0,
-      "frames": 160,
-      "timeline_frame": 374583,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 349120,
       "frames": 160,
       "timeline_frame": 376830,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 160,
-      "frames": 160,
-      "timeline_frame": 374756,
       "generation": 2
     },
     {
@@ -15313,24 +15299,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 320,
-      "frames": 160,
-      "timeline_frame": 374929,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 349440,
       "frames": 160,
       "timeline_frame": 377150,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 480,
-      "frames": 160,
-      "timeline_frame": 375103,
       "generation": 2
     },
     {
@@ -15341,24 +15313,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 640,
-      "frames": 160,
-      "timeline_frame": 375282,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 349760,
       "frames": 160,
       "timeline_frame": 377470,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 800,
-      "frames": 160,
-      "timeline_frame": 375445,
       "generation": 2
     },
     {
@@ -15376,24 +15334,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 960,
-      "frames": 160,
-      "timeline_frame": 375613,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 350240,
       "frames": 160,
       "timeline_frame": 377950,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 1120,
-      "frames": 160,
-      "timeline_frame": 375776,
       "generation": 2
     },
     {
@@ -15404,31 +15348,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 1280,
-      "frames": 160,
-      "timeline_frame": 375939,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 1440,
-      "frames": 160,
-      "timeline_frame": 376114,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 350560,
       "frames": 160,
       "timeline_frame": 378270,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 1600,
-      "frames": 160,
-      "timeline_frame": 376277,
       "generation": 2
     },
     {
@@ -15446,24 +15369,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 1760,
-      "frames": 160,
-      "timeline_frame": 376446,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 351040,
       "frames": 160,
       "timeline_frame": 378750,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 1920,
-      "frames": 160,
-      "timeline_frame": 376609,
       "generation": 2
     },
     {
@@ -15474,24 +15383,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 2080,
-      "frames": 160,
-      "timeline_frame": 376779,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 351360,
       "frames": 160,
       "timeline_frame": 379070,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 2240,
-      "frames": 160,
-      "timeline_frame": 376954,
       "generation": 2
     },
     {
@@ -15502,24 +15397,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 2400,
-      "frames": 160,
-      "timeline_frame": 377132,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 351680,
       "frames": 160,
       "timeline_frame": 379390,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 2560,
-      "frames": 160,
-      "timeline_frame": 377301,
       "generation": 2
     },
     {
@@ -15530,24 +15411,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 2720,
-      "frames": 160,
-      "timeline_frame": 377467,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 352000,
       "frames": 160,
       "timeline_frame": 379710,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 2880,
-      "frames": 160,
-      "timeline_frame": 377630,
       "generation": 2
     },
     {
@@ -15558,24 +15425,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 3040,
-      "frames": 160,
-      "timeline_frame": 377800,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 352320,
       "frames": 160,
       "timeline_frame": 380030,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 3200,
-      "frames": 160,
-      "timeline_frame": 377977,
       "generation": 2
     },
     {
@@ -15586,24 +15439,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 3360,
-      "frames": 160,
-      "timeline_frame": 378156,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 352640,
       "frames": 160,
       "timeline_frame": 380350,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 3520,
-      "frames": 160,
-      "timeline_frame": 378325,
       "generation": 2
     },
     {
@@ -15614,24 +15453,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 3680,
-      "frames": 160,
-      "timeline_frame": 378499,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 352960,
       "frames": 160,
       "timeline_frame": 380670,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 3840,
-      "frames": 160,
-      "timeline_frame": 378669,
       "generation": 2
     },
     {
@@ -15649,24 +15474,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 4000,
-      "frames": 160,
-      "timeline_frame": 378839,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 353440,
       "frames": 160,
       "timeline_frame": 381150,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 4160,
-      "frames": 160,
-      "timeline_frame": 379008,
       "generation": 2
     },
     {
@@ -15677,24 +15488,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 4320,
-      "frames": 160,
-      "timeline_frame": 379178,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 353760,
       "frames": 160,
       "timeline_frame": 381470,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 4480,
-      "frames": 160,
-      "timeline_frame": 379351,
       "generation": 2
     },
     {
@@ -15705,24 +15502,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 4640,
-      "frames": 160,
-      "timeline_frame": 379519,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 354080,
       "frames": 160,
       "timeline_frame": 381790,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 4800,
-      "frames": 160,
-      "timeline_frame": 379698,
       "generation": 2
     },
     {
@@ -15733,24 +15516,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 4960,
-      "frames": 160,
-      "timeline_frame": 379877,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 354400,
       "frames": 160,
       "timeline_frame": 382110,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 5120,
-      "frames": 160,
-      "timeline_frame": 380054,
       "generation": 2
     },
     {
@@ -15761,13 +15530,6 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 5280,
-      "frames": 160,
-      "timeline_frame": 380233,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 354720,
       "frames": 160,
@@ -15775,24 +15537,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 5440,
-      "frames": 160,
-      "timeline_frame": 380396,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 354880,
       "frames": 160,
       "timeline_frame": 382590,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 5600,
-      "frames": 160,
-      "timeline_frame": 380574,
       "generation": 2
     },
     {
@@ -15810,24 +15558,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 5760,
-      "frames": 160,
-      "timeline_frame": 380748,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 355360,
       "frames": 160,
       "timeline_frame": 383070,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 5920,
-      "frames": 160,
-      "timeline_frame": 380910,
       "generation": 2
     },
     {
@@ -15838,24 +15572,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 6080,
-      "frames": 160,
-      "timeline_frame": 381077,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 355680,
       "frames": 160,
       "timeline_frame": 383390,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 6240,
-      "frames": 160,
-      "timeline_frame": 381243,
       "generation": 2
     },
     {
@@ -15866,24 +15586,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 6400,
-      "frames": 160,
-      "timeline_frame": 381410,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 356000,
       "frames": 160,
       "timeline_frame": 383710,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 6560,
-      "frames": 160,
-      "timeline_frame": 381575,
       "generation": 2
     },
     {
@@ -15894,24 +15600,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 6720,
-      "frames": 160,
-      "timeline_frame": 381738,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 356320,
       "frames": 160,
       "timeline_frame": 384030,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 6880,
-      "frames": 160,
-      "timeline_frame": 381908,
       "generation": 2
     },
     {
@@ -15922,24 +15614,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 7040,
-      "frames": 160,
-      "timeline_frame": 382073,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 356640,
       "frames": 160,
       "timeline_frame": 384350,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 7200,
-      "frames": 160,
-      "timeline_frame": 382241,
       "generation": 2
     },
     {
@@ -15950,24 +15628,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 7360,
-      "frames": 160,
-      "timeline_frame": 382419,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 356960,
       "frames": 160,
       "timeline_frame": 384670,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 7520,
-      "frames": 160,
-      "timeline_frame": 382597,
       "generation": 2
     },
     {
@@ -15978,24 +15642,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 7680,
-      "frames": 160,
-      "timeline_frame": 382776,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 357280,
       "frames": 160,
       "timeline_frame": 384990,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 7840,
-      "frames": 160,
-      "timeline_frame": 382946,
       "generation": 2
     },
     {
@@ -16006,13 +15656,6 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 8000,
-      "frames": 160,
-      "timeline_frame": 383111,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 357600,
       "frames": 160,
@@ -16020,24 +15663,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 8160,
-      "frames": 160,
-      "timeline_frame": 383281,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 357760,
       "frames": 160,
       "timeline_frame": 385470,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 8320,
-      "frames": 160,
-      "timeline_frame": 383454,
       "generation": 2
     },
     {
@@ -16055,24 +15684,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 8480,
-      "frames": 160,
-      "timeline_frame": 383617,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 358240,
       "frames": 160,
       "timeline_frame": 385950,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 8640,
-      "frames": 160,
-      "timeline_frame": 383780,
       "generation": 2
     },
     {
@@ -16083,24 +15698,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 8800,
-      "frames": 160,
-      "timeline_frame": 383950,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 358560,
       "frames": 160,
       "timeline_frame": 386270,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 8960,
-      "frames": 160,
-      "timeline_frame": 384113,
       "generation": 2
     },
     {
@@ -16111,31 +15712,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 9120,
-      "frames": 160,
-      "timeline_frame": 384277,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 358880,
       "frames": 160,
       "timeline_frame": 386590,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 9280,
-      "frames": 160,
-      "timeline_frame": 384444,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 9440,
-      "frames": 160,
-      "timeline_frame": 384610,
       "generation": 2
     },
     {
@@ -16153,24 +15733,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 9600,
-      "frames": 160,
-      "timeline_frame": 384777,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 359360,
       "frames": 160,
       "timeline_frame": 387070,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 9760,
-      "frames": 160,
-      "timeline_frame": 384944,
       "generation": 2
     },
     {
@@ -16181,24 +15747,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 9920,
-      "frames": 160,
-      "timeline_frame": 385114,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 359680,
       "frames": 160,
       "timeline_frame": 387390,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 10080,
-      "frames": 160,
-      "timeline_frame": 385289,
       "generation": 2
     },
     {
@@ -16209,24 +15761,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 10240,
-      "frames": 160,
-      "timeline_frame": 385453,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 360000,
       "frames": 160,
       "timeline_frame": 387710,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 10400,
-      "frames": 160,
-      "timeline_frame": 385621,
       "generation": 2
     },
     {
@@ -16237,24 +15775,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 10560,
-      "frames": 160,
-      "timeline_frame": 385800,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 360320,
       "frames": 160,
       "timeline_frame": 388030,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 10720,
-      "frames": 160,
-      "timeline_frame": 385979,
       "generation": 2
     },
     {
@@ -16265,13 +15789,6 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 10880,
-      "frames": 160,
-      "timeline_frame": 386158,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 360640,
       "frames": 160,
@@ -16279,24 +15796,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 11040,
-      "frames": 160,
-      "timeline_frame": 386337,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 360800,
       "frames": 160,
       "timeline_frame": 388510,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 11200,
-      "frames": 160,
-      "timeline_frame": 386500,
       "generation": 2
     },
     {
@@ -16314,24 +15817,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 11360,
-      "frames": 160,
-      "timeline_frame": 386665,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 361280,
       "frames": 160,
       "timeline_frame": 388990,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 11520,
-      "frames": 160,
-      "timeline_frame": 386828,
       "generation": 2
     },
     {
@@ -16342,24 +15831,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 11680,
-      "frames": 160,
-      "timeline_frame": 386992,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 361600,
       "frames": 160,
       "timeline_frame": 389310,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 11840,
-      "frames": 160,
-      "timeline_frame": 387157,
       "generation": 2
     },
     {
@@ -16370,24 +15845,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 12000,
-      "frames": 160,
-      "timeline_frame": 387322,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 361920,
       "frames": 160,
       "timeline_frame": 389630,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 12160,
-      "frames": 160,
-      "timeline_frame": 387486,
       "generation": 2
     },
     {
@@ -16398,24 +15859,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 12320,
-      "frames": 160,
-      "timeline_frame": 387650,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 362240,
       "frames": 160,
       "timeline_frame": 389950,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 12480,
-      "frames": 160,
-      "timeline_frame": 387817,
       "generation": 2
     },
     {
@@ -16426,24 +15873,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 12640,
-      "frames": 160,
-      "timeline_frame": 387982,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 362560,
       "frames": 160,
       "timeline_frame": 390270,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 12800,
-      "frames": 160,
-      "timeline_frame": 388155,
       "generation": 2
     },
     {
@@ -16454,24 +15887,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 12960,
-      "frames": 160,
-      "timeline_frame": 388327,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 362880,
       "frames": 160,
       "timeline_frame": 390590,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 13120,
-      "frames": 160,
-      "timeline_frame": 388496,
       "generation": 2
     },
     {
@@ -16482,24 +15901,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 13280,
-      "frames": 160,
-      "timeline_frame": 388670,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 363200,
       "frames": 160,
       "timeline_frame": 390910,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 13440,
-      "frames": 160,
-      "timeline_frame": 388849,
       "generation": 2
     },
     {
@@ -16510,24 +15915,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 13600,
-      "frames": 160,
-      "timeline_frame": 389029,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 363520,
       "frames": 160,
       "timeline_frame": 391230,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 13760,
-      "frames": 160,
-      "timeline_frame": 389205,
       "generation": 2
     },
     {
@@ -16545,24 +15936,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 13920,
-      "frames": 160,
-      "timeline_frame": 389368,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 364000,
       "frames": 160,
       "timeline_frame": 391710,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 14080,
-      "frames": 160,
-      "timeline_frame": 389552,
       "generation": 2
     },
     {
@@ -16573,24 +15950,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 14240,
-      "frames": 160,
-      "timeline_frame": 389722,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 364320,
       "frames": 160,
       "timeline_frame": 392030,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 14400,
-      "frames": 160,
-      "timeline_frame": 389892,
       "generation": 2
     },
     {
@@ -16601,24 +15964,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 14560,
-      "frames": 160,
-      "timeline_frame": 390065,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 364640,
       "frames": 160,
       "timeline_frame": 392350,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 14720,
-      "frames": 160,
-      "timeline_frame": 390227,
       "generation": 2
     },
     {
@@ -16629,24 +15978,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 14880,
-      "frames": 160,
-      "timeline_frame": 390392,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 364960,
       "frames": 160,
       "timeline_frame": 392670,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 15040,
-      "frames": 160,
-      "timeline_frame": 390568,
       "generation": 2
     },
     {
@@ -16657,24 +15992,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 15200,
-      "frames": 160,
-      "timeline_frame": 390746,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 365280,
       "frames": 160,
       "timeline_frame": 392990,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 15360,
-      "frames": 160,
-      "timeline_frame": 390910,
       "generation": 2
     },
     {
@@ -16685,24 +16006,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 15520,
-      "frames": 160,
-      "timeline_frame": 391074,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 365600,
       "frames": 160,
       "timeline_frame": 393310,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 15680,
-      "frames": 160,
-      "timeline_frame": 391248,
       "generation": 2
     },
     {
@@ -16713,24 +16020,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 15840,
-      "frames": 160,
-      "timeline_frame": 391415,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 365920,
       "frames": 160,
       "timeline_frame": 393630,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 16000,
-      "frames": 160,
-      "timeline_frame": 391594,
       "generation": 2
     },
     {
@@ -16748,20 +16041,6 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 16160,
-      "frames": 160,
-      "timeline_frame": 391772,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 16320,
-      "frames": 160,
-      "timeline_frame": 391948,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 366400,
       "frames": 160,
@@ -16776,24 +16055,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 16480,
-      "frames": 160,
-      "timeline_frame": 392112,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 366720,
       "frames": 160,
       "timeline_frame": 394430,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 16640,
-      "frames": 160,
-      "timeline_frame": 392277,
       "generation": 2
     },
     {
@@ -16804,24 +16069,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 16800,
-      "frames": 160,
-      "timeline_frame": 392445,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 367040,
       "frames": 160,
       "timeline_frame": 394750,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 16960,
-      "frames": 160,
-      "timeline_frame": 392616,
       "generation": 2
     },
     {
@@ -16832,24 +16083,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 17120,
-      "frames": 160,
-      "timeline_frame": 392786,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 367360,
       "frames": 160,
       "timeline_frame": 395070,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 17280,
-      "frames": 160,
-      "timeline_frame": 392958,
       "generation": 2
     },
     {
@@ -16860,24 +16097,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 17440,
-      "frames": 160,
-      "timeline_frame": 393125,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 367680,
       "frames": 160,
       "timeline_frame": 395390,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 17600,
-      "frames": 160,
-      "timeline_frame": 393303,
       "generation": 2
     },
     {
@@ -16888,24 +16111,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 17760,
-      "frames": 160,
-      "timeline_frame": 393483,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 368000,
       "frames": 160,
       "timeline_frame": 395710,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 17920,
-      "frames": 160,
-      "timeline_frame": 393654,
       "generation": 2
     },
     {
@@ -16916,24 +16125,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 18080,
-      "frames": 160,
-      "timeline_frame": 393834,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 368320,
       "frames": 160,
       "timeline_frame": 396030,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 18240,
-      "frames": 160,
-      "timeline_frame": 394000,
       "generation": 2
     },
     {
@@ -16944,24 +16139,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 18400,
-      "frames": 160,
-      "timeline_frame": 394172,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 368640,
       "frames": 160,
       "timeline_frame": 396350,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 18560,
-      "frames": 160,
-      "timeline_frame": 394350,
       "generation": 2
     },
     {
@@ -16979,24 +16160,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 18720,
-      "frames": 160,
-      "timeline_frame": 394518,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 369120,
       "frames": 160,
       "timeline_frame": 396830,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 18880,
-      "frames": 160,
-      "timeline_frame": 394683,
       "generation": 2
     },
     {
@@ -17007,24 +16174,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 19040,
-      "frames": 160,
-      "timeline_frame": 394853,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 369440,
       "frames": 160,
       "timeline_frame": 397150,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 19200,
-      "frames": 160,
-      "timeline_frame": 395016,
       "generation": 2
     },
     {
@@ -17035,24 +16188,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 19360,
-      "frames": 160,
-      "timeline_frame": 395179,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 369760,
       "frames": 160,
       "timeline_frame": 397470,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 19520,
-      "frames": 160,
-      "timeline_frame": 395356,
       "generation": 2
     },
     {
@@ -17063,24 +16202,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 19680,
-      "frames": 160,
-      "timeline_frame": 395526,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 370080,
       "frames": 160,
       "timeline_frame": 397790,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 19840,
-      "frames": 160,
-      "timeline_frame": 395701,
       "generation": 2
     },
     {
@@ -17091,24 +16216,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 20000,
-      "frames": 160,
-      "timeline_frame": 395879,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 370400,
       "frames": 160,
       "timeline_frame": 398110,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 20160,
-      "frames": 160,
-      "timeline_frame": 396043,
       "generation": 2
     },
     {
@@ -17119,24 +16230,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 20320,
-      "frames": 160,
-      "timeline_frame": 396221,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 370720,
       "frames": 160,
       "timeline_frame": 398430,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 20480,
-      "frames": 160,
-      "timeline_frame": 396386,
       "generation": 2
     },
     {
@@ -17147,13 +16244,6 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 20640,
-      "frames": 160,
-      "timeline_frame": 396564,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 371040,
       "frames": 160,
@@ -17161,24 +16251,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 20800,
-      "frames": 160,
-      "timeline_frame": 396733,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 371200,
       "frames": 160,
       "timeline_frame": 398910,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 20960,
-      "frames": 160,
-      "timeline_frame": 396905,
       "generation": 2
     },
     {
@@ -17196,24 +16272,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 21120,
-      "frames": 160,
-      "timeline_frame": 397069,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 371680,
       "frames": 160,
       "timeline_frame": 399390,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 21280,
-      "frames": 160,
-      "timeline_frame": 397237,
       "generation": 2
     },
     {
@@ -17224,24 +16286,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 21440,
-      "frames": 160,
-      "timeline_frame": 397402,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 372000,
       "frames": 160,
       "timeline_frame": 399710,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 21600,
-      "frames": 160,
-      "timeline_frame": 397573,
       "generation": 2
     },
     {
@@ -17252,24 +16300,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 21760,
-      "frames": 160,
-      "timeline_frame": 397746,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 372320,
       "frames": 160,
       "timeline_frame": 400030,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 21920,
-      "frames": 160,
-      "timeline_frame": 397917,
       "generation": 2
     },
     {
@@ -17280,24 +16314,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 22080,
-      "frames": 160,
-      "timeline_frame": 398083,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 372640,
       "frames": 160,
       "timeline_frame": 400350,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 22240,
-      "frames": 160,
-      "timeline_frame": 398263,
       "generation": 2
     },
     {
@@ -17308,24 +16328,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 22400,
-      "frames": 160,
-      "timeline_frame": 398441,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 372960,
       "frames": 160,
       "timeline_frame": 400670,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 22560,
-      "frames": 160,
-      "timeline_frame": 398620,
       "generation": 2
     },
     {
@@ -17336,24 +16342,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 22720,
-      "frames": 160,
-      "timeline_frame": 398798,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 373280,
       "frames": 160,
       "timeline_frame": 400990,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 22880,
-      "frames": 160,
-      "timeline_frame": 398977,
       "generation": 2
     },
     {
@@ -17364,24 +16356,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 23040,
-      "frames": 160,
-      "timeline_frame": 399148,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 373600,
       "frames": 160,
       "timeline_frame": 401310,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 23200,
-      "frames": 160,
-      "timeline_frame": 399317,
       "generation": 2
     },
     {
@@ -17392,13 +16370,6 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 23360,
-      "frames": 160,
-      "timeline_frame": 399495,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 373920,
       "frames": 160,
@@ -17406,24 +16377,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 23520,
-      "frames": 160,
-      "timeline_frame": 399662,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 374080,
       "frames": 160,
       "timeline_frame": 401790,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 23680,
-      "frames": 160,
-      "timeline_frame": 399840,
       "generation": 2
     },
     {
@@ -17441,24 +16398,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 23840,
-      "frames": 160,
-      "timeline_frame": 400009,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 374560,
       "frames": 160,
       "timeline_frame": 402270,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 24000,
-      "frames": 160,
-      "timeline_frame": 400188,
       "generation": 2
     },
     {
@@ -17469,24 +16412,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 24160,
-      "frames": 160,
-      "timeline_frame": 400367,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 374880,
       "frames": 160,
       "timeline_frame": 402590,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 24320,
-      "frames": 160,
-      "timeline_frame": 400546,
       "generation": 2
     },
     {
@@ -17497,13 +16426,6 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 24480,
-      "frames": 160,
-      "timeline_frame": 400726,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 375200,
       "frames": 160,
@@ -17511,24 +16433,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 24640,
-      "frames": 160,
-      "timeline_frame": 400896,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 375360,
       "frames": 160,
       "timeline_frame": 403070,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 24800,
-      "frames": 160,
-      "timeline_frame": 401070,
       "generation": 2
     },
     {
@@ -17546,24 +16454,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 24960,
-      "frames": 160,
-      "timeline_frame": 401247,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 375840,
       "frames": 160,
       "timeline_frame": 403550,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 25120,
-      "frames": 160,
-      "timeline_frame": 401410,
       "generation": 2
     },
     {
@@ -17574,24 +16468,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 25280,
-      "frames": 160,
-      "timeline_frame": 401574,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 376160,
       "frames": 160,
       "timeline_frame": 403870,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 25440,
-      "frames": 160,
-      "timeline_frame": 401745,
       "generation": 2
     },
     {
@@ -17602,24 +16482,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 25600,
-      "frames": 160,
-      "timeline_frame": 401922,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 376480,
       "frames": 160,
       "timeline_frame": 404190,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 25760,
-      "frames": 160,
-      "timeline_frame": 402096,
       "generation": 2
     },
     {
@@ -17630,24 +16496,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 25920,
-      "frames": 160,
-      "timeline_frame": 402275,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 376800,
       "frames": 160,
       "timeline_frame": 404510,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 26080,
-      "frames": 160,
-      "timeline_frame": 402455,
       "generation": 2
     },
     {
@@ -17658,13 +16510,6 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 26240,
-      "frames": 160,
-      "timeline_frame": 402636,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 377120,
       "frames": 160,
@@ -17672,24 +16517,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 26400,
-      "frames": 160,
-      "timeline_frame": 402804,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 377280,
       "frames": 160,
       "timeline_frame": 404990,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 26560,
-      "frames": 160,
-      "timeline_frame": 402983,
       "generation": 2
     },
     {
@@ -17707,24 +16538,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 26720,
-      "frames": 160,
-      "timeline_frame": 403161,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 377760,
       "frames": 160,
       "timeline_frame": 405470,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 26880,
-      "frames": 160,
-      "timeline_frame": 403326,
       "generation": 2
     },
     {
@@ -17735,24 +16552,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 27040,
-      "frames": 160,
-      "timeline_frame": 403490,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 378080,
       "frames": 160,
       "timeline_frame": 405790,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 27200,
-      "frames": 160,
-      "timeline_frame": 403659,
       "generation": 2
     },
     {
@@ -17763,24 +16566,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 27360,
-      "frames": 160,
-      "timeline_frame": 403829,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 378400,
       "frames": 160,
       "timeline_frame": 406110,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 27520,
-      "frames": 160,
-      "timeline_frame": 404001,
       "generation": 2
     },
     {
@@ -17791,24 +16580,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 27680,
-      "frames": 160,
-      "timeline_frame": 404177,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 378720,
       "frames": 160,
       "timeline_frame": 406430,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 27840,
-      "frames": 160,
-      "timeline_frame": 404345,
       "generation": 2
     },
     {
@@ -23279,24 +22054,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 28000,
-      "frames": 160,
-      "timeline_frame": 529382,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 503840,
       "frames": 160,
       "timeline_frame": 531550,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 28160,
-      "frames": 160,
-      "timeline_frame": 529550,
       "generation": 2
     },
     {
@@ -23314,31 +22075,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 28320,
-      "frames": 160,
-      "timeline_frame": 529714,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 504320,
       "frames": 160,
       "timeline_frame": 532030,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 28480,
-      "frames": 160,
-      "timeline_frame": 529881,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 28640,
-      "frames": 160,
-      "timeline_frame": 530047,
       "generation": 2
     },
     {
@@ -23356,20 +22096,6 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 28800,
-      "frames": 160,
-      "timeline_frame": 530213,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 28960,
-      "frames": 160,
-      "timeline_frame": 530377,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 504800,
       "frames": 160,
@@ -23384,24 +22110,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 29120,
-      "frames": 160,
-      "timeline_frame": 530540,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 505120,
       "frames": 160,
       "timeline_frame": 532830,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 29280,
-      "frames": 160,
-      "timeline_frame": 530714,
       "generation": 2
     },
     {
@@ -23412,24 +22124,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 29440,
-      "frames": 160,
-      "timeline_frame": 530885,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 505440,
       "frames": 160,
       "timeline_frame": 533150,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 29600,
-      "frames": 160,
-      "timeline_frame": 531063,
       "generation": 2
     },
     {
@@ -23440,24 +22138,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 29760,
-      "frames": 160,
-      "timeline_frame": 531238,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 505760,
       "frames": 160,
       "timeline_frame": 533470,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 29920,
-      "frames": 160,
-      "timeline_frame": 531416,
       "generation": 2
     },
     {
@@ -23468,13 +22152,6 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 30080,
-      "frames": 160,
-      "timeline_frame": 531595,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 506080,
       "frames": 160,
@@ -23482,24 +22159,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 30240,
-      "frames": 160,
-      "timeline_frame": 531774,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 506240,
       "frames": 160,
       "timeline_frame": 533950,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 30400,
-      "frames": 160,
-      "timeline_frame": 531953,
       "generation": 2
     },
     {
@@ -23517,24 +22180,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 30560,
-      "frames": 160,
-      "timeline_frame": 532120,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 506720,
       "frames": 160,
       "timeline_frame": 534430,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 30720,
-      "frames": 160,
-      "timeline_frame": 532287,
       "generation": 2
     },
     {
@@ -23545,24 +22194,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 30880,
-      "frames": 160,
-      "timeline_frame": 532455,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 507040,
       "frames": 160,
       "timeline_frame": 534750,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 31040,
-      "frames": 160,
-      "timeline_frame": 532620,
       "generation": 2
     },
     {
@@ -23573,24 +22208,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 31200,
-      "frames": 160,
-      "timeline_frame": 532791,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 507360,
       "frames": 160,
       "timeline_frame": 535070,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 31360,
-      "frames": 160,
-      "timeline_frame": 532964,
       "generation": 2
     },
     {
@@ -23601,24 +22222,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 31520,
-      "frames": 160,
-      "timeline_frame": 533132,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 507680,
       "frames": 160,
       "timeline_frame": 535390,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 31680,
-      "frames": 160,
-      "timeline_frame": 533311,
       "generation": 2
     },
     {
@@ -23629,24 +22236,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 31840,
-      "frames": 160,
-      "timeline_frame": 533490,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 508000,
       "frames": 160,
       "timeline_frame": 535710,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 32000,
-      "frames": 160,
-      "timeline_frame": 533656,
       "generation": 2
     },
     {
@@ -23657,13 +22250,6 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 32160,
-      "frames": 160,
-      "timeline_frame": 533836,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 508320,
       "frames": 160,
@@ -23671,24 +22257,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 32320,
-      "frames": 160,
-      "timeline_frame": 534012,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 508480,
       "frames": 160,
       "timeline_frame": 536190,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 32480,
-      "frames": 160,
-      "timeline_frame": 534192,
       "generation": 2
     },
     {
@@ -23706,31 +22278,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 32640,
-      "frames": 160,
-      "timeline_frame": 534355,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 32800,
-      "frames": 160,
-      "timeline_frame": 534521,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 508960,
       "frames": 160,
       "timeline_frame": 536670,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 32960,
-      "frames": 160,
-      "timeline_frame": 534694,
       "generation": 2
     },
     {
@@ -23748,24 +22299,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 33120,
-      "frames": 160,
-      "timeline_frame": 534862,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 509440,
       "frames": 160,
       "timeline_frame": 537150,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 33280,
-      "frames": 160,
-      "timeline_frame": 535034,
       "generation": 2
     },
     {
@@ -23776,24 +22313,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 33440,
-      "frames": 160,
-      "timeline_frame": 535211,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 509760,
       "frames": 160,
       "timeline_frame": 537470,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 33600,
-      "frames": 160,
-      "timeline_frame": 535387,
       "generation": 2
     },
     {
@@ -23804,24 +22327,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 33760,
-      "frames": 160,
-      "timeline_frame": 535563,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 510080,
       "frames": 160,
       "timeline_frame": 537790,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 33920,
-      "frames": 160,
-      "timeline_frame": 535734,
       "generation": 2
     },
     {
@@ -23832,13 +22341,6 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 34080,
-      "frames": 160,
-      "timeline_frame": 535910,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 510400,
       "frames": 160,
@@ -23846,24 +22348,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 34240,
-      "frames": 160,
-      "timeline_frame": 536083,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 510560,
       "frames": 160,
       "timeline_frame": 538270,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 34400,
-      "frames": 160,
-      "timeline_frame": 536259,
       "generation": 2
     },
     {
@@ -23881,20 +22369,6 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 34560,
-      "frames": 160,
-      "timeline_frame": 536422,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 34720,
-      "frames": 160,
-      "timeline_frame": 536588,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 511040,
       "frames": 160,
@@ -23909,24 +22383,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 34880,
-      "frames": 160,
-      "timeline_frame": 536752,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 511360,
       "frames": 160,
       "timeline_frame": 539070,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 35040,
-      "frames": 160,
-      "timeline_frame": 536917,
       "generation": 2
     },
     {
@@ -23937,24 +22397,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 35200,
-      "frames": 160,
-      "timeline_frame": 537081,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 511680,
       "frames": 160,
       "timeline_frame": 539390,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 35360,
-      "frames": 160,
-      "timeline_frame": 537249,
       "generation": 2
     },
     {
@@ -23965,24 +22411,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 35520,
-      "frames": 160,
-      "timeline_frame": 537420,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 512000,
       "frames": 160,
       "timeline_frame": 539710,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 35680,
-      "frames": 160,
-      "timeline_frame": 537595,
       "generation": 2
     },
     {
@@ -23993,24 +22425,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 35840,
-      "frames": 160,
-      "timeline_frame": 537769,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 512320,
       "frames": 160,
       "timeline_frame": 540030,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 36000,
-      "frames": 160,
-      "timeline_frame": 537948,
       "generation": 2
     },
     {
@@ -24021,24 +22439,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 36160,
-      "frames": 160,
-      "timeline_frame": 538110,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 512640,
       "frames": 160,
       "timeline_frame": 540350,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 36320,
-      "frames": 160,
-      "timeline_frame": 538289,
       "generation": 2
     },
     {
@@ -24049,24 +22453,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 36480,
-      "frames": 160,
-      "timeline_frame": 538458,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 512960,
       "frames": 160,
       "timeline_frame": 540670,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 36640,
-      "frames": 160,
-      "timeline_frame": 538632,
       "generation": 2
     },
     {
@@ -24077,13 +22467,6 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 36800,
-      "frames": 160,
-      "timeline_frame": 538802,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 513280,
       "frames": 160,
@@ -24091,24 +22474,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 36960,
-      "frames": 160,
-      "timeline_frame": 538976,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 513440,
       "frames": 160,
       "timeline_frame": 541150,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 37120,
-      "frames": 160,
-      "timeline_frame": 539145,
       "generation": 2
     },
     {
@@ -24126,20 +22495,6 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 37280,
-      "frames": 160,
-      "timeline_frame": 539312,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 37440,
-      "frames": 160,
-      "timeline_frame": 539487,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 513920,
       "frames": 160,
@@ -24154,24 +22509,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 37600,
-      "frames": 160,
-      "timeline_frame": 539652,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 514240,
       "frames": 160,
       "timeline_frame": 541950,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 37760,
-      "frames": 160,
-      "timeline_frame": 539822,
       "generation": 2
     },
     {
@@ -24182,24 +22523,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 37920,
-      "frames": 160,
-      "timeline_frame": 539987,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 514560,
       "frames": 160,
       "timeline_frame": 542270,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 38080,
-      "frames": 160,
-      "timeline_frame": 540156,
       "generation": 2
     },
     {
@@ -24210,24 +22537,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 38240,
-      "frames": 160,
-      "timeline_frame": 540326,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 514880,
       "frames": 160,
       "timeline_frame": 542590,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 38400,
-      "frames": 160,
-      "timeline_frame": 540504,
       "generation": 2
     },
     {
@@ -24238,24 +22551,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 38560,
-      "frames": 160,
-      "timeline_frame": 540682,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 515200,
       "frames": 160,
       "timeline_frame": 542910,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 38720,
-      "frames": 160,
-      "timeline_frame": 540861,
       "generation": 2
     },
     {
@@ -24266,13 +22565,6 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 38880,
-      "frames": 160,
-      "timeline_frame": 541039,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 515520,
       "frames": 160,
@@ -24280,24 +22572,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 39040,
-      "frames": 160,
-      "timeline_frame": 541218,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 515680,
       "frames": 160,
       "timeline_frame": 543390,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 39200,
-      "frames": 160,
-      "timeline_frame": 541397,
       "generation": 2
     },
     {
@@ -24315,24 +22593,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 39360,
-      "frames": 160,
-      "timeline_frame": 541565,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 516160,
       "frames": 160,
       "timeline_frame": 543870,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 39520,
-      "frames": 160,
-      "timeline_frame": 541728,
       "generation": 2
     },
     {
@@ -24343,24 +22607,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 39680,
-      "frames": 160,
-      "timeline_frame": 541894,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 516480,
       "frames": 160,
       "timeline_frame": 544190,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 39840,
-      "frames": 160,
-      "timeline_frame": 542061,
       "generation": 2
     },
     {
@@ -24371,24 +22621,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 40000,
-      "frames": 160,
-      "timeline_frame": 542228,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 516800,
       "frames": 160,
       "timeline_frame": 544510,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 40160,
-      "frames": 160,
-      "timeline_frame": 542402,
       "generation": 2
     },
     {
@@ -24399,24 +22635,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 40320,
-      "frames": 160,
-      "timeline_frame": 542577,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 517120,
       "frames": 160,
       "timeline_frame": 544830,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 40480,
-      "frames": 160,
-      "timeline_frame": 542756,
       "generation": 2
     },
     {
@@ -24427,24 +22649,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 40640,
-      "frames": 160,
-      "timeline_frame": 542934,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 517440,
       "frames": 160,
       "timeline_frame": 545150,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 40800,
-      "frames": 160,
-      "timeline_frame": 543114,
       "generation": 2
     },
     {
@@ -24455,24 +22663,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 40960,
-      "frames": 160,
-      "timeline_frame": 543294,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 517760,
       "frames": 160,
       "timeline_frame": 545470,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 41120,
-      "frames": 160,
-      "timeline_frame": 543467,
       "generation": 2
     },
     {
@@ -24490,24 +22684,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 41280,
-      "frames": 160,
-      "timeline_frame": 543639,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 518240,
       "frames": 160,
       "timeline_frame": 545950,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 41440,
-      "frames": 160,
-      "timeline_frame": 543807,
       "generation": 2
     },
     {
@@ -24518,24 +22698,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 41600,
-      "frames": 160,
-      "timeline_frame": 543972,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 518560,
       "frames": 160,
       "timeline_frame": 546270,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 41760,
-      "frames": 160,
-      "timeline_frame": 544138,
       "generation": 2
     },
     {
@@ -24546,24 +22712,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 41920,
-      "frames": 160,
-      "timeline_frame": 544307,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 518880,
       "frames": 160,
       "timeline_frame": 546590,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 42080,
-      "frames": 160,
-      "timeline_frame": 544471,
       "generation": 2
     },
     {
@@ -24574,24 +22726,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 42240,
-      "frames": 160,
-      "timeline_frame": 544641,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 519200,
       "frames": 160,
       "timeline_frame": 546910,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 42400,
-      "frames": 160,
-      "timeline_frame": 544817,
       "generation": 2
     },
     {
@@ -24602,24 +22740,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 42560,
-      "frames": 160,
-      "timeline_frame": 544993,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 519520,
       "frames": 160,
       "timeline_frame": 547230,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 42720,
-      "frames": 160,
-      "timeline_frame": 545171,
       "generation": 2
     },
     {
@@ -24630,24 +22754,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 42880,
-      "frames": 160,
-      "timeline_frame": 545350,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 519840,
       "frames": 160,
       "timeline_frame": 547550,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 43040,
-      "frames": 160,
-      "timeline_frame": 545529,
       "generation": 2
     },
     {
@@ -24658,24 +22768,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 43200,
-      "frames": 160,
-      "timeline_frame": 545699,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 520160,
       "frames": 160,
       "timeline_frame": 547870,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 43360,
-      "frames": 160,
-      "timeline_frame": 545875,
       "generation": 2
     },
     {
@@ -24693,24 +22789,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 43520,
-      "frames": 160,
-      "timeline_frame": 546042,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 520640,
       "frames": 160,
       "timeline_frame": 548350,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 43680,
-      "frames": 160,
-      "timeline_frame": 546212,
       "generation": 2
     },
     {
@@ -24721,24 +22803,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 43840,
-      "frames": 160,
-      "timeline_frame": 546376,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 520960,
       "frames": 160,
       "timeline_frame": 548670,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 44000,
-      "frames": 160,
-      "timeline_frame": 546540,
       "generation": 2
     },
     {
@@ -24749,24 +22817,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 44160,
-      "frames": 160,
-      "timeline_frame": 546710,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 521280,
       "frames": 160,
       "timeline_frame": 548990,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 44320,
-      "frames": 160,
-      "timeline_frame": 546879,
       "generation": 2
     },
     {
@@ -24777,24 +22831,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 44480,
-      "frames": 160,
-      "timeline_frame": 547045,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 521600,
       "frames": 160,
       "timeline_frame": 549310,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 44640,
-      "frames": 160,
-      "timeline_frame": 547223,
       "generation": 2
     },
     {
@@ -24805,24 +22845,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 44800,
-      "frames": 160,
-      "timeline_frame": 547398,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 521920,
       "frames": 160,
       "timeline_frame": 549630,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 44960,
-      "frames": 160,
-      "timeline_frame": 547573,
       "generation": 2
     },
     {
@@ -24833,24 +22859,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 45120,
-      "frames": 160,
-      "timeline_frame": 547752,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 522240,
       "frames": 160,
       "timeline_frame": 549950,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 45280,
-      "frames": 160,
-      "timeline_frame": 547930,
       "generation": 2
     },
     {
@@ -24868,24 +22880,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 45440,
-      "frames": 160,
-      "timeline_frame": 548106,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 522720,
       "frames": 160,
       "timeline_frame": 550430,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 45600,
-      "frames": 160,
-      "timeline_frame": 548286,
       "generation": 2
     },
     {
@@ -24896,24 +22894,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 45760,
-      "frames": 160,
-      "timeline_frame": 548455,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 523040,
       "frames": 160,
       "timeline_frame": 550750,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 45920,
-      "frames": 160,
-      "timeline_frame": 548622,
       "generation": 2
     },
     {
@@ -24924,24 +22908,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 46080,
-      "frames": 160,
-      "timeline_frame": 548795,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 523360,
       "frames": 160,
       "timeline_frame": 551070,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 46240,
-      "frames": 160,
-      "timeline_frame": 548957,
       "generation": 2
     },
     {
@@ -24952,24 +22922,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 46400,
-      "frames": 160,
-      "timeline_frame": 549128,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 523680,
       "frames": 160,
       "timeline_frame": 551390,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 46560,
-      "frames": 160,
-      "timeline_frame": 549299,
       "generation": 2
     },
     {
@@ -24980,24 +22936,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 46720,
-      "frames": 160,
-      "timeline_frame": 549474,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 524000,
       "frames": 160,
       "timeline_frame": 551710,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 46880,
-      "frames": 160,
-      "timeline_frame": 549644,
       "generation": 2
     },
     {
@@ -25008,24 +22950,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 47040,
-      "frames": 160,
-      "timeline_frame": 549816,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 524320,
       "frames": 160,
       "timeline_frame": 552030,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 47200,
-      "frames": 160,
-      "timeline_frame": 549995,
       "generation": 2
     },
     {
@@ -25043,20 +22971,6 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 47360,
-      "frames": 160,
-      "timeline_frame": 550178,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 47520,
-      "frames": 160,
-      "timeline_frame": 550345,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 524800,
       "frames": 160,
@@ -25071,24 +22985,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 47680,
-      "frames": 160,
-      "timeline_frame": 550515,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 525120,
       "frames": 160,
       "timeline_frame": 552830,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 47840,
-      "frames": 160,
-      "timeline_frame": 550678,
       "generation": 2
     },
     {
@@ -25099,24 +22999,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 48000,
-      "frames": 160,
-      "timeline_frame": 550844,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 525440,
       "frames": 160,
       "timeline_frame": 553150,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 48160,
-      "frames": 160,
-      "timeline_frame": 551014,
       "generation": 2
     },
     {
@@ -25127,24 +23013,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 48320,
-      "frames": 160,
-      "timeline_frame": 551187,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 525760,
       "frames": 160,
       "timeline_frame": 553470,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 48480,
-      "frames": 160,
-      "timeline_frame": 551360,
       "generation": 2
     },
     {
@@ -25155,24 +23027,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 48640,
-      "frames": 160,
-      "timeline_frame": 551534,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 526080,
       "frames": 160,
       "timeline_frame": 553790,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 48800,
-      "frames": 160,
-      "timeline_frame": 551712,
       "generation": 2
     },
     {
@@ -25183,24 +23041,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 48960,
-      "frames": 160,
-      "timeline_frame": 551891,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 526400,
       "frames": 160,
       "timeline_frame": 554110,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 49120,
-      "frames": 160,
-      "timeline_frame": 552059,
       "generation": 2
     },
     {
@@ -25211,24 +23055,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 49280,
-      "frames": 160,
-      "timeline_frame": 552226,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 526720,
       "frames": 160,
       "timeline_frame": 554430,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 49440,
-      "frames": 160,
-      "timeline_frame": 552398,
       "generation": 2
     },
     {
@@ -25246,24 +23076,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 49600,
-      "frames": 160,
-      "timeline_frame": 552577,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 527200,
       "frames": 160,
       "timeline_frame": 554910,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 49760,
-      "frames": 160,
-      "timeline_frame": 552741,
       "generation": 2
     },
     {
@@ -25274,31 +23090,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 49920,
-      "frames": 160,
-      "timeline_frame": 552908,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 50080,
-      "frames": 160,
-      "timeline_frame": 553085,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 527520,
       "frames": 160,
       "timeline_frame": 555230,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 50240,
-      "frames": 160,
-      "timeline_frame": 553265,
       "generation": 2
     },
     {
@@ -25316,24 +23111,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 50400,
-      "frames": 160,
-      "timeline_frame": 553434,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 528000,
       "frames": 160,
       "timeline_frame": 555710,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 50560,
-      "frames": 160,
-      "timeline_frame": 553599,
       "generation": 2
     },
     {
@@ -25344,24 +23125,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 50720,
-      "frames": 160,
-      "timeline_frame": 553777,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 528320,
       "frames": 160,
       "timeline_frame": 556030,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 50880,
-      "frames": 160,
-      "timeline_frame": 553950,
       "generation": 2
     },
     {
@@ -25372,24 +23139,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 51040,
-      "frames": 160,
-      "timeline_frame": 554113,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 528640,
       "frames": 160,
       "timeline_frame": 556350,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 51200,
-      "frames": 160,
-      "timeline_frame": 554281,
       "generation": 2
     },
     {
@@ -25400,24 +23153,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 51360,
-      "frames": 160,
-      "timeline_frame": 554460,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 528960,
       "frames": 160,
       "timeline_frame": 556670,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 51520,
-      "frames": 160,
-      "timeline_frame": 554637,
       "generation": 2
     },
     {
@@ -25428,13 +23167,6 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 51680,
-      "frames": 160,
-      "timeline_frame": 554802,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 529280,
       "frames": 160,
@@ -25442,24 +23174,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 51840,
-      "frames": 160,
-      "timeline_frame": 554980,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 529440,
       "frames": 160,
       "timeline_frame": 557150,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 52000,
-      "frames": 160,
-      "timeline_frame": 555149,
       "generation": 2
     },
     {
@@ -25477,31 +23195,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 52160,
-      "frames": 160,
-      "timeline_frame": 555313,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 529920,
       "frames": 160,
       "timeline_frame": 557630,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 52320,
-      "frames": 160,
-      "timeline_frame": 555477,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 52480,
-      "frames": 160,
-      "timeline_frame": 555656,
       "generation": 2
     },
     {
@@ -25519,24 +23216,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 52640,
-      "frames": 160,
-      "timeline_frame": 555822,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 530400,
       "frames": 160,
       "timeline_frame": 558110,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 52800,
-      "frames": 160,
-      "timeline_frame": 555993,
       "generation": 2
     },
     {
@@ -25547,24 +23230,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 52960,
-      "frames": 160,
-      "timeline_frame": 556168,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 530720,
       "frames": 160,
       "timeline_frame": 558430,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 53120,
-      "frames": 160,
-      "timeline_frame": 556344,
       "generation": 2
     },
     {
@@ -25575,24 +23244,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 53280,
-      "frames": 160,
-      "timeline_frame": 556522,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 531040,
       "frames": 160,
       "timeline_frame": 558750,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 53440,
-      "frames": 160,
-      "timeline_frame": 556700,
       "generation": 2
     },
     {
@@ -25603,24 +23258,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 53600,
-      "frames": 160,
-      "timeline_frame": 556877,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 531360,
       "frames": 160,
       "timeline_frame": 559070,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 53760,
-      "frames": 160,
-      "timeline_frame": 557051,
       "generation": 2
     },
     {
@@ -25638,24 +23279,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 53920,
-      "frames": 160,
-      "timeline_frame": 557220,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 531840,
       "frames": 160,
       "timeline_frame": 559550,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 54080,
-      "frames": 160,
-      "timeline_frame": 557390,
       "generation": 2
     },
     {
@@ -25666,24 +23293,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 54240,
-      "frames": 160,
-      "timeline_frame": 557552,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 532160,
       "frames": 160,
       "timeline_frame": 559870,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 54400,
-      "frames": 160,
-      "timeline_frame": 557716,
       "generation": 2
     },
     {
@@ -25694,24 +23307,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 54560,
-      "frames": 160,
-      "timeline_frame": 557880,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 532480,
       "frames": 160,
       "timeline_frame": 560190,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 54720,
-      "frames": 160,
-      "timeline_frame": 558048,
       "generation": 2
     },
     {
@@ -25722,24 +23321,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 54880,
-      "frames": 160,
-      "timeline_frame": 558218,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 532800,
       "frames": 160,
       "timeline_frame": 560510,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 55040,
-      "frames": 160,
-      "timeline_frame": 558386,
       "generation": 2
     },
     {
@@ -25750,24 +23335,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 55200,
-      "frames": 160,
-      "timeline_frame": 558563,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 533120,
       "frames": 160,
       "timeline_frame": 560830,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 55360,
-      "frames": 160,
-      "timeline_frame": 558738,
       "generation": 2
     },
     {
@@ -25778,24 +23349,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 55520,
-      "frames": 160,
-      "timeline_frame": 558912,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 533440,
       "frames": 160,
       "timeline_frame": 561150,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 55680,
-      "frames": 160,
-      "timeline_frame": 559091,
       "generation": 2
     },
     {
@@ -25806,13 +23363,6 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 55840,
-      "frames": 160,
-      "timeline_frame": 559269,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 533760,
       "frames": 160,
@@ -25820,24 +23370,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 56000,
-      "frames": 160,
-      "timeline_frame": 559443,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 533920,
       "frames": 160,
       "timeline_frame": 561630,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 56160,
-      "frames": 160,
-      "timeline_frame": 559622,
       "generation": 2
     },
     {
@@ -25855,24 +23391,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 56320,
-      "frames": 160,
-      "timeline_frame": 559790,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 534400,
       "frames": 160,
       "timeline_frame": 562110,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 56480,
-      "frames": 160,
-      "timeline_frame": 559954,
       "generation": 2
     },
     {
@@ -25883,24 +23405,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 56640,
-      "frames": 160,
-      "timeline_frame": 560121,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 534720,
       "frames": 160,
       "timeline_frame": 562430,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 56800,
-      "frames": 160,
-      "timeline_frame": 560284,
       "generation": 2
     },
     {
@@ -25911,24 +23419,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 56960,
-      "frames": 160,
-      "timeline_frame": 560449,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 535040,
       "frames": 160,
       "timeline_frame": 562750,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 57120,
-      "frames": 160,
-      "timeline_frame": 560614,
       "generation": 2
     },
     {
@@ -25939,24 +23433,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 57280,
-      "frames": 160,
-      "timeline_frame": 560780,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 535360,
       "frames": 160,
       "timeline_frame": 563070,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 57440,
-      "frames": 160,
-      "timeline_frame": 560951,
       "generation": 2
     },
     {
@@ -25967,24 +23447,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 57600,
-      "frames": 160,
-      "timeline_frame": 561122,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 535680,
       "frames": 160,
       "timeline_frame": 563390,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 57760,
-      "frames": 160,
-      "timeline_frame": 561284,
       "generation": 2
     },
     {
@@ -25995,24 +23461,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 57920,
-      "frames": 160,
-      "timeline_frame": 561460,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 536000,
       "frames": 160,
       "timeline_frame": 563710,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 58080,
-      "frames": 160,
-      "timeline_frame": 561639,
       "generation": 2
     },
     {
@@ -26023,24 +23475,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 58240,
-      "frames": 160,
-      "timeline_frame": 561804,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 536320,
       "frames": 160,
       "timeline_frame": 564030,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 58400,
-      "frames": 160,
-      "timeline_frame": 561977,
       "generation": 2
     },
     {
@@ -26051,24 +23489,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 58560,
-      "frames": 160,
-      "timeline_frame": 562143,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 536640,
       "frames": 160,
       "timeline_frame": 564350,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 58720,
-      "frames": 160,
-      "timeline_frame": 562320,
       "generation": 2
     },
     {
@@ -26079,24 +23503,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 58880,
-      "frames": 160,
-      "timeline_frame": 562497,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 536960,
       "frames": 160,
       "timeline_frame": 564670,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 59040,
-      "frames": 160,
-      "timeline_frame": 562660,
       "generation": 2
     },
     {
@@ -26114,24 +23524,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 59200,
-      "frames": 160,
-      "timeline_frame": 562826,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 537440,
       "frames": 160,
       "timeline_frame": 565150,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 59360,
-      "frames": 160,
-      "timeline_frame": 562998,
       "generation": 2
     },
     {
@@ -26142,24 +23538,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 59520,
-      "frames": 160,
-      "timeline_frame": 563163,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 537760,
       "frames": 160,
       "timeline_frame": 565470,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 59680,
-      "frames": 160,
-      "timeline_frame": 563332,
       "generation": 2
     },
     {
@@ -26170,24 +23552,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 59840,
-      "frames": 160,
-      "timeline_frame": 563503,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 538080,
       "frames": 160,
       "timeline_frame": 565790,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 60000,
-      "frames": 160,
-      "timeline_frame": 563669,
       "generation": 2
     },
     {
@@ -26198,24 +23566,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 60160,
-      "frames": 160,
-      "timeline_frame": 563841,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 538400,
       "frames": 160,
       "timeline_frame": 566110,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 60320,
-      "frames": 160,
-      "timeline_frame": 564020,
       "generation": 2
     },
     {
@@ -26226,24 +23580,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 60480,
-      "frames": 160,
-      "timeline_frame": 564198,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 538720,
       "frames": 160,
       "timeline_frame": 566430,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 60640,
-      "frames": 160,
-      "timeline_frame": 564373,
       "generation": 2
     },
     {
@@ -26254,13 +23594,6 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 60800,
-      "frames": 160,
-      "timeline_frame": 564537,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 539040,
       "frames": 160,
@@ -26268,24 +23601,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 60960,
-      "frames": 160,
-      "timeline_frame": 564710,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 539200,
       "frames": 160,
       "timeline_frame": 566910,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 61120,
-      "frames": 160,
-      "timeline_frame": 564890,
       "generation": 2
     },
     {
@@ -26303,24 +23622,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 61280,
-      "frames": 160,
-      "timeline_frame": 565070,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 539680,
       "frames": 160,
       "timeline_frame": 567390,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 61440,
-      "frames": 160,
-      "timeline_frame": 565241,
       "generation": 2
     },
     {
@@ -26331,24 +23636,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 61600,
-      "frames": 160,
-      "timeline_frame": 565409,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 540000,
       "frames": 160,
       "timeline_frame": 567710,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 61760,
-      "frames": 160,
-      "timeline_frame": 565577,
       "generation": 2
     },
     {
@@ -26359,24 +23650,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 61920,
-      "frames": 160,
-      "timeline_frame": 565743,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 540320,
       "frames": 160,
       "timeline_frame": 568030,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 62080,
-      "frames": 160,
-      "timeline_frame": 565918,
       "generation": 2
     },
     {
@@ -26387,24 +23664,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 62240,
-      "frames": 160,
-      "timeline_frame": 566094,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 540640,
       "frames": 160,
       "timeline_frame": 568350,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 62400,
-      "frames": 160,
-      "timeline_frame": 566267,
       "generation": 2
     },
     {
@@ -26415,24 +23678,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 62560,
-      "frames": 160,
-      "timeline_frame": 566444,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 540960,
       "frames": 160,
       "timeline_frame": 568670,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 62720,
-      "frames": 160,
-      "timeline_frame": 566625,
       "generation": 2
     },
     {
@@ -26443,24 +23692,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 62880,
-      "frames": 160,
-      "timeline_frame": 566797,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 541280,
       "frames": 160,
       "timeline_frame": 568990,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 63040,
-      "frames": 160,
-      "timeline_frame": 566976,
       "generation": 2
     },
     {
@@ -26478,20 +23713,6 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 63200,
-      "frames": 160,
-      "timeline_frame": 567144,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 63360,
-      "frames": 160,
-      "timeline_frame": 567311,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 541760,
       "frames": 160,
@@ -26506,24 +23727,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 63520,
-      "frames": 160,
-      "timeline_frame": 567477,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 542080,
       "frames": 160,
       "timeline_frame": 569790,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 63680,
-      "frames": 160,
-      "timeline_frame": 567643,
       "generation": 2
     },
     {
@@ -26534,24 +23741,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 63840,
-      "frames": 160,
-      "timeline_frame": 567810,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 542400,
       "frames": 160,
       "timeline_frame": 570110,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 64000,
-      "frames": 160,
-      "timeline_frame": 567975,
       "generation": 2
     },
     {
@@ -26562,24 +23755,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 64160,
-      "frames": 160,
-      "timeline_frame": 568138,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 542720,
       "frames": 160,
       "timeline_frame": 570430,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 64320,
-      "frames": 160,
-      "timeline_frame": 568310,
       "generation": 2
     },
     {
@@ -26590,24 +23769,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 64480,
-      "frames": 160,
-      "timeline_frame": 568488,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 543040,
       "frames": 160,
       "timeline_frame": 570750,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 64640,
-      "frames": 160,
-      "timeline_frame": 568656,
       "generation": 2
     },
     {
@@ -26618,24 +23783,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 64800,
-      "frames": 160,
-      "timeline_frame": 568834,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 543360,
       "frames": 160,
       "timeline_frame": 571070,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 64960,
-      "frames": 160,
-      "timeline_frame": 569004,
       "generation": 2
     },
     {
@@ -26646,13 +23797,6 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 65120,
-      "frames": 160,
-      "timeline_frame": 569177,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 543680,
       "frames": 160,
@@ -26660,24 +23804,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 65280,
-      "frames": 160,
-      "timeline_frame": 569355,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 543840,
       "frames": 160,
       "timeline_frame": 571550,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 65440,
-      "frames": 160,
-      "timeline_frame": 569534,
       "generation": 2
     },
     {
@@ -26695,20 +23825,6 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 65600,
-      "frames": 160,
-      "timeline_frame": 569696,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 65760,
-      "frames": 160,
-      "timeline_frame": 569863,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 544320,
       "frames": 160,
@@ -26723,24 +23839,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 65920,
-      "frames": 160,
-      "timeline_frame": 570034,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 544640,
       "frames": 160,
       "timeline_frame": 572350,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 66080,
-      "frames": 160,
-      "timeline_frame": 570198,
       "generation": 2
     },
     {
@@ -26751,24 +23853,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 66240,
-      "frames": 160,
-      "timeline_frame": 570367,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 544960,
       "frames": 160,
       "timeline_frame": 572670,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 66400,
-      "frames": 160,
-      "timeline_frame": 570538,
       "generation": 2
     },
     {
@@ -26779,24 +23867,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 66560,
-      "frames": 160,
-      "timeline_frame": 570701,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 545280,
       "frames": 160,
       "timeline_frame": 572990,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 66720,
-      "frames": 160,
-      "timeline_frame": 570872,
       "generation": 2
     },
     {
@@ -26807,24 +23881,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 66880,
-      "frames": 160,
-      "timeline_frame": 571041,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 545600,
       "frames": 160,
       "timeline_frame": 573310,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 67040,
-      "frames": 160,
-      "timeline_frame": 571213,
       "generation": 2
     },
     {
@@ -26835,24 +23895,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 67200,
-      "frames": 160,
-      "timeline_frame": 571378,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 545920,
       "frames": 160,
       "timeline_frame": 573630,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 67360,
-      "frames": 160,
-      "timeline_frame": 571556,
       "generation": 2
     },
     {
@@ -26863,24 +23909,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 67520,
-      "frames": 160,
-      "timeline_frame": 571720,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 546240,
       "frames": 160,
       "timeline_frame": 573950,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 67680,
-      "frames": 160,
-      "timeline_frame": 571899,
       "generation": 2
     },
     {
@@ -26891,13 +23923,6 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 67840,
-      "frames": 160,
-      "timeline_frame": 572070,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 546560,
       "frames": 160,
@@ -26905,24 +23930,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 68000,
-      "frames": 160,
-      "timeline_frame": 572248,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 546720,
       "frames": 160,
       "timeline_frame": 574430,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 68160,
-      "frames": 160,
-      "timeline_frame": 572413,
       "generation": 2
     },
     {
@@ -26940,20 +23951,6 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 68320,
-      "frames": 160,
-      "timeline_frame": 572578,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 68480,
-      "frames": 160,
-      "timeline_frame": 572755,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 547200,
       "frames": 160,
@@ -26968,24 +23965,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 68640,
-      "frames": 160,
-      "timeline_frame": 572928,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 547520,
       "frames": 160,
       "timeline_frame": 575230,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 68800,
-      "frames": 160,
-      "timeline_frame": 573095,
       "generation": 2
     },
     {
@@ -26996,24 +23979,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 68960,
-      "frames": 160,
-      "timeline_frame": 573264,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 547840,
       "frames": 160,
       "timeline_frame": 575550,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 69120,
-      "frames": 160,
-      "timeline_frame": 573439,
       "generation": 2
     },
     {
@@ -27024,24 +23993,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 69280,
-      "frames": 160,
-      "timeline_frame": 573603,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 548160,
       "frames": 160,
       "timeline_frame": 575870,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 69440,
-      "frames": 160,
-      "timeline_frame": 573781,
       "generation": 2
     },
     {
@@ -27052,13 +24007,6 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 69600,
-      "frames": 160,
-      "timeline_frame": 573960,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 548480,
       "frames": 160,
@@ -27066,24 +24014,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 69760,
-      "frames": 160,
-      "timeline_frame": 574142,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 548640,
       "frames": 160,
       "timeline_frame": 576350,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 69920,
-      "frames": 160,
-      "timeline_frame": 574320,
       "generation": 2
     },
     {
@@ -27101,31 +24035,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 70080,
-      "frames": 160,
-      "timeline_frame": 574507,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 549120,
       "frames": 160,
       "timeline_frame": 576830,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 70240,
-      "frames": 160,
-      "timeline_frame": 574673,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 70400,
-      "frames": 160,
-      "timeline_frame": 574837,
       "generation": 2
     },
     {
@@ -27143,24 +24056,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 70560,
-      "frames": 160,
-      "timeline_frame": 575001,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 549600,
       "frames": 160,
       "timeline_frame": 577310,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 70720,
-      "frames": 160,
-      "timeline_frame": 575167,
       "generation": 2
     },
     {
@@ -27171,24 +24070,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 70880,
-      "frames": 160,
-      "timeline_frame": 575338,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 549920,
       "frames": 160,
       "timeline_frame": 577630,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 71040,
-      "frames": 160,
-      "timeline_frame": 575501,
       "generation": 2
     },
     {
@@ -27199,24 +24084,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 71200,
-      "frames": 160,
-      "timeline_frame": 575671,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 550240,
       "frames": 160,
       "timeline_frame": 577950,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 71360,
-      "frames": 160,
-      "timeline_frame": 575845,
       "generation": 2
     },
     {
@@ -27227,24 +24098,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 71520,
-      "frames": 160,
-      "timeline_frame": 576020,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 550560,
       "frames": 160,
       "timeline_frame": 578270,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 71680,
-      "frames": 160,
-      "timeline_frame": 576198,
       "generation": 2
     },
     {
@@ -27255,13 +24112,6 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 71840,
-      "frames": 160,
-      "timeline_frame": 576377,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 550880,
       "frames": 160,
@@ -27269,24 +24119,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 72000,
-      "frames": 160,
-      "timeline_frame": 576555,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 551040,
       "frames": 160,
       "timeline_frame": 578750,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 72160,
-      "frames": 160,
-      "timeline_frame": 576733,
       "generation": 2
     },
     {
@@ -27304,20 +24140,6 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 72320,
-      "frames": 160,
-      "timeline_frame": 576899,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 72480,
-      "frames": 160,
-      "timeline_frame": 577072,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 551520,
       "frames": 160,
@@ -27332,24 +24154,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 72640,
-      "frames": 160,
-      "timeline_frame": 577241,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 551840,
       "frames": 160,
       "timeline_frame": 579550,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 72800,
-      "frames": 160,
-      "timeline_frame": 577409,
       "generation": 2
     },
     {
@@ -27360,24 +24168,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 72960,
-      "frames": 160,
-      "timeline_frame": 577579,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 552160,
       "frames": 160,
       "timeline_frame": 579870,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 73120,
-      "frames": 160,
-      "timeline_frame": 577749,
       "generation": 2
     },
     {
@@ -27388,24 +24182,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 73280,
-      "frames": 160,
-      "timeline_frame": 577921,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 552480,
       "frames": 160,
       "timeline_frame": 580190,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 73440,
-      "frames": 160,
-      "timeline_frame": 578091,
       "generation": 2
     },
     {
@@ -27416,24 +24196,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 73600,
-      "frames": 160,
-      "timeline_frame": 578268,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 552800,
       "frames": 160,
       "timeline_frame": 580510,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 73760,
-      "frames": 160,
-      "timeline_frame": 578444,
       "generation": 2
     },
     {
@@ -27444,24 +24210,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 73920,
-      "frames": 160,
-      "timeline_frame": 578623,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 553120,
       "frames": 160,
       "timeline_frame": 580830,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 74080,
-      "frames": 160,
-      "timeline_frame": 578801,
       "generation": 2
     },
     {
@@ -27479,24 +24231,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 74240,
-      "frames": 160,
-      "timeline_frame": 578981,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 553600,
       "frames": 160,
       "timeline_frame": 581310,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 74400,
-      "frames": 160,
-      "timeline_frame": 579147,
       "generation": 2
     },
     {
@@ -27507,24 +24245,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 74560,
-      "frames": 160,
-      "timeline_frame": 579324,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 553920,
       "frames": 160,
       "timeline_frame": 581630,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 74720,
-      "frames": 160,
-      "timeline_frame": 579490,
       "generation": 2
     },
     {
@@ -27535,24 +24259,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 74880,
-      "frames": 160,
-      "timeline_frame": 579660,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 554240,
       "frames": 160,
       "timeline_frame": 581950,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 75040,
-      "frames": 160,
-      "timeline_frame": 579829,
       "generation": 2
     },
     {
@@ -27563,24 +24273,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 75200,
-      "frames": 160,
-      "timeline_frame": 580004,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 554560,
       "frames": 160,
       "timeline_frame": 582270,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 75360,
-      "frames": 160,
-      "timeline_frame": 580178,
       "generation": 2
     },
     {
@@ -27591,24 +24287,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 75520,
-      "frames": 160,
-      "timeline_frame": 580357,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 554880,
       "frames": 160,
       "timeline_frame": 582590,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 75680,
-      "frames": 160,
-      "timeline_frame": 580529,
       "generation": 2
     },
     {
@@ -27619,24 +24301,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 75840,
-      "frames": 160,
-      "timeline_frame": 580708,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 555200,
       "frames": 160,
       "timeline_frame": 582910,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 76000,
-      "frames": 160,
-      "timeline_frame": 580888,
       "generation": 2
     },
     {
@@ -27647,24 +24315,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 76160,
-      "frames": 160,
-      "timeline_frame": 581059,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 555520,
       "frames": 160,
       "timeline_frame": 583230,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 76320,
-      "frames": 160,
-      "timeline_frame": 581235,
       "generation": 2
     },
     {
@@ -27682,24 +24336,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 76480,
-      "frames": 160,
-      "timeline_frame": 581402,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 556000,
       "frames": 160,
       "timeline_frame": 583710,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 76640,
-      "frames": 160,
-      "timeline_frame": 581570,
       "generation": 2
     },
     {
@@ -27710,24 +24350,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 76800,
-      "frames": 160,
-      "timeline_frame": 581740,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 556320,
       "frames": 160,
       "timeline_frame": 584030,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 76960,
-      "frames": 160,
-      "timeline_frame": 581908,
       "generation": 2
     },
     {
@@ -27738,24 +24364,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 77120,
-      "frames": 160,
-      "timeline_frame": 582075,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 556640,
       "frames": 160,
       "timeline_frame": 584350,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 77280,
-      "frames": 160,
-      "timeline_frame": 582247,
       "generation": 2
     },
     {
@@ -27766,24 +24378,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 77440,
-      "frames": 160,
-      "timeline_frame": 582425,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 556960,
       "frames": 160,
       "timeline_frame": 584670,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 77600,
-      "frames": 160,
-      "timeline_frame": 582595,
       "generation": 2
     },
     {
@@ -27794,13 +24392,6 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 77760,
-      "frames": 160,
-      "timeline_frame": 582774,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 557280,
       "frames": 160,
@@ -27808,24 +24399,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 77920,
-      "frames": 160,
-      "timeline_frame": 582948,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 557440,
       "frames": 160,
       "timeline_frame": 585150,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 78080,
-      "frames": 160,
-      "timeline_frame": 583127,
       "generation": 2
     },
     {
@@ -27843,24 +24420,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 78240,
-      "frames": 160,
-      "timeline_frame": 583312,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 557920,
       "frames": 160,
       "timeline_frame": 585630,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 78400,
-      "frames": 160,
-      "timeline_frame": 583481,
       "generation": 2
     },
     {
@@ -27871,24 +24434,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 78560,
-      "frames": 160,
-      "timeline_frame": 583649,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 558240,
       "frames": 160,
       "timeline_frame": 585950,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 78720,
-      "frames": 160,
-      "timeline_frame": 583815,
       "generation": 2
     },
     {
@@ -27899,24 +24448,10 @@
       "generation": 2
     },
     {
-      "track": "sent",
-      "source_frame": 78880,
-      "frames": 160,
-      "timeline_frame": 583987,
-      "generation": 2
-    },
-    {
       "track": "remote",
       "source_frame": 558560,
       "frames": 160,
       "timeline_frame": 586270,
-      "generation": 2
-    },
-    {
-      "track": "sent",
-      "source_frame": 79040,
-      "frames": 160,
-      "timeline_frame": 584159,
       "generation": 2
     },
     {
@@ -30711,10 +27246,26 @@
       "frames": 160,
       "timeline_frame": 650110,
       "generation": 2
+    },
+    {
+      "track": "sent",
+      "source_frame": 0,
+      "frames": 28000,
+      "timeline_frame": 374583,
+      "generation": 2
+    },
+    {
+      "track": "sent",
+      "source_frame": 28000,
+      "frames": 51200,
+      "timeline_frame": 529382,
+      "generation": 2
     }
   ],
+  "delegate_timing": "first_send_anchor_per_release; continuous_source_pcm_within_reply",
   "limitations": [
     "Aligned to the local transport clock; remote acoustic/playback latency is unknown.",
+    "Delegate replies preserve continuous source audio; local send-packet jitter is not rendered as silence.",
     "Missing audio during stream reconnection is silence, not recovered speech."
   ],
   "overlap_adjustment_frames": 0,
