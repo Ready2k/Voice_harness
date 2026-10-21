@@ -27,12 +27,12 @@ import numpy as np
 from fastapi import FastAPI, Request, WebSocket
 from fastapi.responses import Response
 
-from .telephone_providers import build_adapter
 from .asr import AsrUnavailable, OpenAITranscriptionAsr
 from .caller_voice import CallerVoiceUnavailable, openai_tts_pcm
 from .delegate_dialogue import VOICE_STYLES, DelegateDialogue, DialogueReviewer
 from .events import Ledger
 from .resample import StreamResampler, resample
+from .telephone_providers import build_adapter
 
 PHRASES = {
     "greeting": "Hello. This is an automated assistant calling to check a test balance.",

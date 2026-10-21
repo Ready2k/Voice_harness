@@ -1,16 +1,16 @@
 """Goals/details are bound to one call; values cannot be substituted by the agent."""
 import asyncio
 import json
-from pathlib import Path
 import tempfile
-from types import SimpleNamespace
 import unittest
+from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import AsyncMock, Mock
 
 from pydantic import ValidationError
 
 from voice_harness.delegate_dialogue import DelegateDialogue
-from voice_harness.telephone_setup import CallSetup, CallDetail, FixedResponse, setup_templates
+from voice_harness.telephone_setup import CallDetail, CallSetup, FixedResponse, setup_templates
 from voice_harness.telephony_demo import DelegateDemo
 
 

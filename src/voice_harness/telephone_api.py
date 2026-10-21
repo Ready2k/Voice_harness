@@ -2,21 +2,20 @@
 import asyncio
 import json
 import os
-from pathlib import Path
 import shutil
 import signal
 import sys
 import uuid
+from pathlib import Path
 
 import httpx
-
 from fastapi import Depends, HTTPException
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, ConfigDict, Field
 
-from .telephony_demo import load_environment, normalise_number
 from .telephone_providers import provider_options
 from .telephone_setup import CallSetup, setup_templates
+from .telephony_demo import load_environment, normalise_number
 
 
 class TelephoneRequest(BaseModel):

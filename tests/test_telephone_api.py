@@ -101,7 +101,8 @@ class TelephoneTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_verification_values_use_private_pipe_and_redacted_history(self):
         import json
-        from voice_harness.telephone_setup import CallSetup, CallDetail
+
+        from voice_harness.telephone_setup import CallDetail, CallSetup
         with tempfile.TemporaryDirectory() as root:
             calls = TelephoneCalls(root)
             process = Mock(returncode=None)
