@@ -2,6 +2,7 @@
 
 export const PAGES = {
   "runs.html": "Runs",
+  "telephone.html": "Telephone",
   "manual.html": "Manual test",
   "bakeoff.html": "Bake-off",
   "compare.html": "Compare",

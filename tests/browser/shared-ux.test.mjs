@@ -37,7 +37,8 @@ test("each provider has one display name whatever identifier a record carries", 
 
 test("page template gives one title and breadcrumb per page, with Review & holds named consistently", () => {
   assert.deepEqual(pageMeta("Review & holds"), { title: "Review & holds · Voice Harness", breadcrumb: "Voice Harness / Review & holds" });
-  assert.equal(Object.keys(PAGES).length, 7);
+  assert.equal(Object.keys(PAGES).length, 8);
+  assert.equal(PAGES["telephone.html"], "Telephone");
   assert.equal(PAGES["review.html"], "Review & holds");
 });
 

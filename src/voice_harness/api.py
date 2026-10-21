@@ -297,6 +297,7 @@ def create_app(
         scheduler = asyncio.create_task(bakeoff_scheduler())
         yield
         app.state.accepting = False  # stop intake before anything else
+        await app.state.telephone_calls.close()
         maintenance.cancel()
         scheduler.cancel()
         with suppress(asyncio.CancelledError):
@@ -786,6 +787,9 @@ def create_app(
     def renew_hold(run_id: str, hold_id: str, body: RenewHold):
         return evidence.renew(run_id, hold_id, body.expires_at, body.reason)
 
+    from .telephone_api import register_telephone_routes
+
+    register_telephone_routes(app, root, auth)
     register_review_routes(app, database, evidence, auth)
     register_cost_routes(app, database, auth)
     from .judges.api import register_judge_routes

@@ -1301,6 +1301,314 @@
         }
       }
     },
+    "/api/v1/telephone": {
+      "get": {
+        "summary": "Catalogue",
+        "operationId": "catalogue_api_v1_telephone_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Start",
+        "operationId": "start_api_v1_telephone_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TelephoneRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/telephone/configuration": {
+      "get": {
+        "summary": "Configuration",
+        "operationId": "configuration_api_v1_telephone_configuration_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/telephone/{call_id}": {
+      "get": {
+        "summary": "Status",
+        "operationId": "status_api_v1_telephone__call_id__get",
+        "parameters": [
+          {
+            "name": "call_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Call Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/telephone/{call_id}/stop": {
+      "post": {
+        "summary": "Stop",
+        "operationId": "stop_api_v1_telephone__call_id__stop_post",
+        "parameters": [
+          {
+            "name": "call_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Call Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/telephone/{call_id}/artifacts/{name}": {
+      "get": {
+        "summary": "Artifact",
+        "operationId": "artifact_api_v1_telephone__call_id__artifacts__name__get",
+        "parameters": [
+          {
+            "name": "call_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Call Id"
+            }
+          },
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Name"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/preservation-holds": {
       "get": {
         "summary": "Holds",
@@ -3159,6 +3467,104 @@
         ],
         "title": "CalibrateBody"
       },
+      "CallDetail": {
+        "properties": {
+          "label": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 1,
+            "title": "Label"
+          },
+          "value": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Value"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "fact",
+              "identifier",
+              "passcode"
+            ],
+            "title": "Kind",
+            "default": "fact"
+          },
+          "delivery": {
+            "type": "string",
+            "enum": [
+              "speech",
+              "dtmf"
+            ],
+            "title": "Delivery",
+            "default": "speech"
+          },
+          "when_asked": {
+            "type": "string",
+            "maxLength": 100,
+            "title": "When Asked",
+            "default": ""
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "label",
+          "value"
+        ],
+        "title": "CallDetail"
+      },
+      "CallSetup": {
+        "properties": {
+          "goal": {
+            "type": "string",
+            "maxLength": 800,
+            "title": "Goal",
+            "default": ""
+          },
+          "situation": {
+            "type": "string",
+            "maxLength": 1200,
+            "title": "Situation",
+            "default": ""
+          },
+          "tone": {
+            "type": "string",
+            "enum": [
+              "worried",
+              "calm"
+            ],
+            "title": "Tone",
+            "default": "calm"
+          },
+          "opening": {
+            "type": "string",
+            "maxLength": 160,
+            "title": "Opening",
+            "default": ""
+          },
+          "details": {
+            "items": {
+              "$ref": "#/components/schemas/CallDetail"
+            },
+            "type": "array",
+            "maxItems": 16,
+            "title": "Details"
+          },
+          "fixed_responses": {
+            "items": {
+              "$ref": "#/components/schemas/FixedResponse"
+            },
+            "type": "array",
+            "maxItems": 16,
+            "title": "Fixed Responses"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "CallSetup"
+      },
       "CallerConfig": {
         "properties": {
           "mode": {
@@ -3423,6 +3829,29 @@
           "rationale"
         ],
         "title": "DecisionBody"
+      },
+      "FixedResponse": {
+        "properties": {
+          "when_asked": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "When Asked"
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 450,
+            "minLength": 1,
+            "title": "Text"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "when_asked",
+          "text"
+        ],
+        "title": "FixedResponse"
       },
       "HTTPValidationError": {
         "properties": {
@@ -4175,6 +4604,103 @@
         "additionalProperties": false,
         "type": "object",
         "title": "StopCondition"
+      },
+      "TelephoneRequest": {
+        "properties": {
+          "destination": {
+            "type": "string",
+            "title": "Destination"
+          },
+          "caller_id": {
+            "type": "string",
+            "title": "Caller Id"
+          },
+          "route_id": {
+            "type": "string",
+            "pattern": "^[0-9]{5,6}$",
+            "title": "Route Id"
+          },
+          "subtest_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[0-9]{1,12}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subtest Id"
+          },
+          "scenario": {
+            "type": "string",
+            "pattern": "^(balance|lost-wallet)$",
+            "title": "Scenario",
+            "default": "lost-wallet"
+          },
+          "response_mode": {
+            "type": "string",
+            "pattern": "^(static|ai)$",
+            "title": "Response Mode",
+            "default": "ai"
+          },
+          "provider_config_id": {
+            "type": "string",
+            "pattern": "^(openai-realtime-live|gemini-live|nova-sonic-live|xai-voice-live)$",
+            "title": "Provider Config Id",
+            "default": "openai-realtime-live"
+          },
+          "routing_mode": {
+            "type": "string",
+            "pattern": "^(dtmf|voice)$",
+            "title": "Routing Mode",
+            "default": "dtmf"
+          },
+          "max_seconds": {
+            "type": "integer",
+            "maximum": 180.0,
+            "minimum": 20.0,
+            "title": "Max Seconds",
+            "default": 180
+          },
+          "turn_quiet_ms": {
+            "type": "integer",
+            "maximum": 2000.0,
+            "minimum": 200.0,
+            "title": "Turn Quiet Ms",
+            "default": 1500
+          },
+          "vad_silence_ms": {
+            "type": "integer",
+            "maximum": 1500.0,
+            "minimum": 300.0,
+            "title": "Vad Silence Ms",
+            "default": 900
+          },
+          "parallel_speech_checks": {
+            "type": "boolean",
+            "title": "Parallel Speech Checks",
+            "default": false
+          },
+          "call_setup": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CallSetup"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "destination",
+          "caller_id",
+          "route_id"
+        ],
+        "title": "TelephoneRequest"
       },
       "TestedBody": {
         "properties": {

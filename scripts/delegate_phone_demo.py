@@ -8,6 +8,7 @@ import contextlib
 import json
 import re
 import signal
+import sys
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -19,7 +20,9 @@ from voice_harness.telephony_demo import DelegateDemo, TwilioError, load_environ
 
 
 async def run(args):
-    brief = json.loads(Path(args.brief).read_text()) if args.brief else None
+    from voice_harness.telephone_setup import CallSetup
+    setup = CallSetup.model_validate_json(sys.stdin.buffer.read(131073)) if args.call_setup_stdin else None
+    brief = setup.brief(args.scenario) if setup and args.response_mode == "ai" else json.loads(Path(args.brief).read_text()) if args.brief else None
     env = load_environment(Path(args.env_file))
     for key in ["TWILIO_ACCOUNT_SID", "TWILIO_AUTH_TOKEN", "TWILIO_API_KEY_SID", "TWILIO_API_KEY_SECRET", "OPENAI_API_KEY"]:
         if not env.get(key):
@@ -29,15 +32,15 @@ async def run(args):
                         route_id=args.route_id, subtest_id=args.subtest_id, scenario=args.scenario,
                         wallet_card_included=None if args.wallet_card_included is None else args.wallet_card_included == "yes",
                         wallet_card_description=args.wallet_card_description,
-                        brief=brief,
+                        brief=brief, call_setup=setup,
                         routing_mode=args.routing_mode,
                         turn_quiet_ms=args.turn_quiet_ms, vad_silence_ms=args.vad_silence_ms,
                         parallel_speech_checks=args.parallel_speech_checks,
                         speech_cache=root.parent.parent / "delegate-speech-cache",
-                        task=args.task or ("Say I've lost my wallet and follow the demo questions using only supplied facts."
+                        task=(setup.goal if setup else args.task) or ("Say I've lost my wallet and follow the demo questions using only supplied facts."
                                            if args.scenario == "lost-wallet" else
                                            "Check the demo gift card balance and currency and report what the system says."),
-                        max_seconds=args.max_seconds)
+                        max_seconds=args.max_seconds, provider_config_id=args.provider_config_id)
     server, serving, tunnel, tunnel_log = None, None, None, None
     loop = asyncio.get_running_loop()
     def stop():
@@ -141,6 +144,9 @@ async def run(args):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--call-setup-stdin", action="store_true", help="Read operator goal/details from private standard input")
+    parser.add_argument("--response-mode", choices=["static", "ai"], default="ai")
+    parser.add_argument("--provider-config-id", choices=["openai-realtime-live", "gemini-live", "nova-sonic-live", "xai-voice-live"], default="openai-realtime-live")
     parser.add_argument("--env-file", default=".env")
     parser.add_argument("--to", required=True)
     parser.add_argument("--caller-id", required=True)

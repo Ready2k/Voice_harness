@@ -1,12 +1,12 @@
 # Delegate telephone pilot
 
-This CLI pilot implements the first voice/DTMF transport experiment from [the delegate spec](DELEGATE_AGENT_SPEC.md). It does not expose the harness's operator API or change existing banking evaluations. It is not yet the number/scenario setup UI or a general login agent.
+This CLI pilot implements the first voice/DTMF transport experiment from [the delegate spec](DELEGATE_AGENT_SPEC.md). It does not expose the harness's operator API or change existing banking evaluations. The operator GUI now wraps this runner; it is not a general login agent.
 
 ## What the first proof does
 
 The agent listens to the automated test line, selects when to send the bound routing ID (and optional supplied sub-test ID), can request the balance using a controlled spoken phrase, and reports a quoted finding. Twilio call updates send the digits and reconnect bidirectional audio on the same CallSid. The delegate session persists across stream generations. See the [live proof report](../reports/delegate-phone-proof-2026-10-21.md) for observed results and retained failures.
 
-The pilot uses the existing OpenAI realtime adapter, independent ASR backend, speech synthesiser, resampler and hash-chained Ledger. It does not reuse the banking engine's account/identity verdicts: their roles and facts are inappropriate for a customer-side delegate. Without a brief it retains its fixed-phrase diagnostic path. Supplying a demo brief enables generated natural replies, reviewed against the scenario before synthesis and checked again through independent ASR. Native realtime-model audio is withheld in both modes. Credentials and account changes remain unavailable. The full signed evaluation export still needs subsequent integration.
+The pilot uses the existing OpenAI realtime adapter, independent ASR backend, speech synthesiser, resampler and hash-chained Ledger. It does not reuse the banking engine's account/identity verdicts: their roles and facts are inappropriate for a customer-side delegate. Without a brief it retains its fixed-phrase diagnostic path. Supplying a demo brief enables generated natural replies, reviewed against the scenario before synthesis and checked again through independent ASR. Native realtime-model audio is withheld in both modes. Legacy briefs do not carry credentials. The GUI can now bind operator-supplied account/verification details through the separate detail tool described below; account changes remain unavailable. The full signed evaluation export still needs subsequent integration.
 
 ## Natural, goal-based wallet demo
 
@@ -38,7 +38,7 @@ Routine dialogue and card ordering need no approval. Missing personal/security d
 ## Requirements
 
 - A Full Twilio account, a Voice-enabled caller number, destination calling permission and an authorised automated demo destination.
-- Restricted key permissions for Calls create/read/update (list for reconciliation). The account Auth Token is used only for incoming signature validation.
+- Restricted key permissions for Calls create/read/update (list for reconciliation). The runner uses the account Auth Token for incoming signature validation. The GUI also uses it for a read-only phone-number lookup if the restricted key lacks number-list permission.
 - OpenAI API access for the existing realtime model, TTS and independent transcription. Credentials stay in `.env`/the process environment and are not printed.
 - A public HTTPS/WSS origin routing exclusively to this ingress, or an explicitly supplied official `cloudflared` binary for a temporary tunnel. No global install is required.
 - Explicit permission for the demo audio to pass through the chosen tunnel and AI/ASR services and to be retained locally. Do not supply production personal/account data to this pilot.
@@ -130,3 +130,33 @@ PYTHONPATH=src .venv/bin/python -m unittest tests.test_telephony_demo -v
 ```
 
 These cover number formatting, mu-law codec values, signature tampering, wrong/stale stream binding, hidden operator/artifact routes, out-of-scope tool denial, single-use DTMF, uncertain-send containment, evidence failure before an external action, cleanup and artifact tampering. They do not establish live account/region/IVR support.
+
+## Operator GUI
+
+Open `/client/telephone.html` on the host API and connect with the operator token. Enter an authorised destination, Twilio caller number and supplied routing IDs; choose the balance diagnostic or supplied adaptive wallet brief, keypad/spoken routing and timing settings. **Start chargeable call** runs the existing preflight and bounded CLI runner. Stop requests its normal hangup and evidence cleanup. History, summaries, audio and evidence downloads stay behind operator authentication. Findings remain diagnostic rather than independent platform verification.
+
+Configure `VOICE_HARNESS_TUNNEL_BINARY` with the absolute path to the existing official cloudflared executable (or put it on PATH), or set `VOICE_HARNESS_TELEPHONE_PUBLIC_URL` for an origin already forwarding to port 8770. The public ingress still exposes only signed Twilio endpoints. Credentials use the existing environment/`.env` loader; setup status shows missing names without values. The host must contain the repository runner and its dependencies.
+
+GUI call artifacts are stored under `HARNESS_DATA/telephone-calls/`. One GUI call may run per API process; do not run a separate CLI call or multiple operator API workers against the same ingress port. A server interruption can leave a call outcome uncertain: reconcile it in Twilio before retrying. The Twilio time limit still bounds the call. Existing CLI attempt folders remain separate.
+
+The GUI fetches voice-capable caller numbers from Twilio IncomingPhoneNumbers through the authenticated `/api/v1/telephone/configuration` endpoint. It prepopulates the caller number and local scenario routing defaults without overwriting edited fields on refresh. No account credentials are returned to the browser.
+
+### Response mode and agent selection
+
+The Telephone page offers **Static · fixed spoken phrases** or **AI agent · generated replies**, plus OpenAI Realtime, Google Gemini, Amazon Nova Sonic or xAI Grok Voice. Static mode still uses the selected agent to choose routing/phrase actions; it is not a deterministic scripted IVR. Both wallet and balance scenarios accept generated replies using the editable goal and supplied facts, or operator-defined static phrases. Missing provider configuration disables its choice, and the API rejects unavailable selections without falling back.
+
+Each run forwards `--provider-config-id` to the runner and records it in the start event, provider connection receipt and final summary. CLI runs can select the same provider with `--provider-config-id gemini-live` or `--provider-config-id nova-sonic-live`. `--brief` enables generated wallet replies; omitting it retains fixed phrases. All providers use the shared OpenAI speech synthesis, independent ASR and (for generated replies) semantic review. Selecting an agent changes reasoning/dialogue, not the audible TTS voice.
+
+Gemini and Nova telephone integrations are experimental. They retain provider-controlled audio endpointing; Nova uses LOW sensitivity rather than the OpenAI millisecond VAD control. The controller still supplies current prompt IDs and enforces routing, speech and action bounds. Their native tool-result interfaces automatically continue model turns and cannot honour the OpenAI `respond=False` tool-result flag. Native model audio remains withheld. Offline adapter tests do not establish live telephone compatibility or conversational quality; each provider needs a recorded authorised call evaluation.
+
+### Editable goals and supplied details
+
+Both response modes now accept an editable goal, situation/background, opening, delivery tone and detail rows. The scenario picker loads a starting template; it does not invent account or verification details. Generated replies now work for balance calls as well as lost-card/wallet calls. General scenario facts such as card brand/type are included in the caller brief. The result must satisfy the supplied goal with a quote from the called service.
+
+Fixed mode also accepts **When asked about / Say exactly** rows. These define the available spoken phrases, with an AI controller selecting between them. The opening is an additional fixed phrase. An unanswered question still requires a supplied response/detail or stops as missing information.
+
+For account IDs, identity answers or passcodes, choose the corresponding detail type, specify **When asked for** (for example `account number` or `passcode`) and speech or keypad delivery. Keypad values must be digits. Values retain leading zeros and are bound to one call. The agent sees references, labels and purposes, not the underlying values in its initial prompt. `phone_provide_detail` can submit only an existing bound reference for the latest matching explicit request after test routing; it consumes the detail before transmission and never retries an uncertain send. Hash terminators require a matching remote instruction. These checks are conservative lexical matching, not a semantic proof of the remote party's intent.
+
+The GUI sends the validated setup to the child runner through a private standard-input pipe (`--call-setup-stdin`), with no credential values in command arguments or `setup.json` history. Spoken identifier/passcode audio is independently assessed before calling and bypasses the shared speech cache. Detail values are redacted from controller event text; raw retained call audio and independent transcripts can still contain spoken or echoed values. Use only test details authorised for the chosen destination. Fixed phrases, goals and background are ordinary visible scenario data; enter verification values in the dedicated detail rows.
+
+Calls still cannot approve card/account changes, payments or transfers. This is a bounded demo delegate, not a general banking login service.
