@@ -27,6 +27,7 @@ USER harness
 
 FROM base AS test
 COPY --chown=harness:harness tests/ ./tests/
+COPY --chown=harness:harness scenarios/ ./scenarios/
 ENV HARNESS_REQUIRE_NOVA_RUNTIME=1
 COPY --chown=harness:harness artifacts/phase0/ ./artifacts/phase0/
 CMD ["python", "-m", "unittest", "discover", "-s", "tests", "-v"]

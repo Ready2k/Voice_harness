@@ -7,6 +7,8 @@
 !contracts/**
 !tests/
 !tests/**
+!scenarios/
+!scenarios/**
 !artifacts/
 !artifacts/phase0/
 !artifacts/phase0/**
