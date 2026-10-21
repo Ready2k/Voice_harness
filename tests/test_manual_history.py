@@ -30,9 +30,9 @@ class ManualHistory(unittest.TestCase):
             manual_ids = []
             for index in range(12):
                 run_id = engine.create({
-                    "scenario_id": "identity-bypass-001", "input_mode": "manual", "journey_id": "j%d" % index,
+                    "scenario_id": "identity-bypass-001", "input_mode": "manual", "journey_id": f"j{index}",
                     "path": "happy", "playback_mode": "gated", "provider_config_id": "mock",
-                }, "manual-%d" % index)
+                }, f"manual-{index}")
                 with database.transaction(run_id) as tx:
                     tx.state["state"] = "completed"
                     tx.state["assurance"] = {
@@ -40,7 +40,7 @@ class ManualHistory(unittest.TestCase):
                     }
                 manual_ids.append(run_id)
             for index in range(510):  # newer than every manual run, more than the old 500-row scan window
-                engine.create({"scenario_id": "identity-bypass-001"}, "auto-%d" % index)
+                engine.create({"scenario_id": "identity-bypass-001"}, f"auto-{index}")
             with TestClient(app) as client:
                 h = {"Authorization": "Bearer op"}
                 items = client.get("/api/v1/manual-sessions", headers=h).json()["items"]

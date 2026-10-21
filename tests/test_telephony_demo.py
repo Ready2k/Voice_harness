@@ -1,25 +1,33 @@
 """Offline containment and protocol checks; these cannot prove IVR compatibility."""
-import base64
 import asyncio
+import base64
 import hashlib
 import hmac
 import json
 import tempfile
 import unittest
 from pathlib import Path
-from unittest.mock import AsyncMock, Mock
 from types import SimpleNamespace
+from unittest.mock import AsyncMock, Mock
 
 import httpx
 import numpy as np
 from fastapi.testclient import TestClient
+from starlette.websockets import WebSocketDisconnect
 
-from voice_harness.telephony_demo import (
-    DelegateDemo, TwilioControl, TwilioError, decode_mulaw, encode_mulaw,
-    normalise_number, signature_valid, verify_output, words,
-)
 from voice_harness.adapters.openai_realtime import OpenAIRealtimeAdapter
 from voice_harness.caller_voice import CallerVoiceUnavailable
+from voice_harness.telephony_demo import (
+    DelegateDemo,
+    TwilioControl,
+    TwilioError,
+    decode_mulaw,
+    encode_mulaw,
+    normalise_number,
+    signature_valid,
+    verify_output,
+    words,
+)
 
 
 class ProtocolTests(unittest.TestCase):
@@ -89,7 +97,7 @@ class DemoTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(client.get("/docs").status_code, 404)
             self.assertEqual(client.get("/summary.json").status_code, 404)
             self.assertEqual(client.post("/status", data={"CallSid": "CAtest"}).status_code, 403)
-            with self.assertRaises(Exception):
+            with self.assertRaises(WebSocketDisconnect):
                 with client.websocket_connect("/media"):
                     pass
 
@@ -101,7 +109,7 @@ class DemoTests(unittest.IsolatedAsyncioTestCase):
                 socket.send_json({"event": "connected"})
                 socket.send_json({"event": "start", "start": self.start()})
                 socket.send_json({"event": "stop", "streamSid": "MZtest", "sequenceNumber": "1"})
-                with self.assertRaises(Exception):
+                with self.assertRaises(WebSocketDisconnect):
                     socket.receive_json()
         self.assertIn("stream.bound", [e.type for e in self.demo.ledger.events])
 

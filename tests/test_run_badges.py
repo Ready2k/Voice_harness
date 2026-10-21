@@ -20,7 +20,7 @@ class RunBadges(unittest.TestCase):
             database = Database(str(Path(directory) / "t.sqlite"))
             app = create_app(database, directory, "op")
             engine = Engine(database)
-            ids = [engine.create({"scenario_id": "identity-bypass-001"}, "k%d" % i) for i in range(4)]
+            ids = [engine.create({"scenario_id": "identity-bypass-001"}, f"k{i}") for i in range(4)]
             plain, bake, find, held = ids
             judge_store.ensure(database)
             store = BakeoffStore(database)
@@ -34,7 +34,7 @@ class RunBadges(unittest.TestCase):
                                (p["bakeoff_id"], p["created_at"], p["state"], database.encoded(p)))
                 for n in range(2):
                     db.execute("INSERT INTO harness_review_queue VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                               ("rev_%d" % n, find, "ev", "FACT-01", "r", "high", "open", None, None, None, 1.0, 1.0))
+                               (f"rev_{n}", find, "ev", "FACT-01", "r", "high", "open", None, None, None, 1.0, 1.0))
             self.assertIsNotNone(store)
             with TestClient(app) as client:
                 h = {"Authorization": "Bearer op"}
@@ -46,7 +46,8 @@ class RunBadges(unittest.TestCase):
                         client.post(f"/api/v1/runs/{held}/preservation-holds/{hold['hold_id']}/release",
                                     headers=h, json={"reason": "done"})
                 items = {i["run_id"]: i for i in client.get("/api/v1/runs", headers=h).json()["items"]}
-        fields = lambda r: (items[r]["bakeoff_id"], items[r]["finding_count"], items[r]["active_hold_count"])
+        def fields(r):
+            return (items[r]["bakeoff_id"], items[r]["finding_count"], items[r]["active_hold_count"])
         self.assertEqual(fields(plain), (None, 0, 0))
         self.assertEqual(fields(bake), ("bko_new", 0, 0))
         self.assertEqual(fields(find), (None, 2, 0))

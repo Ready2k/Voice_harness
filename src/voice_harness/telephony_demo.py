@@ -20,7 +20,7 @@ import uuid
 import wave
 from pathlib import Path
 from urllib.parse import parse_qs, urlsplit
-from xml.etree import ElementTree as ET
+from xml.etree import ElementTree as ET  # nosec B405 - only builds outgoing TwiML; no XML is parsed
 
 import httpx
 import numpy as np

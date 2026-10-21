@@ -6,7 +6,14 @@ from pathlib import Path
 
 import numpy as np
 
-from voice_harness.call_review import make_alignment, mix_tracks, render_review, sha, verify_review, write_audio
+from voice_harness.call_review import (
+    make_alignment,
+    mix_tracks,
+    render_review,
+    sha,
+    verify_review,
+    write_audio,
+)
 from voice_harness.events import Ledger
 from voice_harness.telephony_demo import verify_output
 

@@ -154,7 +154,7 @@ def make_alignment(root, sources, events, *, speech_cache=None):
         if len(sources["sent"]) and not releases:
             raise ValueError("NO_DELEGATE_TIMING_AVAILABLE")
         cursor = 0
-        for release, count in zip(releases, counts or []):
+        for release, count in zip(releases, counts or [], strict=False):
             if count:
                 segments.append({"track": "sent", "source_frame": cursor, "frames": count,
                                  "timeline_frame": _frame_offset(release["monotonic_ns"], origin),
@@ -197,7 +197,7 @@ def _peaks(samples, count=1000):
         return []
     edges = np.linspace(0, len(samples), min(count, len(samples)) + 1, dtype=int)
     return [round(float(np.max(np.abs(samples[a:b].astype(np.int32)))) / 32768, 4)
-            for a, b in zip(edges[:-1], edges[1:])]
+            for a, b in zip(edges[:-1], edges[1:], strict=True)]
 
 
 def render_review(root, *, speech_cache=None):
