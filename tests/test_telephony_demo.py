@@ -7,7 +7,8 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
-from unittest.mock import AsyncMock
+from unittest.mock import AsyncMock, Mock
+from types import SimpleNamespace
 
 import httpx
 import numpy as np
@@ -15,9 +16,10 @@ from fastapi.testclient import TestClient
 
 from voice_harness.telephony_demo import (
     DelegateDemo, TwilioControl, TwilioError, decode_mulaw, encode_mulaw,
-    normalise_number, signature_valid, verify_output,
+    normalise_number, signature_valid, verify_output, words,
 )
 from voice_harness.adapters.openai_realtime import OpenAIRealtimeAdapter
+from voice_harness.caller_voice import CallerVoiceUnavailable
 
 
 class ProtocolTests(unittest.TestCase):
@@ -46,6 +48,11 @@ class ProtocolTests(unittest.TestCase):
         samples = np.array([-30000, -12000, -1000, 0, 1000, 12000, 30000], dtype="<i2")
         result = np.frombuffer(decode_mulaw(encode_mulaw(samples.tobytes())), dtype="<i2")
         self.assertTrue(np.all(np.abs(result.astype(int) - samples.astype(int)) < 600))
+
+    def test_wallet_phrase_contractions_are_equivalent_but_negation_is_not(self):
+        self.assertEqual(words("I've lost my wallet."), words("I have lost my wallet."))
+        self.assertNotEqual(words("I've lost my wallet."), words("I have not lost my wallet."))
+        self.assertEqual(words("It's my Premier card."), words("It is my Premier card."))
 
 
 class DemoTests(unittest.IsolatedAsyncioTestCase):
@@ -161,6 +168,122 @@ class DemoTests(unittest.IsolatedAsyncioTestCase):
         self.assertTrue(self.demo.done.is_set())
         self.control.request.assert_not_awaited()
         self.adapter.send_text.assert_not_awaited()
+
+    async def test_acknowledgements_and_stale_partial_turns_do_not_trigger_replies(self):
+        self.demo.prompt_events = ["evt_old", "evt_ack"]
+        self.demo.prompt_text = {"evt_old": "Please", "evt_ack": "Got it."}
+        await self.demo.respond_to_prompt("evt_old")
+        await self.demo.respond_to_prompt("evt_ack")
+        self.adapter.send_text.assert_not_awaited()
+
+    async def test_response_waits_for_remote_speech_to_finish(self):
+        import time
+        self.demo.turn_quiet_seconds = 0.03
+        self.demo.prompt_events = ["evt_question"]
+        self.demo.prompt_text = {"evt_question": "Why are you calling?"}
+        self.demo.last_voice_at = time.monotonic()
+        self.demo.prompt_received_at["evt_question"] = self.demo.last_voice_at
+        task = asyncio.create_task(self.demo.respond_to_prompt("evt_question"))
+        await asyncio.sleep(0.01)
+        self.adapter.send_text.assert_not_awaited()
+        await task
+        self.adapter.send_text.assert_awaited_once()
+
+    async def test_five_digit_wallet_scenario_uses_exact_operator_brief(self):
+        demo = DelegateDemo({}, Path(self.temp.name) / "wallet", destination="01617683858",
+            caller_id="01483694454", route_id="77022", subtest_id="01", scenario="lost-wallet",
+            task="I've lost my wallet", control=self.control, adapter=self.adapter)
+        self.assertEqual(demo.digit_values, {"test_route": "77022", "subtest": "01"})
+        self.assertEqual(demo.phrases["lost_wallet"], "I've lost my wallet.")
+        self.assertNotIn("balance_question", demo.phrases)
+        demo.phrase_audio["lost_wallet"] = bytes(960)
+        with self.assertRaisesRegex(ValueError, "COMPLETE_ROUTING"):
+            await demo.execute("phone_speak", {"phrase": "lost_wallet"})
+        self.control.request.assert_not_awaited()
+
+    async def test_wallet_preflight_builds_valid_provider_session_without_dialling(self):
+        asr = Mock()
+        asr.available.return_value = (True, None)
+        asr.transcribe.side_effect = lambda pcm, rate: SimpleNamespace(text=pcm.decode())
+        adapter = AsyncMock()
+        adapter.open_session.return_value = {"session_id": "offline-session"}
+        async def empty_events():
+            if False:
+                yield None
+        adapter.receive = empty_events
+        demo = DelegateDemo({}, Path(self.temp.name) / "wallet-preflight", destination="01617683858",
+            caller_id="01483694454", route_id="77022", subtest_id="01", scenario="lost-wallet",
+            wallet_card_included=True,
+            task="I've lost my wallet", control=self.control, adapter=adapter,
+            asr=asr, synthesise=lambda text: text.encode())
+        await demo.prepare()
+        config = adapter.open_session.await_args.args[0]
+        self.assertIn("phone_speak lost_wallet", config["instructions"])
+        self.assertNotIn("phone_speak balance_question", config["instructions"])
+        self.assertIn("phone_speak card_in_wallet", config["instructions"])
+        self.assertEqual(demo.phrases["card_in_wallet"], "Yes, my Barclays card was in the wallet.")
+        self.assertEqual(set(demo.phrase_audio), set(demo.phrases))
+        self.control.request.assert_not_awaited()
+        await asyncio.gather(*demo.tasks)
+
+    async def test_unanswered_question_is_preserved_without_inventing_answer(self):
+        self.demo.prompt_events.append("evt_question")
+        self.demo.prompt_text["evt_question"] = "What is your postcode?"
+        await self.demo.execute("report_blocked", {"reason": "missing_answer"})
+        self.assertEqual(self.demo.blocking_question, "What is your postcode?")
+        self.assertTrue(self.demo.done.is_set())
+        self.control.request.assert_not_awaited()
+
+    async def test_card_description_is_bound_to_confirmation_without_accepting_numbers(self):
+        demo = DelegateDemo({}, Path(self.temp.name) / "wallet-description", destination="01617683827",
+            caller_id="01483694454", route_id="770222", subtest_id="01", scenario="lost-wallet",
+            wallet_card_included=True, wallet_card_description="It's my Premier and business banking card.",
+            task="I've lost my wallet", control=self.control, adapter=self.adapter)
+        self.assertEqual(demo.phrases["card_description"], "It's my Premier and business banking card.")
+        self.assertEqual(demo.phrases["card_in_wallet"], "Yes. It's my Premier and business banking card.")
+        demo.active = True
+        demo.prompt_events = ["evt_priority"]
+        demo.prompt_text["evt_priority"] = "Which would you like to sort first?"
+        await demo.respond_to_prompt("evt_priority")
+        self.assertEqual(demo.reason, "TASK_BLOCKED:missing_card_priority")
+        self.adapter.send_text.assert_not_awaited()
+        with self.assertRaisesRegex(ValueError, "INVALID_DEMO_CARD_DESCRIPTION"):
+            DelegateDemo({}, Path(self.temp.name) / "invalid-description", destination="01617683827",
+                caller_id="01483694454", route_id="770222", task="Wallet", scenario="lost-wallet",
+                wallet_card_included=True, wallet_card_description="Card 1234567890123456",
+                control=self.control, adapter=self.adapter)
+
+    async def test_cached_speech_is_reassessed_and_replaced_if_transcript_fails(self):
+        asr = Mock()
+        phrase = "I've lost my wallet."
+        asr.transcribe.return_value = SimpleNamespace(text=phrase)
+        synth = Mock(return_value=b"correct_audio")
+        demo = DelegateDemo({}, Path(self.temp.name) / "cache-run", destination="01617683827",
+            caller_id="01483694454", route_id="770222", task="Wallet", scenario="lost-wallet",
+            control=self.control, adapter=self.adapter, asr=asr, synthesise=synth,
+            speech_cache=Path(self.temp.name) / "speech-cache")
+        await demo.prepare_phrase("lost_wallet", phrase, asyncio.Semaphore(1))
+        next(demo.speech_cache.iterdir()).write_bytes(b"corrupted_audio")
+        synth.reset_mock()
+        asr.transcribe.reset_mock()
+        asr.transcribe.side_effect = [SimpleNamespace(text="Wrong phrase"), SimpleNamespace(text=phrase)]
+        await demo.prepare_phrase("lost_wallet", phrase, asyncio.Semaphore(1))
+        self.assertEqual(asr.transcribe.call_count, 2)
+        synth.assert_called_once_with(phrase)
+        self.assertEqual(demo.phrase_audio["lost_wallet"], b"correct_audio")
+
+    async def test_transient_synthesis_failure_retries_only_before_dial(self):
+        from unittest.mock import patch
+        asr = Mock()
+        asr.transcribe.return_value = SimpleNamespace(text="Hello.")
+        synth = Mock(side_effect=[CallerVoiceUnavailable("CALLER_VOICE_TTS_TRANSPORT_ERROR"), b"audio"])
+        demo = DelegateDemo({}, Path(self.temp.name) / "retry-run", destination="01617683827",
+            caller_id="01483694454", route_id="770222", task="Wallet", scenario="lost-wallet",
+            control=self.control, adapter=self.adapter, asr=asr, synthesise=synth)
+        with patch("voice_harness.telephony_demo.asyncio.sleep", new=AsyncMock()):
+            await demo.prepare_phrase("greeting", "Hello.", asyncio.Semaphore(1))
+        self.assertEqual(synth.call_count, 2)
+        self.control.request.assert_not_awaited()
 
     async def test_subtest_requires_bound_value_and_prior_route(self):
         self.demo.socket = AsyncMock()

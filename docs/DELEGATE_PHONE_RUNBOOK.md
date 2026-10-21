@@ -30,6 +30,22 @@ PYTHONPATH=src .venv/bin/python scripts/delegate_phone_demo.py \
 
 Alternatively pass `--public-url https://your-telephony-ingress.example` when routing is already configured to the selected local port (default 8770). The service listens on loopback. The public app has only `/media` and `/status`, with no docs, operator controls or artifact downloads. It verifies Twilio signatures using the configured external URL and rejects wrong account/call bindings and stale or replayed streams.
 
+For the operator's lost-wallet test, the latest supplied route is `770222`, with sub-test `01`:
+
+```bash
+PYTHONPATH=src .venv/bin/python scripts/delegate_phone_demo.py \
+  --to 01617683827 --caller-id 01483694454 --route-id 770222 --subtest-id 01 \
+  --scenario lost-wallet --wallet-card-included yes --max-seconds 180 \
+  --wallet-card-description "It's my Premier and business banking card." \
+  --tunnel-binary /absolute/path/to/cloudflared
+```
+
+The lost-wallet profile replaces the balance phrases with “I've lost my wallet”, clarification/guidance requests, delegate disclosure and goodbye. `--wallet-card-included yes` (or `no`) adds the operator's explicitly supplied answer about whether the wallet contained their Barclays card; omit it when unknown. The example's `yes` was expressly confirmed by this operator and must not be assumed for other callers. It requires both routing steps before speaking. It preserves the latest question when personal information, an unknown answer or approval for an account-changing action is required. It cannot invent account details or approve card blocking. Native model audio remains withheld. This is a bounded scripted-speech pilot, not unrestricted conversational speech.
+
+The optional `--wallet-card-description` binds the operator's supplied product description as an approved spoken phrase, including it in the card-in-wallet confirmation. The example uses this operator's exact intended wording; it does not infer card numbers or whether there are multiple accounts. This demo description field rejects numeric credentials/card numbers and requires an explicitly confirmed card-in-wallet fact.
+
+Observed attempts on the original `0161 768 3858` destination did not route the lost-wallet test. The operator corrected the destination to **0161 768 3827**, which accepted **770222 / 01** and reached the AI-agent conversation. See [the lost-wallet attempt report](../reports/delegate-lost-wallet-2026-10-21.md) for recordings, preserved failures and the exact question at which the first correct-destination attempt stopped.
+
 The number normaliser converts `0161…`, `+44 (0)161…` and `0044 0161…` to `+44161…`. Start triggers a chargeable call only after speech, ASR, provider and ingress preflight. Each bound keypad value can be sent once, with optional `#` when the observed prompt requires it. No uncertain call creation or digit send is automatically retried. The `770022` route has now been observed to request a sub-test number after accepting the routing ID: supply `--subtest-id VALUE` only when the operator provides that value. Without it, the pilot stops on the sub-test prompt rather than guessing or repeating speech.
 
 Press Ctrl-C to stop. The runner attempts API hangup on every exit. A provider-side call time limit also bounds the call if the process dies. The runner shuts down its ingress and temporary tunnel. An unresolved dial-create response is explicitly uncertain and must be reconciled in Twilio before another attempt; no unknown CallSid can be hung up locally.

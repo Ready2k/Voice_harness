@@ -14,6 +14,9 @@ from pathlib import Path
 import uvicorn
 
 from voice_harness.telephony_demo import DelegateDemo, load_environment, verify_output
+from voice_harness.asr import AsrUnavailable
+from voice_harness.caller_voice import CallerVoiceUnavailable
+from voice_harness.telephony_demo import TwilioError
 
 
 async def run(args):
@@ -23,7 +26,14 @@ async def run(args):
             raise ValueError("MISSING_CONFIG:" + key)
     root = Path(args.output or (".local/delegate-calls/" + datetime.now(UTC).strftime("%Y%m%dT%H%M%S%fZ")))
     demo = DelegateDemo(env, root, destination=args.to, caller_id=args.caller_id,
-                        route_id=args.route_id, subtest_id=args.subtest_id, task=args.task, max_seconds=args.max_seconds)
+                        route_id=args.route_id, subtest_id=args.subtest_id, scenario=args.scenario,
+                        wallet_card_included=None if args.wallet_card_included is None else args.wallet_card_included == "yes",
+                        wallet_card_description=args.wallet_card_description,
+                        speech_cache=root.parent.parent / "delegate-speech-cache",
+                        task=args.task or ("Say I've lost my wallet and follow the demo questions using only supplied facts."
+                                           if args.scenario == "lost-wallet" else
+                                           "Check the demo gift card balance and currency and report what the system says."),
+                        max_seconds=args.max_seconds)
     server, serving, tunnel, tunnel_log = None, None, None, None
     loop = asyncio.get_running_loop()
     def stop():
@@ -57,14 +67,17 @@ async def run(args):
                 f"http://127.0.0.1:{args.port}", "--no-autoupdate", "--protocol", "http2",
                 stdout=tunnel_log, stderr=tunnel_log)
             async with asyncio.timeout(40):
-                while not demo.public_url:
+                while True:
                     if tunnel.returncode is not None:
                         raise ValueError("TUNNEL_FAILED")
-                    matches = re.findall(r"https://[a-z0-9-]+\.trycloudflare\.com", (root / "tunnel.log").read_text())
-                    if matches:
+                    log = (root / "tunnel.log").read_text()
+                    matches = re.findall(r"https://[a-z0-9-]+\.trycloudflare\.com", log)
+                    if matches and "Registered tunnel connection" in log:
                         demo.configure_public_url(matches[0])
-                    else:
-                        await asyncio.sleep(0.5)
+                        # Avoid caching NXDOMAIN before the new DNS record exists.
+                        await asyncio.sleep(3)
+                        break
+                    await asyncio.sleep(0.5)
         # A newly allocated tunnel can briefly return NXDOMAIN. Verify both
         # managed and operator-supplied origins before placing a chargeable call.
         import httpx
@@ -90,7 +103,7 @@ async def run(args):
         await demo.done.wait()
     except Exception as exc:
         # Errors are stable codes; never dump provider bodies or credentials.
-        demo.reason = demo.reason or "FAILED:" + (str(exc) if isinstance(exc, ValueError) else type(exc).__name__)
+        demo.reason = demo.reason or "FAILED:" + (str(exc) if isinstance(exc, (ValueError, AsrUnavailable, CallerVoiceUnavailable, TwilioError)) else type(exc).__name__)
         print("Run stopped:", demo.reason, flush=True)
     finally:
         try:
@@ -122,7 +135,10 @@ def main():
     parser.add_argument("--caller-id", required=True)
     parser.add_argument("--route-id", required=True)
     parser.add_argument("--subtest-id", help="Optional operator-supplied sub-test keypad value; never guessed")
-    parser.add_argument("--task", default="Check the demo gift card balance and currency and report what the system says.")
+    parser.add_argument("--scenario", choices=["balance", "lost-wallet"], default="balance")
+    parser.add_argument("--wallet-card-included", choices=["yes", "no"], help="Operator-supplied demo fact about the Barclays card")
+    parser.add_argument("--wallet-card-description", help="Operator-supplied demo card description; no card numbers or secrets")
+    parser.add_argument("--task")
     parser.add_argument("--max-seconds", type=int, default=90)
     parser.add_argument("--port", type=int, default=8770)
     parser.add_argument("--public-url")

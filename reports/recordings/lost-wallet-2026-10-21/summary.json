@@ -1,0 +1,25 @@
+{
+  "run_id": "delegate_e1e0dec2e78643169cd52b45e981b4be",
+  "call_sid": "CA7b5b4110b561f43a873baa5ddbab7215",
+  "stop_reason": "MEDIA_DISCONNECTED",
+  "scenario": "lost-wallet",
+  "blocking_question": null,
+  "cleanup": "confirmed",
+  "remote_audio_seconds": 102.06,
+  "sent_audio_seconds": 7.8,
+  "dtmf_requested": true,
+  "dtmf_value_refs_consumed": [
+    "subtest",
+    "test_route"
+  ],
+  "stream_generations_bound": [
+    0,
+    1,
+    2
+  ],
+  "model_finding": null,
+  "source_quote_supported_by_independent_asr": false,
+  "platform_outcome": "not_independently_verified_no_oracle",
+  "ledger_valid": true,
+  "manifest_authentication": "unsigned_local"
+}
