@@ -43,6 +43,8 @@ export async function renderReviewQueue(root,token,{onAddHold}={}){
  const filter=field('Review state',{value:'open',options:[['open','Open'],['in_review','Claimed / in review'],['decided','Decided']]});
  const sev=field('Severity',{value:'all',options:[['all','All severities'],...SEVERITIES.map(s=>[s,s.charAt(0).toUpperCase()+s.slice(1)])]});
  const bar=el('div','filter-bar');bar.append(filter.wrapper,sev.wrapper);
+ const runFilter=new URLSearchParams(location.search).get('run');
+ if(runFilter){const note=el('p','muted','Showing findings for run '+runFilter+'. ');const all=el('a','','Show all findings');const url=new URL(location.href);url.searchParams.delete('run');url.searchParams.delete('review');all.href=url.pathname+url.search;note.append(all);root.append(note);}
  const list=el('div','review-queue');const detail=el('section','panel review-detail');detail.append(el('p','muted','Select a finding to inspect its evidence and record a review.'));const columns=el('div','review-columns');columns.append(list,detail);const status=el('p','muted');status.setAttribute('role','status');const more=action('Load more findings',()=>load(true));
  root.append(bar,status,columns,more);const drafts=createDraftStore();list.setAttribute('role','group');list.setAttribute('aria-label','Findings queue');detail.setAttribute('aria-label','Selected finding');detail.setAttribute('role','region');let cursor=null;let loaded=[];let runs=[];let selected=null;
  function renderList(){
@@ -59,7 +61,7 @@ export async function renderReviewQueue(root,token,{onAddHold}={}){
  }
  async function load(append=false){
   more.disabled=true;
-  try{runs=await loadRuns(token);const result=await api(token,'/api/v1/reviews?state='+filter.input.value+(append&&cursor?'&cursor='+encodeURIComponent(cursor):''));
+  try{runs=await loadRuns(token);const result=await api(token,'/api/v1/reviews?state='+filter.input.value+(runFilter?'&run_id='+encodeURIComponent(runFilter):'')+(append&&cursor?'&cursor='+encodeURIComponent(cursor):''));
    const rows=enrichQueue(result.items,runs);loaded=append?[...loaded,...rows]:rows;cursor=result.next_cursor;more.hidden=!cursor;renderList();}catch(e){status.textContent=e.message;}finally{more.disabled=false;}
  }
  async function open(id,{reveal=false,notice=''}={}){

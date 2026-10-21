@@ -250,7 +250,7 @@ test("run badges: bake-off, findings and hold are links; absent fields mean no b
   const all = runBadges({ run_id: "run_a b", bakeoff_id: "bko_1", finding_count: 3, active_hold_count: 2 });
   assert.deepEqual(all.map((b) => [b.kind, b.label, b.href]), [
     ["bakeoff", "Bake-off", "./bakeoff.html?bakeoff=bko_1"],
-    ["findings", "3 findings", "./review.html"],
+    ["findings", "3 findings", "./review.html?run=run_a%20b"],
     ["hold", "Hold", "./review.html?run=run_a%20b"],
   ]);
   assert.ok(all.every((b) => b.aria.length > 10));
@@ -269,7 +269,7 @@ test("drawer badges: the same badge list renders as stop-propagation links for t
     assert.equal(box.className, "run-badges");
     assert.deepEqual(box.children.map((a) => [a.tag, a.className, a.textContent, a.href]), [
       ["a", "run-badge badge-bakeoff", "Bake-off", "./bakeoff.html?bakeoff=bko_1"],
-      ["a", "run-badge badge-findings", "2 findings", "./review.html"],
+      ["a", "run-badge badge-findings", "2 findings", "./review.html?run=run_x"],
       ["a", "run-badge badge-hold", "Hold", "./review.html?run=run_x"]]);
     assert.ok(box.children.every((a) => a.attrs["aria-label"].endsWith("(run_x)")));
     let stopped = 0; box.children[0].handlers.click({ stopPropagation() { stopped++; } });

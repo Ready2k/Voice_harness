@@ -40,7 +40,7 @@ export function runBadges(run) {
   const id = encodeURIComponent(run.run_id ?? "");
   if (run.bakeoff_id) badges.push({ kind: "bakeoff", label: "Bake-off", href: "./bakeoff.html?bakeoff=" + encodeURIComponent(run.bakeoff_id), aria: "Open the bake-off this run belongs to" });
   const findings = Number(run.finding_count) || 0;
-  if (findings > 0) badges.push({ kind: "findings", label: findings + (findings === 1 ? " finding" : " findings"), href: "./review.html", aria: findings + (findings === 1 ? " review finding" : " review findings") + " for this run: open the review queue" });
+  if (findings > 0) badges.push({ kind: "findings", label: findings + (findings === 1 ? " finding" : " findings"), href: "./review.html?run=" + id, aria: findings + (findings === 1 ? " review finding" : " review findings") + " for this run: open them in review" });
   if ((Number(run.active_hold_count) || 0) > 0) badges.push({ kind: "hold", label: "Hold", href: "./review.html?run=" + id, aria: "This run has an active preservation hold: open review" });
   return badges;
 }

@@ -2119,6 +2119,22 @@
             }
           },
           {
+            "name": "run_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Run Id"
+            }
+          },
+          {
             "name": "authorization",
             "in": "header",
             "required": false,

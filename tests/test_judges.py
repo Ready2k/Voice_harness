@@ -386,6 +386,8 @@ class Adjudication(Base):
         self.assertEqual(len(out["review_ids"]), 1)
         item = review.list_queue(self.database, "open")["items"][0]
         self.assertEqual(item["reason"], "JUDGE_DISAGREEMENT_MATERIAL")
+        self.assertEqual(len(review.list_queue(self.database, "open", run_id=run)["items"]), 1)
+        self.assertEqual(review.list_queue(self.database, "open", run_id="run_other")["items"], [])
 
     def test_non_material_disagreement_takes_worst_case_not_average(self):
         run = self.run_of("balance-verified-001")

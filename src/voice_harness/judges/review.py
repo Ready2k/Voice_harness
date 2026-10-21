@@ -167,13 +167,16 @@ def effective_from_events(events: list[dict], run_id: str) -> dict:
     }
 
 
-def list_queue(database, state: str | None = None, after: str = "", limit: int = 100) -> dict:
+def list_queue(database, state: str | None = None, after: str = "", limit: int = 100, run_id: str | None = None) -> dict:
     store.ensure(database)
     sql = "SELECT * FROM harness_review_queue WHERE review_id>?"
     params: list = [after]
     if state:
         sql += " AND state=?"
         params.append(state)
+    if run_id:
+        sql += " AND run_id=?"
+        params.append(run_id)
     sql += " ORDER BY review_id LIMIT ?"
     params.append(limit + 1)
     with database.connection() as db:

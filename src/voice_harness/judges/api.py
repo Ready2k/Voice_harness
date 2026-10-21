@@ -104,10 +104,10 @@ def register_judge_routes(app, database, auth):
         return review.effective_assurance(database, run_id)
 
     @app.get("/api/v1/reviews", dependencies=[Depends(auth)])
-    def reviews(state: str | None = None, cursor: str = "", limit: int = 100):
+    def reviews(state: str | None = None, cursor: str = "", limit: int = 100, run_id: str | None = None):
         if (state is not None and state not in review.STATES) or not 1 <= limit <= 1000:
             raise HTTPException(422, "INVALID_PAGINATION")
-        return review.list_queue(database, state, cursor, limit)
+        return review.list_queue(database, state, cursor, limit, run_id)
 
     @app.get("/api/v1/reviews/{review_id}", dependencies=[Depends(auth)])
     def get_review(review_id: str):
