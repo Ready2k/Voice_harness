@@ -127,8 +127,8 @@ def verify_output(root: Path) -> bool:
     """Verify the local ledger/artifact binding, not external authenticity or task truth."""
     try:
         manifest = json.loads((root / "manifest.json").read_text())
-        allowed = {"events.jsonl", "summary.json", "remote.wav", "sent.wav", "remote-transcript.txt"}
-        required = allowed - {"remote-transcript.txt"}
+        allowed = {"events.jsonl", "summary.json", "remote.wav", "sent.wav", "remote-transcript.txt", "audio-timing.json"}
+        required = {"events.jsonl", "summary.json", "remote.wav", "sent.wav"}
         if not required.issubset(manifest["sha256"]) or not set(manifest["sha256"]).issubset(allowed):
             return False
         for name, expected in manifest["sha256"].items():
@@ -239,6 +239,7 @@ class DelegateDemo:
         self.turn_quiet_seconds = 1.5
         self.inbound = bytearray()
         self.outbound = bytearray()
+        self.audio_chunks = []
         self.phrase_audio = {}
         self.pending_marks = {}
         self.counter, self.epoch = 0, 0
@@ -254,6 +255,18 @@ class DelegateDemo:
 
     def record(self, kind, content):
         return self.ledger.append("orchestrator", kind, content)
+
+    def capture_audio(self, track, pcm, *, at_ns, generation, stream_timestamp_ms=None, observed_ns=None):
+        """Index actual captured/sent samples on one monotonic transport clock."""
+        if track not in {"remote", "sent"} or len(pcm) % 2 or not pcm:
+            raise ValueError("INVALID_CAPTURE_AUDIO")
+        if len(self.audio_chunks) >= self.max_seconds * 200:
+            raise ValueError("CAPTURE_TIMING_LIMIT")
+        buffer = self.inbound if track == "remote" else self.outbound
+        self.audio_chunks.append({"track": track, "source_frame": len(buffer) // 2, "frames": len(pcm) // 2,
+                                  "at_ns": at_ns, "generation": generation,
+                                  "stream_timestamp_ms": stream_timestamp_ms, "observed_ns": observed_ns})
+        buffer.extend(pcm)
 
     def spawn(self, coro):
         task = asyncio.create_task(coro)
@@ -461,6 +474,7 @@ class DelegateDemo:
         await socket.accept()
         local_generation, stream = None, None
         upsampler = StreamResampler(8000, 24000)
+        remote_epoch_ns = None
         last_sequence = 0
         try:
             async with asyncio.timeout(10):
@@ -505,7 +519,14 @@ class DelegateDemo:
                     samples = np.frombuffer(pcm, dtype="<i2").astype(np.float32)
                     if samples.size and float(np.sqrt(np.mean(samples * samples))) > 250:
                         self.last_voice_at = time.monotonic()
-                    self.inbound.extend(pcm)
+                    observed_ns = time.monotonic_ns()
+                    stream_ms = int(media["timestamp"])
+                    if stream_ms < 0:
+                        raise ValueError("INVALID_MEDIA_TIMESTAMP")
+                    if remote_epoch_ns is None:
+                        remote_epoch_ns = observed_ns - len(raw) * 1_000_000_000 // 8000 - stream_ms * 1_000_000
+                    self.capture_audio("remote", pcm, at_ns=remote_epoch_ns + stream_ms * 1_000_000,
+                                       generation=local_generation, stream_timestamp_ms=stream_ms, observed_ns=observed_ns)
                     audio = upsampler.process(pcm)
                     if audio and not self.transitioning:
                         await self.adapter.send_audio(audio, {"sample_count": len(audio) // 2, "sample_rate": 24000})
@@ -681,9 +702,10 @@ class DelegateDemo:
                 if not self.active or self.done.is_set() or epoch != self.epoch or generation != self.generation:
                     raise ValueError("SPEECH_INTERRUPTED")
                 raw = encoded[offset:offset + 160]
+                sent_at_ns = time.monotonic_ns()
                 await socket.send_json({"event": "media", "streamSid": self.stream_sid,
                                         "media": {"payload": base64.b64encode(raw).decode()}})
-                self.outbound.extend(decode_mulaw(raw))
+                self.capture_audio("sent", decode_mulaw(raw), at_ns=sent_at_ns, generation=generation)
                 await asyncio.sleep(len(raw) / 8000)
             await socket.send_json({"event": "mark", "streamSid": self.stream_sid, "mark": {"name": mark_name}})
             await asyncio.wait_for(mark["event"].wait(), 8)
@@ -755,6 +777,12 @@ class DelegateDemo:
             with wave.open(str(self.root / f"{name}.wav"), "wb") as out:
                 out.setparams((1, 2, 8000, 0, "NONE", "not compressed"))
                 out.writeframes(bytes(audio))
+        timing = {"schema_version": 1, "clock": "local_monotonic_ns", "sample_rate": 8000,
+                  "remote_basis": "stream_timestamp_anchored_to_first_packet_receive",
+                  "sent_basis": "local_websocket_send_start", "chunks": self.audio_chunks}
+        timing_path = self.root / "audio-timing.json"
+        timing_path.write_text(json.dumps(timing, separators=(",", ":")))
+        self.record("audio.timing_saved", {"chunks": len(self.audio_chunks), "sha256": hashlib.sha256(timing_path.read_bytes()).hexdigest()})
         transcript = None
         if self.inbound:
             try:
@@ -769,6 +797,7 @@ class DelegateDemo:
         quote_supported = bool(self.finding and transcript and words(self.finding["source_quote"]) in words(transcript))
         summary = {"run_id": self.run_id, "call_sid": self.call_sid, "stop_reason": self.reason,
                    "scenario": self.scenario, "blocking_question": self.blocking_question,
+                   "audio_timing": "capture_clock",
                    "cleanup": cleanup, "remote_audio_seconds": len(self.inbound) / 16000,
                    "sent_audio_seconds": len(self.outbound) / 16000, "dtmf_requested": self.dtmf_sent,
                    "dtmf_value_refs_consumed": sorted(self.sent_values),
@@ -779,7 +808,7 @@ class DelegateDemo:
         self.record("run.finished", summary)
         (self.root / "summary.json").write_text(json.dumps(summary, indent=2))
         hashes = {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in self.root.iterdir()
-                  if p.name in {"events.jsonl", "summary.json", "remote.wav", "sent.wav", "remote-transcript.txt"}}
+                  if p.name in {"events.jsonl", "summary.json", "remote.wav", "sent.wav", "remote-transcript.txt", "audio-timing.json"}}
         (self.root / "manifest.json").write_text(json.dumps({"run_id": self.run_id, "sha256": hashes,
             "ledger_final_hash": self.ledger.events[-1].event_hash, "authentication": "unsigned_local"}, indent=2))
         await self.control.close()

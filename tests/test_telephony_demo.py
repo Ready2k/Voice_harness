@@ -331,6 +331,23 @@ class DemoTests(unittest.IsolatedAsyncioTestCase):
         (self.demo.root / "remote.wav").write_bytes(b"tampered")
         self.assertFalse(verify_output(self.demo.root))
 
+    async def test_common_clock_audio_index_is_bound_to_original_manifest(self):
+        self.control.request.return_value = {"status": "completed", "sid": "CAtest", "duration": "1"}
+        self.demo.capture_audio("remote", bytes(320), at_ns=1_000_000_000, generation=0, stream_timestamp_ms=5)
+        self.demo.capture_audio("remote", bytes(320), at_ns=1_020_000_000, generation=0, stream_timestamp_ms=25)
+        self.demo.capture_audio("sent", bytes(160), at_ns=2_000_000_000, generation=0)
+        # Use a synchronous ASR double, like the real backend called via to_thread.
+        self.demo.asr = Mock()
+        self.demo.asr.transcribe.return_value = SimpleNamespace(text="Demo audio", model="offline", backend="offline")
+        await self.demo.finish()
+        timing = json.loads((self.demo.root / "audio-timing.json").read_text())
+        self.assertEqual([r["source_frame"] for r in timing["chunks"]], [0, 160, 0])
+        self.assertEqual([r["at_ns"] for r in timing["chunks"]], [1_000_000_000, 1_020_000_000, 2_000_000_000])
+        self.assertTrue(verify_output(self.demo.root))
+        timing["chunks"][1]["at_ns"] += 1_000_000_000
+        (self.demo.root / "audio-timing.json").write_text(json.dumps(timing))
+        self.assertFalse(verify_output(self.demo.root))
+
     async def test_twilio_timeout_never_retries(self):
         count = 0
         def fail(request):

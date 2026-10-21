@@ -124,6 +124,13 @@ async def run(args):
                 tunnel_log.close()
     print("Evidence:", root.resolve(), flush=True)
     print("Local evidence verification:", verify_output(root), flush=True)
+    if summary and (summary["remote_audio_seconds"] or summary["sent_audio_seconds"]):
+        from voice_harness.call_review import render_review, verify_review
+        try:
+            render_review(root)
+            print("Combined playback:", root.resolve() / "index.html", "verified:", verify_review(root), flush=True)
+        except (ValueError, OSError, KeyError, TypeError) as exc:
+            print("Combined playback unavailable:", type(exc).__name__, "; original evidence retained.", flush=True)
     print(json.dumps(summary, indent=2), flush=True)
     return 0 if summary and summary["model_finding"] else 1
 

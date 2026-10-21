@@ -63,6 +63,20 @@ Each attempt gets a private directory under `.local/delegate-calls/` (git-ignore
 | `summary.json` | Model finding, evidence availability, cleanup and explicit limits |
 | `manifest.json` | Local artifact hashes and ledger tail binding; unsigned and not an external trust root |
 | `tunnel.log` | Temporary tunnel diagnostics; excluded from the evidence manifest because it may still be written during shutdown |
+| `audio-timing.json` | Per-chunk source frame offsets and a common monotonic transport clock; included in the original manifest for new calls |
+| `index.html` | Combined playback, original tracks and evidence views; works from disk |
+| `conversation.wav` / `conversation-stereo.wav` | One mixed playback, or service-left/delegate-right stereo on the same timeline |
+| `alignment.json` / `playback-manifest.json` | Derived sample placement, timing-quality label and source/output hash bindings |
+
+New calls automatically create combined playback after source evidence finalisation. Remote frame positions use Twilio stream presentation timestamps anchored to the first packet's local receive clock; sent frames use local send times. This aligns transport capture, not unknown remote acoustic latency. Twilio describes its timestamp in the [Media Streams message contract](https://www.twilio.com/docs/voice/media-streams/websocket-messages).
+
+Older recordings without per-frame capture timing can be reconstructed from stream and speech events with an explicit **Estimated alignment** label. Their lost audio cannot be recovered. To render/re-render a review page:
+
+```bash
+PYTHONPATH=src .venv/bin/python scripts/render_call_review.py PATH_TO_EVIDENCE_DIRECTORY
+```
+
+For the first reconstruction, `--speech-cache .local/delegate-speech-cache` can recover utterance lengths from approved PCM hashes. The saved alignment allows subsequent rendering without the cache. Rendering preserves the source WAVs, ledger and original manifest and creates a separate derived manifest. The [shared recording package](../reports/recordings/lost-wallet-2026-10-21/README.md) includes this additional view.
 
 The runner verifies the local evidence binding at exit. To verify again:
 

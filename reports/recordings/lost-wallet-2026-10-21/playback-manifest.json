@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "authentication": "unsigned_derived_review",
+  "source_manifest_sha256": "1239540feb6af253e5315e586e6cf706708790887869f00e59d98d2b4b587249",
+  "source_sha256": {
+    "remote.wav": "f7eda821512077719925407266aed679183b7b783f28f810ef2c3176ee621ad3",
+    "sent.wav": "314f35506f456031d3f37bcdcefdfa4011f83b7d9cffdae2b347a19b6ec61a3e",
+    "events.jsonl": "e8dc6b283f000ef069555b8185f17b04a8ead1a881afed38dad198fc40d84013"
+  },
+  "alignment_mode": "estimated_legacy",
+  "mix": "mono_equal_half_gain; stereo_left_service_right_delegate",
+  "sha256": {
+    "alignment.json": "8946d844e0f39c4182fa21d6d77caef4f43b01022ee6205ad3baf026b65dbf86",
+    "conversation.wav": "15cf9af3c1e23c8662f2de6e66bc627f334ead68e48407538870b65059ddf983",
+    "conversation-stereo.wav": "c5cb763aa1410e30714dad37ef3e07b124dc613d8ad6ccbef93a2a3ba9c3da9e",
+    "index.html": "af2ca934fcffbe42e3d5df36e15aa2fd221251f09f396ffcec68ff6a58de2f79"
+  }
+}
