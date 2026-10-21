@@ -361,6 +361,11 @@ class DelegateDemo:
         # workers before reporting a failure so none can mutate a closed ledger.
         slots = asyncio.Semaphore(3)
         preflight = {"delegate_disclosure": self.phrases["delegate_disclosure"]} if self.dialogue else self.phrases
+        if self.dialogue and self.dialogue.brief.get("opening"):
+            opening = self.dialogue.brief["opening"]
+            key = "dynamic_" + hashlib.sha256(opening.encode()).hexdigest()[:20]
+            self.phrases[key] = opening
+            preflight[key] = opening
         results = await asyncio.gather(*(self.prepare_phrase(name, phrase, slots)
                                        for name, phrase in preflight.items()), return_exceptions=True)
         for result in results:
@@ -719,7 +724,12 @@ class DelegateDemo:
         self.record("dialogue.proposed", {**args, "generation": generation})
         await self.review_dialogue("speech", {"text": text, "item_refs": args["item_refs"]})
         phrase = "dynamic_" + hashlib.sha256(text.encode()).hexdigest()[:20]
-        await self.prepare_phrase(phrase, text, asyncio.Semaphore(1))
+        if phrase not in self.phrase_audio:
+            await self.prepare_phrase(phrase, text, asyncio.Semaphore(1))
+        else:
+            self.record("speech.preapproved_reused", {"phrase": phrase, "text": text,
+                        "audio_sha256": hashlib.sha256(self.phrase_audio[phrase]).hexdigest(),
+                        "basis": "same_run_exact_text_and_preflight_asr; fresh_context_review"})
         await asyncio.wait_for(self.stream_ready.wait(), 10)
         # A newly heard turn/interruption invalidates the earlier assessment's context.
         if (not self.active or self.done.is_set() or epoch != self.epoch or generation != self.generation

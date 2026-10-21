@@ -1,0 +1,67 @@
+{
+  "run_id": "delegate_51d116d207f34bc2aee20c98b319488f",
+  "call_sid": "CA960151377915196fef525d6a4a42669e",
+  "stop_reason": "MEDIA_DISCONNECTED",
+  "scenario": "lost-wallet",
+  "blocking_question": null,
+  "dialogue_mode": "adaptive_demo",
+  "dialogue_state": {
+    "brief": {
+      "mode": "demo",
+      "goal": "Explain the missing wallet, identify both banking cards accurately, and get guidance about what to do for each. Choose which card to discuss first when asked, then return to the other. Do not consent to any card or account changes.",
+      "situation": "I cannot find my wallet. I might have left it at work, but I really do not know whether it is there or truly lost. I am worried and unsure what I should do. The listed cards were in the wallet. I have no other personal, security or transaction details supplied for this demo.",
+      "tone": "worried",
+      "items": [
+        {
+          "id": "barclaycard_credit",
+          "label": "Barclaycard credit card",
+          "target": true
+        },
+        {
+          "id": "barclays_debit",
+          "label": "Barclays current-account debit card",
+          "target": true
+        },
+        {
+          "id": "tesco_clubcard",
+          "label": "Tesco Clubcard loyalty card",
+          "target": false
+        }
+      ]
+    },
+    "items_discussed": [
+      "barclaycard_credit",
+      "barclays_debit"
+    ],
+    "targets_still_to_introduce": [],
+    "recent_releases": [
+      {
+        "text": "I\u2019m calling because I can\u2019t find my wallet. I\u2019m worried it\u2019s lost, and it contains my Barclaycard credit card and Barclays debit card. I\u2019m looking for guidance on what to do, but I\u2019m not agreeing to any changes yet.",
+        "item_refs": [
+          "barclaycard_credit",
+          "barclays_debit"
+        ]
+      }
+    ],
+    "authority": "discussion_and_routine_order_only; no card/account changes"
+  },
+  "audio_timing": "capture_clock",
+  "cleanup": "confirmed",
+  "remote_audio_seconds": 82.24,
+  "sent_audio_seconds": 14.4,
+  "dtmf_requested": true,
+  "dtmf_value_refs_consumed": [
+    "subtest",
+    "test_route"
+  ],
+  "stream_generations_bound": [
+    0,
+    1,
+    2
+  ],
+  "model_finding": null,
+  "source_quote_supported_by_independent_asr": false,
+  "platform_outcome": "not_independently_verified_no_oracle",
+  "ledger_valid": true,
+  "manifest_authentication": "unsigned_local"
+}

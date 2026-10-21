@@ -1,0 +1,72 @@
+{
+  "run_id": "delegate_91264ecca7054c49ac219c430aa80e91",
+  "call_sid": "CA4349a781175c3f1f8c336c2287588550",
+  "stop_reason": "MEDIA_DISCONNECTED",
+  "scenario": "lost-wallet",
+  "blocking_question": null,
+  "dialogue_mode": "adaptive_demo",
+  "dialogue_state": {
+    "brief": {
+      "mode": "demo",
+      "goal": "Explain the missing wallet, identify both banking cards accurately, and get guidance about what to do for each. Choose which card to discuss first when asked, then return to the other. Do not consent to any card or account changes.",
+      "situation": "I cannot find my wallet. I might have left it at work, but I really do not know whether it is there or truly lost. I am worried and unsure what I should do. The listed cards were in the wallet. I have no other personal, security or transaction details supplied for this demo.",
+      "tone": "worried",
+      "opening": "I can't find my wallet, and I'm really worried.",
+      "items": [
+        {
+          "id": "barclaycard_credit",
+          "label": "Barclaycard credit card",
+          "target": true
+        },
+        {
+          "id": "barclays_debit",
+          "label": "Barclays current-account debit card",
+          "target": true
+        },
+        {
+          "id": "tesco_clubcard",
+          "label": "Tesco Clubcard loyalty card",
+          "target": false
+        }
+      ]
+    },
+    "items_discussed": [
+      "barclays_debit"
+    ],
+    "targets_still_to_introduce": [
+      "barclaycard_credit"
+    ],
+    "recent_releases": [
+      {
+        "text": "I can't find my wallet, and I'm really worried.",
+        "item_refs": []
+      },
+      {
+        "text": "Yes. There\u2019s a Barclays current-account debit card in there, and I\u2019m not sure where the wallet is.",
+        "item_refs": [
+          "barclays_debit"
+        ]
+      }
+    ],
+    "authority": "discussion_and_routine_order_only; no card/account changes"
+  },
+  "audio_timing": "capture_clock",
+  "cleanup": "confirmed",
+  "remote_audio_seconds": 77.82,
+  "sent_audio_seconds": 9.9,
+  "dtmf_requested": true,
+  "dtmf_value_refs_consumed": [
+    "subtest",
+    "test_route"
+  ],
+  "stream_generations_bound": [
+    0,
+    1,
+    2
+  ],
+  "model_finding": null,
+  "source_quote_supported_by_independent_asr": false,
+  "platform_outcome": "not_independently_verified_no_oracle",
+  "ledger_valid": true,
+  "manifest_authentication": "unsigned_local"
+}

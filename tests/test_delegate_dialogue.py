@@ -99,6 +99,19 @@ class DialogueTests(unittest.IsolatedAsyncioTestCase):
         self.adapter.send_text.assert_awaited_once()
         self.assertIn("barclays_debit", self.adapter.send_text.await_args.args[0])
 
+    async def test_prepared_opening_reuses_same_run_assessed_pcm_with_fresh_review(self):
+        await self.demo.prepare()
+        await asyncio.gather(*self.demo.tasks)
+        self.synth.reset_mock()
+        self.asr.transcribe.reset_mock()
+        self.reviewer.review.reset_mock()
+        result = await self.reply("In a few words, why are you calling?", BRIEF["opening"])
+        self.assertTrue(result["transport_acknowledged"])
+        self.synth.assert_not_called()
+        self.asr.transcribe.assert_not_called()
+        self.reviewer.review.assert_awaited_once()
+        self.assertIn("speech.preapproved_reused", [e.type for e in self.demo.ledger.events])
+
     async def test_reviewer_denial_prevents_synthesis_and_audio(self):
         for verdict, text in [("unsupported_fact", "My postcode is London."),
                               ("protected_action", "Go ahead and cancel both cards."),
