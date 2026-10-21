@@ -19,3 +19,7 @@
 .probe-dialog .mono{font-family:ui-monospace,monospace;overflow-wrap:anywhere}
 .probe-dialog pre{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font-size:.72rem}
 .raw-toggle{display:block;margin:6px 0}
+.reverify-btn{margin-top:6px;display:block;font:inherit;font-size:.85rem;font-weight:600;min-height:32px;padding:4px 12px;border-radius:6px;border:1px solid var(--info);background:transparent;color:var(--info);cursor:pointer}
+.reverify-cost{margin:6px 0;font-weight:600;color:var(--warn)}
+.reverify-cmd{display:flex;flex-direction:column;gap:4px;margin:8px 0}
+.reverify-cmd code{display:block;white-space:pre-wrap;overflow-wrap:anywhere;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--fg);font-size:.8rem}

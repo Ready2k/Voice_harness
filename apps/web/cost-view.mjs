@@ -1,6 +1,6 @@
 import {viewChanged} from './ux-insights.mjs';
-import {el} from './runs.mjs?v=ux-final-20261023';
-import {words} from './workflow.mjs?v=ux-final-20261023';
+import {el} from './runs.mjs?v=ux-final-20261025';
+import {words} from './workflow.mjs?v=ux-final-20261025';
 export function renderCost(root,cost){
  if(!viewChanged(root,cost))return;
  const wasOpen=root.querySelector('details')?.open??false;

@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { readFileSync } from "node:fs";
 import {
-  confirmations, decisions, durationLabel, filterRows, relativeTime, runResult, shortId, sortRows, summaryCounts, assuranceView, groupedOptions, launchBody, launchOptions, providerChoices, mergeEvents, metricRows, runRows, runView, toolCalls, transcript, unitStates,
+  confirmations, decisions, durationLabel, filterRows, relativeTime, runResult, shortId, sortRows, summaryCounts, assuranceView, groupedOptions, launchBody, launchOptions, providerChoices, mergeEvents, metricRows, runBadges, runRows, runView, toolCalls, transcript, unitStates,
 } from "../../apps/web/runs.mjs";
 import { describeHold, view as reviewView } from "../../apps/web/review.mjs";
 
@@ -242,4 +242,37 @@ test("filters, card filters and attention sort work on result, provider and sear
   assert.deepEqual(sortRows(rows, "attention").map((r) => r.runId), ["run_b", "run_c", "run_d", "run_a"]);
   assert.deepEqual(sortRows(rows).map((r) => r.runId), rows.map((r) => r.runId));
   assert.deepEqual(summaryCounts(rows), { shown: 4, active: 1, failed: 1, review: 1, pass: 1, assessed: 2 });
+});
+
+test("run badges: bake-off, findings and hold are links; absent fields mean no badges", () => {
+  assert.deepEqual(runBadges({ run_id: "run_a" }), []);
+  assert.deepEqual(runBadges({ run_id: "run_a", bakeoff_id: null, finding_count: 0, active_hold_count: 0 }), []);
+  const all = runBadges({ run_id: "run_a b", bakeoff_id: "bko_1", finding_count: 3, active_hold_count: 2 });
+  assert.deepEqual(all.map((b) => [b.kind, b.label, b.href]), [
+    ["bakeoff", "Bake-off", "./bakeoff.html?bakeoff=bko_1"],
+    ["findings", "3 findings", "./review.html"],
+    ["hold", "Hold", "./review.html?run=run_a%20b"],
+  ]);
+  assert.ok(all.every((b) => b.aria.length > 10));
+  assert.equal(runBadges({ run_id: "r", finding_count: 1 })[0].label, "1 finding");
+  assert.deepEqual(runRows({ items: [{ run_id: "r", state: "completed", bakeoff_id: "b" }] })[0].badges.map((b) => b.kind), ["bakeoff"]);
+});
+
+test("drawer badges: the same badge list renders as stop-propagation links for the opened run", async () => {
+  const { badgeList } = await import("../../apps/web/live-view.mjs");
+  globalThis.document = { createElement: (tag) => { const attrs = {}, handlers = {};
+    return { tag, className: "", children: [], textContent: "", attrs, handlers, append(...n) { this.children.push(...n); },
+      setAttribute(k, v) { attrs[k] = v; }, addEventListener(t, f) { handlers[t] = f; } }; } };
+  try {
+    const row = runRows({ items: [{ run_id: "run_x", state: "completed", bakeoff_id: "bko_1", finding_count: 2, active_hold_count: 1 }] })[0];
+    const box = badgeList(row.badges, row.runId);
+    assert.equal(box.className, "run-badges");
+    assert.deepEqual(box.children.map((a) => [a.tag, a.className, a.textContent, a.href]), [
+      ["a", "run-badge badge-bakeoff", "Bake-off", "./bakeoff.html?bakeoff=bko_1"],
+      ["a", "run-badge badge-findings", "2 findings", "./review.html"],
+      ["a", "run-badge badge-hold", "Hold", "./review.html?run=run_x"]]);
+    assert.ok(box.children.every((a) => a.attrs["aria-label"].endsWith("(run_x)")));
+    let stopped = 0; box.children[0].handlers.click({ stopPropagation() { stopped++; } });
+    assert.equal(stopped, 1);
+  } finally { delete globalThis.document; }
 });

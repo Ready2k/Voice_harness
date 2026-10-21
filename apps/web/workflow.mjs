@@ -1,5 +1,5 @@
-import {api,el,TERMINAL} from './runs.mjs?v=ux-final-20261023';
-import {friendlyError} from './onboarding.mjs?v=ux-final-20261023';
+import {api,el,TERMINAL} from './runs.mjs?v=ux-final-20261025';
+import {friendlyError} from './onboarding.mjs?v=ux-final-20261025';
 
 export const words = value => {const text=String(value??'Unknown').replaceAll('_',' ');return /^[A-Z0-9 ]+$/.test(text)?text.charAt(0)+text.slice(1).toLowerCase():text;};
 export function field(label,{value='',type='text',required=true,options=null}={}){

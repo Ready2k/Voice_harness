@@ -1,10 +1,10 @@
-import {setConnected} from './chrome.mjs?v=ux-final-20261023';
-import {api,el} from './runs.mjs?v=ux-final-20261023';
-import {post,formAction,action} from './workflow.mjs?v=ux-final-20261023';
-import {friendlyError} from './onboarding.mjs?v=ux-final-20261023';
-import {relativeTime,runLink} from './format.mjs?v=ux-final-20261023';
-import {providerEl} from './providers.mjs?v=ux-final-20261023';
-import {audioLabel,bakeoffIndex,buildGroups,filterOptions,latestResults,matches,matrix,summaryModel,tally,toolLabel} from './scenarios-view.mjs?v=ux-final-20261023';
+import {setConnected} from './chrome.mjs?v=ux-final-20261025';
+import {api,el} from './runs.mjs?v=ux-final-20261025';
+import {post,formAction,action} from './workflow.mjs?v=ux-final-20261025';
+import {friendlyError} from './onboarding.mjs?v=ux-final-20261025';
+import {relativeTime,runLink} from './format.mjs?v=ux-final-20261025';
+import {providerEl} from './providers.mjs?v=ux-final-20261025';
+import {audioLabel,bakeoffIndex,buildGroups,filterOptions,latestResults,matches,matrix,summaryModel,tally,toolLabel} from './scenarios-view.mjs?v=ux-final-20261025';
 const $=id=>document.getElementById(id);
 let token='',items=[],cursor=null,results=new Map(),bakeoffs=new Map();
 const selected=new Map(),expanded=new Set(),tabs=new Map(),collapsed=new Set();

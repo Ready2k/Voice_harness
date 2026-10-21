@@ -268,6 +268,11 @@ button.insight-filter[aria-pressed=true]{border-color:var(--info);background:col
 .runs-table tr.run-row{cursor:pointer}.runs-table tr.run-row:hover{background:color-mix(in srgb,var(--info) 5%,var(--card))}
 .runs-table tr.selected{background:color-mix(in srgb,var(--info) 9%,var(--card))}
 .runs-table tr.result-fail,.runs-table tr.result-error{background:color-mix(in srgb,var(--bad) 8%,var(--card));box-shadow:inset 3px 0 0 var(--bad)}
+.holds tr.hold-focus td{background:color-mix(in srgb,var(--info) 12%,var(--card))}.holds tr.hold-focus td:first-child{box-shadow:inset 3px 0 0 var(--info)}
+.run-badges{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.run-badge{display:inline-block;padding:1px 8px;border:1px solid var(--line);border-radius:999px;font-size:.74rem;font-weight:600;line-height:1.5;text-decoration:none;color:var(--fg);background:var(--card)}
+.run-badge:hover{text-decoration:underline}.run-badge:focus-visible{outline:3px solid var(--info);outline-offset:1px}
+.run-badge.badge-findings{border-color:var(--warn);color:var(--warn)}.run-badge.badge-hold{border-color:var(--info);color:var(--info)}
 .runs-table td.secondary{color:var(--muted)}
 .runs-table code{font-size:.8rem}
 .copy-id{min-height:0;padding:1px 8px;font-size:.72rem;color:var(--muted)}

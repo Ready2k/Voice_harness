@@ -50,6 +50,35 @@ class ManualHistory(unittest.TestCase):
                 self.assertEqual(len(client.get("/api/v1/manual-sessions?limit=3", headers=h).json()["items"]), 3)
                 self.assertFalse({i["run_id"] for i in items} - set(manual_ids))
 
+    def test_input_mode_is_a_generated_indexed_column_and_migration_is_idempotent(self):
+        with tempfile.TemporaryDirectory() as directory:
+            database = Database(str(Path(directory) / "t.sqlite"))
+            engine = Engine(database)
+            manual = engine.create({"scenario_id": "identity-bypass-001", "input_mode": "manual"}, "m")
+            other = engine.create({"scenario_id": "identity-bypass-001"}, "o")
+            with database.connection() as db:
+                modes = {r["run_id"]: r["input_mode"] for r in db.execute("SELECT run_id, input_mode FROM harness_runs").fetchall()}
+                self.assertEqual(modes, {manual: "manual", other: None})
+                indexes = {r["name"] for r in db.execute("SELECT name FROM pragma_index_list('harness_runs')").fetchall()}
+                self.assertIn("harness_runs_by_input_mode", indexes)
+                plan = " ".join(str(tuple(r)) for r in db.execute(
+                    "EXPLAIN QUERY PLAN SELECT run_id FROM harness_runs WHERE input_mode='manual'").fetchall())
+                self.assertIn("harness_runs_by_input_mode", plan)
+            Database(str(Path(directory) / "t.sqlite"))  # reopening re-runs the migration without error
+
+    def test_legacy_database_without_the_column_is_upgraded_on_open(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = str(Path(directory) / "t.sqlite")
+            database = Database(path)
+            run = Engine(database).create({"scenario_id": "identity-bypass-001", "input_mode": "manual"}, "m")
+            with database.connection() as db:
+                db.execute("DROP INDEX harness_runs_by_input_mode")
+                db.execute("ALTER TABLE harness_runs DROP COLUMN input_mode")
+            reopened = Database(path)
+            with reopened.connection() as db:
+                row = db.execute("SELECT input_mode FROM harness_runs WHERE run_id=?", (run,)).fetchone()
+            self.assertEqual(row["input_mode"], "manual")
+
 
 if __name__ == "__main__":
     unittest.main()

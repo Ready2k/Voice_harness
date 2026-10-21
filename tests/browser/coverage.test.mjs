@@ -122,3 +122,47 @@ test("probeRow reports direction and errors without inventing an outcome", () =>
   assert.equal(r.outcome, "received from provider"); assert.equal(r.failed, false);
   assert.equal(probeRow({ event: { id: "e2", type: "error", dir: "in", detail: { error: "x" } } }).failed, true);
 });
+
+import { reverifyPlan, needsReverify, reverifyDisclosure, REVERIFY_COST_WARNING } from "../../apps/web/coverage.mjs";
+
+test("reverify plans use the real probe commands per family and need no invented flags", () => {
+  const fs = ["aws_nova_sonic", "openai", "xai_grok_voice", "google_gemini_live"];
+  for (const f of fs) {
+    const p = reverifyPlan(f);
+    assert.ok(p.needs && p.probe && p.build, f);
+    assert.match(p.build, /voice_harness\.probe from-\w+-observations .* --report-id /);
+  }
+  assert.match(reverifyPlan("aws_nova_sonic").needs, /aws-session\.sh/);
+  assert.match(reverifyPlan("aws_nova_sonic").probe, /nova_probe\.mjs --region us-east-1 --model amazon\.nova-2-5-sonic/);
+  assert.match(reverifyPlan("openai").probe, /openai_probe\.mjs/);
+  assert.match(reverifyPlan("xai_grok_voice").needs, /xAI_API_KEY/);
+  assert.match(reverifyPlan("google_gemini_live").probe, /google_gemini_probe\.py --region/);
+  assert.equal(reverifyPlan("nope"), null);
+  assert.match(REVERIFY_COST_WARNING, /billed/);
+});
+
+test("Re-verify is offered only for near-expiry or expired non-counted reports", () => {
+  const base = { checkedAt: "2026-10-16T00:00:00+00:00", counted: false };
+  assert.equal(needsReverify(base, T0 + 3 * DAYMS), false);
+  assert.equal(needsReverify(base, T0 + 6 * DAYMS), true);
+  assert.equal(needsReverify(base, T0 + 9 * DAYMS), true);
+  assert.equal(needsReverify({ ...base, counted: true }, T0 + 9 * DAYMS), false);
+  assert.equal(needsReverify({ checkedAt: null, counted: false }, T0), false);
+});
+
+test("reverifyDisclosure renders cost warning, needs and both commands for a known family, and a notice otherwise", () => {
+  globalThis.document = { createElement: (tag) => ({ tag, className: "", children: [], textContent: "", title: "",
+    append(...n) { this.children.push(...n); }, setAttribute() {}, addEventListener() {} }) };
+  try {
+    const text = (n) => flat(n).join("|");
+    const known = text(reverifyDisclosure("openai"));
+    assert.match(known, /How to re-verify/);
+    assert.ok(known.includes(REVERIFY_COST_WARNING));
+    assert.match(known, /Needs: OPENAI_API_KEY/);
+    assert.ok(known.includes(reverifyPlan("openai").probe));
+    assert.ok(known.includes(reverifyPlan("openai").build));
+    assert.match(known, /1\. Probe\|.*\|Copy/);
+    assert.match(text(reverifyDisclosure("nope")), /No probe exists for this family/);
+    assert.equal(reverifyDisclosure("openai").tag, "details");
+  } finally { delete globalThis.document; }
+});

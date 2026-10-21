@@ -1,7 +1,7 @@
-import {setConnected} from "./chrome.mjs?v=ux-final-20261023";
-import { renderReviewQueue, renderHoldManagement } from "./review-workflow.mjs?v=ux-final-20261023";
-import { api } from "./runs.mjs?v=ux-final-20261023";
-import { friendlyError, renderGetStarted } from "./onboarding.mjs?v=ux-final-20261023";
+import {setConnected} from "./chrome.mjs?v=ux-final-20261025";
+import { renderReviewQueue, renderHoldManagement } from "./review-workflow.mjs?v=ux-final-20261025";
+import { api } from "./runs.mjs?v=ux-final-20261025";
+import { friendlyError, renderGetStarted } from "./onboarding.mjs?v=ux-final-20261025";
 
 const error = document.getElementById("error");
 

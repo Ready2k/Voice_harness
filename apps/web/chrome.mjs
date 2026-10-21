@@ -1,6 +1,6 @@
-import {el} from './runs.mjs?v=ux-final-20261023';
-import {PAGES,pageMeta} from './nav.mjs?v=ux-final-20261023';
-import {renderGetStarted} from './onboarding.mjs?v=ux-final-20261023';
+import {el} from './runs.mjs?v=ux-final-20261025';
+import {PAGES,pageMeta} from './nav.mjs?v=ux-final-20261025';
+import {renderGetStarted} from './onboarding.mjs?v=ux-final-20261025';
 const THEMES=['auto','light','dark'];
 export function applyTheme(choice){const root=document.documentElement;if(choice==='light'||choice==='dark')root.dataset.theme=choice;else delete root.dataset.theme;}
 export function savedTheme(){try{const t=localStorage.getItem('harness-theme');return THEMES.includes(t)?t:'auto';}catch{return 'auto';}}

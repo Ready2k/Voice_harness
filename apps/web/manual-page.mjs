@@ -1,15 +1,15 @@
-import {setConnected} from './chrome.mjs?v=ux-final-20261023';
-import {api, el, mergeEvents} from './runs.mjs?v=ux-final-20261023';
-import {words} from './workflow.mjs?v=ux-final-20261023';
-import {friendlyError} from './onboarding.mjs?v=ux-final-20261023';
+import {setConnected} from './chrome.mjs?v=ux-final-20261025';
+import {api, el, mergeEvents} from './runs.mjs?v=ux-final-20261025';
+import {words} from './workflow.mjs?v=ux-final-20261025';
+import {friendlyError} from './onboarding.mjs?v=ux-final-20261025';
 import {EnergyVad, Framer, HARNESS_RATE, Resampler, STATUS_LABEL, base64ToBytes, feedItem, floatToPcm16, formatClock,
-  liveChecks, pcm16ToFloat, promptProgress, reduceTranscript, rms, sessionStatus, CHALLENGE_LABEL, challengeOptions, challengeSource, historyRow, streamedImpact} from './manual.mjs?v=ux-final-20261023';
+  liveChecks, pcm16ToFloat, promptProgress, reduceTranscript, rms, sessionStatus, CHALLENGE_LABEL, challengeOptions, challengeSource, historyRow, streamedImpact} from './manual.mjs?v=ux-final-20261025';
 
 const $ = id => document.getElementById(id);
 const radio = name => document.querySelector(`input[name="${name}"]:checked`)?.value;
-import {providerName} from './providers.mjs?v=ux-final-20261023';
-import {revealResult} from './nav.mjs?v=ux-final-20261023';
-import {relativeTime, shortId, scrollRegion} from './format.mjs?v=ux-final-20261023';
+import {providerName} from './providers.mjs?v=ux-final-20261025';
+import {revealResult} from './nav.mjs?v=ux-final-20261025';
+import {relativeTime, shortId, scrollRegion} from './format.mjs?v=ux-final-20261025';
 let token = '', catalogue = null, journeyId = null, challengeId = null, s = null;
 
 function button(text, fn, cls = '') { const b = el('button', cls, text); b.type = 'button'; b.addEventListener('click', fn); return b; }
@@ -87,7 +87,7 @@ function renderPreview() {
 // ---------------------------------------------------------------- audio
 async function openAudio(session) {
   session.playCtx = new AudioContext({sampleRate: HARNESS_RATE, latencyHint: 'interactive'});
-  await session.playCtx.audioWorklet.addModule(new URL('./manual-worklets.js?v=ux-final-20261023', import.meta.url));
+  await session.playCtx.audioWorklet.addModule(new URL('./manual-worklets.js?v=ux-final-20261025', import.meta.url));
   session.playNode = new AudioWorkletNode(session.playCtx, 'manual-playback', {numberOfInputs: 0, numberOfOutputs: 1, outputChannelCount: [1]});
   session.playNode.connect(session.playCtx.destination);
   session.playNode.port.onmessage = ({data}) => {
@@ -104,7 +104,7 @@ async function openMic(session) {
   if (session.capCtx) return;
   const stream = await navigator.mediaDevices.getUserMedia({audio: {channelCount: 1, echoCancellation: true, noiseSuppression: true, autoGainControl: true}});
   const ctx = new AudioContext({latencyHint: 'interactive'});
-  await ctx.audioWorklet.addModule(new URL('./manual-worklets.js?v=ux-final-20261023', import.meta.url));
+  await ctx.audioWorklet.addModule(new URL('./manual-worklets.js?v=ux-final-20261025', import.meta.url));
   const source = ctx.createMediaStreamSource(stream);
   const node = new AudioWorkletNode(ctx, 'manual-capture', {numberOfInputs: 1, numberOfOutputs: 1, outputChannelCount: [1]});
   const sink = ctx.createGain(); sink.gain.value = 0; // keeps the capture node pulled without monitoring the mic

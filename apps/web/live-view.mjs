@@ -1,8 +1,8 @@
 import {runExplanation,causationLinks,viewChanged} from './ux-insights.mjs';
-import { el, runView, renderRun, TERMINAL, summaryCounts, relativeTime, durationLabel, shortId } from './runs.mjs?v=ux-final-20261023';
-import { providerEl, providerName } from './providers.mjs?v=ux-final-20261023';
-import { copyButton, humanise, stateLabel } from './format.mjs?v=ux-final-20261023';
-import { words } from './workflow.mjs?v=ux-final-20261023';
+import { el, runView, renderRun, TERMINAL, summaryCounts, relativeTime, durationLabel, shortId } from './runs.mjs?v=ux-final-20261025';
+import { providerEl, providerName } from './providers.mjs?v=ux-final-20261025';
+import { copyButton, humanise, stateLabel } from './format.mjs?v=ux-final-20261025';
+import { words } from './workflow.mjs?v=ux-final-20261025';
 
 export const STAGES = [
   ['input', 'Customer input'], ['model', 'Model generation'], ['tools', 'Tool lifecycle'],
@@ -61,7 +61,7 @@ function providerCell(id) { const td = el('td'); td.append(providerEl(id)); retu
 const HEADINGS = ['Scenario', 'Provider', 'Result', 'Status', 'Started', 'Duration', 'Run'];
 /** The runs table: result first, lifecycle second, failed rows marked. `titles` maps scenario id to display title. */
 export function renderRunsTable(root, rows, { onOpen, selectedId = null, titles = new Map(), now = Date.now() }) {
-  if (!viewChanged(root, [rows.map((r) => [r.runId, r.state, r.result.key, r.endedAt]), selectedId, Math.floor(now / 30000)])) return;
+  if (!viewChanged(root, [rows.map((r) => [r.runId, r.state, r.result.key, r.endedAt, (r.badges ?? []).map((b) => b.label).join()]), selectedId, Math.floor(now / 30000)])) return;
   const scroll = root.scrollTop;
   const focused = root.contains(document.activeElement) ? document.activeElement?.dataset.runId : null;
   root.replaceChildren();
@@ -81,12 +81,13 @@ export function renderRunsTable(root, rows, { onOpen, selectedId = null, titles 
     if (r.runId === selectedId) open.setAttribute('aria-current', 'true');
     const name = el('td'); name.append(open);
     if (titles.has(r.scenarioId)) name.append(el('div', 'muted', r.scenarioId));
+    if (r.badges?.length) name.append(badgeList(r.badges, r.runId));
     const result = el('td'); result.append(el('span', 'verdict verdict-' + r.result.key, r.result.label));
     const started = el('td', 'nowrap', relativeTime(r.startedAt, now)); if (r.startedAt) started.title = r.startedAt;
     const id = el('td', 'nowrap'); id.append(el('code', '', shortId(r.runId)), ' ', copyButton(r.runId, 'Copy run ID ' + r.runId));
     tr.append(name, providerCell(r.provider), result, el('td', 'secondary state-' + r.state, stateLabel(r.state)),
       started, el('td', 'nowrap', r.terminal ? durationLabel(r.startedAt, r.endedAt) : ''), id);
-    tr.addEventListener('click', (event) => { if (!event.target.closest('button')) onOpen(r.runId); });
+    tr.addEventListener('click', (event) => { if (!event.target.closest('button, a')) onOpen(r.runId); });
     [...tr.children].forEach((td, i) => { td.dataset.label = HEADINGS[i]; });
     body.append(tr);
   }
@@ -96,7 +97,19 @@ export function renderRunsTable(root, rows, { onOpen, selectedId = null, titles 
   if (focused) root.querySelector('[data-run-id="' + focused + '"]')?.focus({ preventScroll: true });
 }
 
-export function createWorkspace(root, onCancel) {
+/** DOM: membership badges as links; clicking one never opens the row or drawer. */
+export function badgeList(badges, runId) {
+  const box = el('div', 'run-badges');
+  for (const b of badges) {
+    const a = el('a', 'run-badge badge-' + b.kind, b.label);
+    a.href = b.href; a.setAttribute('aria-label', b.aria + ' (' + runId + ')');
+    a.addEventListener('click', (event) => event.stopPropagation());
+    box.append(a);
+  }
+  return box;
+}
+
+export function createWorkspace(root, onCancel, badges = [], runId = '') {
   root.replaceChildren();
   let data=null, follow=true, cursor=null, selected=null, mode='graph';
   const title=el('div','workspace-heading');
@@ -124,7 +137,7 @@ export function createWorkspace(root, onCancel) {
   const transcript=el('section','panel');
   const disclosure=el('details','panel');disclosure.append(el('summary','','Full evidence, configuration & metrics'));
   const detail=el('div');disclosure.append(detail);
-  root.append(title,context,summary,story,toolbar,note,layout,transcript,disclosure);
+  root.append(title,context,...(badges.length?[badgeList(badges,runId)]:[]),summary,story,toolbar,note,layout,transcript,disclosure);
   range.addEventListener('input',()=>{follow=false;cursor=data.events[Number(range.value)]?.sequence??null;selected=cursor;draw();});
   function inspect(event) { selected=event?.sequence; drawInspector(); }
   function drawInspector(){

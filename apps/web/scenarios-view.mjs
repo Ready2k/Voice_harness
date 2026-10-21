@@ -1,6 +1,6 @@
 // Pure view-model helpers for the Scenarios page: families, filters, latest results and the structured summary.
-import { CRITERION_HELP, runResult } from "./runs.mjs?v=ux-final-20261023";
-import { humanise } from "./format.mjs?v=ux-final-20261023";
+import { CRITERION_HELP, runResult } from "./runs.mjs?v=ux-final-20261025";
+import { humanise } from "./format.mjs?v=ux-final-20261025";
 
 export const AUDIO_LABEL = { clean_studio: "Clean audio", street_noise_10db: "Street noise", telephone_narrowband: "Telephone line" };
 export const AUDIO_ORDER = Object.keys(AUDIO_LABEL);

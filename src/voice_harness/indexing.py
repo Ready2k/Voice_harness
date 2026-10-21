@@ -45,6 +45,7 @@ RUN_COLUMNS = (
         "BIGINT",
     ),
     ("experiment_key", "$.config.experiment_key", "payload->'config'->>'experiment_key'", "TEXT"),
+    ("input_mode", "$.config.input_mode", "payload->'config'->>'input_mode'", "TEXT"),
 )
 
 INDEXES = (
@@ -58,6 +59,8 @@ INDEXES = (
     # A benchmark experiment (scenario/seed/policy/provider/repetition) may be
     # recorded once; ordinary runs carry no experiment key and are unconstrained.
     "CREATE UNIQUE INDEX IF NOT EXISTS harness_runs_unique_experiment ON harness_runs(experiment_key) WHERE experiment_key IS NOT NULL",
+    # Manual-session listing filters on this; columns are added idempotently by _add above.
+    "CREATE INDEX IF NOT EXISTS harness_runs_by_input_mode ON harness_runs(input_mode)",
     "CREATE INDEX IF NOT EXISTS harness_turns_by_run_session ON harness_turns(run_id, session_id)",
     "CREATE INDEX IF NOT EXISTS harness_tool_calls_by_state ON harness_tool_calls(run_id, state)",
 )

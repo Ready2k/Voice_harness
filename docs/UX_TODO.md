@@ -22,7 +22,7 @@ Status as of the final validation round: each page checked in a real browser, li
 - [x] Short IDs + copy, relative times, humanised labels, raw JSON behind a toggle (`format.mjs`)
 - [x] `revealResult` after click-through results (Bake-off, Manual, Compare, Review)
 - [x] Run IDs link to `./runs.html?run=`
-- [ ] Bake-off / finding / hold membership badges on runs: needs a backend field on the runs list (not exposed today)
+- [x] Bake-off / findings / hold badges on runs and in the drawer (`GET /api/v1/runs` returns `bakeoff_id`, `finding_count`, `active_hold_count`); the Findings badge opens the whole review queue (no per-run findings filter on Review yet)
 
 ### 2. Bake-off: done
 Collapsing left column, sticky section index, unclipped tables and short names, confidence note + caveats up, failures first + "only rows that differ", weights as % with live re-rank and Custom banner, distinct chart colours, sensible axes and "≥ cap" marks, launch confirmation with run count and estimate, rank-ordered matrix cards, "Eliminated at gates" badge, merged scenario groups, export note.
@@ -40,10 +40,12 @@ Defaults to a task with 2+ runs and shows counts, run picker table with quick pi
 Group by family with collapsible headers and locale x audio matrix, filters (group, locale, audio, criterion), latest result per provider with run / bake-off links, structured Summary with Raw tab, readable tool labels, Import in header. The fraud-team "no expected tools" is by design (the scenario fails if an account tool is called).
 
 ### 7. Provider coverage: done
-One merged table, expiry from the server's `expires_at` (falls back to checked time + 7 days; never contradicts server status), summary tiles, probe-event dialog (`GET /api/v1/providers/{family}/probe-events`). No free re-verify flow exists: the page shows how to re-verify (the probe makes paid provider calls).
+One merged table, expiry from the server's `expires_at` (falls back to checked time + 7 days; never contradicts server status), summary tiles, probe-event dialog (`GET /api/v1/providers/{family}/probe-events`). No free re-verify flow exists: near-expiry and expired rows show a Re-verify button with the exact probe commands, Copy buttons and a billed-calls warning.
 
 ## Known limits / possible follow-ups
-- [ ] Runs DOM-flow browser test (needs a DOM test dependency; current tests cover pure logic and fake DOMs)
-- [ ] Index on `config.input_mode` if the runs table grows large (manual-sessions filter is unindexed JSON extraction)
-- [ ] Exported `report.html` follows the OS colour scheme only (it is self-contained and cannot read the page theme)
+- [ ] Runs DOM-flow browser test: needs a DOM test dependency (the project has no package.json); current tests cover pure logic and fake DOMs
+- [ ] Per-run findings filter on the Review page (the Findings badge currently opens the whole queue)
 - [ ] Bake-off launch confirmation verified by layout and unit tests only (no live provider available in the test environment)
+- [ ] One-click re-verify would need to call paid providers; deliberately not built
+
+Done since the last review: `input_mode` generated column + index (SQLite and PostgreSQL, migration idempotent), themed exported `report.html` (Auto/Light/Dark, self-contained).

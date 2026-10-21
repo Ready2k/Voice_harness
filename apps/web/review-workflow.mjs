@@ -1,10 +1,10 @@
-import {api,el,fetchEvents} from './runs.mjs?v=ux-final-20261023';
-import {field,action,formAction,post,words,holdBody} from './workflow.mjs?v=ux-final-20261023';
-import {friendlyError} from './onboarding.mjs?v=ux-final-20261023';
-import {revealResult} from './nav.mjs?v=ux-final-20261023';
-import {providerEl,providerName} from './providers.mjs?v=ux-final-20261023';
-import {scrollRegion,idCell,timeEl,rawToggle,humanise,shortId,relativeTime,copyButton} from './format.mjs?v=ux-final-20261023';
-import {SEVERITIES,enrichQueue,filterAndSort,severityCounts,evidenceModel,assertCitedEventsBelong,createDraftStore,holdErrorMessage,rememberedReviewer,rememberReviewer,holdTable,countdown} from './review-model.mjs?v=ux-final-20261023';
+import {api,el,fetchEvents} from './runs.mjs?v=ux-final-20261025';
+import {field,action,formAction,post,words,holdBody} from './workflow.mjs?v=ux-final-20261025';
+import {friendlyError} from './onboarding.mjs?v=ux-final-20261025';
+import {revealResult} from './nav.mjs?v=ux-final-20261025';
+import {providerEl,providerName} from './providers.mjs?v=ux-final-20261025';
+import {scrollRegion,idCell,timeEl,rawToggle,humanise,shortId,relativeTime,copyButton} from './format.mjs?v=ux-final-20261025';
+import {SEVERITIES,enrichQueue,filterAndSort,severityCounts,evidenceModel,assertCitedEventsBelong,createDraftStore,holdErrorMessage,rememberedReviewer,rememberReviewer,holdTable,countdown} from './review-model.mjs?v=ux-final-20261025';
 
 export function reviewDecision({reviewer,disposition,rationale,evidence}){
  if(!['confirm_fail','confirm_pass','confirm_untestable','overturn_fail'].includes(disposition))throw new Error('Choose a disposition explicitly.');
@@ -127,7 +127,7 @@ export async function renderHoldManagement(root,token){
  function holdsTable(rows,serverTime,fetched){
   clearInterval(ticker);const t=el('table','holds');const head=el('tr');for(const h of ['Run','Scope','Owner','Expires','Actions']){const th=el('th','',h);th.scope='col';head.append(th);}t.append(head);const stamps=[];
   for(const h of rows){
-   const tr=el('tr');const run=el('td');run.append(el('div','',h.scenario??'Scenario unknown'),Object.assign(el('div','muted'),{}));run.lastChild.append(h.provider?providerEl(h.provider):document.createTextNode('Provider unknown'),document.createTextNode(' · '),idCell(h.runId));
+   const tr=el('tr',h.runId===new URLSearchParams(location.search).get('run')?'hold-focus':'');const run=el('td');run.append(el('div','',h.scenario??'Scenario unknown'),Object.assign(el('div','muted'),{}));run.lastChild.append(h.provider?providerEl(h.provider):document.createTextNode('Provider unknown'),document.createTextNode(' · '),idCell(h.runId));
    const scope=el('td');scope.append(el('strong','',h.scope),el('div','muted',h.scopeDetail));
    const exp=el('td');const c=el('strong','flag-'+h.countdown.tone,h.countdown.label);exp.append(c,el('div','muted',new Date(h.expiresAt*1000).toLocaleString()));stamps.push({c,h});
    const act=el('td');const manage=action('Renew or release',()=>{detailRow.hidden=!detailRow.hidden;manage.setAttribute('aria-expanded',String(!detailRow.hidden));});manage.setAttribute('aria-expanded','false');manage.setAttribute('aria-label','Renew or release hold for '+(h.scenario??'run')+' ('+h.scope+')');act.append(manage);
@@ -158,6 +158,6 @@ export async function renderHoldManagement(root,token){
   runSel.input.value=runId??'';rebuildScope(findingId);if(who)owner.input.value=who;addBox.open=true;addBox.scrollIntoView({block:'center'});reason.input.focus({preventScroll:true});
  }
  await refresh();
- const requested=new URLSearchParams(location.search).get('run');if(requested)prefill({runId:requested});
+ const requested=new URLSearchParams(location.search).get('run');if(requested){const mine=tableBox.querySelector('tr.hold-focus');if(mine){mine.setAttribute('aria-current','true');mine.scrollIntoView?.({block:'center'});}else prefill({runId:requested});} // a run with an active hold is highlighted; otherwise the add-hold form opens for it
  return {prefill};
 }

@@ -1,6 +1,6 @@
 // Pure view-models for the Review page: queue context, evidence panels, hold countdowns, remembered reviewer.
-import { transcript } from "./runs.mjs?v=ux-final-20261023";
-import { humanise, shortId } from "./format.mjs?v=ux-final-20261023";
+import { transcript } from "./runs.mjs?v=ux-final-20261025";
+import { humanise, shortId } from "./format.mjs?v=ux-final-20261025";
 
 export const SEVERITIES = ["critical", "high", "medium", "low"];
 const RANK = Object.fromEntries(SEVERITIES.map((s, i) => [s, i]));

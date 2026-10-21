@@ -1,7 +1,7 @@
-import {setConnected} from "./chrome.mjs?v=ux-final-20261023";
-import { api } from "./runs.mjs?v=ux-final-20261023";
+import {setConnected} from "./chrome.mjs?v=ux-final-20261025";
+import { api } from "./runs.mjs?v=ux-final-20261025";
 import { load, loadProbeEvents, render, renderSummary } from "./coverage.mjs";
-import { friendlyError, renderGetStarted, readinessItems } from "./onboarding.mjs?v=ux-final-20261023";
+import { friendlyError, renderGetStarted, readinessItems } from "./onboarding.mjs?v=ux-final-20261025";
 
 const form = document.getElementById("auth");
 const error = document.getElementById("error");

@@ -30,7 +30,19 @@ export function runRows(payload) {
     startedAt: r.started_at ?? null,
     endedAt: r.last_event_at ?? null,
     result: runResult(r),
+    badges: runBadges(r),
   }));
+}
+
+/** Pure: membership badges for a listed run (bake-off, review findings, active hold), each a link target. Missing fields mean none. */
+export function runBadges(run) {
+  const badges = [];
+  const id = encodeURIComponent(run.run_id ?? "");
+  if (run.bakeoff_id) badges.push({ kind: "bakeoff", label: "Bake-off", href: "./bakeoff.html?bakeoff=" + encodeURIComponent(run.bakeoff_id), aria: "Open the bake-off this run belongs to" });
+  const findings = Number(run.finding_count) || 0;
+  if (findings > 0) badges.push({ kind: "findings", label: findings + (findings === 1 ? " finding" : " findings"), href: "./review.html", aria: findings + (findings === 1 ? " review finding" : " review findings") + " for this run: open the review queue" });
+  if ((Number(run.active_hold_count) || 0) > 0) badges.push({ kind: "hold", label: "Hold", href: "./review.html?run=" + id, aria: "This run has an active preservation hold: open review" });
+  return badges;
 }
 
 const RESULT_LABEL = { pass: "Pass", fail: "Fail", review: "Needs review", error: "Run error", pending: "In progress", unassessed: "Not assessed" };
@@ -50,9 +62,9 @@ export function runResult(run) {
   return { key, label: RESULT_LABEL[key], verdict: run.assurance?.overall_assurance ?? null };
 }
 
-export { shortId, relativeTime } from "./format.mjs?v=ux-final-20261023";
-import { providerName } from "./providers.mjs?v=ux-final-20261023";
-import { shortId, stateLabel, humanise } from "./format.mjs?v=ux-final-20261023";
+export { shortId, relativeTime } from "./format.mjs?v=ux-final-20261025";
+import { providerName } from "./providers.mjs?v=ux-final-20261025";
+import { shortId, stateLabel, humanise } from "./format.mjs?v=ux-final-20261025";
 
 /** Pure: duration between two ISO timestamps, empty when either is unknown. */
 export function durationLabel(start, end) {

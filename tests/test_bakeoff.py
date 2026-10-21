@@ -246,6 +246,10 @@ class Export(unittest.TestCase):
         self.assertEqual(parsed["observations"][0]["scenario"], "</script><script>alert(1)</script>")
         self.assertEqual(parsed["report"]["verdict"]["final"], True)
         self.assertNotRegex(html, r'<(script|link)[^>]+(src|href)="https?:')  # nothing loads from the network
+        self.assertNotRegex(html, r'(src|href)=|@import|url\(|https://')  # no external references of any kind
+        self.assertIn('id="theme-select"', html)  # Auto/Light/Dark control
+        for needle in (':root[data-theme=dark]', ':root[data-theme=light]', 'harness-theme'):
+            self.assertIn(needle, html)
 
 
 if __name__ == "__main__":

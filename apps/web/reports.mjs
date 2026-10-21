@@ -1,5 +1,5 @@
-import {api,el} from './runs.mjs?v=ux-final-20261023';
-import {action,words} from './workflow.mjs?v=ux-final-20261023';
+import {api,el} from './runs.mjs?v=ux-final-20261025';
+import {action,words} from './workflow.mjs?v=ux-final-20261025';
 export function mountReports(root,token){
  const details=el('details','panel');details.append(el('summary','','Saved statistical comparison reports'));
  const content=el('div');details.append(content);let loaded=false;

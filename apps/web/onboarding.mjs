@@ -1,4 +1,4 @@
-import { el } from "./runs.mjs?v=ux-final-20261023";
+import { el } from "./runs.mjs?v=ux-final-20261025";
 
 export const TOKEN_COMMAND = "make token";
 export const TOKEN_FALLBACK = "docker compose exec -T api cat /data/operator-token";

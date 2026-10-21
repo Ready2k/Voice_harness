@@ -1,6 +1,6 @@
 // Provider coverage panel (AC-20). Pure view-model + DOM rendering; no ranking, no scores.
-import { providerName } from "./providers.mjs?v=ux-final-20261023";
-import { reportIdEl, scrollRegion } from "./format.mjs?v=ux-final-20261023";
+import { providerName } from "./providers.mjs?v=ux-final-20261025";
+import { copyButton, reportIdEl, scrollRegion } from "./format.mjs?v=ux-final-20261025";
 export const STATE_LABEL = {
   implemented_and_verified: "Implemented and verified",
   implemented_but_unverified: "Implemented, not verified",
@@ -21,7 +21,53 @@ export const REPORT_LIFETIME_DAYS = 7;
 export const EXPIRY_WARN_DAYS = 2;
 const DAY = 86400000;
 
-export const REVERIFY_GUIDANCE = "No re-verify action is available here: refreshing a report runs the provider probe from scripts/probe on the server host, which makes paid provider calls. Re-run the probe, rebuild the capability report and its AC-09 result, then reload this page.";
+export const REVERIFY_GUIDANCE = "Re-verifying is run from a terminal on the server host, not from this page: it runs the provider probe (scripts/probe), then builds the capability report from its observations. Reload this page afterwards.";
+export const REVERIFY_COST_WARNING = "Cost: the probe makes billed provider API calls. Run it only when you intend to spend.";
+
+const BUILD = "PYTHONPATH=src .venv/bin/python -m voice_harness.probe ";
+/** Pure: the real probe invocation for a provider family (from scripts/probe headers and the Makefile), or null.
+ *  { needs: what must be set up first, probe: command, build: command (replace the <> placeholders) }. */
+export function reverifyPlan(family) {
+  const plans = {
+    aws_nova_sonic: { needs: "An unexpired AWS session: ./scripts/aws-session.sh <MFA_CODE> writes .local/aws-session.env.",
+      probe: "set -a; . .local/aws-session.env; set +a; node scripts/probe/nova_probe.mjs --region us-east-1 --model amazon.nova-2-5-sonic",
+      build: BUILD + "from-nova-observations artifacts/phase0/nova-observations-<timestamp>.json --report-id <report-id>" },
+    openai: { needs: "OPENAI_API_KEY in the repo-root .env file.",
+      probe: "cd scripts/probe && node --env-file=../../.env openai_probe.mjs --model gpt-realtime-2.1",
+      build: BUILD + "from-openai-observations artifacts/phase0/openai-observations-<timestamp>.json --report-id <report-id>" },
+    xai_grok_voice: { needs: "xAI_API_KEY set in the environment.",
+      probe: "PYTHONPATH=src .venv/bin/python scripts/probe/xai_probe.py --model grok-voice-3.0",
+      build: BUILD + "from-xai-observations artifacts/phase0/xai-observations-<timestamp>.json --report-id <report-id>" },
+    google_gemini_live: { needs: "Google Application Default Credentials (for example gcloud auth application-default login).",
+      probe: "PYTHONPATH=src .venv/bin/python scripts/probe/google_gemini_probe.py --region us-central1",
+      build: BUILD + "from-google-observations artifacts/phase0/google_gemini-observations-<timestamp>.json --report-id <report-id>" },
+  };
+  return plans[family] ?? null;
+}
+
+/** Pure: a row offers the Re-verify action when it has a report that is near expiry or expired (not the server-skew case). */
+export function needsReverify(item, now = Date.now()) {
+  const x = expiryOf(item.checkedAt, now, item.expiresAt);
+  return x.state === "soon" || (x.state === "expired" && !item.counted);
+}
+
+function commandBlock(label, command) {
+  const row = el("div", "reverify-cmd");
+  const code = el("code", "", command);
+  row.append(el("span", "muted", label), code, copyButton(command, "Copy " + label.toLowerCase() + " command"));
+  return row;
+}
+
+export function reverifyDisclosure(family) {
+  const det = el("details", "reverify");
+  det.append(el("summary", "", "How to re-verify"));
+  const plan = reverifyPlan(family);
+  det.append(el("p", "reverify-cost", REVERIFY_COST_WARNING), el("p", "muted", REVERIFY_GUIDANCE));
+  if (plan) {
+    det.append(el("p", "muted", "Needs: " + plan.needs), commandBlock("1. Probe", plan.probe), commandBlock("2. Build report", plan.build));
+  } else det.append(el("p", "muted", "No probe exists for this family."));
+  return det;
+}
 
 /** Pure: when a report expires and how close that is. `now` is injectable. state: none | ok | soon | expired.
  *  Prefers the server's expires_at; falls back to checked_at + 7 days (`source` says which). */
@@ -135,10 +181,13 @@ function expiryCell(c, now) {
   const span = el("span", "expiry expiry-" + x.state, (x.state === "soon" ? "⚠ " : "") + x.label.charAt(0).toUpperCase() + x.label.slice(1));
   span.title = "Report " + c.reportId + " checked " + c.checkedAt + "; expires " + x.at;
   td.append(span);
-  if (x.state === "soon" || x.state === "expired") {
-    const det = el("details", "reverify");
-    det.append(el("summary", "", "How to re-verify"), el("p", "muted", REVERIFY_GUIDANCE));
-    td.append(det);
+  if (needsReverify(c, now)) {
+    const det = reverifyDisclosure(c.family);
+    const btn = el("button", "reverify-btn", "Re-verify");
+    btn.type = "button";
+    btn.setAttribute("aria-label", "Re-verify " + c.title + ": show the probe commands");
+    btn.addEventListener("click", () => { det.open = !det.open; if (det.open) det.scrollIntoView?.({ block: "nearest" }); });
+    td.append(btn, det);
   }
   return td;
 }

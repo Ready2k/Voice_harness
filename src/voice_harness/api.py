@@ -45,6 +45,7 @@ from .evidence import Evidence
 from .exports import download_links
 from .inbound_queue import InboundQueue
 from .judges import service as judge_service
+from .judges import store as judge_store
 from .live_scenario import LIVE_LIMITS
 from .manual_session import MANUAL_LIMITS, Bridge
 from .manual_session import journeys as manual_journeys
@@ -543,6 +544,35 @@ def create_app(
             },
         }
 
+    def run_memberships(run_ids):
+        """Bake-off, review-finding and active-hold membership for one page of runs (three batched reads)."""
+        if not run_ids:
+            return {}
+        marks = ",".join("?" for _ in run_ids)
+        out = {r: {} for r in run_ids}
+        wanted = set(run_ids)
+        judge_store.ensure(database)  # the review queue table is created lazily
+        with database.connection() as db:
+            bakeoffs = db.execute("SELECT bakeoff_id, payload FROM harness_bakeoffs ORDER BY created_at, bakeoff_id").fetchall()
+            findings = db.execute(
+                f"SELECT run_id, COUNT(*) AS n FROM harness_review_queue WHERE run_id IN ({marks}) GROUP BY run_id", tuple(run_ids)
+            ).fetchall()
+            holds = db.execute(
+                f"SELECT run_id, COUNT(*) AS n FROM harness_preservation_holds WHERE released_at IS NULL AND run_id IN ({marks}) GROUP BY run_id",
+                tuple(run_ids),
+            ).fetchall()
+        for row in bakeoffs:  # newest bake-off wins when a run was imported into several
+            payload = database.decoded(row["payload"])
+            for cell in payload.get("cells", []):
+                for attempt in cell.get("attempts", []):
+                    if attempt.get("run_id") in wanted:
+                        out[attempt["run_id"]]["bakeoff_id"] = row["bakeoff_id"]
+        for row in findings:
+            out[row["run_id"]]["finding_count"] = row["n"]
+        for row in holds:
+            out[row["run_id"]]["active_hold_count"] = row["n"]
+        return out
+
     @app.get("/api/v1/runs", dependencies=[Depends(auth)])
     def list_runs(cursor: int = 0, limit: int = 50):
         """Operator list, newest first; identifiers come from indexed columns."""
@@ -564,6 +594,12 @@ def create_app(
             if item["state"] not in {"completed", "cancelled", "failed"}:
                 item["last_event_at"] = None
             items.append(item)
+        memberships = run_memberships([i["run_id"] for i in items])
+        for item in items:
+            item.update(memberships.get(item["run_id"], {}))
+            item.setdefault("bakeoff_id", None)
+            item.setdefault("finding_count", 0)
+            item.setdefault("active_hold_count", 0)
         return {
             "items": items,
             "next_cursor": cursor + limit if len(rows) > limit else None,
@@ -870,14 +906,10 @@ def create_app(
         if not 1 <= limit <= 50:
             raise HTTPException(422, "INVALID_PAGINATION")
         with database.connection() as db:
-            manual = (
-                "r.payload->'config'->>'input_mode'" if database.postgres
-                else "json_extract(r.payload, '$.config.input_mode')"
-            )
             rows = db.execute(
                 "SELECT r.run_id, r.state, r.provider_config_id, r.payload AS payload, e.occurred_at AS started_at "
                 "FROM harness_runs r LEFT JOIN harness_events e ON e.run_id=r.run_id AND e.sequence=1 "
-                f"WHERE {manual}='manual' ORDER BY e.occurred_at DESC NULLS LAST, r.run_id LIMIT ?",
+                "WHERE r.input_mode='manual' ORDER BY e.occurred_at DESC NULLS LAST, r.run_id LIMIT ?",
                 (limit,),
             ).fetchall()
         items = []

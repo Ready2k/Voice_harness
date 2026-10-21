@@ -1,11 +1,11 @@
-import {setConnected} from './chrome.mjs?v=ux-final-20261023';
-import {api, el} from './runs.mjs?v=ux-final-20261023';
-import {friendlyError} from './onboarding.mjs?v=ux-final-20261023';
-import {estimateCost, normaliseWeights, planSize, renderReport, scenarioGroups, usdEstimate, joinParts, weightPercents, weightsAreCustom, weightsTotal, words} from './bakeoff-report.mjs?v=ux-final-20261023';
+import {setConnected} from './chrome.mjs?v=ux-final-20261025';
+import {api, el} from './runs.mjs?v=ux-final-20261025';
+import {friendlyError} from './onboarding.mjs?v=ux-final-20261025';
+import {estimateCost, normaliseWeights, planSize, renderReport, scenarioGroups, usdEstimate, joinParts, weightPercents, weightsAreCustom, weightsTotal, words} from './bakeoff-report.mjs?v=ux-final-20261025';
 
 const $ = id => document.getElementById(id);
-import {providerName} from './providers.mjs?v=ux-final-20261023';
-import {revealResult} from './nav.mjs?v=ux-final-20261023';
+import {providerName} from './providers.mjs?v=ux-final-20261025';
+import {revealResult} from './nav.mjs?v=ux-final-20261025';
 let token = '', groups = [], current = null, view = null, poll = null, whatIf = null, baseData = null, stored = {}, costHistory = null, recomputeTimer = null, seq = 0;
 
 const post = (path, body) => api(token, path, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)});

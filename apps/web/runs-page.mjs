@@ -1,14 +1,14 @@
-import {setConnected} from "./chrome.mjs?v=ux-final-20261023";
+import {setConnected} from "./chrome.mjs?v=ux-final-20261025";
 import {callerRecordings} from "./caller-recordings.mjs";
-import { humanise } from "./format.mjs?v=ux-final-20261023";
-import { providerName } from "./providers.mjs?v=ux-final-20261023";
-import { renderCost } from "./cost-view.mjs?v=ux-final-20261023";
-import { runActions } from "./workflow.mjs?v=ux-final-20261023";
-import { createWorkspace, renderOverview, renderRunsTable } from "./live-view.mjs?v=ux-final-20261023";
-import { friendlyError, renderGetStarted, renderReadiness } from "./onboarding.mjs?v=ux-final-20261023";
+import { humanise } from "./format.mjs?v=ux-final-20261025";
+import { providerName } from "./providers.mjs?v=ux-final-20261025";
+import { renderCost } from "./cost-view.mjs?v=ux-final-20261025";
+import { runActions } from "./workflow.mjs?v=ux-final-20261025";
+import { createWorkspace, renderOverview, renderRunsTable } from "./live-view.mjs?v=ux-final-20261025";
+import { friendlyError, renderGetStarted, renderReadiness } from "./onboarding.mjs?v=ux-final-20261025";
 import {
   api, CRITERION_HELP, fetchEvents, filterRows, groupedOptions, launchBody, launchOptions, mergeEvents, providerChoices, runRows, sortRows, TERMINAL, el,
-} from "./runs.mjs?v=ux-final-20261023";
+} from "./runs.mjs?v=ux-final-20261025";
 
 const $ = (id) => document.getElementById(id);
 const error = $("error");
@@ -137,7 +137,7 @@ async function openRun(runId) {
   current = { runId, events: [], timer: null };
   showDrawer(true);
   renderRuns();
-  workspace = createWorkspace($("detail"), cancelRun);
+  workspace = createWorkspace($("detail"), cancelRun, rows.find((r) => r.runId === runId)?.badges ?? [], runId);
   runActions($("detail"), {token,runId,getData:()=>current?.runId===runId&&current.run?{run:current.run,events:current.events}:null,onOpen:openRun,onRefresh:paint});
   $("drawer").scrollTop = 0;
   current.costRoot=el("section","panel");
