@@ -1,0 +1,13 @@
+{
+  "run_id": "delegate_c0539929c3854219a213822fa3e958cc",
+  "sha256": {
+    "summary.json": "588921fa051246820eb54a6058f4c4312a22cec6c25c8db7540d9a1e77d71e18",
+    "audio-timing.json": "7c29e1b97d9ecff5ab6e8772be79081884a73760a8a3478e717828d84495120a",
+    "remote.wav": "4df0e27fd81bc1dda9c9b63c35f05d11f461608b084fff2d390379482ca99cc8",
+    "remote-transcript.txt": "16393ceeff8806f7dbf70f33cd14d558abed547ab6d80ef49fc3af637d9aa85b",
+    "sent.wav": "77dad8c575257483b8a87b6f0f13fec031f7c7e97862a836027ca18a3634e5a8",
+    "events.jsonl": "ba073d0512f4cd803e3fd12802f3fda05c8c032b9bf7387675f251a95a6d9713"
+  },
+  "ledger_final_hash": "824dadd2dcb6087d726526a970dc5c8c9bfcaa7c3ace32972080e73229d67380",
+  "authentication": "unsigned_local"
+}

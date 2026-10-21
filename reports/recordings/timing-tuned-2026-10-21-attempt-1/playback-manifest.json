@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "authentication": "unsigned_derived_review",
+  "source_manifest_sha256": "0ab91a5723d5626892894aa2f09d4b96267553ea713b66bca0c5e4901411cfe9",
+  "source_sha256": {
+    "remote.wav": "98bbcba252fbe3d56a6128c0b87f96723970e706eead618f80a2620cc3076229",
+    "sent.wav": "4f8734c5e13ac599e168cf247a51c1dd0758537ce00bf16d7fed1a3d14d07041",
+    "events.jsonl": "3031d227e7a1f4de21c796039f8d7974159f4d576b273f590a66acd5ad219a84",
+    "audio-timing.json": "85e3a39fb98bb05ff308f52eeec2d57e59a11a6aafcb6d98c0f710980f21ac3d"
+  },
+  "alignment_mode": "capture_clock",
+  "mix": "mono_equal_half_gain; stereo_left_service_right_delegate",
+  "sha256": {
+    "alignment.json": "dd6b94b8fc6fd89b40178665be813bb1d9db710ff558f522555b7419a8053c0f",
+    "conversation.wav": "75da713cfd18f1e6ddb901597302ce6b55860e5146285e9b12b764f88edf582e",
+    "conversation-stereo.wav": "309c6d4aefa955b8ab806426ca5972fa8c8dcaf7caef3679a7b46fa763e1e7a7",
+    "index.html": "41fab8939df99fafd00e6380a435fb0bc4917c0d87e51aeb4af61199c7b71b04"
+  }
+}

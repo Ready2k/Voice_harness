@@ -189,6 +189,7 @@ class DelegateDemo:
     def __init__(self, env, root, *, destination, caller_id, route_id, task,
                  subtest_id=None, scenario="balance", wallet_card_included=None,
                  wallet_card_description=None, brief=None, reviewer=None, routing_mode="dtmf",
+                 turn_quiet_ms=1500, vad_silence_ms=900, parallel_speech_checks=False,
                  max_seconds=90, adapter=None, control=None, asr=None, synthesise=None, speech_cache=None):
         if not re.fullmatch(r"[0-9]{5,6}", route_id):
             raise ValueError("ROUTE_ID_MUST_BE_FIVE_OR_SIX_DIGITS")
@@ -209,6 +210,10 @@ class DelegateDemo:
         if routing_mode not in {"dtmf", "voice"}:
             raise ValueError("INVALID_ROUTING_MODE")
         self.routing_mode = routing_mode
+        if not 200 <= turn_quiet_ms <= 2000 or not 300 <= vad_silence_ms <= 1500:
+            raise ValueError("TURN_TIMING_OUT_OF_RANGE")
+        self.vad_silence_ms = vad_silence_ms
+        self.parallel_speech_checks = parallel_speech_checks
         self.dialogue = DelegateDialogue(brief) if brief is not None else None
         if self.dialogue and (scenario != "lost-wallet" or wallet_card_included is not None or wallet_card_description):
             raise ValueError("BRIEF_REQUIRES_WALLET_WITHOUT_LEGACY_FACT_FLAGS")
@@ -265,7 +270,7 @@ class DelegateDemo:
         self.prompt_text = {}
         self.last_voice_at = 0.0
         self.prompt_received_at = {}
-        self.turn_quiet_seconds = 1.5
+        self.turn_quiet_seconds = turn_quiet_ms / 1000
         self.inbound = bytearray()
         self.outbound = bytearray()
         self.audio_chunks = []
@@ -280,6 +285,8 @@ class DelegateDemo:
                                    "card_description": self.wallet_card_description},
                     "from": self.caller_id, "to": self.destination, "route_ref": "test_route",
                     "routing_mode": routing_mode,
+                    "turn_quiet_ms": turn_quiet_ms, "vad_silence_ms": vad_silence_ms,
+                    "parallel_speech_checks": parallel_speech_checks,
                     "max_seconds": max_seconds, "independent_platform_oracle": False,
                     "speech_policy": "semantic_review_then_independent_asr" if self.dialogue else "trusted_phrase_with_independent_asr", "model_audio": "withheld"})
         if self.dialogue:
@@ -343,12 +350,19 @@ class DelegateDemo:
             cache = self.speech_cache / (cache_key + ".pcm") if self.speech_cache else None
             for attempt in range(3):
                 try:
+                    started = time.monotonic()
+                    cached = False
                     if attempt == 0 and cache and cache.is_file() and not cache.is_symlink() and cache.stat().st_size <= 960000:
                         pcm = cache.read_bytes()
+                        cached = True
                     else:
                         pcm = await asyncio.to_thread(self.synthesise, phrase)
+                    synthesised_at = time.monotonic()
                     # Cached synthesis never bypasses the fresh independent ASR gate.
                     transcript = await asyncio.to_thread(self.asr.transcribe, pcm, 24000)
+                    self.record("speech.assessment_timing", {"phrase": name, "attempt": attempt + 1,
+                                "cached_synthesis": cached, "synthesis_ms": round((synthesised_at-started)*1000, 1),
+                                "asr_ms": round((time.monotonic()-synthesised_at)*1000, 1)})
                 except (CallerVoiceUnavailable, AsrUnavailable) as exc:
                     code = str(exc)
                     self.record("speech.preflight_service_error", {"phrase": name, "attempt": attempt + 1, "code": code})
@@ -426,7 +440,7 @@ class DelegateDemo:
                     "value_ref": {"type": "string", "enum": list(self.digit_values)},
                     "prompt_event_id": {"type": "string"}}, "required": ["value_ref", "prompt_event_id"]}})
         info = await self.adapter.open_session({"session_id": self.run_id, "tools": tools, "tool_choice": "required",
-            "turn_detection": {"type": "server_vad", "silence_duration_ms": 900,
+            "turn_detection": {"type": "server_vad", "silence_duration_ms": self.vad_silence_ms,
                                "interrupt_response": False, "create_response": False},
             "instructions": (
                 "You are an AI delegate calling an authorised automated DEMO system. Your only task is: " + self.task +
@@ -673,8 +687,12 @@ class DelegateDemo:
                 if self.prompt_events and event_id != self.prompt_events[-1]:
                     return
                 text = words(self.prompt_text.get(event_id, ""))
+                if (self.dialogue and not set(self.digit_values).issubset(self.sent_values)
+                        and not re.search(r"\b(enter|say|provide|give|key|input|press|what|which)\b", text)):
+                    self.record("turn.routing_announcement_ignored", {"prompt_event_id": event_id})
+                    return
                 if text in {"got it", "of course", "thanks", "thank you", "right", "okay", "ok", "please"} or (
-                        "your call to the test harness" in text and "succeeded" in text):
+                        "your call to the test harness" in text and "succeeded" in text) or text.startswith("your initial intent is"):
                     self.record("turn.acknowledgement_ignored", {"prompt_event_id": event_id})
                     return
                 if self.scenario == "lost-wallet" and not self.dialogue and re.search(r"\bwhich\b.*\bfirst\b", text):
@@ -690,6 +708,9 @@ class DelegateDemo:
                     self.reason = "TASK_BLOCKED:missing_subtest"
                     self.done.set()
                     return
+                self.record("turn.response_requested", {"prompt_event_id": event_id,
+                            "since_transcript_ms": round((time.monotonic()-self.prompt_received_at.get(event_id,time.monotonic()))*1000,1),
+                            "quiet_ms": round(self.turn_quiet_seconds*1000)})
                 await self.adapter.send_text(
                     "Controller: PROMPT_EVENT_ID=" + event_id +
                     ". Choose the next permitted tool for the latest remote prompt now." +
@@ -728,9 +749,10 @@ class DelegateDemo:
     async def review_dialogue(self, kind, proposal):
         payload = {"kind": kind, "proposal": proposal, **self.dialogue.context(),
                    "remote_turns": [self.prompt_text[i] for i in self.prompt_events[-20:]]}
+        started = time.monotonic()
         verdict = await self.reviewer.review(payload)
         self.record("dialogue.review", {"kind": kind, "proposal": proposal, "verdict": verdict,
-                    "independent_semantic_guarantee": False})
+                    "independent_semantic_guarantee": False, "duration_ms": round((time.monotonic()-started)*1000,1)})
         if verdict != "allow":
             raise ValueError("DIALOGUE_REVIEW_DENIED:" + str(verdict))
 
@@ -751,11 +773,22 @@ class DelegateDemo:
             raise ValueError("DIALOGUE_REPETITION_LOOP")
         epoch, generation, last_voice_at = self.epoch, self.generation, self.last_voice_at
         self.record("dialogue.proposed", {**args, "generation": generation})
-        await self.review_dialogue("speech", {"text": text, "item_refs": args["item_refs"]})
         phrase = "dynamic_" + hashlib.sha256(text.encode()).hexdigest()[:20]
+        had_preapproved = phrase in self.phrase_audio
+        proposal = {"text": text, "item_refs": args["item_refs"]}
+        if self.parallel_speech_checks and phrase not in self.phrase_audio:
+            # Speculative synthesis is never playback. Wait for BOTH checks,
+            # including failed workers, before proceeding or closing evidence.
+            results = await asyncio.gather(self.review_dialogue("speech", proposal),
+                self.prepare_phrase(phrase, text, asyncio.Semaphore(1)), return_exceptions=True)
+            for result in results:
+                if isinstance(result, BaseException):
+                    raise result
+        else:
+            await self.review_dialogue("speech", proposal)
         if phrase not in self.phrase_audio:
             await self.prepare_phrase(phrase, text, asyncio.Semaphore(1))
-        else:
+        elif had_preapproved:
             self.record("speech.preapproved_reused", {"phrase": phrase, "text": text,
                         "audio_sha256": hashlib.sha256(self.phrase_audio[phrase]).hexdigest(),
                         "basis": "same_run_exact_text_and_preflight_asr; fresh_context_review"})
@@ -856,7 +889,12 @@ class DelegateDemo:
         if name == "report_blocked":
             if set(args) != {"reason"} or args["reason"] not in {"missing_subtest", "missing_credentials", "missing_answer", "requires_approval", "unsupported_menu", "access_denied"}:
                 raise ValueError("INVALID_BLOCKED_REASON")
-            self.blocking_question = self.prompt_text.get(self.prompt_events[-1]) if self.prompt_events else None
+            question = self.prompt_text.get(self.prompt_events[-1]) if self.prompt_events else None
+            if self.dialogue and args["reason"] == "access_denied" and not re.search(
+                    r"\b(denied|unauthori[sz]ed|not authori[sz]ed|cannot access|can t access|access refused|not permitted)\b",
+                    words(question or "")):
+                raise ValueError("ACCESS_DENIAL_NOT_SUPPORTED_BY_REMOTE_PROMPT")
+            self.blocking_question = question
             self.record("task.blocked", {"reason": args["reason"], "question": self.blocking_question})
             self.reason = "TASK_BLOCKED:" + args["reason"]
             self.done.set()

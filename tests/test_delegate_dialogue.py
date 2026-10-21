@@ -99,6 +99,22 @@ class DialogueTests(unittest.IsolatedAsyncioTestCase):
         self.adapter.send_text.assert_awaited_once()
         self.assertIn("barclays_debit", self.adapter.send_text.await_args.args[0])
 
+    async def test_partial_routing_announcements_do_not_trigger_a_reply_or_false_denial(self):
+        self.demo.sent_values = {"test_route"}
+        for text in ["Open Question Module Set with AI Agent.", "Test number 770222."]:
+            await self.demo.respond_to_prompt(self.question(text))
+        self.adapter.send_text.assert_not_awaited()
+        with self.assertRaisesRegex(ValueError, "ACCESS_DENIAL_NOT_SUPPORTED"):
+            await self.demo.execute("report_blocked", {"reason": "access_denied"})
+        self.assertFalse(self.demo.done.is_set())
+        self.assertIsNone(self.demo.blocking_question)
+        await self.demo.respond_to_prompt(self.question("Please enter your sub-test number."))
+        self.adapter.send_text.assert_awaited_once()
+
+    async def test_intent_metadata_does_not_trigger_a_conversational_reply(self):
+        await self.demo.respond_to_prompt(self.question("Your initial intent is: ok-call, oqflow"))
+        self.adapter.send_text.assert_not_awaited()
+
     async def test_prepared_opening_reuses_same_run_assessed_pcm_with_fresh_review(self):
         await self.demo.prepare()
         await asyncio.gather(*self.demo.tasks)
@@ -231,6 +247,39 @@ class DialogueTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(self.demo.reason, "DIALOGUE_REPEATED_DENIAL")
         self.assertEqual(self.adapter.submit_tool_result.await_count, 2)
         self.assertTrue(self.adapter.submit_tool_result.await_args.kwargs["respond"])
+        self.demo.socket.send_json.assert_not_awaited()
+
+    async def test_parallel_checks_overlap_but_never_release_before_both_pass(self):
+        self.demo.parallel_speech_checks = True
+        started, finish_audio = asyncio.Event(), asyncio.Event()
+        async def prepare(name, text, slots):
+            started.set()
+            await finish_audio.wait()
+            self.demo.phrase_audio[name] = bytes(480)
+        self.demo.prepare_phrase = prepare
+        async def review(payload):
+            await started.wait()  # Cannot finish if work is still sequential.
+            return "allow"
+        self.reviewer.review.side_effect = review
+        task = asyncio.create_task(self.reply("What happened?", "I can't find my wallet."))
+        await asyncio.wait_for(started.wait(), 1)
+        self.demo.socket.send_json.assert_not_awaited()
+        finish_audio.set()
+        result = await asyncio.wait_for(task, 1)
+        self.assertTrue(result["transport_acknowledged"])
+
+    async def test_parallel_review_denial_drains_audio_worker_without_release(self):
+        self.demo.parallel_speech_checks = True
+        completed = asyncio.Event()
+        async def prepare(name, text, slots):
+            await asyncio.sleep(0)
+            self.demo.phrase_audio[name] = bytes(480)
+            completed.set()
+        self.demo.prepare_phrase = prepare
+        self.reviewer.review.return_value = "unsupported_fact"
+        with self.assertRaisesRegex(ValueError, "REVIEW_DENIED"):
+            await self.reply("What happened?", "It was stolen yesterday.")
+        self.assertTrue(completed.is_set())
         self.demo.socket.send_json.assert_not_awaited()
 
 

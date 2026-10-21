@@ -31,6 +31,8 @@ async def run(args):
                         wallet_card_description=args.wallet_card_description,
                         brief=brief,
                         routing_mode=args.routing_mode,
+                        turn_quiet_ms=args.turn_quiet_ms, vad_silence_ms=args.vad_silence_ms,
+                        parallel_speech_checks=args.parallel_speech_checks,
                         speech_cache=root.parent.parent / "delegate-speech-cache",
                         task=args.task or ("Say I've lost my wallet and follow the demo questions using only supplied facts."
                                            if args.scenario == "lost-wallet" else
@@ -144,6 +146,9 @@ def main():
     parser.add_argument("--caller-id", required=True)
     parser.add_argument("--route-id", required=True)
     parser.add_argument("--routing-mode", choices=["dtmf", "voice"], default="dtmf", help="Submit bound demo IDs as keypad tones or spoken digits")
+    parser.add_argument("--turn-quiet-ms", type=int, default=1500, help="Controller quiet wait after transcript, 200–2000 ms")
+    parser.add_argument("--vad-silence-ms", type=int, default=900, help="Provider VAD silence, 300–1500 ms")
+    parser.add_argument("--parallel-speech-checks", action="store_true", help="Run text review alongside speculative TTS/ASR; release only after both pass")
     parser.add_argument("--subtest-id", help="Optional operator-supplied sub-test keypad value; never guessed")
     parser.add_argument("--scenario", choices=["balance", "lost-wallet"], default="balance")
     parser.add_argument("--brief", help="JSON demo brief enabling adaptive dialogue for lost-wallet; replaces legacy wallet fact flags")
