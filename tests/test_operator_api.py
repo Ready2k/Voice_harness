@@ -51,6 +51,9 @@ class OperatorApi(unittest.TestCase):
                 self.assertEqual([x["hold_id"] for x in holds["items"]], [hold["hold_id"]])
                 self.assertEqual(holds["items"][0]["scope_type"], "run")
                 self.assertFalse(holds["items"][0]["expired"])
+                self.assertEqual(holds["total"], 1)
+                self.assertEqual(holds["items"][0]["scenario_id"], "identity-bypass-001")
+                self.assertTrue(holds["items"][0]["provider_config_id"])
                 client.post(
                     f"/api/v1/runs/{ids[0]}/preservation-holds/{hold['hold_id']}/release",
                     headers=h,

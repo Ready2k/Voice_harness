@@ -138,7 +138,7 @@ export function holdTable(payload, findings = new Map(), runs = [], now = payloa
       const run = byRun.get(h.run_id);
       const ids = h.finding_ids ?? [];
       return {
-        holdId: h.hold_id, runId: h.run_id, owner: h.owner_id, expiresAt: h.expires_at, scenario: run?.scenario_id ?? null, provider: run?.provider_config_id ?? null,
+        holdId: h.hold_id, runId: h.run_id, owner: h.owner_id, expiresAt: h.expires_at, scenario: run?.scenario_id ?? h.scenario_id ?? null, provider: run?.provider_config_id ?? h.provider_config_id ?? null,
         scope: ids.length ? "Finding" : "Whole run",
         scopeDetail: ids.length ? ids.map((id) => findings.get(id)?.criterionId ?? shortId(id)).join(", ") : "All run evidence",
         findingIds: ids, countdown: countdown(h.expires_at, now),

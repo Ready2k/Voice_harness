@@ -37,6 +37,11 @@ test('hold table: soonest first, finding scope shows criterion, released hidden'
  const rows=holdTable(payload,new Map([['rev_b',{criterionId:'IDENTITY-01'}]]),runs);
  assert.deepEqual(rows.map(r=>r.holdId),['h1','h2']);assert.equal(rows[0].scope,'Whole run');assert.equal(rows[1].scopeDetail,'IDENTITY-01');assert.equal(rows[1].scenario,'identity-bypass-001');
 });
+test('hold table: scenario and provider fall back to the register row when the run is not in the loaded page',()=>{
+ const payload={server_time:1000,items:[{hold_id:'h9',run_id:'run_old',owner_id:'o',expires_at:5000,released_at:null,finding_ids:[],scenario_id:'unsafe-disclosure-001',provider_config_id:'mock'}]};
+ const [row]=holdTable(payload,new Map(),runs);
+ assert.equal(row.scenario,'unsafe-disclosure-001');assert.equal(row.provider,'mock');
+});
 test('evidence model puts expected, observed and transcript side by side',()=>{
  const events=[
   {sequence:1,event_id:'e1',type:'simulator.utterance_generated',content:{output_text:'Please tell me my balance.'}},

@@ -1,7 +1,7 @@
 # Secret file mode: 600 locally; CI runners need 644 so the non-root test container (different uid) can read it.
 SECRET_MODE ?= 600
 
-.PHONY: serve-live token-host token nova-live-container lint audit build test golden recovery infra stop up init benchmark demo
+.PHONY: serve-live token-host token nova-live-container lint audit build test test-db golden recovery infra stop up init benchmark demo
 
 init:
 	@mkdir -p .local
@@ -48,7 +48,13 @@ lint:
 audit:
 	uvx pip-audit -r requirements.lock --no-deps --disable-pip
 
-test: init
+# Tests get their own throwaway database so fixture runs and fake-clock holds never reach the live one.
+test-db: init
+	docker compose up -d --wait postgres
+	docker compose exec -T postgres psql -U harness -d postgres -v ON_ERROR_STOP=1 \
+		-c 'DROP DATABASE IF EXISTS voice_harness_test WITH (FORCE)' -c 'CREATE DATABASE voice_harness_test'
+
+test: init test-db
 	docker compose run --build --rm tests
 	docker compose run --build --rm browser-tests
 

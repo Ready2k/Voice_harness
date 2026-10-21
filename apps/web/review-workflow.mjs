@@ -122,7 +122,7 @@ export async function renderHoldManagement(root,token){
  async function refresh(){
   try{
    const payload=await api(token,'/api/v1/holds-register?state=active');const fetched=Date.now();const rows=holdTable(payload,findings,runs);
-   summary.textContent=rows.length+' active hold'+(rows.length===1?'':'s')+'; '+rows.filter(r=>r.countdown.tone!=='ok').length+' expiring within 7 days or expired. Holds protect retained artifacts until expiry; they cannot restore purged evidence.';
+   const more=payload.total>payload.items.length?' (showing the '+payload.items.length+' expiring soonest of '+payload.total+')':'';summary.textContent=rows.length+' active hold'+(rows.length===1?'':'s')+more+'; '+rows.filter(r=>r.countdown.tone!=='ok').length+' expiring within 7 days or expired. Holds protect retained artifacts until expiry; they cannot restore purged evidence.';
    tableBox.replaceChildren(rows.length?holdsTable(rows,payload.server_time,fetched):el('p','muted','No active holds. Add one below, or from a finding.'));
   }catch(e){summary.textContent=e.message;}
  }

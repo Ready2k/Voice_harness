@@ -613,20 +613,26 @@ def create_app(
             raise HTTPException(422, "INVALID_FILTER")
         clauses, params = [], []
         if state == "active":
-            clauses.append("released_at IS NULL")
+            clauses.append("h.released_at IS NULL")
         elif state == "released":
-            clauses.append("released_at IS NOT NULL")
+            clauses.append("h.released_at IS NOT NULL")
         if run_id:
-            clauses.append("run_id=?")
+            clauses.append("h.run_id=?")
             params.append(run_id)
         with database.connection() as db:
             rows = db.execute(
-                "SELECT hold_id, run_id, owner_id, requester_id, scope_type, scope, access_classification, created_at, expires_at, released_at, release_reason, audit_event_id "
-                "FROM harness_preservation_holds"
+                "SELECT h.hold_id, h.run_id, h.owner_id, h.requester_id, h.scope_type, h.scope, h.access_classification, h.created_at, h.expires_at, h.released_at, h.release_reason, h.audit_event_id, "
+                "r.scenario_id, r.provider_config_id "
+                "FROM harness_preservation_holds h LEFT JOIN harness_runs r ON r.run_id=h.run_id"
                 + (" WHERE " + " AND ".join(clauses) if clauses else "")
-                + " ORDER BY expires_at, hold_id LIMIT ?",
+                + " ORDER BY h.expires_at, h.hold_id LIMIT ?",
                 (*params, limit),
             ).fetchall()
+            total = db.execute(
+                "SELECT COUNT(*) AS n FROM harness_preservation_holds h"
+                + (" WHERE " + " AND ".join(clauses) if clauses else ""),
+                tuple(params),
+            ).fetchone()["n"]
         now = time.time()
         items = []
         for row in rows:
@@ -635,7 +641,7 @@ def create_app(
             item["finding_ids"] = scope.get("finding_ids", [])
             item["expired"] = item["released_at"] is None and item["expires_at"] <= now
             items.append(item)
-        return {"items": items, "server_time": now}
+        return {"items": items, "total": total, "server_time": now}
 
     @app.get("/api/v1/runs/{run_id}", dependencies=[Depends(auth)])
     def get_run(run_id: str):
