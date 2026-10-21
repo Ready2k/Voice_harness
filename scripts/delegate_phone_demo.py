@@ -30,6 +30,7 @@ async def run(args):
                         wallet_card_included=None if args.wallet_card_included is None else args.wallet_card_included == "yes",
                         wallet_card_description=args.wallet_card_description,
                         brief=brief,
+                        routing_mode=args.routing_mode,
                         speech_cache=root.parent.parent / "delegate-speech-cache",
                         task=args.task or ("Say I've lost my wallet and follow the demo questions using only supplied facts."
                                            if args.scenario == "lost-wallet" else
@@ -142,6 +143,7 @@ def main():
     parser.add_argument("--to", required=True)
     parser.add_argument("--caller-id", required=True)
     parser.add_argument("--route-id", required=True)
+    parser.add_argument("--routing-mode", choices=["dtmf", "voice"], default="dtmf", help="Submit bound demo IDs as keypad tones or spoken digits")
     parser.add_argument("--subtest-id", help="Optional operator-supplied sub-test keypad value; never guessed")
     parser.add_argument("--scenario", choices=["balance", "lost-wallet"], default="balance")
     parser.add_argument("--brief", help="JSON demo brief enabling adaptive dialogue for lost-wallet; replaces legacy wallet fact flags")

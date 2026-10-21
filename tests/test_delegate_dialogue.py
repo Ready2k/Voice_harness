@@ -11,7 +11,7 @@ import httpx
 
 from voice_harness.caller_voice import openai_tts_pcm
 from voice_harness.delegate_dialogue import DelegateDialogue, DialogueReviewer
-from voice_harness.telephony_demo import DelegateDemo, words
+from voice_harness.telephony_demo import DelegateDemo, spoken_digits, words
 
 BRIEF = json.loads((Path(__file__).resolve().parents[1] / "scenarios/delegate/lost-wallet-worried.json").read_text())
 
@@ -111,6 +111,38 @@ class DialogueTests(unittest.IsolatedAsyncioTestCase):
         self.asr.transcribe.assert_not_called()
         self.reviewer.review.assert_awaited_once()
         self.assertIn("speech.preapproved_reused", [e.type for e in self.demo.ledger.events])
+
+    async def test_voice_routing_speaks_bound_codes_without_twilio_updates(self):
+        asr = Mock()
+        asr.available.return_value = (True, None)
+        asr.transcribe.side_effect = lambda pcm, rate: SimpleNamespace(text=pcm.decode())
+        demo = DelegateDemo({}, Path(self.temp.name) / "voice-routing", destination="01617683827",
+            caller_id="01483694454", route_id="770222", subtest_id="01", scenario="lost-wallet",
+            task="Demo", brief=BRIEF, routing_mode="voice", reviewer=self.reviewer,
+            control=self.control, adapter=self.adapter, asr=asr, synthesise=lambda text: text.encode())
+        await demo.prepare()
+        await asyncio.gather(*demo.tasks)
+        config = self.adapter.open_session.await_args.args[0]
+        names = {t["name"] for t in config["tools"]}
+        self.assertIn("phone_say_code", names)
+        self.assertNotIn("phone_send_dtmf", names)
+        demo.active = True
+        demo.socket = self.demo.socket
+        demo.play_phrase = AsyncMock(return_value={"transport_acknowledged": True})
+        for ref, question in [("test_route", "Please enter your auto test number."),
+                              ("subtest", "Please enter your sub test number.")]:
+            demo.prompt_events.append(ref)
+            demo.prompt_text[ref] = question
+            args = {"value_ref": ref, "prompt_event_id": ref}
+            await demo.execute("phone_say_code", args)
+            with self.assertRaisesRegex(ValueError, "REPLAY"):
+                await demo.execute("phone_say_code", args)
+        self.assertEqual(demo.phrases["routing_test_route"], "seven, seven, zero, two, two, two.")
+        self.assertEqual(demo.phrases["routing_subtest"], "zero, one.")
+        self.assertFalse(demo.dtmf_sent)
+        self.control.request.assert_not_awaited()
+        with self.assertRaisesRegex(ValueError, "DTMF_OUTSIDE"):
+            await demo.execute("phone_send_dtmf", {"value_ref": "test_route", "prompt_event_id": "test_route", "terminator": ""})
 
     async def test_reviewer_denial_prevents_synthesis_and_audio(self):
         for verdict, text in [("unsupported_fact", "My postcode is London."),
@@ -213,6 +245,13 @@ class BriefAndReviewerTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(words("I'm worried. I can't find it and don't know."),
                          words("I am worried. I cannot find it and do not know."))
         self.assertNotEqual(words("I can't find it."), words("I can find it."))
+
+    def test_spoken_digit_assessment_preserves_leading_zero_and_exact_value(self):
+        self.assertEqual(spoken_digits("seven seven zero two two two"), "770222")
+        self.assertEqual(spoken_digits("770222"), "770222")
+        self.assertEqual(spoken_digits("zero one"), "01")
+        self.assertNotEqual(spoken_digits("one"), "01")
+        self.assertIsNone(spoken_digits("my code is seven"))
 
     async def test_reviewer_http_contract_and_fail_closed_outputs(self):
         requests = []

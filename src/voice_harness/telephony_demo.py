@@ -48,6 +48,16 @@ WALLET_PHRASES = {
     "goodbye": "Thank you. Goodbye.",
 }
 TERMINAL = {"completed", "canceled", "failed", "busy", "no-answer"}
+DIGIT_WORDS = ("zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine")
+
+
+def spoken_digits(text):
+    tokens = re.findall(r"[a-z]+|[0-9]+", text.lower())
+    values = {word: str(n) for n, word in enumerate(DIGIT_WORDS)}
+    values["oh"] = "0"
+    if not tokens or any(t not in values and not t.isdigit() for t in tokens):
+        return None
+    return "".join(values.get(t, t) for t in tokens)
 
 
 def normalise_number(value: str) -> str:
@@ -178,7 +188,7 @@ class TwilioControl:
 class DelegateDemo:
     def __init__(self, env, root, *, destination, caller_id, route_id, task,
                  subtest_id=None, scenario="balance", wallet_card_included=None,
-                 wallet_card_description=None, brief=None, reviewer=None,
+                 wallet_card_description=None, brief=None, reviewer=None, routing_mode="dtmf",
                  max_seconds=90, adapter=None, control=None, asr=None, synthesise=None, speech_cache=None):
         if not re.fullmatch(r"[0-9]{5,6}", route_id):
             raise ValueError("ROUTE_ID_MUST_BE_FIVE_OR_SIX_DIGITS")
@@ -196,6 +206,9 @@ class DelegateDemo:
             raise ValueError("CALL_LIMIT_OUT_OF_RANGE")
         if subtest_id is not None and not re.fullmatch(r"[0-9]{1,12}", subtest_id):
             raise ValueError("INVALID_SUBTEST_ID")
+        if routing_mode not in {"dtmf", "voice"}:
+            raise ValueError("INVALID_ROUTING_MODE")
+        self.routing_mode = routing_mode
         self.dialogue = DelegateDialogue(brief) if brief is not None else None
         if self.dialogue and (scenario != "lost-wallet" or wallet_card_included is not None or wallet_card_description):
             raise ValueError("BRIEF_REQUIRES_WALLET_WITHOUT_LEGACY_FACT_FLAGS")
@@ -222,6 +235,9 @@ class DelegateDemo:
         self.result_fields = {"balance", "currency", "source_quote"} if scenario == "balance" else {"summary", "source_quote"}
         self.blocking_question = None
         self.digit_values = {"test_route": route_id, **({"subtest": subtest_id} if subtest_id else {})}
+        if routing_mode == "voice":
+            self.phrases.update({"routing_" + ref: ", ".join(DIGIT_WORDS[int(d)] for d in value) + "."
+                                 for ref, value in self.digit_values.items()})
         self.sent_values = set()
         self.run_id = "delegate_" + uuid.uuid4().hex
         self.ledger = Ledger(self.run_id, self.root / "events.jsonl")
@@ -263,6 +279,7 @@ class DelegateDemo:
                     "demo_facts": {"barclays_card_in_wallet": wallet_card_included,
                                    "card_description": self.wallet_card_description},
                     "from": self.caller_id, "to": self.destination, "route_ref": "test_route",
+                    "routing_mode": routing_mode,
                     "max_seconds": max_seconds, "independent_platform_oracle": False,
                     "speech_policy": "semantic_review_then_independent_asr" if self.dialogue else "trusted_phrase_with_independent_asr", "model_audio": "withheld"})
         if self.dialogue:
@@ -339,7 +356,9 @@ class DelegateDemo:
                         await asyncio.sleep(2 ** attempt)
                         continue
                     raise
-                if words(transcript.text) == words(phrase):
+                routing_ref = name.removeprefix("routing_") if name.startswith("routing_") else None
+                if (words(transcript.text) == words(phrase) or
+                        (routing_ref in self.digit_values and spoken_digits(transcript.text) == self.digit_values[routing_ref])):
                     if cache:
                         cache.write_bytes(pcm)
                         cache.chmod(0o600)
@@ -361,6 +380,8 @@ class DelegateDemo:
         # workers before reporting a failure so none can mutate a closed ledger.
         slots = asyncio.Semaphore(3)
         preflight = {"delegate_disclosure": self.phrases["delegate_disclosure"]} if self.dialogue else self.phrases
+        if self.routing_mode == "voice":
+            preflight.update({k: v for k, v in self.phrases.items() if k.startswith("routing_")})
         if self.dialogue and self.dialogue.brief.get("opening"):
             opening = self.dialogue.brief["opening"]
             key = "dynamic_" + hashlib.sha256(opening.encode()).hexdigest()[:20]
@@ -398,6 +419,12 @@ class DelegateDemo:
                     "prompt_event_id": {"type": "string"}}, "required": ["text", "item_refs", "prompt_event_id"]}})
             # Exercise availability before dialling; each actual proposal is checked afresh.
             await self.review_dialogue("speech", {"text": preflight["delegate_disclosure"], "item_refs": []})
+        if self.routing_mode == "voice":
+            tools = [t for t in tools if t["name"] != "phone_send_dtmf"]
+            tools.append({"name": "phone_say_code", "description": "Speak the bound demo routing code digit by digit when prompted, once per value. No keypad tones.",
+                "parameters": {"type": "object", "additionalProperties": False, "properties": {
+                    "value_ref": {"type": "string", "enum": list(self.digit_values)},
+                    "prompt_event_id": {"type": "string"}}, "required": ["value_ref", "prompt_event_id"]}})
         info = await self.adapter.open_session({"session_id": self.run_id, "tools": tools, "tool_choice": "required",
             "turn_detection": {"type": "server_vad", "silence_duration_ms": 900,
                                "interrupt_response": False, "create_response": False},
@@ -406,7 +433,9 @@ class DelegateDemo:
                 " Listen first. Never invent credentials or amounts. All audio you generate is withheld. " +
                 ("Use phone_respond for natural replies; use tools instead of speaking directly. " if self.dialogue else
                  "Use phone_speak for spoken phrases; use tools instead of speaking directly. ") +
-                "When asked for a test ID, use phone_send_dtmf. The controller holds the bound ID. "
+                ("When asked for a test ID, use phone_say_code. This run uses spoken digits only, never keypad tones. "
+                 if self.routing_mode == "voice" else
+                 "When asked for a test ID, use phone_send_dtmf. ") + "The controller holds the bound ID. "
                 "Use value_ref=test_route for the initial auto-test number prompt. "
                 + ("A sub-test number is also bound: use value_ref=subtest when the IVR asks for the sub-test number. "
                    if "subtest" in self.digit_values else
@@ -744,12 +773,31 @@ class DelegateDemo:
         return {**result, "task_state": self.dialogue.context()}
 
     async def execute(self, name, args):
+        if name == "phone_say_code":
+            if (self.routing_mode != "voice" or set(args) != {"value_ref", "prompt_event_id"}
+                    or args["value_ref"] not in self.digit_values or args["value_ref"] in self.sent_values
+                    or not self.prompt_events or args["prompt_event_id"] != self.prompt_events[-1]
+                    or (args["value_ref"] == "subtest" and "test_route" not in self.sent_values)):
+                raise ValueError("SPOKEN_CODE_OUTSIDE_MANDATE_OR_REPLAY")
+            ref = args["value_ref"]
+            prompt = words(self.prompt_text.get(args["prompt_event_id"], ""))
+            subtest = bool(re.search(r"\bsub ?test\b", prompt))
+            if not (subtest if ref == "subtest" else not subtest and bool(re.search(r"\b(auto ?test|test|routing)\b.*\b(number|id|code)\b", prompt))):
+                raise ValueError("SPOKEN_CODE_PROMPT_PURPOSE_MISMATCH")
+            phrase = "routing_" + ref
+            if phrase not in self.phrase_audio or not self.socket:
+                raise ValueError("SPOKEN_CODE_NOT_PREFLIGHTED_OR_NO_SOCKET")
+            self.record("routing.voice_authorised", {"value_ref": ref, "prompt_event_id": args["prompt_event_id"],
+                        "audio_sha256": hashlib.sha256(self.phrase_audio[phrase]).hexdigest()})
+            self.sent_values.add(ref)
+            result = await self.play_phrase(phrase)
+            return {**result, "value_ref": ref, "input_mode": "voice", "ivr_acceptance": "not_yet_verified"}
         if name == "phone_respond":
             if not self.dialogue:
                 raise ValueError("DIALOGUE_NOT_ENABLED")
             return await self.respond_naturally(args)
         if name == "phone_send_dtmf":
-            if (set(args) != {"value_ref", "prompt_event_id", "terminator"} or args["terminator"] not in ("", "#")
+            if (self.routing_mode != "dtmf" or set(args) != {"value_ref", "prompt_event_id", "terminator"} or args["terminator"] not in ("", "#")
                     or args["value_ref"] not in self.digit_values or args["value_ref"] in self.sent_values
                     or (args["value_ref"] == "subtest" and "test_route" not in self.sent_values)
                     or args["prompt_event_id"] not in self.prompt_events or not self.socket):
@@ -913,7 +961,8 @@ class DelegateDemo:
                    "audio_timing": "capture_clock",
                    "cleanup": cleanup, "remote_audio_seconds": len(self.inbound) / 16000,
                    "sent_audio_seconds": len(self.outbound) / 16000, "dtmf_requested": self.dtmf_sent,
-                   "dtmf_value_refs_consumed": sorted(self.sent_values),
+                   "routing_mode": self.routing_mode, "routing_value_refs_consumed": sorted(self.sent_values),
+                   "dtmf_value_refs_consumed": sorted(self.sent_values) if self.routing_mode == "dtmf" else [],
                    "stream_generations_bound": sorted(self.bound_generations), "model_finding": self.finding,
                    "source_quote_supported_by_independent_asr": quote_supported,
                    "platform_outcome": "not_independently_verified_no_oracle",

@@ -41,6 +41,8 @@ Routine dialogue and card ordering need no approval. Missing personal/security d
 
 Canonical environment names are `TWILIO_ACCOUNT_SID`, `TWILIO_API_KEY_SID`, `TWILIO_API_KEY_SECRET`, `TWILIO_AUTH_TOKEN` and `OPENAI_API_KEY`. The loader also recognises the existing lowercase `twilio_account_sid`, `twilio_sid`, `twilio_sid_secret` and `twilio_auth_token`. It never executes `.env` as shell code.
 
+`--routing-mode voice` speaks the bound test ID and sub-test ID digit by digit instead of sending keypad tones. Both code recordings are synthesised and independently transcribed before dialling; transcription must match the exact bound digits, including leading zero. The model chooses a value reference, not arbitrary spoken credentials. The controller checks the latest prompt purpose, routing order and single-use limit. Voice mode disables the DTMF tool and does not reconnect the media stream to submit a code. It never silently falls back to keypad tones; an IVR requiring DTMF may reject voice input. This mode covers only the supplied demo routing values, not general account authentication. `summary.json` records routing mode and consumed references separately from actual DTMF use.
+
 ## Run one test
 
 From the repository root, after authorising the live test:
