@@ -1,0 +1,11 @@
+{
+  "mode": "demo",
+  "goal": "Explain the missing wallet, identify both banking cards accurately, and get guidance about what to do for each. Choose which card to discuss first when asked, then return to the other. Do not consent to any card or account changes.",
+  "situation": "I cannot find my wallet. I might have left it at work, but I really do not know whether it is there or truly lost. I am worried and unsure what I should do. The listed cards were in the wallet. I have no other personal, security or transaction details supplied for this demo.",
+  "tone": "worried",
+  "items": [
+    {"id": "barclaycard_credit", "label": "Barclaycard credit card", "target": true},
+    {"id": "barclays_debit", "label": "Barclays current-account debit card", "target": true},
+    {"id": "tesco_clubcard", "label": "Tesco Clubcard loyalty card", "target": false}
+  ]
+}

@@ -68,9 +68,12 @@ def openai_tts_pcm(text, environ=None, client=None):
     spec = describe(forced)
     try:
         client = client or httpx.Client(timeout=60)
+        body = {"model": spec["model_id"], "voice": spec["voice"], "input": text, "response_format": "pcm"}
+        if environ.get("VOICE_HARNESS_CALLER_TTS_INSTRUCTIONS"):
+            body["instructions"] = environ["VOICE_HARNESS_CALLER_TTS_INSTRUCTIONS"]
         response = client.post(
             OPENAI_TTS_URL, headers={"Authorization": "Bearer " + environ["OPENAI_API_KEY"]},
-            json={"model": spec["model_id"], "voice": spec["voice"], "input": text, "response_format": "pcm"})
+            json=body)
     except httpx.HTTPError:
         raise CallerVoiceUnavailable("CALLER_VOICE_TTS_TRANSPORT_ERROR") from None
     if response.status_code != 200:

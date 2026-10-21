@@ -13,13 +13,13 @@ from pathlib import Path
 
 import uvicorn
 
-from voice_harness.telephony_demo import DelegateDemo, load_environment, verify_output
 from voice_harness.asr import AsrUnavailable
 from voice_harness.caller_voice import CallerVoiceUnavailable
-from voice_harness.telephony_demo import TwilioError
+from voice_harness.telephony_demo import DelegateDemo, TwilioError, load_environment, verify_output
 
 
 async def run(args):
+    brief = json.loads(Path(args.brief).read_text()) if args.brief else None
     env = load_environment(Path(args.env_file))
     for key in ["TWILIO_ACCOUNT_SID", "TWILIO_AUTH_TOKEN", "TWILIO_API_KEY_SID", "TWILIO_API_KEY_SECRET", "OPENAI_API_KEY"]:
         if not env.get(key):
@@ -29,6 +29,7 @@ async def run(args):
                         route_id=args.route_id, subtest_id=args.subtest_id, scenario=args.scenario,
                         wallet_card_included=None if args.wallet_card_included is None else args.wallet_card_included == "yes",
                         wallet_card_description=args.wallet_card_description,
+                        brief=brief,
                         speech_cache=root.parent.parent / "delegate-speech-cache",
                         task=args.task or ("Say I've lost my wallet and follow the demo questions using only supplied facts."
                                            if args.scenario == "lost-wallet" else
@@ -103,7 +104,7 @@ async def run(args):
         await demo.done.wait()
     except Exception as exc:
         # Errors are stable codes; never dump provider bodies or credentials.
-        demo.reason = demo.reason or "FAILED:" + (str(exc) if isinstance(exc, (ValueError, AsrUnavailable, CallerVoiceUnavailable, TwilioError)) else type(exc).__name__)
+        demo.reason = demo.reason or "FAILED:" + (str(exc) if isinstance(exc, ValueError | AsrUnavailable | CallerVoiceUnavailable | TwilioError) else type(exc).__name__)
         print("Run stopped:", demo.reason, flush=True)
     finally:
         try:
@@ -143,6 +144,7 @@ def main():
     parser.add_argument("--route-id", required=True)
     parser.add_argument("--subtest-id", help="Optional operator-supplied sub-test keypad value; never guessed")
     parser.add_argument("--scenario", choices=["balance", "lost-wallet"], default="balance")
+    parser.add_argument("--brief", help="JSON demo brief enabling adaptive dialogue for lost-wallet; replaces legacy wallet fact flags")
     parser.add_argument("--wallet-card-included", choices=["yes", "no"], help="Operator-supplied demo fact about the Barclays card")
     parser.add_argument("--wallet-card-description", help="Operator-supplied demo card description; no card numbers or secrets")
     parser.add_argument("--task")

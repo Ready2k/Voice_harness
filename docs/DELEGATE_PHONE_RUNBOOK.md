@@ -6,7 +6,28 @@ This CLI pilot implements the first voice/DTMF transport experiment from [the de
 
 The agent listens to the automated test line, selects when to send the bound routing ID (and optional supplied sub-test ID), can request the balance using a controlled spoken phrase, and reports a quoted finding. Twilio call updates send the digits and reconnect bidirectional audio on the same CallSid. The delegate session persists across stream generations. See the [live proof report](../reports/delegate-phone-proof-2026-10-21.md) for observed results and retained failures.
 
-The pilot uses the existing OpenAI realtime adapter, independent ASR backend, speech synthesiser, resampler and hash-chained Ledger. It does not reuse the banking engine's account/identity verdicts: their roles and facts are inappropriate for a customer-side delegate. Its separate diagnostic speech policy allows only four fixed phrases whose synthesised audio has passed independent ASR. Native model audio is withheld. Arbitrary speech, credentials and account changes are unavailable. This is a deliberately limited first proof; general adaptive speech and the full signed evaluation export need subsequent integration.
+The pilot uses the existing OpenAI realtime adapter, independent ASR backend, speech synthesiser, resampler and hash-chained Ledger. It does not reuse the banking engine's account/identity verdicts: their roles and facts are inappropriate for a customer-side delegate. Without a brief it retains its fixed-phrase diagnostic path. Supplying a demo brief enables generated natural replies, reviewed against the scenario before synthesis and checked again through independent ASR. Native realtime-model audio is withheld in both modes. Credentials and account changes remain unavailable. The full signed evaluation export still needs subsequent integration.
+
+## Natural, goal-based wallet demo
+
+The supplied [worried caller brief](../scenarios/delegate/lost-wallet-worried.json) describes an uncertain missing wallet, possibly left at work, a Barclaycard credit card, a Barclays current-account debit card and a Tesco Clubcard. These replace the older Premier/business-card facts for this scenario. The goal is to get guidance for both banking cards; the Clubcard is background context.
+
+```bash
+PYTHONPATH=src .venv/bin/python scripts/delegate_phone_demo.py \
+  --to 01617683827 --caller-id 01483694454 --route-id 770222 --subtest-id 01 \
+  --scenario lost-wallet --brief scenarios/delegate/lost-wallet-worried.json \
+  --max-seconds 180 --tunnel-binary /absolute/path/to/cloudflared
+```
+
+This is a chargeable live-call command, not a rehearsal. It was not run as part of the offline adaptive implementation checks. Keep the routing values separate from the brief. Do not combine `--brief` with legacy `--wallet-card-included` or `--wallet-card-description` flags; the brief supplies the goal instead of `--task`. `mode` must be `demo`; only non-secret facts belong in this file. No personal identifiers, passcodes or generated credentials are supported.
+
+The caller generates its own short replies, expresses concern without inventing events, answers the latest question and chooses a card to discuss first without operator input. The controller tracks items actually mentioned in transport-acknowledged speech and supplies that state alongside the conversation history. Mentioning a card is not proof that guidance for it is complete. The result gate requires both target cards to have been discussed, a quote heard from the service and a separate semantic review of whether the summary is supported for both targets.
+
+Before sending each reply, a separate model reviews the proposed text, item references, brief and recent remote turns. It rejects unsupported personal facts, wrong card types, role reversal and unauthorised action consent. TTS then uses the chosen `worried` or `calm` delivery style; an independent ASR pass must match the approved wording. Common contractions are normalised without removing negation. New remote speech, a newer prompt or an interruption invalidates an in-flight reply. Each prompt can release once; repeated replies and total actions are bounded. Raw realtime-model audio cannot bypass this path.
+
+The review model defaults to the repository's existing `gpt-4.1-mini` choice, configurable via `VOICE_HARNESS_DELEGATE_REVIEW_MODEL`. It uses the existing OpenAI key and adds a separate model request per speech/result proposal. TTS supports tone through its [speech instructions](https://developers.openai.com/api/docs/guides/text-to-speech); scenario, tone and conversation flow follow the [official voice prompting guidance](https://developers.openai.com/api/docs/guides/voice-prompting). Review, TTS and ASR add response delay; live latency and naturalness need a recorded call evaluation.
+
+Routine dialogue and card ordering need no approval. Missing personal/security details or permission to freeze, cancel, replace or otherwise change a card/account still stop the call with the question preserved. There is no pause/resume facility or authority to make such changes in this version. The semantic reviewer is another model judgement, not a guarantee or external platform oracle. Offline tests exercise enforcement with injected proposals; they do not establish live model accuracy, vocal concern, completion or IVR compatibility.
 
 ## Requirements
 
@@ -30,7 +51,7 @@ PYTHONPATH=src .venv/bin/python scripts/delegate_phone_demo.py \
 
 Alternatively pass `--public-url https://your-telephony-ingress.example` when routing is already configured to the selected local port (default 8770). The service listens on loopback. The public app has only `/media` and `/status`, with no docs, operator controls or artifact downloads. It verifies Twilio signatures using the configured external URL and rejects wrong account/call bindings and stale or replayed streams.
 
-For the operator's lost-wallet test, the latest supplied route is `770222`, with sub-test `01`:
+For a replay of the older fixed-phrase lost-wallet test, the supplied route is `770222`, with sub-test `01`:
 
 ```bash
 PYTHONPATH=src .venv/bin/python scripts/delegate_phone_demo.py \

@@ -1,10 +1,18 @@
-# Adaptive, goal-based telephone delegate — next implementation scope
+# Adaptive, goal-based telephone delegate — scope and implementation status
 
 User clarification, 21 October 2026: the delegate must pursue a goal and adapt to the conversation without asking the operator to prescribe each answer. Sharing the present recordings does not establish that this behaviour is implemented.
 
-## Current limitation
+## Implementation update
 
-The transport pilot proves outbound calls, two-way audio and guarded keypad navigation. Its model chooses from a fixed phrase list. Adding each new answer as a CLI option, repeating a product description, or escalating ordinary preferences to the operator is not the intended agent experience. It is a diagnostic transport experiment, not the finished delegate.
+An opt-in adaptive demo path is now implemented through `--brief`; see the [runbook](DELEGATE_PHONE_RUNBOOK.md#natural-goal-based-wallet-demo) and [worried wallet brief](../scenarios/delegate/lost-wallet-worried.json). It replaces phrase selection with natural generated text, separate semantic review, style-directed TTS and independent ASR before release. It tracks cards mentioned in acknowledged speech, lets the model choose ordinary question order and withholds stale/replayed replies. It requires both target cards plus a source-supported, reviewed summary before accepting a model-reported result.
+
+The new brief uses the operator's revised facts: Barclaycard credit card, Barclays current-account debit card and Tesco Clubcard; the wallet might be at work or genuinely missing. These are demo scenario facts, not a claim about a real lost wallet. The caller should sound worried and uncertain, without inventing personal information or events.
+
+Offline tests cover the enforcement path using injected reply/reviewer doubles, including free-form replies, card ordering, remaining items, unavailable/denying review, ASR mismatch, stale assessment, replay, protected-action prompts and result evidence. They do not prove live model behaviour or vocal naturalness. A recorded live evaluation with varied questions remains outstanding. Dynamic authentication/keypad values, protected-action approval, persistent per-card resolution, pause/resume, and a setup UI remain outside this implementation. No new live call was placed for this change.
+
+## Limitation observed in the earlier recordings
+
+The recorded transport pilot proves outbound calls, two-way audio and guarded keypad navigation. Its model chose from a fixed phrase list. Adding each new answer as a CLI option, repeating a product description, or escalating ordinary preferences to the operator is not the intended agent experience. That recording is a diagnostic transport experiment, not evidence of the new adaptive path.
 
 The latest recordings show that the service understood the wallet and Premier/business banking description, then asked which card to sort first. A goal-based delegate with authority over routine conversational choices should choose an order, explain it if useful, and continue toward handling both cards. It should not require an operator preference for that routine ordering decision.
 
@@ -47,4 +55,4 @@ If an operator response is necessary, prefer a bounded pause/resume mechanism wh
 
 ## Current evidence and delivery boundary
 
-The [shareable recording package](../reports/recordings/lost-wallet-2026-10-21/README.md) contains both audio tracks, a playback page, independent remote transcript, local manifest and event ledger. Its events demonstrate the transport and the fixed-phrase limitation. This document records the next implementation requirement; it does not mark the adaptive response path, generalised mandate or pause/resume facility complete.
+The [shareable recording package](../reports/recordings/lost-wallet-2026-10-21/README.md) contains both audio tracks, a playback page, independent remote transcript, local manifest and event ledger. Its events demonstrate the transport and the old fixed-phrase limitation. The implementation update above does not change that historical evidence or mark the complete acceptance list, generalised mandate or pause/resume facility complete.
