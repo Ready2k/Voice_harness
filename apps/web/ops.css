@@ -347,3 +347,5 @@ label.theme-toggle select{flex:0 0 auto;width:auto;min-height:34px;padding:4px 8
 .scroll-region:focus-visible{outline:3px solid var(--info);outline-offset:-3px}
 .flag-urgent,.flag-bad{color:var(--bad);font-weight:600}
 .flag-warn{color:var(--warn);font-weight:600}
+
+.balance-notice { border-left:3px solid var(--warn); padding:10px 14px; background:color-mix(in srgb,var(--warn) 7%,var(--card)); font-size:.9rem }

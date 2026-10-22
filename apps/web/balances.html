@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
+<title>Balances &amp; spend · Voice Harness</title>
+<link rel="stylesheet" href="./ops.css?v=ux-final-20261025"><link rel="stylesheet" href="./balances.css">
+</head><body><main>
+<nav aria-label="Main navigation"><a href="./runs.html">Runs</a><a href="./telephone.html">Telephone</a><a href="./manual.html">Manual test</a><a href="./bakeoff.html">Bake-off</a><a href="./compare.html">Compare</a><a href="./scenarios.html">Scenarios</a><a href="./review.html">Review & holds</a><a href="./coverage.html">Provider coverage</a><a href="./balances.html" aria-current="page">Balances &amp; spend</a></nav>
+<h1>Provider balances &amp; spend</h1>
+<p class="sub">Check prepaid credit and estimated monthly charges before the next call.</p>
+<form id="auth"><input id="token" type="password" autocomplete="off" placeholder="Operator token" aria-label="Operator token" required><button type="submit">Connect</button></form>
+<p id="error" role="alert"></p>
+<div class="balance-toolbar"><button id="refresh" type="button">Refresh readings</button><p id="checked" class="muted" role="status">Connect to check provider billing.</p></div>
+<div id="balance-summary" class="tally" aria-live="polite"></div>
+<p class="balance-notice">An unavailable balance does not mean you have credit. OpenAI transcription supports every live provider here, so exhausted OpenAI credit can affect all evaluations.</p>
+<div id="balance-grid" class="balance-grid"></div>
+<p class="note">Credit checks refresh every minute while this page is visible; AWS spend refreshes at most daily. Warnings appear in the app; there are no background notifications. Provider reporting may lag. Saved balances are historical observations and do not track new usage, top-ups or expiry.</p>
+</main><script type="module" src="./balances-page.mjs"></script></body></html>

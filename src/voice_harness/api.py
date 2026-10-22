@@ -388,6 +388,10 @@ def create_app(
     async def dependency(request, error):
         return error_response(request, "EVIDENCE_UNAVAILABLE", 503, True)
 
+    from .provider_balances import register_balances
+
+    register_balances(app, database, auth)
+
     @app.get("/health")
     def health():
         return {"status": "ok", "schema_version": "0.3"}

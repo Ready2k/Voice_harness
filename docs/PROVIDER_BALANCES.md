@@ -1,0 +1,28 @@
+# Provider balances and billing
+
+The dashboard is at `/client/balances.html`. It separates prepaid credit from monthly spend because those figures have different meanings and alert directions. xAI can return an actual prepaid balance through its Management API. AWS is shown as estimated month-to-date account charges through Cost Explorer. OpenAI and Google Cloud do not expose a documented live remaining-credit value through the APIs currently used by this harness; the page can keep a dated manual observation for those providers.
+
+## What each row means
+
+| Provider | Reading | Setup and limits |
+|---|---|---|
+| **OpenAI** | The organization Costs API reports spend, not remaining prepaid credit. It cannot safely be subtracted from an assumed top-up because credits, shared usage and billing changes can make the result wrong. | Keep a dated manual credit observation and configure OpenAI's own spend alerts. The harness's inference key cannot read organization costs. |
+| **xAI** | The Management API `GET /v1/billing/teams/{team_id}/prepaid/balance` returns the team's prepaid balance. The adapter converts the documented USD-cent ledger to dollars. | Set `XAI_MANAGEMENT_API_KEY` and `XAI_TEAM_ID` on the server. This key is separate from `xAI_API_KEY`; an account admin must grant Management Keys access and issue it. |
+| **Google Cloud** | The billing account shown by the operator is **Postpay**. Its balance is accrued charges due so far, like a monthly bill, not remaining credit. This harness calls Gemini Live on **Vertex AI**, billed through Google Cloud. | Enable Standard usage cost export to the `voice_billing` BigQuery dataset in project `voiceharness`. Server configuration uses `GOOGLE_BILLING_PROJECT_ID` and `GOOGLE_BILLING_DATASET`; the server uses its existing Google ADC identity to query net month-to-date cost. That identity needs BigQuery Job User on the query project and BigQuery Data Viewer on the export dataset. Google updates the export daily; initial cost data can take hours to appear, with backfill taking up to five days. BigQuery storage and query usage may incur charges. **Gemini API through AI Studio** is a separate product and can use prepaid billing. |
+| **AWS** | Estimated net unblended charges for the current calendar month across the AWS account, from Cost Explorer. It is spend, not a remaining-credit amount or final invoice. | Enable Cost Explorer in the AWS billing console once. Use the dedicated billing IAM identity's credentials in `AWS_billing_access_key_id` and `AWS_billing_secret_access_key`; grant that identity only `ce:GetCostAndUsage` where possible. These are separate from Bedrock credentials. AWS reports can lag by a day or more. The dashboard caches successful reads for 24 hours because Cost Explorer API requests are billable. |
+
+The dashboard deliberately does not fall back to Nova's Bedrock session or the default AWS profile for billing. A narrow customer-managed policy can allow `ce:GetCostAndUsage` on `*`; AWS also offers the broader `AWSBillingReadOnlyAccess` managed policy. Store the separate credential pair in the local `.env` only; never commit it. Restart `make serve-live` after changing the credentials.
+
+## Freshness and alerts
+
+The page checks xAI on open and at most once a minute while visible. AWS and Google spend are checked at most once per 24 hours after a successful read. Cost Explorer and the Cloud Billing export update daily and can lag current usage; the AWS and Google numbers are estimates, not final invoices. Spend alerts fire when estimated monthly charges reach or exceed the configured amount. Credit alerts fire when a live or dated balance falls at or below the threshold. A stale, unknown, or unavailable reading is never presented as a zero balance.
+
+Provider credentials stay server-side and the page never makes an inference request to probe credit. The operator-token-protected endpoint returns billing data. These readings are available only while the local harness is running; there are no background notifications. A hosted dashboard or closed-page alert would need a persistent service and separately configured notification channel.
+
+## References
+
+- xAI [Management API setup](https://docs.x.ai/developers/management-api-guide) and [billing endpoints](https://docs.x.ai/developers/rest-api-reference/management/billing)
+- AWS [Cost Explorer](https://docs.aws.amazon.com/cost-management/latest/userguide/ce-what-is.html), [exploring costs and month-to-date estimates](https://docs.aws.amazon.com/cost-management/latest/userguide/ce-exploring-data.html), [enabling Cost Explorer](https://docs.aws.amazon.com/cost-management/latest/userguide/ce-enable.html), and [`GetCostAndUsage`](https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_GetCostAndUsage.html)
+- Google [Cloud Billing REST API](https://docs.cloud.google.com/billing/docs/reference/rest), [Vertex AI pricing](https://cloud.google.com/vertex-ai/generative-ai/pricing), and [Gemini API prepay billing for the separate AI Studio product](https://ai.google.dev/gemini-api/docs/billing/)
+- Google [Cloud Billing export to BigQuery](https://docs.cloud.google.com/billing/docs/how-to/export-data-bigquery) and [export setup and freshness](https://docs.cloud.google.com/billing/docs/how-to/export-data-bigquery-setup)
+- OpenAI [Costs API](https://developers.openai.com/api/reference/resources/admin/subresources/organization/subresources/usage/methods/costs), [spend limits and alerts](https://developers.openai.com/api/docs/guides/spend-limits), and [billing error codes](https://developers.openai.com/api/docs/guides/error-codes)

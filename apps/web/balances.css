@@ -1,0 +1,20 @@
+.balance-toolbar { display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin:20px 0 }
+.balance-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; margin-top:20px }
+.balance-card { padding:22px; border-top:4px solid var(--warn); overflow:visible }
+.balance-card[data-tone=ok] { border-top-color:var(--ok) }
+.balance-card[data-tone=bad] { border-top-color:var(--bad) }
+.balance-head { display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap }
+.balance-card .chip { color:var(--warn) }
+.balance-card[data-tone=ok] .chip { color:var(--ok) }
+.balance-card[data-tone=bad] .chip { color:var(--bad) }
+.balance-value { font-size:2.25rem; font-weight:650; margin:22px 0 2px; letter-spacing:-.04em; overflow-wrap:anywhere }
+.balance-message { min-height:4.5em; font-size:.9rem; color:var(--muted); margin:18px 0 }
+.balance-settings { margin-top:22px; padding-top:14px; border-top:1px solid var(--line) }
+.balance-settings summary { cursor:pointer; font-size:.9rem }
+.balance-settings form { display:grid; grid-template-columns:1fr 1fr; margin:16px 0 0 }
+.balance-settings label { display:flex; flex-direction:column; gap:5px; font-size:.85rem }
+.balance-settings input,.balance-settings select { flex:none; min-width:0; width:100% }
+.balance-settings label:nth-of-type(n+3),.balance-settings p { grid-column:1/-1 }
+.balance-settings .balance-check { display:flex; flex-direction:row; align-items:center }
+.balance-check input { width:auto }
+@media(max-width:720px){.balance-grid{grid-template-columns:1fr}.balance-card{padding:16px}.balance-value{font-size:1.8rem}}

@@ -9,6 +9,7 @@ export const PAGES = {
   "scenarios.html": "Scenarios",
   "review.html": "Review & holds",
   "coverage.html": "Provider coverage",
+  "balances.html": "Balances",
 };
 
 /** Pure: page label -> { title, breadcrumb }. */

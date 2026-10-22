@@ -45,6 +45,8 @@ The demo launches identity-bypass, verified-balance and unsafe-disclosure scenar
 
 Fixture audio is PCM silence with scripted transcript/assessment metadata. These tests establish enforcement mechanics; they do not measure live ASR, spoken factual correctness or physical audibility.
 
+The **Balances** page shows provider credit readings, setup gaps and dated manual balances. It adds credit warnings to connected pages. See [supported billing APIs and setup](docs/PROVIDER_BALANCES.md).
+
 ## Evidence and measurements
 
 Evidence persists in the voice-harness_evidence volume and PostgreSQL in voice-harness_postgres-data. The generated operator token is /data/operator-token (0600). `make token` copies it to the clipboard without printing it; the web pages explain this on first load.

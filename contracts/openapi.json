@@ -5,6 +5,113 @@
     "version": "0.3"
   },
   "paths": {
+    "/api/v1/provider-balances": {
+      "get": {
+        "summary": "Balances",
+        "operationId": "balances_api_v1_provider_balances_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/provider-balances/{provider}": {
+      "put": {
+        "summary": "Save Balance",
+        "operationId": "save_balance_api_v1_provider_balances__provider__put",
+        "parameters": [
+          {
+            "name": "provider",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Provider"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BalanceSettings"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/health": {
       "get": {
         "summary": "Health",
@@ -3456,6 +3563,48 @@
         ],
         "title": "BakeoffRequest",
         "description": "Launch a plan (scenarios x providers x repetitions), or wrap runs that already exist (``runs``)."
+      },
+      "BalanceSettings": {
+        "properties": {
+          "threshold": {
+            "type": "number",
+            "maximum": 1000000000000.0,
+            "minimum": 0.0,
+            "title": "Threshold",
+            "default": 10
+          },
+          "currency": {
+            "type": "string",
+            "enum": [
+              "USD",
+              "GBP",
+              "EUR"
+            ],
+            "title": "Currency",
+            "default": "USD"
+          },
+          "manual_balance": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 1000000000000.0,
+                "minimum": -1000000000000.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Manual Balance"
+          },
+          "record_balance": {
+            "type": "boolean",
+            "title": "Record Balance",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "BalanceSettings"
       },
       "CalibrateBody": {
         "properties": {
