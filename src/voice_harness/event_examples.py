@@ -239,6 +239,10 @@ def examples():
                 "payload_bytes": 4800, "payload_retained": False, "omission_reason": "AUDIO_AND_BULK_PAYLOAD_HASH_ONLY",
                 "received_ms": 1200, "clock_domain_id": "process_fixture",
             },
+            "adapter.session_ready": {
+                "adapter": "openai_realtime", "setup_ms": 640, "started_ms": 500, "ready_ms": 1140,
+                "clock_domain_id": "process_fixture",
+            },
             "manual.session_started": {
                 "journey_id": "balance", "path": "happy", "scenario_id": "happy-balance-clean-001",
                 "playback_mode": "gated", "input_modes": ["voice", "text"], "segmentation": "client_energy_vad",

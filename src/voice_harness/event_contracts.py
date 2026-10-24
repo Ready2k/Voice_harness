@@ -736,6 +736,16 @@ class AdapterNativeEvent(Closed):
     clock_domain_id: Identifier
 
 
+class AdapterSessionReady(Closed):
+    """The provider session became usable: ``setup_ms`` runs from the start of ``open_session`` to its return."""
+
+    adapter: Identifier
+    setup_ms: Count
+    started_ms: Count
+    ready_ms: Count
+    clock_domain_id: Identifier
+
+
 EVENT_CONTENT_CONTRACTS.update(
     {
         "run.live_binding": RunLiveBinding,
@@ -746,6 +756,7 @@ EVENT_CONTENT_CONTRACTS.update(
         "caller.agent_audio": CallerAgentAudio,
         "assessment.abandoned": AssessmentAbandoned,
         "adapter.native_event": AdapterNativeEvent,
+        "adapter.session_ready": AdapterSessionReady,
         "fault.disposition": FaultDisposition,
         "confirmation.voice_observation": ConfirmationVoiceObservation,
     }

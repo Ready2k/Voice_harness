@@ -14,6 +14,7 @@ from contextlib import suppress
 
 from .asr import LIVE_FLAG, select_backend
 from .contracts import TOOLS as TOOL_CONTRACTS
+from .events import PROCESS_CLOCK_DOMAIN
 from .live_assessment import IndependentAssessor
 from .live_scenario import LIVE_LIMITS, RATE, TURN_TIMEOUT_S, LiveScenarioRunner
 from .scenario_catalogue import catalogue_entry
@@ -236,6 +237,12 @@ def _adapter(provider_config_id, prompt_profile="standardised-v2"):
     return NovaSonicAdapter(), config
 
 
+# A room mic is far noisier than the synthetic caller: a high threshold keeps background speech and noise
+# from opening turns (and cutting the welcome), a short silence window still closes real turns promptly.
+MIC_VAD = {"threshold": 0.8, "silence_duration_ms": 700, "prefix_padding_ms": 300}
+MIC_VAD_PROVIDERS = ("openai-realtime-live", "xai-voice-live")
+
+
 def configure_transport(provider_config_id, config, caller_mode):
     """Select native turn controls for the input source, without changing task or judge prompts."""
     if provider_config_id not in LIVE_PROVIDERS:
@@ -251,6 +258,13 @@ def configure_transport(provider_config_id, config, caller_mode):
     else:
         detection = "server_vad" if caller_mode == "human_microphone" else "manual"
         config["turn_detection"] = detection
+        if detection == "server_vad" and provider_config_id in MIC_VAD_PROVIDERS:
+            config["turn_detection"] = {"type": "server_vad", **MIC_VAD, **(
+                {"interrupt_response": True, "create_response": True} if provider_config_id == "openai-realtime-live" else {})}
+    if provider_config_id == "gemini-live" and detection == "server_vad" and caller_mode == "human_microphone":
+        # Default end-of-speech detection answered 8-9 s after a short utterance in a room-mic session.
+        config["activity_detection"] = {"endOfSpeechSensitivity": "END_SENSITIVITY_HIGH", "silenceDurationMs": 600,
+                                        "prefixPaddingMs": 200}
     return {
         "profile_version": "provider-transport-v1", "caller_mode": caller_mode,
         "turn_detection": detection, "endpointing": config.get("endpointing") if nova else None,
@@ -262,6 +276,20 @@ def configure_transport(provider_config_id, config, caller_mode):
         "turn_timeout_seconds": TURN_TIMEOUT_S if caller_mode != "human_microphone" else None,
         "response_audio_seconds": LIVE_LIMITS["response_audio_seconds"],
     }
+
+
+async def _open_timed(engine, run_id, adapter, config):
+    """``adapter.open_session``, then a ledger event with how long the provider took to become ready.
+
+    The event is written inside the caller's setup guard: if the evidence write fails the run fails closed."""
+    started = time.monotonic()
+    receipt = await adapter.open_session(config)
+    ready = time.monotonic()
+    with engine.database.transaction(run_id) as tx:
+        tx.event("provider", "adapter.session_ready", {
+            "adapter": type(adapter).__name__, "setup_ms": round((ready - started) * 1000),
+            "started_ms": int(started * 1000), "ready_ms": int(ready * 1000), "clock_domain_id": PROCESS_CLOCK_DOMAIN})
+    return receipt
 
 
 async def run_live(engine, run_id, provider_config_id, scenario_id, *, seed=0, caller=None, evidence=None, prompt_profile="standardised-v2"):
@@ -277,7 +305,7 @@ async def run_live(engine, run_id, provider_config_id, scenario_id, *, seed=0, c
     transport = configure_transport(provider_config_id, config, "fixed")
     config["session_id"] = engine.database.get(run_id)["session_id"]
     try:
-        receipt = await adapter.open_session(config)
+        receipt = await _open_timed(engine, run_id, adapter, config)
     except BaseException:
         with suppress(Exception):
             await asyncio.wait_for(adapter.close("setup_failed"), 5)
@@ -361,7 +389,7 @@ async def _run_interactive(engine, run_id, provider_config_id, scenario_id, call
     setup_stage = "TARGET"
     try:
         async with asyncio.timeout_at(deadline):
-            receipt = await adapter.open_session(config)
+            receipt = await _open_timed(engine, run_id, adapter, config)
             setup_stage = "CALLER"
             caller_receipt = await caller.open(config["session_id"])
         metadata = session_metadata(provider_config_id, TESTED_MODELS[provider_config_id]["model_id"], receipt,
