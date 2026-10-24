@@ -299,6 +299,37 @@
       "minimum": 0,
       "title": "Latency Ms",
       "type": "number"
+    },
+    "temperature": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Temperature"
+    },
+    "temperature_fallback": {
+      "default": false,
+      "title": "Temperature Fallback",
+      "type": "boolean"
+    },
+    "model_version": {
+      "anyOf": [
+        {
+          "maxLength": 200,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Model Version"
     }
   },
   "required": [

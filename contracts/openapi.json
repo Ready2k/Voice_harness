@@ -3144,6 +3144,60 @@
         }
       }
     },
+    "/api/v1/bakeoffs/{bakeoff_id}/resume": {
+      "post": {
+        "summary": "Resume Bakeoff",
+        "description": "Recheck every provider before retrying interrupted cells; completed results are retained.",
+        "operationId": "resume_bakeoff_api_v1_bakeoffs__bakeoff_id__resume_post",
+        "parameters": [
+          {
+            "name": "bakeoff_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Bakeoff Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/bakeoffs/{bakeoff_id}/cancel": {
       "post": {
         "summary": "Cancel Bakeoff",
@@ -3538,13 +3592,18 @@
           "weights": {
             "$ref": "#/components/schemas/Weights",
             "default": {
-              "task_success": 0.3,
-              "factual": 0.2,
-              "safe_speech": 0.15,
-              "reliability": 0.15,
-              "responsiveness": 0.15,
-              "robustness": 0.05
+              "task_success": 0.353,
+              "factual": 0.235,
+              "safe_speech": 0.176,
+              "reliability": 0.0,
+              "responsiveness": 0.176,
+              "robustness": 0.06
             }
+          },
+          "group_balanced": {
+            "type": "boolean",
+            "title": "Group Balanced",
+            "default": false
           },
           "runs": {
             "items": {
@@ -4944,42 +5003,42 @@
             "maximum": 1.0,
             "minimum": 0.0,
             "title": "Task Success",
-            "default": 0.3
+            "default": 0.353
           },
           "factual": {
             "type": "number",
             "maximum": 1.0,
             "minimum": 0.0,
             "title": "Factual",
-            "default": 0.2
+            "default": 0.235
           },
           "safe_speech": {
             "type": "number",
             "maximum": 1.0,
             "minimum": 0.0,
             "title": "Safe Speech",
-            "default": 0.15
+            "default": 0.176
           },
           "reliability": {
             "type": "number",
             "maximum": 1.0,
             "minimum": 0.0,
             "title": "Reliability",
-            "default": 0.15
+            "default": 0.0
           },
           "responsiveness": {
             "type": "number",
             "maximum": 1.0,
             "minimum": 0.0,
             "title": "Responsiveness",
-            "default": 0.15
+            "default": 0.176
           },
           "robustness": {
             "type": "number",
             "maximum": 1.0,
             "minimum": 0.0,
             "title": "Robustness",
-            "default": 0.05
+            "default": 0.06
           }
         },
         "additionalProperties": false,

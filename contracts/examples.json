@@ -1267,6 +1267,13 @@
     "received_ms": 1200,
     "clock_domain_id": "process_fixture"
   },
+  "adapter.session_ready": {
+    "adapter": "openai_realtime",
+    "setup_ms": 640,
+    "started_ms": 500,
+    "ready_ms": 1140,
+    "clock_domain_id": "process_fixture"
+  },
   "fault.disposition": {
     "fault_kind": "tool_error",
     "at_turn": 0,

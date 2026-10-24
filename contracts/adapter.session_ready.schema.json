@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "The provider session became usable: ``setup_ms`` runs from the start of ``open_session`` to its return.",
+  "properties": {
+    "adapter": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Adapter",
+      "type": "string"
+    },
+    "setup_ms": {
+      "minimum": 0,
+      "title": "Setup Ms",
+      "type": "integer"
+    },
+    "started_ms": {
+      "minimum": 0,
+      "title": "Started Ms",
+      "type": "integer"
+    },
+    "ready_ms": {
+      "minimum": 0,
+      "title": "Ready Ms",
+      "type": "integer"
+    },
+    "clock_domain_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Clock Domain Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "adapter",
+    "setup_ms",
+    "started_ms",
+    "ready_ms",
+    "clock_domain_id"
+  ],
+  "title": "AdapterSessionReady",
+  "type": "object"
+}
