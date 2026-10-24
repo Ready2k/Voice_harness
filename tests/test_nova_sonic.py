@@ -221,9 +221,6 @@ def _creds_live():
     return False
 
 
-@unittest.skipUnless(_creds_live() and os.environ.get("NOVA_LIVE") == "1",
-                     "live Nova test: set NOVA_LIVE=1 with unexpired .local/aws-session.env "
-                     "(refresh via `! ./scripts/aws-session.sh <MFA code>`)")
 class AcknowledgingTransport(ReplayTransport):
     acknowledges_open = True
 
@@ -249,6 +246,9 @@ class NovaOpenAcknowledgement(unittest.IsolatedAsyncioTestCase):
         await a.close("done")
 
 
+@unittest.skipUnless(_creds_live() and os.environ.get("NOVA_LIVE") == "1",
+                     "live Nova test: set NOVA_LIVE=1 with unexpired .local/aws-session.env "
+                     "(refresh via `! ./scripts/aws-session.sh <MFA code>`)")
 class NovaLive(unittest.IsolatedAsyncioTestCase):
     async def test_live_tool_roundtrip(self):
         env = {}
