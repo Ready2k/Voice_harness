@@ -116,6 +116,11 @@ class JudgeOfflineEvaluated(Closed):
     results: list[FindingRecord]
     abstained_criteria: list[Identifier]
     latency_ms: Annotated[float, Field(ge=0)]
+    # Sampling actually used. ``temperature`` is None when none was sent (rejected by the model, or a backend that has
+    # no such setting); ``model_version`` is the model string the API returned, None when it returns none.
+    temperature: float | None = None
+    temperature_fallback: bool = False
+    model_version: Identifier | None = None
 
 
 class CalibrationBinding(Closed):

@@ -63,7 +63,8 @@ def assess_run(database, run_id: str, *, tested: dict, backends: list[JudgeBacke
     applicable, not_applicable, unknown = rubric.applicability(scenario, extra_applicable)
     ctx = EvalContext(events, scenario, fixture_for(state))
     det = rubric.evaluate(ctx, applicable)
-    required = required_judges if required_judges is not None else (2 if material_benchmark else 1)
+    required = required_judges if required_judges is not None else (
+        2 if material_benchmark else rubric.required_judge_count(applicable))
     backends = list(backends or [])
     indep = independence.assess(
         tested, [b.config for b in backends], required_judges=required, material_benchmark=material_benchmark,
@@ -117,6 +118,7 @@ def assess_run(database, run_id: str, *, tested: dict, backends: list[JudgeBacke
                 "evaluation_id": evaluation_id, "judge": judge["identity"], "status": outcome["status"],
                 "error_code": outcome["error_code"], "results": outcome["results"],
                 "abstained_criteria": outcome["abstained_criteria"], "latency_ms": outcome["latency_ms"],
+                **outcome["sampling"],
             }, [indep_event]))
         adjudicated = emit(tx, "judge.adjudicated", {
             "evaluation_id": evaluation_id, "rubric_id": rubric.RUBRIC_ID, "rubric_version": rubric.RUBRIC_VERSION,

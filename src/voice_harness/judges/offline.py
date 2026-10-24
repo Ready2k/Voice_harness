@@ -76,6 +76,9 @@ def run_offline(backend: JudgeBackend, oracle: Oracle, criteria: list[str], by_i
                 "reason_codes": ["RESULT_MISSING"], "judge_id": config.judge_id,
             })
     outcome["latency_ms"] = round((time.monotonic() - started) * 1000, 3)
+    call = getattr(backend, "last_call", None) or {}
+    outcome["sampling"] = {"temperature": call.get("temperature"), "temperature_fallback": bool(call.get("temperature_fallback")),
+                           "model_version": call.get("model_version")}
     return outcome
 
 

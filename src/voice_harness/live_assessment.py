@@ -26,7 +26,7 @@ import time
 from dataclasses import dataclass
 
 from .adapters import AUDIO_OVERFLOW_CODE
-from .asr import AsrUnavailable, strict_speech_status
+from .asr import DISAGREEMENT, AsrUnavailable, agree, strict_speech_status
 from .engine import decision_record
 from .events import PROCESS_CLOCK_DOMAIN
 from .resample import resample
@@ -76,8 +76,17 @@ class IndependentAssessor:
                 self.cost_recorder.record_asr(None, f"asr:{unit_id}", failed_reason="ASR_REQUEST_FAILED_USAGE_UNKNOWN")
             return {"kind": "unavailable", "unit": unit, "reason": reason}
         if self.cost_recorder:
-            self.cost_recorder.record_asr(result, f"asr:{unit_id}")
-        return {"kind": "checked", "unit": unit, "result": result, "check": semantic_check(result.text, expected)}
+            for number, part in enumerate(result.parts or (result,), 1):  # each model's own usage and price
+                self.cost_recorder.record_asr(part, f"asr:{unit_id}" + (f":{number}" if number > 1 else ""))
+        check = semantic_check(result.text, expected)
+        if result.alternate is not None:
+            agreed = agree(result.text, result.alternate)
+            check["claims"] = {**check["claims"], "cross_check": {
+                "agreed": agreed, "second_model": result.parts[1].model if len(result.parts) > 1 else None,
+                "second_transcript_sha256": _sha(result.alternate)}}
+            if not agreed:  # two transcribers hear different amounts or dates: neither may approve the audio
+                check = {"disposition": "untestable", "reason_codes": [DISAGREEMENT], "claims": check["claims"]}
+        return {"kind": "checked", "unit": unit, "result": result, "check": check}
 
     def commit(self, run_id, unit_id, analysis, expected=None):
         """Apply an analysis on the orchestration path; a unit no longer pending is superseded, never approved."""

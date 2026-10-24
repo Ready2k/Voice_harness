@@ -17,6 +17,14 @@ from typing import Any
 
 from .oracle import DATA_CLASSIFICATION
 
+JUDGE_TEMPERATURE = 0.0
+# The calibrated Claude Haiku 4.5 (docs/PHASE4_NOTES_bedrock_calibration.md) is the default while this account has no access
+# to the Claude 5.5 models (AccessDeniedException on 2026-10-24). Haiku 5.5 (us.anthropic.claude-haiku-5-5) and Sonnet 5.5
+# (us.anthropic.claude-sonnet-5-5) are selectable through VOICE_HARNESS_BEDROCK_JUDGE_MODEL once access is enabled; the bare
+# model ids have no in-Region endpoint and cannot be called on demand.
+DEFAULT_BEDROCK_JUDGE_MODEL = "us.anthropic.claude-haiku-4-5-20251001-v1:0"
+# gpt-4.1-mini shuts down on 2027-01-14; gpt-6-luna is the replacement OpenAI names.
+DEFAULT_OPENAI_JUDGE_MODEL = "gpt-6-luna"
 OFFLINE_TEMPLATE_ID = "offline-judge/1"
 ONLINE_TEMPLATE_ID = "online-judge/1"
 
@@ -141,7 +149,7 @@ class OpenAIBackend(JudgeBackend):
         if not live_enabled("openai", environ):
             raise JudgeUnavailable("LIVE_JUDGE_DISABLED")
         self._environ = environ
-        model = model_id or environ.get("VOICE_HARNESS_OPENAI_JUDGE_MODEL", "gpt-4.1-mini")
+        model = model_id or environ.get("VOICE_HARNESS_OPENAI_JUDGE_MODEL", DEFAULT_OPENAI_JUDGE_MODEL)
         self.config = JudgeConfig("openai-" + model, "openai", "openai", model, "gpt")
         self.timeout, self.client = timeout, client
         self.base_url = base_url or environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1")
@@ -160,13 +168,22 @@ class OpenAIBackend(JudgeBackend):
                 {"role": "user", "content": request.user_payload},
             ],
             "response_format": {"type": "json_object"},
+            "temperature": JUDGE_TEMPERATURE,
         }
+        self.last_call = {"temperature": JUDGE_TEMPERATURE, "temperature_fallback": False, "model_version": None}
         try:
             post = (self.client or httpx).post
-            response = post(
-                self.base_url.rstrip("/") + "/chat/completions", json=body, timeout=self.timeout,
-                headers={"Authorization": "Bearer " + key},
-            )
+
+            def send(payload):
+                return post(self.base_url.rstrip("/") + "/chat/completions", json=payload, timeout=self.timeout,
+                            headers={"Authorization": "Bearer " + key})
+
+            response = send(body)
+            if response.status_code == 400 and "temperature" in response.text.lower():
+                # The model does not accept a temperature: retry once without it and record that it was not sent.
+                body.pop("temperature")
+                self.last_call.update(temperature=None, temperature_fallback=True)
+                response = send(body)
         except httpx.TimeoutException as exc:
             raise JudgeTimeout() from exc
         except httpx.HTTPError as exc:
@@ -175,6 +192,8 @@ class OpenAIBackend(JudgeBackend):
             raise JudgeUnavailable(f"JUDGE_HTTP_{response.status_code}")
         try:
             payload = response.json()
+            resolved = payload.get("model")
+            self.last_call["model_version"] = resolved if isinstance(resolved, str) and resolved else None
             usage = payload.get("usage") or {}
             if usage.get("prompt_tokens") is not None:
                 self.last_usage = {"input_tokens": usage.get("prompt_tokens"),
@@ -208,7 +227,7 @@ class BedrockConverseBackend(JudgeBackend):
     def __init__(self, model_id=None, *, environ=os.environ, client=None):
         if not live_enabled("bedrock", environ):
             raise JudgeUnavailable("LIVE_JUDGE_DISABLED")
-        model = model_id or environ.get("VOICE_HARNESS_BEDROCK_JUDGE_MODEL", "anthropic.claude-3-5-haiku-20241022-v1:0")
+        model = model_id or environ.get("VOICE_HARNESS_BEDROCK_JUDGE_MODEL", DEFAULT_BEDROCK_JUDGE_MODEL)
         self.config = JudgeConfig("bedrock-" + model, "bedrock", "aws_bedrock", model, bedrock_family(model))
         self.client = client
         if client is None:
@@ -222,12 +241,14 @@ class BedrockConverseBackend(JudgeBackend):
 
     def complete(self, request):
         _require_synthetic(request)
+        # Converse returns no resolved model string, so the pinned model id is the only version there is.
+        self.last_call = {"temperature": JUDGE_TEMPERATURE, "temperature_fallback": False, "model_version": None}
         try:
             out = self.client.converse(
                 modelId=self.config.model_id,
                 system=[{"text": request.system_prompt}],
                 messages=[{"role": "user", "content": [{"text": request.user_payload}]}],
-                inferenceConfig={"maxTokens": 4096, "temperature": 0},
+                inferenceConfig={"maxTokens": 4096, "temperature": JUDGE_TEMPERATURE},
             )
             usage = out.get("usage") or {}
             if usage.get("inputTokens") is not None:
