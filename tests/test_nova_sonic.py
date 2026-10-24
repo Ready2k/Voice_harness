@@ -224,6 +224,31 @@ def _creds_live():
 @unittest.skipUnless(_creds_live() and os.environ.get("NOVA_LIVE") == "1",
                      "live Nova test: set NOVA_LIVE=1 with unexpired .local/aws-session.env "
                      "(refresh via `! ./scripts/aws-session.sh <MFA code>`)")
+class AcknowledgingTransport(ReplayTransport):
+    acknowledges_open = True
+
+
+class NovaOpenAcknowledgement(unittest.IsolatedAsyncioTestCase):
+    """Session setup time must include Bedrock accepting the stream, not just starting the local bridge."""
+
+    async def open(self, msgs, **config):
+        tr = AcknowledgingTransport(msgs, hold_open=True)
+        a = NovaSonicAdapter(pump_interval_s=0.001)
+        await a.open_session({"session_id": "S1", "transport": tr, "system_prompt": "x", **config})
+        return a
+
+    async def test_open_waits_for_the_bridge_to_report_the_stream_open(self):
+        a = await self.open([{"_open_ok": {"requestId": "req-1"}}])
+        self.assertEqual(a.stats["request_id"], "req-1")
+        self.assertNotIn("open_unacknowledged", a.stats)
+        await a.close("done")
+
+    async def test_an_unacknowledged_open_is_recorded_and_not_fatal(self):
+        a = await self.open([], open_timeout=0.05)
+        self.assertTrue(a.stats["open_unacknowledged"])
+        await a.close("done")
+
+
 class NovaLive(unittest.IsolatedAsyncioTestCase):
     async def test_live_tool_roundtrip(self):
         env = {}

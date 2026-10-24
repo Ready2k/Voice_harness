@@ -114,6 +114,8 @@ def map_error(name: str, message: str) -> tuple[str, bool]:
 class NodeBridgeTransport:
     """JSON-lines bridge to scripts/probe/nova_bridge.mjs (Node + @aws-sdk/client-bedrock-runtime)."""
 
+    acknowledges_open = True  # the bridge reports _open_ok once Bedrock has accepted the stream
+
     def __init__(self, region: str = REGION, model_id: str = MODEL_ID, env: dict | None = None):
         self.region, self.model_id, self.env = region, model_id, env
         self.proc: asyncio.subprocess.Process | None = None
@@ -175,6 +177,7 @@ class NovaSonicAdapter:
         self._tool_ids: set[str] = set()
         self._turn_open = False
         self.stats = {"silence_chunks": 0, "audio_chunks": 0, "request_id": None}
+        self._open_ok = asyncio.Event()
 
     # ------------------------------------------------------------------ capabilities
     def capabilities(self) -> dict[str, Any]:
@@ -277,6 +280,13 @@ class NovaSonicAdapter:
                                         "encoding": "base64"}}})
         self._reader = asyncio.create_task(self._read_loop())
         self._pump = asyncio.create_task(self._pump_loop())
+        if getattr(self.transport, "acknowledges_open", False):
+            # Starting the bridge only spawns a local process. Wait for Bedrock to accept the stream, so session setup
+            # time measures a real handshake like the other providers; an unacknowledged open is recorded, not fatal.
+            try:
+                await asyncio.wait_for(self._open_ok.wait(), config.get("open_timeout", 10))
+            except TimeoutError:
+                self.stats["open_unacknowledged"] = True
         return {"session_id": self.session_id, "model_id": MODEL_ID, "prompt_name": self._prompt}
 
     async def _send(self, event: dict) -> None:
@@ -376,6 +386,7 @@ class NovaSonicAdapter:
                     break
                 if "_open_ok" in msg:
                     self.stats["request_id"] = msg["_open_ok"].get("requestId")
+                    self._open_ok.set()
                     continue
                 if "_error" in msg:
                     code, fatal = map_error(msg["_error"].get("name", ""), msg["_error"].get("message", ""))
