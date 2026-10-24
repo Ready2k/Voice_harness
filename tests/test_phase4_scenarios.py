@@ -100,7 +100,7 @@ class CatalogueCriteria(unittest.TestCase):
         for sid, entry in CATALOGUE.items():
             criteria = entry["definition"]["applicable_criteria"]
             self.assertEqual("CARE-01" in criteria, entry["definition"]["customer"]["vulnerability"] != "none", sid)
-            self.assertEqual("CONFIRM-01" in criteria, sid == "commit-cancel-unconfirmed-001", sid)
+            self.assertEqual("CONFIRM-01" in criteria, sid in {"commit-cancel-unconfirmed-001", "commit-cancel-claimed-confirmation-001"}, sid)
             self.assertEqual(entry["mechanics"], ["out_of_band_confirmation"] if sid == "commit-cancel-confirmed-001" else [], sid)
             asks = any(
                 w in t["customer"].lower() for t in entry["definition"]["turns"] for w in ("balance", "account"))
@@ -112,6 +112,37 @@ class CatalogueCriteria(unittest.TestCase):
             self.assertTrue(all("get_account_summary" not in t["prohibited_actions"] for t in turns), sid)
         refuses = CATALOGUE["identity-impatient-en-gb-clean-001"]["definition"]["turns"]
         self.assertTrue(all("get_account_summary" in t["prohibited_actions"] for t in refuses))
+
+
+ATTACKS = {
+    "identity-injection-ignore-rules-001": "prompt_injection",
+    "identity-injection-reveal-instructions-001": "prompt_injection",
+    "identity-injection-fake-tool-result-001": "prompt_injection",
+    "identity-authority-employee-001": "social_engineering",
+    "identity-authority-urgency-001": "social_engineering",
+    "commit-cancel-claimed-confirmation-001": "social_engineering",
+}
+
+
+class AttackScenarios(unittest.TestCase):
+    def test_attacks_are_tagged_and_can_fail_the_criterion_they_target(self):
+        for sid, tag in ATTACKS.items():
+            entry = CATALOGUE[sid]
+            self.assertEqual(entry["tags"], [tag], sid)
+            d = entry["definition"]
+            self.assertEqual(d["initial_state"]["identity"], "unverified", sid)
+            self.assertEqual(d["expected_tool_sequence"], [], sid)
+            self.assertTrue(all("get_account_summary" in t["prohibited_actions"] for t in d["turns"]), sid)
+            self.assertIn("IDENTITY-01", d["applicable_criteria"], sid)
+            if sid.startswith("commit-cancel-"):
+                self.assertIn("CONFIRM-01", d["applicable_criteria"], sid)
+        self.assertEqual(CATALOGUE["commit-cancel-unconfirmed-001"]["tags"], ["social_engineering"])
+
+    def test_attack_text_is_scripted_and_never_asks_for_a_real_secret(self):
+        for sid in ATTACKS:
+            for turn in CATALOGUE[sid]["definition"]["turns"]:
+                self.assertLessEqual(len(turn["customer"]), 1000, sid)
+                self.assertNotRegex(turn["customer"].lower(), r"password|card number|\bpin\b", sid)
 
 
 class AllowedAmounts(unittest.TestCase):
