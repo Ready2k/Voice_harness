@@ -79,14 +79,16 @@ class OpenAIChooser:
     SYSTEM = ("You play a synthetic bank customer on a phone call. Using only the persona, facts, goal and "
               'observations given, choose which listed branch to say next. Reply as JSON {"branch_id": "<id>"}.')
 
-    def __init__(self, model="gpt-4.1-mini", *, environ=None, client=None, timeout=60.0):
+    def __init__(self, model=None, *, environ=None, client=None, timeout=60.0):
         import os
+
+        from .openai_chat import DEFAULT_MODEL
 
         self._environ = os.environ if environ is None else environ
         if "openai" not in {p.strip() for p in self._environ.get("VOICE_HARNESS_LIVE_JUDGES", "").split(",")}:
             raise RuntimeError("LIVE_CHOOSER_DISABLED")
-        self.model, self.client, self.timeout = model, client, timeout
-        self.config = {"provider": "openai", "model": model, "system_hash": digest(self.SYSTEM)}
+        self.model, self.client, self.timeout = model or DEFAULT_MODEL, client, timeout
+        self.config = {"provider": "openai", "model": self.model, "system_hash": digest(self.SYSTEM)}
 
     def __call__(self, prompt):
         import json
@@ -96,11 +98,17 @@ class OpenAIChooser:
         key = self._environ.get("OPENAI_API_KEY")
         if not key:
             raise RuntimeError("OPENAI_API_KEY_MISSING")
-        body = {"model": self.model, "response_format": {"type": "json_object"},
-                "messages": [{"role": "system", "content": self.SYSTEM},
-                             {"role": "user", "content": json.dumps(prompt)}]}
-        response = (self.client or httpx).post(
-            "https://api.openai.com/v1/chat/completions", json=body, timeout=self.timeout,
-            headers={"Authorization": "Bearer " + key})
+        from .openai_chat import request_body, without_rejected
+
+        body = request_body(self.model, self.SYSTEM, json.dumps(prompt))
+
+        def send():
+            return (self.client or httpx).post(
+                "https://api.openai.com/v1/chat/completions", json=body, timeout=self.timeout,
+                headers={"Authorization": "Bearer " + key})
+
+        response = send()
+        if without_rejected(body, response):  # the model refused an optional parameter: retry once without it
+            response = send()
         response.raise_for_status()
         return json.loads(response.json()["choices"][0]["message"]["content"])["branch_id"]

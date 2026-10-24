@@ -11,6 +11,8 @@ import re
 import httpx
 from jsonschema import ValidationError, validate
 
+from .openai_chat import DEFAULT_MODEL, request_body, without_rejected
+
 BRIEF_SCHEMA = {
     "type": "object", "additionalProperties": False,
     "required": ["mode", "goal", "situation", "tone", "items"],
@@ -159,22 +161,24 @@ class DialogueReviewer:
 
     def __init__(self, env, client=None):
         self.env, self.client = env, client
-        self.model = env.get("VOICE_HARNESS_DELEGATE_REVIEW_MODEL", "gpt-4.1-mini")
+        self.model = env.get("VOICE_HARNESS_DELEGATE_REVIEW_MODEL", DEFAULT_MODEL)
 
     async def review(self, payload):
         if not self.env.get("OPENAI_API_KEY"):
             raise ValueError("DIALOGUE_REVIEW_NOT_CONFIGURED")
-        body = {"model": self.model, "response_format": {"type": "json_object"},
-                "messages": [{"role": "system", "content": self.SYSTEM},
-                             {"role": "user", "content": json.dumps(payload)}]}
+        body = request_body(self.model, self.SYSTEM, json.dumps(payload))
+        headers = {"Authorization": "Bearer " + self.env["OPENAI_API_KEY"]}
+        url = "https://api.openai.com/v1/chat/completions"
         try:
             if self.client:
-                response = await self.client.post("https://api.openai.com/v1/chat/completions", json=body,
-                    headers={"Authorization": "Bearer " + self.env["OPENAI_API_KEY"]}, timeout=15)
+                response = await self.client.post(url, json=body, headers=headers, timeout=15)
+                if without_rejected(body, response):  # the model refused an optional parameter: retry once without it
+                    response = await self.client.post(url, json=body, headers=headers, timeout=15)
             else:
                 async with httpx.AsyncClient(timeout=15) as client:
-                    response = await client.post("https://api.openai.com/v1/chat/completions", json=body,
-                        headers={"Authorization": "Bearer " + self.env["OPENAI_API_KEY"]})
+                    response = await client.post(url, json=body, headers=headers)
+                    if without_rejected(body, response):
+                        response = await client.post(url, json=body, headers=headers)
             if response.status_code != 200:
                 raise ValueError("DIALOGUE_REVIEW_HTTP_" + str(response.status_code))
             result = json.loads(response.json()["choices"][0]["message"]["content"])
