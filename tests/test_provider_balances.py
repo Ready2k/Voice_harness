@@ -11,7 +11,13 @@ import httpx
 from fastapi.testclient import TestClient
 
 from voice_harness.api import create_app
-from voice_harness.provider_balances import BalanceService, BalanceSettings, aws_balance, google_balance, xai_balance
+from voice_harness.provider_balances import (
+    BalanceService,
+    BalanceSettings,
+    aws_balance,
+    google_balance,
+    xai_balance,
+)
 from voice_harness.storage import Database
 
 
@@ -84,7 +90,7 @@ class BalanceApi(unittest.TestCase):
         self.assertEqual(result['balance'], 12.34)
         self.assertEqual(result['currency'], 'GBP')
         self.assertEqual(result['kind'], 'spend')
-        self.assertIn('voiceharness.voice_billing.gcp_billing_export_v1_*', post.call_args.args[1]['json']['query'])
+        self.assertIn('voiceharness.voice_billing.gcp_billing_export_v1_*', post.call_args.kwargs['json']['query'])
         self.assertNotIn('access-token', json.dumps(result))
 
     def test_google_cost_export_requires_configuration_and_handles_not_yet_enabled_export(self):

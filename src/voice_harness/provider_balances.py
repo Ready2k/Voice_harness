@@ -91,7 +91,7 @@ def aws_balance(env):
         aws_env.pop(name, None)
     aws_env["AWS_ACCESS_KEY_ID"] = access_key
     aws_env["AWS_SECRET_ACCESS_KEY"] = secret_key
-    today = dt.datetime.now(dt.timezone.utc).date()
+    today = dt.datetime.now(dt.UTC).date()
     month_start = today.replace(day=1)
     next_month = (month_start.replace(day=28) + dt.timedelta(days=4)).replace(day=1)
     # Cost Explorer data updates at most daily; use one monthly request and cache it for a day.
@@ -136,7 +136,7 @@ def google_balance(env):
     from .adapters.google_gemini_live import _fetch_access_token
 
     token = _fetch_access_token()
-    today = dt.datetime.now(dt.timezone.utc).date()
+    today = dt.datetime.now(dt.UTC).date()
     month_start = today.replace(day=1)
     query = f"""
         SELECT SUM(cost + IFNULL((SELECT SUM(credit.amount) FROM UNNEST(credits) AS credit), 0)) AS net_cost,
