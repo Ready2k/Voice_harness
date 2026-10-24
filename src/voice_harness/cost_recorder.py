@@ -25,6 +25,9 @@ CUMULATIVE_PROVIDERS = {"aws_nova_sonic"}
 SERVICES = {"openai": "realtime", "aws_nova_sonic": "bedrock"}
 BILLED_UNKNOWN = "BILLED_STATUS_UNKNOWN: provider reported usage for a cancelled or failed generation"
 NO_USAGE = "PROVIDER_RETURNED_NO_USAGE"
+HARNESS_MEASURED_ASR = "harness_measured_audio_seconds"
+HARNESS_MEASURED_NOTE = ("HARNESS_MEASURED_NOT_PROVIDER_REPORTED: the provider returned no usage; seconds are the length of "
+                         "the audio the harness sent, priced at the per-minute rate")
 
 
 def _key(report):
@@ -157,19 +160,26 @@ class UsageRecorder:
                            "raw": {"input_token_details": usage.get("input_token_details")}},
                 scope_id=scope_id, usage_date=date, service="transcription", model=model, component="asr",
                 meter_map=self.meter_map))
+        measured = getattr(result, "audio_seconds", None)
+        if result is not None and result.live and not failed_reason and measured is not None and measured > 0:
+            # No provider usage: price the audio length the harness measured, labelled as an estimate, never as provider-reported.
+            return self._append([self._asr_seconds(provider, model, scope_id, date, format(Decimal(str(measured)), "f"), None,
+                                                   estimated=True)])
         offline = result is not None and not result.live
         reason = failed_reason or ("OFFLINE_FIXTURE_NO_USAGE" if offline else NO_USAGE)
         return self._append([self._asr_seconds(provider, model, scope_id, date, None, reason)])
 
-    def _asr_seconds(self, provider, model, scope_id, date, quantity, reason):
+    def _asr_seconds(self, provider, model, scope_id, date, quantity, reason, *, estimated=False):
         return {
             "report_id": f"{scope_id}:asr_seconds:1", "component": "asr", "provider": provider,
             "service": "transcription", "model": model, "region": None,
             "meter_id": self.meter_map.get("asr_seconds", "asr_seconds"), "billing_scope_id": scope_id,
             "scope_type": "request", "report_kind": "incremental", "revision": 1, "corrects_report_id": None,
-            "covers_scope_ids": [], "provenance": "provider_reported_usage", "quantity": quantity,
-            "unit": "second", "cached_quantity": None, "generation_state": "completed", "usage_date": date,
-            "interval_start_ms": None, "interval_end_ms": None, "estimation_method": None, "assumptions": [],
+            "covers_scope_ids": [], "provenance": "estimated" if estimated else "provider_reported_usage",
+            "quantity": quantity, "unit": "second", "cached_quantity": None, "generation_state": "completed",
+            "usage_date": date, "interval_start_ms": None, "interval_end_ms": None,
+            "estimation_method": HARNESS_MEASURED_ASR if estimated else None,
+            "assumptions": [HARNESS_MEASURED_NOTE] if estimated else [],
             "unknown_reason": reason, "evidence_event_ids": []}
 
     # -- judges

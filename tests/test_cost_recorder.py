@@ -273,6 +273,26 @@ class AsrAndJudges(Base):
         token = [x for x in self.section()["lines"] if x["billing_scope_id"] == "asr:u5"]
         self.assertEqual({x["meter_id"]: x["quantity"] for x in token if x["quantity"]}, {"audio_input_tokens": "2", "text_input_tokens": "0", "output_tokens_unclassified": "4"})
 
+    def test_asr_without_provider_usage_is_priced_from_harness_measured_seconds_and_labelled(self):
+        recorder = self.asr_recorder()
+        recorder.record_asr(AsrResult("t", "fixture_asr", "m", True, None, audio_seconds=12.5), "asr:m1")
+        recorder.record_asr(AsrResult("t", "fixture_asr", "m", True, {"type": "duration", "seconds": 30}, audio_seconds=12.5), "asr:m2")
+        recorder.record_asr(AsrResult("t", "fixture_asr", "m", False, None, audio_seconds=12.5), "asr:m3")
+        recorder.record_asr(AsrResult("t", "fixture_asr", "m", True, None, audio_seconds=0.0), "asr:m4")
+        recorder.record_asr(AsrResult("t", "fixture_asr", "m", True, None, audio_seconds=12.5), "asr:m5", failed_reason="ASR_REQUEST_FAILED_USAGE_UNKNOWN")
+        lines = {x["billing_scope_id"]: x for x in self.section()["lines"] if x["meter_id"] == "asr_seconds"}
+        measured = lines["asr:m1"]
+        self.assertEqual((measured["quantity"], measured["amount"]), ("12.5", "0.7500"))
+        self.assertEqual((measured["provenance"], measured["usage_source"]), ("estimated", "estimated"))
+        self.assertEqual(measured["estimation_method"], "harness_measured_audio_seconds")
+        self.assertIn("HARNESS_MEASURED_NOT_PROVIDER_REPORTED", measured["assumptions"][0])
+        # Provider-reported usage is preferred over the harness's own measurement.
+        self.assertEqual((lines["asr:m2"]["quantity"], lines["asr:m2"]["provenance"]), ("30", "provider_reported_usage"))
+        # Offline fixtures, zero-length audio and failed requests stay unknown, never priced from a guess.
+        self.assertEqual(lines["asr:m3"]["unknown_reason"], "OFFLINE_FIXTURE_NO_USAGE")
+        self.assertEqual(lines["asr:m4"]["unknown_reason"], "PROVIDER_RETURNED_NO_USAGE")
+        self.assertEqual(lines["asr:m5"]["unknown_reason"], "ASR_REQUEST_FAILED_USAGE_UNKNOWN")
+
     def test_judge_wrapper_records_usage_unknown_and_failure(self):
         class Fake(JudgeBackend):
             def __init__(self):

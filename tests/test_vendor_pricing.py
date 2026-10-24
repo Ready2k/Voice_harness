@@ -10,7 +10,7 @@ from voice_harness.live_providers import FAMILIES, TESTED_MODELS
 from voice_harness.pricing import load_table
 
 PRICING = Path(__file__).parent.parent / "artifacts" / "pricing"
-TABLE = PRICING / "vendor-pricing-2026-10-19.json"
+TABLE = PRICING / "vendor-pricing-2026-10-24.json"
 
 
 class VendorPricingTable(unittest.TestCase):
@@ -31,7 +31,7 @@ class VendorPricingTable(unittest.TestCase):
                 self.assertEqual(tariff.source_status, "primary_source")
                 self.assertEqual(tariff.currency, "USD")
 
-    def recorded(self, config_id, meter, region=None, usage_date="2026-10-19"):
+    def recorded(self, config_id, meter, region=None, usage_date="2026-10-24"):
         """The tariff for the identifiers a live run of ``config_id`` records (as live_providers builds the recorder)."""
         provider = FAMILIES[config_id]
         return self.table.find(provider=provider, service=SERVICES.get(provider, provider),
@@ -62,6 +62,23 @@ class VendorPricingTable(unittest.TestCase):
     def test_unpriced_families_stay_unknown(self):
         self.assertIsNone(self.find("google_gemini_live", "google_gemini_live", "gemini-live-2.5-flash-native-audio",
                                     None, "input_tokens_unclassified"))  # unsplit totals cannot be priced
+
+
+class NewestTableIsTheDefault(unittest.TestCase):
+    def test_serve_live_defaults_to_the_newest_vendor_table(self):
+        newest = sorted(PRICING.glob("vendor-pricing-*.json"))[-1].name
+        self.assertEqual(newest, "vendor-pricing-2026-10-24.json")
+        makefile = Path(__file__).parent.parent / "Makefile"
+        if not makefile.exists():
+            self.skipTest("the Makefile is not shipped into the test image")
+        self.assertIn(newest, makefile.read_text())
+
+    def test_reverified_rows_cite_the_official_page_with_todays_date(self):
+        table = load_table(PRICING / "vendor-pricing-2026-10-24.json")
+        rows = {t.tariff_id: t for t in table.tariffs}
+        for tariff_id in ("openai-rt-audio-in", "openai-judge-41mini-out", "gemini-3-8-live-audio-input-tokens", "xai-voice-sts-minute"):
+            self.assertTrue(any(e.endswith("#2026-10-24") for e in rows[tariff_id].evidence_ids), tariff_id)
+        self.assertTrue(all(e.endswith("#2026-10-18") for e in rows["nova25-speech-in"].evidence_ids))  # not re-verifiable: unchanged
 
 
 class XaiPerMinuteMeter(unittest.TestCase):
