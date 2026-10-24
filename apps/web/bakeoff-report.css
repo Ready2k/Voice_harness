@@ -101,3 +101,22 @@ label.bk-check input { flex:none; width:auto }
 .bk-rank-cards .bk-detail { grid-template-columns:minmax(0, 1fr) auto }
 .bk-rank-cards .bk-detail dd { white-space:nowrap; text-align:right }
 .bk [data-section]:focus { outline:none }
+
+/* Scorecard: data bars, interval text, overlap marker. */
+.bk-table td.bk-bar { white-space:nowrap; background:linear-gradient(90deg, var(--info) var(--bar, 0%), transparent var(--bar, 0%)) left bottom / 100% 3px no-repeat }
+.bk-ci { color:var(--muted); font-size:.8em }
+.bk-overlap { color:var(--warn); font-weight:600; cursor:help }
+/* Caveats: the extra ones sit behind a toggle on screen and always print. */
+.bk-limits-toggle { align-self:flex-start; font-size:.88rem }
+.bk-glossary dt { font-weight:600; color:var(--fg) }
+@media print { .bk-limits-more[hidden] { display:flex !important } .bk-limits-toggle { display:none } .bk-table td.bk-bar { background:none } }
+.bakeoff-group { display:flex; flex-direction:column; gap:2px }
+.bakeoff-group > details { margin-left:28px }
+.bakeoff-group > details > summary { cursor:pointer; font-size:.8rem }
+.bakeoff-scenarios { padding:4px 0 6px }
+.bakeoff-pause { padding:8px 12px; border:1px solid var(--warn); border-left-width:5px; border-radius:8px; background:color-mix(in srgb, var(--warn) 12%, var(--card)) }
+.bakeoff-pause[hidden] { display:none }
+.bakeoff-provider-progress p { margin:6px 0 0 }
+.bakeoff-provider-table { border-collapse:collapse; font-size:.85rem; width:100%; max-width:46rem }
+.bakeoff-provider-table th, .bakeoff-provider-table td { text-align:left; padding:3px 12px 3px 0; font-variant-numeric:tabular-nums }
+.bakeoff-provider-table th { color:var(--muted); font-weight:500 }

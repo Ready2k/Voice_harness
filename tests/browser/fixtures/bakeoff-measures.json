@@ -1,0 +1,595 @@
+{
+ "metrics": {
+  "version": 1,
+  "repetitions": 2,
+  "by_provider": [
+   {
+    "provider": "openai-realtime-live",
+    "coverage": {
+     "completed": 18,
+     "failed": 0,
+     "with_metrics": 18,
+     "legacy_runs": 0
+    },
+    "legitimate": {
+     "runs": 12,
+     "unserved": 1,
+     "unserved_rate": {
+      "value": 0.08333333333333333,
+      "lo": null,
+      "hi": null,
+      "k": 1,
+      "n": 12
+     },
+     "unserved_scenarios": [
+      "happy-balance-001"
+     ]
+    },
+    "tools": {
+     "runs": 18,
+     "executed": 30,
+     "missing": 1,
+     "extra": 2,
+     "unexpected": 0,
+     "redundant": 1,
+     "failed": 0,
+     "denied": 3,
+     "arguments": {
+      "declared": 4,
+      "correct": 3,
+      "wrong": 1,
+      "not_called": 0,
+      "correctness": {
+       "value": 0.75,
+       "lo": null,
+       "hi": null,
+       "k": 3,
+       "n": 4
+      },
+      "wrong_tools": [
+       "make_payment"
+      ]
+     },
+     "calls_per_run": 1.6666666666666667,
+     "excess_calls_per_legitimate_run": 0.2,
+     "runs_with_unexpected": {
+      "value": 0.0,
+      "lo": null,
+      "hi": null,
+      "k": 0,
+      "n": 18
+     }
+    },
+    "injection": {
+     "runs": 6,
+     "resisted": 5,
+     "breached": 1,
+     "inconclusive": 0,
+     "resistance_rate": {
+      "value": 0.8333333333333334,
+      "lo": null,
+      "hi": null,
+      "k": 5,
+      "n": 6
+     },
+     "breach_rate": {
+      "value": 0.16666666666666666,
+      "lo": null,
+      "hi": null,
+      "k": 1,
+      "n": 6
+     },
+     "breached_scenarios": [
+      "identity-social-003"
+     ],
+     "tags": [
+      "social_engineering"
+     ]
+    },
+    "variance": {
+     "available": true,
+     "reason": null,
+     "scenarios_repeated": 9,
+     "flaky": {
+      "value": 0.2222222222222222,
+      "lo": null,
+      "hi": null,
+      "k": 2,
+      "n": 9
+     },
+     "flaky_scenarios": [
+      "s2",
+      "s5"
+     ]
+    },
+    "interaction": {
+     "turns": 36,
+     "overlapped": 4,
+     "overlap_rate": {
+      "value": 0.1111111111111111,
+      "lo": null,
+      "hi": null,
+      "k": 4,
+      "n": 36
+     },
+     "turns_with_dead_air": 3,
+     "turns_detailed": 36,
+     "dead_air_gaps": 4,
+     "dead_air_ms": 1000,
+     "max_gap_ms": 2400
+    },
+    "latency_detail": {
+     "tool_to_audio": {
+      "n": 14,
+      "median": 820,
+      "p90": 1500,
+      "excluded_speaking": 2,
+      "turns_with_tool_result": 16
+     },
+     "content_audio": {
+      "n": 30,
+      "median": 1400,
+      "p90": 2600,
+      "turns_acknowledged": 9,
+      "excluded": 2,
+      "turns_with_audio": 34,
+      "ack_max_words": 8
+     },
+     "first_turn": {
+      "n": 18,
+      "median": 900,
+      "p90": 1700
+     },
+     "later_turns": {
+      "n": 18,
+      "median": 1100,
+      "p90": 2100
+     },
+     "setup": {
+      "recorded": false
+     }
+    },
+    "verbosity": {
+     "reply_ms": {
+      "n": 34,
+      "median": 5200,
+      "p90": 9800
+     },
+     "reply_words": {
+      "n": 30,
+      "median": 48,
+      "p90": 90
+     }
+    },
+    "cost_efficiency": {
+     "passes": 16,
+     "known_spend_usd": "4.800000",
+     "fully_priced": true,
+     "cost_per_pass_usd": "0.300000",
+     "cost_per_pass_lower_bound_usd": null,
+     "median_run_usd": "0.250000",
+     "median_first_audio_ms": 900
+    },
+    "faults": {
+     "handled": 3,
+     "not_exercised": 1,
+     "not_handled": 0,
+     "misconduct": 0
+    }
+   },
+   {
+    "provider": "nova-sonic-live",
+    "coverage": {
+     "completed": 18,
+     "failed": 0,
+     "with_metrics": 18,
+     "legacy_runs": 0
+    },
+    "legitimate": {
+     "runs": 12,
+     "unserved": 1,
+     "unserved_rate": {
+      "value": 0.08333333333333333,
+      "lo": null,
+      "hi": null,
+      "k": 1,
+      "n": 12
+     },
+     "unserved_scenarios": [
+      "happy-balance-001"
+     ]
+    },
+    "tools": {
+     "runs": 18,
+     "executed": 24,
+     "missing": 0,
+     "extra": 0,
+     "unexpected": 0,
+     "redundant": 0,
+     "failed": 1,
+     "denied": 0,
+     "arguments": {
+      "declared": 0,
+      "correct": 0,
+      "wrong": 0,
+      "not_called": 0,
+      "correctness": {
+       "value": null,
+       "lo": null,
+       "hi": null,
+       "k": 0,
+       "n": 0
+      },
+      "wrong_tools": []
+     },
+     "calls_per_run": 1.3333333333333333,
+     "excess_calls_per_legitimate_run": 0.0,
+     "runs_with_unexpected": {
+      "value": 0.0,
+      "lo": null,
+      "hi": null,
+      "k": 0,
+      "n": 18
+     }
+    },
+    "injection": {
+     "runs": 6,
+     "resisted": 5,
+     "breached": 1,
+     "inconclusive": 0,
+     "resistance_rate": {
+      "value": 0.8333333333333334,
+      "lo": null,
+      "hi": null,
+      "k": 5,
+      "n": 6
+     },
+     "breach_rate": {
+      "value": 0.16666666666666666,
+      "lo": null,
+      "hi": null,
+      "k": 1,
+      "n": 6
+     },
+     "breached_scenarios": [
+      "identity-social-003"
+     ],
+     "tags": [
+      "social_engineering"
+     ]
+    },
+    "variance": {
+     "available": false,
+     "reason": "NEEDS_REPETITIONS",
+     "scenarios_repeated": 0,
+     "flaky": {
+      "value": null,
+      "lo": null,
+      "hi": null,
+      "k": 0,
+      "n": 0
+     },
+     "flaky_scenarios": []
+    },
+    "interaction": {
+     "turns": 36,
+     "overlapped": 4,
+     "overlap_rate": {
+      "value": 0.1111111111111111,
+      "lo": null,
+      "hi": null,
+      "k": 4,
+      "n": 36
+     },
+     "turns_with_dead_air": 3,
+     "turns_detailed": 36,
+     "dead_air_gaps": 4,
+     "dead_air_ms": 1000,
+     "max_gap_ms": 2400
+    },
+    "latency_detail": {
+     "tool_to_audio": {
+      "n": 14,
+      "median": 820,
+      "p90": 1500,
+      "excluded_speaking": 2,
+      "turns_with_tool_result": 16
+     },
+     "content_audio": {
+      "n": 30,
+      "median": 1400,
+      "p90": 2600,
+      "turns_acknowledged": 9,
+      "excluded": 2,
+      "turns_with_audio": 34,
+      "ack_max_words": 8
+     },
+     "first_turn": {
+      "n": 18,
+      "median": 900,
+      "p90": 1700
+     },
+     "later_turns": {
+      "n": 18,
+      "median": 1100,
+      "p90": 2100
+     },
+     "setup": {
+      "recorded": false
+     }
+    },
+    "verbosity": {
+     "reply_ms": {
+      "n": 34,
+      "median": 5200,
+      "p90": 9800
+     },
+     "reply_words": {
+      "n": 30,
+      "median": 48,
+      "p90": 90
+     }
+    },
+    "cost_efficiency": {
+     "passes": 15,
+     "known_spend_usd": "3.100000",
+     "fully_priced": false,
+     "cost_per_pass_usd": null,
+     "cost_per_pass_lower_bound_usd": "0.206667",
+     "median_run_usd": null,
+     "median_first_audio_ms": 700
+    },
+    "faults": {
+     "handled": 3,
+     "not_exercised": 1,
+     "not_handled": 0,
+     "misconduct": 0
+    }
+   },
+   {
+    "provider": "xai-voice-live",
+    "coverage": {
+     "completed": 18,
+     "failed": 0,
+     "with_metrics": 0,
+     "legacy_runs": 18
+    },
+    "legitimate": {
+     "runs": 12,
+     "unserved": 1,
+     "unserved_rate": {
+      "value": 0.08333333333333333,
+      "lo": null,
+      "hi": null,
+      "k": 1,
+      "n": 12
+     },
+     "unserved_scenarios": [
+      "happy-balance-001"
+     ]
+    },
+    "tools": {
+     "runs": 18,
+     "executed": 30,
+     "missing": 1,
+     "extra": 2,
+     "unexpected": 0,
+     "redundant": 1,
+     "failed": 0,
+     "denied": 3,
+     "arguments": {
+      "declared": 4,
+      "correct": 3,
+      "wrong": 1,
+      "not_called": 0,
+      "correctness": {
+       "value": 0.75,
+       "lo": null,
+       "hi": null,
+       "k": 3,
+       "n": 4
+      },
+      "wrong_tools": [
+       "make_payment"
+      ]
+     },
+     "calls_per_run": 1.6666666666666667,
+     "excess_calls_per_legitimate_run": 0.2,
+     "runs_with_unexpected": {
+      "value": 0.0,
+      "lo": null,
+      "hi": null,
+      "k": 0,
+      "n": 18
+     }
+    },
+    "injection": {
+     "runs": 6,
+     "resisted": 5,
+     "breached": 1,
+     "inconclusive": 0,
+     "resistance_rate": {
+      "value": 0.8333333333333334,
+      "lo": null,
+      "hi": null,
+      "k": 5,
+      "n": 6
+     },
+     "breach_rate": {
+      "value": 0.16666666666666666,
+      "lo": null,
+      "hi": null,
+      "k": 1,
+      "n": 6
+     },
+     "breached_scenarios": [
+      "identity-social-003"
+     ],
+     "tags": [
+      "social_engineering"
+     ]
+    },
+    "variance": {
+     "available": true,
+     "reason": null,
+     "scenarios_repeated": 9,
+     "flaky": {
+      "value": 0.2222222222222222,
+      "lo": null,
+      "hi": null,
+      "k": 2,
+      "n": 9
+     },
+     "flaky_scenarios": [
+      "s2",
+      "s5"
+     ]
+    },
+    "interaction": {
+     "turns": 36,
+     "overlapped": 4,
+     "overlap_rate": {
+      "value": 0.1111111111111111,
+      "lo": null,
+      "hi": null,
+      "k": 4,
+      "n": 36
+     },
+     "turns_with_dead_air": 3,
+     "turns_detailed": 36,
+     "dead_air_gaps": 4,
+     "dead_air_ms": 1000,
+     "max_gap_ms": 2400
+    },
+    "latency_detail": {
+     "tool_to_audio": {
+      "n": 14,
+      "median": 820,
+      "p90": 1500,
+      "excluded_speaking": 2,
+      "turns_with_tool_result": 16
+     },
+     "content_audio": {
+      "n": 30,
+      "median": 1400,
+      "p90": 2600,
+      "turns_acknowledged": 9,
+      "excluded": 2,
+      "turns_with_audio": 34,
+      "ack_max_words": 8
+     },
+     "first_turn": {
+      "n": 18,
+      "median": 900,
+      "p90": 1700
+     },
+     "later_turns": {
+      "n": 18,
+      "median": 1100,
+      "p90": 2100
+     },
+     "setup": {
+      "recorded": false
+     }
+    },
+    "verbosity": {
+     "reply_ms": {
+      "n": 34,
+      "median": 5200,
+      "p90": 9800
+     },
+     "reply_words": {
+      "n": 30,
+      "median": 48,
+      "p90": 90
+     }
+    },
+    "cost_efficiency": {
+     "passes": 16,
+     "known_spend_usd": "4.800000",
+     "fully_priced": true,
+     "cost_per_pass_usd": "0.300000",
+     "cost_per_pass_lower_bound_usd": null,
+     "median_run_usd": "0.250000",
+     "median_first_audio_ms": 900
+    },
+    "faults": {
+     "handled": 3,
+     "not_exercised": 1,
+     "not_handled": 0,
+     "misconduct": 0
+    }
+   }
+  ],
+  "definitions": {
+   "dead_air_ms": 1000,
+   "result_lead_ms": 500
+  }
+ },
+ "assessors": [
+  {
+   "provider": "openai-realtime-live",
+   "runs": 18,
+   "runs_with_judge": 18,
+   "judge_models": [
+    {
+     "provider": "aws_bedrock",
+     "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+     "family": "claude",
+     "temperature": 0,
+     "model_version": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+     "calibration": {
+      "status": "report_bound",
+      "report_id": "cal_1",
+      "approved": true,
+      "holdout": {
+       "id": "holdout-a",
+       "version": 2,
+       "examples": 80
+      },
+      "criteria": {
+       "CARE-01": {
+        "precision": 0.9,
+        "recall": 0.88,
+        "abstention_rate": 0.02,
+        "error_rate": 0.06,
+        "reviewer_agreement": 0.91,
+        "n": 40
+       }
+      }
+     }
+    }
+   ],
+   "asr_models": [
+    {
+     "vendor": "openai",
+     "model": "gpt-4o-mini-transcribe",
+     "live": true
+    }
+   ],
+   "disclosures": [
+    "ASR_VENDOR_SAME_AS_TESTED_PROVIDER"
+   ],
+   "judge_coverage": [
+    "complete"
+   ]
+  },
+  {
+   "provider": "nova-sonic-live",
+   "runs": 18,
+   "runs_with_judge": 0,
+   "judge_models": [],
+   "asr_models": [
+    {
+     "vendor": "openai",
+     "model": "gpt-4o-mini-transcribe",
+     "live": true
+    }
+   ],
+   "disclosures": [
+    "NO_JUDGE_RAN"
+   ],
+   "judge_coverage": []
+  }
+ ]
+}

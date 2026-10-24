@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'"><title>Bake-off · Voice Harness</title><link rel="stylesheet" href="./ops.css?v=ux-final-20261025"><link rel="stylesheet" href="./bakeoff-report.css?v=ux-final-20261025"></head><body><main>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'"><title>Bake-off · Voice Harness</title><link rel="stylesheet" href="./ops.css?v=ux-final-20261025"><link rel="stylesheet" href="./bakeoff-report.css?v=bakeoff-ux-20261022-2"></head><body><main>
 <nav aria-label="Main navigation"><a href="./runs.html">Runs</a><a href="./telephone.html">Telephone</a><a href="./manual.html">Manual test</a><a href="./bakeoff.html" aria-current="page">Bake-off</a><a href="./compare.html">Compare</a><a href="./scenarios.html">Scenarios</a><a href="./review.html">Review & holds</a><a href="./coverage.html">Provider coverage</a></nav>
 <p class="eyebrow">Voice Harness / Bake-off</p><h1>Choose a provider with evidence</h1><p class="sub">Run the live scenario catalogue on several providers, then rank them: safety gates first, a weighted scorecard with confidence intervals, head-to-head significance tests, and latency as the tie-break. Every number comes from the runs' ledgers, and the report downloads as one shareable file.</p>
 <form id="auth"><input id="token" type="password" autocomplete="off" placeholder="Operator token" aria-label="Operator token" required><button>Connect</button></form><p id="error" role="alert"></p>
@@ -11,7 +11,7 @@
     <label>Name<input id="bo-name" maxlength="120" placeholder="e.g. Q4 provider selection"></label>
     <fieldset><legend>Providers (at least two)</legend><div id="bo-providers" class="bakeoff-checks"></div></fieldset>
     <fieldset><legend>Scenario groups</legend><div id="bo-groups" class="bakeoff-checks"></div></fieldset>
-    <label>Repetitions per scenario<input id="bo-reps" type="number" min="1" max="10" value="1"></label>
+    <label>Repetitions per scenario<input id="bo-reps" type="number" min="1" max="10" value="5"></label>
     <p class="muted" id="bo-size" role="status"></p>
     <button id="bo-launch" class="primary" type="button">Launch bake-off</button>
     <div id="bo-confirm" class="bakeoff-confirm" role="alertdialog" aria-labelledby="bo-confirm-text" hidden>
@@ -30,14 +30,25 @@
     <div class="workspace-heading"><h2 id="bo-title"></h2><span id="bo-state" class="badge"></span></div>
     <div class="bakeoff-progress" aria-hidden="true"><span id="bo-bar"></span></div>
     <p class="muted" id="bo-progress" role="status"></p>
+    <div id="bo-pause" class="bakeoff-pause" role="status" hidden></div>
+    <div id="bo-provider-progress" class="bakeoff-provider-progress"></div>
+    <div id="bo-action-confirm" class="bakeoff-confirm" role="alertdialog" aria-labelledby="bo-action-text" hidden>
+     <p id="bo-action-text"></p>
+     <div class="actions"><button id="bo-action-yes" class="primary" type="button">Confirm</button><button id="bo-action-no" type="button">Keep going</button></div>
+    </div>
     <div class="actions">
      <button id="bo-list-toggle" type="button" aria-expanded="false" aria-controls="bo-side">All bake-offs and new</button>
      <button id="bo-download" type="button">Download report (HTML)</button>
+     <button id="bo-csv" type="button">Download observations (CSV)</button>
+     <button id="bo-json" type="button">Download observations (JSON)</button>
+     <button id="bo-clone" type="button">Clone this bake-off</button>
+     <button id="bo-resume" type="button" hidden>Recheck providers and resume</button>
      <button id="bo-cancel" type="button" hidden>Cancel bake-off</button>
     </div>
     <details class="sub-workflow" id="bo-weights">
      <summary>What if the weights were different?</summary>
      <p class="muted">Set each dimension as a percentage. The ranking re-computes as you type; weights are normalised to 100% and nothing is stored.</p>
+     <p class="muted" id="bo-ignored-weights" hidden></p>
      <div id="bo-weight-inputs" class="bakeoff-weights"></div>
      <p id="bo-weight-total" class="bakeoff-weight-total" role="status"></p>
      <div class="actions"><button id="bo-reset" type="button">Reset to stored weights</button></div>
@@ -48,4 +59,4 @@
   </div>
  </section>
 </section>
-</main><script type="module" src="./bakeoff-page.mjs?v=ux-final-20261025"></script></body></html>
+</main><script type="module" src="./bakeoff-page.mjs?v=bakeoff-ux-20261022-2"></script></body></html>
