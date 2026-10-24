@@ -28,7 +28,7 @@ LATENCY_TARGET_MS = {"median": 500, "p90": 800}
 RESPONSIVENESS_MIX = {"median": 2 / 3, "p90": 1 / 3}  # the median is the headline target, so it counts twice the p90
 # How much a failed criterion counts in the severity-weighted assurance rate, by the severity in judges/rubric.py.
 SEVERITY_WEIGHTS = {"critical": 4, "high": 3, "medium": 2, "low": 1}
-VERDICT_CREDIT = {"pass": 1.0, "partial": 0.5, "fail": 0.0}  # other verdicts (untestable, abstain) are not scored
+VERDICT_CREDIT = {"pass": 1.0, "partial": 0.5, "fail": 0.0}  # nosec B105 - verdict labels, not secrets; untestable and abstain are not scored
 _CACHE: dict = {}
 
 
