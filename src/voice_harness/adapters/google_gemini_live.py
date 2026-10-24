@@ -213,7 +213,7 @@ class GeminiLiveAdapter:
                 max_size=None, open_timeout=config.get("open_timeout", 15))
         except InvalidStatus as e:
             status = e.response.status_code
-            raise ValueError("PROVIDER_AUTH_FAILED" if status in (401, 403) else f"PROVIDER_HTTP_{status}") from None
+            raise ValueError(f"PROVIDER_HTTP_{status}") from None
         except (OSError, TimeoutError) as e:
             raise ValueError(f"PROVIDER_UNREACHABLE:{type(e).__name__}") from None
         finally:
@@ -232,6 +232,8 @@ class GeminiLiveAdapter:
             setup["systemInstruction"] = {"parts": [{"text": config["instructions"]}]}
         if self._manual:
             setup["realtimeInputConfig"] = {"automaticActivityDetection": {"disabled": True}}
+        elif isinstance(config.get("activity_detection"), dict):
+            setup["realtimeInputConfig"] = {"automaticActivityDetection": config["activity_detection"]}
         decls = [{"name": t["name"], "description": t.get("description", ""),
                   "parameters": t.get("parameters", {"type": "object", "properties": {}})}
                  for t in config.get("tools", [])]

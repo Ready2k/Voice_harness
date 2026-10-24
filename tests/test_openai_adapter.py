@@ -237,7 +237,7 @@ class OfflineTests(unittest.IsolatedAsyncioTestCase):
         try:
             port = server.sockets[0].getsockname()[1]
             a = OpenAIRealtimeAdapter(api_key="sk-x", url=f"ws://127.0.0.1:{port}/v1/realtime")
-            with self.assertRaisesRegex(ValueError, "PROVIDER_AUTH_FAILED"):
+            with self.assertRaisesRegex(ValueError, "PROVIDER_HTTP_401"):
                 await a.open_session({"session_id": "s"})
             with self.assertRaisesRegex(ValueError, "PROVIDER_AUTH_MISSING"):
                 await OpenAIRealtimeAdapter(api_key="", url="ws://x").open_session({"session_id": "s"})

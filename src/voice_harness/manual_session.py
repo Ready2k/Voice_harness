@@ -41,12 +41,21 @@ MAX_TEXT_CHARS = 1000
 MAX_SESSION_S = 900.0  # 15 minutes of provider time per session
 MAX_UTTERANCE_BYTES = 60 * RATE * 2  # a single speech segment is closed after 60 s
 AUDIO_RATE_SLACK_S = 5.0  # mic audio may run ahead of the wall clock by this much (network bursts)
+WELCOME_HOLD_S = 20.0  # caller audio is withheld this long at most while the opening welcome is generated
+MAX_REPLY_RETRIES = 2  # consecutive withheld replies the orchestrator will ask the model to redo
+RETRY_PROMPT = ("[orchestrator] Your last reply was withheld by a safety control ({reasons}) and the caller did not "
+                "hear it. Answer the caller again now, briefly and in line with your instructions: do not state, "
+                "repeat or confirm any security answer, password or PIN, and share no account details unless "
+                "identity is verified.")
+CLOSE_SILENCE_S = 1.5  # silence sent when the caller stops mid-speech so provider VAD can end the turn
 ASSESSMENT_DRAIN_S = 20.0  # replies still being assessed at stop get this long to settle
 # A manual session can run up to MAX_SESSION_S. Streamed replies are released but never acknowledged, so the
 # session-wide pending budget covers the whole session. The per-response cap stays the same as live runs.
 MANUAL_LIMITS = {**LIVE_LIMITS, "pending_audio_seconds": MAX_SESSION_S,
                  "pending_audio_bytes": int(MAX_SESSION_S) * RATE * 2}
 PLAYBACK_MODES = ("gated", "streamed")
+WELCOME_PROMPT = ("[orchestrator] The call has just connected and the caller has not spoken yet. "
+                  "Greet the caller with your standard welcome and ask how you can help.")
 CONTROL_ACTIONS = ("pause", "resume", "mute", "unmute", "mode_voice", "mode_text")
 # Adapter truncate outcomes -> interruption receipt vocabulary; only a provider acknowledgement reconciles history.
 TRUNCATION = {"acknowledged": "confirmed", "rejected": "unknown", "not_attempted": "unknown"}
@@ -184,6 +193,8 @@ class ManualSession(LiveScenarioRunner):
         self.voice_turns = self.text_turns = 0
         self.outcomes, self.errors, self.fatal = [], [], False
         self._remainder = b""
+        self._retries = 0
+        self._welcome_until = None  # provider VAD would cut the welcome on mic noise, so audio waits for it to end
         self._frames = 0
         self._speech, self._speech_started = None, None
         self._confirm, self._held_audio = None, None  # out-of-band confirmation awaiting the caller's voice
@@ -217,6 +228,10 @@ class ManualSession(LiveScenarioRunner):
             raise ValueError("INVALID_AUDIO_FRAME")
         if self.paused or self.muted or self.mode != "voice":
             return  # the page stops sending in these states; late frames are dropped, never forwarded
+        if self._welcome_until is not None:
+            if self.clock() < self._welcome_until:
+                return
+            self._welcome_until = None
         self._audio_samples += len(data) // 2
         if self._audio_samples / RATE > self.clock() - self._started + AUDIO_RATE_SLACK_S:
             raise ValueError("AUDIO_RATE_EXCEEDED")
@@ -274,6 +289,21 @@ class ManualSession(LiveScenarioRunner):
         self.emit({"type": "turn", "turn": self.turn, "source": "text"})
         await self.adapter.send_text(text)
 
+    async def _welcome(self):
+        """The agent speaks first, as a real call would; the cue is an orchestrator note, not a caller turn."""
+        self._record("manual.welcome_requested", {"at_ms": self._now_ms(), "clock_domain_id": PROCESS_CLOCK_DOMAIN,
+                                                  "text_sha256": _sha(WELCOME_PROMPT.encode())})
+        self._welcome_until = self.clock() + WELCOME_HOLD_S
+        await self.adapter.send_text(WELCOME_PROMPT)
+
+    async def _close_turn(self):
+        """The page stops sending on mute/pause/text, so provider VAD would never see the silence ending a turn."""
+        if self._held_audio is not None or self._welcome_until is not None:
+            return
+        silence = bytes(FRAME_SAMPLES * 2)
+        for _ in range(int(CLOSE_SILENCE_S * RATE / FRAME_SAMPLES)):
+            await self.adapter.send_audio(silence, {"sample_count": FRAME_SAMPLES, "sample_rate": RATE})
+
     async def _control(self, action):
         if action not in CONTROL_ACTIONS:
             raise ValueError("INVALID_CONTROL")
@@ -285,7 +315,10 @@ class ManualSession(LiveScenarioRunner):
             self.mode = action.removeprefix("mode_")
         if self.paused or self.muted or self.mode != "voice":
             self._remainder = b""
+            speaking = self._speech is not None
             await self._speech_end()  # a segment in progress ends where the caller stopped sending
+            if speaking:
+                await self._close_turn()
         self._record("manual.control", {"action": action, "at_ms": self._now_ms(),
                                         "clock_domain_id": PROCESS_CLOCK_DOMAIN})
         self.emit(self._state())
@@ -386,6 +419,20 @@ class ManualSession(LiveScenarioRunner):
                    "status": outcome["strict_speech_approval"], "disposition": outcome.get("disposition"),
                    "reason_codes": [r for r in outcome.get("reason_codes", []) if r],
                    "transcript": outcome.get("transcript"), "provider_text": job.snapshot["text"]})
+        await self._retry_withheld(outcome)
+
+    async def _retry_withheld(self, outcome):
+        """A withheld reply leaves the caller in silence; have the model answer again instead of waiting for them."""
+        if outcome["strict_speech_approval"] == "approved":
+            self._retries = 0
+            return
+        if outcome["strict_speech_approval"] != "held" or self.paused or self._retries >= MAX_REPLY_RETRIES:
+            return
+        self._retries += 1
+        reasons = ", ".join(r for r in outcome.get("reason_codes", []) if r) or "policy"
+        self._record("manual.reply_retry_requested", {"attempt": self._retries, "reason_codes": outcome.get("reason_codes", []),
+                                                      "unit_id": outcome.get("unit_id"), "at_ms": self._now_ms()})
+        await self.adapter.send_text(RETRY_PROMPT.format(reasons=reasons))
 
     async def _pump(self, bank):
         async for event in self.adapter.receive():
@@ -397,6 +444,7 @@ class ManualSession(LiveScenarioRunner):
                 await self._tool(bank, event)
                 continue
             if kind == "turn_end":
+                self._welcome_until = None
                 job, _ = self.driver.begin(event)
                 if self.playback_mode == "streamed":
                     self._record_streamed(job.unit_id if job else None, interrupted=False)
@@ -503,6 +551,7 @@ class ManualSession(LiveScenarioRunner):
                 self.emit({"type": "ready", "run_id": self.run_id, "scenario_id": definition["id"],
                            "playback_mode": self.playback_mode, "max_session_seconds": int(self.max_session_s)})
                 self.emit(self._state())
+                await self._welcome()
                 reason = await self._serve(inbound, pump)
                 await self._speech_end()
                 if self._assessments:  # let the last reply finish its assessment before the session closes

@@ -34,7 +34,11 @@ class ProviderTransportTests(unittest.TestCase):
             profile = configure_transport(provider, config, "human_microphone")
             self.assertEqual(profile["turn_commit"], "provider_vad" if provider == "nova-sonic-live" else "automatic")
             if provider != "nova-sonic-live":
-                self.assertEqual(config["turn_detection"], "server_vad")
+                detection = config["turn_detection"]
+                if provider in ("openai-realtime-live", "xai-voice-live"):  # a room mic gets the less sensitive VAD
+                    self.assertEqual((detection["type"], detection["threshold"]), ("server_vad", 0.8))
+                else:
+                    self.assertEqual(detection, "server_vad")
             self.assertIsNone(profile["turn_timeout_seconds"])
             self.assertIsNone(profile["caller_trailing_silence_ms"])
 

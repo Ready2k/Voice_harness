@@ -42,7 +42,9 @@ RULES = (
     _r("SECRET_CARD_NUMBER", "secrets", "redact", r"\b(?:\d[ -]?){15}\d\b"),
     _r(
         "SECRET_CREDENTIAL", "secrets", "redact",
-        r"\b(?:password|passcode|pin|security answer)\s*(?:is|was|=|:)\s*\S+",
+        r"\b(?:password|passcode|pin|security answer)\s*(?:is|was|=|:)\s*"
+        r"(?!(?:set|incorrect|correct|wrong|invalid|valid|not|required|needed|locked|verified|expired|missing|"
+        r"stored|on|a|an|the|your|my|still|now|being|currently|already|too|case|different|accepted)\b)\S+",
     ),
     # Prohibited disclosure: balances before identity is verified, raw identifiers always.
     _r(

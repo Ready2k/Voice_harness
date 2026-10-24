@@ -163,17 +163,14 @@ class LiveScenarioRunner:
         injected = event.name in self._fault_profile
         result = await bank.tool(event.call_id, event.name, event.arguments)
         if result["status"] == "success":
-            # Amounts returned by a trusted tool may be spoken; they are allowed, not required.
-            # Typed facts, rebuilt not mutated: jobs already frozen keep the context they were started with.
-            now = int(time.monotonic() * 1000)
-            facts = list(self.driver.expected_claims.get("allowed_facts", []))
-            facts.extend(
-                {"account_id": (result.get("structured_content") or {}).get("account_id"), "field": k,
-                 "amount_minor": v, "currency": (result.get("structured_content") or {}).get("currency", "GBP"),
-                 "source_call_id": event.call_id, "source_ts_ms": now}
-                for k, v in (result.get("structured_content") or {}).items()
-                if k.endswith("_minor") and isinstance(v, int))
-            self.driver.expected_claims = {**self.driver.expected_claims, "allowed_facts": facts}
+            from .tool_claims import allowed_tool_claims
+
+            amounts, dates = allowed_tool_claims(result, event.call_id, int(time.monotonic() * 1000))
+            self.driver.expected_claims = {
+                **self.driver.expected_claims,
+                "allowed_facts": [*self.driver.expected_claims.get("allowed_facts", []), *amounts],
+                "allowed_date_facts": [*self.driver.expected_claims.get("allowed_date_facts", []), *dates],
+            }
         receipt = await self.adapter.submit_tool_result(event.call_id, result)
         self.tool_calls.append({
             "call_id": event.call_id, "name": event.name, "status": result["status"],
@@ -333,7 +330,7 @@ class LiveScenarioRunner:
                                         self._faults("background_noise"), self.seed + index)
                     # Trusted tool amounts are allowed for the response they were returned in, not for later turns.
                     self.driver.expected_claims = {k: v for k, v in self.driver.expected_claims.items()
-                                                   if k not in ("allowed_amounts_minor", "allowed_facts")}
+                                                   if k not in ("allowed_amounts_minor", "allowed_facts", "allowed_date_facts")}
                     self.pending_caller_pcm = pcm  # the audio about to be spoken, for observing a confirmation
                     if self.before_turn is not None:
                         await self.before_turn(index)

@@ -12,6 +12,20 @@ from voice_harness.storage import Database
 
 
 class OperatorApi(unittest.TestCase):
+    def test_client_assets_revalidate_even_on_conditional_requests(self):
+        with tempfile.TemporaryDirectory() as directory:
+            app = create_app(Database(str(Path(directory) / "t.sqlite")), directory, "op")
+            with TestClient(app) as client:
+                for asset in ("bakeoff.html", "bakeoff-page.mjs", "bakeoff-report.mjs", "ops.css"):
+                    with self.subTest(asset=asset):
+                        url = "/client/" + asset
+                        response = client.get(url)
+                        self.assertEqual(response.status_code, 200)
+                        self.assertEqual(response.headers["cache-control"], "no-cache")
+                        cached = client.get(url, headers={"If-None-Match": response.headers["etag"]})
+                        self.assertEqual(cached.status_code, 304)
+                        self.assertEqual(cached.headers["cache-control"], "no-cache")
+
     def test_run_list_hold_register_and_static_pages(self):
         with tempfile.TemporaryDirectory() as directory:
             app = create_app(Database(str(Path(directory) / "t.sqlite")), directory, "op")

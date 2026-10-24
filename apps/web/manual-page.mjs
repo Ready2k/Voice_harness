@@ -119,6 +119,8 @@ async function openMic(session) {
 
 function capturing(session) { return session.connected && !session.ended && !session.paused && !session.muted && session.mode === 'voice'; }
 
+const BARGE_LEVEL = 0.05, BARGE_FRAMES = 12; // ~240 ms of clearly loud sound
+
 function onFrame(session, frame, vad) {
   const level = rms(frame);
   $('meter-fill').style.width = Math.min(100, level * 600) + '%';
@@ -127,11 +129,45 @@ function onFrame(session, frame, vad) {
   if (edge === 'start') {
     session.speaking = true;
     send({type: 'speech', phase: 'start'});
-    if (session.aiPlaying && session.playbackMode === 'gated' && $('barge').checked) flushPlayback('barge_in');
     renderStatus();
   }
+  // Barge-in stops the agent mid-reply, so it needs clearly louder, sustained sound than speech detection does:
+  // room noise and the agent's own voice leaking into the mic must not cut it off.
+  if (session.aiPlaying && session.playbackMode === 'gated' && $('barge').checked) {
+    session.bargeFrames = level >= Math.max(BARGE_LEVEL, vad.threshold() * 2) ? (session.bargeFrames || 0) + 1 : 0;
+    if (session.bargeFrames >= BARGE_FRAMES) { session.bargeFrames = 0; flushPlayback('barge_in'); }
+  } else session.bargeFrames = 0;
   session.socket.send(floatToPcm16(frame));
   if (edge === 'end') { session.speaking = false; send({type: 'speech', phase: 'end'}); renderStatus(); }
+}
+
+// Filler while a reply is held for assessment: a soft two-note cue, pulsed, so the line never feels dead.
+// It is page-generated (never provider audio), starts after a short grace so quick assessments stay silent,
+// and stops the moment reply audio arrives or the assessment settles.
+const THINK_DELAY_MS = 400, THINK_PERIOD_MS = 1800;
+
+function startThinking(session) {
+  if (session.thinkTimer || session.playbackMode !== 'gated') return;
+  session.thinkTimer = setTimeout(function pulse() {
+    if (!session.assessing || session.paused || session.ended) { stopThinking(session); return; }
+    thinkTone(session);
+    session.thinkTimer = setTimeout(pulse, THINK_PERIOD_MS);
+  }, THINK_DELAY_MS);
+}
+
+function stopThinking(session) { clearTimeout(session.thinkTimer); session.thinkTimer = null; }
+
+function thinkTone(session) {
+  const ctx = session.playCtx; if (!ctx || ctx.state !== 'running') return;
+  const gain = ctx.createGain(); gain.connect(ctx.destination);
+  const t = ctx.currentTime;
+  gain.gain.setValueAtTime(0, t);
+  [[660, 0], [880, 0.14]].forEach(([hz, at]) => {
+    const osc = ctx.createOscillator(); osc.type = 'sine'; osc.frequency.value = hz; osc.connect(gain);
+    gain.gain.linearRampToValueAtTime(0.05, t + at + 0.03);
+    gain.gain.linearRampToValueAtTime(0, t + at + 0.12);
+    osc.start(t + at); osc.stop(t + at + 0.14);
+  });
 }
 
 function flushPlayback(reason = null) { s?.playNode?.port.postMessage({type: 'flush', reason}); }
@@ -186,18 +222,19 @@ function onMessage(session, m) {
     case 'state': Object.assign(session, {paused: m.paused, muted: m.muted, mode: m.mode, turn: m.turn}); break;
     case 'turn': session.turn = m.turn; break;
     case 'audio': {
+      stopThinking(session);
       const samples = pcm16ToFloat(base64ToBytes(m.audio));
       session.playNode.port.postMessage({type: 'enqueue', unitId: m.unit_id ?? null, endSample: m.end_sample, samples}, [samples.buffer]);
       break;
     }
     case 'flush': if (m.reason !== 'barge_in') flushPlayback(); break;
-    case 'assessing': session.assessing += 1; break;
-    case 'assessment': session.assessing = Math.max(0, session.assessing - 1); session.assessments.push(m); break;
+    case 'assessing': session.assessing += 1; startThinking(session); break;
+    case 'assessment': session.assessing = Math.max(0, session.assessing - 1); session.assessments.push(m); if (!session.assessing) stopThinking(session); break;
     case 'tool': session.identity = m.identity ?? session.identity; break;
     case 'ledger': session.events = mergeEvents(session.events, m.events); break;
     case 'confirmation': session.confirmation = m; break;
     case 'session_ended': session.endReason = m.reason; break;
-    case 'ended': finish(session, m); return;
+    case 'ended': stopThinking(session); finish(session, m); return;
     default:
   }
   session.lines = reduceTranscript(session.lines, m);

@@ -313,8 +313,13 @@ def semantic_check(text: str, expected: dict | None) -> dict:
         if amount not in allowed:
             unsafe = True
             reasons.append("AMOUNT_MISMATCH" if exp_amounts else "UNEXPECTED_AMOUNT")
+    date_facts = expected.get("allowed_date_facts", [])
+    if "verified_account_id" in expected:
+        date_facts = [f for f in date_facts if expected["verified_account_id"]
+                      and f.get("account_id") == expected["verified_account_id"]]
+    allowed_dates = [_expected_date(f["date"]) for f in date_facts]
     for spoken in claims["dates"]:
-        if not any(_date_matches(spoken, e) for e in exp_dates):
+        if not any(_date_matches(spoken, e) for e in [*exp_dates, *allowed_dates]):
             unsafe = True
             reasons.append("DATE_MISMATCH" if exp_dates else "UNEXPECTED_DATE")
     if unsafe:

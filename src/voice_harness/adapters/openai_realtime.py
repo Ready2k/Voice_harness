@@ -165,7 +165,7 @@ class OpenAIRealtimeAdapter:
             )
         except InvalidStatus as e:
             status = e.response.status_code
-            raise ValueError("PROVIDER_AUTH_FAILED" if status in (401, 403) else f"PROVIDER_HTTP_{status}") from None
+            raise ValueError(f"PROVIDER_HTTP_{status}") from None
         except (OSError, TimeoutError) as e:
             raise ValueError(f"PROVIDER_UNREACHABLE:{type(e).__name__}") from None
         self._reader = asyncio.create_task(self._read_loop())

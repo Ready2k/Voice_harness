@@ -317,7 +317,7 @@ class XaiAdapterTests(unittest.IsolatedAsyncioTestCase):
         url = f"ws://127.0.0.1:{server.sockets[0].getsockname()[1]}/v1/realtime"
         with self.assertRaises(ValueError) as caught:
             await XaiVoiceAdapter(api_key=KEY, url=url).open_session({"session_id": "s"})
-        self.assertEqual(str(caught.exception), "PROVIDER_AUTH_FAILED")
+        self.assertEqual(str(caught.exception), "PROVIDER_HTTP_401")
         self.assertNotIn(KEY, str(caught.exception))
 
     async def test_secret_never_appears_in_events_receipts_repr_or_connection_info(self):

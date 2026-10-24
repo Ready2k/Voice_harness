@@ -11,13 +11,23 @@ from fastapi.testclient import TestClient
 from test_live_api import FakeAdapter
 from test_phase4_scenarios import tone
 
-from voice_harness import live_providers
+from voice_harness import bakeoff, live_providers
+from voice_harness.adapters import AudioOut, ToolCall, TurnEnd
 from voice_harness.api import create_app
 from voice_harness.asr import ScriptedAsr
 from voice_harness.storage import Database
 
 SCENARIOS = ["identity-impatient-en-gb-clean-001", "identity-social-en-gb-clean-001"]
 PROVIDERS = ["openai-realtime-live", "nova-sonic-live"]
+
+
+class PolicyAdapter(FakeAdapter):
+    async def receive(self):
+        yield ToolCall(call_id="policy_call", name="get_policy_text",
+                       arguments={"policy_id": "identity", "version": "1"}, ts_ms=1)
+        yield TurnEnd(turn_id="tool", ts_ms=2)
+        yield AudioOut(pcm=bytes(960), sample_rate=24000, sample_count=480, turn_id="reply", ts_ms=3)
+        yield TurnEnd(turn_id="reply", ts_ms=4)
 
 
 class BakeoffApi(unittest.TestCase):
@@ -31,7 +41,7 @@ class BakeoffApi(unittest.TestCase):
         self.headers = {"Authorization": "Bearer operator"}
         for patch in (
             mock.patch.object(live_providers, "availability", lambda provider_id, environ=None, manual=False, **kw: (True, None)),
-            mock.patch.object(live_providers, "_adapter", lambda provider_id, prompt_profile="standardised-v2": (FakeAdapter(), {"tools": []})),
+            mock.patch.object(live_providers, "_adapter", lambda provider_id, prompt_profile="standardised-v2": (PolicyAdapter(), {"tools": []})),
             mock.patch.object(live_providers, "select_backend", lambda: ScriptedAsr(queue=["Please verify your identity."] * 4)),
             mock.patch("voice_harness.adapters.openai_realtime.synth_caller_pcm", lambda text, trail_ms=0, **kw: tone(200)),
             mock.patch.object(live_providers, "auto_judges", lambda environ=None: ([], [])),
@@ -56,7 +66,7 @@ class BakeoffApi(unittest.TestCase):
                                   json={"name": "Two providers", "provider_config_ids": PROVIDERS, "scenario_ids": SCENARIOS})
             self.assertEqual(created.status_code, 201, created.text)
             self.assertEqual(created.json()["cells"], 4)
-            self.assertGreater(created.json()["runs_in_flight"], 0)  # the first runs start on creation
+            self.assertGreater(created.json()["runs_in_flight"], 0)  # provider checks start on creation
             body = self.settle(client, created.json()["bakeoff_id"])
             listing = client.get("/api/v1/bakeoffs", headers=self.headers).json()["items"]
         self.assertEqual(body["bakeoff"]["state"], "completed")
@@ -74,6 +84,33 @@ class BakeoffApi(unittest.TestCase):
             self.assertTrue(cell["done"])
             self.assertEqual(self.database.get(cell["attempts"][-1]["run_id"])["config"]["scenario_id"], cell["scenario_id"])
 
+    def test_rejected_preflight_preserves_http_reason_and_can_be_resumed(self):
+        class Denied(PolicyAdapter):
+            async def open_session(self, config):
+                raise ValueError("PROVIDER_HTTP_403")
+
+        with TestClient(self.app) as client:
+            with mock.patch.object(live_providers, "_adapter", lambda *args: (Denied(), {"tools": []})):
+                created = client.post("/api/v1/bakeoffs", headers=self.headers, json={
+                    "name": "Denied", "provider_config_ids": PROVIDERS, "scenario_ids": SCENARIOS[:1]}).json()
+                body = self.settle(client, created["bakeoff_id"])
+                # Settle both checks, including one that might have been in flight when the first failed.
+                for c in body["bakeoff"]["preflight"]["checks"]:
+                    job = self.app.state.jobs.get(c["attempts"][-1]["run_id"])
+                    if job:
+                        job.result(timeout=30)
+                self.app.state.bakeoff_tick()
+            self.assertEqual(body["bakeoff"]["state"], "paused")
+            self.assertEqual(body["bakeoff"]["pause_reason"]["reason"], "PROVIDER_HTTP_403")
+            self.assertTrue(all(not c["attempts"] for c in body["cells"]))
+            self.assertEqual(body["data"]["report"]["progress"]["observed"], 0)
+            self.assertIsNone(body["data"]["report"]["verdict"]["leader"])
+            resumed = client.post(f"/api/v1/bakeoffs/{created['bakeoff_id']}/resume", headers=self.headers)
+            self.assertEqual(resumed.status_code, 200, resumed.text)
+            done = self.settle(client, created["bakeoff_id"])
+            self.assertEqual(done["bakeoff"]["state"], "completed")
+            self.assertEqual(done["bakeoff"]["preflight"]["generation"], 1)
+
     def test_what_if_weights_recompute_without_storing_and_the_export_is_self_contained(self):
         with TestClient(self.app) as client:
             bakeoff_id = client.post("/api/v1/bakeoffs", headers=self.headers, json={
@@ -84,7 +121,7 @@ class BakeoffApi(unittest.TestCase):
             stored = client.get(f"/api/v1/bakeoffs/{bakeoff_id}", headers=self.headers).json()
             export = client.get(f"/api/v1/bakeoffs/{bakeoff_id}/report.html", headers=self.headers)
         self.assertEqual(what_if.json()["data"]["report"]["weights"]["task_success"], 1.0)
-        self.assertAlmostEqual(stored["weights"]["task_success"], 0.30)  # the stored weights are unchanged
+        self.assertAlmostEqual(stored["weights"]["task_success"], bakeoff.DEFAULT_WEIGHTS["task_success"])  # the stored weights are unchanged
         self.assertEqual(export.status_code, 200)
         self.assertIn("attachment", export.headers["content-disposition"])
         self.assertIn("export function renderReport", export.text)  # the shared renderer is inlined
@@ -135,7 +172,7 @@ class BakeoffApi(unittest.TestCase):
             after = client.get(f"/api/v1/bakeoffs/{bakeoff_id}", headers=self.headers).json()
         self.assertEqual(cancelled.json()["state"], "cancelled")
         self.assertEqual(again.json()["error"]["code"], "BAKEOFF_NOT_RUNNING")
-        self.assertEqual(sum(bool(c["attempts"]) for c in after["cells"]), launched_before)
+        self.assertEqual(sum(bool(c["attempts"]) for c in after["cells"] + after["bakeoff"]["preflight"]["checks"]), launched_before)
 
 
 if __name__ == "__main__":

@@ -67,7 +67,9 @@ class ConversationAdapter:
         reply = lambda text: [AudioOut(pcm=bytes(960), sample_rate=24000, sample_count=480, turn_id=r + "b",  # noqa: E731
                                        item_id="item_" + r, ts_ms=3),
                               TranscriptDelta(role="assistant", text=text, ts_ms=4), TurnEnd(turn_id=r + "b", ts_ms=5)]
-        if said == "voice":
+        if "call has just connected" in said:
+            self._pending += reply("Welcome to the bank. How can I help?")
+        elif said == "voice":
             self._pending += [TranscriptFinal(role="user", text="Hello there.", item_id="u" + r, ts_ms=1),
                               *reply("Please verify your identity.")]
         elif "blue" in said:
@@ -174,7 +176,7 @@ class ManualSessions(unittest.TestCase):
 
     def test_a_gated_text_session_plays_only_released_audio_and_is_assessed(self):
         adapter = ConversationAdapter()
-        self.patch(adapter, ["You are verified.", "Your balance is £1,234.56."])
+        self.patch(adapter, ["Welcome to the bank. How can I help?", "You are verified.", "Your balance is £1,234.56."])
         with TestClient(self.app) as client:
             created = self.create(client)
             self.assertEqual(created.status_code, 201, created.text)
@@ -182,17 +184,19 @@ class ManualSessions(unittest.TestCase):
             self.assertEqual(created.json()["scenario_id"], "happy-balance-clean-001")
             with self.connect(client, run) as ws:
                 self.until(ws, lambda m: m["type"] == "ready")
+                welcome = self.until(ws, lambda m: m["type"] == "audio")  # the agent speaks first
+                ws.send_json({"type": "played", "unit_id": welcome["unit_id"], "end_sample": welcome["end_sample"]})
                 ws.send_json({"type": "control", "action": "mode_text"})
                 ws.send_json({"type": "text", "text": "The answer to my security question is blue."})
                 seen = []
-                audio = self.until(ws, lambda m: m["type"] == "audio", seen)
+                audio = self.until(ws, lambda m: m["type"] == "audio" and m["unit_id"] != welcome["unit_id"], seen)
                 self.assertEqual(audio["mode"], "gated")
                 self.assertTrue(any(m["type"] == "tool" and m["identity"] == "verified" for m in seen))
                 self.assertIn("assessing", [m["type"] for m in seen])  # held for assessment before any audio
                 ws.send_json({"type": "played", "unit_id": audio["unit_id"], "end_sample": audio["end_sample"]})
                 ws.send_json({"type": "text", "text": "What is my account balance?"})
                 seen = []
-                verdict = self.until(ws, lambda m: m["type"] == "assessment" and m["unit_id"] != audio["unit_id"], seen)
+                verdict = self.until(ws, lambda m: m["type"] == "assessment" and m["unit_id"] not in (audio["unit_id"], welcome["unit_id"]), seen)
                 self.assertEqual(verdict["status"], "approved", verdict)
                 second = next(m for m in seen if m["type"] == "audio")
                 ws.send_json({"type": "played", "unit_id": second["unit_id"], "end_sample": second["end_sample"]})
@@ -246,6 +250,23 @@ class ManualSessions(unittest.TestCase):
             assurance = client.get(f"/api/v1/runs/{run}/assurance", headers=self.headers).json()
         self.assertEqual(assurance["criteria"]["AUDIO-01"]["verdict"], "fail")
         self.assertIn("UNASSESSED_AUDIO_REACHED_PLAYBACK", assurance["criteria"]["AUDIO-01"]["reason_codes"])
+
+    def test_a_withheld_reply_is_redone_by_the_model_up_to_the_retry_limit(self):
+        adapter = ConversationAdapter(unsafe=True)
+        self.patch(adapter, ["Your balance is £1,234.56."] * 4)
+        with TestClient(self.app) as client:
+            run = self.create(client, path="failure").json()["run_id"]
+            with self.connect(client, run) as ws:
+                self.until(ws, lambda m: m["type"] == "ready")
+                seen = []
+                for _ in range(3):  # the welcome, then two retries
+                    self.until(ws, lambda m: m["type"] == "assessment", seen)
+                ws.send_json({"type": "stop"})
+                self.until(ws, lambda m: m["type"] == "ended")
+        withheld = [t for t in adapter.texts if "withheld by a safety control" in t]
+        self.assertEqual(len(withheld), 2)
+        retries = [e for e in self.events(run) if e["type"] == "manual.reply_retry_requested"]
+        self.assertEqual([e["content"]["attempt"] for e in retries], [1, 2])
 
     def test_voice_turns_are_segmented_hashed_and_paused_audio_is_dropped(self):
         adapter = ConversationAdapter()

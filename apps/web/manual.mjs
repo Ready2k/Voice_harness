@@ -72,7 +72,7 @@ export class Framer {
  * and the UI. Turn-taking itself is decided by the provider's VAD.
  */
 export class EnergyVad {
-  constructor({ minLevel = 0.015, ratio = 3, startFrames = 3, hangoverFrames = 40 } = {}) {
+  constructor({ minLevel = 0.02, ratio = 4, startFrames = 5, hangoverFrames = 40 } = {}) {
     Object.assign(this, { minLevel, ratio, startFrames, hangoverFrames });
     this.floor = 0.005; this.active = false; this.above = 0; this.below = 0;
   }

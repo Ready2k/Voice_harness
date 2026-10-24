@@ -31,7 +31,7 @@ from pydantic import ValidationError
 from . import live_providers
 from .approvals import public_key
 from .auth import bearer_matches, load_token, restrict_bundle, reviewer_may, role_for, tls_options
-from .bakeoff import BakeoffRequest, BakeoffStore, Weights
+from .bakeoff import BakeoffRequest, BakeoffStore, Weights, resume, work_cells
 from .bakeoff import summary as bakeoff_summary
 from .bakeoff import tick as bakeoff_step
 from .bakeoff_export import render as render_bakeoff
@@ -51,6 +51,7 @@ from .manual_session import MANUAL_LIMITS, Bridge
 from .manual_session import journeys as manual_journeys
 from .manual_session import scenario_for as manual_scenario
 from .metrics import derive as derive_metrics
+from .provider_failures import failure_code, stream_failure
 from .review_api import register_review_routes
 from .scenario_catalogue import CATALOGUE, presentation
 from .scenario_defs import SCENARIOS, ScenarioDefinition, definition_hash
@@ -58,6 +59,15 @@ from .scenarios import run_scenario
 from .shutdown import graceful_shutdown
 from .storage import Database
 from .verdicts import aggregate
+
+
+class ClientStaticFiles(StaticFiles):
+    async def get_response(self, path, scope):
+        response = await super().get_response(path, scope)
+        # Local deployments update files in place. Revalidate HTML and modules
+        # together instead of letting browser freshness heuristics mix versions.
+        response.headers["Cache-Control"] = "no-cache"
+        return response
 
 
 def create_app(
@@ -121,7 +131,7 @@ def create_app(
                 run_live_work(run_id, config)
             else:
                 run_scenario(engine, run_id, evidence)
-        except Exception:  # noqa: BLE001 -- protected worker boundary fails closed
+        except Exception as error:  # noqa: BLE001 -- protected worker boundary fails closed
             logging.getLogger("voice_harness.run").exception("run worker failed: %s", run_id)
             with database.transaction(run_id) as tx:
                 if tx.state["state"] not in {"cancelled", "recovery_required"}:
@@ -132,7 +142,7 @@ def create_app(
                             unit["state"] = "discarded"
                         unit.pop("pcm", None)
                     tx.state["tokens"].clear()
-                    tx.event("orchestrator", "run.failed", {"reason": "WORKER_FAILED"})
+                    tx.event("orchestrator", "run.failed", {"reason": failure_code(error)})
         finally:
             evidence.save_manifest(run_id)
 
@@ -208,7 +218,7 @@ def create_app(
         elif "turn_timeout" in outcomes:
             failure = "TURN_TIMEOUT"
         elif outcomes & {"provider_error", "stream_ended"} or summary["adapter_errors"]:
-            failure = "PROVIDER_FAILURE"
+            failure = stream_failure(summary["adapter_errors"])
         else:
             failure = None
         evaluate_live(run_id, config, failure)
@@ -323,7 +333,7 @@ def create_app(
     client_assets = Path(__file__).resolve().parents[2] / "apps" / "web"
     if client_assets.exists():
         app.mount(
-            "/client", StaticFiles(directory=client_assets), name="playback-client"
+            "/client", ClientStaticFiles(directory=client_assets), name="playback-client"
         )
     origins = {
         "http://localhost:8765",
@@ -859,14 +869,26 @@ def create_app(
         return HTMLResponse(render_bakeoff(payload, source=bakeoff_id),
                             headers={"Content-Disposition": f'attachment; filename="{filename}"'})
 
+    @app.post("/api/v1/bakeoffs/{bakeoff_id}/resume", dependencies=[Depends(auth)])
+    def resume_bakeoff(bakeoff_id: str):
+        """Recheck every provider before retrying interrupted cells; completed results are retained."""
+        if not app.state.accepting:
+            raise HTTPException(503, "SHUTTING_DOWN")
+        with bakeoff_lock:
+            payload = bakeoff_payload(bakeoff_id)
+            resume(payload, database)
+            bakeoffs.save(payload)
+        bakeoff_tick()
+        return bakeoff_summary(bakeoffs.get(bakeoff_id))
+
     @app.post("/api/v1/bakeoffs/{bakeoff_id}/cancel", dependencies=[Depends(auth)])
     def cancel_bakeoff(bakeoff_id: str):
         """Stop launching, cancel runs in flight; finished runs stay in the report."""
         with bakeoff_lock:
             payload = bakeoff_payload(bakeoff_id)
-            if payload["state"] != "running":
+            if payload["state"] not in {"running", "paused"}:
                 raise ValueError("BAKEOFF_NOT_RUNNING")
-            for cell in payload["cells"]:
+            for cell in work_cells(payload):
                 latest = cell["attempts"][-1] if cell["attempts"] else None
                 if latest and latest.get("run_id") and not cell.get("done"):
                     with suppress(ValueError, KeyError):  # already terminal

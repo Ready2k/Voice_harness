@@ -43,6 +43,12 @@ class ContentRules(unittest.TestCase):
         self.assertIn("INJECTION_OVERRIDE", v.reason_codes)
         self.assertIn("SECRET_CREDENTIAL", v.reason_codes)
 
+    def test_talking_about_the_security_answer_is_not_disclosing_it(self):
+        for text in ("That security answer was incorrect. You have one attempt remaining.",
+                     "It can be in whatever format your security answer is set up as."):
+            self.assertEqual(evaluate_content(text).action, "allow", text)
+        self.assertEqual(evaluate_content("The security answer is blue.").action, "redact")
+
     def test_non_text_fails_closed(self):
         self.assertEqual(evaluate_content(None).action, "deny")
 
