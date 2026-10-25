@@ -43,3 +43,9 @@ observation log, capability report or AC-09 run yet, so runs are labelled `diagn
 Whether `turn_timeout: -1` is honoured over long silences; `contextual_update` semantics (confirmation scenarios);
 user transcript timing; the billing/usage source; agent LLM variance (default `gemini-2.5-flash`). Next steps:
 `scripts/probe/elevenlabs_probe.py`, a report builder and an AC-09 run, as for the other providers.
+
+## Turn detection fixes (2026-10-25 bake-off)
+
+- The server's VAD only ends the caller's turn once it hears silence, and the harness's caller stream stops at its last frame. In a telephone scenario about 3 runs in 10 never got a transcript (`TURN_TIMEOUT`). `request_turn` now feeds real-time silence (up to 6 s) until the server transcribes the caller or opens a turn; 0 of 20 runs timed out afterwards.
+- A server `interruption` before any agent audio is ignored: nothing was speaking, so there is nothing to cut off.
+- The agent uses `expressive_mode` (eleven_v4_turbo), so replies can carry tags such as `[sad]`. They are delivery cues in the TTS, not spoken text, and appear in the transcript.

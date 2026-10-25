@@ -57,6 +57,7 @@ DEFAULT_MODEL = "elevenlabs-agent"  # the platform has no single model id: the a
 SAMPLE_RATE = 24000
 IDLE_S = 0.7  # audio silence that ends a response the agent has already answered
 NO_AUDIO_S = 3.0  # an answer that produced no audio at all
+SILENCE_MAX_S = 6  # longest the adapter keeps feeding silence while it waits for the server to hear the caller stop
 FATAL_CODES = {"invalid_api_key", "authentication_error", "unauthorized", "quota_exceeded", "agent_not_found"}
 _END = object()
 _SECRET_KEYS = {"xi-api-key", "authorization", "api_key"}
@@ -97,6 +98,8 @@ class ElevenLabsVoiceAdapter:
         self._idle_s = idle_s
         self._answered = False  # agent_response or tool call seen for the open turn: only audio silence is awaited
         self._close_timer: asyncio.TimerHandle | None = None
+        self._silence: asyncio.Task | None = None
+        self._turn_no_at_request = self._user_at_request = 0
         self._ws = None
         self._reader: asyncio.Task | None = None
         self._queue: asyncio.Queue = asyncio.Queue()
@@ -220,7 +223,22 @@ class ElevenLabsVoiceAdapter:
         await self._send({"type": "user_message", "text": text} if respond else {"type": "contextual_update", "text": text})
 
     async def request_turn(self) -> None:
-        """Server VAD owns turn detection and there is no commit message; the caller's trailing silence ends the turn."""
+        """Server VAD owns turn detection and there is no commit message. It only decides once it hears silence, and
+        the caller's stream stops at its last frame, so keep real-time silence flowing until the server answers."""
+        self._turn_no_at_request, self._user_at_request = self._turn_no, self._user_item
+        if self._silence is None or self._silence.done():
+            self._silence = asyncio.get_running_loop().create_task(self._feed_silence())
+
+    async def _feed_silence(self) -> None:
+        frame = base64.b64encode(bytes(SAMPLE_RATE // 50 * 2)).decode()  # 20 ms
+        try:
+            for _ in range(SILENCE_MAX_S * 50):
+                if self.closed or self._turn_no > self._turn_no_at_request or self._user_item > self._user_at_request:
+                    return
+                await self._send({"user_audio_chunk": frame})
+                await asyncio.sleep(0.02)
+        except Exception:  # the connection closing ends the feed; the reader reports the loss
+            return
 
     async def submit_tool_result(self, call_id: str, result: dict[str, Any]) -> dict[str, Any]:
         if call_id != result.get("call_id") or call_id not in self._pending_calls:
@@ -244,6 +262,8 @@ class ElevenLabsVoiceAdapter:
             return
         self.closed = True
         self._cancel_timer()
+        if self._silence is not None:
+            self._silence.cancel()
         if self._ws is not None:
             with contextlib.suppress(Exception):
                 await self._ws.close()
@@ -364,6 +384,8 @@ class ElevenLabsVoiceAdapter:
             self._answered = True
             self._arm_close(self._idle_s if self._turn_audio_bytes.get(self._turn_id) else NO_AUDIO_S)
         elif kind == "interruption":
+            if not self._turn_audio_bytes:  # nothing was ever spoken, so nothing was cut off: the server's VAD blipped on line noise
+                return
             turn = self._turn_id
             ms = self._turn_audio_bytes.get(turn, 0) * 1000 // (SAMPLE_RATE * 2) if turn else None
             self._emit(Interrupted, item_id=turn, audio_end_ms=ms)

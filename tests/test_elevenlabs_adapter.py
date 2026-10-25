@@ -209,6 +209,38 @@ class ElevenLabsAdapterTests(unittest.IsolatedAsyncioTestCase):
         with self.assertRaises(CapabilityUnsupported):
             await a.interrupt(None, 10)
 
+    async def test_interruption_before_any_agent_audio_is_ignored(self):
+        async def respond(ws, msg):
+            if msg.get("type") == "user_message":
+                await ws.send(json.dumps({"type": "interruption", "interruption_event": {"event_id": 2}}))
+                await ws.send(json.dumps(audio(1)))
+                await ws.send(json.dumps({"type": "agent_response", "agent_response_event": {"agent_response": "Hi."}}))
+
+        async with FakeServer(respond) as srv:
+            a = adapter_for(srv)
+            await a.open_session({})
+            await a.send_text("hello")
+            events = await collect(a, lambda e: e.type == "turn_end")
+            await a.close("done")
+        self.assertNotIn("interrupted", [e.type for e in events])
+        self.assertIn("audio_out", [e.type for e in events])
+
+    async def test_request_turn_feeds_silence_until_the_server_answers(self):
+        async with FakeServer() as srv:
+            a = adapter_for(srv)
+            await a.open_session({})
+            await a.request_turn()
+            await asyncio.sleep(0.3)
+            before = sum(1 for m in srv.received if "user_audio_chunk" in m)
+            a._handle("user_transcript", {"user_transcription_event": {"user_transcript": "hi"}})
+            await asyncio.sleep(0.2)
+            after = sum(1 for m in srv.received if "user_audio_chunk" in m)
+            await asyncio.sleep(0.2)
+            final = sum(1 for m in srv.received if "user_audio_chunk" in m)
+            await a.close("done")
+        self.assertGreater(before, 5)
+        self.assertLessEqual(final - after, 1)  # stops once the server has heard the caller
+
     async def test_native_events_reach_the_sink_without_pings(self):
         seen = []
 
