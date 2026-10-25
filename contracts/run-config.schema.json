@@ -86,7 +86,8 @@
         "openai-realtime-live",
         "nova-sonic-live",
         "xai-voice-live",
-        "gemini-live"
+        "gemini-live",
+        "elevenlabs-live"
       ],
       "title": "Provider Config Id",
       "type": "string"

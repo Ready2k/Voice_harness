@@ -60,7 +60,8 @@ for _name, _description in {
 
 
 LIVE_PROVIDERS = {"openai-realtime-live": "openai_realtime", "nova-sonic-live": "aws_nova_sonic",
-                  "xai-voice-live": "xai_grok_voice", "gemini-live": "google_gemini_live"}
+                  "xai-voice-live": "xai_grok_voice", "gemini-live": "google_gemini_live",
+                  "elevenlabs-live": "elevenlabs_agents"}
 # The model under test, as recorded for judge independence checks (a judge must not be the tested model).
 TESTED_MODELS = {
     "openai-realtime-live": {"provider": "openai", "model_id": "gpt-realtime-2.1", "family": "openai_realtime"},
@@ -69,6 +70,8 @@ TESTED_MODELS = {
     "xai-voice-live": {"provider": "xai", "model_id": "grok-voice-3.0", "family": "xai_grok_voice"},
     # Vertex AI publisher model; setupComplete returns no version, so the pinned name is all there is
     "gemini-live": {"provider": "google", "model_id": "gemini-3.8-live", "family": "google_gemini_live"},
+    # The agent's LLM (default gemini-2.5-flash, see adapters/elevenlabs_agent.py) is not echoed by the session.
+    "elevenlabs-live": {"provider": "elevenlabs", "model_id": "elevenlabs-agent", "family": "elevenlabs_agents"},
 }
 
 
@@ -142,6 +145,12 @@ def requirements(provider_config_id, environ=None, *, manual=False, caller=None)
         ok, reason = credentials_available(environ)  # ADC file + project id present; the token is fetched at session open
         if not ok:
             missing.append(reason)
+    elif provider_config_id == "elevenlabs-live":
+        from .adapters.elevenlabs_voice import credentials_available as elevenlabs_available
+
+        ok, reason = elevenlabs_available(environ)
+        if not ok:
+            missing.append(reason)
     elif provider_config_id == "nova-sonic-live":
         from .adapters.nova_sonic import SESSION_ENV
 
@@ -157,7 +166,7 @@ def availability(provider_config_id, environ=None, *, manual=False, caller=None)
 
 
 FAMILIES = {"openai-realtime-live": "openai", "nova-sonic-live": "aws_nova_sonic", "xai-voice-live": "xai_grok_voice",
-            "gemini-live": "google_gemini_live"}
+            "gemini-live": "google_gemini_live", "elevenlabs-live": "elevenlabs_agents"}
 
 
 def capability_binding(provider_config_id, now=None):
@@ -231,6 +240,11 @@ def _adapter(provider_config_id, prompt_profile="standardised-v2"):
 
         config.update(instructions=instructions, turn_detection="server_vad", model_id=TESTED_MODELS[provider_config_id]["model_id"])
         return GeminiLiveAdapter(), config
+    if provider_config_id == "elevenlabs-live":
+        from .adapters.elevenlabs_voice import ElevenLabsVoiceAdapter
+
+        config.update(instructions=instructions, model_id=TESTED_MODELS[provider_config_id]["model_id"])
+        return ElevenLabsVoiceAdapter(), config
     from .adapters.nova_sonic import NovaSonicAdapter
 
     config.update(system_prompt=instructions, env=_nova_env())
@@ -250,7 +264,11 @@ def configure_transport(provider_config_id, config, caller_mode):
     if caller_mode not in {"fixed", "live_ai", "human_microphone"}:
         raise ValueError("UNKNOWN_CALLER_MODE")
     nova = provider_config_id == "nova-sonic-live"
-    if nova:
+    provider_vad = nova or provider_config_id == "elevenlabs-live"  # no manual commit: the provider owns endpointing
+    if provider_config_id == "elevenlabs-live":
+        config.pop("turn_detection", None)
+        detection = "provider_vad"
+    elif nova:
         # Nova owns endpointing and requires its existing continuous silence pump.
         config.pop("turn_detection", None)
         config["endpointing"] = "LOW" if caller_mode == "live_ai" else "MEDIUM"
@@ -268,7 +286,7 @@ def configure_transport(provider_config_id, config, caller_mode):
     return {
         "profile_version": "provider-transport-v1", "caller_mode": caller_mode,
         "turn_detection": detection, "endpointing": config.get("endpointing") if nova else None,
-        "turn_commit": "provider_vad" if nova else ("automatic" if detection == "server_vad" else "explicit"),
+        "turn_commit": "provider_vad" if provider_vad else ("automatic" if detection == "server_vad" else "explicit"),
         "harness_input_rate": RATE, "provider_input_rate": 16000 if provider_config_id in {
             "gemini-live", "nova-sonic-live"} else RATE,
         "output_rate": RATE, "chunk_ms": 20, "caller_trailing_silence_ms": CALLER_TRAIL_MS if caller_mode == "fixed" else None,
@@ -320,7 +338,7 @@ async def run_live(engine, run_id, provider_config_id, scenario_id, *, seed=0, c
     metadata["harness_transport"] = transport
     metadata["caller_mode"] = "fixed"
     metadata["caller_voice"] = describe_caller_voice(voice_env)
-    context_only = provider_config_id in ("openai-realtime-live", "xai-voice-live", "gemini-live")  # send_text(respond=False) supported
+    context_only = provider_config_id in ("openai-realtime-live", "xai-voice-live", "gemini-live", "elevenlabs-live")  # send_text(respond=False) supported
     from .cost_recorder import UsageRecorder
 
     tested = TESTED_MODELS[provider_config_id]
@@ -466,7 +484,7 @@ async def run_manual(engine, run_id, config, bridge):
         engine, run_id, adapter, IndependentAssessor(engine, select_backend()), config["scenario_id"], bridge=bridge,
         playback_mode=config["playback_mode"], journey_id=config.get("journey_id"), path=config.get("path", "happy"),
         provider_session=metadata, cost_recorder=recorder, seed=config["fixture_seed"],
-        context_only=provider_config_id in ("openai-realtime-live", "xai-voice-live", "gemini-live"))
+        context_only=provider_config_id in ("openai-realtime-live", "xai-voice-live", "gemini-live", "elevenlabs-live"))
     reason = "done"
     try:
         return await session.run()

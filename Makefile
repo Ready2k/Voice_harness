@@ -20,7 +20,7 @@ token:
 # Live runs need a macOS host (say/afconvert caller voice), so run the API on the host, not in Compose.
 # Loads .env (KEY=value lines; values are never printed), uses its own data dir and port 8766, and does not touch Compose.
 serve-live:
-	@test -f .env || { echo "missing .env (OPENAI_API_KEY, xAI_API_KEY)" >&2; exit 2; }
+	@test -f .env || { echo "missing .env (OPENAI_API_KEY, xAI_API_KEY, ELEVENLABS_API_KEY)" >&2; exit 2; }
 	@test -x .venv/bin/python || { echo "missing .venv: see CLAUDE.md local development" >&2; exit 2; }
 	@mkdir -p .local/host-data
 	@echo "Live API on http://127.0.0.1:8766/client/runs.html (get the token with: make token-host)"

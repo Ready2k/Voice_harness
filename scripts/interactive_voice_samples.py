@@ -11,7 +11,8 @@ from concurrent.futures import as_completed
 from pathlib import Path
 
 PROVIDER_NAMES = {"openai-realtime-live": "OpenAI Realtime", "xai-voice-live": "xAI Grok Voice",
-                  "gemini-live": "Google Gemini Live", "nova-sonic-live": "Amazon Nova Sonic"}
+                  "gemini-live": "Google Gemini Live", "nova-sonic-live": "Amazon Nova Sonic",
+                  "elevenlabs-live": "ElevenLabs Agents"}
 
 
 def load_env(path):

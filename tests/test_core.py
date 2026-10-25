@@ -53,7 +53,7 @@ class CoreTests(unittest.TestCase):
 
     def test_coverage_registry_keeps_all_requested_families_visible(self):
         registry = default_registry()
-        self.assertEqual(len(registry), 4)
+        self.assertEqual(len(registry), 5)
         self.assertTrue(
             all(item.coverage_state == "not_implemented" for item in registry)
         )

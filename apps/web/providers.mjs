@@ -5,6 +5,7 @@ export const PROVIDER_NAMES = {
   "nova-sonic-live": "Amazon Nova Sonic",
   "xai-voice-live": "xAI Grok Voice",
   "gemini-live": "Google Gemini Live",
+  "elevenlabs-live": "ElevenLabs Agents",
   "mock-banking-v1": "Scripted mock",
 };
 
@@ -16,13 +17,14 @@ const ALIASES = {
   "grok-voice-3.0": "xai-voice-live", "grok-voice-latest": "xai-voice-live", "grok-voice": "xai-voice-live", "grok-transcribe": "xai-voice-live", "xai": "xai-voice-live",
   "gemini-live": "gemini-live", "gemini": "gemini-live", "google": "gemini-live",
   "openai": "openai-realtime-live", "xai_grok_voice": "xai-voice-live",
+  "elevenlabs-agent": "elevenlabs-live", "elevenlabs_agents": "elevenlabs-live", "elevenlabs": "elevenlabs-live",
 };
 
 /** Display name for a provider configuration ID, model ID or family; unknown or empty values fall back to themselves. */
 export function providerName(id) {
   if (id == null || id === "") return "Unknown provider";
   const lower = String(id).toLowerCase();
-  const key = PROVIDER_NAMES[id] ? id : ALIASES[lower] ?? (/^gpt-realtime/.test(lower) ? "openai-realtime-live" : /^grok-/.test(lower) ? "xai-voice-live" : /^gemini-[\d.]+-live|^gemini-live/.test(lower) ? "gemini-live" : /^amazon\.nova/.test(lower) ? "nova-sonic-live" : undefined);
+  const key = PROVIDER_NAMES[id] ? id : ALIASES[lower] ?? (/^gpt-realtime/.test(lower) ? "openai-realtime-live" : /^grok-/.test(lower) ? "xai-voice-live" : /^gemini-[\d.]+-live|^gemini-live/.test(lower) ? "gemini-live" : /^amazon\.nova/.test(lower) ? "nova-sonic-live" : /^elevenlabs/.test(lower) ? "elevenlabs-live" : undefined);
   return PROVIDER_NAMES[key] ?? String(id);
 }
 

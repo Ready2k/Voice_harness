@@ -4,9 +4,9 @@
 
 const SVG = "http://www.w3.org/2000/svg";
 const AUDIO = {clean_studio: "Clean audio", street_noise_10db: "Street noise (10 dB)", telephone_narrowband: "Telephone line"};
-const PALETTE = ["var(--bk-c0)", "var(--bk-c1)", "var(--bk-c2)", "var(--bk-c3)"];
+const PALETTE = ["var(--bk-c0)", "var(--bk-c1)", "var(--bk-c2)", "var(--bk-c3)", "var(--bk-c4)"];
 // Each provider keeps its colour across bake-offs. Orange is deliberately unused: event types (direct reply, tool called first) are told apart by marker shape.
-const PROVIDER_SLOT = {"openai-realtime-live": 0, "nova-sonic-live": 1, "xai-voice-live": 2, "gemini-live": 3};
+const PROVIDER_SLOT = {"openai-realtime-live": 0, "nova-sonic-live": 1, "xai-voice-live": 2, "gemini-live": 3, "elevenlabs-live": 4};
 
 export const pct = v => (v == null ? "—" : Math.round(v * 100) + "%");
 export const dec = v => (v == null ? "—" : v.toFixed(3));

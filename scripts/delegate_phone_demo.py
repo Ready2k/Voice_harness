@@ -146,7 +146,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--call-setup-stdin", action="store_true", help="Read operator goal/details from private standard input")
     parser.add_argument("--response-mode", choices=["static", "ai"], default="ai")
-    parser.add_argument("--provider-config-id", choices=["openai-realtime-live", "gemini-live", "nova-sonic-live", "xai-voice-live"], default="openai-realtime-live")
+    parser.add_argument("--provider-config-id", choices=["openai-realtime-live", "gemini-live", "nova-sonic-live", "xai-voice-live", "elevenlabs-live"], default="openai-realtime-live")
     parser.add_argument("--env-file", default=".env")
     parser.add_argument("--to", required=True)
     parser.add_argument("--caller-id", required=True)

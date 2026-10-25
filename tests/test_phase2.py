@@ -101,7 +101,7 @@ class AdapterContractTests(unittest.TestCase):
 class CoverageTests(unittest.TestCase):
     NOW = datetime(2026, 10, 17, tzinfo=UTC)
 
-    def reg(self, ac09=None, now=None, present=lambda f: f in ("openai", "aws_nova_sonic", "xai_grok_voice", "google_gemini_live")):
+    def reg(self, ac09=None, now=None, present=lambda f: f in ("openai", "aws_nova_sonic", "xai_grok_voice", "google_gemini_live", "elevenlabs_agents")):
         with tempfile.TemporaryDirectory() as d:
             for k, v in (ac09 or {}).items():
                 (Path(d) / f"{k}-ac09.json").write_text(json.dumps(v))
@@ -113,10 +113,13 @@ class CoverageTests(unittest.TestCase):
         for f in ("openai", "aws_nova_sonic", "xai_grok_voice", "google_gemini_live"):
             self.assertEqual(r[f].coverage_state, "implemented_but_unverified")
             self.assertIn("AC09_NOT_PASSED", r[f].reason_codes)
+        # ElevenLabs has an adapter but no Phase 0 probe and capability report yet: runs stay diagnostic.
+        self.assertEqual(r["elevenlabs_agents"].coverage_state, "implemented_but_unverified")
+        self.assertIn("NO_CAPABILITY_REPORT", r["elevenlabs_agents"].reason_codes)
         s = summarize(list(r.values()))
         self.assertEqual(s["verified_count"], 0)
         self.assertIsNone(s["ranking"])
-        self.assertEqual(len(s["items"]), 4)
+        self.assertEqual(len(s["items"]), 5)
 
     def test_verified_requires_ac09_bound_to_report(self):
         rid = self.reg()["openai"].capability_report_id
@@ -199,7 +202,7 @@ class CoverageTests(unittest.TestCase):
             h = {"Authorization": "Bearer t"}
             for path in ("/api/v1/providers", "/api/v1/providers/export"):
                 body = c.get(path, headers=h).json()
-                self.assertEqual(len(body["items"]), 4)
+                self.assertEqual(len(body["items"]), 5)
                 self.assertEqual(body["verified_count"], 0)
                 self.assertIsNone(body["ranking"])
 

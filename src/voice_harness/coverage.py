@@ -57,6 +57,14 @@ def default_registry() -> list[Coverage]:
             "not_implemented",
             reason_codes=("NO_ADAPTER",),
         ),
+        Coverage(
+            "elevenlabs_agents",
+            None,
+            None,
+            None,
+            "not_implemented",
+            reason_codes=("NO_ADAPTER",),
+        ),
     ]
 
 
@@ -81,13 +89,14 @@ def verified_report(
     )
 
 
-FAMILIES = ("openai", "aws_nova_sonic", "xai_grok_voice", "google_gemini_live")
+FAMILIES = ("openai", "aws_nova_sonic", "xai_grok_voice", "google_gemini_live", "elevenlabs_agents")
 # Adapter module per family; absence of the module means NO_ADAPTER.
 ADAPTER_MODULES = {
     "openai": "voice_harness.adapters.openai_realtime",
     "aws_nova_sonic": "voice_harness.adapters.nova_sonic",
     "xai_grok_voice": "voice_harness.adapters.xai_voice",
     "google_gemini_live": "voice_harness.adapters.google_gemini_live",
+    "elevenlabs_agents": "voice_harness.adapters.elevenlabs_voice",
 }
 DEFAULT_REPORT_DIR = Path(
     os.environ.get("HARNESS_PHASE0_DIR")

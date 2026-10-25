@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-Voice Harness is a container-first, deterministic core for a Voice AI Evaluation & Assurance Platform (spec: `docs/voice_evals_spec_v0.3.md`). It provides synthetic banking fixtures, a mock provider, PostgreSQL-backed evidence, an authenticated FastAPI service, a stdio MCP server and a PCM playback gate. The deterministic core and CI need no provider credentials; live adapters (OpenAI, Nova, xAI, Gemini 3.8 configured as `gemini-3.8-live`) are opt-in and need keys. See `docs/ARCHITECTURE.md`, `docs/ENGINEERING.md`, `docs/VISION.md`. Acceptance-gate coverage (AC-01…AC-21) is mapped in `docs/PHASE1_STATUS.md`. Fixture audio is PCM silence with scripted metadata, so tests prove enforcement mechanics, not ASR/audibility.
+Voice Harness is a container-first, deterministic core for a Voice AI Evaluation & Assurance Platform (spec: `docs/voice_evals_spec_v0.3.md`). It provides synthetic banking fixtures, a mock provider, PostgreSQL-backed evidence, an authenticated FastAPI service, a stdio MCP server and a PCM playback gate. The deterministic core and CI need no provider credentials; live adapters (OpenAI, Nova, xAI, Gemini 3.8 configured as `gemini-3.8-live`, ElevenLabs Agents as `elevenlabs-live`) are opt-in and need keys. See `docs/ARCHITECTURE.md`, `docs/ENGINEERING.md`, `docs/VISION.md`. Acceptance-gate coverage (AC-01…AC-21) is mapped in `docs/PHASE1_STATUS.md`. Fixture audio is PCM silence with scripted metadata, so tests prove enforcement mechanics, not ASR/audibility.
 
 ## Commands
 
@@ -34,6 +34,8 @@ docker compose exec -T api python -m voice_harness verify-bundle /data/demo/RUN_
 Tests use `unittest` (not pytest). `tests/test_release.py` requires PostgreSQL, so it only fully runs under Compose. Browser tests are `tests/browser/*.test.mjs` (Node). The provider coverage panel (AC-20) is served at `/client/coverage.html` (needs the operator token). Manual (human-driven) testing is at `/client/manual.html`: mic/text sessions against a live adapter, recorded and assessed as ordinary runs (`manual_session.py`, `/api/v1/manual-sessions`). Provider bake-offs are at `/client/bakeoff.html` (`bakeoff.py`, `/api/v1/bakeoffs`): the API schedules the live runs, the report (gates, Wilson-interval scorecard, McNemar head-to-heads, first-audio latency) is computed from the ledgers, and `report.html` exports it as one self-contained file. The report renderer `apps/web/bakeoff-report.mjs` is shared by the page and the export; `scripts/benchmark_report.py` renders a report from a `scripts/provider_matrix.py` batch.
 
 `tests/test_contracts_in_sync.py` fails if the checked-in `contracts/` differ from generator output. After changing pydantic models or API routes, rerun `generate_contracts` and commit the result; the generator is deterministic, so any diff is real drift.
+
+ElevenLabs needs a stored agent: run `PYTHONPATH=src .venv/bin/python -m voice_harness.adapters.elevenlabs_agent setup` (key from `.env`) after changing `live_providers.TOOLS`; see `docs/PHASE4_NOTES_elevenlabs.md`. Bake-offs take 2-5 providers.
 
 Dependencies are pinned in `pyproject.toml` and hash-locked in `requirements.lock`; Python and collector images are pinned by digest — update the lock, not just `pyproject.toml`.
 

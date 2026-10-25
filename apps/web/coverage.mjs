@@ -14,6 +14,7 @@ export const FAMILY_CONFIG = {
   aws_nova_sonic: "nova-sonic-live",
   xai_grok_voice: "xai-voice-live",
   google_gemini_live: "gemini-live",
+  elevenlabs_agents: "elevenlabs-live",
 };
 
 // Capability reports last 7 days (capability_report.DEFAULT_EXPIRY); the API exposes checked_at, not expires_at.

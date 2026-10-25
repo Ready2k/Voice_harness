@@ -54,9 +54,10 @@ MAX_ATTEMPTS = 2
 MAX_RUNS = 600
 COMPLETION_GATE = 0.95
 GEMINI_AUDIO_BYTES = 2000
-AUDIO_TYPES = {"response.output_audio.delta", "audioOutput"}
+AUDIO_TYPES = {"response.output_audio.delta", "audioOutput", "audio"}
 NAMES = {"openai-realtime-live": "OpenAI Realtime", "nova-sonic-live": "Amazon Nova Sonic",
-         "xai-voice-live": "xAI Grok Voice", "gemini-live": "Google Gemini Live"}
+         "xai-voice-live": "xAI Grok Voice", "gemini-live": "Google Gemini Live",
+         "elevenlabs-live": "ElevenLabs Agents"}
 
 # Proposed weights for a banking voice agent: correctness and safety outweigh speed.
 DIMENSIONS = (
@@ -96,7 +97,7 @@ class BakeoffRequest(Closed):
 
     name: Annotated[str, Field(min_length=1, max_length=120)]
     provider_config_ids: Annotated[list[Literal["openai-realtime-live", "nova-sonic-live", "xai-voice-live",
-                                                "gemini-live"]], Field(min_length=2, max_length=4)] = []
+                                                "gemini-live", "elevenlabs-live"]], Field(min_length=2, max_length=5)] = []
     # Empty means every live catalogue scenario.
     scenario_ids: Annotated[list[Identifier], Field(max_length=200)] = []
     repetitions: Annotated[int, Field(ge=1, le=10)] = 1

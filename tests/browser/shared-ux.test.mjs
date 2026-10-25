@@ -79,3 +79,8 @@ t2('scrollRegion makes a focusable named region', () => {
   assert2.equal(scrollRegion(w, 'X table'), w);
   assert2.equal(w.tabIndex, 0); assert2.equal(attrs.role, 'region'); assert2.equal(attrs['aria-label'], 'X table');
 });
+
+test("ElevenLabs resolves to one display name from its config id, family and model id", () => {
+  for (const id of ["elevenlabs-live", "elevenlabs_agents", "elevenlabs-agent"]) assert.equal(providerName(id), "ElevenLabs Agents");
+  assert.equal(PROVIDER_NAMES["elevenlabs-live"], "ElevenLabs Agents");
+});

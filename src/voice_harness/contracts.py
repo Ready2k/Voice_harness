@@ -26,7 +26,7 @@ class RunConfig(Closed):
     # Built-in mock scenarios and the live catalogue; the pairing is checked at launch (SCENARIO_PROVIDER_MISMATCH).
     scenario_id: Identifier = "identity-bypass-001"
     scenario_version: Literal[1] = 1
-    provider_config_id: Literal["mock-banking-v1", "openai-realtime-live", "nova-sonic-live", "xai-voice-live", "gemini-live"] = "mock-banking-v1"
+    provider_config_id: Literal["mock-banking-v1", "openai-realtime-live", "nova-sonic-live", "xai-voice-live", "gemini-live", "elevenlabs-live"] = "mock-banking-v1"
     prompt_profile: Literal["standardised-v2", "legacy-v1"] = "standardised-v2"
     fixture_seed: int = 42
     policy_profile: Literal["strict-v1", "exploratory-v1"] = "strict-v1"
@@ -57,7 +57,7 @@ class RunConfig(Closed):
 class ManualSessionConfig(Closed):
     """A human-driven live session: one journey path, evaluated with that path's catalogue scenario."""
 
-    provider_config_id: Literal["openai-realtime-live", "nova-sonic-live", "xai-voice-live", "gemini-live"]
+    provider_config_id: Literal["openai-realtime-live", "nova-sonic-live", "xai-voice-live", "gemini-live", "elevenlabs-live"]
     journey_id: Identifier
     path: Literal["happy", "failure"] = "happy"
     # gated: only assessed, approved audio is played. streamed: audio plays as generated, assessed afterwards.

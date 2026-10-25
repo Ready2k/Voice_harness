@@ -4,7 +4,8 @@ import inspect
 from .live_providers import LIVE_PROVIDERS, TESTED_MODELS, _nova_env, requirements
 
 LABELS = {"openai-realtime-live": "OpenAI Realtime", "gemini-live": "Google Gemini",
-          "nova-sonic-live": "Amazon Nova Sonic", "xai-voice-live": "xAI Grok Voice"}
+          "nova-sonic-live": "Amazon Nova Sonic", "xai-voice-live": "xAI Grok Voice",
+          "elevenlabs-live": "ElevenLabs Agents"}
 
 
 def provider_options(env):
@@ -61,6 +62,9 @@ def build_adapter(provider, env):
     elif provider == "nova-sonic-live":
         from .adapters.nova_sonic import NovaSonicAdapter
         native = NovaSonicAdapter()
+    elif provider == "elevenlabs-live":
+        from .adapters.elevenlabs_voice import ElevenLabsVoiceAdapter
+        native = ElevenLabsVoiceAdapter(api_key=env.get("ELEVENLABS_API_KEY"))
     else:
         from .adapters.xai_voice import KEY_ENV, XaiVoiceAdapter
         native = XaiVoiceAdapter(api_key=env.get(KEY_ENV))

@@ -19,6 +19,9 @@ class ProviderTransportTests(unittest.TestCase):
                         self.assertNotIn("turn_detection", config)
                         self.assertEqual(config["endpointing"], "LOW" if mode == "live_ai" else "MEDIUM")
                         self.assertEqual(profile["turn_commit"], "provider_vad")
+                    elif provider == "elevenlabs-live":  # server VAD only: no manual commit exists
+                        self.assertNotIn("turn_detection", config)
+                        self.assertEqual(profile["turn_commit"], "provider_vad")
                     else:
                         self.assertEqual(config["turn_detection"], "manual")
                         self.assertEqual(profile["turn_commit"], "explicit")
@@ -32,8 +35,9 @@ class ProviderTransportTests(unittest.TestCase):
         for provider in LIVE_PROVIDERS:
             _, config = _adapter(provider)
             profile = configure_transport(provider, config, "human_microphone")
-            self.assertEqual(profile["turn_commit"], "provider_vad" if provider == "nova-sonic-live" else "automatic")
-            if provider != "nova-sonic-live":
+            provider_vad = provider in ("nova-sonic-live", "elevenlabs-live")
+            self.assertEqual(profile["turn_commit"], "provider_vad" if provider_vad else "automatic")
+            if not provider_vad:
                 detection = config["turn_detection"]
                 if provider in ("openai-realtime-live", "xai-voice-live"):  # a room mic gets the less sensitive VAD
                     self.assertEqual((detection["type"], detection["threshold"]), ("server_vad", 0.8))

@@ -96,7 +96,7 @@ export function rawToggle(value, label = "Raw") {
   return d;
 }
 
-const REPORT_WORDS = { google: "Google", xai: "xAI", openai: "OpenAI", gpt: "GPT", grok: "Grok", gemini: "Gemini", nova: "Nova", sonic: "Sonic", live: "Live", voice: "Voice", aws: "AWS", amazon: "Amazon", mock: "Mock", asr: "ASR", tts: "TTS" };
+const REPORT_WORDS = { google: "Google", xai: "xAI", elevenlabs: "ElevenLabs", agent: "Agent", agents: "Agents", openai: "OpenAI", gpt: "GPT", grok: "Grok", gemini: "Gemini", nova: "Nova", sonic: "Sonic", live: "Live", voice: "Voice", aws: "AWS", amazon: "Amazon", mock: "Mock", asr: "ASR", tts: "TTS" };
 
 /** "cap_google_gemini_live_2_5_flash_native_audio_20261018" -> "Google Gemini Live 2.5 flash native audio (18 Oct 2026)". Digit pairs become versions; a trailing YYYYMMDD becomes a date. */
 export function humaniseReportId(id) {

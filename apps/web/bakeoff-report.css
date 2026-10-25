@@ -1,8 +1,8 @@
 /* Bake-off report: shared by bakeoff.html (with ops.css tokens) and the standalone export (which defines them). */
-.bk { --bk-c0:#2563c9; --bk-c1:#b8328f; --bk-c2:#1f8a70; --bk-c3:#7c5cd6; --bk-grid:color-mix(in srgb, var(--line) 70%, transparent);
+.bk { --bk-c0:#2563c9; --bk-c1:#b8328f; --bk-c2:#1f8a70; --bk-c3:#7c5cd6; --bk-c4:#c2710c; --bk-grid:color-mix(in srgb, var(--line) 70%, transparent);
   display:flex; flex-direction:column; gap:18px; min-width:0 }
-@media (prefers-color-scheme: dark) { :root:not([data-theme=light]) .bk { --bk-c0:#6ea2ff; --bk-c1:#f08ccc; --bk-c2:#4fd1b0; --bk-c3:#b5a0f5 } }
-:root[data-theme=dark] .bk { --bk-c0:#6ea2ff; --bk-c1:#f08ccc; --bk-c2:#4fd1b0; --bk-c3:#b5a0f5 }
+@media (prefers-color-scheme: dark) { :root:not([data-theme=light]) .bk { --bk-c0:#6ea2ff; --bk-c1:#f08ccc; --bk-c2:#4fd1b0; --bk-c3:#b5a0f5; --bk-c4:#f0a64a } }
+:root[data-theme=dark] .bk { --bk-c0:#6ea2ff; --bk-c1:#f08ccc; --bk-c2:#4fd1b0; --bk-c3:#b5a0f5; --bk-c4:#f0a64a }
 .bk h1 { margin:0 }
 .bk h2 { margin:0; font-size:1.1rem }
 .bk h3 { margin:0; font-size:.95rem }

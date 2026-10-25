@@ -52,7 +52,8 @@ class TelephoneProviderTests(unittest.IsolatedAsyncioTestCase):
 
     def test_all_choices_build_correct_adapter_without_fallback(self):
         for provider, class_name in [('openai-realtime-live', 'OpenAIRealtimeAdapter'), ('gemini-live', 'GeminiLiveAdapter'),
-                                     ('nova-sonic-live', 'NovaSonicAdapter'), ('xai-voice-live', 'XaiVoiceAdapter')]:
+                                     ('nova-sonic-live', 'NovaSonicAdapter'), ('xai-voice-live', 'XaiVoiceAdapter'),
+                                     ('elevenlabs-live', 'ElevenLabsVoiceAdapter')]:
             with self.subTest(provider=provider):
                 self.assertEqual(type(build_adapter(provider, {}).native).__name__, class_name)
         with self.assertRaises(ValueError):
@@ -61,5 +62,5 @@ class TelephoneProviderTests(unittest.IsolatedAsyncioTestCase):
     def test_provider_options_report_missing_setup(self):
         with patch('voice_harness.telephone_providers.requirements', return_value=['NO_CONFIG']):
             options = provider_options({})
-        self.assertEqual(len(options), 4)
+        self.assertEqual(len(options), 5)
         self.assertTrue(all(p['missing'] == ['NO_CONFIG'] for p in options))

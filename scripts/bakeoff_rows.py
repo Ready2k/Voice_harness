@@ -20,7 +20,7 @@ from pathlib import Path
 
 TRAIL_MS = 1200
 GEMINI_AUDIO_BYTES = 2000
-AUDIO_TYPES = {"response.output_audio.delta", "audioOutput"}
+AUDIO_TYPES = {"response.output_audio.delta", "audioOutput", "audio"}
 
 
 def api(token, path, base="http://127.0.0.1:8766"):

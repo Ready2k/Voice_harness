@@ -10,6 +10,8 @@ const FIXES = {
   CALLER_VOICE_UNKNOWN_BACKEND: "VOICE_HARNESS_CALLER_VOICE must be macos or openai_tts.",
   NO_AWS_SESSION: "Start an AWS session on the server host: ./scripts/aws-session.sh <MFA code>.",
   NO_XAI_API_KEY: "Set xAI_API_KEY in the server's .env, then restart the server.",
+  NO_ELEVENLABS_API_KEY: "Set ELEVENLABS_API_KEY in the server's .env, then restart the server.",
+  NO_ELEVENLABS_AGENT: "Create the harness agent on the server host: PYTHONPATH=src .venv/bin/python -m voice_harness.adapters.elevenlabs_agent setup.",
   NO_GOOGLE_ADC: "Sign in on the server host: gcloud auth application-default login.",
   NO_GOOGLE_PROJECT: "Set GOOGLE_CLOUD_PROJECT on the server, or use ADC that carries a quota project.",
 };
