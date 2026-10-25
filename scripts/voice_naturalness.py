@@ -157,7 +157,7 @@ def render(out):
 
 
 def rating_page(order, key):
-    items = [{"id": clip, "text": LINES[key[clip]["line"]]} for clip in order]
+    items = [{"id": clip, "text": LINES[key[clip]["line"]], "phone": key[clip]["condition"] == "phone"} for clip in order]
     return PAGE.replace("__ITEMS__", json.dumps(items))
 
 
@@ -330,7 +330,7 @@ function count(){ const done = ITEMS.filter(i => AXES.every(([a]) => ratings[i.i
   document.getElementById("count").textContent = done + " of " + ITEMS.length + " rated"; }
 ITEMS.forEach((item, n) => {
   const card = document.createElement("div"); card.className = "card";
-  const p = document.createElement("p"); p.className = "line"; p.textContent = (n + 1) + ". \\u201c" + item.text + "\\u201d";
+  const p = document.createElement("p"); p.className = "line"; p.textContent = (n + 1) + ". " + (item.phone ? "[Phone-line simulation: deliberately low quality, rate it against other phone clips] " : "") + "\\u201c" + item.text + "\\u201d";
   const audio = document.createElement("audio"); audio.controls = true; audio.preload = "none"; audio.src = "clips/" + item.id + ".wav";
   const row = document.createElement("div"); row.className = "row";
   AXES.forEach(([axis, label]) => {
