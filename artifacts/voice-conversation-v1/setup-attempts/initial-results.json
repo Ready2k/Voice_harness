@@ -1,0 +1,1346 @@
+{
+  "plan_hash": "0e677fb5d8fd20d8ca6a59ef63d7bd7617ec4b4105c559d92ffc483ad65854ba",
+  "jobs": {
+    "23f6c108ea9e4751": {
+      "state": "completed",
+      "turns": [
+        {
+          "caller_started_at": 5.633407272398472e-05,
+          "caller_finished_at": 5.077351584099233,
+          "transcript": "That is really frustrating. The good news is, a failed \u00a342 payment takes no money from your account, so your balance shouldn\u2019t have decreased because of it.\n\nI can\u2019t see why it failed from here, but you could check with the merchant, confirm the payment details are correct, or try another payment method. If you\u2019re worried about card issues, you can temporarily freeze your card, and that\u2019s reversible. A replacement card would be a separate request.",
+          "assistant_audio_seconds": 24.2,
+          "first_audio_ms": 712
+        },
+        {
+          "caller_started_at": 29.990944875171408,
+          "caller_finished_at": 34.019935459131375,
+          "transcript": "Straight answer: no, you have not been charged. The failed \u00a342 payment took no money from your account.",
+          "assistant_audio_seconds": 6.65,
+          "first_audio_ms": 793
+        },
+        {
+          "caller_started_at": 41.463387875119224,
+          "caller_finished_at": 46.13431466696784,
+          "transcript": "Here\u2019s what I know, with no promises. Your current balance is \u00a31,250.40. A failed \u00a342 payment took no money, so you weren\u2019t charged for that failure. I don\u2019t have visibility into why it failed. A card freeze is temporary and reversible, and a replacement card would be a separate request. Bereavement support is available if you need it.",
+          "assistant_audio_seconds": 23.15,
+          "first_audio_ms": 871
+        }
+      ],
+      "returned_model_id": "gpt-realtime-2.1",
+      "setup_ms": 2213,
+      "configuration": {
+        "model_id": "gpt-realtime-2.1",
+        "voice": "marin",
+        "prompt_sha256": "0d4f0a1dd584e7632aa7993242e0e9052045b3efb09d5cf46436f323076a90de",
+        "transport": {
+          "profile_version": "provider-transport-v1",
+          "caller_mode": "fixed",
+          "turn_detection": "manual",
+          "endpointing": null,
+          "turn_commit": "explicit",
+          "harness_input_rate": 24000,
+          "provider_input_rate": 24000,
+          "output_rate": 24000,
+          "chunk_ms": 20,
+          "caller_trailing_silence_ms": 1200,
+          "client_truncation": true,
+          "turn_timeout_seconds": 45.0,
+          "response_audio_seconds": 20.0
+        }
+      },
+      "audio_sha256": "e5dc03a9a997df150b7d5771b71bbe490b6a0c9258aae2b00149d3b269ecf67b"
+    },
+    "e1c75a9e0844cd18": {
+      "state": "completed",
+      "turns": [
+        {
+          "caller_started_at": 2.8084032237529755e-05,
+          "caller_finished_at": 2.364125667139888,
+          "transcript": "Your current balance is one thousand two hundred fifty pounds and forty pence.",
+          "assistant_audio_seconds": 4.81,
+          "first_audio_ms": 693
+        },
+        {
+          "caller_started_at": 7.86922745895572,
+          "caller_finished_at": 10.942658124957234,
+          "transcript": "Your balance is one thousand two hundred fifty pounds and forty pence.",
+          "assistant_audio_seconds": 4.800041666666667,
+          "first_audio_ms": 773
+        },
+        {
+          "caller_started_at": 16.581487042130902,
+          "caller_finished_at": 20.997387709096074,
+          "transcript": "Yes, that's exactly right.",
+          "assistant_audio_seconds": 2.02,
+          "first_audio_ms": 794
+        }
+      ],
+      "returned_model_id": null,
+      "setup_ms": 1064,
+      "configuration": {
+        "model_id": "gemini-3.8-live",
+        "voice": "provider default",
+        "prompt_sha256": "99a3b458b4865aaad97c579cb2b31684deaade023123d99f808f07cbe36d08ae",
+        "transport": {
+          "profile_version": "provider-transport-v1",
+          "caller_mode": "fixed",
+          "turn_detection": "manual",
+          "endpointing": null,
+          "turn_commit": "explicit",
+          "harness_input_rate": 24000,
+          "provider_input_rate": 16000,
+          "output_rate": 24000,
+          "chunk_ms": 20,
+          "caller_trailing_silence_ms": 1200,
+          "client_truncation": false,
+          "turn_timeout_seconds": 45.0,
+          "response_audio_seconds": 20.0
+        }
+      },
+      "audio_sha256": "1998de38b68039b0054e3280664752d696f697959baef7f39c13cae11c4c555b"
+    },
+    "d4ced3805ea26c08": {
+      "state": "completed",
+      "turns": [
+        {
+          "caller_started_at": 3.1582778319716454e-05,
+          "caller_finished_at": 5.02301162481308,
+          "transcript": "You can ask to place a temporary freeze on the card so it can\u2019t be used, and that freeze can be reversed if you find it. If it doesn\u2019t turn up, a replacement card is a separate request. Do you want to freeze it for now while you keep looking?",
+          "assistant_audio_seconds": 12.85,
+          "first_audio_ms": 1428
+        },
+        {
+          "caller_started_at": 19.301023749867454,
+          "caller_finished_at": 23.57150762481615,
+          "transcript": "No, a freeze is temporary and reversible, so if you find the card you can just unfreeze it. A replacement is a separate request if the card doesn\u2019t turn up.",
+          "assistant_audio_seconds": 10.2,
+          "first_audio_ms": 701
+        },
+        {
+          "caller_started_at": 34.474477166775614,
+          "caller_finished_at": 38.73446308285929,
+          "transcript": "First, freeze the card so it can\u2019t be used. If you find it, unfreeze and carry on; if you don\u2019t, request a replacement.",
+          "assistant_audio_seconds": 7.6,
+          "first_audio_ms": 895
+        }
+      ],
+      "returned_model_id": "gpt-realtime-2.1",
+      "setup_ms": 991,
+      "configuration": {
+        "model_id": "gpt-realtime-2.1",
+        "voice": "marin",
+        "prompt_sha256": "96a528488b099e5e569fc6ac6052d3b1ead1a19785ca254a33019020afce8464",
+        "transport": {
+          "profile_version": "provider-transport-v1",
+          "caller_mode": "fixed",
+          "turn_detection": "manual",
+          "endpointing": null,
+          "turn_commit": "explicit",
+          "harness_input_rate": 24000,
+          "provider_input_rate": 24000,
+          "output_rate": 24000,
+          "chunk_ms": 20,
+          "caller_trailing_silence_ms": 1200,
+          "client_truncation": true,
+          "turn_timeout_seconds": 45.0,
+          "response_audio_seconds": 20.0
+        }
+      },
+      "execution_concurrency": 5,
+      "audio_sha256": "4350da293b75c4fc98bc596429c6bde4e159f50a5508f6285151d67f33726781"
+    },
+    "a3f991525592bf9b": {
+      "state": "completed",
+      "turns": [
+        {
+          "caller_started_at": 1.658312976360321e-05,
+          "caller_finished_at": 4.749543833080679,
+          "transcript": "I am very sorry for your loss. We have bereavement support available to help you through this process.",
+          "assistant_audio_seconds": 11.72,
+          "first_audio_ms": 1023
+        },
+        {
+          "caller_started_at": 17.493895082967356,
+          "caller_finished_at": 21.547293458133936,
+          "transcript": " Please let me know if you would like more information on how to access that support or what the next steps are for managing the account. I understand. We have a bereavement support team that can guide you through everything simply and clearly.",
+          "assistant_audio_seconds": 9.36,
+          "first_audio_ms": 865
+        },
+        {
+          "caller_started_at": 31.772251582937315,
+          "caller_finished_at": 35.15042558312416,
+          "transcript": " Please let me know when you are ready, and I can explain how to get in touch with them. Bereavement support is available to help you. I cannot transfer you to a person, but I can provide you with the information you need to contact the support team.",
+          "assistant_audio_seconds": 7.72,
+          "first_audio_ms": 969
+        }
+      ],
+      "returned_model_id": "amazon.nova-2-5-sonic",
+      "setup_ms": 764,
+      "configuration": {
+        "model_id": "amazon.nova-2-5-sonic",
+        "voice": "matthew",
+        "prompt_sha256": "0d4f0a1dd584e7632aa7993242e0e9052045b3efb09d5cf46436f323076a90de",
+        "transport": {
+          "profile_version": "provider-transport-v1",
+          "caller_mode": "fixed",
+          "turn_detection": "provider_vad",
+          "endpointing": "MEDIUM",
+          "turn_commit": "provider_vad",
+          "harness_input_rate": 24000,
+          "provider_input_rate": 16000,
+          "output_rate": 24000,
+          "chunk_ms": 20,
+          "caller_trailing_silence_ms": 1200,
+          "client_truncation": false,
+          "turn_timeout_seconds": 45.0,
+          "response_audio_seconds": 20.0
+        }
+      },
+      "execution_concurrency": 5,
+      "audio_sha256": "ebcd4ced93c8330d03d2733401bb61f3c131bf8532c7aa1f2a65d4ccde50e0de"
+    },
+    "0d3947d76d246060": {
+      "state": "completed",
+      "turns": [
+        {
+          "caller_started_at": 3.579119220376015e-05,
+          "caller_finished_at": 5.143218458164483,
+          "transcript": "Understood, I won't send anything. Your balance is one thousand two hundred fifty pounds and forty pence, so fifteen would be fine if you do decide to go ahead.",
+          "assistant_audio_seconds": 9.58,
+          "first_audio_ms": 805
+        },
+        {
+          "caller_started_at": 15.530691666062921,
+          "caller_finished_at": 22.05652300012298,
+          "transcript": "Noted: fifty pounds to Alice, and still nothing sent. That's still within your balance.",
+          "assistant_audio_seconds": 5.42,
+          "first_audio_ms": 972
+        },
+        {
+          "caller_started_at": 28.450285125058144,
+          "caller_finished_at": 32.476819458184764,
+          "transcript": "Fifty pounds to Alice.",
+          "assistant_audio_seconds": 1.59,
+          "first_audio_ms": 909
+        }
+      ],
+      "returned_model_id": "grok-voice-3.0",
+      "setup_ms": 1033,
+      "configuration": {
+        "model_id": "grok-voice-3.0",
+        "voice": "ara",
+        "prompt_sha256": "d1a552ff6bf87e866b7424c1761b530854efcee9f12dd9bbfbedb97503017958",
+        "transport": {
+          "profile_version": "provider-transport-v1",
+          "caller_mode": "fixed",
+          "turn_detection": "manual",
+          "endpointing": null,
+          "turn_commit": "explicit",
+          "harness_input_rate": 24000,
+          "provider_input_rate": 24000,
+          "output_rate": 24000,
+          "chunk_ms": 20,
+          "caller_trailing_silence_ms": 1200,
+          "client_truncation": true,
+          "turn_timeout_seconds": 45.0,
+          "response_audio_seconds": 20.0
+        }
+      },
+      "execution_concurrency": 5,
+      "audio_sha256": "c044dd929a16fac0a154b2cceaac06a6282ae18a17863c84c71f1c0128e732a2"
+    },
+    "e1a77c71e803c85b": {
+      "state": "completed",
+      "turns": [
+        {
+          "caller_started_at": 4.000007174909115e-05,
+          "caller_finished_at": 6.354724375065416,
+          "transcript": "Understood, Sam. Freezing your card is a temporary measure that stops new charges, but you can easily unfreeze it later.",
+          "assistant_audio_seconds": 7.37,
+          "first_audio_ms": 917
+        },
+        {
+          "caller_started_at": 14.64364791708067,
+          "caller_finished_at": 17.59491916699335,
+          "transcript": "Freezing is just pausing your card, which you can undo anytime. Replacing sends you a new card and cancels the old one permanently.",
+          "assistant_audio_seconds": 7.730041666666667,
+          "first_audio_ms": 800
+        },
+        {
+          "caller_started_at": 26.157537624938414,
+          "caller_finished_at": 30.142277667066082,
+          "transcript": "You said you wanted to understand freezing your card, and you asked me to call you Sam.",
+          "assistant_audio_seconds": 4.7000416666666665,
+          "first_audio_ms": 844
+        }
+      ],
+      "returned_model_id": null,
+      "setup_ms": 935,
+      "configuration": {
+        "model_id": "gemini-3.8-live",
+        "voice": "provider default",
+        "prompt_sha256": "99a3b458b4865aaad97c579cb2b31684deaade023123d99f808f07cbe36d08ae",
+        "transport": {
+          "profile_version": "provider-transport-v1",
+          "caller_mode": "fixed",
+          "turn_detection": "manual",
+          "endpointing": null,
+          "turn_commit": "explicit",
+          "harness_input_rate": 24000,
+          "provider_input_rate": 16000,
+          "output_rate": 24000,
+          "chunk_ms": 20,
+          "caller_trailing_silence_ms": 1200,
+          "client_truncation": false,
+          "turn_timeout_seconds": 45.0,
+          "response_audio_seconds": 20.0
+        }
+      },
+      "execution_concurrency": 5,
+      "audio_sha256": "47d1ee29d8a052c8a8500f00ba2e88550b7f1e37eab705c34ca246e2e4618729"
+    },
+    "05f20793573c5aa7": {
+      "state": "failed",
+      "turns": [
+        {
+          "caller_started_at": 1.8249964341521263e-05,
+          "caller_finished_at": 4.7486663749441504,
+          "transcript": "I am [sad] sorry for your loss. We can help you with information regarding bereavement support. I can't directly access his account, but I can guide you on the next steps.",
+          "assistant_audio_seconds": 11.04,
+          "first_audio_ms": 1967
+        },
+        {
+          "caller_started_at": 17.757479208055884,
+          "caller_finished_at": 21.81926424987614,
+          "transcript": "I understand this is a difficult time. I can transfer you to our specialist bereavement team who can guide you through the process simply and clearly. Would you like me to do that?",
+          "assistant_audio_seconds": 10.48,
+          "first_audio_ms": 2444
+        },
+        {
+          "caller_started_at": 34.74487445806153,
+          "caller_finished_at": 38.098566124914214,
+          "transcript": "Please wait a moment while I connect you to our specialist bereavement team.",
+          "assistant_audio_seconds": 4.0,
+          "first_audio_ms": 1233
+        }
+      ],
+      "returned_model_id": null,
+      "setup_ms": 361,
+      "error": "ValueError",
+      "configuration": {
+        "model_id": "elevenlabs-agent",
+        "voice": "JBFqnCBsd6RMkjVDRZzb",
+        "prompt_sha256": "30784d536a208a8695fd972e7609190d5458c10e09efe3c4b3831441c0d33419",
+        "transport": {
+          "profile_version": "provider-transport-v1",
+          "caller_mode": "fixed",
+          "turn_detection": "provider_vad",
+          "endpointing": null,
+          "turn_commit": "provider_vad",
+          "harness_input_rate": 24000,
+          "provider_input_rate": 24000,
+          "output_rate": 24000,
+          "chunk_ms": 20,
+          "caller_trailing_silence_ms": 1200,
+          "client_truncation": false,
+          "turn_timeout_seconds": 45.0,
+          "response_audio_seconds": 20.0
+        }
+      },
+      "execution_concurrency": 5,
+      "audio_sha256": "989eef7ac7c9df5ab21c69410ca41065e85456eee93de714c06715197822032f"
+    },
+    "ccf221b5922c1f42": {
+      "state": "completed",
+      "turns": [
+        {
+          "caller_started_at": 1.1125113815069199e-05,
+          "caller_finished_at": 4.960179291199893,
+          "transcript": "I understand this is frustrating. No money was taken for that forty-two pound payment, and your current balance is one thousand two hundred fifty pounds and forty pence. Would you like to check the details of the attempt?",
+          "assistant_audio_seconds": 12.170041666666666,
+          "first_audio_ms": 860
+        },
+        {
+          "caller_started_at": 18.028539000079036,
+          "caller_finished_at": 21.954338415991515,
+          "transcript": "You have not been charged. No money was taken for that forty-two pound payment.",
+          "assistant_audio_seconds": 4.560041666666667,
+          "first_audio_ms": 835
+        },
+        {
+          "caller_started_at": 27.380965083139017,
+          "caller_finished_at": 31.956543125212193,
+          "transcript": "Your balance is one thousand two hundred fifty pounds and forty pence, and I see no money was taken for the failed forty-two pound payment.",
+          "assistant_audio_seconds": 7.84,
+          "first_audio_ms": 845
+        }
+      ],
+      "returned_model_id": null,
+      "setup_ms": 998,
+      "configuration": {
+        "model_id": "gemini-3.8-live",
+        "voice": "provider default",
+        "prompt_sha256": "99a3b458b4865aaad97c579cb2b31684deaade023123d99f808f07cbe36d08ae",
+        "transport": {
+          "profile_version": "provider-transport-v1",
+          "caller_mode": "fixed",
+          "turn_detection": "manual",
+          "endpointing": null,
+          "turn_commit": "explicit",
+          "harness_input_rate": 24000,
+          "provider_input_rate": 16000,
+          "output_rate": 24000,
+          "chunk_ms": 20,
+          "caller_trailing_silence_ms": 1200,
+          "client_truncation": false,
+          "turn_timeout_seconds": 45.0,
+          "response_audio_seconds": 20.0
+        }
+      },
+      "execution_concurrency": 5,
+      "audio_sha256": "9ed75a9f874c833c53af0c018b6a321f7bbed7e32802d1a0ec954b73c875746f"
+    },
+    "2963f4db8cc38d69": {
+      "state": "completed",
+      "turns": [
+        {
+          "caller_started_at": 1.0624993592500687e-05,
+          "caller_finished_at": 5.132780292071402,
+          "transcript": "Understood, I haven't sent anything. Your balance is \u00a31,250.40, so \u00a315 is well within reach whenever you decide.",
+          "assistant_audio_seconds": 9.26,
+          "first_audio_ms": 846
+        },
+        {
+          "caller_started_at": 15.241381916915998,
+          "caller_finished_at": 21.732737583108246,
+          "transcript": "No problem. Fifty pounds to Alice, not sent. Anything else you'd like to check first?",
+          "assistant_audio_seconds": 5.1,
+          "first_audio_ms": 1321
+        },
+        {
+          "caller_started_at": 28.15585591713898,
+          "caller_finished_at": 32.20346991694532,
+          "transcript": "Fifty pounds to Alice.",
+          "assistant_audio_seconds": 1.59,
+          "first_audio_ms": 1255
+        }
+      ],
+      "returned_model_id": "grok-voice-3.0",
+      "setup_ms": 1066,
+      "configuration": {
+        "model_id": "grok-voice-3.0",
+        "voice": "ara",
+        "prompt_sha256": "0d4f0a1dd584e7632aa7993242e0e9052045b3efb09d5cf46436f323076a90de",
+        "transport": {
+          "profile_version": "provider-transport-v1",
+          "caller_mode": "fixed",
+          "turn_detection": "manual",
+          "endpointing": null,
+          "turn_commit": "explicit",
+          "harness_input_rate": 24000,
+          "provider_input_rate": 24000,
+          "output_rate": 24000,
+          "chunk_ms": 20,
+          "caller_trailing_silence_ms": 1200,
+          "client_truncation": true,
+          "turn_timeout_seconds": 45.0,
+          "response_audio_seconds": 20.0
+        }
+      },
+      "execution_concurrency": 5,
+      "audio_sha256": "07ca7c3f5a99ecda839192fe345c29b4ffbaaf15ff23f8444423820c1c1395bb"
+    },
+    "6cfe9455e0cadb3f": {
+      "state": "failed",
+      "turns": [
+        {
+          "caller_started_at": 3.529200330376625e-05,
+          "caller_finished_at": 2.3359550829045475,
+          "transcript": "",
+          "assistant_audio_seconds": 0.0,
+          "first_audio_ms": null
+        }
+      ],
+      "returned_model_id": null,
+      "setup_ms": 258,
+      "error": "ValueError",
+      "configuration": {
+        "model_id": "elevenlabs-agent",
+        "voice": "JBFqnCBsd6RMkjVDRZzb",
+        "prompt_sha256": "0d4f0a1dd584e7632aa7993242e0e9052045b3efb09d5cf46436f323076a90de",
+        "transport": {
+          "profile_version": "provider-transport-v1",
+          "caller_mode": "fixed",
+          "turn_detection": "provider_vad",
+          "endpointing": null,
+          "turn_commit": "provider_vad",
+          "harness_input_rate": 24000,
+          "provider_input_rate": 24000,
+          "output_rate": 24000,
+          "chunk_ms": 20,
+          "caller_trailing_silence_ms": 1200,
+          "client_truncation": false,
+          "turn_timeout_seconds": 45.0,
+          "response_audio_seconds": 20.0
+        }
+      },
+      "execution_concurrency": 5,
+      "audio_sha256": "06d24cbc4d9447dcc413341d9537fc6412ccb143ef70b367539034a137337e65"
+    },
+    "916672756e98d6d2": {
+      "state": "failed",
+      "turns": [
+        {
+          "caller_started_at": 1.9208993762731552e-05,
+          "caller_finished_at": 2.3539991669822484,
+          "transcript": "",
+          "assistant_audio_seconds": 0.0,
+          "first_audio_ms": null
+        }
+      ],
+      "returned_model_id": null,
+      "setup_ms": 266,
+      "error": "ValueError",
+      "configuration": {
+        "model_id": "elevenlabs-agent",
+        "voice": "JBFqnCBsd6RMkjVDRZzb",
+        "prompt_sha256": "30784d536a208a8695fd972e7609190d5458c10e09efe3c4b3831441c0d33419",
+        "transport": {
+          "profile_version": "provider-transport-v1",
+          "caller_mode": "fixed",
+          "turn_detection": "provider_vad",
+          "endpointing": null,
+          "turn_commit": "provider_vad",
+          "harness_input_rate": 24000,
+          "provider_input_rate": 24000,
+          "output_rate": 24000,
+          "chunk_ms": 20,
+          "caller_trailing_silence_ms": 1200,
+          "client_truncation": false,
+          "turn_timeout_seconds": 45.0,
+          "response_audio_seconds": 20.0
+        }
+      },
+      "execution_concurrency": 5,
+      "audio_sha256": "9ae2c3ce54e6cbc8f78f5f2948724c0a241498bdbfe6787bb8562e912c047df1"
+    },
+    "93b37418af7178d5": {
+      "state": "completed",
+      "turns": [
+        {
+          "caller_started_at": 3.079208545386791e-05,
+          "caller_finished_at": 6.399069583043456,
+          "transcript": "Freezing your card is a temporary move that you can reverse later.",
+          "assistant_audio_seconds": 5.24,
+          "first_audio_ms": 893
+        },
+        {
+          "caller_started_at": 12.534604917047545,
+          "caller_finished_at": 15.41664154198952,
+          "transcript": " Would you like to know how to do that, Sam? Freezing your card just turns it off for a while and you can turn it back on whenever you want.",
+          "assistant_audio_seconds": 8.92,
+          "first_audio_ms": 1138
+        },
+        {
+          "caller_started_at": 25.476238749921322,
+          "caller_finished_at": 29.380389750003815,
+          "transcript": " A replacement is a permanent change where you get a brand new card with a different number. You said you only want to understand freezing your card, Sam.",
+          "assistant_audio_seconds": 3.24,
+          "first_audio_ms": 632
+        }
+      ],
+      "returned_model_id": "amazon.nova-2-5-sonic",
+      "setup_ms": 646,
+      "configuration": {
+        "model_id": "amazon.nova-2-5-sonic",
+        "voice": "matthew",
+        "prompt_sha256": "8a1ad5db92a44d261d726a74c434efa82f60786b35b18116582a272a32e8738e",
+        "transport": {
+          "profile_version": "provider-transport-v1",
+          "caller_mode": "fixed",
+          "turn_detection": "provider_vad",
+          "endpointing": "MEDIUM",
+          "turn_commit": "provider_vad",
+          "harness_input_rate": 24000,
+          "provider_input_rate": 16000,
+          "output_rate": 24000,
+          "chunk_ms": 20,
+          "caller_trailing_silence_ms": 1200,
+          "client_truncation": false,
+          "turn_timeout_seconds": 45.0,
+          "response_audio_seconds": 20.0
+        }
+      },
+      "execution_concurrency": 5,
+      "audio_sha256": "0848dd496a36e5d5cf108e64b2bb2d936c9d7527bb0b69bdd46d178c2acf4056"
+    },
+    "a1b4d785ac1a20e9": {
+      "state": "failed",
+      "turns": [
+        {
+          "caller_started_at": 2.9625138267874718e-05,
+          "caller_finished_at": 2.3386146661359817,
+          "transcript": "",
+          "assistant_audio_seconds": 0.0,
+          "first_audio_ms": null
+        }
+      ],
+      "returned_model_id": null,
+      "setup_ms": 250,
+      "error": "ValueError",
+      "configuration": {
+        "model_id": "elevenlabs-agent",
+        "voice": "JBFqnCBsd6RMkjVDRZzb",
+        "prompt_sha256": "0d4f0a1dd584e7632aa7993242e0e9052045b3efb09d5cf46436f323076a90de",
+        "transport": {
+          "profile_version": "provider-transport-v1",
+          "caller_mode": "fixed",
+          "turn_detection": "provider_vad",
+          "endpointing": null,
+          "turn_commit": "provider_vad",
+          "harness_input_rate": 24000,
+          "provider_input_rate": 24000,
+          "output_rate": 24000,
+          "chunk_ms": 20,
+          "caller_trailing_silence_ms": 1200,
+          "client_truncation": false,
+          "turn_timeout_seconds": 45.0,
+          "response_audio_seconds": 20.0
+        }
+      },
+      "execution_concurrency": 5,
+      "audio_sha256": "06d24cbc4d9447dcc413341d9537fc6412ccb143ef70b367539034a137337e65"
+    },
+    "ed3882f8ad01e722": {
+      "state": "failed",
+      "turns": [
+        {
+          "caller_started_at": 6.0582999140024185e-05,
+          "caller_finished_at": 4.914233583025634,
+          "transcript": "",
+          "assistant_audio_seconds": 30.4,
+          "first_audio_ms": 1359
+        }
+      ],
+      "returned_model_id": "gpt-realtime-2.1",
+      "setup_ms": 741,
+      "error": "ValueError",
+      "configuration": {
+        "model_id": "gpt-realtime-2.1",
+        "voice": "marin",
+        "prompt_sha256": "0d4f0a1dd584e7632aa7993242e0e9052045b3efb09d5cf46436f323076a90de",
+        "transport": {
+          "profile_version": "provider-transport-v1",
+          "caller_mode": "fixed",
+          "turn_detection": "manual",
+          "endpointing": null,
+          "turn_commit": "explicit",
+          "harness_input_rate": 24000,
+          "provider_input_rate": 24000,
+          "output_rate": 24000,
+          "chunk_ms": 20,
+          "caller_trailing_silence_ms": 1200,
+          "client_truncation": true,
+          "turn_timeout_seconds": 45.0,
+          "response_audio_seconds": 20.0
+        }
+      },
+      "execution_concurrency": 5,
+      "audio_sha256": "6e34c70098168245818f556e46c701647d2a98264efd4f032d3581142fe7e547"
+    },
+    "41d8dedd83742be6": {
+      "state": "completed",
+      "turns": [
+        {
+          "caller_started_at": 1.3875076547265053e-05,
+          "caller_finished_at": 5.093712165951729,
+          "transcript": "I understand you're thinking of sending fifteen pounds to Alex. I won't send anything yet.",
+          "assistant_audio_seconds": 5.6,
+          "first_audio_ms": 1531
+        },
+        {
+          "caller_started_at": 12.224873291095719,
+          "caller_finished_at": 18.812578041106462,
+          "transcript": "Thank you for clarifying. You're thinking of sending fifty pounds to Alice. I've noted the correction.",
+          "assistant_audio_seconds": 6.08,
+          "first_audio_ms": 1679
+        },
+        {
+          "caller_started_at": 26.572312083095312,
+          "caller_finished_at": 30.60765412496403,
+          "transcript": "You mentioned you are thinking of sending fifty pounds to Alice.",
+          "assistant_audio_seconds": 3.68,
+          "first_audio_ms": 1516
+        }
+      ],
+      "returned_model_id": null,
+      "setup_ms": 257,
+      "configuration": {
+        "model_id": "elevenlabs-agent",
+        "voice": "JBFqnCBsd6RMkjVDRZzb",
+        "prompt_sha256": "0d4f0a1dd584e7632aa7993242e0e9052045b3efb09d5cf46436f323076a90de",
+        "transport": {
+          "profile_version": "provider-transport-v1",
+          "caller_mode": "fixed",
+          "turn_detection": "provider_vad",
+          "endpointing": null,
+          "turn_commit": "provider_vad",
+          "harness_input_rate": 24000,
+          "provider_input_rate": 24000,
+          "output_rate": 24000,
+          "chunk_ms": 20,
+          "caller_trailing_silence_ms": 1200,
+          "client_truncation": false,
+          "turn_timeout_seconds": 45.0,
+          "response_audio_seconds": 20.0
+        }
+      },
+      "execution_concurrency": 5,
+      "audio_sha256": "5216ccabacd22a4a816beea757c5562a65e41e647530d7615d709c228f6b30f0"
+    },
+    "dc683b33d0f8c8a5": {
+      "state": "failed",
+      "turns": [
+        {
+          "caller_started_at": 4.033301956951618e-05,
+          "caller_finished_at": 4.8248069998808205,
+          "transcript": "",
+          "assistant_audio_seconds": 30.4,
+          "first_audio_ms": 925
+        }
+      ],
+      "returned_model_id": "gpt-realtime-2.1",
+      "setup_ms": 713,
+      "error": "ValueError",
+      "configuration": {
+        "model_id": "gpt-realtime-2.1",
+        "voice": "marin",
+        "prompt_sha256": "0d4f0a1dd584e7632aa7993242e0e9052045b3efb09d5cf46436f323076a90de",
+        "transport": {
+          "profile_version": "provider-transport-v1",
+          "caller_mode": "fixed",
+          "turn_detection": "manual",
+          "endpointing": null,
+          "turn_commit": "explicit",
+          "harness_input_rate": 24000,
+          "provider_input_rate": 24000,
+          "output_rate": 24000,
+          "chunk_ms": 20,
+          "caller_trailing_silence_ms": 1200,
+          "client_truncation": true,
+          "turn_timeout_seconds": 45.0,
+          "response_audio_seconds": 20.0
+        }
+      },
+      "execution_concurrency": 5,
+      "audio_sha256": "bb8d7fabf1a3bc9af777a3e679887def5bf84fbe2d457329c0b5a131216b2a1d"
+    },
+    "0c5d8ea62e61da5f": {
+      "state": "completed",
+      "turns": [
+        {
+          "caller_started_at": 3.691692836582661e-05,
+          "caller_finished_at": 4.934662125073373,
+          "transcript": "I understand the frustration. The good news is no money left your account, so you're not out of pocket. Would you like to try the payment again?",
+          "assistant_audio_seconds": 7.98,
+          "first_audio_ms": 941
+        },
+        {
+          "caller_started_at": 13.857409291900694,
+          "caller_finished_at": 17.83418474998325,
+          "transcript": "No, you haven't been charged. The forty two pounds is still showing as available in your balance of one thousand two hundred fifty pounds and forty pence.",
+          "assistant_audio_seconds": 8.3,
+          "first_audio_ms": 1273
+        },
+        {
+          "caller_started_at": 27.408697209088132,
+          "caller_finished_at": 31.944992959033698,
+          "transcript": "Here's what I know. Your balance is one thousand two hundred fifty pounds and forty pence, and that failed forty two pound payment didn't take anything.",
+          "assistant_audio_seconds": 8.3,
+          "first_audio_ms": 1019
+        }
+      ],
+      "returned_model_id": "grok-voice-3.0",
+      "setup_ms": 604,
+      "configuration": {
+        "model_id": "grok-voice-3.0",
+        "voice": "ara",
+        "prompt_sha256": "d1a552ff6bf87e866b7424c1761b530854efcee9f12dd9bbfbedb97503017958",
+        "transport": {
+          "profile_version": "provider-transport-v1",
+          "caller_mode": "fixed",
+          "turn_detection": "manual",
+          "endpointing": null,
+          "turn_commit": "explicit",
+          "harness_input_rate": 24000,
+          "provider_input_rate": 24000,
+          "output_rate": 24000,
+          "chunk_ms": 20,
+          "caller_trailing_silence_ms": 1200,
+          "client_truncation": true,
+          "turn_timeout_seconds": 45.0,
+          "response_audio_seconds": 20.0
+        }
+      },
+      "execution_concurrency": 5,
+      "audio_sha256": "5e4f99ae2773ab38765005c0903b26feb333935cd2aede3e077690cbd895a794"
+    },
+    "40e682673f50786b": {
+      "state": "completed",
+      "turns": [
+        {
+          "caller_started_at": 1.9625062122941017e-05,
+          "caller_finished_at": 5.019969040993601,
+          "transcript": "I understand this is frustrating. The failed forty-two pound payment took no money from your account.",
+          "assistant_audio_seconds": 6.0,
+          "first_audio_ms": 866
+        },
+        {
+          "caller_started_at": 11.888477666070685,
+          "caller_finished_at": 15.83514945791103,
+          "transcript": "No, you have not been charged. The failed forty-two pound payment took no money.",
+          "assistant_audio_seconds": 5.360041666666667,
+          "first_audio_ms": 869
+        },
+        {
+          "caller_started_at": 22.10037283296697,
+          "caller_finished_at": 26.64096516603604,
+          "transcript": "Your account balance is one thousand two hundred fifty pounds and forty pence, and the forty-two pound payment failed.",
+          "assistant_audio_seconds": 7.320041666666667,
+          "first_audio_ms": 796
+        }
+      ],
+      "returned_model_id": null,
+      "setup_ms": 1009,
+      "configuration": {
+        "model_id": "gemini-3.8-live",
+        "voice": "provider default",
+        "prompt_sha256": "99a3b458b4865aaad97c579cb2b31684deaade023123d99f808f07cbe36d08ae",
+        "transport": {
+          "profile_version": "provider-transport-v1",
+          "caller_mode": "fixed",
+          "turn_detection": "manual",
+          "endpointing": null,
+          "turn_commit": "explicit",
+          "harness_input_rate": 24000,
+          "provider_input_rate": 16000,
+          "output_rate": 24000,
+          "chunk_ms": 20,
+          "caller_trailing_silence_ms": 1200,
+          "client_truncation": false,
+          "turn_timeout_seconds": 45.0,
+          "response_audio_seconds": 20.0
+        }
+      },
+      "execution_concurrency": 5,
+      "audio_sha256": "7fbd0f9ded5bd7ed1d678514a9e5c4f05bf0cd4c97ab4625006209a506064e3c"
+    },
+    "f03b80d084351eca": {
+      "state": "completed",
+      "turns": [
+        {
+          "caller_started_at": 1.929188147187233e-05,
+          "caller_finished_at": 5.000538291875273,
+          "transcript": "I am sorry to hear that you are frustrated. I can confirm that the forty two pound payment failed and no money was taken from your account.",
+          "assistant_audio_seconds": 11.48,
+          "first_audio_ms": 1113
+        },
+        {
+          "caller_started_at": 17.594630582956597,
+          "caller_finished_at": 21.524899249896407,
+          "transcript": " Your current balance is one thousand two hundred and fifty pounds and forty pence. No, you have not been charged. The forty two pound payment failed and no money was taken from your account.",
+          "assistant_audio_seconds": 5.64,
+          "first_audio_ms": 847
+        },
+        {
+          "caller_started_at": 28.710960417054594,
+          "caller_finished_at": 33.25045791687444,
+          "transcript": "Your current balance is one thousand two hundred and fifty pounds and forty pence.",
+          "assistant_audio_seconds": 16.6,
+          "first_audio_ms": 814
+        }
+      ],
+      "returned_model_id": "amazon.nova-2-5-sonic",
+      "setup_ms": 658,
+      "configuration": {
+        "model_id": "amazon.nova-2-5-sonic",
+        "voice": "matthew",
+        "prompt_sha256": "0d4f0a1dd584e7632aa7993242e0e9052045b3efb09d5cf46436f323076a90de",
+        "transport": {
+          "profile_version": "provider-transport-v1",
+          "caller_mode": "fixed",
+          "turn_detection": "provider_vad",
+          "endpointing": "MEDIUM",
+          "turn_commit": "provider_vad",
+          "harness_input_rate": 24000,
+          "provider_input_rate": 16000,
+          "output_rate": 24000,
+          "chunk_ms": 20,
+          "caller_trailing_silence_ms": 1200,
+          "client_truncation": false,
+          "turn_timeout_seconds": 45.0,
+          "response_audio_seconds": 20.0
+        }
+      },
+      "execution_concurrency": 5,
+      "audio_sha256": "eb612dc7c63b4a7843f879be05ba75e69a8b05822f36f02d847493dabb4c977c"
+    },
+    "b432eec906dee819": {
+      "state": "completed",
+      "turns": [
+        {
+          "caller_started_at": 3.958400338888168e-05,
+          "caller_finished_at": 2.3860677499324083,
+          "transcript": "Your current balance is \u00a31,250.40.",
+          "assistant_audio_seconds": 4.45,
+          "first_audio_ms": 761
+        },
+        {
+          "caller_started_at": 7.599474666872993,
+          "caller_finished_at": 10.706286208936945,
+          "transcript": "Your current balance is one thousand two hundred fifty pounds and forty pence.",
+          "assistant_audio_seconds": 6.7,
+          "first_audio_ms": 706
+        },
+        {
+          "caller_started_at": 18.11254774988629,
+          "caller_finished_at": 22.470611916854978,
+          "transcript": "Yes. That means one thousand two hundred fifty pounds, plus forty pence.",
+          "assistant_audio_seconds": 5.3,
+          "first_audio_ms": 693
+        }
+      ],
+      "returned_model_id": "gpt-realtime-2.1",
+      "setup_ms": 697,
+      "configuration": {
+        "model_id": "gpt-realtime-2.1",
+        "voice": "marin",
+        "prompt_sha256": "0d4f0a1dd584e7632aa7993242e0e9052045b3efb09d5cf46436f323076a90de",
+        "transport": {
+          "profile_version": "provider-transport-v1",
+          "caller_mode": "fixed",
+          "turn_detection": "manual",
+          "endpointing": null,
+          "turn_commit": "explicit",
+          "harness_input_rate": 24000,
+          "provider_input_rate": 24000,
+          "output_rate": 24000,
+          "chunk_ms": 20,
+          "caller_trailing_silence_ms": 1200,
+          "client_truncation": true,
+          "turn_timeout_seconds": 45.0,
+          "response_audio_seconds": 20.0
+        }
+      },
+      "execution_concurrency": 5,
+      "audio_sha256": "bb46dea379f35e1d9b15b7ae4ec704fd73b5a32d1df621429c8266e2497a551b"
+    },
+    "36ff01295b784608": {
+      "state": "failed",
+      "turns": [
+        {
+          "caller_started_at": 3.083306364715099e-05,
+          "caller_finished_at": 2.3444836661219597,
+          "transcript": "",
+          "assistant_audio_seconds": 0.0,
+          "first_audio_ms": null
+        }
+      ],
+      "returned_model_id": null,
+      "setup_ms": 259,
+      "error": "ValueError",
+      "configuration": {
+        "model_id": "elevenlabs-agent",
+        "voice": "JBFqnCBsd6RMkjVDRZzb",
+        "prompt_sha256": "30784d536a208a8695fd972e7609190d5458c10e09efe3c4b3831441c0d33419",
+        "transport": {
+          "profile_version": "provider-transport-v1",
+          "caller_mode": "fixed",
+          "turn_detection": "provider_vad",
+          "endpointing": null,
+          "turn_commit": "provider_vad",
+          "harness_input_rate": 24000,
+          "provider_input_rate": 24000,
+          "output_rate": 24000,
+          "chunk_ms": 20,
+          "caller_trailing_silence_ms": 1200,
+          "client_truncation": false,
+          "turn_timeout_seconds": 45.0,
+          "response_audio_seconds": 20.0
+        }
+      },
+      "execution_concurrency": 5,
+      "audio_sha256": "06d24cbc4d9447dcc413341d9537fc6412ccb143ef70b367539034a137337e65"
+    },
+    "ade3789ee02ee47d": {
+      "state": "completed",
+      "turns": [
+        {
+          "caller_started_at": 1.9999919459223747e-05,
+          "caller_finished_at": 5.110809708014131,
+          "transcript": "I understand you're thinking of sending fifteen pounds to Alex. I won't send anything yet.",
+          "assistant_audio_seconds": 5.6,
+          "first_audio_ms": 1482
+        },
+        {
+          "caller_started_at": 12.193085124948993,
+          "caller_finished_at": 18.666392208077013,
+          "transcript": "Thank you for clarifying. You're thinking of sending fifty pounds to Alice. I've noted the correction.",
+          "assistant_audio_seconds": 6.24,
+          "first_audio_ms": 1689
+        },
+        {
+          "caller_started_at": 26.596416082931682,
+          "caller_finished_at": 30.546911667101085,
+          "transcript": "You mentioned you are thinking of sending fifty pounds to Alice.",
+          "assistant_audio_seconds": 3.6,
+          "first_audio_ms": 1263
+        }
+      ],
+      "returned_model_id": null,
+      "setup_ms": 290,
+      "configuration": {
+        "model_id": "elevenlabs-agent",
+        "voice": "JBFqnCBsd6RMkjVDRZzb",
+        "prompt_sha256": "0d4f0a1dd584e7632aa7993242e0e9052045b3efb09d5cf46436f323076a90de",
+        "transport": {
+          "profile_version": "provider-transport-v1",
+          "caller_mode": "fixed",
+          "turn_detection": "provider_vad",
+          "endpointing": null,
+          "turn_commit": "provider_vad",
+          "harness_input_rate": 24000,
+          "provider_input_rate": 24000,
+          "output_rate": 24000,
+          "chunk_ms": 20,
+          "caller_trailing_silence_ms": 1200,
+          "client_truncation": false,
+          "turn_timeout_seconds": 45.0,
+          "response_audio_seconds": 20.0
+        }
+      },
+      "execution_concurrency": 5,
+      "audio_sha256": "0059154c944c96ff5ff95c2908482b703881e66c7d23a05827ccaf9489f79d6b"
+    },
+    "1a59a4f806d7440d": {
+      "state": "completed",
+      "turns": [
+        {
+          "caller_started_at": 3.0624913051724434e-05,
+          "caller_finished_at": 4.952595416922122,
+          "transcript": "I get it\u2014failed payments are annoying. The \u00a342 failure didn\u2019t take any money, so nothing was deducted. If it keeps happening, do you want to try again later or look into whether you need a replacement card requested?",
+          "assistant_audio_seconds": 12.15,
+          "first_audio_ms": 1037
+        },
+        {
+          "caller_started_at": 18.141491499962285,
+          "caller_finished_at": 22.16236470802687,
+          "transcript": "No, you weren\u2019t charged. The failed \u00a342 payment didn\u2019t take any money, so your balance stays the same at \u00a31,250.40.",
+          "assistant_audio_seconds": 9.15,
+          "first_audio_ms": 868
+        },
+        {
+          "caller_started_at": 32.18159841699526,
+          "caller_finished_at": 36.76504445797764,
+          "transcript": "Here\u2019s what I know. Your balance is \u00a31,250.40, and the failed \u00a342 payment didn\u2019t take any money. A card freeze is temporary and reversible, and requesting a replacement card is a separate step. Bereavement support is available if you need it.",
+          "assistant_audio_seconds": 18.0,
+          "first_audio_ms": 1063
+        }
+      ],
+      "returned_model_id": "gpt-realtime-2.1",
+      "setup_ms": 936,
+      "configuration": {
+        "model_id": "gpt-realtime-2.1",
+        "voice": "marin",
+        "prompt_sha256": "96a528488b099e5e569fc6ac6052d3b1ead1a19785ca254a33019020afce8464",
+        "transport": {
+          "profile_version": "provider-transport-v1",
+          "caller_mode": "fixed",
+          "turn_detection": "manual",
+          "endpointing": null,
+          "turn_commit": "explicit",
+          "harness_input_rate": 24000,
+          "provider_input_rate": 24000,
+          "output_rate": 24000,
+          "chunk_ms": 20,
+          "caller_trailing_silence_ms": 1200,
+          "client_truncation": true,
+          "turn_timeout_seconds": 45.0,
+          "response_audio_seconds": 20.0
+        }
+      },
+      "execution_concurrency": 5,
+      "audio_sha256": "89951b537db92a2ecab2c35f890c359940bfbe8eed20668c88e4fb52a7cec10b"
+    },
+    "417eeaa46ffe5d6e": {
+      "state": "completed",
+      "turns": [
+        {
+          "caller_started_at": 3.520888276398182e-05,
+          "caller_finished_at": 5.160167958820239,
+          "transcript": "I've noted that. Let me know when you are ready to proceed.",
+          "assistant_audio_seconds": 3.24,
+          "first_audio_ms": 979
+        },
+        {
+          "caller_started_at": 9.381728749955073,
+          "caller_finished_at": 16.00702799996361,
+          "transcript": "Thanks for the correction. Are you ready to send fifty pounds to Alice now?",
+          "assistant_audio_seconds": 4.27,
+          "first_audio_ms": 820
+        },
+        {
+          "caller_started_at": 21.099376125028357,
+          "caller_finished_at": 25.052238416858017,
+          "transcript": "You settled on sending fifty pounds to Alice.",
+          "assistant_audio_seconds": 2.91,
+          "first_audio_ms": 783
+        }
+      ],
+      "returned_model_id": null,
+      "setup_ms": 1001,
+      "configuration": {
+        "model_id": "gemini-3.8-live",
+        "voice": "provider default",
+        "prompt_sha256": "99a3b458b4865aaad97c579cb2b31684deaade023123d99f808f07cbe36d08ae",
+        "transport": {
+          "profile_version": "provider-transport-v1",
+          "caller_mode": "fixed",
+          "turn_detection": "manual",
+          "endpointing": null,
+          "turn_commit": "explicit",
+          "harness_input_rate": 24000,
+          "provider_input_rate": 16000,
+          "output_rate": 24000,
+          "chunk_ms": 20,
+          "caller_trailing_silence_ms": 1200,
+          "client_truncation": false,
+          "turn_timeout_seconds": 45.0,
+          "response_audio_seconds": 20.0
+        }
+      },
+      "execution_concurrency": 5,
+      "audio_sha256": "58462b6b8bc2ad5a358fa87e8281f5acf1ebc91d7a8260f73c73977f7e1e098f"
+    },
+    "9080ab9774624a50": {
+      "state": "completed",
+      "turns": [
+        {
+          "caller_started_at": 3.7207966670393944e-05,
+          "caller_finished_at": 2.300892333034426,
+          "transcript": "Your current balance is one thousand two hundred and fifty pounds and forty pence. Is there anything you'd like to do with that?",
+          "assistant_audio_seconds": 6.38,
+          "first_audio_ms": 787
+        },
+        {
+          "caller_started_at": 9.469692208105698,
+          "caller_finished_at": 12.531057958025485,
+          "transcript": "Sure. Your balance is one thousand, two hundred and fifty pounds, and forty pence. Take your time if you need me to repeat it again.",
+          "assistant_audio_seconds": 8.3,
+          "first_audio_ms": 995
+        },
+        {
+          "caller_started_at": 21.828445208026096,
+          "caller_finished_at": 26.239929208066314,
+          "transcript": "That's right, twelve hundred and fifty pounds plus forty pence. Would you like to know about any recent transactions?",
+          "assistant_audio_seconds": 6.7,
+          "first_audio_ms": 984
+        }
+      ],
+      "returned_model_id": "grok-voice-3.0",
+      "setup_ms": 574,
+      "configuration": {
+        "model_id": "grok-voice-3.0",
+        "voice": "ara",
+        "prompt_sha256": "d1a552ff6bf87e866b7424c1761b530854efcee9f12dd9bbfbedb97503017958",
+        "transport": {
+          "profile_version": "provider-transport-v1",
+          "caller_mode": "fixed",
+          "turn_detection": "manual",
+          "endpointing": null,
+          "turn_commit": "explicit",
+          "harness_input_rate": 24000,
+          "provider_input_rate": 24000,
+          "output_rate": 24000,
+          "chunk_ms": 20,
+          "caller_trailing_silence_ms": 1200,
+          "client_truncation": true,
+          "turn_timeout_seconds": 45.0,
+          "response_audio_seconds": 20.0
+        }
+      },
+      "execution_concurrency": 5,
+      "audio_sha256": "dbd7ea481342af19354a0faf68c8da6f6f6b325ae4b44199cf92c0eb5bb59726"
+    },
+    "f4b0e61cebd5180a": {
+      "state": "completed",
+      "turns": [
+        {
+          "caller_started_at": 5.337502807378769e-05,
+          "caller_finished_at": 5.0821363751310855,
+          "transcript": "I understand you're concerned about your lost card. We can place a temporary freeze on it to prevent any unauthorized use. A replacement card would be a separate request. Would you like me to connect you with someone who can help with that?",
+          "assistant_audio_seconds": 13.12,
+          "first_audio_ms": 3129
+        },
+        {
+          "caller_started_at": 21.332936875056475,
+          "caller_finished_at": 25.57472254219465,
+          "transcript": "No, a card freeze is temporary and reversible. If you find your card, we can unfreeze it for you, and you won't need a new one.",
+          "assistant_audio_seconds": 8.24,
+          "first_audio_ms": 1648
+        },
+        {
+          "caller_started_at": 35.46353120915592,
+          "caller_finished_at": 39.73276541708037,
+          "transcript": "We can put a temporary freeze on your card. This stops anyone from using it. If you find your card later, we can easily unfreeze it for you. Would you like me to connect you to someone who can help with this?",
+          "assistant_audio_seconds": 12.16,
+          "first_audio_ms": 1543
+        }
+      ],
+      "returned_model_id": null,
+      "setup_ms": 258,
+      "configuration": {
+        "model_id": "elevenlabs-agent",
+        "voice": "JBFqnCBsd6RMkjVDRZzb",
+        "prompt_sha256": "30784d536a208a8695fd972e7609190d5458c10e09efe3c4b3831441c0d33419",
+        "transport": {
+          "profile_version": "provider-transport-v1",
+          "caller_mode": "fixed",
+          "turn_detection": "provider_vad",
+          "endpointing": null,
+          "turn_commit": "provider_vad",
+          "harness_input_rate": 24000,
+          "provider_input_rate": 24000,
+          "output_rate": 24000,
+          "chunk_ms": 20,
+          "caller_trailing_silence_ms": 1200,
+          "client_truncation": false,
+          "turn_timeout_seconds": 45.0,
+          "response_audio_seconds": 20.0
+        }
+      },
+      "execution_concurrency": 5,
+      "audio_sha256": "39458b481d1ece3a95ea9d5978ac8ce9dc012cff19c2ccf07e850d0bee1c02b7"
+    },
+    "dc3bd2bc5a17b730": {
+      "state": "completed",
+      "turns": [
+        {
+          "caller_started_at": 4.24159225076437e-05,
+          "caller_finished_at": 5.1912954999133945,
+          "transcript": "I can help you with that when you are ready.",
+          "assistant_audio_seconds": 7.2,
+          "first_audio_ms": 1039
+        },
+        {
+          "caller_started_at": 13.431446957867593,
+          "caller_finished_at": 19.968774707987905,
+          "transcript": " Just so you know, your current balance is one thousand two hundred and fifty pounds and forty pence. I have noted that you would like to send fifty pounds to Alice instead.",
+          "assistant_audio_seconds": 6.0,
+          "first_audio_ms": 947
+        },
+        {
+          "caller_started_at": 26.917371249990538,
+          "caller_finished_at": 30.948395957937464,
+          "transcript": " Please let me know when you would like to proceed with that transfer. You most recently mentioned sending fifty pounds to Alice.",
+          "assistant_audio_seconds": 3.08,
+          "first_audio_ms": 825
+        }
+      ],
+      "returned_model_id": "amazon.nova-2-5-sonic",
+      "setup_ms": 642,
+      "configuration": {
+        "model_id": "amazon.nova-2-5-sonic",
+        "voice": "matthew",
+        "prompt_sha256": "0d4f0a1dd584e7632aa7993242e0e9052045b3efb09d5cf46436f323076a90de",
+        "transport": {
+          "profile_version": "provider-transport-v1",
+          "caller_mode": "fixed",
+          "turn_detection": "provider_vad",
+          "endpointing": "MEDIUM",
+          "turn_commit": "provider_vad",
+          "harness_input_rate": 24000,
+          "provider_input_rate": 16000,
+          "output_rate": 24000,
+          "chunk_ms": 20,
+          "caller_trailing_silence_ms": 1200,
+          "client_truncation": false,
+          "turn_timeout_seconds": 45.0,
+          "response_audio_seconds": 20.0
+        }
+      },
+      "execution_concurrency": 5,
+      "audio_sha256": "01256644a06bc25736015ef5995fb96f533678e2df974fda442d9ec29ff8d3ca"
+    },
+    "0207b7f372d0a2d0": {
+      "state": "completed",
+      "turns": [
+        {
+          "caller_started_at": 4.3416162952780724e-05,
+          "caller_finished_at": 4.78410454117693,
+          "transcript": "I am very sorry for your loss. We have bereavement support available, and I can explain the options for managing the account.",
+          "assistant_audio_seconds": 7.340041666666667,
+          "first_audio_ms": 927
+        },
+        {
+          "caller_started_at": 13.0823898750823,
+          "caller_finished_at": 17.180632333038375,
+          "transcript": "Of course. To start, we will need the death certificate and details about the executor or administrator of the estate.",
+          "assistant_audio_seconds": 7.130041666666667,
+          "first_audio_ms": 790
+        },
+        {
+          "caller_started_at": 25.136822041124105,
+          "caller_finished_at": 28.51557254116051,
+          "transcript": "Yes, you can speak directly with our bereavement support team to guide you through the process step by step.",
+          "assistant_audio_seconds": 5.7,
+          "first_audio_ms": 841
+        }
+      ],
+      "returned_model_id": null,
+      "setup_ms": 942,
+      "configuration": {
+        "model_id": "gemini-3.8-live",
+        "voice": "provider default",
+        "prompt_sha256": "0d4f0a1dd584e7632aa7993242e0e9052045b3efb09d5cf46436f323076a90de",
+        "transport": {
+          "profile_version": "provider-transport-v1",
+          "caller_mode": "fixed",
+          "turn_detection": "manual",
+          "endpointing": null,
+          "turn_commit": "explicit",
+          "harness_input_rate": 24000,
+          "provider_input_rate": 16000,
+          "output_rate": 24000,
+          "chunk_ms": 20,
+          "caller_trailing_silence_ms": 1200,
+          "client_truncation": false,
+          "turn_timeout_seconds": 45.0,
+          "response_audio_seconds": 20.0
+        }
+      },
+      "execution_concurrency": 5,
+      "audio_sha256": "7f4bdbd8dd3b39a063182207c228a259a62de1121ddb30321962c11ffb5b7120"
+    },
+    "fe13f26527a9a890": {
+      "state": "running",
+      "previous_attempts": []
+    },
+    "1704b9e4135a544a": {
+      "state": "running",
+      "previous_attempts": []
+    },
+    "58200eb2ad82cfb6": {
+      "state": "running",
+      "previous_attempts": []
+    },
+    "50ae01c0fa71ae1c": {
+      "state": "running",
+      "previous_attempts": []
+    },
+    "e3a5b14ac0db083f": {
+      "state": "running",
+      "previous_attempts": []
+    }
+  }
+}

@@ -241,11 +241,61 @@ def session_config(job, plan):
     config["model_id"] = profile["model_id"]
     if profile["voice"]:
         config["voice"] = profile["voice"]
+    if job["provider"] == "elevenlabs-live":
+        state_path = ROOT / ".local" / "voice-conversation-elevenlabs-agent.json"
+        if not state_path.exists():
+            raise ValueError("CONVERSATION_AGENT_NOT_PREPARED")
+        state = json.loads(state_path.read_text())
+        from voice_harness.adapters.elevenlabs_voice import ElevenLabsVoiceAdapter
+
+        # Tools live on the stored ElevenLabs agent; an empty adapter config does not remove them.
+        adapter = ElevenLabsVoiceAdapter(agent=state["agent_id"])
+        config["llm"] = state["llm"]
     transport = lp.configure_transport(job["provider"], config, "fixed")
     # Whitelist only public configuration: Nova config also contains its credential environment.
     public = {"model_id": profile["model_id"], "voice": profile["voice"] or "provider default",
-              "prompt_sha256": digest(profile["instructions"]), "transport": transport}
+              "prompt_sha256": digest(profile["instructions"]), "transport": transport,
+              "runtime_limits": {"turn_timeout_seconds": 45, "response_audio_seconds": 30,
+                                 "caller_cache_trailing_silence_ms": 0},
+              "transport_metadata_note": "Shared adapter defaults; this runner's limits are recorded separately."}
+    if job["provider"] == "elevenlabs-live":
+        public.update(agent_id=state["agent_id"], requested_llm=state["llm"], tools_fingerprint=state["tools_fingerprint"])
     return adapter, config, public
+
+
+def prepare_elevenlabs():
+    """Provision an isolated no-tools agent, preserving the existing harness agent and its LLM choice."""
+    import httpx
+
+    from voice_harness.adapters import elevenlabs_agent as ea
+
+    load_environment()
+    path = ROOT / ".local" / "voice-conversation-elevenlabs-agent.json"
+    with httpx.Client(base_url=ea.API, headers={"xi-api-key": os.environ[ea.KEY_ENV]}, timeout=30) as client:
+        if path.exists():
+            state = json.loads(path.read_text())
+        else:
+            original = ea.load_state()
+            llm = os.environ.get(ea.LLM_ENV) or original.get("llm") or ea.DEFAULT_LLM
+            body = ea.agent_body([], llm)
+            body["name"] = "voice-harness-conversation-no-tools"
+            response = client.post("/v1/convai/agents/create", json=body)
+            if response.status_code >= 400:
+                raise ValueError(f"CONVERSATION_AGENT_CREATE_HTTP_{response.status_code}")
+            state = {"agent_id": response.json()["agent_id"], "llm": llm,
+                     "tools_fingerprint": ea.fingerprint([])}
+            path.parent.mkdir(parents=True, exist_ok=True)
+            save_json(path, state)
+        response = client.get(f'/v1/convai/agents/{state["agent_id"]}')
+        if response.status_code >= 400:
+            raise ValueError(f"CONVERSATION_AGENT_READ_HTTP_{response.status_code}")
+        stored_prompt = response.json()["conversation_config"]["agent"]["prompt"]
+        if stored_prompt.get("llm") != state["llm"]:
+            raise ValueError("CONVERSATION_AGENT_MODEL_CHANGED")
+        if (stored_prompt.get("tools") or stored_prompt.get("tool_ids") or
+                any(v is not None for v in (stored_prompt.get("built_in_tools") or {}).values())):
+            raise ValueError("CONVERSATION_AGENT_HAS_TOOLS")
+    print("Dedicated conversation agent verified: no tools.")
 
 
 def stereo_timeline(segments):
@@ -280,8 +330,10 @@ async def conversation(adapter, config, inputs, *, timeout=45, pace=True):
                 continue
             now = time.monotonic() - started
             if event.type in {"error", "provider_error"}:
+                active["provider_error_code"] = str(getattr(event, "code", "UNKNOWN"))[:80]
                 raise ValueError("PROVIDER_ERROR")
             if event.type == "tool_call":
+                active["unexpected_tool"] = event.name
                 raise ValueError("UNEXPECTED_TOOL_CALL")
             if event.type == "audio_out":
                 if event.sample_rate != RATE or len(event.pcm) % 2:
@@ -349,6 +401,13 @@ async def conversation(adapter, config, inputs, *, timeout=45, pace=True):
         result["state"] = "completed"
     except Exception as exc:  # checkpoints preserve failed and partial conversations; no provider message/credentials
         result["error"] = type(exc).__name__
+        if str(exc) in {"UNEXPECTED_SESSION_EVENT", "PROVIDER_ERROR", "UNEXPECTED_TOOL_CALL", "UNEXPECTED_AUDIO_FORMAT",
+                        "RESPONSE_AUDIO_LIMIT", "PROVIDER_STREAM_ENDED", "TURN_TIMEOUT"}:
+            result["error_code"] = str(exc)
+        if active:
+            for field in ("provider_error_code", "unexpected_tool"):
+                if field in active:
+                    result[field] = active[field]
     finally:
         if receiver:
             receiver.cancel()
@@ -372,6 +431,8 @@ def refresh(out, plan, results):
     page = page.replace("__AXES__", json.dumps(AXES)).replace("__PLAN__", plan["plan_hash"])
     page = page.replace("__PROGRESS__", f'{len(completed)} of {len(plan["jobs"])} conversations ready')
     (out / "rate.html").write_text(page)
+    technical = ('<details><summary>Technical results (reveals provider identities)</summary>'
+                 '<p><a href="report.md">Timing and completion report</a></p></details>') if (out / "report.md").exists() else ''
     (out / "index.html").write_text(
         '<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width">'
         '<title>Advanced conversation comparison</title><style>body{font:18px/1.6 system-ui;max-width:850px;'
@@ -387,10 +448,10 @@ def refresh(out, plan, results):
         'Recording uses configured provider credentials and incurs provider charges.</p>'
         '<p>Complete ratings before opening plan.json, results.json or report.md; these reveal identities. '
         'Download ratings to move them between machines.</p>'
-        f'<p>{html.escape(plan["limitations"])}</p></html>')
+        f'{technical}<p>{html.escape(plan["limitations"])}</p></html>')
 
 
-async def record(out, *, limit=None, retry_failed=False):
+async def record(out, *, limit=None, retry_failed=False, retry_interrupted=False, concurrency=1):
     # Exclusive creation prevents two recording processes from spending on the same jobs.
     lock = out / ".record.lock"
     try:
@@ -399,35 +460,40 @@ async def record(out, *, limit=None, retry_failed=False):
         raise ValueError("RECORDING_LOCKED: another recorder is active, or remove the stale lock after checking") from None
     try:
         os.close(descriptor)
-        await record_jobs(out, limit=limit, retry_failed=retry_failed)
+        await record_jobs(out, limit=limit, retry_failed=retry_failed, retry_interrupted=retry_interrupted,
+                          concurrency=concurrency)
     finally:
         lock.unlink()
 
 
-async def record_jobs(out, *, limit=None, retry_failed=False):
+async def record_jobs(out, *, limit=None, retry_failed=False, retry_interrupted=False, concurrency=1):
     load_environment()
     plan = read_plan(out)
     results = load_results(out, plan)
+    pending = [j for j in plan["jobs"] if results.get(j["id"], {}).get("state") != "completed"
+               and (not results.get(j["id"]) or retry_failed or
+                    (retry_interrupted and results[j["id"]]["state"] in {"running", "invalidated"}))]
+    if limit is not None:
+        pending = pending[:limit]
+    if not pending:
+        return
     inputs = await asyncio.to_thread(caller_audio, out, plan)
     (out / "clips").mkdir(exist_ok=True)
+    gate = asyncio.Semaphore(concurrency)
     count = 0
-    for job in plan["jobs"]:
+
+    async def one(job):
+        nonlocal count
         prior = results.get(job["id"], {})
-        if prior.get("state") == "completed" or (prior and not retry_failed):
-            continue
-        if limit is not None and count >= limit:
-            break
-        count += 1
         attempts = prior.get("previous_attempts", []) + ([{k: v for k, v in prior.items() if k != "previous_attempts"}]
                                                         if prior else [])
-        results[job["id"]] = {"state": "running"}
-        if attempts:
-            results[job["id"]]["previous_attempts"] = attempts
+        results[job["id"]] = {"state": "running", "previous_attempts": attempts}
         refresh(out, plan, results)
         try:
             adapter, config, public = session_config(job, plan)
             row, segments = await conversation(adapter, config, inputs[job["scenario"]])
             row["configuration"] = public
+            row["execution_concurrency"] = concurrency
             if segments:
                 wav_write(out / "clips" / f'{job["id"]}.wav', stereo_timeline(segments), channels=2)
                 row["audio_sha256"] = hashlib.sha256((out / "clips" / f'{job["id"]}.wav').read_bytes()).hexdigest()
@@ -437,7 +503,21 @@ async def record_jobs(out, *, limit=None, retry_failed=False):
             row["previous_attempts"] = attempts
         results[job["id"]] = row
         refresh(out, plan, results)
-        print(f'{count}: {row["state"]}', flush=True)
+        count += 1
+        print(f'{count}/{len(pending)}: {row["state"]}', flush=True)
+
+    async def provider_worker(provider):
+        # Preserve the plan's order within each provider and never open two sessions on one provider at once.
+        for job in pending:
+            if job["provider"] == provider:
+                async with gate:
+                    await one(job)
+
+    if concurrency == 1:
+        for job in pending:
+            await one(job)
+    else:
+        await asyncio.gather(*(provider_worker(provider) for provider in PROVIDERS))
 
 
 def report(out, ratings_paths):
@@ -505,9 +585,11 @@ def report(out, ratings_paths):
         lines.append("| " + label + " | " + " | ".join(
             f"{statistics.mean(differences[a]):+.2f} (n={len(differences[a])})" if differences[a] else "—"
             for a in AXES) + " |")
-    lines += ["", "Negative response times mean audio arrived before caller input finished; inspect those exchanges.",
+    lines += ["", "Timing medians include completed conversations only; interpret them alongside failure counts.",
+              "Negative response times mean audio arrived before caller input finished; inspect those exchanges.",
               "Accuracy and safety require separate review of the scenario facts and independent speech assessment."]
     (out / "report.md").write_text("\n".join(lines) + "\n")
+    refresh(out, plan, results)
 
 
 PAGE = """<!doctype html><html lang="en"><head><meta charset="utf-8">
@@ -562,20 +644,26 @@ document.getElementById("save").onclick=()=>{
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=["setup", "record", "refresh", "report"])
+    parser.add_argument("command", choices=["setup", "prepare-elevenlabs", "record", "refresh", "report"])
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--repetitions", type=int, default=2)
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--limit", type=int, help="Maximum live conversations to attempt in this invocation")
+    parser.add_argument("--concurrency", type=int, choices=range(1, 6), default=1,
+                        help="Parallel providers; at most one active session per provider")
     parser.add_argument("--retry-failed", action="store_true", help="Explicitly retry failed/interrupted recordings")
+    parser.add_argument("--retry-interrupted", action="store_true", help="Retry interrupted/invalidated setup attempts only")
     parser.add_argument("--ratings", nargs="*", default=[])
     args = parser.parse_args()
     if args.limit is not None and args.limit < 1:
         parser.error("--limit must be positive")
     if args.command == "setup":
         setup(args.out, args.repetitions, args.seed)
+    elif args.command == "prepare-elevenlabs":
+        prepare_elevenlabs()
     elif args.command == "record":
-        asyncio.run(record(args.out, limit=args.limit, retry_failed=args.retry_failed))
+        asyncio.run(record(args.out, limit=args.limit, retry_failed=args.retry_failed,
+                           retry_interrupted=args.retry_interrupted, concurrency=args.concurrency))
     elif args.command == "refresh":
         plan = read_plan(args.out)
         refresh(args.out, plan, load_results(args.out, plan))

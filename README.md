@@ -66,7 +66,7 @@ Unsigned manifests bind event count, final ledger hash and artifact hashes. Veri
 
 ## Blind voice comparisons
 
-Open the [two-comparison menu](artifacts/voice-comparisons/index.html) locally to choose the original fixed-line listening test or the new advanced conversation comparison. The advanced option compares common and provider-specific prompts across six multi-turn situations, with blind human ratings and response timing. Its plan is prepared; recordings require an explicit live run. See the [recording and review runbook](docs/VOICE_CONVERSATION_COMPARISON.md).
+Open the [two-comparison menu](artifacts/voice-comparisons/index.html) locally to choose the original fixed-line listening test or the advanced conversation comparison. The advanced live set contains 115 complete conversations from a 120-cell plan, comparing common and provider-specific prompts across six multi-turn situations. Five attempts exceeded the response-length limit. Response timings are recorded; blind human ratings are pending. See the [recording and review runbook](docs/VOICE_CONVERSATION_COMPARISON.md).
 
 ## Development
 

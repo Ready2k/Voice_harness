@@ -88,6 +88,64 @@ class Comparison(unittest.TestCase):
         self.assertEqual(config["tools"], [])
         self.assertEqual(config["system_prompt"], self.plan["profiles"][provider][job["condition"]]["instructions"])
 
+    def test_elevenlabs_uses_isolated_agent_and_not_inherited_tools(self):
+        provider = "elevenlabs-live"
+        job = next(j for j in self.plan["jobs"] if j["provider"] == provider)
+        state_path = self.out / ".local" / "voice-conversation-elevenlabs-agent.json"
+        with patch.object(vc, "ROOT", self.out), \
+                patch("voice_harness.live_providers._adapter", return_value=(FakeAdapter(), {})):
+            with self.assertRaisesRegex(ValueError, "CONVERSATION_AGENT_NOT_PREPARED"):
+                vc.session_config(job, self.plan)
+            state_path.parent.mkdir()
+            vc.save_json(state_path, {"agent_id": "isolated", "llm": "test-llm", "tools_fingerprint": "empty"})
+            adapter, config, public = vc.session_config(job, self.plan)
+        self.assertEqual(adapter._agent, "isolated")
+        self.assertEqual(config["llm"], "test-llm")
+        self.assertEqual(public["tools_fingerprint"], "empty")
+
+    def test_agent_preparation_reuses_isolated_agent_and_rejects_enabled_tools(self):
+        calls = []
+        stored = {"llm": "test-llm", "tools": [], "tool_ids": [], "built_in_tools": {"end_call": None}}
+
+        class Response:
+            status_code = 200
+
+            def __init__(self, body):
+                self.body = body
+
+            def json(self):
+                return self.body
+
+        class Client:
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+            def post(self, url, json):
+                calls.append((url, json))
+                return Response({"agent_id": "isolated"})
+
+            def get(self, url):
+                self.url = url
+                return Response({"conversation_config": {"agent": {"prompt": stored}}})
+
+        from voice_harness.adapters import elevenlabs_agent as ea
+
+        with patch.object(vc, "ROOT", self.out), patch.object(vc, "load_environment"), \
+                patch.dict(vc.os.environ, {ea.KEY_ENV: "test-only-key"}), \
+                patch.object(ea, "load_state", return_value={"llm": "test-llm", "agent_id": "original"}), \
+                patch("httpx.Client", return_value=Client()):
+            vc.prepare_elevenlabs()
+            vc.prepare_elevenlabs()
+            self.assertEqual(len(calls), 1)
+            self.assertEqual(calls[0][0], "/v1/convai/agents/create")
+            self.assertEqual(calls[0][1]["conversation_config"]["agent"]["prompt"]["tools"], [])
+            stored["tool_ids"] = ["inherited"]
+            with self.assertRaisesRegex(ValueError, "CONVERSATION_AGENT_HAS_TOOLS"):
+                vc.prepare_elevenlabs()
+
     def test_audio_cache_is_reused_and_tampering_is_rejected(self):
         with patch("voice_harness.adapters.openai_realtime.synth_caller_pcm", return_value=b"\x01\x00" * 240) as synth:
             vc.caller_audio(self.out, self.plan)
@@ -166,6 +224,35 @@ class Comparison(unittest.TestCase):
         (self.out / ".record.lock").touch()
         with self.assertRaisesRegex(ValueError, "RECORDING_LOCKED"):
             asyncio.run(vc.record(self.out))
+
+    def test_parallel_providers_keep_one_session_each_and_preserve_provider_order(self):
+        active, sequence = {}, {p: [] for p in vc.PROVIDERS}
+        maximum = 0
+
+        def configuration(job, plan):
+            sequence[job["provider"]].append(job["id"])
+            return job["provider"], {}, {}
+
+        async def respond(provider, config, inputs):
+            nonlocal maximum
+            active[provider] = active.get(provider, 0) + 1
+            self.assertEqual(active[provider], 1)
+            maximum = max(maximum, sum(active.values()))
+            self.assertLessEqual(sum(active.values()), 2)
+            await asyncio.sleep(.001)
+            active[provider] -= 1
+            return {"state": "completed", "turns": []}, []
+
+        audio = {s["id"]: [bytes(960)] * 3 for s in self.plan["scenarios"]}
+        with patch.object(vc, "load_environment"), patch.object(vc, "caller_audio", return_value=audio), \
+                patch.object(vc, "session_config", side_effect=configuration), \
+                patch.object(vc, "conversation", side_effect=respond):
+            asyncio.run(vc.record(self.out, limit=12, concurrency=2))
+        self.assertEqual(maximum, 2)
+        self.assertEqual(len(vc.load_results(self.out, self.plan)), 12)
+        for provider in vc.PROVIDERS:
+            self.assertEqual(sequence[provider], [j["id"] for j in self.plan["jobs"][:12]
+                                                  if j["provider"] == provider])
 
     def test_failed_jobs_require_explicit_retry_and_retain_previous_attempt(self):
         audio = {s["id"]: [bytes(960)] * 3 for s in self.plan["scenarios"]}
