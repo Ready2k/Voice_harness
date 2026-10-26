@@ -101,7 +101,7 @@ class BakeoffRequest(Closed):
     # Empty means every live catalogue scenario.
     scenario_ids: Annotated[list[Identifier], Field(max_length=200)] = []
     repetitions: Annotated[int, Field(ge=1, le=10)] = 1
-    prompt_profile: Literal["standardised-v2", "advanced-v1"] = "standardised-v2"
+    prompt_profile: Literal["standardised-v2", "advanced-v1", "conversational-v1"] = "standardised-v2"
     weights: Weights = Weights()
     group_balanced: bool = False  # give each scenario group equal weight in the rates instead of pooling runs
     runs: Annotated[list[ImportedRun], Field(max_length=MAX_RUNS)] = []

@@ -463,7 +463,7 @@ async def run_manual(engine, run_id, config, bridge):
     from .manual_session import ManualSession
 
     provider_config_id = config["provider_config_id"]
-    prompt_profile = "standardised-v2"
+    prompt_profile = config.get("prompt_profile", "standardised-v2")
     adapter, adapter_config = _adapter(provider_config_id, prompt_profile)
     transport = configure_transport(provider_config_id, adapter_config, "human_microphone")
     adapter_config["session_id"] = engine.database.get(run_id)["session_id"]

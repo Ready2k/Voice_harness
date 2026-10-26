@@ -97,7 +97,8 @@
       "enum": [
         "standardised-v2",
         "legacy-v1",
-        "advanced-v1"
+        "advanced-v1",
+        "conversational-v1"
       ],
       "title": "Prompt Profile",
       "type": "string"

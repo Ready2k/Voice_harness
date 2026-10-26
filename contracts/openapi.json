@@ -3594,7 +3594,8 @@
             "type": "string",
             "enum": [
               "standardised-v2",
-              "advanced-v1"
+              "advanced-v1",
+              "conversational-v1"
             ],
             "title": "Prompt Profile",
             "default": "standardised-v2"
@@ -4228,6 +4229,15 @@
             ],
             "title": "Playback Mode",
             "default": "gated"
+          },
+          "prompt_profile": {
+            "type": "string",
+            "enum": [
+              "standardised-v2",
+              "conversational-v1"
+            ],
+            "title": "Prompt Profile",
+            "default": "standardised-v2"
           }
         },
         "additionalProperties": false,
@@ -4521,7 +4531,8 @@
             "enum": [
               "standardised-v2",
               "legacy-v1",
-              "advanced-v1"
+              "advanced-v1",
+              "conversational-v1"
             ],
             "title": "Prompt Profile",
             "default": "standardised-v2"

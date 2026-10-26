@@ -21,6 +21,8 @@ def report_data(payload, *, weights=None, title=None, source="Voice Harness ledg
     """What the renderer draws: the report plus the per-run observations behind it."""
     if payload.get("prompt_profile") == "advanced-v1":
         source += " · Advanced provider-specific prompts (advanced-v1)"
+    if payload.get("prompt_profile") == "conversational-v1":
+        source += " · Conversational phone manner (conversational-v1)"
     return {
         "title": title or payload["name"], "source": source,
         "generated_at": generated_at or time.strftime("%Y-%m-%d %H:%M UTC", time.gmtime()),

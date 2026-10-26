@@ -984,7 +984,7 @@ def create_app(
         config = {
             **RunConfig(scenario_id=scenario_id, provider_config_id=body.provider_config_id).model_dump(),
             "input_mode": "manual", "client_mode": "manual_browser", "playback_mode": body.playback_mode,
-            "journey_id": body.journey_id, "path": body.path,
+            "prompt_profile": body.prompt_profile, "journey_id": body.journey_id, "path": body.path,
         }
         run_id = manual_engine.create(config, "manual:" + idempotency_key)
         with job_lock:

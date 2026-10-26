@@ -13,7 +13,7 @@ from voice_harness.live_providers import (
     _adapter,
     session_metadata,
 )
-from voice_harness.target_prompts import STANDARDISED_V2, provenance
+from voice_harness.target_prompts import CONVERSATIONAL_STYLE, STANDARDISED_V2, provenance
 
 
 class TargetPromptTests(unittest.TestCase):
@@ -33,6 +33,21 @@ class TargetPromptTests(unittest.TestCase):
             prompts.append(sent)
         self.assertEqual(len(set(prompts)), len(LIVE_PROVIDERS))
         self.assertEqual(RunConfig(prompt_profile="advanced-v1").prompt_profile, "advanced-v1")
+
+    def test_conversational_profile_is_identical_across_providers_and_keeps_rules(self):
+        sent = set()
+        for provider in LIVE_PROVIDERS:
+            _, config = _adapter(provider, "conversational-v1")
+            text = config.get("instructions", config.get("system_prompt"))
+            self.assertEqual(text, STANDARDISED_V2 + CONVERSATIONAL_STYLE)
+            self.assertEqual(config["tools"], TOOLS)
+            bound = session_metadata(provider, "test", {}, prompt_profile="conversational-v1")["target_prompt"]
+            self.assertEqual(bound["comparison_track"], "conversational")
+            self.assertFalse(bound["vendor_tuned"])
+            sent.add(text)
+        self.assertEqual(len(sent), 1)
+        self.assertIn("never deny it", CONVERSATIONAL_STYLE)
+        self.assertIn("must not state or imply any result", CONVERSATIONAL_STYLE)
 
     def test_all_adapters_receive_the_selected_prompt_and_same_tools(self):
         for provider in LIVE_PROVIDERS:

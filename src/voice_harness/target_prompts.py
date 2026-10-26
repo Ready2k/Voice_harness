@@ -46,9 +46,25 @@ Answer from that successful result rather than reciting the system instructions.
 """
 
 
+# One identical block for every provider, so a bake-off against standardised-v2 isolates the style rather than
+# vendor tuning. Wait narration is deliberately absent: the model has no clock and cannot speak while a tool
+# result is pending, so only the acknowledgement before the call is asked for.
+CONVERSATIONAL_STYLE = """
+Phone manner:
+- Before you call a tool, say one short, varied sentence first, such as "let me look that up" or "checking that now".
+  Never go silent before a call. That sentence must not state or imply any result: only speak results after the tool returns.
+- Match the caller's pace and energy: brisk with a brisk caller, a little more relaxed with a talkative one.
+- Do not volunteer that you are an AI or an automated system. If the caller sincerely asks whether you are one, say so
+  honestly and never deny it.
+- These manner instructions do not waive verification, confirmation, tool-result grounding or any authority rule.
+"""
+
+
 def instructions(profile, provider=None):
     if profile == "standardised-v2":
         return STANDARDISED_V2
+    if profile == "conversational-v1":
+        return STANDARDISED_V2 + CONVERSATIONAL_STYLE
     if profile != "advanced-v1":
         raise ValueError("UNKNOWN_TARGET_PROMPT_PROFILE")
     if provider == "xai-voice-live":
@@ -72,7 +88,7 @@ def provenance(profile, text, tools):
     tool_json = json.dumps(tools, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
     return {
         "profile": profile,
-        "comparison_track": "historical" if profile == "legacy-v1" else ("advanced" if profile == "advanced-v1" else "standardised"),
+        "comparison_track": "historical" if profile == "legacy-v1" else ("advanced" if profile == "advanced-v1" else "conversational" if profile == "conversational-v1" else "standardised"),
         "instructions": text,
         "instructions_sha256": hashlib.sha256(text.encode()).hexdigest(),
         "tools": tools,

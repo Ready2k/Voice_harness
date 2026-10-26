@@ -191,7 +191,7 @@ async function start(path = radio('path'), reuse = null) {
     await openAudio(session);
     if (mode === 'voice') await openMic(session);
     const created = await api(token, '/api/v1/manual-sessions', {method: 'POST', headers: {'Content-Type': 'application/json', 'Idempotency-Key': crypto.randomUUID()},
-      body: JSON.stringify({provider_config_id: provider, journey_id: path === 'failure' ? j.failureJourneyId ?? j.journey_id : j.journey_id, path, playback_mode: playbackMode})});
+      body: JSON.stringify({provider_config_id: provider, journey_id: path === 'failure' ? j.failureJourneyId ?? j.journey_id : j.journey_id, path, playback_mode: playbackMode, prompt_profile: radio('manner') || 'standardised-v2'})});
     session.runId = created.run_id;
     const {ticket} = await api(token, '/api/v1/runs/' + created.run_id + '/ws-ticket', {method: 'POST'});
     const url = new URL(created.websocket, location.origin); url.protocol = url.protocol === 'https:' ? 'wss:' : 'ws:';
