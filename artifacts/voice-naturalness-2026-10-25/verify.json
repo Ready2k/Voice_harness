@@ -1,0 +1,182 @@
+{
+ "34058daf": {
+  "heard": "Thanks for calling. Before I can share any account details, I need to check who I'm speaking with.",
+  "match": 1.0,
+  "numeric": false
+ },
+ "34898ea2": {
+  "heard": "Your current account balance is \u00a31,250.40.",
+  "match": 0.435,
+  "numeric": true
+ },
+ "93737cd2": {
+  "heard": "I'm so sorry for your loss. I can put you through to someone in our bereavement team who can help with this.",
+  "match": 1.0,
+  "numeric": false
+ },
+ "feba2ea5": {
+  "heard": "I can't move that payment without your confirmation. Would you like me to go ahead? Yes or no?",
+  "match": 1.0,
+  "numeric": false
+ },
+ "e8395e48": {
+  "heard": "That didn't go through, I'm afraid. Nothing has been taken from your account, and I can try again if you like?",
+  "match": 1.0,
+  "numeric": false
+ },
+ "1d7bd4ab": {
+  "heard": "You've been verified, thank you. Your last repayments were \u00a342, \u00a319.99, and \u00a3200.",
+  "match": 0.529,
+  "numeric": true
+ },
+ "28ea383f": {
+  "heard": "Thanks for calling. Before I can share any account details, I need to check who I'm speaking with.",
+  "match": 1.0,
+  "numeric": false
+ },
+ "8062e5c4": {
+  "heard": "Your current account balance is \u00a31,250.40.",
+  "match": 0.435,
+  "numeric": true
+ },
+ "cb499e97": {
+  "heard": "I'm so sorry for your loss. I can put you through to someone in our bereavement team who can help with this.",
+  "match": 1.0,
+  "numeric": false
+ },
+ "12362e64": {
+  "heard": "I can't move that payment without your confirmation. Would you like me to go ahead, yes or no?",
+  "match": 1.0,
+  "numeric": false
+ },
+ "768b9bde": {
+  "heard": "That didn't go through I'm afraid, nothing has been taken from your account, and I can try again if you like?",
+  "match": 1.0,
+  "numeric": false
+ },
+ "bcbd5671": {
+  "heard": "You've been verified, thank you. Your last three payments were \u00a342, \u00a319.99, and \u00a3200.",
+  "match": 0.629,
+  "numeric": true
+ },
+ "2ac2fbcb": {
+  "heard": "Thanks for calling. Before I can share any account details, I need to check who I'm speaking with.",
+  "match": 1.0,
+  "numeric": false
+ },
+ "b626c9de": {
+  "heard": "Your current account balance is one thousand two hundred and fifty pounds and forty pence.",
+  "match": 1.0,
+  "numeric": true
+ },
+ "b4d6f01b": {
+  "heard": "I'm so sorry for your loss. I can put you through to someone in our bereavement team who can help with this.",
+  "match": 1.0,
+  "numeric": false
+ },
+ "5a41d358": {
+  "heard": "I can't move that payment without your confirmation. Would you like me to go ahead, yes or no?",
+  "match": 1.0,
+  "numeric": false
+ },
+ "2f37686f": {
+  "heard": "That didn't go through, I'm afraid. Nothing has been taken from your account, and I can try again if you like.",
+  "match": 1.0,
+  "numeric": false
+ },
+ "ce1a681b": {
+  "heard": "You've been verified, thank you. Your last three payments were \u00a342, \u00a319.99, and \u00a3200.",
+  "match": 0.629,
+  "numeric": true
+ },
+ "0294cc68": {
+  "heard": "Thanks for calling! Before I can share any account details, I need to check who I'm speaking with.",
+  "match": 1.0,
+  "numeric": false
+ },
+ "95df7bbb": {
+  "heard": "Your current account balance is one thousand two hundred and fifty pounds and forty pence.",
+  "match": 1.0,
+  "numeric": true
+ },
+ "51ea88df": {
+  "heard": "I'm so sorry for your loss. I can put you through to someone in our bereavement team who can help with this.",
+  "match": 1.0,
+  "numeric": false
+ },
+ "66d93b33": {
+  "heard": "I can't move that payment without your confirmation. Would you like me to go ahead, yes or no?",
+  "match": 1.0,
+  "numeric": false
+ },
+ "b72547fb": {
+  "heard": "That didn't go through, I'm afraid. Nothing has been taken from your account, and I can try again if you like.",
+  "match": 1.0,
+  "numeric": false
+ },
+ "7a45ff82": {
+  "heard": "You've been verified, thank you. Your last three payments were \u00a342, \u00a319.99, and \u00a3200.",
+  "match": 0.629,
+  "numeric": true
+ },
+ "01c12720": {
+  "heard": "Thanks for calling. Before I can share any account details, I need to check who I'm speaking with.",
+  "match": 1.0,
+  "numeric": false
+ },
+ "ff38c795": {
+  "heard": "Your current account balance is \u00a31,250.40.",
+  "match": 0.435,
+  "numeric": true
+ },
+ "e3e9af5f": {
+  "heard": "I'm so sorry for your loss. I can put you through to someone in our bereavement team who can help with this.",
+  "match": 1.0,
+  "numeric": false
+ },
+ "637d09f4": {
+  "heard": "I can't move that payment without your confirmation. Would you like me to go ahead, yes or no?",
+  "match": 1.0,
+  "numeric": false
+ },
+ "ad93ac02": {
+  "heard": "That didn't go through, I'm afraid. Nothing has been taken from your account, and I can try again if you like?",
+  "match": 1.0,
+  "numeric": false
+ },
+ "b0824648": {
+  "heard": "You've been verified. Thank you. Your last three payments were \u00a342, \u00a319.99, and 200.",
+  "match": 0.629,
+  "numeric": true
+ },
+ "b86ecd4e": {
+  "heard": "Thanks for calling. Before I can share any account details, I need to check who I'm speaking with.",
+  "match": 1.0,
+  "numeric": false
+ },
+ "1a13983b": {
+  "heard": "Your current account balance is one thousand two hundred and fifty pounds and forty pence.",
+  "match": 1.0,
+  "numeric": true
+ },
+ "39ef203f": {
+  "heard": "I'm so sorry for your loss. I can put you through to someone in our bereavement team who can help with this.",
+  "match": 1.0,
+  "numeric": false
+ },
+ "87d8898c": {
+  "heard": "I can't move that payment without your confirmation. Would you like me to go ahead, yes or no?",
+  "match": 1.0,
+  "numeric": false
+ },
+ "a508b7aa": {
+  "heard": "That didn't go through, I'm afraid. Nothing has been taken from your account, and I can try again if you like?",
+  "match": 1.0,
+  "numeric": false
+ },
+ "7b944c27": {
+  "heard": "You've been verified, thank you. Your last three payments were \u00a342, \u00a319.99 and \u00a3200.",
+  "match": 0.629,
+  "numeric": true
+ }
+}

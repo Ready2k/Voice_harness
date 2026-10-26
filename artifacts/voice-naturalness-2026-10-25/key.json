@@ -1,0 +1,301 @@
+{
+ "clips": {
+  "34058daf": {
+   "provider": "OpenAI Realtime",
+   "line": 0,
+   "condition": "clean",
+   "seconds": 5.4
+  },
+  "448f6c57": {
+   "provider": "OpenAI Realtime",
+   "line": 0,
+   "condition": "phone",
+   "seconds": 5.4
+  },
+  "34898ea2": {
+   "provider": "OpenAI Realtime",
+   "line": 1,
+   "condition": "clean",
+   "seconds": 5.9
+  },
+  "30d4c78f": {
+   "provider": "OpenAI Realtime",
+   "line": 1,
+   "condition": "phone",
+   "seconds": 5.9
+  },
+  "93737cd2": {
+   "provider": "OpenAI Realtime",
+   "line": 2,
+   "condition": "clean",
+   "seconds": 5.95
+  },
+  "feba2ea5": {
+   "provider": "OpenAI Realtime",
+   "line": 3,
+   "condition": "clean",
+   "seconds": 6.75
+  },
+  "e8395e48": {
+   "provider": "OpenAI Realtime",
+   "line": 4,
+   "condition": "clean",
+   "seconds": 6.0
+  },
+  "1d7bd4ab": {
+   "provider": "OpenAI Realtime",
+   "line": 5,
+   "condition": "clean",
+   "seconds": 8.9
+  },
+  "28ea383f": {
+   "provider": "Amazon Nova Sonic",
+   "line": 0,
+   "condition": "clean",
+   "seconds": 4.48
+  },
+  "c9de1291": {
+   "provider": "Amazon Nova Sonic",
+   "line": 0,
+   "condition": "phone",
+   "seconds": 4.48
+  },
+  "8062e5c4": {
+   "provider": "Amazon Nova Sonic",
+   "line": 1,
+   "condition": "clean",
+   "seconds": 5.04
+  },
+  "3699307f": {
+   "provider": "Amazon Nova Sonic",
+   "line": 1,
+   "condition": "phone",
+   "seconds": 5.04
+  },
+  "cb499e97": {
+   "provider": "Amazon Nova Sonic",
+   "line": 2,
+   "condition": "clean",
+   "seconds": 5.48
+  },
+  "12362e64": {
+   "provider": "Amazon Nova Sonic",
+   "line": 3,
+   "condition": "clean",
+   "seconds": 4.76
+  },
+  "768b9bde": {
+   "provider": "Amazon Nova Sonic",
+   "line": 4,
+   "condition": "clean",
+   "seconds": 5.24
+  },
+  "bcbd5671": {
+   "provider": "Amazon Nova Sonic",
+   "line": 5,
+   "condition": "clean",
+   "seconds": 7.08
+  },
+  "2ac2fbcb": {
+   "provider": "xAI Grok Voice",
+   "line": 0,
+   "condition": "clean",
+   "seconds": 5.11
+  },
+  "0c8ac71e": {
+   "provider": "xAI Grok Voice",
+   "line": 0,
+   "condition": "phone",
+   "seconds": 5.11
+  },
+  "b626c9de": {
+   "provider": "xAI Grok Voice",
+   "line": 1,
+   "condition": "clean",
+   "seconds": 4.79
+  },
+  "e25e4037": {
+   "provider": "xAI Grok Voice",
+   "line": 1,
+   "condition": "phone",
+   "seconds": 4.79
+  },
+  "b4d6f01b": {
+   "provider": "xAI Grok Voice",
+   "line": 2,
+   "condition": "clean",
+   "seconds": 5.43
+  },
+  "5a41d358": {
+   "provider": "xAI Grok Voice",
+   "line": 3,
+   "condition": "clean",
+   "seconds": 4.79
+  },
+  "2f37686f": {
+   "provider": "xAI Grok Voice",
+   "line": 4,
+   "condition": "clean",
+   "seconds": 5.75
+  },
+  "ce1a681b": {
+   "provider": "xAI Grok Voice",
+   "line": 5,
+   "condition": "clean",
+   "seconds": 7.35
+  },
+  "0294cc68": {
+   "provider": "Google Gemini Live",
+   "line": 0,
+   "condition": "clean",
+   "seconds": 5.600041666666667
+  },
+  "04c6954a": {
+   "provider": "Google Gemini Live",
+   "line": 0,
+   "condition": "phone",
+   "seconds": 5.600041666666667
+  },
+  "95df7bbb": {
+   "provider": "Google Gemini Live",
+   "line": 1,
+   "condition": "clean",
+   "seconds": 6.160041666666666
+  },
+  "9e1df800": {
+   "provider": "Google Gemini Live",
+   "line": 1,
+   "condition": "phone",
+   "seconds": 6.160041666666666
+  },
+  "51ea88df": {
+   "provider": "Google Gemini Live",
+   "line": 2,
+   "condition": "clean",
+   "seconds": 6.260041666666667
+  },
+  "66d93b33": {
+   "provider": "Google Gemini Live",
+   "line": 3,
+   "condition": "clean",
+   "seconds": 6.4
+  },
+  "b72547fb": {
+   "provider": "Google Gemini Live",
+   "line": 4,
+   "condition": "clean",
+   "seconds": 6.260041666666667
+  },
+  "7a45ff82": {
+   "provider": "Google Gemini Live",
+   "line": 5,
+   "condition": "clean",
+   "seconds": 8.77
+  },
+  "01c12720": {
+   "provider": "ElevenLabs (George)",
+   "line": 0,
+   "condition": "clean",
+   "seconds": 5.76
+  },
+  "693babc4": {
+   "provider": "ElevenLabs (George)",
+   "line": 0,
+   "condition": "phone",
+   "seconds": 5.76
+  },
+  "ff38c795": {
+   "provider": "ElevenLabs (George)",
+   "line": 1,
+   "condition": "clean",
+   "seconds": 5.28
+  },
+  "b345ac7c": {
+   "provider": "ElevenLabs (George)",
+   "line": 1,
+   "condition": "phone",
+   "seconds": 5.28
+  },
+  "e3e9af5f": {
+   "provider": "ElevenLabs (George)",
+   "line": 2,
+   "condition": "clean",
+   "seconds": 6.0
+  },
+  "637d09f4": {
+   "provider": "ElevenLabs (George)",
+   "line": 3,
+   "condition": "clean",
+   "seconds": 5.68
+  },
+  "ad93ac02": {
+   "provider": "ElevenLabs (George)",
+   "line": 4,
+   "condition": "clean",
+   "seconds": 6.16
+  },
+  "b0824648": {
+   "provider": "ElevenLabs (George)",
+   "line": 5,
+   "condition": "clean",
+   "seconds": 8.0
+  },
+  "b86ecd4e": {
+   "provider": "ElevenLabs (second voice)",
+   "line": 0,
+   "condition": "clean",
+   "seconds": 5.68
+  },
+  "b9fc8d85": {
+   "provider": "ElevenLabs (second voice)",
+   "line": 0,
+   "condition": "phone",
+   "seconds": 5.68
+  },
+  "1a13983b": {
+   "provider": "ElevenLabs (second voice)",
+   "line": 1,
+   "condition": "clean",
+   "seconds": 5.52
+  },
+  "336074f9": {
+   "provider": "ElevenLabs (second voice)",
+   "line": 1,
+   "condition": "phone",
+   "seconds": 5.52
+  },
+  "39ef203f": {
+   "provider": "ElevenLabs (second voice)",
+   "line": 2,
+   "condition": "clean",
+   "seconds": 6.08
+  },
+  "87d8898c": {
+   "provider": "ElevenLabs (second voice)",
+   "line": 3,
+   "condition": "clean",
+   "seconds": 5.6
+  },
+  "a508b7aa": {
+   "provider": "ElevenLabs (second voice)",
+   "line": 4,
+   "condition": "clean",
+   "seconds": 6.4
+  },
+  "7b944c27": {
+   "provider": "ElevenLabs (second voice)",
+   "line": 5,
+   "condition": "clean",
+   "seconds": 8.0
+  }
+ },
+ "failures": [],
+ "lines": [
+  "Thanks for calling. Before I can share any account details, I need to check who I'm speaking with.",
+  "Your current account balance is one thousand two hundred and fifty pounds and forty pence.",
+  "I'm so sorry for your loss. I can put you through to someone in our bereavement team who can help with this.",
+  "I can't move that payment without your confirmation. Would you like me to go ahead, yes or no?",
+  "That didn't go through, I'm afraid. Nothing has been taken from your account, and I can try again if you like.",
+  "You've been verified, thank you. Your last three payments were forty-two pounds, nineteen pounds ninety-nine, and two hundred."
+ ]
+}
