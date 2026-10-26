@@ -47,7 +47,16 @@ from . import (
     TurnEnd,
     TurnStart,
 )
-from .elevenlabs_agent import AGENT_ENV, AUDIO_FORMAT, DEFAULT_LLM, DEFAULT_VOICE, KEY_ENV, agent_id, fingerprint, load_state
+from .elevenlabs_agent import (
+    AGENT_ENV,
+    AUDIO_FORMAT,
+    DEFAULT_LLM,
+    DEFAULT_VOICE,
+    KEY_ENV,
+    agent_id,
+    fingerprint,
+    load_state,
+)
 from .openai_realtime import _package_version
 
 log = logging.getLogger("voice_harness.adapters.elevenlabs_voice")
@@ -411,8 +420,6 @@ class ElevenLabsVoiceAdapter:
 
 def conformance_factory():
     """AC-09 driver: (adapter, prime). Config is baked in; the harness opens with only a session id."""
-    tool = {"name": "get_account_summary", "description": "Account summary",
-            "parameters": {"type": "object", "properties": {"account_id": {"type": "string"}}}}
 
     class _Conformance(ElevenLabsVoiceAdapter):
         async def open_session(self, config):

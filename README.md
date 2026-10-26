@@ -64,6 +64,10 @@ The benchmark covers 1/5/10 sessions, normal/4× payloads, enabled/disabled inst
 
 Unsigned manifests bind event count, final ledger hash and artifact hashes. Verification detects changed events/artifacts and suffix deletion relative to the manifest. A checksum does not authenticate its author; signing is a Phase 3 gate. Missing or purged audio is explicit.
 
+## Blind voice comparisons
+
+Open the [two-comparison menu](artifacts/voice-comparisons/index.html) locally to choose the original fixed-line listening test or the new advanced conversation comparison. The advanced option compares common and provider-specific prompts across six multi-turn situations, with blind human ratings and response timing. Its plan is prepared; recordings require an explicit live run. See the [recording and review runbook](docs/VOICE_CONVERSATION_COMPARISON.md).
+
 ## Development
 
 ```bash

@@ -1,0 +1,985 @@
+{
+  "version": "conversation-v1",
+  "created_at": "2026-10-26T12:22:48Z",
+  "documentation_checked": "2026-10-26",
+  "repetitions": 2,
+  "seed": 42,
+  "profiles": {
+    "openai-realtime-live": {
+      "common": {
+        "instructions": "You are an AI banking assistant in a synthetic evaluation. Respond in English.\nThe caller is already verified. Fixture facts: current balance is \u00a31,250.40; a failed \u00a342 payment took no money.\nA card freeze is temporary and reversible; a replacement card is a separate request. Bereavement support is available.\nYou have no tools: explain options, but never claim to have moved money, frozen a card or completed a transfer.\nUse only supplied facts. If information is unavailable, say so. Do not invent account details or policy promises.\nDo not introduce yourself or greet before the caller speaks. Do not mention the evaluation or provider.\n\nBe helpful, natural, warm and professional. Answer the caller's question concisely.",
+        "model_id": "gpt-realtime-2.1",
+        "voice": "marin",
+        "documentation": "https://developers.openai.com/api/docs/guides/voice-prompting"
+      },
+      "tuned": {
+        "instructions": "You are an AI banking assistant in a synthetic evaluation. Respond in English.\nThe caller is already verified. Fixture facts: current balance is \u00a31,250.40; a failed \u00a342 payment took no money.\nA card freeze is temporary and reversible; a replacement card is a separate request. Bereavement support is available.\nYou have no tools: explain options, but never claim to have moved money, frozen a card or completed a transfer.\nUse only supplied facts. If information is unavailable, say so. Do not invent account details or policy promises.\nDo not introduce yourself or greet before the caller speaks. Do not mention the evaluation or provider.\n\n# Personality and tone\nUse one or two short spoken sentences unless the caller asks for detail. Ask at most one question at a time.\nUse everyday words and contractions, without markdown or stage directions. Explain amounts clearly when spoken.\nAdapt to the caller's words: acknowledge distress briefly, then offer a practical next step. Avoid exaggerated sympathy.\nRemember corrections and earlier details. Do not repeat greetings, stock acknowledgements or information unnecessarily.\nIf the caller asks for a simpler explanation or repetition, rephrase it. Do not add filler to every response.\n\n# Pacing\nSpeak at an unhurried conversational pace.\n",
+        "model_id": "gpt-realtime-2.1",
+        "voice": "marin",
+        "documentation": "https://developers.openai.com/api/docs/guides/voice-prompting"
+      }
+    },
+    "nova-sonic-live": {
+      "common": {
+        "instructions": "You are an AI banking assistant in a synthetic evaluation. Respond in English.\nThe caller is already verified. Fixture facts: current balance is \u00a31,250.40; a failed \u00a342 payment took no money.\nA card freeze is temporary and reversible; a replacement card is a separate request. Bereavement support is available.\nYou have no tools: explain options, but never claim to have moved money, frozen a card or completed a transfer.\nUse only supplied facts. If information is unavailable, say so. Do not invent account details or policy promises.\nDo not introduce yourself or greet before the caller speaks. Do not mention the evaluation or provider.\n\nBe helpful, natural, warm and professional. Answer the caller's question concisely.",
+        "model_id": "amazon.nova-2-5-sonic",
+        "voice": "matthew",
+        "documentation": "https://docs.aws.amazon.com/nova/latest/nova2-userguide/sonic-system-prompts.html"
+      },
+      "tuned": {
+        "instructions": "You are an AI banking assistant in a synthetic evaluation. Respond in English.\nThe caller is already verified. Fixture facts: current balance is \u00a31,250.40; a failed \u00a342 payment took no money.\nA card freeze is temporary and reversible; a replacement card is a separate request. Bereavement support is available.\nYou have no tools: explain options, but never claim to have moved money, frozen a card or completed a transfer.\nUse only supplied facts. If information is unavailable, say so. Do not invent account details or policy promises.\nDo not introduce yourself or greet before the caller speaks. Do not mention the evaluation or provider.\n\nGive a direct answer first, then only the explanation needed for listening comprehension.\nUse one or two short spoken sentences unless the caller asks for detail. Ask at most one question at a time.\nUse everyday words and contractions, without markdown or stage directions. Explain amounts clearly when spoken.\nAdapt to the caller's words: acknowledge distress briefly, then offer a practical next step. Avoid exaggerated sympathy.\nRemember corrections and earlier details. Do not repeat greetings, stock acknowledgements or information unnecessarily.\nIf the caller asks for a simpler explanation or repetition, rephrase it. Do not add filler to every response.\n",
+        "model_id": "amazon.nova-2-5-sonic",
+        "voice": "matthew",
+        "documentation": "https://docs.aws.amazon.com/nova/latest/nova2-userguide/sonic-system-prompts.html"
+      }
+    },
+    "xai-voice-live": {
+      "common": {
+        "instructions": "You are an AI banking assistant in a synthetic evaluation. Respond in English.\nThe caller is already verified. Fixture facts: current balance is \u00a31,250.40; a failed \u00a342 payment took no money.\nA card freeze is temporary and reversible; a replacement card is a separate request. Bereavement support is available.\nYou have no tools: explain options, but never claim to have moved money, frozen a card or completed a transfer.\nUse only supplied facts. If information is unavailable, say so. Do not invent account details or policy promises.\nDo not introduce yourself or greet before the caller speaks. Do not mention the evaluation or provider.\n\nBe helpful, natural, warm and professional. Answer the caller's question concisely.",
+        "model_id": "grok-voice-3.0",
+        "voice": "ara",
+        "documentation": "https://docs.x.ai/developers/model-capabilities/audio/speech-to-speech/prompting-guide"
+      },
+      "tuned": {
+        "instructions": "## Role & Persona\nYou are a calm, approachable banking assistant.\n## Objective\nHelp the caller understand their banking options.\n## Conversation Flow\nAnswer the caller directly, then give the next useful step.\n## Guardrails & Escalation\nYou are an AI banking assistant in a synthetic evaluation. Respond in English.\nThe caller is already verified. Fixture facts: current balance is \u00a31,250.40; a failed \u00a342 payment took no money.\nA card freeze is temporary and reversible; a replacement card is a separate request. Bereavement support is available.\nYou have no tools: explain options, but never claim to have moved money, frozen a card or completed a transfer.\nUse only supplied facts. If information is unavailable, say so. Do not invent account details or policy promises.\nDo not introduce yourself or greet before the caller speaks. Do not mention the evaluation or provider.\n\n## Voice & Communication Style\nUse one or two short spoken sentences unless the caller asks for detail. Ask at most one question at a time.\nUse everyday words and contractions, without markdown or stage directions. Explain amounts clearly when spoken.\nAdapt to the caller's words: acknowledge distress briefly, then offer a practical next step. Avoid exaggerated sympathy.\nRemember corrections and earlier details. Do not repeat greetings, stock acknowledgements or information unnecessarily.\nIf the caller asks for a simpler explanation or repetition, rephrase it. Do not add filler to every response.\n",
+        "model_id": "grok-voice-3.0",
+        "voice": "ara",
+        "documentation": "https://docs.x.ai/developers/model-capabilities/audio/speech-to-speech/prompting-guide"
+      }
+    },
+    "gemini-live": {
+      "common": {
+        "instructions": "You are an AI banking assistant in a synthetic evaluation. Respond in English.\nThe caller is already verified. Fixture facts: current balance is \u00a31,250.40; a failed \u00a342 payment took no money.\nA card freeze is temporary and reversible; a replacement card is a separate request. Bereavement support is available.\nYou have no tools: explain options, but never claim to have moved money, frozen a card or completed a transfer.\nUse only supplied facts. If information is unavailable, say so. Do not invent account details or policy promises.\nDo not introduce yourself or greet before the caller speaks. Do not mention the evaluation or provider.\n\nBe helpful, natural, warm and professional. Answer the caller's question concisely.",
+        "model_id": "gemini-3.8-live",
+        "voice": null,
+        "documentation": "https://ai.google.dev/gemini-api/docs/live-api/capabilities"
+      },
+      "tuned": {
+        "instructions": "You are an AI banking assistant in a synthetic evaluation. Respond in English.\nThe caller is already verified. Fixture facts: current balance is \u00a31,250.40; a failed \u00a342 payment took no money.\nA card freeze is temporary and reversible; a replacement card is a separate request. Bereavement support is available.\nYou have no tools: explain options, but never claim to have moved money, frozen a card or completed a transfer.\nUse only supplied facts. If information is unavailable, say so. Do not invent account details or policy promises.\nDo not introduce yourself or greet before the caller speaks. Do not mention the evaluation or provider.\n\n# Conversation style\nUse one or two short spoken sentences unless the caller asks for detail. Ask at most one question at a time.\nUse everyday words and contractions, without markdown or stage directions. Explain amounts clearly when spoken.\nAdapt to the caller's words: acknowledge distress briefly, then offer a practical next step. Avoid exaggerated sympathy.\nRemember corrections and earlier details. Do not repeat greetings, stock acknowledgements or information unnecessarily.\nIf the caller asks for a simpler explanation or repetition, rephrase it. Do not add filler to every response.\nRespond to the caller's expressed concern without assuming an emotion.\n",
+        "model_id": "gemini-3.8-live",
+        "voice": null,
+        "documentation": "https://ai.google.dev/gemini-api/docs/live-api/capabilities"
+      }
+    },
+    "elevenlabs-live": {
+      "common": {
+        "instructions": "You are an AI banking assistant in a synthetic evaluation. Respond in English.\nThe caller is already verified. Fixture facts: current balance is \u00a31,250.40; a failed \u00a342 payment took no money.\nA card freeze is temporary and reversible; a replacement card is a separate request. Bereavement support is available.\nYou have no tools: explain options, but never claim to have moved money, frozen a card or completed a transfer.\nUse only supplied facts. If information is unavailable, say so. Do not invent account details or policy promises.\nDo not introduce yourself or greet before the caller speaks. Do not mention the evaluation or provider.\n\nBe helpful, natural, warm and professional. Answer the caller's question concisely.",
+        "model_id": "elevenlabs-agent",
+        "voice": "JBFqnCBsd6RMkjVDRZzb",
+        "documentation": "https://elevenlabs.io/docs/eleven-agents/best-practices/prompting-guide"
+      },
+      "tuned": {
+        "instructions": "# Role and facts\nYou are an AI banking assistant in a synthetic evaluation. Respond in English.\nThe caller is already verified. Fixture facts: current balance is \u00a31,250.40; a failed \u00a342 payment took no money.\nA card freeze is temporary and reversible; a replacement card is a separate request. Bereavement support is available.\nYou have no tools: explain options, but never claim to have moved money, frozen a card or completed a transfer.\nUse only supplied facts. If information is unavailable, say so. Do not invent account details or policy promises.\nDo not introduce yourself or greet before the caller speaks. Do not mention the evaluation or provider.\n\n# Goal\nHelp the caller understand their options.\n# Tone\nUse one or two short spoken sentences unless the caller asks for detail. Ask at most one question at a time.\nUse everyday words and contractions, without markdown or stage directions. Explain amounts clearly when spoken.\nAdapt to the caller's words: acknowledge distress briefly, then offer a practical next step. Avoid exaggerated sympathy.\nRemember corrections and earlier details. Do not repeat greetings, stock acknowledgements or information unnecessarily.\nIf the caller asks for a simpler explanation or repetition, rephrase it. Do not add filler to every response.\n",
+        "model_id": "elevenlabs-agent",
+        "voice": "JBFqnCBsd6RMkjVDRZzb",
+        "documentation": "https://elevenlabs.io/docs/eleven-agents/best-practices/prompting-guide"
+      }
+    }
+  },
+  "scenarios": [
+    {
+      "id": "balance",
+      "title": "Balance and clarification",
+      "turns": [
+        "Could you tell me my current balance?",
+        "Sorry, could you say that a little more slowly?",
+        "Is that twelve hundred and fifty pounds, plus forty pence?"
+      ],
+      "review": "Preserve the balance across turns; repeat clearly without sounding irritated."
+    },
+    {
+      "id": "correction",
+      "title": "Remember a correction",
+      "turns": [
+        "I'm thinking of sending fifteen pounds to Alex. Don't send anything yet.",
+        "Sorry, I meant fifty pounds, not fifteen. And the name is Alice, not Alex.",
+        "Before I decide, what amount and name did I settle on?"
+      ],
+      "review": "Remember fifty pounds and Alice; do not claim a payment was made."
+    },
+    {
+      "id": "lost-card",
+      "title": "Anxious caller",
+      "turns": [
+        "I can't find my card and I'm worried someone might use it. What should I do?",
+        "If I freeze it and then find it, does that mean I need a new card?",
+        "I'm still a bit worried. Could you explain the first step simply?"
+      ],
+      "review": "Give calm practical guidance; distinguish a temporary freeze from replacement."
+    },
+    {
+      "id": "bereavement",
+      "title": "Sensitive conversation",
+      "turns": [
+        "My dad died last week and I don't know where to start with his bank account.",
+        "This is quite hard to talk about. Can you keep it simple?",
+        "Would I be able to speak to someone who helps with this?"
+      ],
+      "review": "Use restrained empathy and simple next steps; do not pretend a transfer has happened."
+    },
+    {
+      "id": "failed-payment",
+      "title": "Frustration and reassurance",
+      "turns": [
+        "That forty-two pound payment failed again. This is really frustrating.",
+        "So have I been charged or not? I need a straight answer.",
+        "Okay. Just tell me what you know, without making promises."
+      ],
+      "review": "Clearly say no money was taken; do not invent a cause, repair or retry outcome."
+    },
+    {
+      "id": "continuity",
+      "title": "Conversation continuity",
+      "turns": [
+        "Please call me Sam. I only want to understand freezing my card, not order a replacement.",
+        "Could you explain the difference in plain English?",
+        "What did I say I wanted to do, and what should you call me?"
+      ],
+      "review": "Remember Sam and the stated preference; avoid unnecessary repetition."
+    }
+  ],
+  "jobs": [
+    {
+      "id": "23f6c108ea9e4751",
+      "provider": "openai-realtime-live",
+      "condition": "common",
+      "scenario": "failed-payment",
+      "repetition": 2
+    },
+    {
+      "id": "e1c75a9e0844cd18",
+      "provider": "gemini-live",
+      "condition": "tuned",
+      "scenario": "balance",
+      "repetition": 1
+    },
+    {
+      "id": "e1a77c71e803c85b",
+      "provider": "gemini-live",
+      "condition": "tuned",
+      "scenario": "continuity",
+      "repetition": 2
+    },
+    {
+      "id": "05f20793573c5aa7",
+      "provider": "elevenlabs-live",
+      "condition": "tuned",
+      "scenario": "bereavement",
+      "repetition": 1
+    },
+    {
+      "id": "ccf221b5922c1f42",
+      "provider": "gemini-live",
+      "condition": "tuned",
+      "scenario": "failed-payment",
+      "repetition": 1
+    },
+    {
+      "id": "a3f991525592bf9b",
+      "provider": "nova-sonic-live",
+      "condition": "common",
+      "scenario": "bereavement",
+      "repetition": 1
+    },
+    {
+      "id": "40e682673f50786b",
+      "provider": "gemini-live",
+      "condition": "tuned",
+      "scenario": "failed-payment",
+      "repetition": 2
+    },
+    {
+      "id": "417eeaa46ffe5d6e",
+      "provider": "gemini-live",
+      "condition": "tuned",
+      "scenario": "correction",
+      "repetition": 2
+    },
+    {
+      "id": "6cfe9455e0cadb3f",
+      "provider": "elevenlabs-live",
+      "condition": "common",
+      "scenario": "balance",
+      "repetition": 1
+    },
+    {
+      "id": "916672756e98d6d2",
+      "provider": "elevenlabs-live",
+      "condition": "tuned",
+      "scenario": "balance",
+      "repetition": 2
+    },
+    {
+      "id": "93b37418af7178d5",
+      "provider": "nova-sonic-live",
+      "condition": "tuned",
+      "scenario": "continuity",
+      "repetition": 2
+    },
+    {
+      "id": "0207b7f372d0a2d0",
+      "provider": "gemini-live",
+      "condition": "common",
+      "scenario": "bereavement",
+      "repetition": 2
+    },
+    {
+      "id": "50ae01c0fa71ae1c",
+      "provider": "gemini-live",
+      "condition": "tuned",
+      "scenario": "lost-card",
+      "repetition": 1
+    },
+    {
+      "id": "f03b80d084351eca",
+      "provider": "nova-sonic-live",
+      "condition": "common",
+      "scenario": "failed-payment",
+      "repetition": 1
+    },
+    {
+      "id": "d4ced3805ea26c08",
+      "provider": "openai-realtime-live",
+      "condition": "tuned",
+      "scenario": "lost-card",
+      "repetition": 1
+    },
+    {
+      "id": "0d3947d76d246060",
+      "provider": "xai-voice-live",
+      "condition": "tuned",
+      "scenario": "correction",
+      "repetition": 1
+    },
+    {
+      "id": "509b58990d683726",
+      "provider": "gemini-live",
+      "condition": "common",
+      "scenario": "continuity",
+      "repetition": 1
+    },
+    {
+      "id": "a1b4d785ac1a20e9",
+      "provider": "elevenlabs-live",
+      "condition": "common",
+      "scenario": "balance",
+      "repetition": 2
+    },
+    {
+      "id": "2963f4db8cc38d69",
+      "provider": "xai-voice-live",
+      "condition": "common",
+      "scenario": "correction",
+      "repetition": 2
+    },
+    {
+      "id": "0c5d8ea62e61da5f",
+      "provider": "xai-voice-live",
+      "condition": "tuned",
+      "scenario": "failed-payment",
+      "repetition": 1
+    },
+    {
+      "id": "ed3882f8ad01e722",
+      "provider": "openai-realtime-live",
+      "condition": "common",
+      "scenario": "failed-payment",
+      "repetition": 1
+    },
+    {
+      "id": "9080ab9774624a50",
+      "provider": "xai-voice-live",
+      "condition": "tuned",
+      "scenario": "balance",
+      "repetition": 2
+    },
+    {
+      "id": "41d8dedd83742be6",
+      "provider": "elevenlabs-live",
+      "condition": "common",
+      "scenario": "correction",
+      "repetition": 1
+    },
+    {
+      "id": "36ff01295b784608",
+      "provider": "elevenlabs-live",
+      "condition": "tuned",
+      "scenario": "balance",
+      "repetition": 1
+    },
+    {
+      "id": "dc683b33d0f8c8a5",
+      "provider": "openai-realtime-live",
+      "condition": "common",
+      "scenario": "bereavement",
+      "repetition": 2
+    },
+    {
+      "id": "b432eec906dee819",
+      "provider": "openai-realtime-live",
+      "condition": "common",
+      "scenario": "balance",
+      "repetition": 2
+    },
+    {
+      "id": "d5d5a43652ef7b01",
+      "provider": "gemini-live",
+      "condition": "common",
+      "scenario": "bereavement",
+      "repetition": 1
+    },
+    {
+      "id": "fe13f26527a9a890",
+      "provider": "xai-voice-live",
+      "condition": "tuned",
+      "scenario": "continuity",
+      "repetition": 1
+    },
+    {
+      "id": "dc3bd2bc5a17b730",
+      "provider": "nova-sonic-live",
+      "condition": "common",
+      "scenario": "correction",
+      "repetition": 1
+    },
+    {
+      "id": "f782b2ed97316eb4",
+      "provider": "gemini-live",
+      "condition": "common",
+      "scenario": "failed-payment",
+      "repetition": 1
+    },
+    {
+      "id": "1a59a4f806d7440d",
+      "provider": "openai-realtime-live",
+      "condition": "tuned",
+      "scenario": "failed-payment",
+      "repetition": 2
+    },
+    {
+      "id": "2d33e0f9662bc3cd",
+      "provider": "xai-voice-live",
+      "condition": "common",
+      "scenario": "lost-card",
+      "repetition": 1
+    },
+    {
+      "id": "1704b9e4135a544a",
+      "provider": "nova-sonic-live",
+      "condition": "tuned",
+      "scenario": "lost-card",
+      "repetition": 2
+    },
+    {
+      "id": "54dfa362204abf49",
+      "provider": "xai-voice-live",
+      "condition": "common",
+      "scenario": "correction",
+      "repetition": 1
+    },
+    {
+      "id": "68b3aab5619722b3",
+      "provider": "xai-voice-live",
+      "condition": "tuned",
+      "scenario": "bereavement",
+      "repetition": 1
+    },
+    {
+      "id": "d9838d96c7f51f4d",
+      "provider": "nova-sonic-live",
+      "condition": "tuned",
+      "scenario": "correction",
+      "repetition": 2
+    },
+    {
+      "id": "e692263639e88f21",
+      "provider": "xai-voice-live",
+      "condition": "tuned",
+      "scenario": "bereavement",
+      "repetition": 2
+    },
+    {
+      "id": "5e93b845da766a9f",
+      "provider": "nova-sonic-live",
+      "condition": "common",
+      "scenario": "continuity",
+      "repetition": 1
+    },
+    {
+      "id": "ec2d40aec33b594e",
+      "provider": "xai-voice-live",
+      "condition": "tuned",
+      "scenario": "balance",
+      "repetition": 1
+    },
+    {
+      "id": "7e524b34ccde3953",
+      "provider": "nova-sonic-live",
+      "condition": "tuned",
+      "scenario": "correction",
+      "repetition": 1
+    },
+    {
+      "id": "5c358cae7f6bbbee",
+      "provider": "xai-voice-live",
+      "condition": "common",
+      "scenario": "continuity",
+      "repetition": 2
+    },
+    {
+      "id": "f062bbec00b479bf",
+      "provider": "xai-voice-live",
+      "condition": "common",
+      "scenario": "bereavement",
+      "repetition": 2
+    },
+    {
+      "id": "82de71c9202b2680",
+      "provider": "gemini-live",
+      "condition": "common",
+      "scenario": "lost-card",
+      "repetition": 1
+    },
+    {
+      "id": "58200eb2ad82cfb6",
+      "provider": "openai-realtime-live",
+      "condition": "tuned",
+      "scenario": "continuity",
+      "repetition": 1
+    },
+    {
+      "id": "ea25bdc78c77447d",
+      "provider": "xai-voice-live",
+      "condition": "tuned",
+      "scenario": "correction",
+      "repetition": 2
+    },
+    {
+      "id": "58322b5404096648",
+      "provider": "xai-voice-live",
+      "condition": "tuned",
+      "scenario": "lost-card",
+      "repetition": 2
+    },
+    {
+      "id": "759e0e0ab5aaeaae",
+      "provider": "openai-realtime-live",
+      "condition": "tuned",
+      "scenario": "continuity",
+      "repetition": 2
+    },
+    {
+      "id": "77388eea75f38ab6",
+      "provider": "nova-sonic-live",
+      "condition": "tuned",
+      "scenario": "lost-card",
+      "repetition": 1
+    },
+    {
+      "id": "ade3789ee02ee47d",
+      "provider": "elevenlabs-live",
+      "condition": "common",
+      "scenario": "correction",
+      "repetition": 2
+    },
+    {
+      "id": "f4b0e61cebd5180a",
+      "provider": "elevenlabs-live",
+      "condition": "tuned",
+      "scenario": "lost-card",
+      "repetition": 1
+    },
+    {
+      "id": "65a9799549978d4f",
+      "provider": "nova-sonic-live",
+      "condition": "common",
+      "scenario": "balance",
+      "repetition": 1
+    },
+    {
+      "id": "4ac748c7d9e2037e",
+      "provider": "openai-realtime-live",
+      "condition": "common",
+      "scenario": "bereavement",
+      "repetition": 1
+    },
+    {
+      "id": "0cd58725d1bba0f4",
+      "provider": "xai-voice-live",
+      "condition": "common",
+      "scenario": "failed-payment",
+      "repetition": 1
+    },
+    {
+      "id": "a413b690240c2166",
+      "provider": "gemini-live",
+      "condition": "tuned",
+      "scenario": "bereavement",
+      "repetition": 1
+    },
+    {
+      "id": "a9532a436777bbcb",
+      "provider": "openai-realtime-live",
+      "condition": "tuned",
+      "scenario": "bereavement",
+      "repetition": 1
+    },
+    {
+      "id": "e417b18efe709b0e",
+      "provider": "xai-voice-live",
+      "condition": "common",
+      "scenario": "balance",
+      "repetition": 2
+    },
+    {
+      "id": "e3a5b14ac0db083f",
+      "provider": "elevenlabs-live",
+      "condition": "tuned",
+      "scenario": "continuity",
+      "repetition": 1
+    },
+    {
+      "id": "67602bc217dca729",
+      "provider": "nova-sonic-live",
+      "condition": "tuned",
+      "scenario": "bereavement",
+      "repetition": 1
+    },
+    {
+      "id": "fb1db52d1971ef75",
+      "provider": "openai-realtime-live",
+      "condition": "common",
+      "scenario": "correction",
+      "repetition": 1
+    },
+    {
+      "id": "0b5400d45f94ce58",
+      "provider": "elevenlabs-live",
+      "condition": "common",
+      "scenario": "bereavement",
+      "repetition": 2
+    },
+    {
+      "id": "bb4456a4a0125c0d",
+      "provider": "gemini-live",
+      "condition": "common",
+      "scenario": "balance",
+      "repetition": 1
+    },
+    {
+      "id": "b8ee131ea876f8a7",
+      "provider": "gemini-live",
+      "condition": "common",
+      "scenario": "balance",
+      "repetition": 2
+    },
+    {
+      "id": "5e440df6f464b180",
+      "provider": "nova-sonic-live",
+      "condition": "tuned",
+      "scenario": "balance",
+      "repetition": 1
+    },
+    {
+      "id": "b328fe4c07000ac2",
+      "provider": "nova-sonic-live",
+      "condition": "tuned",
+      "scenario": "continuity",
+      "repetition": 1
+    },
+    {
+      "id": "580c2f801f3641fa",
+      "provider": "nova-sonic-live",
+      "condition": "tuned",
+      "scenario": "balance",
+      "repetition": 2
+    },
+    {
+      "id": "2a85417763a3e611",
+      "provider": "openai-realtime-live",
+      "condition": "common",
+      "scenario": "continuity",
+      "repetition": 1
+    },
+    {
+      "id": "e3e48b1206959683",
+      "provider": "gemini-live",
+      "condition": "common",
+      "scenario": "correction",
+      "repetition": 1
+    },
+    {
+      "id": "70751f9a8576caaf",
+      "provider": "openai-realtime-live",
+      "condition": "tuned",
+      "scenario": "correction",
+      "repetition": 2
+    },
+    {
+      "id": "0ce11866d19dfd99",
+      "provider": "xai-voice-live",
+      "condition": "common",
+      "scenario": "continuity",
+      "repetition": 1
+    },
+    {
+      "id": "9c5d681a4dd1a573",
+      "provider": "openai-realtime-live",
+      "condition": "common",
+      "scenario": "lost-card",
+      "repetition": 2
+    },
+    {
+      "id": "3ac78a20c3e7e42f",
+      "provider": "nova-sonic-live",
+      "condition": "common",
+      "scenario": "failed-payment",
+      "repetition": 2
+    },
+    {
+      "id": "f65a289601de778a",
+      "provider": "nova-sonic-live",
+      "condition": "tuned",
+      "scenario": "failed-payment",
+      "repetition": 1
+    },
+    {
+      "id": "30dc06d90e515891",
+      "provider": "nova-sonic-live",
+      "condition": "tuned",
+      "scenario": "failed-payment",
+      "repetition": 2
+    },
+    {
+      "id": "cfa2ead7518ac80d",
+      "provider": "openai-realtime-live",
+      "condition": "tuned",
+      "scenario": "balance",
+      "repetition": 1
+    },
+    {
+      "id": "ffad2b1a83aafdc3",
+      "provider": "xai-voice-live",
+      "condition": "common",
+      "scenario": "balance",
+      "repetition": 1
+    },
+    {
+      "id": "761a3bf93f92721e",
+      "provider": "elevenlabs-live",
+      "condition": "common",
+      "scenario": "lost-card",
+      "repetition": 2
+    },
+    {
+      "id": "e83c9097691b624d",
+      "provider": "elevenlabs-live",
+      "condition": "tuned",
+      "scenario": "correction",
+      "repetition": 1
+    },
+    {
+      "id": "8c3751306148fb3a",
+      "provider": "elevenlabs-live",
+      "condition": "tuned",
+      "scenario": "continuity",
+      "repetition": 2
+    },
+    {
+      "id": "705d2d7c5a0fca69",
+      "provider": "elevenlabs-live",
+      "condition": "common",
+      "scenario": "lost-card",
+      "repetition": 1
+    },
+    {
+      "id": "38a37a642ce82010",
+      "provider": "openai-realtime-live",
+      "condition": "tuned",
+      "scenario": "bereavement",
+      "repetition": 2
+    },
+    {
+      "id": "7b5c5f9c1bfde541",
+      "provider": "gemini-live",
+      "condition": "tuned",
+      "scenario": "balance",
+      "repetition": 2
+    },
+    {
+      "id": "d3a8e5ee3a2c5c03",
+      "provider": "nova-sonic-live",
+      "condition": "tuned",
+      "scenario": "bereavement",
+      "repetition": 2
+    },
+    {
+      "id": "7cde761cc9ac1860",
+      "provider": "elevenlabs-live",
+      "condition": "common",
+      "scenario": "failed-payment",
+      "repetition": 1
+    },
+    {
+      "id": "c7cb4bd25a103fe1",
+      "provider": "openai-realtime-live",
+      "condition": "tuned",
+      "scenario": "failed-payment",
+      "repetition": 1
+    },
+    {
+      "id": "a9c15c22a1f46a99",
+      "provider": "openai-realtime-live",
+      "condition": "common",
+      "scenario": "balance",
+      "repetition": 1
+    },
+    {
+      "id": "25a0a3ba7d9fba5a",
+      "provider": "elevenlabs-live",
+      "condition": "tuned",
+      "scenario": "bereavement",
+      "repetition": 2
+    },
+    {
+      "id": "095b53944a927935",
+      "provider": "elevenlabs-live",
+      "condition": "common",
+      "scenario": "failed-payment",
+      "repetition": 2
+    },
+    {
+      "id": "436dfcf559576718",
+      "provider": "xai-voice-live",
+      "condition": "common",
+      "scenario": "failed-payment",
+      "repetition": 2
+    },
+    {
+      "id": "add94d13d2ceafac",
+      "provider": "elevenlabs-live",
+      "condition": "tuned",
+      "scenario": "lost-card",
+      "repetition": 2
+    },
+    {
+      "id": "a962a2069d773c2c",
+      "provider": "xai-voice-live",
+      "condition": "common",
+      "scenario": "lost-card",
+      "repetition": 2
+    },
+    {
+      "id": "95905f67d3b37f92",
+      "provider": "elevenlabs-live",
+      "condition": "common",
+      "scenario": "continuity",
+      "repetition": 2
+    },
+    {
+      "id": "8099575d360149a5",
+      "provider": "gemini-live",
+      "condition": "tuned",
+      "scenario": "lost-card",
+      "repetition": 2
+    },
+    {
+      "id": "5532e5c697e1ee1a",
+      "provider": "gemini-live",
+      "condition": "common",
+      "scenario": "continuity",
+      "repetition": 2
+    },
+    {
+      "id": "b26c49eb34857ab0",
+      "provider": "gemini-live",
+      "condition": "tuned",
+      "scenario": "bereavement",
+      "repetition": 2
+    },
+    {
+      "id": "ee2fd38d557cdc81",
+      "provider": "nova-sonic-live",
+      "condition": "common",
+      "scenario": "balance",
+      "repetition": 2
+    },
+    {
+      "id": "c06681ea523a1bdc",
+      "provider": "xai-voice-live",
+      "condition": "tuned",
+      "scenario": "continuity",
+      "repetition": 2
+    },
+    {
+      "id": "633d891f41c762e9",
+      "provider": "elevenlabs-live",
+      "condition": "common",
+      "scenario": "bereavement",
+      "repetition": 1
+    },
+    {
+      "id": "4dde3bbce9fb849d",
+      "provider": "gemini-live",
+      "condition": "common",
+      "scenario": "lost-card",
+      "repetition": 2
+    },
+    {
+      "id": "fb58cfe0f4373a1d",
+      "provider": "xai-voice-live",
+      "condition": "tuned",
+      "scenario": "lost-card",
+      "repetition": 1
+    },
+    {
+      "id": "d2920076c525a8cc",
+      "provider": "nova-sonic-live",
+      "condition": "common",
+      "scenario": "lost-card",
+      "repetition": 2
+    },
+    {
+      "id": "c4371ab756d6b1ad",
+      "provider": "nova-sonic-live",
+      "condition": "common",
+      "scenario": "correction",
+      "repetition": 2
+    },
+    {
+      "id": "55516d08d1029ced",
+      "provider": "elevenlabs-live",
+      "condition": "common",
+      "scenario": "continuity",
+      "repetition": 1
+    },
+    {
+      "id": "da82ae60fa9ee786",
+      "provider": "elevenlabs-live",
+      "condition": "tuned",
+      "scenario": "failed-payment",
+      "repetition": 2
+    },
+    {
+      "id": "1237a292678cf641",
+      "provider": "openai-realtime-live",
+      "condition": "common",
+      "scenario": "lost-card",
+      "repetition": 1
+    },
+    {
+      "id": "339a81e90856d422",
+      "provider": "xai-voice-live",
+      "condition": "common",
+      "scenario": "bereavement",
+      "repetition": 1
+    },
+    {
+      "id": "4349502ea2678b05",
+      "provider": "gemini-live",
+      "condition": "common",
+      "scenario": "correction",
+      "repetition": 2
+    },
+    {
+      "id": "0b025cf612c36b81",
+      "provider": "openai-realtime-live",
+      "condition": "common",
+      "scenario": "continuity",
+      "repetition": 2
+    },
+    {
+      "id": "9ef541822962da7d",
+      "provider": "xai-voice-live",
+      "condition": "tuned",
+      "scenario": "failed-payment",
+      "repetition": 2
+    },
+    {
+      "id": "063d81a51e70a980",
+      "provider": "elevenlabs-live",
+      "condition": "tuned",
+      "scenario": "correction",
+      "repetition": 2
+    },
+    {
+      "id": "0bcf78d3c9741625",
+      "provider": "gemini-live",
+      "condition": "tuned",
+      "scenario": "correction",
+      "repetition": 1
+    },
+    {
+      "id": "c4bc8037fbc477f0",
+      "provider": "openai-realtime-live",
+      "condition": "tuned",
+      "scenario": "balance",
+      "repetition": 2
+    },
+    {
+      "id": "eed47f9f4a4e2ccd",
+      "provider": "elevenlabs-live",
+      "condition": "tuned",
+      "scenario": "failed-payment",
+      "repetition": 1
+    },
+    {
+      "id": "3275033ca7cb0365",
+      "provider": "openai-realtime-live",
+      "condition": "tuned",
+      "scenario": "lost-card",
+      "repetition": 2
+    },
+    {
+      "id": "4b5eeffe06292fe1",
+      "provider": "nova-sonic-live",
+      "condition": "common",
+      "scenario": "lost-card",
+      "repetition": 1
+    },
+    {
+      "id": "77b934a77dcb3c5a",
+      "provider": "nova-sonic-live",
+      "condition": "common",
+      "scenario": "bereavement",
+      "repetition": 2
+    },
+    {
+      "id": "5be350e3b0bab920",
+      "provider": "nova-sonic-live",
+      "condition": "common",
+      "scenario": "continuity",
+      "repetition": 2
+    },
+    {
+      "id": "dbfb3bb81d57c4ae",
+      "provider": "gemini-live",
+      "condition": "tuned",
+      "scenario": "continuity",
+      "repetition": 1
+    },
+    {
+      "id": "bead921752f3b0ad",
+      "provider": "openai-realtime-live",
+      "condition": "common",
+      "scenario": "correction",
+      "repetition": 2
+    },
+    {
+      "id": "253c07f17b657cf9",
+      "provider": "openai-realtime-live",
+      "condition": "tuned",
+      "scenario": "correction",
+      "repetition": 1
+    },
+    {
+      "id": "0de6985bbd25c7dc",
+      "provider": "gemini-live",
+      "condition": "common",
+      "scenario": "failed-payment",
+      "repetition": 2
+    }
+  ],
+  "limitations": "Scripted synthetic caller, explicit turns where supported; no live barge-in or emotional-voice inference test. Caller audio is reused across providers and prompt conditions. Recordings preserve arrival gaps with simulated agent playout; latency is provider PCM arrival, not measured loudspeaker output. Provider transcripts are not independent accuracy verification. No tools or real banking actions are executed. Provider-specific prompts are documented starting configurations, not proven optimal tuning.",
+  "plan_hash": "0e677fb5d8fd20d8ca6a59ef63d7bd7617ec4b4105c559d92ffc483ad65854ba"
+}

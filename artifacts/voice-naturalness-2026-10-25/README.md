@@ -1,5 +1,7 @@
 # Blind voice listening test — 25 October 2026
 
+This is comparison 1. The [comparison menu](../voice-comparisons/index.html) also offers the new advanced multi-turn conversation comparison.
+
 This is the latest completed local matched-script recording set (`naturalness-2026-10-25b`): 48 clips covering five providers, with two ElevenLabs voices. Each voice reads six banking lines, with two additional telephone-quality clips.
 
 ## Review on another machine

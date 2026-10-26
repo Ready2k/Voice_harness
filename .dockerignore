@@ -17,6 +17,7 @@
 !artifacts/pricing/
 !artifacts/pricing/**
 !scripts/
+!scripts/voice_conversation.py
 !scripts/probe/
 !scripts/probe/package.json
 !scripts/probe/package-lock.json

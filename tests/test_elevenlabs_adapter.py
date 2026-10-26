@@ -328,8 +328,13 @@ class AgentProvisioningTests(unittest.TestCase):
             def json(self): return self._body
 
         class Http:
-            def post(self, url, json): calls.append(("POST", url)); return Response(200, {"agent_id": "agent_new"})
-            def patch(self, url, json): calls.append(("PATCH", url)); return Response(200, {"agent_id": "agent_new"})
+            def post(self, url, json):
+                calls.append(("POST", url))
+                return Response(200, {"agent_id": "agent_new"})
+
+            def patch(self, url, json):
+                calls.append(("PATCH", url))
+                return Response(200, {"agent_id": "agent_new"})
 
         with tempfile.TemporaryDirectory() as d:
             env = {"ELEVENLABS_API_KEY": KEY, "ELEVENLABS_AGENT_STATE": f"{d}/s.json"}

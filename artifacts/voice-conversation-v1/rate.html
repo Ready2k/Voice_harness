@@ -1,0 +1,48 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Blind conversation ratings</title>
+<style>body{font:17px/1.5 system-ui;max-width:850px;margin:30px auto;padding:0 18px;color:#172336;background:#f5f7fa}
+section{background:white;border:1px solid #cbd4df;border-radius:12px;padding:20px;margin:20px 0}audio{width:100%}
+label{display:inline-block;margin:8px 18px 8px 0}select,button{font:inherit;padding:7px}button{cursor:pointer}
+.top{position:sticky;top:0;background:#f5f7fa;padding:12px 0}summary{cursor:pointer}</style></head><body>
+<p><a href="index.html">Advanced comparison status</a> · <a href="../voice-comparisons/index.html">Choose comparison</a></p>
+<h1>Blind conversation ratings</h1><p>0 of 120 conversations ready</p>
+<p>Listen to the full exchange. Caller is on the left, assistant on the right; use both headphones.
+Score the assistant from 1 (poor) to 5 (excellent). Natural delivery: human rhythm and intonation.
+Appropriate tone: suits the situation. Clarity: easy to understand. Flow: coherent, attentive and not repetitive.
+Scenario accuracy: matches the facts and constraints in the review notes. Overall human likeness: how natural the interaction feels.
+Rate sound and behaviour, rather than your favourite accent.</p>
+<p>These are scripted exchanges, not a live interruption test. Pauses are retained using simulated playback timing.
+The voice may suggest its provider; identities and prompt conditions are hidden.</p>
+<div class="top"><label>Reviewer code <input id="reviewer" maxlength="60" placeholder="e.g. reviewer-a"></label>
+<span id="count" role="status"></span> <button id="save">Download ratings</button><span id="message" role="status"></span></div>
+<div id="list"></div><script>
+const ITEMS = [], AXES = {"naturalness": "Natural delivery", "appropriateness": "Appropriate tone", "clarity": "Clarity", "flow": "Conversation flow", "accuracy": "Scenario accuracy", "overall": "Overall human likeness"}, PLAN = "0e677fb5d8fd20d8ca6a59ef63d7bd7617ec4b4105c559d92ffc483ad65854ba";
+const reviewer=document.getElementById("reviewer"), controls=[];
+const storageKey = () => "conversation-ratings-" + PLAN + "-" + reviewer.value.trim();
+let ratings = {};
+const order = [...ITEMS];
+// Each reviewer gets a fresh order. Only anonymous IDs and scenario descriptions are embedded here.
+for(let i=order.length-1;i>0;i--){const a=new Uint32Array(1);crypto.getRandomValues(a);const j=a[0]%(i+1);[order[i],order[j]]=[order[j],order[i]];}
+function count(){document.getElementById("count").textContent=ITEMS.filter(i=>Object.keys(AXES).every(a=>ratings[i.id]?.[a])).length+" of "+ITEMS.length+" rated";}
+for(const item of order){
+ const card=document.createElement("section"), title=document.createElement("h2"), audio=document.createElement("audio");
+ title.textContent=item.title+" · Sample "+(order.indexOf(item)+1);audio.controls=true;audio.preload="none";audio.src="clips/"+item.id+".wav";
+ card.append(title,audio);
+ for(const [axis,text] of Object.entries(AXES)){
+  const label=document.createElement("label"), select=document.createElement("select");label.append(text+" ");
+  for(const v of ["",1,2,3,4,5]){const o=document.createElement("option");o.value=v;o.textContent=v||"Unrated";select.append(o);}
+  select.disabled=true;controls.push({select,id:item.id,axis});
+  select.onchange=()=>{ratings[item.id]??={};if(select.value)ratings[item.id][axis]=Number(select.value);else delete ratings[item.id][axis];
+   try{localStorage.setItem(storageKey(),JSON.stringify(ratings));}catch{}count();};label.append(select);card.append(label);
+ }
+ const details=document.createElement("details"), summary=document.createElement("summary"), note=document.createElement("p");
+ summary.textContent="Scenario review notes";note.textContent=item.review;details.append(summary,note);card.append(details);document.getElementById("list").append(card);
+}
+reviewer.onchange=()=>{ratings={};try{ratings=JSON.parse(localStorage.getItem(storageKey())||"{}");}catch{}
+ for(const {select,id,axis} of controls){select.disabled=!reviewer.value.trim();select.value=ratings[id]?.[axis]||"";}count();};
+document.getElementById("save").onclick=()=>{
+ if(!reviewer.value.trim()){document.getElementById("message").textContent=" Enter a reviewer code first.";reviewer.focus();return;}
+ const selected=Object.fromEntries(ITEMS.filter(i=>ratings[i.id]).map(i=>[i.id,ratings[i.id]]));
+ const url=URL.createObjectURL(new Blob([JSON.stringify({plan_hash:PLAN,reviewer_id:reviewer.value.trim(),ratings:selected},null,2)],{type:"application/json"}));
+ const a=document.createElement("a");a.href=url;a.download="conversation-ratings.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+};count();</script></body></html>

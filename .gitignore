@@ -11,3 +11,4 @@ node_modules/
 .claude/worktrees/
 .ci-images
 .DS_Store
+artifacts/**/.record.lock

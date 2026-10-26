@@ -80,7 +80,7 @@ def same_words(line, said):
 async def speak(provider, voice, text, timeout=60):
     """One fresh session: the provider's PCM (24 kHz) for ``text``. ElevenLabs' agent LLM sometimes answers the line
     instead of reading it, so its own transcript is checked and the line retried."""
-    for attempt in range(4):
+    for _attempt in range(4):
         pcm, said = await speak_once(provider, voice, text, timeout)
         if provider != "elevenlabs-live" or same_words(text, said):
             return pcm
@@ -254,7 +254,7 @@ def spearman(a, b):
         return None
     ra, rb = ranks(a), ranks(b)
     ma, mb = sum(ra) / len(ra), sum(rb) / len(rb)
-    num = sum((x - ma) * (y - mb) for x, y in zip(ra, rb))
+    num = sum((x - ma) * (y - mb) for x, y in zip(ra, rb, strict=False))
     den = (sum((x - ma) ** 2 for x in ra) * sum((y - mb) ** 2 for y in rb)) ** 0.5
     return num / den if den else None
 
