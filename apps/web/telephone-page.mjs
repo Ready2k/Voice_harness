@@ -13,9 +13,14 @@ function applyScenarioDefaults(force = false) {
 }
 field('scenario').addEventListener('change', () => { applyScenarioDefaults(true); applySetupTemplate(); updateAgent(); });
 field('response_mode').addEventListener('change', updateAgent);
+field('audio_mode').addEventListener('change', updateAgent);
 field('provider_config_id').addEventListener('change', updateAgent);
 function updateAgent() {
   const ai = field('response_mode').value === 'ai';
+  field('audio_mode').querySelector('[value="native"]').disabled = !ai;
+  if (!ai) field('audio_mode').value = 'gated';
+  field('parallel_speech_checks').disabled = field('audio_mode').value === 'native';
+  if (field('parallel_speech_checks').disabled) field('parallel_speech_checks').checked = false;
   $('fixed-editor').hidden = ai;
   for (const node of $('fixed-editor').querySelectorAll('input, textarea')) node.required = !ai;
   const provider = providers.find(p => p.provider_config_id === field('provider_config_id').value);
@@ -88,7 +93,7 @@ function render(items) {
         card.append(el('p', '', call.setup.call_setup.goal));
         const brief = el('details'); brief.append(el('summary', '', 'Call brief & supplied details'), el('pre', '', JSON.stringify(call.setup.call_setup, null, 2))); card.append(brief);
       }
-      card.append(el('p', 'muted', (call.setup.response_mode === 'static' ? 'Static phrases' : 'AI replies') + ' · ' + (provider?.label ?? call.setup.provider_config_id) + ' · ' + call.setup.scenario));
+      card.append(el('p', 'muted', (call.setup.response_mode === 'static' ? 'Static phrases' : 'AI replies') + ' · ' + (provider?.label ?? call.setup.provider_config_id) + ' · ' + call.setup.scenario + ' · ' + (call.setup.audio_mode === 'native' ? 'Native voice · unassessed' : 'Gated speech')));
     }
     if (call.state === 'running') {
       card.append(el('p', '', 'Preparing or calling. Stop requests hangup and preserves the evidence.'));

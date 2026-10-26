@@ -48,6 +48,13 @@ class StreamResampler:
         out = self._stream.resample_chunk(np.frombuffer(pcm, dtype="<i2"))
         return out.astype("<i2").tobytes()
 
+    def finish(self) -> bytes:
+        """Flush the final filter tail; the stream must not be reused afterwards."""
+        if self._stream is None:
+            return b""
+        out = self._stream.resample_chunk(np.array([], dtype="int16"), last=True)
+        return out.astype("<i2").tobytes()
+
 
 def chunk(pcm: bytes, rate: int = HARNESS_RATE, ms: int = CHUNK_MS) -> list[bytes]:
     """Split into whole ``ms`` chunks; a short final chunk is kept (not padded)."""

@@ -1,4 +1,4 @@
-"""Versioned provider-neutral target instructions and reproducible prompt bindings."""
+"""Versioned banking instructions, provider-specific conversational style and exact prompt bindings."""
 
 import hashlib
 import json
@@ -35,10 +35,36 @@ Authority:
 """
 
 
-def instructions(profile):
-    if profile != "standardised-v2":
+ADVANCED_STYLE = """Use one or two short spoken sentences unless the caller asks for detail. Ask at most one question at a time.
+Use everyday words and contractions, without markdown or stage directions. Explain amounts clearly when spoken.
+Adapt to the caller's words: acknowledge distress briefly, then offer a practical next step. Avoid exaggerated sympathy.
+Remember corrections and earlier details. Do not repeat greetings, stock acknowledgements or information unnecessarily.
+If the caller asks for a simpler explanation or repetition, rephrase it. Do not add filler to every response.
+These style instructions do not waive verification, confirmation, tool-result grounding or any authority rule.
+For questions about identity-verification policy, call get_policy_text with policy_id identity and version 1.
+Answer from that successful result rather than reciting the system instructions. If it fails, explain that you cannot confirm the policy.
+"""
+
+
+def instructions(profile, provider=None):
+    if profile == "standardised-v2":
+        return STANDARDISED_V2
+    if profile != "advanced-v1":
         raise ValueError("UNKNOWN_TARGET_PROMPT_PROFILE")
-    return STANDARDISED_V2
+    if provider == "xai-voice-live":
+        return ("## Role & Persona\nYou are a calm, approachable banking assistant.\n"
+                "## Objective\nHelp the caller complete their banking request using the available tools.\n"
+                "## Conversation Flow\nAnswer directly, then give the next useful step.\n"
+                "## Guardrails & Escalation\n" + STANDARDISED_V2 + "\n## Voice & Communication Style\n" + ADVANCED_STYLE)
+    if provider == "nova-sonic-live":
+        return STANDARDISED_V2 + "\nGive a direct answer first, then only the explanation needed for listening comprehension.\n" + ADVANCED_STYLE
+    if provider == "elevenlabs-live":
+        return "# Role and banking rules\n" + STANDARDISED_V2 + "\n# Goal\nHelp the caller using available tools.\n# Tone\n" + ADVANCED_STYLE
+    if provider == "gemini-live":
+        return STANDARDISED_V2 + "\n# Conversation style\n" + ADVANCED_STYLE + "Respond to expressed concerns without assuming an emotion.\n"
+    if provider == "openai-realtime-live":
+        return STANDARDISED_V2 + "\n# Personality and tone\n" + ADVANCED_STYLE + "\n# Pacing\nSpeak at an unhurried conversational pace.\n"
+    raise ValueError("ADVANCED_PROMPT_REQUIRES_LIVE_PROVIDER")
 
 
 def provenance(profile, text, tools):
@@ -46,10 +72,10 @@ def provenance(profile, text, tools):
     tool_json = json.dumps(tools, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
     return {
         "profile": profile,
-        "comparison_track": "historical" if profile == "legacy-v1" else "standardised",
+        "comparison_track": "historical" if profile == "legacy-v1" else ("advanced" if profile == "advanced-v1" else "standardised"),
         "instructions": text,
         "instructions_sha256": hashlib.sha256(text.encode()).hexdigest(),
         "tools": tools,
         "tools_sha256": hashlib.sha256(tool_json.encode()).hexdigest(),
-        "vendor_tuned": False,
+        "vendor_tuned": profile == "advanced-v1",
     }

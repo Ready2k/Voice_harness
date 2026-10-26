@@ -594,6 +594,12 @@ class SchedulerSafeguards(unittest.TestCase):
         self.assertEqual(len(self.launched), 4)
         self.assertEqual(self.p["phase"], "scored")
 
+    def test_advanced_profile_is_used_for_preflight_and_scored_runs(self):
+        self.p["prompt_profile"] = "advanced-v1"
+        self.pass_preflight()
+        self.assertEqual(len(self.launched), 4)
+        self.assertTrue(all(config["prompt_profile"] == "advanced-v1" for _, config, _ in self.launched))
+
     def test_http_403_pauses_all_providers_without_retrying_or_launching_scored_work(self):
         self.tick()
         self.settle("run_0", "PROVIDER_HTTP_403")

@@ -31,6 +31,7 @@ class TelephoneRequest(BaseModel):
     max_seconds: int = Field(default=180, ge=20, le=180)
     turn_quiet_ms: int = Field(default=1500, ge=200, le=2000)
     vad_silence_ms: int = Field(default=900, ge=300, le=1500)
+    audio_mode: str = Field(default="gated", pattern=r"^(gated|native)$")
     parallel_speech_checks: bool = False
     call_setup: CallSetup | None = None
 
@@ -104,6 +105,8 @@ class TelephoneCalls:
 
     async def start(self, request):
         async with self.lock:
+            if request.audio_mode == "native" and request.response_mode != "ai":
+                raise HTTPException(422, "NATIVE_AUDIO_REQUIRES_AI_RESPONSES")
             if self.process and self.process.returncode is None:
                 raise HTTPException(409, "TELEPHONE_CALL_ALREADY_ACTIVE")
             env, tunnel, public, missing = self.configuration()
@@ -124,7 +127,7 @@ class TelephoneCalls:
             (path / "setup.json").chmod(0o600)
             command = [sys.executable, str(self.repo / "scripts/delegate_phone_demo.py"), "--to", destination,
                        "--caller-id", caller, "--output", str((path / "evidence").resolve()), "--env-file", str(self.repo / ".env") if (self.repo / ".env").exists() else os.devnull]
-            for key in ("route_id", "scenario", "routing_mode", "max_seconds", "turn_quiet_ms", "vad_silence_ms", "provider_config_id"):
+            for key in ("route_id", "scenario", "routing_mode", "max_seconds", "turn_quiet_ms", "vad_silence_ms", "provider_config_id", "audio_mode"):
                 command += ["--" + key.replace("_", "-"), str(getattr(request, key))]
             if request.subtest_id:
                 command += ["--subtest-id", request.subtest_id]

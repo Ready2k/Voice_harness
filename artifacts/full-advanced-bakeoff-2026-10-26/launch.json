@@ -1,0 +1,17 @@
+{
+  "bakeoff_id": "bko_3c9b22aa1a9e4386a791b966967a87dc",
+  "request": {
+    "name": "Full advanced provider bake-off \u2014 26 October 2026",
+    "prompt_profile": "advanced-v1",
+    "provider_config_ids": [
+      "openai-realtime-live",
+      "nova-sonic-live",
+      "xai-voice-live",
+      "gemini-live",
+      "elevenlabs-live"
+    ],
+    "repetitions": 3,
+    "group_balanced": true
+  },
+  "created_at": "2026-10-26T15:43:09Z"
+}

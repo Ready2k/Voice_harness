@@ -128,7 +128,7 @@ async function launch() {
     const created = await post('/api/v1/bakeoffs', {
       name: $('bo-name').value.trim() || 'Bake-off ' + new Date().toISOString().slice(0, 16).replace('T', ' '),
       provider_config_ids: chosenProviders(), scenario_ids: scenarios.length === all.length ? [] : scenarios,
-      repetitions: repsValue(),
+      repetitions: repsValue(), prompt_profile: $('bo-prompt-profile').value,
     });
     $('new-drawer').open = false;
     await loadList();
@@ -300,6 +300,7 @@ function cloneCurrent() {
   const reps = Math.max(1, ...lastBody.cells.map(c => c.repetition + 1));
   setSide(true); $('new-drawer').open = true;
   $('bo-name').value = `Copy of ${b.name}`.slice(0, 120);
+  $('bo-prompt-profile').value = b.prompt_profile || 'standardised-v2';
   const left = [];
   for (const input of $('bo-providers').querySelectorAll('input')) {
     const wanted = b.providers.includes(input.value);

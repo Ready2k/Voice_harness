@@ -3590,6 +3590,15 @@
             "title": "Repetitions",
             "default": 1
           },
+          "prompt_profile": {
+            "type": "string",
+            "enum": [
+              "standardised-v2",
+              "advanced-v1"
+            ],
+            "title": "Prompt Profile",
+            "default": "standardised-v2"
+          },
           "weights": {
             "$ref": "#/components/schemas/Weights",
             "default": {
@@ -4511,7 +4520,8 @@
             "type": "string",
             "enum": [
               "standardised-v2",
-              "legacy-v1"
+              "legacy-v1",
+              "advanced-v1"
             ],
             "title": "Prompt Profile",
             "default": "standardised-v2"
@@ -4903,6 +4913,12 @@
             "minimum": 300.0,
             "title": "Vad Silence Ms",
             "default": 900
+          },
+          "audio_mode": {
+            "type": "string",
+            "pattern": "^(gated|native)$",
+            "title": "Audio Mode",
+            "default": "gated"
           },
           "parallel_speech_checks": {
             "type": "boolean",

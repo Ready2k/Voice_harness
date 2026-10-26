@@ -217,13 +217,13 @@ def session_metadata(provider_config_id, requested_model_id, receipt, connection
         "requested_model_id": requested_model_id, "returned_model_id": receipt.get("model_id"),
         "provider_session_id": receipt.get("provider_session_id"),
         **capability_binding(provider_config_id),
-        "target_prompt": prompt_provenance(prompt_profile, LEGACY_INSTRUCTIONS if prompt_profile == "legacy-v1" else target_instructions(prompt_profile), TOOLS),
+        "target_prompt": prompt_provenance(prompt_profile, LEGACY_INSTRUCTIONS if prompt_profile == "legacy-v1" else target_instructions(prompt_profile, provider_config_id), TOOLS),
         **(connection or {}),
     }
 
 
 def _adapter(provider_config_id, prompt_profile="standardised-v2"):
-    instructions = LEGACY_INSTRUCTIONS if prompt_profile == "legacy-v1" else target_instructions(prompt_profile)
+    instructions = LEGACY_INSTRUCTIONS if prompt_profile == "legacy-v1" else target_instructions(prompt_profile, provider_config_id)
     config = {"tools": TOOLS}
     if provider_config_id == "openai-realtime-live":
         from .adapters.openai_realtime import OpenAIRealtimeAdapter

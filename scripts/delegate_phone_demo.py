@@ -21,6 +21,8 @@ from voice_harness.telephony_demo import DelegateDemo, TwilioError, load_environ
 
 async def run(args):
     from voice_harness.telephone_setup import CallSetup
+    if args.audio_mode == "native" and args.response_mode != "ai":
+        raise ValueError("NATIVE_AUDIO_REQUIRES_AI_RESPONSES")
     setup = CallSetup.model_validate_json(sys.stdin.buffer.read(131073)) if args.call_setup_stdin else None
     brief = setup.brief(args.scenario) if setup and args.response_mode == "ai" else json.loads(Path(args.brief).read_text()) if args.brief else None
     env = load_environment(Path(args.env_file))
@@ -35,7 +37,7 @@ async def run(args):
                         brief=brief, call_setup=setup,
                         routing_mode=args.routing_mode,
                         turn_quiet_ms=args.turn_quiet_ms, vad_silence_ms=args.vad_silence_ms,
-                        parallel_speech_checks=args.parallel_speech_checks,
+                        parallel_speech_checks=args.parallel_speech_checks, audio_mode=args.audio_mode,
                         speech_cache=root.parent.parent / "delegate-speech-cache",
                         task=(setup.goal if setup else args.task) or ("Say I've lost my wallet and follow the demo questions using only supplied facts."
                                            if args.scenario == "lost-wallet" else
@@ -154,6 +156,7 @@ def main():
     parser.add_argument("--routing-mode", choices=["dtmf", "voice"], default="dtmf", help="Submit bound demo IDs as keypad tones or spoken digits")
     parser.add_argument("--turn-quiet-ms", type=int, default=1500, help="Controller quiet wait after transcript, 200–2000 ms")
     parser.add_argument("--vad-silence-ms", type=int, default=900, help="Provider VAD silence, 300–1500 ms")
+    parser.add_argument("--audio-mode", choices=["gated", "native"], default="gated", help="Gated shared TTS or unassessed native provider speech (requires AI responses)")
     parser.add_argument("--parallel-speech-checks", action="store_true", help="Run text review alongside speculative TTS/ASR; release only after both pass")
     parser.add_argument("--subtest-id", help="Optional operator-supplied sub-test keypad value; never guessed")
     parser.add_argument("--scenario", choices=["balance", "lost-wallet"], default="balance")

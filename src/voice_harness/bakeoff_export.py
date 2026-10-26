@@ -19,6 +19,8 @@ SHORT = {"openai-realtime-live": "OpenAI", "nova-sonic-live": "Nova", "xai-voice
 
 def report_data(payload, *, weights=None, title=None, source="Voice Harness ledger", generated_at=None):
     """What the renderer draws: the report plus the per-run observations behind it."""
+    if payload.get("prompt_profile") == "advanced-v1":
+        source += " · Advanced provider-specific prompts (advanced-v1)"
     return {
         "title": title or payload["name"], "source": source,
         "generated_at": generated_at or time.strftime("%Y-%m-%d %H:%M UTC", time.gmtime()),

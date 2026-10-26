@@ -1,0 +1,4843 @@
+{
+  "source": "paused export before credit replenishment",
+  "bakeoff_id": "bko_3c9b22aa1a9e4386a791b966967a87dc",
+  "completed_runs_to_reuse": [
+    {
+      "scenario_id": "commit-cancel-claimed-confirmation-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_0926de66be644b04a6c6020fd6b3a8d0"
+    },
+    {
+      "scenario_id": "commit-cancel-claimed-confirmation-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_39f767a3da5748d3ade26b8dcfed9782"
+    },
+    {
+      "scenario_id": "commit-cancel-claimed-confirmation-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_5d5eabfbbc1b43bbace25c4f17254ef3"
+    },
+    {
+      "scenario_id": "commit-cancel-claimed-confirmation-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_f071012286494edcbe8b5bbabce27644"
+    },
+    {
+      "scenario_id": "commit-cancel-claimed-confirmation-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_8a35498a59a44bceadcea55fd3a26101"
+    },
+    {
+      "scenario_id": "commit-cancel-confirmed-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_7fedf5af2a4044c39f1304ce4511927e"
+    },
+    {
+      "scenario_id": "commit-cancel-confirmed-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_e21ff21d2e8a423c81a96809f5fa0ad3"
+    },
+    {
+      "scenario_id": "commit-cancel-confirmed-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_2b1f143485b1416ca98ebbe867934951"
+    },
+    {
+      "scenario_id": "commit-cancel-confirmed-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_e619788d35bc4430827d48eb3ee8827e"
+    },
+    {
+      "scenario_id": "commit-cancel-confirmed-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_a98eb7bd81584acab083bc0ad366076f"
+    },
+    {
+      "scenario_id": "commit-cancel-unconfirmed-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_542217eb0f5f4ec4bbae1fd4f5397579"
+    },
+    {
+      "scenario_id": "commit-cancel-unconfirmed-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_8f5bf87835eb442ca695ea09406ec55b"
+    },
+    {
+      "scenario_id": "commit-cancel-unconfirmed-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_fd30f67138ff4c34b3b678574d726e66"
+    },
+    {
+      "scenario_id": "commit-cancel-unconfirmed-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_f15323b4ba75464f83e9fc19b4ce2a09"
+    },
+    {
+      "scenario_id": "commit-cancel-unconfirmed-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_3d40e498f2b74be1b48c1e963bd311b4"
+    },
+    {
+      "scenario_id": "happy-balance-clean-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_d09ca39f45934ba38bd72484c368eebe"
+    },
+    {
+      "scenario_id": "happy-balance-clean-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_9d63d87191da423a89732a49b8e6f3bb"
+    },
+    {
+      "scenario_id": "happy-balance-clean-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_f79f1ace795a4c1fa79b56f0709d05dd"
+    },
+    {
+      "scenario_id": "happy-balance-clean-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_52acc6d1b9f84d5298263159b4c3e0eb"
+    },
+    {
+      "scenario_id": "happy-balance-clean-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_0d9396eb6235406287bc642d2189ccea"
+    },
+    {
+      "scenario_id": "happy-balance-street-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_9532a11786444b08882f4eaaa2c80e79"
+    },
+    {
+      "scenario_id": "happy-balance-street-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_2676de7ee4c9403d93a45c3ce89f0b59"
+    },
+    {
+      "scenario_id": "happy-balance-street-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_6afd69e0cafd44128dbe2ad7230ead0f"
+    },
+    {
+      "scenario_id": "happy-balance-street-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_324b00d40fae436aa0c122b0fca5a494"
+    },
+    {
+      "scenario_id": "happy-balance-street-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_a6d73f7454f6461a936ba12fd2f10037"
+    },
+    {
+      "scenario_id": "happy-balance-telephone-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_aca3d583518c44ab8ab0c6f8bbc667fa"
+    },
+    {
+      "scenario_id": "happy-balance-telephone-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_a4894e32a1964f00af41ba2bcf2eb4fa"
+    },
+    {
+      "scenario_id": "happy-balance-telephone-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_eaa6c59f6c7e489d81bbe110b72f4ee6"
+    },
+    {
+      "scenario_id": "happy-balance-telephone-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_4a4ddc5bcb294bf39e0298ccfb2debbe"
+    },
+    {
+      "scenario_id": "happy-balance-telephone-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_aefa1f6e33f4412f9b4b498ebe767b53"
+    },
+    {
+      "scenario_id": "happy-balance-us-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_e777485877334b1288e9cf05eae3a058"
+    },
+    {
+      "scenario_id": "happy-balance-us-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_96486dcff6e04764ba4c2aaa0371aca0"
+    },
+    {
+      "scenario_id": "happy-balance-us-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_3883500835ff4dfca447a49ae926bf09"
+    },
+    {
+      "scenario_id": "happy-balance-us-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_105e3b0fb4bd4deab054c04b8bb01997"
+    },
+    {
+      "scenario_id": "happy-balance-us-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_621d4ac34ffc4f6188ecbbca73629159"
+    },
+    {
+      "scenario_id": "happy-handoff-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_c173f0ba83364ac49ead6b541efccb29"
+    },
+    {
+      "scenario_id": "happy-handoff-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_1da5e200bdf94bc5923e2fae79e7cec3"
+    },
+    {
+      "scenario_id": "happy-handoff-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_421cbc859e324f6fbf5e1c80629c6f56"
+    },
+    {
+      "scenario_id": "happy-handoff-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_b9473e825ebb4c8ca2a18154a2cb08c3"
+    },
+    {
+      "scenario_id": "happy-handoff-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_87dc2084a1814a05a22a77a7d6b08eb9"
+    },
+    {
+      "scenario_id": "happy-policy-question-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_89a7260cc2d942e6b13bdf85fb1d3f3a"
+    },
+    {
+      "scenario_id": "happy-policy-question-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_4dd0a29993ee46f58688f0f2e6cb8060"
+    },
+    {
+      "scenario_id": "happy-policy-question-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_29f4605026024e7786fd5d1f44d8fb86"
+    },
+    {
+      "scenario_id": "happy-policy-question-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_039723c95ecf4f13b64cac5ca54ce215"
+    },
+    {
+      "scenario_id": "happy-policy-question-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_5bbd9895b8d847f39564c7f471b3f963"
+    },
+    {
+      "scenario_id": "happy-recent-transactions-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_1a4a2ba6105443e3b342ccd2dc9d6ca1"
+    },
+    {
+      "scenario_id": "happy-recent-transactions-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_9b14db1f2c434b14bd718aa0f8487545"
+    },
+    {
+      "scenario_id": "happy-recent-transactions-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_28daab695ecd4c89824970feb598658a"
+    },
+    {
+      "scenario_id": "happy-recent-transactions-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_8d337e5f0fcd4627a3d95d294b64a0c7"
+    },
+    {
+      "scenario_id": "happy-recent-transactions-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_2bd219efd3c848aaa77b79f350ca9f82"
+    },
+    {
+      "scenario_id": "happy-transaction-details-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_ce05c11b65304605959f7a3734036161"
+    },
+    {
+      "scenario_id": "happy-transaction-details-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_d74a1087687d4e82afe714b73acfa31c"
+    },
+    {
+      "scenario_id": "happy-transaction-details-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_f05bfafeaf7e46f39a8ab7590b8b63b5"
+    },
+    {
+      "scenario_id": "happy-transaction-details-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_15150092d88d47d1aeea41676e74559c"
+    },
+    {
+      "scenario_id": "happy-transaction-details-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_75ed680fdf2a4d7bb0556cefc32ac941"
+    },
+    {
+      "scenario_id": "happy-verify-retry-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_4463dc67844e42eb8eba96d96ab6405c"
+    },
+    {
+      "scenario_id": "happy-verify-retry-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_f650afce9d8b45d89980b6987d06be48"
+    },
+    {
+      "scenario_id": "happy-verify-retry-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_9fa8d8cdabbb45d3a341007019741ab1"
+    },
+    {
+      "scenario_id": "happy-verify-retry-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_4291d56badde4a63bebb1d8a4ff4eacf"
+    },
+    {
+      "scenario_id": "happy-verify-retry-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_633889aafbe64c959557400d23b46f78"
+    },
+    {
+      "scenario_id": "identity-authority-employee-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_2cdf1ff4f5c047b29dad6f13e6406aaf"
+    },
+    {
+      "scenario_id": "identity-authority-employee-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_53d5444ee44d427b8681d743892a422a"
+    },
+    {
+      "scenario_id": "identity-authority-employee-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_77e96042abfb4a859b44f6836a9bd521"
+    },
+    {
+      "scenario_id": "identity-authority-employee-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_a964fabb38e544c2808bfed32f1928ac"
+    },
+    {
+      "scenario_id": "identity-authority-employee-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_ba5f4cbcdd8a4fc9bc6e2716d542b172"
+    },
+    {
+      "scenario_id": "identity-authority-urgency-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_963a2f1df73a4ba6984f4bdb0e816b4f"
+    },
+    {
+      "scenario_id": "identity-authority-urgency-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_d2ba88810cf34610a50cf59a0a594f4c"
+    },
+    {
+      "scenario_id": "identity-authority-urgency-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_123a5015d16a43dea915d8ee42c51082"
+    },
+    {
+      "scenario_id": "identity-authority-urgency-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_17026fa1af3e4fc1adc88c41816b3aa9"
+    },
+    {
+      "scenario_id": "identity-authority-urgency-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_523b89181b77400fb2877878179d714e"
+    },
+    {
+      "scenario_id": "identity-bereaved-en-gb-clean-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_bebcc820423b4766a4db47214df19f54"
+    },
+    {
+      "scenario_id": "identity-bereaved-en-gb-clean-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_df782dbb2a5445c2975f63b3e708e819"
+    },
+    {
+      "scenario_id": "identity-bereaved-en-gb-clean-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_1e580f2d04ba459289758bcbe8ef34c4"
+    },
+    {
+      "scenario_id": "identity-bereaved-en-gb-clean-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_c34b77458c3f49498f93eacd9b97dfda"
+    },
+    {
+      "scenario_id": "identity-bereaved-en-gb-clean-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_a7bd57571cbd44a2b41d3be7af5d3202"
+    },
+    {
+      "scenario_id": "identity-bereaved-en-gb-street-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_ff97521ae4b9487cb26a8ad8121ed832"
+    },
+    {
+      "scenario_id": "identity-bereaved-en-gb-street-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_d5b702e3ce5d4e0b8be67d502627fbb1"
+    },
+    {
+      "scenario_id": "identity-bereaved-en-gb-street-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_76121f3c89a044c59eca2c2fc4c577a2"
+    },
+    {
+      "scenario_id": "identity-bereaved-en-gb-street-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_c2fb18c6c22f460990f0b5316f7df5c4"
+    },
+    {
+      "scenario_id": "identity-bereaved-en-gb-street-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_f2a8f6b2199f457991b8debf4954c45b"
+    },
+    {
+      "scenario_id": "identity-bereaved-en-gb-telephone-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_1e606621ee574339b57a56dc2b7a6e86"
+    },
+    {
+      "scenario_id": "identity-bereaved-en-gb-telephone-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_d6b3b33389394af4a5e71a76a4da2185"
+    },
+    {
+      "scenario_id": "identity-bereaved-en-gb-telephone-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_d88136bdede64247b6e8d8631486da72"
+    },
+    {
+      "scenario_id": "identity-bereaved-en-gb-telephone-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_a14561f2e60d42e58f220a5e7ca90400"
+    },
+    {
+      "scenario_id": "identity-bereaved-en-gb-telephone-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_a16d258527ab4d0fa3b078bb5820c9c2"
+    },
+    {
+      "scenario_id": "identity-bereaved-en-us-clean-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_fdb5de745ddf4451ae950d6aa347215f"
+    },
+    {
+      "scenario_id": "identity-bereaved-en-us-clean-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_e2016ec731e74ea0a2076d1d8728ec5e"
+    },
+    {
+      "scenario_id": "identity-bereaved-en-us-clean-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_37b9d8ca0db7466388b311888797212e"
+    },
+    {
+      "scenario_id": "identity-bereaved-en-us-clean-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_43f2597dc92b4f0b9c7db35ccb8d3b8d"
+    },
+    {
+      "scenario_id": "identity-bereaved-en-us-clean-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_ecdb6f998c1a4e118393a8f41c5f0a04"
+    },
+    {
+      "scenario_id": "identity-bereaved-en-us-street-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_a0161d787074410f9854a0ad88482d0d"
+    },
+    {
+      "scenario_id": "identity-bereaved-en-us-street-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_e2d067080ea347ff93762aec3eacf102"
+    },
+    {
+      "scenario_id": "identity-bereaved-en-us-street-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_ca95958202fa4975b335c8ed73fc5468"
+    },
+    {
+      "scenario_id": "identity-bereaved-en-us-street-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_2defff9646bf48f48e9c761260923545"
+    },
+    {
+      "scenario_id": "identity-bereaved-en-us-street-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_5b0aaad37af84bfd95c5e88bc40ea40a"
+    },
+    {
+      "scenario_id": "identity-bereaved-en-us-telephone-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_0ea76df8fde948ca8d251b074af7277a"
+    },
+    {
+      "scenario_id": "identity-bereaved-en-us-telephone-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_705d77c152fa4d5eb7c3bc2cfa917c7b"
+    },
+    {
+      "scenario_id": "identity-bereaved-en-us-telephone-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_954d0ad51f94436bb98fe8ca7a3e85b0"
+    },
+    {
+      "scenario_id": "identity-bereaved-en-us-telephone-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_93285689db6d406b84c542eacbf489b7"
+    },
+    {
+      "scenario_id": "identity-bereaved-en-us-telephone-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_d532d04a5bfa41878a2d9aa0d66cff66"
+    },
+    {
+      "scenario_id": "identity-failed-auth-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_247a1f1874d54fedae427ca1da6d9ab2"
+    },
+    {
+      "scenario_id": "identity-failed-auth-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_cef91079830d412382f2782bfd507db0"
+    },
+    {
+      "scenario_id": "identity-failed-auth-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_246f346d05564554b0c1c0d650109dd8"
+    },
+    {
+      "scenario_id": "identity-failed-auth-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_302a2f91cf9e4be1a40c4ebf2d2c85df"
+    },
+    {
+      "scenario_id": "identity-failed-auth-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_66bcf67acf6d45868940e6e12d866ba1"
+    },
+    {
+      "scenario_id": "identity-fault-caller-interrupts-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_c1ba3dce3c784276810f0bdc63bd482c"
+    },
+    {
+      "scenario_id": "identity-fault-caller-interrupts-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_183f9dbc0b1c461cae5281873c60fe5d"
+    },
+    {
+      "scenario_id": "identity-fault-caller-interrupts-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_b45294bf4e314413ad5b871ee9a8ce2f"
+    },
+    {
+      "scenario_id": "identity-fault-caller-interrupts-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_e038a9a15dc44f8b885873723410cf45"
+    },
+    {
+      "scenario_id": "identity-fault-caller-interrupts-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_5dfda2a1aec24018aebab1d9f1da1bff"
+    },
+    {
+      "scenario_id": "identity-fault-noisy-line-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_aef0d6776c774e558d69443f1aa24bc9"
+    },
+    {
+      "scenario_id": "identity-fault-noisy-line-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_23458e8b408b41eda8af984a0422dfb0"
+    },
+    {
+      "scenario_id": "identity-fault-noisy-line-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_e1c948f2503744b99ddbf19e0f96273d"
+    },
+    {
+      "scenario_id": "identity-fault-noisy-line-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_e7810e49889440d4ac700431169e9374"
+    },
+    {
+      "scenario_id": "identity-fault-noisy-line-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_b7b2358a9d5842fe9bef9bb2aaf71bef"
+    },
+    {
+      "scenario_id": "identity-fault-tool-error-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_4c9c8ba86ff64f15b5b5a7382450dc35"
+    },
+    {
+      "scenario_id": "identity-fault-tool-error-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_9db5b1ba03994adda33043f601c77099"
+    },
+    {
+      "scenario_id": "identity-fault-tool-error-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_c9cfd10bc1d64164b9e715bf50cec004"
+    },
+    {
+      "scenario_id": "identity-fault-tool-error-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_c3956f784d2f49ea88176918ffbbe6eb"
+    },
+    {
+      "scenario_id": "identity-fault-tool-error-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_4231b74d62c746df9a95721838230941"
+    },
+    {
+      "scenario_id": "identity-fault-tool-latency-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_708f7904b73e43459bf58ac5ab526523"
+    },
+    {
+      "scenario_id": "identity-fault-tool-latency-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_ff6c7b43d3ad49ac86889fffcc435e14"
+    },
+    {
+      "scenario_id": "identity-fault-tool-latency-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_7efba747feeb4783bc61c137c566bb94"
+    },
+    {
+      "scenario_id": "identity-fault-tool-latency-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_5bfe25af0e8948c3b18c80536b72191b"
+    },
+    {
+      "scenario_id": "identity-fault-tool-latency-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_40a3abe8463c4902baf5f87ecd3bca6a"
+    },
+    {
+      "scenario_id": "identity-impatient-en-gb-clean-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_9397d2f784d445e2b7bdb596dd79ac12"
+    },
+    {
+      "scenario_id": "identity-impatient-en-gb-clean-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_2dc4e75a70e1481991c3f337d69dffd3"
+    },
+    {
+      "scenario_id": "identity-impatient-en-gb-clean-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_f1d25aebd86849df80a2a7a71455439a"
+    },
+    {
+      "scenario_id": "identity-impatient-en-gb-clean-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_133a9eeca27c4edd93e505319ebb1d6e"
+    },
+    {
+      "scenario_id": "identity-impatient-en-gb-clean-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_94c9d855d1fb45f5960da5041a6cc52d"
+    },
+    {
+      "scenario_id": "identity-impatient-en-gb-street-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_a6d453f7afa448ce81f6ffaa10b02b63"
+    },
+    {
+      "scenario_id": "identity-impatient-en-gb-street-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_53a63d82791344df832b530c2bc79fb8"
+    },
+    {
+      "scenario_id": "identity-impatient-en-gb-street-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_3db136891c68498ead422c3b16d22703"
+    },
+    {
+      "scenario_id": "identity-impatient-en-gb-street-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_e36ec209e28d4646847a0b75d22dd4b0"
+    },
+    {
+      "scenario_id": "identity-impatient-en-gb-street-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_e02596bcac964f75abe8362deedced2e"
+    },
+    {
+      "scenario_id": "identity-impatient-en-gb-telephone-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_6061f9613adb4817811978588aa18fda"
+    },
+    {
+      "scenario_id": "identity-impatient-en-gb-telephone-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_f470ec86a44b4da1bc26b6e604936d75"
+    },
+    {
+      "scenario_id": "identity-impatient-en-gb-telephone-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_56c3cddd5e784336be51573ad94c8e6f"
+    },
+    {
+      "scenario_id": "identity-impatient-en-gb-telephone-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_00455807d71240a68bd316a5fe70f6a8"
+    },
+    {
+      "scenario_id": "identity-impatient-en-gb-telephone-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_dd722e84e0ca4eda909a4cbc9d2c575d"
+    },
+    {
+      "scenario_id": "identity-impatient-en-us-clean-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_bcb56741562f4a2e8e7a8337d98c47e9"
+    },
+    {
+      "scenario_id": "identity-impatient-en-us-clean-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_f014f91d07d1491d9c7676159416a3f2"
+    },
+    {
+      "scenario_id": "identity-impatient-en-us-clean-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_20ee7cd365d6425d8cad8f30a705fb40"
+    },
+    {
+      "scenario_id": "identity-impatient-en-us-clean-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_dee178ef2131468585de5f274c0c7910"
+    },
+    {
+      "scenario_id": "identity-impatient-en-us-clean-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_7daf2474bdf14c22869f2f7d16731afc"
+    },
+    {
+      "scenario_id": "identity-impatient-en-us-street-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_1bd98c7a210142719186c191c7309576"
+    },
+    {
+      "scenario_id": "identity-impatient-en-us-street-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_7ce1b0e4021e46b9bbcf0b1c4fca406d"
+    },
+    {
+      "scenario_id": "identity-impatient-en-us-street-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_ac408b176e9d4104bec240d3e3bef5b7"
+    },
+    {
+      "scenario_id": "identity-impatient-en-us-street-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_a2f7c5bc9ed74601a554c4c878b436e7"
+    },
+    {
+      "scenario_id": "identity-impatient-en-us-street-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_d1c19922171941d4b0982b497ad6301c"
+    },
+    {
+      "scenario_id": "identity-impatient-en-us-telephone-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_27c2619eafac411f96141120178424f6"
+    },
+    {
+      "scenario_id": "identity-impatient-en-us-telephone-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_0476e4516f844ce5a08b61bd0ba8f1da"
+    },
+    {
+      "scenario_id": "identity-impatient-en-us-telephone-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_f779e68d96004e41a9c188fe478aa8e5"
+    },
+    {
+      "scenario_id": "identity-impatient-en-us-telephone-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_986e3303c7494cbfa586e14c4a6c3d5c"
+    },
+    {
+      "scenario_id": "identity-impatient-en-us-telephone-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_62491cb9d0a54767b1934ca89c62e1bd"
+    },
+    {
+      "scenario_id": "identity-injection-fake-tool-result-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_9fd6451f7bcd41eeaa0baffe277eb471"
+    },
+    {
+      "scenario_id": "identity-injection-fake-tool-result-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_78a7b174e75c4175b4bc2c51228f0d91"
+    },
+    {
+      "scenario_id": "identity-injection-fake-tool-result-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_2529e3c00db0417e9984710a7358c9f6"
+    },
+    {
+      "scenario_id": "identity-injection-fake-tool-result-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_a0ef2c0946a64d66a88aa7631d07230b"
+    },
+    {
+      "scenario_id": "identity-injection-fake-tool-result-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_c4d0c42e19604414ae884b0b2891ce5f"
+    },
+    {
+      "scenario_id": "identity-injection-ignore-rules-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_090e54071cd84738b5b3a9e9a2c0df8b"
+    },
+    {
+      "scenario_id": "identity-injection-ignore-rules-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_5a8021be025d4fe88fb24bd8e486c8fe"
+    },
+    {
+      "scenario_id": "identity-injection-ignore-rules-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_6dc0ae7b70e14dd78b05407fdf5cd675"
+    },
+    {
+      "scenario_id": "identity-injection-ignore-rules-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_bfb3a2c5accf4b3ca3551e3f847487c5"
+    },
+    {
+      "scenario_id": "identity-injection-ignore-rules-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_320de0d48f774aa99ba01047a46169de"
+    },
+    {
+      "scenario_id": "identity-injection-reveal-instructions-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_24a7a684dccc4e4fb2964dfaa6d6c98c"
+    },
+    {
+      "scenario_id": "identity-injection-reveal-instructions-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_25425817c3a14460b539ac0db647f6d1"
+    },
+    {
+      "scenario_id": "identity-injection-reveal-instructions-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_39c16acc92da412bb432f64b1ee92489"
+    },
+    {
+      "scenario_id": "identity-injection-reveal-instructions-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_26702620d45a475db538a93e76cc27da"
+    },
+    {
+      "scenario_id": "identity-injection-reveal-instructions-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_96f42a8d745a4cdda41cf32fac32a1b2"
+    },
+    {
+      "scenario_id": "identity-social-en-gb-clean-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_ff470deb31084204ab03f234f79e60d1"
+    },
+    {
+      "scenario_id": "identity-social-en-gb-clean-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_9eb0f2a72d674e4a91390218810aa0fa"
+    },
+    {
+      "scenario_id": "identity-social-en-gb-clean-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_c58e3c2086ae420384e1346df655fb55"
+    },
+    {
+      "scenario_id": "identity-social-en-gb-clean-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_09e9f998a6ed477dab350e8ef8545f05"
+    },
+    {
+      "scenario_id": "identity-social-en-gb-clean-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_041b97cff22f4f929e6d1f37aae7b451"
+    },
+    {
+      "scenario_id": "identity-social-en-gb-street-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_ba5b9bf6da9e4648bbe55f93f8d87396"
+    },
+    {
+      "scenario_id": "identity-social-en-gb-street-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_e2c382146f76477682bca44cb7917a3d"
+    },
+    {
+      "scenario_id": "identity-social-en-gb-street-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_ddbce59322a3455fbae15b5956f8b5f6"
+    },
+    {
+      "scenario_id": "identity-social-en-gb-street-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_fa0c7c675cc34a84a9cf998c5597ac4b"
+    },
+    {
+      "scenario_id": "identity-social-en-gb-street-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_ac0f885ff89b4c039a119b70929c8824"
+    },
+    {
+      "scenario_id": "identity-social-en-gb-telephone-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_758944dccd0d4c3f8aaa94678b073d17"
+    },
+    {
+      "scenario_id": "identity-social-en-gb-telephone-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_d37d5eacc9f648bbb5957e8fcce4f5d2"
+    },
+    {
+      "scenario_id": "identity-social-en-gb-telephone-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_64e1d3b7473a4b76b2dca7e31d5963f5"
+    },
+    {
+      "scenario_id": "identity-social-en-gb-telephone-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_6fe70298d38d40a5afe6002215dfa4f9"
+    },
+    {
+      "scenario_id": "identity-social-en-gb-telephone-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_7e2416b799dd42c0bf4dcbddcd16959a"
+    },
+    {
+      "scenario_id": "identity-social-en-us-clean-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_746aa34e214a4f6cb8fb609d6c2e11c1"
+    },
+    {
+      "scenario_id": "identity-social-en-us-clean-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_ea7ed78bc3fb4537ad942811dcf322c0"
+    },
+    {
+      "scenario_id": "identity-social-en-us-clean-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_bb2920d11e69446e9193d50e12383280"
+    },
+    {
+      "scenario_id": "identity-social-en-us-clean-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_3584388a520f4ff696a8e7f12319db44"
+    },
+    {
+      "scenario_id": "identity-social-en-us-clean-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_8abafe4c4e39485eb032ebc8dd41659b"
+    },
+    {
+      "scenario_id": "identity-social-en-us-street-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_8c53514c8a3048ee851b37f27f2cef8f"
+    },
+    {
+      "scenario_id": "identity-social-en-us-street-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_528b9c15cf5d47b48e1190f876c39f76"
+    },
+    {
+      "scenario_id": "identity-social-en-us-street-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_7ba2d69d97d541d988c12d23bebe7e1d"
+    },
+    {
+      "scenario_id": "identity-social-en-us-street-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_2ed80492f2ba4ebf96a667e84acd7d1e"
+    },
+    {
+      "scenario_id": "identity-social-en-us-street-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_5b2dd5a0fb9240cb8a50a1710455a70b"
+    },
+    {
+      "scenario_id": "identity-social-en-us-telephone-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_7c70ce56ad7c4e0b907f17a73ced6748"
+    },
+    {
+      "scenario_id": "identity-social-en-us-telephone-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_76a5ff8978134e08bff833fd5aefc8ee"
+    },
+    {
+      "scenario_id": "identity-social-en-us-telephone-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_87d26159fed444ad8249b0d6408ed45c"
+    },
+    {
+      "scenario_id": "identity-social-en-us-telephone-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_03201d03235649d686fc35542eb96d1d"
+    },
+    {
+      "scenario_id": "identity-social-en-us-telephone-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_1b85e234913e40f9a6957ab74e7358dc"
+    },
+    {
+      "scenario_id": "commit-cancel-claimed-confirmation-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 1,
+      "run_id": "run_f4175fd9707e46068a607426fb1f28d8"
+    },
+    {
+      "scenario_id": "commit-cancel-claimed-confirmation-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 1,
+      "run_id": "run_d39115a3565c4d968e2244244ae46fa6"
+    },
+    {
+      "scenario_id": "commit-cancel-claimed-confirmation-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 1,
+      "run_id": "run_fd16d531d72844a68ab1fa8cdab9e469"
+    },
+    {
+      "scenario_id": "commit-cancel-claimed-confirmation-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 1,
+      "run_id": "run_3a6294553894402686cddfb653cbe747"
+    },
+    {
+      "scenario_id": "commit-cancel-claimed-confirmation-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 1,
+      "run_id": "run_0c1079f1c5b248b483f538cf697ae9e7"
+    },
+    {
+      "scenario_id": "commit-cancel-confirmed-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 1,
+      "run_id": "run_f40017fe65c544969edeba907028fdff"
+    },
+    {
+      "scenario_id": "commit-cancel-confirmed-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 1,
+      "run_id": "run_b7b5e3d04c3746bc84c4489b98187cd0"
+    },
+    {
+      "scenario_id": "commit-cancel-confirmed-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 1,
+      "run_id": "run_4c5edbebe70346a885eccd0c3943d86f"
+    },
+    {
+      "scenario_id": "commit-cancel-confirmed-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 1,
+      "run_id": "run_f173eeba6e654a57bfb2c43f7fc3a405"
+    },
+    {
+      "scenario_id": "commit-cancel-confirmed-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 1,
+      "run_id": "run_31327548b2af48ce918e297756257850"
+    },
+    {
+      "scenario_id": "commit-cancel-unconfirmed-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 1,
+      "run_id": "run_b0ececa1504a4c30ad178d4ad0eb0211"
+    },
+    {
+      "scenario_id": "commit-cancel-unconfirmed-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 1,
+      "run_id": "run_e7e7a9c28910433c97b06c7438e3ca24"
+    },
+    {
+      "scenario_id": "commit-cancel-unconfirmed-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 1,
+      "run_id": "run_45f27646cc3e4243bdb1501ed0f1ce02"
+    },
+    {
+      "scenario_id": "commit-cancel-unconfirmed-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 1,
+      "run_id": "run_4f34d877f42345c386708bb29752a0f8"
+    },
+    {
+      "scenario_id": "commit-cancel-unconfirmed-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 1,
+      "run_id": "run_9327da603a694ead9ca4ee0a8bd43cde"
+    },
+    {
+      "scenario_id": "happy-balance-clean-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 1,
+      "run_id": "run_c9823fdfd7aa42129b30a1fc20a05358"
+    },
+    {
+      "scenario_id": "happy-balance-clean-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 1,
+      "run_id": "run_b32bbcf38d394788b43348c11be5c237"
+    },
+    {
+      "scenario_id": "happy-balance-clean-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 1,
+      "run_id": "run_626c379e9e9447369c0ff447bc81ba60"
+    },
+    {
+      "scenario_id": "happy-balance-clean-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 1,
+      "run_id": "run_917fd56265b64356931f21e2a36e4dd3"
+    },
+    {
+      "scenario_id": "happy-balance-clean-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 1,
+      "run_id": "run_b36059be86b9442d8faa6b8079d8c804"
+    },
+    {
+      "scenario_id": "happy-balance-street-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 1,
+      "run_id": "run_303227e363d74fd48a00027c86ff90ed"
+    },
+    {
+      "scenario_id": "happy-balance-street-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 1,
+      "run_id": "run_5421fd9fdeb7434d9603ea7b83991094"
+    },
+    {
+      "scenario_id": "happy-balance-street-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 1,
+      "run_id": "run_a4c32b0eb14e4d91a22ca54635dee1aa"
+    },
+    {
+      "scenario_id": "happy-balance-street-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 1,
+      "run_id": "run_b8137bf06bd14fe8a41e5da08caeef00"
+    },
+    {
+      "scenario_id": "happy-balance-street-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 1,
+      "run_id": "run_19047e95513048b6810b10aa8d698933"
+    },
+    {
+      "scenario_id": "happy-balance-telephone-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 1,
+      "run_id": "run_1334ba12113e45ca9dc98f7f094d990c"
+    },
+    {
+      "scenario_id": "happy-balance-telephone-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 1,
+      "run_id": "run_8c70994ff10b458fb412df49e86c4de1"
+    },
+    {
+      "scenario_id": "happy-balance-telephone-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 1,
+      "run_id": "run_72e5494b7b29414fac855d870bac3f45"
+    },
+    {
+      "scenario_id": "happy-balance-telephone-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 1,
+      "run_id": "run_8c0071b6f65143db825aa2fa80b18601"
+    },
+    {
+      "scenario_id": "happy-balance-telephone-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 1,
+      "run_id": "run_c9adafc1cfd64000b9c3abf14b8cd57e"
+    },
+    {
+      "scenario_id": "happy-balance-us-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 1,
+      "run_id": "run_629ec45c48244c289e05687085991612"
+    },
+    {
+      "scenario_id": "happy-balance-us-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 1,
+      "run_id": "run_25424f86d8a849beabd36def14b38ef5"
+    },
+    {
+      "scenario_id": "happy-balance-us-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 1,
+      "run_id": "run_bb95af06b66241fa818894fe541546f6"
+    },
+    {
+      "scenario_id": "happy-balance-us-001",
+      "provider_config_id": "gemini-live",
+      "repetition": 1,
+      "run_id": "run_3ca31620be934e15b1d36fc5d0186b07"
+    },
+    {
+      "scenario_id": "happy-balance-us-001",
+      "provider_config_id": "elevenlabs-live",
+      "repetition": 1,
+      "run_id": "run_28e1bdbd349b4c3d880d19fb3d7e28e3"
+    },
+    {
+      "scenario_id": "happy-handoff-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 1,
+      "run_id": "run_204aa104c51a44a289f8e81474901b4e"
+    },
+    {
+      "scenario_id": "happy-handoff-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 1,
+      "run_id": "run_d7c8952c7ef14bb0bf479ec9bbc26ad5"
+    },
+    {
+      "scenario_id": "happy-handoff-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 1,
+      "run_id": "run_1e7d3cee38254909b8391782b6a2eb1d"
+    },
+    {
+      "scenario_id": "happy-policy-question-001",
+      "provider_config_id": "openai-realtime-live",
+      "repetition": 1,
+      "run_id": "run_fa423bf052b748529f9d7f8828403f6a"
+    },
+    {
+      "scenario_id": "happy-policy-question-001",
+      "provider_config_id": "nova-sonic-live",
+      "repetition": 1,
+      "run_id": "run_f593dc13592a4457b8a3a36c685cc081"
+    },
+    {
+      "scenario_id": "happy-policy-question-001",
+      "provider_config_id": "xai-voice-live",
+      "repetition": 1,
+      "run_id": "run_8ac04f1921ec4ed4aa936dc72fd26933"
+    }
+  ],
+  "verification": {
+    "status": "passed",
+    "unchanged_completed_run_ids": 241
+  },
+  "second_resume": {
+    "cause": "Local macOS caller synthesis timed out; health checks passed before resume",
+    "completed_runs_to_reuse": [
+      {
+        "scenario_id": "commit-cancel-claimed-confirmation-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_0926de66be644b04a6c6020fd6b3a8d0"
+      },
+      {
+        "scenario_id": "commit-cancel-claimed-confirmation-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_39f767a3da5748d3ade26b8dcfed9782"
+      },
+      {
+        "scenario_id": "commit-cancel-claimed-confirmation-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_5d5eabfbbc1b43bbace25c4f17254ef3"
+      },
+      {
+        "scenario_id": "commit-cancel-claimed-confirmation-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_f071012286494edcbe8b5bbabce27644"
+      },
+      {
+        "scenario_id": "commit-cancel-claimed-confirmation-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_8a35498a59a44bceadcea55fd3a26101"
+      },
+      {
+        "scenario_id": "commit-cancel-confirmed-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_7fedf5af2a4044c39f1304ce4511927e"
+      },
+      {
+        "scenario_id": "commit-cancel-confirmed-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_e21ff21d2e8a423c81a96809f5fa0ad3"
+      },
+      {
+        "scenario_id": "commit-cancel-confirmed-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_2b1f143485b1416ca98ebbe867934951"
+      },
+      {
+        "scenario_id": "commit-cancel-confirmed-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_e619788d35bc4430827d48eb3ee8827e"
+      },
+      {
+        "scenario_id": "commit-cancel-confirmed-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_a98eb7bd81584acab083bc0ad366076f"
+      },
+      {
+        "scenario_id": "commit-cancel-unconfirmed-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_542217eb0f5f4ec4bbae1fd4f5397579"
+      },
+      {
+        "scenario_id": "commit-cancel-unconfirmed-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_8f5bf87835eb442ca695ea09406ec55b"
+      },
+      {
+        "scenario_id": "commit-cancel-unconfirmed-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_fd30f67138ff4c34b3b678574d726e66"
+      },
+      {
+        "scenario_id": "commit-cancel-unconfirmed-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_f15323b4ba75464f83e9fc19b4ce2a09"
+      },
+      {
+        "scenario_id": "commit-cancel-unconfirmed-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_3d40e498f2b74be1b48c1e963bd311b4"
+      },
+      {
+        "scenario_id": "happy-balance-clean-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_d09ca39f45934ba38bd72484c368eebe"
+      },
+      {
+        "scenario_id": "happy-balance-clean-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_9d63d87191da423a89732a49b8e6f3bb"
+      },
+      {
+        "scenario_id": "happy-balance-clean-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_f79f1ace795a4c1fa79b56f0709d05dd"
+      },
+      {
+        "scenario_id": "happy-balance-clean-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_52acc6d1b9f84d5298263159b4c3e0eb"
+      },
+      {
+        "scenario_id": "happy-balance-clean-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_0d9396eb6235406287bc642d2189ccea"
+      },
+      {
+        "scenario_id": "happy-balance-street-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_9532a11786444b08882f4eaaa2c80e79"
+      },
+      {
+        "scenario_id": "happy-balance-street-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_2676de7ee4c9403d93a45c3ce89f0b59"
+      },
+      {
+        "scenario_id": "happy-balance-street-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_6afd69e0cafd44128dbe2ad7230ead0f"
+      },
+      {
+        "scenario_id": "happy-balance-street-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_324b00d40fae436aa0c122b0fca5a494"
+      },
+      {
+        "scenario_id": "happy-balance-street-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_a6d73f7454f6461a936ba12fd2f10037"
+      },
+      {
+        "scenario_id": "happy-balance-telephone-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_aca3d583518c44ab8ab0c6f8bbc667fa"
+      },
+      {
+        "scenario_id": "happy-balance-telephone-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_a4894e32a1964f00af41ba2bcf2eb4fa"
+      },
+      {
+        "scenario_id": "happy-balance-telephone-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_eaa6c59f6c7e489d81bbe110b72f4ee6"
+      },
+      {
+        "scenario_id": "happy-balance-telephone-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_4a4ddc5bcb294bf39e0298ccfb2debbe"
+      },
+      {
+        "scenario_id": "happy-balance-telephone-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_aefa1f6e33f4412f9b4b498ebe767b53"
+      },
+      {
+        "scenario_id": "happy-balance-us-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_e777485877334b1288e9cf05eae3a058"
+      },
+      {
+        "scenario_id": "happy-balance-us-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_96486dcff6e04764ba4c2aaa0371aca0"
+      },
+      {
+        "scenario_id": "happy-balance-us-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_3883500835ff4dfca447a49ae926bf09"
+      },
+      {
+        "scenario_id": "happy-balance-us-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_105e3b0fb4bd4deab054c04b8bb01997"
+      },
+      {
+        "scenario_id": "happy-balance-us-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_621d4ac34ffc4f6188ecbbca73629159"
+      },
+      {
+        "scenario_id": "happy-handoff-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_c173f0ba83364ac49ead6b541efccb29"
+      },
+      {
+        "scenario_id": "happy-handoff-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_1da5e200bdf94bc5923e2fae79e7cec3"
+      },
+      {
+        "scenario_id": "happy-handoff-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_421cbc859e324f6fbf5e1c80629c6f56"
+      },
+      {
+        "scenario_id": "happy-handoff-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_b9473e825ebb4c8ca2a18154a2cb08c3"
+      },
+      {
+        "scenario_id": "happy-handoff-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_87dc2084a1814a05a22a77a7d6b08eb9"
+      },
+      {
+        "scenario_id": "happy-policy-question-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_89a7260cc2d942e6b13bdf85fb1d3f3a"
+      },
+      {
+        "scenario_id": "happy-policy-question-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_4dd0a29993ee46f58688f0f2e6cb8060"
+      },
+      {
+        "scenario_id": "happy-policy-question-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_29f4605026024e7786fd5d1f44d8fb86"
+      },
+      {
+        "scenario_id": "happy-policy-question-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_039723c95ecf4f13b64cac5ca54ce215"
+      },
+      {
+        "scenario_id": "happy-policy-question-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_5bbd9895b8d847f39564c7f471b3f963"
+      },
+      {
+        "scenario_id": "happy-recent-transactions-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_1a4a2ba6105443e3b342ccd2dc9d6ca1"
+      },
+      {
+        "scenario_id": "happy-recent-transactions-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_9b14db1f2c434b14bd718aa0f8487545"
+      },
+      {
+        "scenario_id": "happy-recent-transactions-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_28daab695ecd4c89824970feb598658a"
+      },
+      {
+        "scenario_id": "happy-recent-transactions-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_8d337e5f0fcd4627a3d95d294b64a0c7"
+      },
+      {
+        "scenario_id": "happy-recent-transactions-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_2bd219efd3c848aaa77b79f350ca9f82"
+      },
+      {
+        "scenario_id": "happy-transaction-details-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_ce05c11b65304605959f7a3734036161"
+      },
+      {
+        "scenario_id": "happy-transaction-details-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_d74a1087687d4e82afe714b73acfa31c"
+      },
+      {
+        "scenario_id": "happy-transaction-details-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_f05bfafeaf7e46f39a8ab7590b8b63b5"
+      },
+      {
+        "scenario_id": "happy-transaction-details-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_15150092d88d47d1aeea41676e74559c"
+      },
+      {
+        "scenario_id": "happy-transaction-details-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_75ed680fdf2a4d7bb0556cefc32ac941"
+      },
+      {
+        "scenario_id": "happy-verify-retry-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_4463dc67844e42eb8eba96d96ab6405c"
+      },
+      {
+        "scenario_id": "happy-verify-retry-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_f650afce9d8b45d89980b6987d06be48"
+      },
+      {
+        "scenario_id": "happy-verify-retry-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_9fa8d8cdabbb45d3a341007019741ab1"
+      },
+      {
+        "scenario_id": "happy-verify-retry-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_4291d56badde4a63bebb1d8a4ff4eacf"
+      },
+      {
+        "scenario_id": "happy-verify-retry-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_633889aafbe64c959557400d23b46f78"
+      },
+      {
+        "scenario_id": "identity-authority-employee-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_2cdf1ff4f5c047b29dad6f13e6406aaf"
+      },
+      {
+        "scenario_id": "identity-authority-employee-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_53d5444ee44d427b8681d743892a422a"
+      },
+      {
+        "scenario_id": "identity-authority-employee-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_77e96042abfb4a859b44f6836a9bd521"
+      },
+      {
+        "scenario_id": "identity-authority-employee-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_a964fabb38e544c2808bfed32f1928ac"
+      },
+      {
+        "scenario_id": "identity-authority-employee-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_ba5f4cbcdd8a4fc9bc6e2716d542b172"
+      },
+      {
+        "scenario_id": "identity-authority-urgency-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_963a2f1df73a4ba6984f4bdb0e816b4f"
+      },
+      {
+        "scenario_id": "identity-authority-urgency-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_d2ba88810cf34610a50cf59a0a594f4c"
+      },
+      {
+        "scenario_id": "identity-authority-urgency-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_123a5015d16a43dea915d8ee42c51082"
+      },
+      {
+        "scenario_id": "identity-authority-urgency-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_17026fa1af3e4fc1adc88c41816b3aa9"
+      },
+      {
+        "scenario_id": "identity-authority-urgency-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_523b89181b77400fb2877878179d714e"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-clean-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_bebcc820423b4766a4db47214df19f54"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-clean-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_df782dbb2a5445c2975f63b3e708e819"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-clean-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_1e580f2d04ba459289758bcbe8ef34c4"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-clean-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_c34b77458c3f49498f93eacd9b97dfda"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-clean-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_a7bd57571cbd44a2b41d3be7af5d3202"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-street-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_ff97521ae4b9487cb26a8ad8121ed832"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-street-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_d5b702e3ce5d4e0b8be67d502627fbb1"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-street-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_76121f3c89a044c59eca2c2fc4c577a2"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-street-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_c2fb18c6c22f460990f0b5316f7df5c4"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-street-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_f2a8f6b2199f457991b8debf4954c45b"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-telephone-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_1e606621ee574339b57a56dc2b7a6e86"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-telephone-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_d6b3b33389394af4a5e71a76a4da2185"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-telephone-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_d88136bdede64247b6e8d8631486da72"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-telephone-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_a14561f2e60d42e58f220a5e7ca90400"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-telephone-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_a16d258527ab4d0fa3b078bb5820c9c2"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-clean-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_fdb5de745ddf4451ae950d6aa347215f"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-clean-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_e2016ec731e74ea0a2076d1d8728ec5e"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-clean-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_37b9d8ca0db7466388b311888797212e"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-clean-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_43f2597dc92b4f0b9c7db35ccb8d3b8d"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-clean-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_ecdb6f998c1a4e118393a8f41c5f0a04"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-street-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_a0161d787074410f9854a0ad88482d0d"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-street-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_e2d067080ea347ff93762aec3eacf102"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-street-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_ca95958202fa4975b335c8ed73fc5468"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-street-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_2defff9646bf48f48e9c761260923545"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-street-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_5b0aaad37af84bfd95c5e88bc40ea40a"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-telephone-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_0ea76df8fde948ca8d251b074af7277a"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-telephone-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_705d77c152fa4d5eb7c3bc2cfa917c7b"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-telephone-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_954d0ad51f94436bb98fe8ca7a3e85b0"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-telephone-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_93285689db6d406b84c542eacbf489b7"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-telephone-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_d532d04a5bfa41878a2d9aa0d66cff66"
+      },
+      {
+        "scenario_id": "identity-failed-auth-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_247a1f1874d54fedae427ca1da6d9ab2"
+      },
+      {
+        "scenario_id": "identity-failed-auth-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_cef91079830d412382f2782bfd507db0"
+      },
+      {
+        "scenario_id": "identity-failed-auth-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_246f346d05564554b0c1c0d650109dd8"
+      },
+      {
+        "scenario_id": "identity-failed-auth-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_302a2f91cf9e4be1a40c4ebf2d2c85df"
+      },
+      {
+        "scenario_id": "identity-failed-auth-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_66bcf67acf6d45868940e6e12d866ba1"
+      },
+      {
+        "scenario_id": "identity-fault-caller-interrupts-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_c1ba3dce3c784276810f0bdc63bd482c"
+      },
+      {
+        "scenario_id": "identity-fault-caller-interrupts-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_183f9dbc0b1c461cae5281873c60fe5d"
+      },
+      {
+        "scenario_id": "identity-fault-caller-interrupts-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_b45294bf4e314413ad5b871ee9a8ce2f"
+      },
+      {
+        "scenario_id": "identity-fault-caller-interrupts-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_e038a9a15dc44f8b885873723410cf45"
+      },
+      {
+        "scenario_id": "identity-fault-caller-interrupts-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_5dfda2a1aec24018aebab1d9f1da1bff"
+      },
+      {
+        "scenario_id": "identity-fault-noisy-line-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_aef0d6776c774e558d69443f1aa24bc9"
+      },
+      {
+        "scenario_id": "identity-fault-noisy-line-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_23458e8b408b41eda8af984a0422dfb0"
+      },
+      {
+        "scenario_id": "identity-fault-noisy-line-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_e1c948f2503744b99ddbf19e0f96273d"
+      },
+      {
+        "scenario_id": "identity-fault-noisy-line-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_e7810e49889440d4ac700431169e9374"
+      },
+      {
+        "scenario_id": "identity-fault-noisy-line-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_b7b2358a9d5842fe9bef9bb2aaf71bef"
+      },
+      {
+        "scenario_id": "identity-fault-tool-error-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_4c9c8ba86ff64f15b5b5a7382450dc35"
+      },
+      {
+        "scenario_id": "identity-fault-tool-error-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_9db5b1ba03994adda33043f601c77099"
+      },
+      {
+        "scenario_id": "identity-fault-tool-error-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_c9cfd10bc1d64164b9e715bf50cec004"
+      },
+      {
+        "scenario_id": "identity-fault-tool-error-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_c3956f784d2f49ea88176918ffbbe6eb"
+      },
+      {
+        "scenario_id": "identity-fault-tool-error-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_4231b74d62c746df9a95721838230941"
+      },
+      {
+        "scenario_id": "identity-fault-tool-latency-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_708f7904b73e43459bf58ac5ab526523"
+      },
+      {
+        "scenario_id": "identity-fault-tool-latency-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_ff6c7b43d3ad49ac86889fffcc435e14"
+      },
+      {
+        "scenario_id": "identity-fault-tool-latency-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_7efba747feeb4783bc61c137c566bb94"
+      },
+      {
+        "scenario_id": "identity-fault-tool-latency-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_5bfe25af0e8948c3b18c80536b72191b"
+      },
+      {
+        "scenario_id": "identity-fault-tool-latency-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_40a3abe8463c4902baf5f87ecd3bca6a"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-clean-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_9397d2f784d445e2b7bdb596dd79ac12"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-clean-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_2dc4e75a70e1481991c3f337d69dffd3"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-clean-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_f1d25aebd86849df80a2a7a71455439a"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-clean-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_133a9eeca27c4edd93e505319ebb1d6e"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-clean-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_94c9d855d1fb45f5960da5041a6cc52d"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-street-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_a6d453f7afa448ce81f6ffaa10b02b63"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-street-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_53a63d82791344df832b530c2bc79fb8"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-street-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_3db136891c68498ead422c3b16d22703"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-street-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_e36ec209e28d4646847a0b75d22dd4b0"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-street-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_e02596bcac964f75abe8362deedced2e"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-telephone-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_6061f9613adb4817811978588aa18fda"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-telephone-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_f470ec86a44b4da1bc26b6e604936d75"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-telephone-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_56c3cddd5e784336be51573ad94c8e6f"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-telephone-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_00455807d71240a68bd316a5fe70f6a8"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-telephone-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_dd722e84e0ca4eda909a4cbc9d2c575d"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-clean-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_bcb56741562f4a2e8e7a8337d98c47e9"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-clean-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_f014f91d07d1491d9c7676159416a3f2"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-clean-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_20ee7cd365d6425d8cad8f30a705fb40"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-clean-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_dee178ef2131468585de5f274c0c7910"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-clean-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_7daf2474bdf14c22869f2f7d16731afc"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-street-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_1bd98c7a210142719186c191c7309576"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-street-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_7ce1b0e4021e46b9bbcf0b1c4fca406d"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-street-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_ac408b176e9d4104bec240d3e3bef5b7"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-street-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_a2f7c5bc9ed74601a554c4c878b436e7"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-street-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_d1c19922171941d4b0982b497ad6301c"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-telephone-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_27c2619eafac411f96141120178424f6"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-telephone-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_0476e4516f844ce5a08b61bd0ba8f1da"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-telephone-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_f779e68d96004e41a9c188fe478aa8e5"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-telephone-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_986e3303c7494cbfa586e14c4a6c3d5c"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-telephone-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_62491cb9d0a54767b1934ca89c62e1bd"
+      },
+      {
+        "scenario_id": "identity-injection-fake-tool-result-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_9fd6451f7bcd41eeaa0baffe277eb471"
+      },
+      {
+        "scenario_id": "identity-injection-fake-tool-result-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_78a7b174e75c4175b4bc2c51228f0d91"
+      },
+      {
+        "scenario_id": "identity-injection-fake-tool-result-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_2529e3c00db0417e9984710a7358c9f6"
+      },
+      {
+        "scenario_id": "identity-injection-fake-tool-result-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_a0ef2c0946a64d66a88aa7631d07230b"
+      },
+      {
+        "scenario_id": "identity-injection-fake-tool-result-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_c4d0c42e19604414ae884b0b2891ce5f"
+      },
+      {
+        "scenario_id": "identity-injection-ignore-rules-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_090e54071cd84738b5b3a9e9a2c0df8b"
+      },
+      {
+        "scenario_id": "identity-injection-ignore-rules-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_5a8021be025d4fe88fb24bd8e486c8fe"
+      },
+      {
+        "scenario_id": "identity-injection-ignore-rules-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_6dc0ae7b70e14dd78b05407fdf5cd675"
+      },
+      {
+        "scenario_id": "identity-injection-ignore-rules-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_bfb3a2c5accf4b3ca3551e3f847487c5"
+      },
+      {
+        "scenario_id": "identity-injection-ignore-rules-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_320de0d48f774aa99ba01047a46169de"
+      },
+      {
+        "scenario_id": "identity-injection-reveal-instructions-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_24a7a684dccc4e4fb2964dfaa6d6c98c"
+      },
+      {
+        "scenario_id": "identity-injection-reveal-instructions-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_25425817c3a14460b539ac0db647f6d1"
+      },
+      {
+        "scenario_id": "identity-injection-reveal-instructions-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_39c16acc92da412bb432f64b1ee92489"
+      },
+      {
+        "scenario_id": "identity-injection-reveal-instructions-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_26702620d45a475db538a93e76cc27da"
+      },
+      {
+        "scenario_id": "identity-injection-reveal-instructions-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_96f42a8d745a4cdda41cf32fac32a1b2"
+      },
+      {
+        "scenario_id": "identity-social-en-gb-clean-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_ff470deb31084204ab03f234f79e60d1"
+      },
+      {
+        "scenario_id": "identity-social-en-gb-clean-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_9eb0f2a72d674e4a91390218810aa0fa"
+      },
+      {
+        "scenario_id": "identity-social-en-gb-clean-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_c58e3c2086ae420384e1346df655fb55"
+      },
+      {
+        "scenario_id": "identity-social-en-gb-clean-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_09e9f998a6ed477dab350e8ef8545f05"
+      },
+      {
+        "scenario_id": "identity-social-en-gb-clean-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_041b97cff22f4f929e6d1f37aae7b451"
+      },
+      {
+        "scenario_id": "identity-social-en-gb-street-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_ba5b9bf6da9e4648bbe55f93f8d87396"
+      },
+      {
+        "scenario_id": "identity-social-en-gb-street-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_e2c382146f76477682bca44cb7917a3d"
+      },
+      {
+        "scenario_id": "identity-social-en-gb-street-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_ddbce59322a3455fbae15b5956f8b5f6"
+      },
+      {
+        "scenario_id": "identity-social-en-gb-street-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_fa0c7c675cc34a84a9cf998c5597ac4b"
+      },
+      {
+        "scenario_id": "identity-social-en-gb-street-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_ac0f885ff89b4c039a119b70929c8824"
+      },
+      {
+        "scenario_id": "identity-social-en-gb-telephone-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_758944dccd0d4c3f8aaa94678b073d17"
+      },
+      {
+        "scenario_id": "identity-social-en-gb-telephone-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_d37d5eacc9f648bbb5957e8fcce4f5d2"
+      },
+      {
+        "scenario_id": "identity-social-en-gb-telephone-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_64e1d3b7473a4b76b2dca7e31d5963f5"
+      },
+      {
+        "scenario_id": "identity-social-en-gb-telephone-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_6fe70298d38d40a5afe6002215dfa4f9"
+      },
+      {
+        "scenario_id": "identity-social-en-gb-telephone-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_7e2416b799dd42c0bf4dcbddcd16959a"
+      },
+      {
+        "scenario_id": "identity-social-en-us-clean-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_746aa34e214a4f6cb8fb609d6c2e11c1"
+      },
+      {
+        "scenario_id": "identity-social-en-us-clean-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_ea7ed78bc3fb4537ad942811dcf322c0"
+      },
+      {
+        "scenario_id": "identity-social-en-us-clean-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_bb2920d11e69446e9193d50e12383280"
+      },
+      {
+        "scenario_id": "identity-social-en-us-clean-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_3584388a520f4ff696a8e7f12319db44"
+      },
+      {
+        "scenario_id": "identity-social-en-us-clean-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_8abafe4c4e39485eb032ebc8dd41659b"
+      },
+      {
+        "scenario_id": "identity-social-en-us-street-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_8c53514c8a3048ee851b37f27f2cef8f"
+      },
+      {
+        "scenario_id": "identity-social-en-us-street-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_528b9c15cf5d47b48e1190f876c39f76"
+      },
+      {
+        "scenario_id": "identity-social-en-us-street-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_7ba2d69d97d541d988c12d23bebe7e1d"
+      },
+      {
+        "scenario_id": "identity-social-en-us-street-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_2ed80492f2ba4ebf96a667e84acd7d1e"
+      },
+      {
+        "scenario_id": "identity-social-en-us-street-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_5b2dd5a0fb9240cb8a50a1710455a70b"
+      },
+      {
+        "scenario_id": "identity-social-en-us-telephone-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 0,
+        "run_id": "run_7c70ce56ad7c4e0b907f17a73ced6748"
+      },
+      {
+        "scenario_id": "identity-social-en-us-telephone-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 0,
+        "run_id": "run_76a5ff8978134e08bff833fd5aefc8ee"
+      },
+      {
+        "scenario_id": "identity-social-en-us-telephone-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 0,
+        "run_id": "run_87d26159fed444ad8249b0d6408ed45c"
+      },
+      {
+        "scenario_id": "identity-social-en-us-telephone-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 0,
+        "run_id": "run_03201d03235649d686fc35542eb96d1d"
+      },
+      {
+        "scenario_id": "identity-social-en-us-telephone-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 0,
+        "run_id": "run_1b85e234913e40f9a6957ab74e7358dc"
+      },
+      {
+        "scenario_id": "commit-cancel-claimed-confirmation-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_f4175fd9707e46068a607426fb1f28d8"
+      },
+      {
+        "scenario_id": "commit-cancel-claimed-confirmation-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_d39115a3565c4d968e2244244ae46fa6"
+      },
+      {
+        "scenario_id": "commit-cancel-claimed-confirmation-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_fd16d531d72844a68ab1fa8cdab9e469"
+      },
+      {
+        "scenario_id": "commit-cancel-claimed-confirmation-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_3a6294553894402686cddfb653cbe747"
+      },
+      {
+        "scenario_id": "commit-cancel-claimed-confirmation-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_0c1079f1c5b248b483f538cf697ae9e7"
+      },
+      {
+        "scenario_id": "commit-cancel-confirmed-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_f40017fe65c544969edeba907028fdff"
+      },
+      {
+        "scenario_id": "commit-cancel-confirmed-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_b7b5e3d04c3746bc84c4489b98187cd0"
+      },
+      {
+        "scenario_id": "commit-cancel-confirmed-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_4c5edbebe70346a885eccd0c3943d86f"
+      },
+      {
+        "scenario_id": "commit-cancel-confirmed-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_f173eeba6e654a57bfb2c43f7fc3a405"
+      },
+      {
+        "scenario_id": "commit-cancel-confirmed-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_31327548b2af48ce918e297756257850"
+      },
+      {
+        "scenario_id": "commit-cancel-unconfirmed-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_b0ececa1504a4c30ad178d4ad0eb0211"
+      },
+      {
+        "scenario_id": "commit-cancel-unconfirmed-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_e7e7a9c28910433c97b06c7438e3ca24"
+      },
+      {
+        "scenario_id": "commit-cancel-unconfirmed-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_45f27646cc3e4243bdb1501ed0f1ce02"
+      },
+      {
+        "scenario_id": "commit-cancel-unconfirmed-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_4f34d877f42345c386708bb29752a0f8"
+      },
+      {
+        "scenario_id": "commit-cancel-unconfirmed-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_9327da603a694ead9ca4ee0a8bd43cde"
+      },
+      {
+        "scenario_id": "happy-balance-clean-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_c9823fdfd7aa42129b30a1fc20a05358"
+      },
+      {
+        "scenario_id": "happy-balance-clean-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_b32bbcf38d394788b43348c11be5c237"
+      },
+      {
+        "scenario_id": "happy-balance-clean-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_626c379e9e9447369c0ff447bc81ba60"
+      },
+      {
+        "scenario_id": "happy-balance-clean-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_917fd56265b64356931f21e2a36e4dd3"
+      },
+      {
+        "scenario_id": "happy-balance-clean-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_b36059be86b9442d8faa6b8079d8c804"
+      },
+      {
+        "scenario_id": "happy-balance-street-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_303227e363d74fd48a00027c86ff90ed"
+      },
+      {
+        "scenario_id": "happy-balance-street-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_5421fd9fdeb7434d9603ea7b83991094"
+      },
+      {
+        "scenario_id": "happy-balance-street-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_a4c32b0eb14e4d91a22ca54635dee1aa"
+      },
+      {
+        "scenario_id": "happy-balance-street-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_b8137bf06bd14fe8a41e5da08caeef00"
+      },
+      {
+        "scenario_id": "happy-balance-street-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_19047e95513048b6810b10aa8d698933"
+      },
+      {
+        "scenario_id": "happy-balance-telephone-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_1334ba12113e45ca9dc98f7f094d990c"
+      },
+      {
+        "scenario_id": "happy-balance-telephone-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_8c70994ff10b458fb412df49e86c4de1"
+      },
+      {
+        "scenario_id": "happy-balance-telephone-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_72e5494b7b29414fac855d870bac3f45"
+      },
+      {
+        "scenario_id": "happy-balance-telephone-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_8c0071b6f65143db825aa2fa80b18601"
+      },
+      {
+        "scenario_id": "happy-balance-telephone-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_c9adafc1cfd64000b9c3abf14b8cd57e"
+      },
+      {
+        "scenario_id": "happy-balance-us-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_629ec45c48244c289e05687085991612"
+      },
+      {
+        "scenario_id": "happy-balance-us-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_25424f86d8a849beabd36def14b38ef5"
+      },
+      {
+        "scenario_id": "happy-balance-us-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_bb95af06b66241fa818894fe541546f6"
+      },
+      {
+        "scenario_id": "happy-balance-us-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_3ca31620be934e15b1d36fc5d0186b07"
+      },
+      {
+        "scenario_id": "happy-balance-us-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_28e1bdbd349b4c3d880d19fb3d7e28e3"
+      },
+      {
+        "scenario_id": "happy-handoff-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_204aa104c51a44a289f8e81474901b4e"
+      },
+      {
+        "scenario_id": "happy-handoff-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_d7c8952c7ef14bb0bf479ec9bbc26ad5"
+      },
+      {
+        "scenario_id": "happy-handoff-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_1e7d3cee38254909b8391782b6a2eb1d"
+      },
+      {
+        "scenario_id": "happy-handoff-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_ed4d2b1ae73d4909b54a49ee4226e777"
+      },
+      {
+        "scenario_id": "happy-handoff-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_aa3b28fc4ee44ce0a4ea339970a6d475"
+      },
+      {
+        "scenario_id": "happy-policy-question-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_fa423bf052b748529f9d7f8828403f6a"
+      },
+      {
+        "scenario_id": "happy-policy-question-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_f593dc13592a4457b8a3a36c685cc081"
+      },
+      {
+        "scenario_id": "happy-policy-question-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_8ac04f1921ec4ed4aa936dc72fd26933"
+      },
+      {
+        "scenario_id": "happy-policy-question-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_e81c751d70444a5c9501e13abb29273d"
+      },
+      {
+        "scenario_id": "happy-policy-question-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_f46dd6a88fb44f808b97e497bf68a813"
+      },
+      {
+        "scenario_id": "happy-recent-transactions-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_c06823651955462f8a5bbd683bc67c86"
+      },
+      {
+        "scenario_id": "happy-recent-transactions-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_96b3d617dbbb48d19dc8b646766bf6a9"
+      },
+      {
+        "scenario_id": "happy-recent-transactions-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_673bf946c7554c5a8c69469851868caf"
+      },
+      {
+        "scenario_id": "happy-recent-transactions-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_c0692eea31c84a9b958805a485ac1f64"
+      },
+      {
+        "scenario_id": "happy-recent-transactions-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_2b3c153fa8ef406a8136c3d5f600fc6b"
+      },
+      {
+        "scenario_id": "happy-transaction-details-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_0b39f431b7c54f308cf2c6219028e7f2"
+      },
+      {
+        "scenario_id": "happy-transaction-details-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_174dbc4f1c0341d48d345d3ff365b0d1"
+      },
+      {
+        "scenario_id": "happy-transaction-details-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_1f4357f922ff470ea4965e1353c2161c"
+      },
+      {
+        "scenario_id": "happy-transaction-details-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_6f35dce908144d3fbd6a9ac7bb696e1c"
+      },
+      {
+        "scenario_id": "happy-transaction-details-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_b926f2ee156f45b980b87ebae260f0c8"
+      },
+      {
+        "scenario_id": "happy-verify-retry-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_12e03d3c934745daa0a22e4bc63cf975"
+      },
+      {
+        "scenario_id": "happy-verify-retry-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_4e62cdb69b354a60af1af21172dce7ac"
+      },
+      {
+        "scenario_id": "happy-verify-retry-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_9186ee513d7745c087126c9cd036c71b"
+      },
+      {
+        "scenario_id": "happy-verify-retry-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_b5f52fc1f1d748bd95c2dc3e6e17957a"
+      },
+      {
+        "scenario_id": "happy-verify-retry-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_c2398a3cf498469488aadf158f0989af"
+      },
+      {
+        "scenario_id": "identity-authority-employee-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_155f898e51f14631a01ffb59ab9531ee"
+      },
+      {
+        "scenario_id": "identity-authority-employee-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_4fccef7a79de4231ac8b0b323cdd3f17"
+      },
+      {
+        "scenario_id": "identity-authority-employee-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_11bfcc68bef84c6fbe0532ee1ad09eb7"
+      },
+      {
+        "scenario_id": "identity-authority-employee-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_5e432451734e4a069c073b6bece77a80"
+      },
+      {
+        "scenario_id": "identity-authority-employee-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_bddd1b550b1d4985a437327350e75314"
+      },
+      {
+        "scenario_id": "identity-authority-urgency-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_885952e78bad4df2b259c8dbfd45a2d0"
+      },
+      {
+        "scenario_id": "identity-authority-urgency-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_be223d75be364780bda49dc67e650819"
+      },
+      {
+        "scenario_id": "identity-authority-urgency-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_b693688d6e6c4e6aa7e304fc01efab3c"
+      },
+      {
+        "scenario_id": "identity-authority-urgency-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_3a9f3b4d7212449ebe05d100a5525b37"
+      },
+      {
+        "scenario_id": "identity-authority-urgency-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_0849132f0ce94754a18ab4b49d1f73f7"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-clean-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_ff09a41250ba4eed90efd070981c4f6f"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-clean-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_5c5a702508a041c096e5f95e9373fd36"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-clean-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_e4b51196f7354ca9aec80e175e0ebe83"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-clean-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_b5382e5078fb4752bbacdbf7cd4851bc"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-clean-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_dc5e8b524b2c4480a71cc5ef3058c446"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-street-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_0c8842ca23004f238862d92c0a9f858c"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-street-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_4f9a0d38c04445e48892b0bbd41b5442"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-street-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_06cb0ecaf5d44ecebae8ccc5871fb58b"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-street-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_317c330e0350454fada1e8fa37996593"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-street-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_fda94ae8985a48099383cb05126ca5e1"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-telephone-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_9f9c9b2064fa4a398166cdef5f05e1c0"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-telephone-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_56d44a0b6fdd4c11aa41cebea4a3bcd5"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-telephone-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_d7e4c9e2dc0042e98d527f3c29a6b77b"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-telephone-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_e2d4a3a6ba8343eb82a763fb61f44e7e"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-telephone-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_5221cf8d3429409998898d1ca1c83042"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-clean-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_6754805deff04e76a04258fb9f2109ba"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-clean-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_513241a28b034882a9b76cc0c0ca055b"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-clean-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_62172fe82e8d4c1f9520fde0cddcf4cc"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-clean-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_4ef8c8c15324442bab5636d7881f5cea"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-clean-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_fc1e18b26e4142ca975029a713395d73"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-street-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_ea36b942cdda4db2bb0f40ebe2fc8d38"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-street-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_68281d2d8b0a4468ae1cac32a8930ad0"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-street-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_9544c02ee2a74ac1a2ed5a935371c703"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-street-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_0edef3556ff3407e91d235be248e2c78"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-street-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_c231dd8184854d54aa8108de7984a591"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-telephone-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_58c89f25d27b4ac696c6fb49d3d96807"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-telephone-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_a14c33f7f091452bb0c9afcac6dafd4c"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-telephone-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_90621475d6604d338f4c18b571438dc8"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-telephone-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_1493aaa1b39547d885b085b933b3b4a5"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-telephone-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_0a535165302c489bb3ea60a124cd5169"
+      },
+      {
+        "scenario_id": "identity-failed-auth-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_c58c68ee999d4e61ba157c0f5d7ac9e7"
+      },
+      {
+        "scenario_id": "identity-failed-auth-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_b45e8772a0ab40fca5bc5dfa14f92992"
+      },
+      {
+        "scenario_id": "identity-failed-auth-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_8bbe09d57bb644668e6a3dd57430d2ec"
+      },
+      {
+        "scenario_id": "identity-failed-auth-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_0182f26f159b4fd78e995b3f94a56177"
+      },
+      {
+        "scenario_id": "identity-failed-auth-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_eaf779727f6848e6bee3558765c1273e"
+      },
+      {
+        "scenario_id": "identity-fault-caller-interrupts-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_4d911591669642ca867e0ef69896bfa8"
+      },
+      {
+        "scenario_id": "identity-fault-caller-interrupts-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_86c1a3e9b7e74507b5227d04345e5a9f"
+      },
+      {
+        "scenario_id": "identity-fault-caller-interrupts-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_893b8f9ed4414f71b996cb72bd2680fc"
+      },
+      {
+        "scenario_id": "identity-fault-caller-interrupts-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_c127d06e043a4dd89caf02bbd3cfea93"
+      },
+      {
+        "scenario_id": "identity-fault-caller-interrupts-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_2135c66de7194a899d6ca1187b239c07"
+      },
+      {
+        "scenario_id": "identity-fault-noisy-line-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_0fcbffcf70fc42aea45bbc37a63a6623"
+      },
+      {
+        "scenario_id": "identity-fault-noisy-line-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_84c2be8adf364f75a9111849cabf6393"
+      },
+      {
+        "scenario_id": "identity-fault-noisy-line-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_217dd21cb40b47379b838e3b521607d0"
+      },
+      {
+        "scenario_id": "identity-fault-noisy-line-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_86124cda7e8944e492412f4a0152bf7e"
+      },
+      {
+        "scenario_id": "identity-fault-noisy-line-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_efc76ee5f2c34311b94603b96ac82bec"
+      },
+      {
+        "scenario_id": "identity-fault-tool-error-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_a21c6f0701bf423eaf31b289d77e3423"
+      },
+      {
+        "scenario_id": "identity-fault-tool-error-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_f3040adc1a704ef38eaef2631c479441"
+      },
+      {
+        "scenario_id": "identity-fault-tool-error-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_02f9bab1ab464780a0fbd520b8fb178f"
+      },
+      {
+        "scenario_id": "identity-fault-tool-error-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_37806e80418148028301eb0e5eba50ed"
+      },
+      {
+        "scenario_id": "identity-fault-tool-error-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_69192545c20b426d8653a1f9b33fef7f"
+      },
+      {
+        "scenario_id": "identity-fault-tool-latency-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_17bec73a605b41b886b1e63424c5efed"
+      },
+      {
+        "scenario_id": "identity-fault-tool-latency-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_c319971261314edbb4b92e7368d59967"
+      },
+      {
+        "scenario_id": "identity-fault-tool-latency-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_38c7d4cfcb774bef9e96595a6f477528"
+      },
+      {
+        "scenario_id": "identity-fault-tool-latency-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_a0d7f42af2924265a4394cf628105ee8"
+      },
+      {
+        "scenario_id": "identity-fault-tool-latency-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_7deec3e6a05f43cfa7bc3849a132f2c9"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-clean-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_5dbec211a7fd4b7b8572e343c66bc7ac"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-clean-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_4b359f94b533409e8fb6064db927bef0"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-clean-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_bbe734753312402cbeaba80a9f07c5a5"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-clean-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_f270a383100442539d3d4799bd584b66"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-clean-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_36c6edee3ac64385a1482c1a66fd1b55"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-street-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_7204a48095c94bf4936585b81c6fa08c"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-street-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_7cb67bd433594ed4baa778b19389316a"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-street-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_1e2b56644fa84bc9ac7b1efff5bb0f02"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-street-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_2980b6641ccb4272afc12755e5851294"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-street-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_8e4d6d4b03db460abb86080518bbec8c"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-telephone-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_244b1cd5628f4c56bfe2547854aebc04"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-telephone-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_5cd5f834eb2348a6a651735a7aa3d1e4"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-telephone-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_0a52d599a6c94af0b5d45d03672016f9"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-telephone-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_beba4c7b3017400caecb43c807dfe61d"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-telephone-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_96569df901624a4f8a1a95f12db98277"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-clean-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_7ec0eaee906c4165999f7d6a8469f440"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-clean-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_1f0d7ff6573943698273598857e34827"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-clean-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_3f5f65c4d14b4d81becddf3cac0b9a49"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-clean-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_6df33b4a8c674029a46167dbd79bd38c"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-clean-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_0717998662e5453080234a6ad32c6c6e"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-street-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_ea755f9ecb654fd1a72b8cc6a8f7a17e"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-street-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_5098b60076104a1e889be38a409df844"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-street-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_eff55f68d9e8467d8f11acdf616773fd"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-street-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_6929c2b3ac254c0493eac73e22a4437f"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-street-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_702137a28a4a4decab99402516134afa"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-telephone-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_6d6bedecbffc48649ad19ba149eabfc2"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-telephone-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_4577af1b09c14040bffa70d361b9c41c"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-telephone-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_ef52282674184fbdb6529a5d20088391"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-telephone-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_ef0bcb949b344bb387a73acc31ca626c"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-telephone-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_929292df5b854e7f840496128bea6229"
+      },
+      {
+        "scenario_id": "identity-injection-fake-tool-result-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_c319bd2fe12543b4a46319273ee2874d"
+      },
+      {
+        "scenario_id": "identity-injection-fake-tool-result-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_f890239e0b8f4d60af5c996fd02f89d8"
+      },
+      {
+        "scenario_id": "identity-injection-fake-tool-result-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_13ee5accf8eb4a18a32e1a4ff4310262"
+      },
+      {
+        "scenario_id": "identity-injection-fake-tool-result-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_619b4a5fc317469b95a48419d03802b4"
+      },
+      {
+        "scenario_id": "identity-injection-fake-tool-result-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_433a43841fb94e388c18e16df8b9268d"
+      },
+      {
+        "scenario_id": "identity-injection-ignore-rules-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_6aff1b8e7ce543b698e8038fd6b6897c"
+      },
+      {
+        "scenario_id": "identity-injection-ignore-rules-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_40095b7b97164cd39ce4dad44be493b0"
+      },
+      {
+        "scenario_id": "identity-injection-ignore-rules-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_78442f5690164130b145ff27d02fb141"
+      },
+      {
+        "scenario_id": "identity-injection-ignore-rules-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_33321313e604481cbf946f4c4c75e3d0"
+      },
+      {
+        "scenario_id": "identity-injection-ignore-rules-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_0e5f2b0cce2042808feaae6a01a9fdd0"
+      },
+      {
+        "scenario_id": "identity-injection-reveal-instructions-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_7d73bba472804a309c4ca5d3c39e3d48"
+      },
+      {
+        "scenario_id": "identity-injection-reveal-instructions-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_ec1d273ae185444fac202769ab3ad40b"
+      },
+      {
+        "scenario_id": "identity-injection-reveal-instructions-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_7acaecbdd0494ac89b46d812599fb620"
+      },
+      {
+        "scenario_id": "identity-injection-reveal-instructions-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_b2e740f8b96c46c189bec5bda2b29d9b"
+      },
+      {
+        "scenario_id": "identity-injection-reveal-instructions-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_0fce3ad3f8864f7d8ee60e867976eb10"
+      },
+      {
+        "scenario_id": "identity-social-en-gb-clean-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_f50cc4123c5d4e3288e35b471fa541d0"
+      },
+      {
+        "scenario_id": "identity-social-en-gb-clean-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_1fa3275979ea4dc58e25b3fd39852761"
+      },
+      {
+        "scenario_id": "identity-social-en-gb-clean-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_9930795853384ca789d93cd58df8020d"
+      },
+      {
+        "scenario_id": "identity-social-en-gb-clean-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_823576540a14485a91c6ac21cc639151"
+      },
+      {
+        "scenario_id": "identity-social-en-gb-clean-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_1ec4abdf92144712b416d02cdc19681e"
+      },
+      {
+        "scenario_id": "identity-social-en-gb-street-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_9fac425e322a4dfb83e691c9436a703e"
+      },
+      {
+        "scenario_id": "identity-social-en-gb-street-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_7220e74ece9f4cb5b91be67b0b5a7b3c"
+      },
+      {
+        "scenario_id": "identity-social-en-gb-street-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_206b95f0a48042fab53de4a80e2be1fb"
+      },
+      {
+        "scenario_id": "identity-social-en-gb-street-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_2e734258bd36432897c4357372023300"
+      },
+      {
+        "scenario_id": "identity-social-en-gb-street-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_2093526de3b94b429a712ec21cd562ea"
+      },
+      {
+        "scenario_id": "identity-social-en-gb-telephone-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_dd69cb4705864bf48f1304201557b924"
+      },
+      {
+        "scenario_id": "identity-social-en-gb-telephone-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_4f407b6df3504a5c8edba8f3d63c283a"
+      },
+      {
+        "scenario_id": "identity-social-en-gb-telephone-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_5e0130f87fb9415b826f6b77172f6a26"
+      },
+      {
+        "scenario_id": "identity-social-en-gb-telephone-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_2478b95029d847f6ad55e1b5ce6f648f"
+      },
+      {
+        "scenario_id": "identity-social-en-gb-telephone-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_6927bae151874b9681c203bd0a8640fd"
+      },
+      {
+        "scenario_id": "identity-social-en-us-clean-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_c86cf99b30714b8abdaa908468fc24ba"
+      },
+      {
+        "scenario_id": "identity-social-en-us-clean-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_10245e1be5c24009a5282ec881250c57"
+      },
+      {
+        "scenario_id": "identity-social-en-us-clean-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_7487684fa75a46a8a36d8dfdc317e610"
+      },
+      {
+        "scenario_id": "identity-social-en-us-clean-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_caf001f8039840ec87f65c69bc510175"
+      },
+      {
+        "scenario_id": "identity-social-en-us-clean-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_1e146025e9724cf5a4a2a56fb0cb7b1e"
+      },
+      {
+        "scenario_id": "identity-social-en-us-street-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_bed1034dc4554cc983f1d454cbd9694b"
+      },
+      {
+        "scenario_id": "identity-social-en-us-street-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_71e424f436dd4e43a9b6caed2b8a2b42"
+      },
+      {
+        "scenario_id": "identity-social-en-us-street-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_46896c2d4cae4f09bd206a308b15ac6b"
+      },
+      {
+        "scenario_id": "identity-social-en-us-street-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_90b6df0a265b49eda976f478054144f3"
+      },
+      {
+        "scenario_id": "identity-social-en-us-street-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_217554762f054411bc36eeb83c8b6794"
+      },
+      {
+        "scenario_id": "identity-social-en-us-telephone-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 1,
+        "run_id": "run_0c6b6ed85ae8419496a911a2c6a5fb46"
+      },
+      {
+        "scenario_id": "identity-social-en-us-telephone-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 1,
+        "run_id": "run_d89b1b60e520466faa3d5cec7f0e6395"
+      },
+      {
+        "scenario_id": "identity-social-en-us-telephone-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 1,
+        "run_id": "run_d438db898326413a9990404b20d1fc81"
+      },
+      {
+        "scenario_id": "identity-social-en-us-telephone-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 1,
+        "run_id": "run_6645a64a1ba84d3a96fe12b0e3711c5e"
+      },
+      {
+        "scenario_id": "identity-social-en-us-telephone-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 1,
+        "run_id": "run_043dbbd73e844b3baf6c037039a55501"
+      },
+      {
+        "scenario_id": "commit-cancel-claimed-confirmation-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 2,
+        "run_id": "run_94ce72337eda48e88a91ca6279537307"
+      },
+      {
+        "scenario_id": "commit-cancel-claimed-confirmation-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 2,
+        "run_id": "run_ead8b822eb7c4656884ae28b01c8179f"
+      },
+      {
+        "scenario_id": "commit-cancel-claimed-confirmation-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 2,
+        "run_id": "run_3b410572d9b340a3ba5e9222ffdf2ec5"
+      },
+      {
+        "scenario_id": "commit-cancel-claimed-confirmation-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 2,
+        "run_id": "run_8c3afd5f576542549871a52df9905678"
+      },
+      {
+        "scenario_id": "commit-cancel-claimed-confirmation-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 2,
+        "run_id": "run_0380e238fd4d4d8589024785c49a1bfc"
+      },
+      {
+        "scenario_id": "commit-cancel-confirmed-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 2,
+        "run_id": "run_0611498a4a6e4f63ba4db45667c1b7b1"
+      },
+      {
+        "scenario_id": "commit-cancel-confirmed-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 2,
+        "run_id": "run_d2300de646de4d05968a61a88b60b2af"
+      },
+      {
+        "scenario_id": "commit-cancel-confirmed-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 2,
+        "run_id": "run_8f8fb15caf8744c5a34658d044e06817"
+      },
+      {
+        "scenario_id": "commit-cancel-confirmed-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 2,
+        "run_id": "run_c2d7f2d2929d4062991e91ee6a029d78"
+      },
+      {
+        "scenario_id": "commit-cancel-confirmed-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 2,
+        "run_id": "run_4ee5f8890bb94f84a1fd31047910428b"
+      },
+      {
+        "scenario_id": "commit-cancel-unconfirmed-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 2,
+        "run_id": "run_7d756c7f1668458f9bb8371975571d58"
+      },
+      {
+        "scenario_id": "commit-cancel-unconfirmed-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 2,
+        "run_id": "run_52f55d92459b4403bcb222aaa6ae7638"
+      },
+      {
+        "scenario_id": "commit-cancel-unconfirmed-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 2,
+        "run_id": "run_5508553b1e114c5590e5f0b582a18f6c"
+      },
+      {
+        "scenario_id": "commit-cancel-unconfirmed-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 2,
+        "run_id": "run_c921c23c42f9486e8630d0df72b6b684"
+      },
+      {
+        "scenario_id": "commit-cancel-unconfirmed-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 2,
+        "run_id": "run_9f07e153a55a409b9f312cfa265c4e14"
+      },
+      {
+        "scenario_id": "happy-balance-clean-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 2,
+        "run_id": "run_f12db5e7d0ec4c3e86e9a0edf6f12c7d"
+      },
+      {
+        "scenario_id": "happy-balance-clean-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 2,
+        "run_id": "run_b06385cf3fc6476e978410a3693470e0"
+      },
+      {
+        "scenario_id": "happy-balance-clean-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 2,
+        "run_id": "run_beb97624751b41b7ab0b5490e39f2e98"
+      },
+      {
+        "scenario_id": "happy-balance-clean-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 2,
+        "run_id": "run_4c85be977f494a7ca3efeb682a535caa"
+      },
+      {
+        "scenario_id": "happy-balance-clean-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 2,
+        "run_id": "run_a2e56d0fca254fc4bd4070fd2baf98f1"
+      },
+      {
+        "scenario_id": "happy-balance-street-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 2,
+        "run_id": "run_c3fbf762ddd1437d9af996c8576fc009"
+      },
+      {
+        "scenario_id": "happy-balance-street-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 2,
+        "run_id": "run_2762b4bb3f5949bfa11ace916918a1f3"
+      },
+      {
+        "scenario_id": "happy-balance-street-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 2,
+        "run_id": "run_0dd545baa1c749faa5577119b2e03527"
+      },
+      {
+        "scenario_id": "happy-balance-street-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 2,
+        "run_id": "run_4a74b0e5f3aa4566a977c3506b7740e7"
+      },
+      {
+        "scenario_id": "happy-balance-street-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 2,
+        "run_id": "run_1d64044f356c40de99baf84ac7422604"
+      },
+      {
+        "scenario_id": "happy-balance-telephone-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 2,
+        "run_id": "run_6f5da55016f046c19357178418c3e996"
+      },
+      {
+        "scenario_id": "happy-balance-telephone-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 2,
+        "run_id": "run_28b903fd346f4da9ba0b0e706e2833c3"
+      },
+      {
+        "scenario_id": "happy-balance-telephone-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 2,
+        "run_id": "run_e8d093f51206471189bcd07d4e342a55"
+      },
+      {
+        "scenario_id": "happy-balance-telephone-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 2,
+        "run_id": "run_9bef92c2685646cd9e7f9c9f3bf2c735"
+      },
+      {
+        "scenario_id": "happy-balance-telephone-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 2,
+        "run_id": "run_e07ae4b3750d4868b1d35b7e4b4d705e"
+      },
+      {
+        "scenario_id": "happy-balance-us-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 2,
+        "run_id": "run_4734c9220be34dadb9016ba4d83c36c8"
+      },
+      {
+        "scenario_id": "happy-balance-us-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 2,
+        "run_id": "run_b0c944f31f4149a2b8f365aa1e564dac"
+      },
+      {
+        "scenario_id": "happy-balance-us-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 2,
+        "run_id": "run_67a7500155c2441e9cb5ebd7eb04132e"
+      },
+      {
+        "scenario_id": "happy-balance-us-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 2,
+        "run_id": "run_e28b29f9dba84b1484b31d80e076d80b"
+      },
+      {
+        "scenario_id": "happy-balance-us-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 2,
+        "run_id": "run_bd28366c26a949a58dd21e2be3f9c0ac"
+      },
+      {
+        "scenario_id": "happy-handoff-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 2,
+        "run_id": "run_b919677d6c8f4faead51d2fceefbb65f"
+      },
+      {
+        "scenario_id": "happy-handoff-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 2,
+        "run_id": "run_750dc470ac334293a15b6ae62bef05b0"
+      },
+      {
+        "scenario_id": "happy-handoff-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 2,
+        "run_id": "run_89741eaee18a4fec971bd288607e178b"
+      },
+      {
+        "scenario_id": "happy-handoff-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 2,
+        "run_id": "run_48cde5be3451401bb8731e99ffc3363c"
+      },
+      {
+        "scenario_id": "happy-handoff-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 2,
+        "run_id": "run_8228d404579a41d0a1e50508d85d10d6"
+      },
+      {
+        "scenario_id": "happy-policy-question-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 2,
+        "run_id": "run_882e66b435b14ea7a9a5c38637e12afe"
+      },
+      {
+        "scenario_id": "happy-policy-question-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 2,
+        "run_id": "run_8775924143974f7985129c0082537fba"
+      },
+      {
+        "scenario_id": "happy-policy-question-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 2,
+        "run_id": "run_d4f7f1e3716147c0913e66f5eaf6f4c7"
+      },
+      {
+        "scenario_id": "happy-policy-question-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 2,
+        "run_id": "run_62ace1d151614b4cb139329836a1eaf6"
+      },
+      {
+        "scenario_id": "happy-policy-question-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 2,
+        "run_id": "run_cd5a5688a4d84991b349ca0a72590c86"
+      },
+      {
+        "scenario_id": "happy-recent-transactions-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 2,
+        "run_id": "run_91dabe984ced404caf15ba4b087d968c"
+      },
+      {
+        "scenario_id": "happy-recent-transactions-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 2,
+        "run_id": "run_00a3da3ebfb742b99f6e00f5fbb0fc80"
+      },
+      {
+        "scenario_id": "happy-recent-transactions-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 2,
+        "run_id": "run_3f70a5d4360547dd8e9d4146293d29af"
+      },
+      {
+        "scenario_id": "happy-recent-transactions-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 2,
+        "run_id": "run_fee3a74a4d5743caa1c1fba9a31b5762"
+      },
+      {
+        "scenario_id": "happy-recent-transactions-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 2,
+        "run_id": "run_1c63ddd274494451a8e34c55f2f8e615"
+      },
+      {
+        "scenario_id": "happy-transaction-details-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 2,
+        "run_id": "run_2009192e38444914a5d67c1f07617531"
+      },
+      {
+        "scenario_id": "happy-transaction-details-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 2,
+        "run_id": "run_23f7a596becb46838d7b1cfd93ffa1b0"
+      },
+      {
+        "scenario_id": "happy-transaction-details-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 2,
+        "run_id": "run_f2cbb2faba264a2fa9c834b1d7123fee"
+      },
+      {
+        "scenario_id": "happy-transaction-details-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 2,
+        "run_id": "run_42a1fe583fc3468fa2b43dd54f441f37"
+      },
+      {
+        "scenario_id": "happy-transaction-details-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 2,
+        "run_id": "run_43aab443d9f549459f5095a60a52c9d4"
+      },
+      {
+        "scenario_id": "happy-verify-retry-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 2,
+        "run_id": "run_b539496f21114819ad2517ef381c5e72"
+      },
+      {
+        "scenario_id": "happy-verify-retry-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 2,
+        "run_id": "run_e7ed1316f023449bb98f612c2b3b46c4"
+      },
+      {
+        "scenario_id": "happy-verify-retry-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 2,
+        "run_id": "run_d216d65b3ed140bbbc44c0948b1bf25e"
+      },
+      {
+        "scenario_id": "happy-verify-retry-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 2,
+        "run_id": "run_37985403e2504b2da5fd49f404626eae"
+      },
+      {
+        "scenario_id": "happy-verify-retry-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 2,
+        "run_id": "run_32d3e0b9457f459c9311f6596205f4ec"
+      },
+      {
+        "scenario_id": "identity-authority-employee-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 2,
+        "run_id": "run_f8b71e10458b48b9b65bb490c05f45ab"
+      },
+      {
+        "scenario_id": "identity-authority-employee-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 2,
+        "run_id": "run_507cf04f80be48b493a13edcfd0bf293"
+      },
+      {
+        "scenario_id": "identity-authority-employee-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 2,
+        "run_id": "run_27665ba69cb1408d97f9ac8dddb7923f"
+      },
+      {
+        "scenario_id": "identity-authority-employee-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 2,
+        "run_id": "run_1aacec020ccd4a56bd70958d24029c70"
+      },
+      {
+        "scenario_id": "identity-authority-employee-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 2,
+        "run_id": "run_dfe0e3c9d6944a0dab0a26f76c69d629"
+      },
+      {
+        "scenario_id": "identity-authority-urgency-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 2,
+        "run_id": "run_8c3df73f6f354654b4a173d7d69de426"
+      },
+      {
+        "scenario_id": "identity-authority-urgency-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 2,
+        "run_id": "run_adea7b00bd9d409eb0b6ecf729f2af0e"
+      },
+      {
+        "scenario_id": "identity-authority-urgency-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 2,
+        "run_id": "run_0141e89044bb41f7921d77fa1aa5f20a"
+      },
+      {
+        "scenario_id": "identity-authority-urgency-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 2,
+        "run_id": "run_91c5d57c0e45437abba2cce17b8fa5f0"
+      },
+      {
+        "scenario_id": "identity-authority-urgency-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 2,
+        "run_id": "run_7f868d3f210340008d81b23515439f24"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-clean-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 2,
+        "run_id": "run_4678422dbb98441e86bb4a47576e44b3"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-clean-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 2,
+        "run_id": "run_c725015474f34f0bb7e854e06d9c3265"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-clean-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 2,
+        "run_id": "run_f9eece82220a440795857793bcd7518e"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-clean-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 2,
+        "run_id": "run_4e13e172f0e34f2f97047b764fe8984d"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-clean-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 2,
+        "run_id": "run_56dd79ff27354e34ad5a854b91e3e473"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-street-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 2,
+        "run_id": "run_76d96b91ef5b4048a1d8c95da423a681"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-street-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 2,
+        "run_id": "run_241cebc8284a4318a6b8d3407019db15"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-street-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 2,
+        "run_id": "run_ffec0f4f4f2447bcb0dd0a07aadd0532"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-street-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 2,
+        "run_id": "run_867b0b86f70241f2bacde066f923c66f"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-street-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 2,
+        "run_id": "run_0cc0515f0e1a403fa2b334fab77db449"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-telephone-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 2,
+        "run_id": "run_f1d55ecaeaf64f3aa32fdf0588f6e2eb"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-telephone-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 2,
+        "run_id": "run_a0ded6d3f4ce44d48ddc5a44dd3e5f2d"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-telephone-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 2,
+        "run_id": "run_4ecf559b305e4486802a8c6e9040351c"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-telephone-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 2,
+        "run_id": "run_ed08613e57584abe90eedd799a30560b"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-gb-telephone-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 2,
+        "run_id": "run_5c3ab419ad484e8394b299de4c502ed5"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-clean-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 2,
+        "run_id": "run_78e981a746374ca4ab3d3a82587593db"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-clean-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 2,
+        "run_id": "run_c5458ddc2b804d08b77ca744614d859e"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-clean-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 2,
+        "run_id": "run_cb92de57bf794183a74f85a6c41d163e"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-clean-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 2,
+        "run_id": "run_6570ad84d82d4c59908ac45ebf52b915"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-clean-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 2,
+        "run_id": "run_91aff989036345b4a460a5ae1fe56bd7"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-street-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 2,
+        "run_id": "run_d9da8dba586c41938bbaf2e0ecfd8332"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-street-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 2,
+        "run_id": "run_94f1ae5c72754561b67ba9e623ca0433"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-street-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 2,
+        "run_id": "run_482b9401e9864e498117c0a3235b5391"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-street-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 2,
+        "run_id": "run_8d3b2dca5fd94a81a8155d8d9d0fa288"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-street-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 2,
+        "run_id": "run_2b22622225ca45b29ff30843c615bdb1"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-telephone-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 2,
+        "run_id": "run_5673a98955764305b4331726779b2565"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-telephone-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 2,
+        "run_id": "run_50e4a8430aee4c27bfdb61f29d4b261a"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-telephone-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 2,
+        "run_id": "run_e1d522e7ffb645dd9714296460ed8fd4"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-telephone-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 2,
+        "run_id": "run_7f6b04d9ab654670a91028595769a354"
+      },
+      {
+        "scenario_id": "identity-bereaved-en-us-telephone-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 2,
+        "run_id": "run_145c336d154c417c86388b45db7f61d9"
+      },
+      {
+        "scenario_id": "identity-failed-auth-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 2,
+        "run_id": "run_68d4b047a3b9458f9f56a1eeb88a1600"
+      },
+      {
+        "scenario_id": "identity-failed-auth-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 2,
+        "run_id": "run_f6561676e993455585503c2bab8446f0"
+      },
+      {
+        "scenario_id": "identity-failed-auth-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 2,
+        "run_id": "run_458f48812fb443bead3f8cedc5c40860"
+      },
+      {
+        "scenario_id": "identity-failed-auth-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 2,
+        "run_id": "run_49d386f9970b4fa7abc57eef7f483c82"
+      },
+      {
+        "scenario_id": "identity-failed-auth-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 2,
+        "run_id": "run_94d28101431d449d82a1e5492ea8eb4e"
+      },
+      {
+        "scenario_id": "identity-fault-caller-interrupts-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 2,
+        "run_id": "run_ba79c0f124074c039b88045eb512aecd"
+      },
+      {
+        "scenario_id": "identity-fault-caller-interrupts-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 2,
+        "run_id": "run_cd1c5ac61f4d4f9c9ec2997b48bad780"
+      },
+      {
+        "scenario_id": "identity-fault-caller-interrupts-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 2,
+        "run_id": "run_b0fbf4ee7aa240ca8475b643ea38bd00"
+      },
+      {
+        "scenario_id": "identity-fault-caller-interrupts-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 2,
+        "run_id": "run_a4785914c11440f392cfee4aa290bd42"
+      },
+      {
+        "scenario_id": "identity-fault-caller-interrupts-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 2,
+        "run_id": "run_9e55995531344265967cb7308c86f97a"
+      },
+      {
+        "scenario_id": "identity-fault-noisy-line-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 2,
+        "run_id": "run_a76beafe9980480c8c1ce8c1b048c278"
+      },
+      {
+        "scenario_id": "identity-fault-noisy-line-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 2,
+        "run_id": "run_7e7f643721354d1681930a17ebe7cc8a"
+      },
+      {
+        "scenario_id": "identity-fault-noisy-line-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 2,
+        "run_id": "run_a1312f7190af426a8326af06e20c58b9"
+      },
+      {
+        "scenario_id": "identity-fault-noisy-line-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 2,
+        "run_id": "run_a6e828024d33407d8aabb340fdb6f57f"
+      },
+      {
+        "scenario_id": "identity-fault-noisy-line-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 2,
+        "run_id": "run_80257c8f3516413692894ab668f84ca5"
+      },
+      {
+        "scenario_id": "identity-fault-tool-error-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 2,
+        "run_id": "run_e6d9261451744ee4bfb358886239f805"
+      },
+      {
+        "scenario_id": "identity-fault-tool-error-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 2,
+        "run_id": "run_097c4052e3994ec882143ecc350ba4d2"
+      },
+      {
+        "scenario_id": "identity-fault-tool-error-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 2,
+        "run_id": "run_cd0557fc830f41b5ae79688d9a458363"
+      },
+      {
+        "scenario_id": "identity-fault-tool-error-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 2,
+        "run_id": "run_1e471fa05318415583fcf86126c0b3e9"
+      },
+      {
+        "scenario_id": "identity-fault-tool-error-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 2,
+        "run_id": "run_1f5897cb8d114bc7bf6c1f339edf2a55"
+      },
+      {
+        "scenario_id": "identity-fault-tool-latency-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 2,
+        "run_id": "run_0e5c7d85eb56436dbcffec7587c5a67b"
+      },
+      {
+        "scenario_id": "identity-fault-tool-latency-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 2,
+        "run_id": "run_a28c8ee02d334175ba59eea09ebe3e20"
+      },
+      {
+        "scenario_id": "identity-fault-tool-latency-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 2,
+        "run_id": "run_69f3f9e97b884754a8e8d2ff84d7f96d"
+      },
+      {
+        "scenario_id": "identity-fault-tool-latency-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 2,
+        "run_id": "run_c28f57bfa8804d69a98d3ab1fb739265"
+      },
+      {
+        "scenario_id": "identity-fault-tool-latency-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 2,
+        "run_id": "run_7025be32fc744501b27de17b4e6c4fa9"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-clean-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 2,
+        "run_id": "run_ac2aa3065f5e4eb1b897d63a478fa0d1"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-clean-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 2,
+        "run_id": "run_e8e4ae842da345aea0528b22004e46ad"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-clean-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 2,
+        "run_id": "run_63926b27c87646988d60db5e3304cf60"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-clean-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 2,
+        "run_id": "run_d272e15eadf347ea82412727de794655"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-clean-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 2,
+        "run_id": "run_323b8757ec3b4367bde3f27443e159be"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-street-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 2,
+        "run_id": "run_3184989a94f746898a57588ca0334366"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-street-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 2,
+        "run_id": "run_de59852699494a20bdff994cb76cc035"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-street-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 2,
+        "run_id": "run_3aa60195020c425ab4152bd95acf11f9"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-street-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 2,
+        "run_id": "run_d9be6d0280514ef7bdbe48a0bf41e4c5"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-street-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 2,
+        "run_id": "run_4029ff62f69146c3bd54d136fc3ae710"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-telephone-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 2,
+        "run_id": "run_dc4ddf6e052948eab9fea4154ba77350"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-telephone-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 2,
+        "run_id": "run_10dad010496b42a39641a7dff7c6daa9"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-telephone-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 2,
+        "run_id": "run_8c925822c97046739a5611ebeab11008"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-telephone-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 2,
+        "run_id": "run_cd9fee2f096640678343767614cee4be"
+      },
+      {
+        "scenario_id": "identity-impatient-en-gb-telephone-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 2,
+        "run_id": "run_90cdb97adc0b411cbb9d27ede4005ad6"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-clean-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 2,
+        "run_id": "run_e59432785f8a4900a43b77201647c8c2"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-clean-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 2,
+        "run_id": "run_13c7afa891284b5eb27b3c06293d9a78"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-clean-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 2,
+        "run_id": "run_9d0157f1f7f7411089b8cfa7b0d13023"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-clean-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 2,
+        "run_id": "run_d44840e33ece404ea2861b50df892722"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-clean-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 2,
+        "run_id": "run_bc0fe4ac86b4465180566fb0f5131e7e"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-street-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 2,
+        "run_id": "run_da86415892ce4671a626b838297aa29b"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-street-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 2,
+        "run_id": "run_21bb9a6b9d7941b1bd0abe38eb7fa181"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-street-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 2,
+        "run_id": "run_623d5b0f618e4b368c39162177ae5064"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-street-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 2,
+        "run_id": "run_7f8e11ddba1245a889b2f8a67de09416"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-street-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 2,
+        "run_id": "run_ea314842afe142cb807946cf3905c2bf"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-telephone-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 2,
+        "run_id": "run_5c586eda50064d04a6deebb7c823d971"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-telephone-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 2,
+        "run_id": "run_322e9796e69c4fada6dbb0a0d036edf4"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-telephone-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 2,
+        "run_id": "run_49f9b5fa0ccb42c99f32096bf123facd"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-telephone-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 2,
+        "run_id": "run_4483dc0f07cc4e42b9983b2304df4bc0"
+      },
+      {
+        "scenario_id": "identity-impatient-en-us-telephone-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 2,
+        "run_id": "run_ae23bde1e9b04caf8319da77c1bc628f"
+      },
+      {
+        "scenario_id": "identity-injection-fake-tool-result-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 2,
+        "run_id": "run_c3e200449e584bce97cc5f9dbd554b0d"
+      },
+      {
+        "scenario_id": "identity-injection-fake-tool-result-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 2,
+        "run_id": "run_2959cb00ce8b4a46bdccf16dd63adda4"
+      },
+      {
+        "scenario_id": "identity-injection-fake-tool-result-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 2,
+        "run_id": "run_3cc5204a905347bca6f110fd1854a16f"
+      },
+      {
+        "scenario_id": "identity-injection-fake-tool-result-001",
+        "provider_config_id": "gemini-live",
+        "repetition": 2,
+        "run_id": "run_7350105098c24e6f832b8056728aa541"
+      },
+      {
+        "scenario_id": "identity-injection-fake-tool-result-001",
+        "provider_config_id": "elevenlabs-live",
+        "repetition": 2,
+        "run_id": "run_71925bfba4894720a36373a8465415fa"
+      },
+      {
+        "scenario_id": "identity-injection-ignore-rules-001",
+        "provider_config_id": "openai-realtime-live",
+        "repetition": 2,
+        "run_id": "run_d6016aba0025471d90854b5fabdb3e19"
+      },
+      {
+        "scenario_id": "identity-injection-ignore-rules-001",
+        "provider_config_id": "nova-sonic-live",
+        "repetition": 2,
+        "run_id": "run_e31ff8127eef4386858736fa9aa79bcc"
+      },
+      {
+        "scenario_id": "identity-injection-ignore-rules-001",
+        "provider_config_id": "xai-voice-live",
+        "repetition": 2,
+        "run_id": "run_4c8a929bb3ef41b8ba9a42bb7091fdb1"
+      }
+    ],
+    "verification": {
+      "status": "passed",
+      "unchanged_completed_run_ids": 563
+    }
+  }
+}

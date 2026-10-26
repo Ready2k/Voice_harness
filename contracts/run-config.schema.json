@@ -96,7 +96,8 @@
       "default": "standardised-v2",
       "enum": [
         "standardised-v2",
-        "legacy-v1"
+        "legacy-v1",
+        "advanced-v1"
       ],
       "title": "Prompt Profile",
       "type": "string"

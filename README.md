@@ -68,6 +68,10 @@ Unsigned manifests bind event count, final ledger hash and artifact hashes. Veri
 
 Open the [two-comparison menu](artifacts/voice-comparisons/index.html) locally to choose the original fixed-line listening test or the advanced conversation comparison. The advanced live set contains 115 complete conversations from a 120-cell plan, comparing common and provider-specific prompts across six multi-turn situations. Five attempts exceeded the response-length limit. Response timings are recorded; blind human ratings are pending. See the [recording and review runbook](docs/VOICE_CONVERSATION_COMPARISON.md).
 
+For the complete assessed banking catalogue, the [advanced full bake-off](docs/ADVANCED_FULL_BAKEOFF.md) runs provider-specific conversation styles with all verification rules, tools and speech assessments retained. Select **Advanced provider-specific prompts** in the bake-off page or use `prompt_profile: "advanced-v1"` through the API.
+
+The [completed 600-cell advanced report](artifacts/full-advanced-bakeoff-2026-10-26/index.html) includes results, exact prompt bindings and verified reuse of completed runs after pauses. Human likeness still requires the separate blind listening review.
+
 ## Development
 
 ```bash

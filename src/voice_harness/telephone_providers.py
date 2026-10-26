@@ -25,7 +25,12 @@ class TelephoneAdapter:
         elif self.provider == "gemini-live":
             config["turn_detection"] = "server_vad"
         info = await self.native.open_session(config)
-        return {**info, "provider_config_id": self.provider, "requested_model_id": config["model_id"],
+        capabilities = self.native.capabilities() if callable(getattr(self.native, "capabilities", None)) else {}
+        return {**info, "provider_config_id": self.provider,
+                "native_audio": "provider_pcm_converted_to_twilio_mulaw_8khz",
+                "interrupt_truncate": capabilities.get("interrupt_truncate", "unknown"),
+                "interrupt_detection": capabilities.get("interrupt_detection", "provider_reported"),
+                "playback_clear": "local_twilio_clear_not_provider_context_truncation", "requested_model_id": config["model_id"],
                 "turn_control": "controller_requested" if self.provider in {"openai-realtime-live", "xai-voice-live"} else "provider_vad_with_controller_context"}
 
     async def send_text(self, text, *, respond=True):

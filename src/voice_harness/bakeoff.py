@@ -101,6 +101,7 @@ class BakeoffRequest(Closed):
     # Empty means every live catalogue scenario.
     scenario_ids: Annotated[list[Identifier], Field(max_length=200)] = []
     repetitions: Annotated[int, Field(ge=1, le=10)] = 1
+    prompt_profile: Literal["standardised-v2", "advanced-v1"] = "standardised-v2"
     weights: Weights = Weights()
     group_balanced: bool = False  # give each scenario group equal weight in the rates instead of pooling runs
     runs: Annotated[list[ImportedRun], Field(max_length=MAX_RUNS)] = []
@@ -162,6 +163,7 @@ class BakeoffStore:
             "phase": "scored" if request.runs else "preflight",
             **({} if request.runs else {"preflight": {"generation": 0, "checks": preflight_checks(providers)}}),
             "providers": providers, "repetitions": request.repetitions if not request.runs else None,
+            "prompt_profile": request.prompt_profile,
             "weights": request.weights.model_dump(), "group_balanced": request.group_balanced, "cells": cells,
         }
         with self.database.connection() as db:
@@ -197,6 +199,7 @@ def summary(payload):
     done = sum(c.get("done", False) for c in cells)
     return {"bakeoff_id": payload["bakeoff_id"], "name": payload["name"], "state": payload["state"],
             "mode": payload["mode"], "created_at": payload["created_at"], "providers": payload["providers"],
+            "prompt_profile": payload.get("prompt_profile", "standardised-v2"),
             "phase": payload.get("phase", "scored"), "pause_reason": payload.get("pause_reason"),
             "preflight": payload.get("preflight"),
             "cells": len(cells), "cells_done": done,
@@ -325,6 +328,8 @@ def tick(store, database, start_run, *, capacity, per_provider=2, clock=time.tim
                 if busy.get(provider, 0) >= per_provider:
                     continue
                 config = {"scenario_id": cell["scenario_id"], "provider_config_id": provider}
+                if payload.get("prompt_profile", "standardised-v2") != "standardised-v2":
+                    config["prompt_profile"] = payload["prompt_profile"]
                 generation = payload.get("preflight", {}).get("generation", 0)
                 key = f"{bakeoff_id}:{'preflight' if checking else 'scored'}:{generation}:{cell['scenario_id']}:{provider}:{cell['repetition']}:{len(cell['attempts'])}"
                 try:

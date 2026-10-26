@@ -17,6 +17,23 @@ from voice_harness.target_prompts import STANDARDISED_V2, provenance
 
 
 class TargetPromptTests(unittest.TestCase):
+    def test_advanced_style_preserves_banking_rules_and_binds_actual_provider_prompt(self):
+        prompts = []
+        for provider in LIVE_PROVIDERS:
+            _, config = _adapter(provider, "advanced-v1")
+            sent = config.get("instructions", config.get("system_prompt"))
+            self.assertIn(STANDARDISED_V2, sent)
+            self.assertNotIn("already verified", sent)
+            self.assertNotIn("You have no tools", sent)
+            self.assertEqual(config["tools"], TOOLS)
+            bound = session_metadata(provider, "test", {}, prompt_profile="advanced-v1")["target_prompt"]
+            self.assertEqual(bound["instructions"], sent)
+            self.assertTrue(bound["vendor_tuned"])
+            self.assertEqual(bound["comparison_track"], "advanced")
+            prompts.append(sent)
+        self.assertEqual(len(set(prompts)), len(LIVE_PROVIDERS))
+        self.assertEqual(RunConfig(prompt_profile="advanced-v1").prompt_profile, "advanced-v1")
+
     def test_all_adapters_receive_the_selected_prompt_and_same_tools(self):
         for provider in LIVE_PROVIDERS:
             for profile, expected in [("standardised-v2", STANDARDISED_V2), ("legacy-v1", LEGACY_INSTRUCTIONS)]:

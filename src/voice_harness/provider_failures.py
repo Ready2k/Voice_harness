@@ -19,6 +19,10 @@ def failure_code(error):
     code = value.split(":", 1)[0]
     if code in INFRA_FAILURES or re.fullmatch(r"PROVIDER_HTTP_[45][0-9]{2}", value):
         return code
+    closed = getattr(error, "rcvd", None)
+    if getattr(closed, "code", None) == 3000 and getattr(closed, "reason", "").startswith("[quota_exceeded]"):
+        # ElevenLabs may reject the socket before its first client message, without an error event.
+        return "PROVIDER_QUOTA_EXCEEDED"
     response = getattr(error, "response", None)
     if isinstance(response, dict):  # botocore's structured error, without its message
         aws_code = (response.get("Error") or {}).get("Code")
@@ -37,7 +41,7 @@ def stream_failure(errors):
     """Known provider error codes from an established session, without provider message text."""
     access = {"invalid_api_key", "authentication_error", "unauthorized", "permission_denied",
               "AccessDeniedException", "UnrecognizedClientException", "ExpiredTokenException"}
-    quota = {"insufficient_quota", "rate_limit_exceeded", "resource_exhausted", "RESOURCE_EXHAUSTED",
+    quota = {"insufficient_quota", "quota_exceeded", "rate_limit_exceeded", "resource_exhausted", "RESOURCE_EXHAUSTED",
              "ThrottlingException", "ServiceQuotaExceededException"}
     for error in errors:
         code = error.get("code")
