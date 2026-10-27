@@ -33,6 +33,7 @@ AXES = {"naturalness": "Natural delivery", "appropriateness": "Appropriate tone"
         "clarity": "Clarity", "flow": "Conversation flow", "accuracy": "Scenario accuracy",
         "overall": "Overall human likeness"}
 PROVIDERS = {
+    "openai-live": ("OpenAI GPT-Live 1", "marin"),
     "openai-realtime-live": ("OpenAI Realtime", "marin"),
     "nova-sonic-live": ("Amazon Nova Sonic", "matthew"),
     "xai-voice-live": ("xAI Grok Voice", "ara"),
@@ -40,6 +41,7 @@ PROVIDERS = {
     "elevenlabs-live": ("ElevenLabs Agents", "JBFqnCBsd6RMkjVDRZzb"),
 }
 SOURCES = {
+    "openai-live": "https://developers.openai.com/api/docs/guides/live",
     "openai-realtime-live": "https://developers.openai.com/api/docs/guides/voice-prompting",
     "nova-sonic-live": "https://docs.aws.amazon.com/nova/latest/nova2-userguide/sonic-system-prompts.html",
     "xai-voice-live": "https://docs.x.ai/developers/model-capabilities/audio/speech-to-speech/prompting-guide",

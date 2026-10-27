@@ -1,6 +1,7 @@
 // One display name per provider. The technical ID stays available on hover.
 
 export const PROVIDER_NAMES = {
+  "openai-live": "OpenAI GPT-Live 1",
   "openai-realtime-live": "OpenAI Realtime",
   "nova-sonic-live": "Amazon Nova Sonic",
   "xai-voice-live": "xAI Grok Voice",
@@ -11,6 +12,7 @@ export const PROVIDER_NAMES = {
 
 // Model IDs and families seen in run records resolve to the same display name as their configuration.
 const ALIASES = {
+  "gpt-live-1": "openai-live", "openai_live": "openai-live",
   "amazon.nova-2-5-sonic": "nova-sonic-live", "aws_nova_sonic": "nova-sonic-live", "nova": "nova-sonic-live",
   "gemini-3.8-live": "gemini-live", "google_gemini_live": "gemini-live",
   "gpt-realtime-2.1": "openai-realtime-live", "gpt-realtime": "openai-realtime-live", "openai_realtime": "openai-realtime-live",

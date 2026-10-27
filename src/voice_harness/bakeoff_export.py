@@ -14,7 +14,7 @@ from .bakeoff import NAMES, report
 
 TEMPLATE = Path(__file__).with_name("templates") / "bakeoff_report.html"
 WEB = Path(__file__).resolve().parents[2] / "apps" / "web"
-SHORT = {"openai-realtime-live": "OpenAI", "nova-sonic-live": "Nova", "xai-voice-live": "xAI", "gemini-live": "Gemini", "elevenlabs-live": "ElevenLabs"}
+SHORT = {"openai-live": "GPT-Live", "openai-realtime-live": "OpenAI", "nova-sonic-live": "Nova", "xai-voice-live": "xAI", "gemini-live": "Gemini", "elevenlabs-live": "ElevenLabs"}
 
 
 def report_data(payload, *, weights=None, title=None, source="Voice Harness ledger", generated_at=None):

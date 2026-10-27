@@ -78,6 +78,8 @@ def instructions(profile, provider=None):
         return "# Role and banking rules\n" + STANDARDISED_V2 + "\n# Goal\nHelp the caller using available tools.\n# Tone\n" + ADVANCED_STYLE
     if provider == "gemini-live":
         return STANDARDISED_V2 + "\n# Conversation style\n" + ADVANCED_STYLE + "Respond to expressed concerns without assuming an emotion.\n"
+    if provider == "openai-live":
+        return STANDARDISED_V2 + "\n# Live conversation\n" + ADVANCED_STYLE + "Delegate banking reasoning and tools to the backend; keep listening while it works.\n"
     if provider == "openai-realtime-live":
         return STANDARDISED_V2 + "\n# Personality and tone\n" + ADVANCED_STYLE + "\n# Pacing\nSpeak at an unhurried conversational pace.\n"
     raise ValueError("ADVANCED_PROMPT_REQUIRES_LIVE_PROVIDER")

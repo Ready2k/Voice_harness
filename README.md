@@ -86,3 +86,6 @@ Local tests default to SQLite; Compose tests use PostgreSQL. Schemas and OpenAPI
 make golden and make recovery retain the earlier standalone development fixtures. The API/demo path is the integrated PostgreSQL/MCP implementation. make stop preserves volumes.
 
 Acceptance coverage is mapped in [Phase 1 status](docs/PHASE1_STATUS.md) and the later phase status documents.
+
+GPT-Live 1 is available as **OpenAI GPT-Live 1** (`openai-live`), separately from Realtime.
+See [configuration, diagnostic limitations and the live smoke test](docs/OPENAI_LIVE.md).

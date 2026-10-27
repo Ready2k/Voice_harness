@@ -26,7 +26,7 @@ class TelephoneRequest(BaseModel):
     subtest_id: str | None = Field(default=None, pattern=r"^[0-9]{1,12}$")
     scenario: str = Field(default="lost-wallet", pattern=r"^(balance|lost-wallet)$")
     response_mode: str = Field(default="ai", pattern=r"^(static|ai)$")
-    provider_config_id: str = Field(default="openai-realtime-live", pattern=r"^(openai-realtime-live|gemini-live|nova-sonic-live|xai-voice-live|elevenlabs-live)$")
+    provider_config_id: str = Field(default="openai-realtime-live", pattern=r"^(openai-live|openai-realtime-live|gemini-live|nova-sonic-live|xai-voice-live|elevenlabs-live)$")
     routing_mode: str = Field(default="dtmf", pattern=r"^(dtmf|voice)$")
     max_seconds: int = Field(default=180, ge=20, le=180)
     turn_quiet_ms: int = Field(default=1500, ge=200, le=2000)

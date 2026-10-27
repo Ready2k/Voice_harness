@@ -83,6 +83,7 @@
       "default": "mock-banking-v1",
       "enum": [
         "mock-banking-v1",
+        "openai-live",
         "openai-realtime-live",
         "nova-sonic-live",
         "xai-voice-live",

@@ -3559,6 +3559,7 @@
             "items": {
               "type": "string",
               "enum": [
+                "openai-live",
                 "openai-realtime-live",
                 "nova-sonic-live",
                 "xai-voice-live",
@@ -3567,7 +3568,7 @@
               ]
             },
             "type": "array",
-            "maxItems": 5,
+            "maxItems": 6,
             "minItems": 2,
             "title": "Provider Config Ids",
             "default": []
@@ -4198,6 +4199,7 @@
           "provider_config_id": {
             "type": "string",
             "enum": [
+              "openai-live",
               "openai-realtime-live",
               "nova-sonic-live",
               "xai-voice-live",
@@ -4517,6 +4519,7 @@
             "type": "string",
             "enum": [
               "mock-banking-v1",
+              "openai-live",
               "openai-realtime-live",
               "nova-sonic-live",
               "xai-voice-live",
@@ -4894,7 +4897,7 @@
           },
           "provider_config_id": {
             "type": "string",
-            "pattern": "^(openai-realtime-live|gemini-live|nova-sonic-live|xai-voice-live|elevenlabs-live)$",
+            "pattern": "^(openai-live|openai-realtime-live|gemini-live|nova-sonic-live|xai-voice-live|elevenlabs-live)$",
             "title": "Provider Config Id",
             "default": "openai-realtime-live"
           },

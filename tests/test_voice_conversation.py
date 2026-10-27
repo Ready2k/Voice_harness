@@ -52,7 +52,7 @@ class Comparison(unittest.TestCase):
         self.plan = vc.setup(self.out, repetitions=1)
 
     def test_plan_balances_conditions_and_freezes_configuration(self):
-        self.assertEqual(len(self.plan["jobs"]), 60)
+        self.assertEqual(len(self.plan["jobs"]), len(vc.PROVIDERS) * len(vc.SCENARIOS) * 2)
         for provider in vc.PROVIDERS:
             for condition in ("common", "tuned"):
                 self.assertEqual(sum(j["provider"] == provider and j["condition"] == condition

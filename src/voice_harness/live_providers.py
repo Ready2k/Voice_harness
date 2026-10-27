@@ -59,11 +59,12 @@ for _name, _description in {
                   "parameters": TOOL_CONTRACTS[_name].model_json_schema(by_alias=True)})
 
 
-LIVE_PROVIDERS = {"openai-realtime-live": "openai_realtime", "nova-sonic-live": "aws_nova_sonic",
+LIVE_PROVIDERS = {"openai-live": "openai_live", "openai-realtime-live": "openai_realtime", "nova-sonic-live": "aws_nova_sonic",
                   "xai-voice-live": "xai_grok_voice", "gemini-live": "google_gemini_live",
                   "elevenlabs-live": "elevenlabs_agents"}
 # The model under test, as recorded for judge independence checks (a judge must not be the tested model).
 TESTED_MODELS = {
+    "openai-live": {"provider": "openai", "model_id": "gpt-live-1", "family": "openai_live"},
     "openai-realtime-live": {"provider": "openai", "model_id": "gpt-realtime-2.1", "family": "openai_realtime"},
     "nova-sonic-live": {"provider": "aws", "model_id": "amazon.nova-2-5-sonic", "family": "aws_nova_sonic"},
     # pinned versioned name; the grok-voice-latest alias is never used for runs
@@ -165,7 +166,7 @@ def availability(provider_config_id, environ=None, *, manual=False, caller=None)
     return (False, missing[0]) if missing else (True, None)
 
 
-FAMILIES = {"openai-realtime-live": "openai", "nova-sonic-live": "aws_nova_sonic", "xai-voice-live": "xai_grok_voice",
+FAMILIES = {"openai-live": "openai_live", "openai-realtime-live": "openai", "nova-sonic-live": "aws_nova_sonic", "xai-voice-live": "xai_grok_voice",
             "gemini-live": "google_gemini_live", "elevenlabs-live": "elevenlabs_agents"}
 
 
@@ -216,6 +217,8 @@ def session_metadata(provider_config_id, requested_model_id, receipt, connection
         "provider_config_id": provider_config_id, "adapter": tested["family"], "family": FAMILIES[provider_config_id],
         "requested_model_id": requested_model_id, "returned_model_id": receipt.get("model_id"),
         "provider_session_id": receipt.get("provider_session_id"),
+        **({"backend_model_id": receipt.get("backend_model_id"), "turn_boundary": receipt.get("turn_boundary")}
+           if provider_config_id == "openai-live" else {}),
         **capability_binding(provider_config_id),
         "target_prompt": prompt_provenance(prompt_profile, LEGACY_INSTRUCTIONS if prompt_profile == "legacy-v1" else target_instructions(prompt_profile, provider_config_id), TOOLS),
         **(connection or {}),
@@ -225,6 +228,11 @@ def session_metadata(provider_config_id, requested_model_id, receipt, connection
 def _adapter(provider_config_id, prompt_profile="standardised-v2"):
     instructions = LEGACY_INSTRUCTIONS if prompt_profile == "legacy-v1" else target_instructions(prompt_profile, provider_config_id)
     config = {"tools": TOOLS}
+    if provider_config_id == "openai-live":
+        from .adapters.openai_live import OpenAILiveAdapter
+
+        config.update(instructions=instructions, model_id="gpt-live-1")
+        return OpenAILiveAdapter(), config
     if provider_config_id == "openai-realtime-live":
         from .adapters.openai_realtime import OpenAIRealtimeAdapter
 
@@ -264,8 +272,8 @@ def configure_transport(provider_config_id, config, caller_mode):
     if caller_mode not in {"fixed", "live_ai", "human_microphone"}:
         raise ValueError("UNKNOWN_CALLER_MODE")
     nova = provider_config_id == "nova-sonic-live"
-    provider_vad = nova or provider_config_id == "elevenlabs-live"  # no manual commit: the provider owns endpointing
-    if provider_config_id == "elevenlabs-live":
+    provider_vad = nova or provider_config_id in {"elevenlabs-live", "openai-live"}  # no manual commit: the provider owns endpointing
+    if provider_config_id in {"elevenlabs-live", "openai-live"}:
         config.pop("turn_detection", None)
         detection = "provider_vad"
     elif nova:
@@ -338,12 +346,14 @@ async def run_live(engine, run_id, provider_config_id, scenario_id, *, seed=0, c
     metadata["harness_transport"] = transport
     metadata["caller_mode"] = "fixed"
     metadata["caller_voice"] = describe_caller_voice(voice_env)
-    context_only = provider_config_id in ("openai-realtime-live", "xai-voice-live", "gemini-live", "elevenlabs-live")  # send_text(respond=False) supported
+    context_only = provider_config_id in ("openai-live", "openai-realtime-live", "xai-voice-live", "gemini-live", "elevenlabs-live")  # send_text(respond=False) supported
     from .cost_recorder import UsageRecorder
 
     tested = TESTED_MODELS[provider_config_id]
     recorder = UsageRecorder(engine.database, run_id, provider=metadata["family"], model=tested["model_id"],
                              region=getattr(adapter, "region", None))
+    if provider_config_id == "openai-live":
+        adapter.usage_sink = recorder.observe
 
     assessor = IndependentAssessor(engine, select_backend())
 
@@ -420,6 +430,8 @@ async def _run_interactive(engine, run_id, provider_config_id, scenario_id, call
         metadata["caller_voice"] = {**configuration(caller_config), "session": caller_receipt}
         recorder = UsageRecorder(engine.database, run_id, provider=metadata["family"],
                                  model=TESTED_MODELS[provider_config_id]["model_id"])
+        if provider_config_id == "openai-live":
+            adapter.usage_sink = recorder.observe
         runner = InteractiveScenarioRunner(
             engine, run_id, adapter, IndependentAssessor(engine, select_backend()), scenario_id,
             caller=caller, caller_config=caller_config, evidence=evidence, seed=seed,
@@ -480,11 +492,13 @@ async def run_manual(engine, run_id, config, bridge):
     tested = TESTED_MODELS[provider_config_id]
     recorder = UsageRecorder(engine.database, run_id, provider=metadata["family"], model=tested["model_id"],
                              region=getattr(adapter, "region", None))
+    if provider_config_id == "openai-live":
+        adapter.usage_sink = recorder.observe
     session = ManualSession(
         engine, run_id, adapter, IndependentAssessor(engine, select_backend()), config["scenario_id"], bridge=bridge,
         playback_mode=config["playback_mode"], journey_id=config.get("journey_id"), path=config.get("path", "happy"),
         provider_session=metadata, cost_recorder=recorder, seed=config["fixture_seed"],
-        context_only=provider_config_id in ("openai-realtime-live", "xai-voice-live", "gemini-live", "elevenlabs-live"))
+        context_only=provider_config_id in ("openai-live", "openai-realtime-live", "xai-voice-live", "gemini-live", "elevenlabs-live"))
     reason = "done"
     try:
         return await session.run()

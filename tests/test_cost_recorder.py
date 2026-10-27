@@ -373,3 +373,18 @@ class DriverEndToEnd(Base):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class LiveUsageTests(unittest.TestCase):
+    def test_voice_duration_is_cumulative_and_backend_tokens_are_separate(self):
+        from unittest.mock import patch
+        recorder = UsageRecorder(None, 'run', provider='openai_live', model='gpt-live-1')
+        with patch.object(recorder, '_append', side_effect=lambda reports: reports):
+            voice = recorder.observe(Usage(session_id='s', raw={'voice_usage': {'seconds': 12.5}, 'cumulative': True}))
+            self.assertEqual(len(voice), 1)
+            self.assertEqual((voice[0]['unit'], voice[0]['quantity'], voice[0]['report_kind']), ('second', '12.5', 'cumulative'))
+            backend = recorder.observe(Usage(session_id='s', raw={'backend_model_id': 'gpt-6-luna',
+                'response_id': 'resp1', 'backend_usage': {'input_tokens': 20, 'output_tokens': 5}}))
+            self.assertTrue(all(r['model'] == 'gpt-6-luna' and r['service'] == 'live_responses' for r in backend))
+            self.assertEqual([r['quantity'] for r in backend], ['20', '5'])
+            self.assertEqual(recorder.observe(TurnEnd(session_id='s')), [])

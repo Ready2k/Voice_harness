@@ -118,8 +118,9 @@ def reports_from_adapter_usage(provider, usage, *, scope_id, usage_date, revisio
                     "meter_id": meter_map.get(meter, meter), "quantity": None if quantity is None else str(int(quantity)),
                     "cached_quantity": None if cached is None else str(int(cached)), "unknown_reason": unknown})
 
-    for side, total_key, details_key in (("input", "input_tokens", "input_token_details"),
-                                         ("output", "output_tokens", "output_token_details")):
+    token_sides = (("input", "input_tokens", "input_token_details"),
+                   ("output", "output_tokens", "output_token_details"))
+    for side, total_key, details_key in (() if raw.get("live_voice_duration") else token_sides):
         total = data.get(total_key)
         details = raw.get(details_key) if isinstance(raw.get(details_key), dict) else None
         if details is None:  # Nova usageEvent: details.total.{input|output}.{speechTokens,textTokens}
@@ -140,10 +141,11 @@ def reports_from_adapter_usage(provider, usage, *, scope_id, usage_date, revisio
         else:
             add(f"{side}_tokens_unclassified", total)
     seconds = raw.get("billable_audio_seconds")  # xAI bills voice per minute; report as the provider stated it
-    if isinstance(seconds, int | float) and not isinstance(seconds, bool) and seconds >= 0:
+    if raw.get("live_voice_duration") or (isinstance(seconds, int | float) and not isinstance(seconds, bool) and seconds >= 0):
         out.append({**base, "report_id": f"{scope_id}:billable_audio_seconds:{revision}",
                     "meter_id": meter_map.get("billable_audio_seconds", "billable_audio_seconds"),
-                    "unit": "second", "quantity": format(Decimal(str(seconds)), "f"), "unknown_reason": None})
+                    "unit": "second", "quantity": None if seconds is None else format(Decimal(str(seconds)), "f"),
+                    "unknown_reason": "USAGE_NOT_REPORTED" if seconds is None else None})
     return out
 
 

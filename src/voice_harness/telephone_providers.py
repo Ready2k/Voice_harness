@@ -3,7 +3,7 @@ import inspect
 
 from .live_providers import LIVE_PROVIDERS, TESTED_MODELS, _nova_env, requirements
 
-LABELS = {"openai-realtime-live": "OpenAI Realtime", "gemini-live": "Google Gemini",
+LABELS = {"openai-live": "OpenAI GPT-Live 1", "openai-realtime-live": "OpenAI Realtime", "gemini-live": "Google Gemini",
           "nova-sonic-live": "Amazon Nova Sonic", "xai-voice-live": "xAI Grok Voice",
           "elevenlabs-live": "ElevenLabs Agents"}
 
@@ -58,7 +58,10 @@ class TelephoneAdapter:
 def build_adapter(provider, env):
     if provider not in LIVE_PROVIDERS:
         raise ValueError("UNKNOWN_TELEPHONE_PROVIDER")
-    if provider == "openai-realtime-live":
+    if provider == "openai-live":
+        from .adapters.openai_live import OpenAILiveAdapter
+        native = OpenAILiveAdapter(api_key=env.get("OPENAI_API_KEY"))
+    elif provider == "openai-realtime-live":
         from .adapters.openai_realtime import OpenAIRealtimeAdapter
         native = OpenAIRealtimeAdapter(api_key=env.get("OPENAI_API_KEY"))
     elif provider == "gemini-live":

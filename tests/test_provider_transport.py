@@ -19,7 +19,7 @@ class ProviderTransportTests(unittest.TestCase):
                         self.assertNotIn("turn_detection", config)
                         self.assertEqual(config["endpointing"], "LOW" if mode == "live_ai" else "MEDIUM")
                         self.assertEqual(profile["turn_commit"], "provider_vad")
-                    elif provider == "elevenlabs-live":  # server VAD only: no manual commit exists
+                    elif provider in {"elevenlabs-live", "openai-live"}:  # server VAD only: no manual commit exists
                         self.assertNotIn("turn_detection", config)
                         self.assertEqual(profile["turn_commit"], "provider_vad")
                     else:
@@ -35,7 +35,7 @@ class ProviderTransportTests(unittest.TestCase):
         for provider in LIVE_PROVIDERS:
             _, config = _adapter(provider)
             profile = configure_transport(provider, config, "human_microphone")
-            provider_vad = provider in ("nova-sonic-live", "elevenlabs-live")
+            provider_vad = provider in ("nova-sonic-live", "elevenlabs-live", "openai-live")
             self.assertEqual(profile["turn_commit"], "provider_vad" if provider_vad else "automatic")
             if not provider_vad:
                 detection = config["turn_detection"]

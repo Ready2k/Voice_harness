@@ -21,7 +21,7 @@ from decimal import Decimal
 
 from . import cost
 
-CUMULATIVE_PROVIDERS = {"aws_nova_sonic"}
+CUMULATIVE_PROVIDERS = {"aws_nova_sonic", "openai_live"}
 SERVICES = {"openai": "realtime", "aws_nova_sonic": "bedrock"}
 BILLED_UNKNOWN = "BILLED_STATUS_UNKNOWN: provider reported usage for a cancelled or failed generation"
 NO_USAGE = "PROVIDER_RETURNED_NO_USAGE"
@@ -105,6 +105,24 @@ class UsageRecorder:
 
     def _usage(self, event):
         raw = dict(event.raw or {})
+        if self.provider == "openai_live":
+            scope = event.session_id or self._session or "session"
+            if "voice_usage" in raw:
+                seconds = raw["voice_usage"].get("seconds")
+                self._cumulative_scopes.add(scope)
+                return self._append(cost.reports_from_adapter_usage(
+                    self.provider, {"raw": {"cumulative": True, "billable_audio_seconds": seconds,
+                                            "live_voice_duration": True}},
+                    scope_id=scope, revision=max(1, int(Decimal(str(seconds or 0)) * 1000)), **self._common()))
+            if "backend_usage" in raw:
+                usage = raw["backend_usage"]
+                usage = {**usage, "input_token_details": usage.get("input_tokens_details"),
+                         "output_token_details": usage.get("output_tokens_details")}
+                common = self._common()
+                common.update(model=raw["backend_model_id"], service="live_responses")
+                return self._append(cost.reports_from_adapter_usage(
+                    self.provider, {**usage, "raw": usage}, scope_id=raw.get("response_id") or self._turn_scope(event),
+                    **common))
         if raw.get("cumulative"):
             scope = raw.get("provider_session_id") or event.session_id or self._session or "session"
             total = raw.get("totalTokens")
@@ -133,7 +151,7 @@ class UsageRecorder:
 
     def _unknown(self, scope, cumulative, state, reason):
         reports = cost.reports_from_adapter_usage(
-            self.provider, {"input_tokens": None, "output_tokens": None, "raw": {"cumulative": cumulative}},
+            self.provider, {"input_tokens": None, "output_tokens": None, "raw": {"cumulative": cumulative, **({"live_voice_duration": True} if self.provider == "openai_live" else {})}},
             scope_id=scope, generation_state=state, assumptions=[BILLED_UNKNOWN] if state != "completed" else (),
             **self._common())
         return self._append([{**r, "unknown_reason": reason} for r in reports])

@@ -86,6 +86,7 @@ def redact(obj: Any) -> Any:
 
 
 class OpenAIRealtimeAdapter:
+    NATIVE_NAME = "openai_realtime"
     # Runner turn accounting: a tool-calling response ends (response.done) before the response that uses the tool result.
     TOOL_CALL_ENDS_RESPONSE = True
 
@@ -359,7 +360,7 @@ class OpenAIRealtimeAdapter:
                     self._emit(ProviderError, code="MALFORMED_PROVIDER_EVENT", message="non-JSON frame")
                     continue
                 if self.native_sink is not None:
-                    self.native_sink("openai_realtime", ev.get("type") or "unknown", ev)
+                    self.native_sink(self.NATIVE_NAME, ev.get("type") or "unknown", ev)
                 log.debug("in %s", json.dumps(redact(ev))[:500])
                 self._handle(ev)
         except asyncio.CancelledError:
@@ -368,7 +369,7 @@ class OpenAIRealtimeAdapter:
             if not self.closed:
                 self._emit(ProviderError, code="CONNECTION_LOST", message=type(e).__name__, fatal=True)
         else:
-            if not self.closed:
+            if not self.closed and not getattr(self, "_finalized", False):
                 code = getattr(getattr(self._ws, "close_code", None), "real", None) or "closed"
                 self._emit(ProviderError, code="CONNECTION_CLOSED", message=str(code), fatal=True)
         finally:
