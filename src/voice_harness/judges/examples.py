@@ -30,9 +30,11 @@ def judge_examples():
         },
         "judge.independence_recorded": {
             "evaluation_id": "eval_001",
-            "tested": {"provider": "openai", "model_id": "gpt-realtime-2.1", "family": "gpt"},
+            "tested": {"provider": "openai", "model_id": "gpt-realtime-2.1", "family": "gpt", "host": "openai",
+                       "vendor": "openai"},
             "judges": [{"judge_id": "judge_alpha", "provider": "aws_bedrock", "model_id": "claude-judge",
-                        "family": "claude", "eligible": True, "reason_codes": [], "disclosures": []}],
+                        "family": "claude", "host": "aws", "vendor": "anthropic", "eligible": True, "reason_codes": [],
+                        "disclosures": []}],
             "independent_judge_count": 1, "required_judges": 2, "material_benchmark": True,
             "coverage": "judge_coverage_incomplete", "cross_family_judge_present": True,
             "blinding": {"provider_identity_hidden": True, "limitations": ["Audio fingerprints may reveal provider."]},

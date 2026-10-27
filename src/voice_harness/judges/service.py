@@ -17,11 +17,16 @@ from .backends import JudgeBackend
 from .events import JUDGE_EVENT_CONTRACTS
 from .findings import det_finding
 from .offline import run_offline, run_online
-from .oracle import build_oracle
+from .oracle import build_oracle, identity_leaks
 from .rubric import EvalContext
 
 JUDGING_PREFIXES = ("judge.", "rubric.", "review.")
 UNFINISHED = {"queued", "running", "evaluating"}
+
+
+def _identity(tested: dict | None) -> tuple[str, ...]:
+    """Tested-model tokens masked on top of the registry list (its model id is distinctive; labels like 'local' are not)."""
+    return tuple(t for t in [(tested or {}).get("model_id")] if t and len(t) >= 4)
 
 
 def emit(tx, kind: str, content: dict, causes=(), source: str = "judge") -> str:
@@ -66,21 +71,22 @@ def assess_run(database, run_id: str, *, tested: dict, backends: list[JudgeBacke
     required = required_judges if required_judges is not None else (
         2 if material_benchmark else rubric.required_judge_count(applicable))
     backends = list(backends or [])
+    judge_criteria = [c for c in applicable if rubric.CRITERIA[c].judge_eligible]
+    identity = _identity(tested)
+    oracle = build_oracle(
+        events, scenario=scenario, fixture=fixture_for(state), policy_version=state.get("policy_version", "strict-v1"),
+        criteria=judge_criteria, order_seed=order_seed, identity=identity,
+    )
     indep = independence.assess(
         tested, [b.config for b in backends], required_judges=required, material_benchmark=material_benchmark,
         order_seed=order_seed, run_session_id=state["session_id"],
+        blinding=independence.measured_blinding(identity_leaks(oracle.payload, identity)),
     )
-    judge_criteria = [c for c in applicable if rubric.CRITERIA[c].judge_eligible]
     by_id = ctx.by_id
     judges = []
     for backend, eligibility in zip(backends, indep["judges"], strict=True):
         if not eligibility["eligible"] or not judge_criteria:
             continue
-        oracle = build_oracle(
-            events, scenario=scenario, fixture=fixture_for(state),
-            policy_version=state.get("policy_version", "strict-v1"), criteria=judge_criteria,
-            order_seed=order_seed,
-        )
         outcome = run_offline(backend, oracle, judge_criteria, by_id, evaluation_id=evaluation_id)
         judges.append({
             "judge_id": backend.config.judge_id, "provider": backend.config.provider,
@@ -158,12 +164,12 @@ def assess_online(database, run_id: str, backend: JudgeBackend, *, tested: dict 
               if e["sequence"] >= from_sequence and (to_sequence is None or e["sequence"] <= to_sequence)]
     if not window:
         raise ValueError("EMPTY_WINDOW")
-    if tested and tested["provider"] == backend.config.provider and tested["model_id"] == backend.config.model_id:
+    if tested and independence.is_tested_model(backend.config, tested):
         raise ValueError("JUDGE_IS_TESTED_MODEL")
     ctx = EvalContext(window, scenario_for(state), fixture_for(state))
     oracle = build_oracle(
         window, scenario=ctx.scenario, fixture=ctx.fixture, policy_version=state.get("policy_version", "strict-v1"),
-        criteria=[c for c in rubric.CRITERIA if rubric.CRITERIA[c].judge_eligible],
+        criteria=[c for c in rubric.CRITERIA if rubric.CRITERIA[c].judge_eligible], identity=_identity(tested),
     )
     ids = (window[0]["event_id"], window[-1]["event_id"])
     result = run_online(backend, oracle, ctx.by_id, window=ids, blocking_enabled=blocking_enabled)

@@ -49,6 +49,29 @@ ONLINE_FORMAT = (
 )
 
 
+# Serving platform for a provider label: Bedrock-hosted judges and Nova are both AWS; Vertex is Google.
+HOSTS = {"aws": "aws", "aws_bedrock": "aws", "bedrock": "aws", "amazon": "aws", "google": "google", "vertex": "google",
+         "vertex_ai": "google", "gcp": "google", "openai": "openai", "azure_openai": "microsoft", "xai": "xai",
+         "elevenlabs": "elevenlabs", "anthropic": "anthropic"}
+# Model maker from id/family substrings, most specific first ("us.anthropic.claude-...", "amazon.nova-...", "gpt-...").
+VENDOR_HINTS = (("anthropic", "anthropic"), ("claude", "anthropic"), ("amazon", "amazon"), ("nova", "amazon"),
+                ("titan", "amazon"), ("openai", "openai"), ("gpt", "openai"), ("gemini", "google"), ("google", "google"),
+                ("xai", "xai"), ("grok", "xai"), ("elevenlabs", "elevenlabs"), ("llama", "meta"), ("mistral", "mistral"))
+
+
+def model_host(provider: str) -> str:
+    return HOSTS.get(provider.lower(), provider.lower())
+
+
+def model_vendor(provider: str, model_id: str, family: str) -> str:
+    for text in (model_id.lower(), family.lower()):
+        for hint, vendor in VENDOR_HINTS:
+            if hint in text:
+                return vendor
+    host = model_host(provider)
+    return "amazon" if host == "aws" else host
+
+
 class JudgeError(Exception):
     code = "JUDGE_ERROR"
 
@@ -79,11 +102,17 @@ class JudgeConfig:
     prompt_template_id: str = OFFLINE_TEMPLATE_ID
     evaluation_version: str = "eval-1"
     session_id: str = field(default_factory=lambda: "judge_session_" + uuid.uuid4().hex[:16])
+    host: str | None = None  # who serves the model (Bedrock -> aws); inferred from ``provider`` when not given
+    vendor: str | None = None  # who made it (a Bedrock Claude -> anthropic); inferred from the model id and family
+
+    def __post_init__(self):
+        object.__setattr__(self, "host", self.host or model_host(self.provider))
+        object.__setattr__(self, "vendor", self.vendor or model_vendor(self.provider, self.model_id, self.family))
 
     def identity(self, template_id: str | None = None) -> dict:
         return {
             "judge_id": self.judge_id, "backend": self.backend, "provider": self.provider,
-            "model_id": self.model_id, "family": self.family,
+            "model_id": self.model_id, "family": self.family, "host": self.host, "vendor": self.vendor,
             "prompt_template_id": template_id or self.prompt_template_id,
             "evaluation_version": self.evaluation_version, "session_id": self.session_id,
         }

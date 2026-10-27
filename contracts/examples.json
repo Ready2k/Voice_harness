@@ -910,7 +910,9 @@
     "tested": {
       "provider": "openai",
       "model_id": "gpt-realtime-2.1",
-      "family": "gpt"
+      "family": "gpt",
+      "host": "openai",
+      "vendor": "openai"
     },
     "judges": [
       {
@@ -918,6 +920,8 @@
         "provider": "aws_bedrock",
         "model_id": "claude-judge",
         "family": "claude",
+        "host": "aws",
+        "vendor": "anthropic",
         "eligible": true,
         "reason_codes": [],
         "disclosures": []
