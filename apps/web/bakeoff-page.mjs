@@ -1,7 +1,7 @@
 import {setConnected} from './chrome.mjs?v=ux-final-20261025';
 import {api, el} from './runs.mjs?v=ux-final-20261025';
 import {friendlyError} from './onboarding.mjs?v=ux-final-20261025';
-import {MAX_PLAN_RUNS, defaultRepetitions, estimateCost, failingRun, failureText, ignoredWeightsText, knownSpend, launchConfirmText, normaliseWeights, observationsCsv, planSize, providerProgress, renderReport, scenarioGroups, usd, usdEstimate, joinParts, weightPercents, weightsAreCustom, weightsTotal, words} from './bakeoff-report.mjs?v=bakeoff-ux-20261022-2';
+import {MAX_PLAN_RUNS, defaultRepetitions, estimateCost, failingRun, failureText, ignoredWeightsText, knownSpend, launchConfirmText, normaliseWeights, observationsCsv, planSize, providerProgress, renderReport, scenarioGroups, usd, usdEstimate, joinParts, weightPercents, weightsAreCustom, weightsTotal, words} from './bakeoff-report.mjs?v=bakeoff-ux-20261027-1';
 
 const $ = id => document.getElementById(id);
 // Older cached HTML predates this control. Keep it compatible with this module.

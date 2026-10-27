@@ -23,6 +23,8 @@ RATE_KEYS = ("task_success", "factual", "safe_speech", "reliability", "robustnes
 COMPOSITE_KEYS = ("task_success", "factual", "safe_speech", "responsiveness", "robustness")
 # What decides a winner: safety and correctness only. Speed alone never makes a winner clear.
 QUALITY_KEYS = ("task_success", "factual", "safe_speech", "robustness")
+CONTRAST_KEYS = (*QUALITY_KEYS, "responsiveness")  # dimensions compared pair by pair in ``report.contrasts``
+TIE = 1e-12  # composites this close are a tie when counting wins
 # First-audio targets: full marks at or under the target, target / time above it (so twice the target scores 0.5).
 LATENCY_TARGET_MS = {"median": 500, "p90": 800}
 RESPONSIVENESS_MIX = {"median": 2 / 3, "p90": 1 / 3}  # the median is the headline target, so it counts twice the p90
@@ -162,7 +164,7 @@ def _dimensions(drawn, providers, balanced=False):
 
 
 def composite_of(values, weights):
-    return sum(weights[d] * (values[d] or 0.0) for d in weights)
+    return sum(weights[d] * (values.get(d) or 0.0) for d in weights)
 
 
 def _key(clusters_by_provider, resamples, seed, balanced):
@@ -211,52 +213,81 @@ def quality_of(values, weights):
     return composite_of(values, chosen)
 
 
-def cluster_uncertainty(observed, providers, weights, eligible, leader=None, runner_up=None, balanced=False):
-    """Cluster-bootstrap intervals for every dimension and the composite, plus per-resample win shares.
+def split_wins(rounds, eligible, score):
+    """Share of ``rounds`` each eligible provider tops under ``score(round, provider)``. An exact tie splits the round, so
+    identical providers share it rather than the first listed taking all of it."""
+    wins = dict.fromkeys(eligible, 0.0)
+    for r in rounds:
+        values = {p: score(r, p) for p in eligible}
+        top = max(values.values())
+        winners = [p for p in eligible if values[p] >= top - TIE]
+        for p in winners:
+            wins[p] += 1 / len(winners)
+    return wins
+
+
+def cluster_uncertainty(observed, providers, weights, eligible, leader=None, runner_up=None, balanced=False, quality_reference=None):
+    """Cluster-bootstrap intervals for every dimension, the composite and the quality composite, plus per-resample win shares.
 
     ``eligible`` lists the providers that pass the gates (only they can win). ``leader`` / ``runner_up`` are the
-    observed order; the paired composite difference between them is reported when both are given."""
+    observed order; the paired composite difference between them is reported when both are given. ``quality_gap`` is the
+    paired quality difference from ``quality_reference`` to every other provider."""
     scenarios, draws = bootstrap_dimensions(observed, providers, balanced=balanced)
     result = {"method": "scenario-cluster bootstrap", "resamples": len(draws), "scenario_clusters": len(scenarios),
-              "seed": SEED, "dimensions": {}, "composite": {}, "win_share": {}, "leader_minus_runner_up": None,
-              "quality_leader_minus_runner_up": None}
+              "seed": SEED, "dimensions": {}, "composite": {}, "quality": {}, "win_share": {}, "quality_win_share": {},
+              "leader_minus_runner_up": None, "quality_leader_minus_runner_up": None, "quality_gap": {}}
     for p in providers:
         result["dimensions"][p] = {k: dict(zip(("lo", "hi"), interval([d[p][k] for d in draws]), strict=True))
                                    for k in (*RATE_KEYS, "responsiveness")}
         lo, hi = interval([composite_of(d[p], weights) for d in draws])
         result["composite"][p] = {"lo": lo, "hi": hi}
-    wins = dict.fromkeys(providers, 0)
-    contested = [d for d in draws if eligible]
-    for d in contested:
-        wins[max(eligible, key=lambda p: composite_of(d[p], weights))] += 1
-    result["win_share"] = {p: (wins[p] / len(contested) if contested else None) for p in providers}
+        lo, hi = interval([quality_of(d[p], weights) for d in draws])
+        result["quality"][p] = {"lo": lo, "hi": hi}
+    for key, score in (("win_share", composite_of), ("quality_win_share", quality_of)):
+        wins = split_wins(draws, eligible, lambda d, p, score=score: score(d[p], weights)) if eligible else {}
+        result[key] = {p: (wins[p] / len(draws) if draws and p in wins else None) for p in providers}
     if leader and runner_up and draws:
         lo, hi = interval([composite_of(d[leader], weights) - composite_of(d[runner_up], weights) for d in draws])
         result["leader_minus_runner_up"] = {"lo": lo, "hi": hi}
         lo, hi = interval([quality_of(d[leader], weights) - quality_of(d[runner_up], weights) for d in draws])
         result["quality_leader_minus_runner_up"] = {"lo": lo, "hi": hi}
+    if quality_reference:
+        for p in providers:
+            if p != quality_reference:
+                lo, hi = interval([quality_of(d[quality_reference], weights) - quality_of(d[p], weights) for d in draws])
+                result["quality_gap"][p] = {"lo": lo, "hi": hi}
     return result
 
 
-def weight_sensitivity(values, eligible, draws=SENSITIVITY_DRAWS, seed=SEED):
-    """Share of random weightings (uniform on the simplex) under which each provider has the top composite.
+def dimension_contrasts(observed, providers, pairs, balanced=False, keys=CONTRAST_KEYS):
+    """Paired scenario-cluster bootstrap intervals for a minus b on each dimension, for each (a, b) in ``pairs``.
+    Reuses the cached resamples behind ``cluster_uncertainty``. {(a, b): {dimension: (lo, hi)}}."""
+    _, draws = bootstrap_dimensions(observed, providers, balanced=balanced)
+    return {(a, b): {k: interval([None if d[a][k] is None or d[b][k] is None else d[a][k] - d[b][k] for d in draws]) for k in keys}
+            for a, b in pairs}
 
-    ``values`` maps provider -> {dimension: observed value}. Only ``eligible`` providers can win."""
+
+def weight_sensitivity(values, eligible, draws=SENSITIVITY_DRAWS, seed=SEED, keys=COMPOSITE_KEYS):
+    """Share of random weightings (uniform on the simplex over ``keys``) under which each provider has the top composite.
+
+    ``values`` maps provider -> {dimension: observed value}. Only ``eligible`` providers can win; exact ties split the draw.
+    ``keys=QUALITY_KEYS`` leaves responsiveness out (``basis`` says which was used)."""
     providers = list(values)
+    basis = "all_dimensions" if tuple(keys) == COMPOSITE_KEYS else "quality_only" if tuple(keys) == QUALITY_KEYS else "custom"
     if not eligible:
         return {"draws": 0, "win_share": dict.fromkeys(providers), "leader": None, "leader_win_share": None, "rank_stable": None,
-                "stable_at": STABLE_SHARE}
+                "stable_at": STABLE_SHARE, "basis": basis}
     rng = random.Random(seed + 1)  # noqa: S311  # nosec B311 -- reproducible sampling, not security
-    wins = dict.fromkeys(providers, 0)
+    weightings = []
     for _ in range(draws):
-        raw = [rng.gammavariate(1.0, 1.0) for _ in COMPOSITE_KEYS]
+        raw = [rng.gammavariate(1.0, 1.0) for _ in keys]
         total = sum(raw)
-        w = {k: r / total for k, r in zip(COMPOSITE_KEYS, raw, strict=True)}
-        wins[max(eligible, key=lambda p: composite_of(values[p], w))] += 1
-    share = {p: wins[p] / draws for p in providers}
+        weightings.append({k: r / total for k, r in zip(keys, raw, strict=True)})
+    wins = split_wins(weightings, eligible, lambda w, p: composite_of(values[p], w))
+    share = {p: wins.get(p, 0) / draws for p in providers}
     leader = max(eligible, key=lambda p: share[p])
     return {"draws": draws, "win_share": share, "leader": leader, "leader_win_share": share[leader],
-            "rank_stable": share[leader] >= STABLE_SHARE, "stable_at": STABLE_SHARE}
+            "rank_stable": share[leader] >= STABLE_SHARE, "stable_at": STABLE_SHARE, "basis": basis}
 
 
 # --------------------------------------------------------------------------------------------- paired comparisons

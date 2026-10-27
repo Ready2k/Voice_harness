@@ -55,25 +55,29 @@ export function verdictText(report, names) {
   const noClearWinner = second && (v.no_clear_winner ?? (!v.separable && !(v.eliminated ?? []).includes(v.runner_up)));
   const adjusted = v.leader_vs_runner_up_p_adjusted != null, pValue = v.leader_vs_runner_up_p_adjusted ?? v.leader_vs_runner_up_p;
   const pText = d => (pValue == null ? "" : ` (${adjusted ? "adjusted p" : "p"} = ${pValue.toFixed(d)})`);
+  const unlike = v.latency_comparable === false;
   let text;
   if (noClearWinner) {
     text = `No clear winner: ${names[v.leader]} and ${names[v.runner_up]} can't be told apart on safety and correctness${pText(2)}. `;
     // Speed alone never names a winner: say who is fastest instead of crowning the composite leader.
     text += v.speed_only_lead && v.latency_leader
-      ? `The fastest provider is ${names[v.latency_leader]}, but speed alone does not make a winner.`
+      ? (unlike ? `${names[v.latency_leader]} had the fastest measured first audio, but latency was not measured the same way for every provider, and speed alone does not make a winner.`
+        : `The fastest provider is ${names[v.latency_leader]}, but speed alone does not make a winner.`)
       : `${names[v.leader]} has the higher weighted composite, but that gap is not evidence of a real difference.`;
+    if (unlike && !v.speed_only_lead) text += " That composite includes responsiveness, which was not measured the same way for every provider.";
   } else {
     text = `${names[v.leader]} ranks first`;
     text += second ? (outscored ? `, ahead of ${names[v.runner_up]} (which scored higher but was eliminated at the safety and availability gates). ` : `, ahead of ${names[v.runner_up]}. `) : ". ";
     if (second) text += v.separable ? `The head-to-head confirms the difference${pText(3)}.`
       : v.quality_lead?.lo > 0 ? `It leads on safety and correctness: the interval for its lead over ${names[v.runner_up]} excludes zero.`
       : `Its closest rival was eliminated at the gates, so no head-to-head decides it${pText(2)}.`;
+    if (unlike) text += " Responsiveness was not measured the same way for every provider, so the scorecard also ranks without latency.";
   }
-  if (v.median_only_leader && v.median_only_leader !== v.leader) text += ` Judged on median latency alone, ${names[v.median_only_leader]} would rank first, so the choice depends on how much slow turns matter to you.`;
+  if (v.median_only_leader && v.median_only_leader !== v.leader && !noClearWinner && !unlike) text += ` Judged on median latency alone, ${names[v.median_only_leader]} would rank first, so the choice depends on how much slow turns matter to you.`;
   const fastest = report.latency.filter(l => l.median_ms != null).sort((a, b) => a.median_ms - b.median_ms)[0];
   const sub = (v.eliminated.length ? `Eliminated at the safety and availability gates: ${v.eliminated.map(p => names[p]).join(", ")}. ` : "Every provider passes the safety and availability gates. ")
     + (v.significant_pairs.length ? `Significant head-to-head differences: ${v.significant_pairs.map(p => names[p.better] + " over " + names[p.better === p.a ? p.b : p.a]).join("; ")}. ` : "No pair differs significantly on outcomes. ")
-    + (fastest ? `Fastest to first audio: ${names[fastest.provider]} (median ${ms(fastest.median_ms)}).` : "")
+    + (fastest ? (unlike ? `Fastest measured first audio: ${names[fastest.provider]} (median ${ms(fastest.median_ms)}), not a like-for-like latency ranking.` : `Fastest to first audio: ${names[fastest.provider]} (median ${ms(fastest.median_ms)}).`) : "")
     + (v.final ? "" : ` ${report.progress.pending} runs still pending: results are provisional.`);
   return {lead: text, sub};
 }
@@ -128,7 +132,9 @@ export function confidenceNote(report, observations = []) {
   const tied = !!(v.leader && v.runner_up && (v.no_clear_winner ?? !v.separable));
   if (tied) reasons.push("leaders not separable");
   if (!singleModel && v.rank_stable === false) reasons.push("ranking depends on the weights");
-  const level = report.limits?.single_repetition || !v.final || v.comparison_complete === false ? "low" : tied || v.rank_stable === false || untestable ? "medium" : "high";
+  const unlike = !singleModel && v.latency_comparable === false;
+  if (unlike) reasons.push("latency not measured like for like");
+  const level = report.limits?.single_repetition || !v.final || v.comparison_complete === false ? "low" : tied || v.rank_stable === false || untestable || unlike ? "medium" : "high";
   return {level, text: `${level.charAt(0).toUpperCase() + level.slice(1)} confidence: ${reasons.join(", ")}`};
 }
 
@@ -147,6 +153,7 @@ export const CRITERIA = {
 export const TERMS = {
   "Assurance pass rate": "Share of completed runs where every mandatory assurance check passed. It is not whether the caller's task was completed.",
   "Composite": "Weighted sum of the scorecard dimensions, 0 to 1. A ranking aid, not a measurement; the head-to-head decides whether two providers differ.",
+  "Composite without latency": "The composite over safety and correctness alone (assurance, factual, safe speech, robustness, re-weighted among themselves). Read it when latency was not measured like for like.",
   "Severity-weighted assurance": "Criterion verdicts weighted by severity (critical counts most). Shown beside the pass rate and not part of the composite.",
   "Eliminated at gates": "A prohibited tool ran, an identity, confirmation or audio check failed, or too few runs completed.",
 };
@@ -193,21 +200,87 @@ export function responsivenessNote(scoring) {
     + "The older relative-to-fastest figure is shown in the latency table as a secondary measure.";
 }
 
-/** "How often each provider wins under random weights": [{provider, share}] (largest first) and whether the leader is stable, or null. */
+/** "How often each provider wins under random weights": [{provider, share}] (largest first), whether the leader is stable and which
+ *  dimensions were weighted ("all_dimensions", "quality_only" or null for an older report), or null when there is nothing to show.
+ *  The report picks the basis: quality only when latency is not like for like, none at all when no provider leads on quality. */
 export function weightShares(report) {
   if (report.scores?.length === 1) return null;
-  const sens = report.uncertainty?.sensitivity, shares = sens?.win_share;
+  const v = report.verdict ?? {}, u = report.uncertainty ?? {};
+  if (v.ranking && v.ranking !== "ranked") return null;
+  const basis = v.sensitivity_basis ?? null, sens = basis === "quality_only" ? u.sensitivity_quality : u.sensitivity, shares = sens?.win_share;
   if (!shares) return null;
   const rows = Object.entries(shares).filter(([, v]) => v != null).map(([provider, share]) => ({provider, share})).sort((a, b) => b.share - a.share || (a.provider < b.provider ? -1 : 1));
   if (!rows.length) return null;
-  return {rows, draws: sens.draws ?? null, stable: report.verdict?.rank_stable ?? sens.rank_stable ?? null, stableAt: sens.stable_at ?? 0.9};
+  return {rows, draws: sens.draws ?? null, stable: v.rank_stable ?? sens.rank_stable ?? null, stableAt: sens.stable_at ?? 0.9, basis};
 }
 export function weightShareText(report, names) {
+  if (report.verdict?.ranking === "tied_on_quality")
+    return "No random-weights stability check: no provider leads on safety and correctness, so there is no first place to test. Weightings that include responsiveness would only repeat the latency difference.";
   const w = weightShares(report);
   if (!w) return null;
   const list = w.rows.map(r => `${names[r.provider] ?? r.provider} ${pct(r.share)}`).join(" · ");
   const verdict = w.stable == null ? "" : w.stable ? ` The leader wins at least ${pct(w.stableAt)} of them, so the ranking is stable.` : ` No provider wins ${pct(w.stableAt)} of them, so the ranking depends on how the dimensions are weighted.`;
-  return `Share of ${w.draws ?? "random"} random weightings each provider wins: ${list}.${verdict}`;
+  const over = w.basis === "quality_only" ? " of the safety-and-correctness dimensions (responsiveness left out: latency was not measured like for like)"
+    : w.basis === "all_dimensions" ? " of all scored dimensions" : "";
+  return `Share of ${w.draws ?? "random"} random weightings${over} each provider wins: ${list}.${verdict}`;
+}
+
+const COMMIT_WORDS = {explicit: "Explicit commit", provider_vad: "Provider turn detection", automatic: "Automatic turn detection", not_recorded: "Not recorded"};
+/** How a provider's timed turns were ended, in words, with re-anchored older turns flagged. */
+export function turnControlText(row) {
+  const modes = Object.keys(row?.turn_commit ?? {});
+  if (!modes.length) return "—";
+  return modes.map(m => COMMIT_WORDS[m] ?? words(m)).join(" + ") + (row.anchors?.legacy_commit ? " (re-anchored at the commit)" : "");
+}
+const nameList = (ps, names) => ps.map(p => names[p] ?? p).join(", ");
+/** Why latency is not like for like, in plain language, or null when it is (or the report predates the check). */
+export function latencyComparabilityText(report, names) {
+  const c = report.scoring?.latency_comparability, v = report.verdict ?? {};
+  if (!c || v.latency_comparable !== false) return null;
+  const parts = [];
+  if (c.reasons.includes("mixed_turn_control"))
+    parts.push(`Latency is not like for like. ${nameList(c.explicit_commit, names)} ${c.explicit_commit.length === 1 ? "was" : "were"} told exactly when each caller turn ended (explicit commit), so ${c.explicit_commit.length === 1 ? "its figure carries" : "their figures carry"} no end-of-speech detection delay; ${nameList(c.provider_endpointing, names)} detected the end of speech ${c.provider_endpointing.length === 1 ? "itself" : "themselves"} and ${c.provider_endpointing.length === 1 ? "its figure includes" : "their figures include"} that delay.`);
+  if (c.reasons.includes("legacy_commit_anchor"))
+    parts.push(`First audio for ${nameList(c.legacy_commit_anchor, names)} was re-anchored at the turn commit when these older runs were re-scored. That removes the trailing silence they were wrongly charged, but also any detection delay, so it now leans in their favour; the true order lies between the original and re-scored figures.`);
+  if (c.reasons.includes("not_recorded"))
+    parts.push(`How turns were ended was not recorded for ${nameList(c.not_recorded, names)} (older runs), so it cannot be confirmed that latency was measured the same way for every provider.`);
+  parts.push("Responsiveness (†) therefore cannot rank these providers: read the composite without latency beside it.");
+  return parts.join(" ");
+}
+
+/** Scorecard rank cell: the rank, or the standing when the report names no first place. */
+export function rankLabel(s) {
+  if (s.rank != null) return String(s.rank);
+  return {tied: "Tied", behind_on_quality: "Behind on quality"}[s.standing] ?? "—";
+}
+/** Rank on the composite without latency: the position, marked tied where the report finds no first place. */
+export function rankExcludingLatencyLabel(s, report) {
+  if (s.rank_excluding_latency == null) return "—";
+  return String(s.rank_excluding_latency) + (report.verdict?.ranking === "tied_on_quality" && s.standing === "tied" ? " (tied)" : "");
+}
+
+const CONTRAST_LABEL = {task_success: "assurance pass rate", factual: "factual accuracy", safe_speech: "safe speech", robustness: "robustness", responsiveness: "responsiveness"};
+const pts = v => (Math.round(v * 100) > 0 ? "+" : Math.round(v * 100) < 0 ? "−" : "") + Math.abs(Math.round(v * 100));
+/** The pairs worth reading first: every pair among the top three gate-passing providers in composite order. */
+export function contrastPairs(report) {
+  const top = [...report.scores].filter(s => s.advances !== false).sort((a, b) => (a.composite_order ?? 99) - (b.composite_order ?? 99)).slice(0, 3).map(s => s.provider);
+  return (report.contrasts ?? []).filter(c => top.includes(c.a) && top.includes(c.b));
+}
+/** X over Y, dimension by dimension, for one pair: {title, separated: [sentences], tied: sentence or null}. */
+export function contrastText(c, names) {
+  const n = p => names[p] ?? p, separated = [], same = [];
+  for (const [d, x] of Object.entries(c.dimensions)) {
+    const label = CONTRAST_LABEL[d] ?? words(d);
+    if (x.a == null || x.b == null) continue;
+    if (!x.separated) { same.push(`${label} (${pct(x.a)} vs ${pct(x.b)}${x.lo != null ? `, difference ${pts(x.lo)} to ${pts(x.hi)} points` : ""})`); continue; }
+    const first = x.favours === c.a, [w, l] = first ? [c.a, c.b] : [c.b, c.a], [vw, vl] = first ? [x.a, x.b] : [x.b, x.a];
+    const [lo, hi] = x.lo == null ? [null, null] : first ? [x.lo, x.hi] : [-x.hi, -x.lo];
+    separated.push(`${n(w)} over ${n(l)} on ${label}: ${pct(vw)} vs ${pct(vl)} (${pts(vw - vl)} points` + (lo != null ? `, 95% interval ${pts(lo)} to ${pts(hi)}` : "")
+      + (x.p_adjusted != null ? `, adjusted p = ${x.p_adjusted.toFixed(3)}` : "") + ")"
+      + (d === "responsiveness" && x.comparable === false ? ", but latency was not measured like for like, so this does not show which is faster" : "") + ".");
+  }
+  return {title: `${n(c.a)} vs ${n(c.b)}`, separated,
+    tied: same.length ? `${separated.length ? "Not separated on" : "Not separated on any dimension:"} ${same.join("; ")}.` : null};
 }
 
 /** The Reading for one head-to-head: the Holm-adjusted p-value decides significance when the report has it. */
@@ -337,7 +410,10 @@ export function metricsSections(metrics) {
 // ---------------------------------------------------------------- who assessed (report.assessors)
 export const DISCLOSURES = {
   ASR_VENDOR_SAME_AS_TESTED_PROVIDER: "The ASR that transcribed replies is from the tested provider's own vendor, so its errors may favour or hurt that provider",
-  SAME_PROVIDER_AS_TESTED_MODEL: "A judge comes from the tested provider",
+  SAME_PROVIDER_AS_TESTED_MODEL: "A judge is served by the tested model's host (e.g. a Bedrock judge on a Nova run)",
+  SAME_HOST_AS_TESTED_MODEL: "A judge is served by the tested model's host",
+  SAME_VENDOR_AS_TESTED_MODEL: "A judge is made by the tested model's vendor, so it may favour its own",
+  SAME_VENDOR_IN_MATERIAL_BENCHMARK: "A judge from the tested model's vendor was excluded from this material benchmark",
   SAME_FAMILY_AS_TESTED_MODEL: "A judge is from the tested model's family",
   DUPLICATE_MODEL_NOT_INDEPENDENT: "Two judges are the same model, so they count once",
   JUDGE_IS_TESTED_MODEL: "The judge is the tested model",
@@ -385,8 +461,10 @@ export function estimateCost(costs, providers, runsPerProvider) {
   return {usd, missing};
 }
 
-/** Scorecard order: rank (advancing providers by composite, then those eliminated at the gates by composite), ties by provider id. */
-export const scoresInRankOrder = scores => [...scores].sort((a, b) => a.rank - b.rank || (a.provider < b.provider ? -1 : 1));
+/** Scorecard order: rank (advancing providers by composite, then those eliminated at the gates by composite), ties by provider id.
+ *  With no rank (no first place, or an incomplete comparison) the composite order is kept for reading. */
+const order = s => s.rank ?? s.composite_order ?? Infinity;
+export const scoresInRankOrder = scores => [...scores].sort((a, b) => (order(a) - order(b) || 0) || (a.provider < b.provider ? -1 : 1));
 
 /** Scenario groups merged by name, ordered by the lowest group_order seen (then name): [{group, order}]. */
 export function mergeGroups(items) {
@@ -484,6 +562,8 @@ export function renderReport(root, data, {heading: showHeading = true, reveal = 
   }
 
   const items = [], add = t => items.push(t);
+  const latencyCaveat = latencyComparabilityText(R, NAMES);
+  if (latencyCaveat) add(latencyCaveat);
   add(R.limits.single_repetition ? "The plan requests one run per scenario and provider. A single observation gives limited confidence."
     : `The plan requests ${R.limits.repetitions ?? "unspecified"} repetitions per scenario and provider. Evidence coverage shows what completed; head-to-heads pair completed runs by scenario and repetition.`);
   add("Assurance passes check the declared safety criteria; they do not prove that the customer’s task was completed. Availability failures are excluded from assurance, factual, noise and head-to-head denominators.");
@@ -556,23 +636,40 @@ export function renderReport(root, data, {heading: showHeading = true, reveal = 
     if (s.composite != null && s.composite_lo != null) f.append(" ", el("span", "bk-ci", `(${s.composite_lo.toFixed(2)}–${s.composite_hi.toFixed(2)})`));
     return f;
   };
-  const scoreHeaders = ["Rank", "Provider", "Composite", ...SCORE_DIMENSIONS.map(d => DIM_LABEL[d] ?? d), "Median-only composite"];
+  const tiedRanking = R.verdict.ranking === "tied_on_quality", unlike = R.verdict.latency_comparable === false;
+  const hasExcl = R.scores.some(s => s.composite_excluding_latency !== undefined);
+  const exclCell = s => {
+    const f = document.createDocumentFragment();
+    f.append(dec(s.composite_excluding_latency));
+    if (s.composite_excluding_latency != null && s.composite_excluding_latency_lo != null) f.append(" ", el("span", "bk-ci", `(${s.composite_excluding_latency_lo.toFixed(2)}–${s.composite_excluding_latency_hi.toFixed(2)})`));
+    return f;
+  };
+  const respCell = (s, cell) => { if (unlike) cell.append(el("span", "bk-overlap", " †")); return cell; };
+  const scoreHeaders = [tiedRanking ? "Standing" : "Rank", "Provider", "Composite", ...(hasExcl ? ["Without latency", "Rank without latency"] : []),
+    ...SCORE_DIMENSIONS.map(d => (DIM_LABEL[d] ?? d) + (d === "responsiveness" && unlike ? " †" : "")), "Median-only composite"];
+  const lead = hasExcl ? 5 : 3;
   const scoreTable = table(scoreHeaders,
-    scoresInRankOrder(R.scores).map(s => [s.rank == null ? "—" : String(s.rank), provCell(s), compositeCell(s), ...SCORE_DIMENSIONS.map(d => rateCell(s[d], leaderRow?.[d], s !== leaderRow)),
+    scoresInRankOrder(R.scores).map(s => [rankLabel(s), provCell(s), compositeCell(s), ...(hasExcl ? [exclCell(s), rankExcludingLatencyLabel(s, R)] : []),
+      ...SCORE_DIMENSIONS.map(d => d === "responsiveness" ? respCell(s, rateCell(s[d], leaderRow?.[d], s !== leaderRow)) : rateCell(s[d], leaderRow?.[d], s !== leaderRow)),
       dec(s.composite_median_only)]), scoreHeaders.map((_, i) => i).filter(i => i !== 1));
   scoresInRankOrder(R.scores).forEach((s, i) => SCORE_DIMENSIONS.forEach((d, j) => {
-    const v = s[d]?.value, cell = scoreTable.querySelectorAll("tbody tr")[i].cells[3 + j];
+    const v = s[d]?.value, cell = scoreTable.querySelectorAll("tbody tr")[i].cells[lead + j];
     if (v != null) { cell.classList.add("bk-bar"); cell.style.setProperty("--bar", Math.round(v * 100) + "%"); }
   }));
-  if (R.verdict.leader) scoreTable.querySelector("tbody tr")?.classList.add("bk-leadrow");
+  if (R.verdict.leader && !tiedRanking) scoreTable.querySelector("tbody tr")?.classList.add("bk-leadrow");
   [...scoreTable.querySelectorAll("tbody tr")].forEach((tr, i) => { if (gateOut.has(scoresInRankOrder(R.scores)[i].provider)) tr.classList.add("bk-elim"); });
   const heads = scoreTable.querySelectorAll("th");
   heads[heads.length - 1].title = "Composite with latency judged on the median target alone (sensitivity check)";
   heads[2].title = TERMS.Composite;
   scoreHeaders.forEach((h, i) => { if (TERMS[h]) heads[i].title = TERMS[h]; });
-  if (hasSeverity) heads[2 + SCORE_DIMENSIONS.length].title = TERMS["Severity-weighted assurance"] + (R.scoring?.severity_weights ? ` Weights: ${Object.entries(R.scoring.severity_weights).map(([k, v]) => `${k} ${v}`).join(", ")}.` : "");
+  if (hasSeverity) heads[lead - 1 + SCORE_DIMENSIONS.length].title = TERMS["Severity-weighted assurance"] + (R.scoring?.severity_weights ? ` Weights: ${Object.entries(R.scoring.severity_weights).map(([k, v]) => `${k} ${v}`).join(", ")}.` : "");
+  if (hasExcl) heads[3].title = TERMS["Composite without latency"];
   const intervalBox = el("div", "bk-chart");
+  const latencyNote = latencyComparabilityText(R, NAMES);
   const scoreNotes = [
+    ...(tiedRanking ? ["No first place: no provider leads on safety and correctness (neither the head-to-head nor the paired interval separates the leaders), so the scorecard shows standings, not ranks. "
+      + "Tied means its safety-and-correctness score can't be separated from the best one; rows stay in composite order for reading only."] : []),
+    ...(latencyNote ? [latencyNote] : []),
     "Figures in brackets are 95% intervals; ≈ marks an interval that overlaps the leader's, so that dimension can't separate them. Overlapping bars mean the same. " + intervalNote(kind),
     responsivenessNote(R.scoring) + " The axis starts at the lowest score, not at 0; an interval cut off at the edge is marked with an arrow (hover for the exact bound).",
     ...(hasSeverity ? ["Severity-weighted assurance weights each criterion by its severity and is shown beside the pass rate; it is not in the composite."] : []),
@@ -594,17 +691,29 @@ export function renderReport(root, data, {heading: showHeading = true, reveal = 
         ...(hasAdjusted ? [x.p_adjusted == null ? "—" : x.p_adjusted.toFixed(3)] : []),
         pill(readings[i].provider ? short(readings[i].provider) + " " + readings[i].text : readings[i].text, readings[i].cls)]), hasAdjusted ? [1, 2, 3, 4, 5, 6] : [1, 2, 3, 4, 5]),
     ...(power.length ? [el("h3", null, "Is this enough data?"), powerList, note("Power figures use a normal approximation and assume independent pairs; they size the evidence, they do not replace the test.")] : []))));
+  const contrasts = contrastPairs(R);
+  if (contrasts.length && complete !== false) {
+    const list = el("ul", "bk-limits");
+    for (const c of contrasts) {
+      const t = contrastText(c, NAMES), li = el("li");
+      li.append(el("strong", null, t.title + ": "), [...t.separated, ...(t.tied ? [t.tied] : [])].join(" ") || "No dimension measured for both.");
+      list.append(li);
+    }
+    views.bakeoff.append(section("Where they differ", card(heading(null, "Where the leading providers differ, and where they don't"),
+      note("Each pair among the top three by composite, dimension by dimension. A difference is named only when the paired scenario-cluster bootstrap interval excludes zero; the assurance pass rate also needs the Holm-adjusted head-to-head. Intervals are not corrected across dimensions. Every pair is in the report data."),
+      list)));
+  }
   const latencyBox = el("div", "bk-chart");
   const shapeKey = (glyph, label) => { const s = el("span"); s.append(el("i", "bk-shape", glyph), label); return s; };
   const latencyLegend = legend(P.map(p => [short(p), color(p)]));
   latencyLegend.append(shapeKey("●", "Direct reply"), shapeKey("◆", "Tool called first"), shapeKey("▏", "Median"));
   views.bakeoff.append(section("Latency", card(heading("Tie-break", "Time to first response audio"),
     note("From the end of the caller's speech to the provider's first audio, one mark per caller turn. Diamonds are turns where the model called a tool before speaking, so the wait includes the tool round trip. Gated playback adds the same assessment wait for every provider; it is not included."),
-    note(responsivenessNote(R.scoring)),
+    note(responsivenessNote(R.scoring)), ...(latencyNote ? [note(latencyNote)] : []),
     latencyLegend, latencyBox,
-    table(["Provider", "Median", "90th percentile", "Direct reply median", "Tool-first median", "Turns tool-first", "Turns measured", "Responsiveness score", "Relative to fastest (secondary)"],
+    table(["Provider", "Median", "90th percentile", "Direct reply median", "Tool-first median", "Turns tool-first", "Turns measured", "Responsiveness score", "Relative to fastest (secondary)", "Turn control"],
       R.latency.map(l => [prov(l.provider), ms(l.median_ms) + (l.estimated ? " *" : ""), ms(l.p90_ms), ms(l.direct_median_ms), ms(l.tool_first_median_ms), pct(l.tool_first_share), String(l.turns_measured),
-        pct(by[l.provider]?.responsiveness?.value), by[l.provider]?.responsiveness_relative ? pct(by[l.provider].responsiveness_relative.value) : "—"]),
+        pct(by[l.provider]?.responsiveness?.value) + (unlike ? " †" : ""), by[l.provider]?.responsiveness_relative ? pct(by[l.provider].responsiveness_relative.value) : "—", turnControlText(l)]),
       [1, 2, 3, 4, 5, 6, 7, 8]))));
   if (costIsEmpty(R)) {
     views.bakeoff.append(section("Cost", card(el("p", "bk-note", "Voice cost per run: not recorded for these runs, so cost is not compared (see caveats)."))));
@@ -657,7 +766,7 @@ export function renderReport(root, data, {heading: showHeading = true, reveal = 
   views.bakeoff.append(section("Caveats", caveats));
   const steps = el("ol", "bk-steps");
   for (const [t, d] of [["1 · Safety and availability", "Pass/fail. A provider that executes a prohibited tool, fails an identity, confirmation or audio-gate check, or completes too few runs is eliminated whatever it scores."],
-    ["2 · Weighted scorecard", "Descriptive dimensions from 0 to 1; reliability is a gate, not a score. Intervals resample whole scenarios where the report has them. Rankings are withheld while the comparison is incomplete, and a faster provider with equal outcomes is no clear winner."],
+    ["2 · Weighted scorecard", "Descriptive dimensions from 0 to 1; reliability is a gate, not a score. Intervals resample whole scenarios where the report has them. Rankings are withheld while the comparison is incomplete. Without a lead on safety and correctness there is no first place: a faster provider with equal outcomes is no clear winner, and the scorecard shows standings instead of ranks."],
     ["3 · Head-to-head", "Completed runs are paired by scenario. McNemar p-values, Holm-adjusted across the pairs, assume independent pairs; repeated scenarios and shared incidents can violate that assumption."],
     ["4 · Tie-break", "Where the leaders can't be separated, choose on responsiveness and conduct, then on cost per run where every run is priced."]]) {
     const li = el("li"); li.append(el("strong", null, t), d); steps.append(li);
@@ -696,11 +805,12 @@ export function renderReport(root, data, {heading: showHeading = true, reveal = 
 
   // ---- Matrix view: provider cards in rank order (one row), failures first, then the grid.
   const cards = el("div", "bk-cards bk-rank-cards"); cards.style.setProperty("--n", String(Math.max(1, R.gates.length)));
-  for (const g of [...R.gates].sort((a, b) => (by[a.provider]?.rank ?? 99) - (by[b.provider]?.rank ?? 99))) {
+  const gateOrder = scoresInRankOrder(R.scores).map(s => s.provider);
+  for (const g of [...R.gates].sort((a, b) => gateOrder.indexOf(a.provider) - gateOrder.indexOf(b.provider))) {
     const mine = OBS.filter(o => o.provider === g.provider), passed = mine.filter(o => o.outcome === "pass").length;
     const head = el("h2"); head.append(prov(g.provider));
     const c = card(head, el("div", "bk-big", pct(mine.length ? passed / mine.length : null)),
-      note(`${passed} of ${mine.length} runs passed · rank ${by[g.provider]?.rank ?? "—"}`));
+      note(`${passed} of ${mine.length} runs passed · ${by[g.provider]?.rank != null ? "rank " + by[g.provider].rank : by[g.provider] ? rankLabel(by[g.provider]).toLowerCase() : "rank —"}`));
     const dl = el("dl", "bk-detail bk-plain");
     for (const [k, v] of [["Model behaviour passed", mine.filter(o => o.model_behaviour === "pass").length], ["Runs retried", mine.filter(o => o.attempts > 1).length],
       ["Runs not completed", mine.filter(o => !o.completed).length]]) dl.append(el("dt", null, k), el("dd", null, String(v)));
