@@ -515,3 +515,12 @@ test("single-model evaluation does not claim a competitive winner or stable rank
   assert.equal(weightShares(single), null);
   assert.equal(weightShareText(single, NAMES), null);
 });
+
+
+test("single-model confidence describes failed attempts without an unfinished comparison claim", () => {
+  const r = report({scores: [report().scores[0]], limits: {single_repetition: true}, verdict: {...report().verdict, final: true, comparison_complete: false}});
+  const note = confidenceNote(r, [{criteria: {"CARE-01": "untestable"}}]);
+  assert.equal(note.level, "low");
+  assert.match(note.text, /n=1 per scenario, one or more runs unsuccessful, some criteria untestable/);
+  assert.doesNotMatch(note.text, /comparison incomplete|without judges|ranking/);
+});

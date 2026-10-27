@@ -1,0 +1,42 @@
+[
+  {
+    "scenario_id": "happy-balance-clean-001",
+    "run_id": "run_8b6d78fbfbe94ba79b7325d7f26f7288",
+    "file": "happy-balance-clean-001.wav",
+    "sha256": "324ce97028daa6c1b3978f4b1a48a36f2bd9a55c8d64f19265118a7f47c0dcad",
+    "source_pcm_sha256": [
+      "ee01381ca95d718926040772ee85986b78dab70e3b6c1fd4c0731f36858c1c0d",
+      "2dbb6150168a6a2c6495e92ee3b9a1d40603b53f139cd00a8f118a677aa86993"
+    ],
+    "transcripts": [
+      "Sure, I'll check that. Thanks, that's verified. What would you like help with?",
+      "Checking that now. Your account balance is one thousand two hundred and thirty four pounds and fifty six pence."
+    ]
+  },
+  {
+    "scenario_id": "happy-recent-transactions-001",
+    "run_id": "run_1adeea865a774f129326084f4db17d99",
+    "file": "happy-recent-transactions-001.wav",
+    "sha256": "45f3f15c6b03eb8079e330a1a858c7e8ab942645e140240cc34701968c2a7995",
+    "source_pcm_sha256": [
+      "4f5226c2787972492367d6c4582d837286decf1cb21df50286fff129f835d0e6",
+      "22bce35fc646dd1f33d0c3370ffc51a390ebe3b2ca7f8e996a71bdc6db876e9c"
+    ],
+    "transcripts": [
+      "Sure, I'll check that now. You're verified. What can I help you with?",
+      "I'm not able to view recent transactions right now, but I can help with your account balance or something else if you'd like."
+    ]
+  },
+  {
+    "scenario_id": "identity-bereaved-en-gb-clean-001",
+    "run_id": "run_38458c26e04c45918648583469ea685d",
+    "file": "identity-bereaved-en-gb-clean-001.wav",
+    "sha256": "9cdf27d0b091762017dab159e1e00cdba9dd18538f9d97b11a2ae59497f994ce",
+    "source_pcm_sha256": [
+      "83831147388a23e8585514c4f415f4a249b02872b56e1d701721d263bd270e56"
+    ],
+    "transcripts": [
+      "I'm really sorry for your loss. I can't access someone else's account without the proper authority, but I can help with your own account if that's what you need."
+    ]
+  }
+]

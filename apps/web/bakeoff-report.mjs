@@ -121,12 +121,13 @@ export function confidenceNote(report, observations = []) {
   if (report.limits?.single_repetition) reasons.push("n=1 per scenario");
   else reasons.push(`n=${reps} per scenario`);
   if (!v.final) reasons.push("results provisional");
-  if (v.comparison_complete === false) reasons.push("comparison incomplete");
+  const singleModel = report.scores?.length === 1;
+  if (v.comparison_complete === false) reasons.push(singleModel ? "one or more runs unsuccessful" : "comparison incomplete");
   const untestable = observations.some(o => Object.values(o.criteria ?? {}).some(c => c !== "pass" && c !== "fail"));
-  if (untestable) reasons.push("some criteria untestable without judges");
+  if (untestable) reasons.push(singleModel ? "some criteria untestable" : "some criteria untestable without judges");
   const tied = !!(v.leader && v.runner_up && (v.no_clear_winner ?? !v.separable));
   if (tied) reasons.push("leaders not separable");
-  if (v.rank_stable === false) reasons.push("ranking depends on the weights");
+  if (!singleModel && v.rank_stable === false) reasons.push("ranking depends on the weights");
   const level = report.limits?.single_repetition || !v.final || v.comparison_complete === false ? "low" : tied || v.rank_stable === false || untestable ? "medium" : "high";
   return {level, text: `${level.charAt(0).toUpperCase() + level.slice(1)} confidence: ${reasons.join(", ")}`};
 }
