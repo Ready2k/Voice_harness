@@ -15,7 +15,10 @@ backend experiments.
 
 Live streams PCM16 at 24 kHz continuously, including silence. There is no native
 reply-complete or history-truncate event. The adapter groups replies after 900 ms
-of low-energy output PCM, while no backend work or tool results are pending.
+of low-energy output PCM, while no backend work or tool results are pending,
+and at least three seconds after the latest caller speech or backend completion. This grace period
+prevents a short acknowledgement from closing a reply before the delegated result
+starts speaking.
 These boundaries are diagnostic heuristics, not verified provider turn boundaries.
 Runs carry `diagnostic_unverified` capability status. Latency uses the adapter’s
 `harness.pcm_speech_detected` markers (PCM RMS above 100), rather than the

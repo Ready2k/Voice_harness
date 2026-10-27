@@ -69,7 +69,12 @@ class LiveAdapterTests(unittest.IsolatedAsyncioTestCase):
         a._handle({'type': 'response.event', 'event': {'type': 'response.completed', 'response': {}}})
         self.assertIsNotNone(a._response_id)
         self.assertEqual(native_events, ['harness.pcm_speech_detected'])
-        a._handle({'type': 'session.output_audio.delta', 'delta': base64.b64encode(bytes(24000 * 2)).decode()})
+        silence = {'type': 'session.output_audio.delta', 'delta': base64.b64encode(bytes(24000 * 2)).decode()}
+        a._handle(silence)
+        self.assertIsNotNone(a._response_id)  # acknowledgement silence cannot end a pending result
+        from unittest.mock import patch
+        with patch('voice_harness.adapters.openai_live.time.monotonic', return_value=a._reply_not_before + 1):
+            a._handle(silence)
         events = []
         while not a._queue.empty():
             events.append(a._queue.get_nowait())
@@ -79,6 +84,16 @@ class LiveAdapterTests(unittest.IsolatedAsyncioTestCase):
         self.assertFalse(_is_audio('openai-live', {'native_type': 'session.output_audio.delta'}))
         self.assertEqual([e.type for e in events].count('turn_end'), 1)
         self.assertEqual(next(e.text for e in events if e.type == 'transcript_final'), 'Hello')
+
+    async def test_acknowledgement_cannot_finish_while_caller_is_speaking(self):
+        from unittest.mock import patch
+        a = OpenAILiveAdapter(api_key='offline')
+        a._handle({'type': 'session.output_audio.delta', 'delta': base64.b64encode(b'\xff\x0f' * 480).decode()})
+        with patch('voice_harness.adapters.openai_live.time.monotonic', return_value=100):
+            await a.send_audio(b'\xff\x0f' * 480, {'sample_count': 480})
+            a._handle({'type': 'session.output_audio.delta', 'delta': base64.b64encode(bytes(24000 * 2)).decode()})
+        self.assertIsNotNone(a._response_id)
+        self.assertEqual(a._reply_not_before, 103)
 
     async def test_registry_and_transport_are_distinct_from_realtime(self):
         a, config = _adapter('openai-live', 'advanced-v1')

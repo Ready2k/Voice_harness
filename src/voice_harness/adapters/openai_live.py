@@ -11,6 +11,7 @@ from __future__ import annotations
 import asyncio
 import base64
 import json
+import time
 import uuid
 from typing import Any
 
@@ -46,6 +47,7 @@ class OpenAILiveAdapter(OpenAIRealtimeAdapter):
         self._silent_samples = 0
         self._texts = {"user": "", "assistant": ""}
         self._backend_active = False
+        self._reply_not_before = 0.0
         self._seen_calls = set()
         self._backend_instructions = ""
         self._closing = False
@@ -120,6 +122,8 @@ class OpenAILiveAdapter(OpenAIRealtimeAdapter):
             except asyncio.QueueEmpty:
                 frame = bytes(960)
                 queued = False
+            if frame and float(np.sqrt(np.mean(np.frombuffer(frame, dtype="<i2").astype(float) ** 2))) > 100:
+                self._reply_not_before = max(self._reply_not_before, time.monotonic() + 3.0)
             await self._send({"type": "session.input_audio.append", "audio": base64.b64encode(frame).decode()})
             if queued:
                 self._input.task_done()
@@ -130,6 +134,8 @@ class OpenAILiveAdapter(OpenAIRealtimeAdapter):
             raise ValueError("INVALID_AUDIO")
         if metadata.get("sample_rate", SAMPLE_RATE) != SAMPLE_RATE:
             raise ValueError("INVALID_AUDIO_RATE")
+        if float(np.sqrt(np.mean(np.frombuffer(data, dtype="<i2").astype(float) ** 2))) > 100:
+            self._reply_not_before = max(self._reply_not_before, time.monotonic() + 3.0)
         for offset in range(0, len(data), 960):
             await self._input.put(data[offset:offset + 960])
 
@@ -203,7 +209,8 @@ class OpenAILiveAdapter(OpenAIRealtimeAdapter):
                 self._silent_samples += len(pcm) // 2
             if self._response_id is not None:
                 self._emit(AudioOut, item_id=self._item_id, pcm=pcm, sample_count=len(pcm) // 2)
-                if self._silent_samples >= SAMPLE_RATE * .9 and not self._backend_active and not self._pending_calls:
+                if (self._silent_samples >= SAMPLE_RATE * .9 and not self._backend_active
+                        and not self._pending_calls and time.monotonic() >= self._reply_not_before):
                     self._finish_speech()
         elif t in ("session.input_transcript.delta", "session.output_transcript.delta"):
             role = "user" if t == "session.input_transcript.delta" else "assistant"
@@ -230,6 +237,11 @@ class OpenAILiveAdapter(OpenAIRealtimeAdapter):
                     self._emit(ToolCall, call_id=item["call_id"], name=item["name"], arguments=args)
             elif kind in ("response.completed", "response.failed", "response.cancelled", "response.incomplete"):
                 self._backend_active = False
+                # Live can finish an acknowledgement before it begins voicing a
+                # delegated result. Backend completion is not a speech boundary.
+                # Allow the voice engine to consume that result before settling.
+                self._reply_not_before = time.monotonic() + 3.0
+                self._silent_samples = 0
                 response = nested.get("response", {})
                 if response.get("usage"):
                     self._emit(Usage, raw={"backend_model_id": self.backend_model, "backend_usage": response["usage"],
