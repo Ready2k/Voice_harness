@@ -504,3 +504,14 @@ test("the scorecard is built from the report's dimensions, so a removed reliabil
   const html = readFileSync(new URL("../../apps/web/bakeoff.html", import.meta.url), "utf8");
   assert.match(html, /id="bo-ignored-weights"/);
 });
+
+
+test("single-model evaluation does not claim a competitive winner or stable ranking", () => {
+  const single = report({scores: [report().scores[0]], uncertainty: {sensitivity: {draws: 2000, win_share: {a: 1}}}});
+  const text = verdictText(single, NAMES);
+  assert.match(text.lead, /Single-model evaluation: Alpha Voice/);
+  assert.match(text.sub, /No other provider was tested/);
+  assert.doesNotMatch(text.lead + text.sub, /ranks first|winner|fastest|Every provider/);
+  assert.equal(weightShares(single), null);
+  assert.equal(weightShareText(single, NAMES), null);
+});

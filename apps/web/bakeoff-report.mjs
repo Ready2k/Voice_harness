@@ -38,6 +38,11 @@ export const outcomeClass = o => (!o ? "" : o.outcome === "pass" ? "bk-pass" : o
 export function verdictText(report, names) {
   const v = report.verdict, by = Object.fromEntries(report.scores.map(s => [s.provider, s]));
   const lead = by[v.leader], second = by[v.runner_up];
+  if (report.scores.length === 1) {
+    const provider = report.scores[0].provider;
+    return {lead: `Single-model evaluation: ${names[provider] ?? provider}.`,
+      sub: `${report.progress.observed} runs observed. Read task completion, safety, latency and evidence coverage below. No other provider was tested.`};
+  }
   if (v.comparison_complete === false) {
     const paused = report.readiness?.pause_reason;
     return {lead: report.readiness?.phase === "preflight" ? (paused ? (report.progress.observed ? "Provider checks failed — scored tests remain paused." : "Provider checks failed — scored tests have not started.") : "Checking providers before scored tests.") : "Comparison incomplete — no provider ranking.",
@@ -189,6 +194,7 @@ export function responsivenessNote(scoring) {
 
 /** "How often each provider wins under random weights": [{provider, share}] (largest first) and whether the leader is stable, or null. */
 export function weightShares(report) {
+  if (report.scores?.length === 1) return null;
   const sens = report.uncertainty?.sensitivity, shares = sens?.win_share;
   if (!shares) return null;
   const rows = Object.entries(shares).filter(([, v]) => v != null).map(([provider, share]) => ({provider, share})).sort((a, b) => b.share - a.share || (a.provider < b.provider ? -1 : 1));
@@ -441,7 +447,7 @@ export function renderReport(root, data, {heading: showHeading = true, reveal = 
   if (showHeading) {
     const head = el("header", "bk-head");
     head.append(el("p", "bk-eyebrow", "Voice Harness · Provider benchmark"), el("h1", null, data.title),
-      el("p", "bk-note", `${OBS.length} live runs · ${P.length} providers · ${new Set(OBS.map(o => o.scenario_id)).size} scenarios · generated ${data.generated_at}`));
+      el("p", "bk-note", `${OBS.length} live runs · ${P.length} provider${P.length === 1 ? "" : "s"} · ${new Set(OBS.map(o => o.scenario_id)).size} scenarios · generated ${data.generated_at}`));
     root.append(head);
   }
   const tabs = el("div", "bk-tabs"); tabs.setAttribute("role", "tablist");
@@ -465,7 +471,7 @@ export function renderReport(root, data, {heading: showHeading = true, reveal = 
   const conf = el("p", "bk-confidence bk-conf-" + confidence.level);
   conf.append(el("strong", null, confidence.text.split(":")[0] + ":"), " " + confidence.text.split(": ").slice(1).join(": ") + " · ", caveatsLink);
   const shareText = weightShareText(R, NAMES);
-  views.bakeoff.append(section("Summary", card(el("p", "bk-eyebrow", "Recommendation"), el("p", "bk-lead", verdict.lead), conf, note(verdict.sub), ...(shareText ? [note(shareText)] : []))));
+  views.bakeoff.append(section("Summary", card(el("p", "bk-eyebrow", P.length === 1 ? "Evaluation" : "Recommendation"), el("p", "bk-lead", verdict.lead), conf, note(verdict.sub), ...(shareText ? [note(shareText)] : []))));
 
   if (R.readiness?.preflight) {
     views.bakeoff.append(section("Provider checks", card(heading(null, "Provider checks before scored tests"),
@@ -486,7 +492,9 @@ export function renderReport(root, data, {heading: showHeading = true, reveal = 
   add("First audio may be an acknowledgement before a tool result. It is not time to a useful answer or audible playback. Shared outages and repeated scenarios weaken independence assumptions in confidence intervals and p-values.");
   add(costLimit(R));
   if (R.readiness?.preflight) add("Provider checks are separate, billable voice-and-tool runs excluded from scored tests and the scorecard cost table. Resuming runs a fresh check for every provider.");
-  if (R.limits.latency_estimated_for.length) add(`* First-audio time for ${R.limits.latency_estimated_for.map(p => NAMES[p]).join(", ")} is estimated from message size, because audio and transcript messages share one type and are stored as hashes.`);
+  const messageSizeEstimates = R.limits.latency_estimated_for.filter(p => p !== "openai-live");
+  if (messageSizeEstimates.length) add(`* First-audio time for ${messageSizeEstimates.map(p => NAMES[p]).join(", ")} is estimated from message size, because audio and transcript messages share one type and are stored as hashes.`);
+  if (R.limits.latency_estimated_for.includes("openai-live")) add("* GPT-Live first-audio time uses harness speech-activity markers (PCM RMS above 100), excluding its continuous silent audio. Reply grouping uses silence plus a caller/backend settling window; these boundaries are diagnostic.");
   add("Turns where a previous reply was still playing when the caller spoke are left out of latency for every provider.");
   add("To decide with confidence: repeat each scenario five or more times, configure two independent judges and price every provider.");
   // The first three caveats are the ones that change how far to trust the result; the rest sit behind a toggle (always shown when printed).
@@ -577,7 +585,7 @@ export function renderReport(root, data, {heading: showHeading = true, reveal = 
   const readings = R.pairs.map(x => pairReading(x, complete));
   const power = powerNotes(R.pairs, short);
   const powerList = el("ul", "bk-limits"); power.forEach(t => powerList.append(el("li", null, t)));
-  views.bakeoff.append(section("Head-to-head", card(heading("Stage 3", "Head-to-head on the same scenarios"),
+  if (P.length > 1) views.bakeoff.append(section("Head-to-head", card(heading("Stage 3", "Head-to-head on the same scenarios"),
     note("Only paired completed runs are compared. p-values assume independent pairs. " + (hasAdjusted ? "Several pairs are tested at once, so the Reading uses the Holm-adjusted p-value; the raw p is shown for reference. " : "They are exploratory across multiple comparisons. ")
       + "They do not establish differences in reasoning or explain an outage."),
     table(["Pair", "Only first passed", "Only second passed", "Both passed", "Neither", "p", ...(hasAdjusted ? ["Adjusted p (Holm)"] : []), "Reading"],
