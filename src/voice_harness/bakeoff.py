@@ -361,6 +361,8 @@ def _failure(database, run_id):
 
 # --------------------------------------------------------------------------------------------- evidence
 def _is_audio(provider, native):
+    if provider == "openai-live":
+        return native["native_type"] == "harness.pcm_speech_detected"
     if provider == "gemini-live":
         return native["native_type"] == "serverContent" and native["payload_bytes"] >= GEMINI_AUDIO_BYTES
     return native["native_type"] in AUDIO_TYPES
@@ -420,7 +422,7 @@ def observe(database, cell, table=None):
             "turn": index, "overlapped": overlapped,
             "first_audio_ms": (audio[0] - speech_end) if audio and not overlapped else None,
             "tool_first": bool(audio) and any(speech_end <= t < audio[0] for t in tool_ms),
-            "estimated": provider == "gemini-live",
+            "estimated": provider in {"gemini-live", "openai-live"},
         })
     expected = iter(definition.get("expected_tool_sequence", []))
     next_tool = next(expected, None)

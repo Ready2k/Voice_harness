@@ -62,14 +62,21 @@ class LiveAdapterTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_pcm_silence_ends_speech_but_backend_completion_does_not(self):
         a = OpenAILiveAdapter(api_key='offline')
+        native_events = []
+        a.native_sink = lambda adapter, kind, payload: native_events.append(kind)
         a._handle({'type': 'session.output_audio.delta', 'delta': base64.b64encode(b'\xff\x0f' * 480).decode()})
         a._handle({'type': 'session.output_transcript.delta', 'delta': 'Hello'})
         a._handle({'type': 'response.event', 'event': {'type': 'response.completed', 'response': {}}})
         self.assertIsNotNone(a._response_id)
+        self.assertEqual(native_events, ['harness.pcm_speech_detected'])
         a._handle({'type': 'session.output_audio.delta', 'delta': base64.b64encode(bytes(24000 * 2)).decode()})
         events = []
         while not a._queue.empty():
             events.append(a._queue.get_nowait())
+        self.assertEqual(native_events, ['harness.pcm_speech_detected'])
+        from voice_harness.bakeoff import _is_audio
+        self.assertTrue(_is_audio('openai-live', {'native_type': native_events[0]}))
+        self.assertFalse(_is_audio('openai-live', {'native_type': 'session.output_audio.delta'}))
         self.assertEqual([e.type for e in events].count('turn_end'), 1)
         self.assertEqual(next(e.text for e in events if e.type == 'transcript_final'), 'Hello')
 

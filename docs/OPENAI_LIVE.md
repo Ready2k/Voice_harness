@@ -17,7 +17,9 @@ Live streams PCM16 at 24 kHz continuously, including silence. There is no native
 reply-complete or history-truncate event. The adapter groups replies after 900 ms
 of low-energy output PCM, while no backend work or tool results are pending.
 These boundaries are diagnostic heuristics, not verified provider turn boundaries.
-Runs carry `diagnostic_unverified` capability status. Full-duplex overlap, long
+Runs carry `diagnostic_unverified` capability status. Latency uses the adapter’s
+`harness.pcm_speech_detected` markers (PCM RMS above 100), rather than the
+continuous raw stream; this is a labelled speech-activity estimate. Full-duplex overlap, long
 pauses, interruptions and delayed transcripts still need evaluation; interruption
 history truncation is explicitly unsupported. Spoken transcripts and backend
 completions are tracked independently. Final voice usage comes from a graceful

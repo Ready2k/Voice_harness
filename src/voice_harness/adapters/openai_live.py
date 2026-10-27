@@ -192,6 +192,11 @@ class OpenAILiveAdapter(OpenAIRealtimeAdapter):
                 return
             speech = bool(pcm) and float(np.sqrt(np.mean(np.frombuffer(pcm, dtype="<i2").astype(float) ** 2))) > 100
             if speech:
+                if self.native_sink is not None:
+                    self.native_sink(self.NATIVE_NAME, "harness.pcm_speech_detected", {
+                        "source_event_id": ev.get("event_id"), "rms_threshold_pcm16": 100,
+                        "sample_count": len(pcm) // 2,
+                    })
                 self._start_speech()
                 self._silent_samples = 0
             elif self._response_id is not None:
