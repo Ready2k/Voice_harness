@@ -567,11 +567,16 @@ def report(payload, weights=None, group_balanced=None):
             return None if value is None else round(value)
 
         direct, tool = [t for t in timed if not t["tool_first"]], [t for t in timed if t["tool_first"]]
+        # How each timed turn was ended and where its clock started (older observations record neither).
+        modes = Counter(t.get("turn_commit") or o.get("turn_commit") or "not_recorded" for o in completed for t in o["turns"]
+                        if t["first_audio_ms"] is not None)
         latency.append({"provider": provider, "name": NAMES[provider], "median_ms": q(timed, 0.5), "p90_ms": q(timed, 0.9),
                         "direct_median_ms": q(direct, 0.5), "tool_first_median_ms": q(tool, 0.5),
                         "tool_first_share": len(tool) / len(timed) if timed else None, "turns_measured": len(timed),
                         "turns_excluded": sum(t["overlapped"] for t in turns),
-                        "estimated": any(t["estimated"] for t in timed)})
+                        "estimated": any(t["estimated"] for t in timed),
+                        "turn_commit": dict(sorted(modes.items())),
+                        "anchors": dict(sorted(Counter(t.get("anchor") or "not_recorded" for t in timed).items()))})
         costs.append(_cost_row(provider, mine))
 
     if balanced:  # every scenario group counts equally; pooled Wilson intervals no longer describe these values
@@ -581,6 +586,7 @@ def report(payload, weights=None, group_balanced=None):
                               "severity_weighted"):
                 row[dimension].update(value=level[row["provider"]][dimension], lo=None, hi=None, balanced=True)
 
+    comparability = latency_comparability(latency)
     by_provider = {row["provider"]: row for row in latency}
     medians = [r["median_ms"] for r in latency if r["median_ms"]]
     tails = [r["p90_ms"] for r in latency if r["p90_ms"]]
@@ -591,7 +597,8 @@ def report(payload, weights=None, group_balanced=None):
         tail_ratio = min(tails) / lat["p90_ms"] if lat["p90_ms"] else 0.0
         median_score = bakeoff_stats.latency_score(lat["median_ms"], bakeoff_stats.LATENCY_TARGET_MS["median"]) or 0.0
         row["responsiveness"] = {"value": bakeoff_stats.responsiveness(lat["median_ms"], lat["p90_ms"]),
-                                 "lo": None, "hi": None, "k": None, "n": lat["turns_measured"]}
+                                 "lo": None, "hi": None, "k": None, "n": lat["turns_measured"],
+                                 "comparability": lat["latency_comparability"]}
         row["responsiveness_relative"] = {"value": (median_ratio + tail_ratio) / 2 if lat["median_ms"] else None,
                                           "lo": None, "hi": None, "k": None, "n": lat["turns_measured"]}
 
@@ -602,10 +609,12 @@ def report(payload, weights=None, group_balanced=None):
 
         row["composite"] = composite(row["responsiveness"]["value"])
         row["composite_median_only"] = composite(median_score)  # sensitivity: latency judged on the median alone
+        # Safety and correctness alone: the composite to read when latency is not like for like or decides nothing.
+        row["composite_excluding_latency"] = bakeoff_stats.quality_of({d: row[d]["value"] for d in bakeoff_stats.QUALITY_KEYS}, weights)
         row["advances"] = next(g["advances"] for g in gates if g["provider"] == row["provider"])
     ranked = sorted(scores, key=lambda r: (not r["advances"], -r["composite"]))
     for position, row in enumerate(ranked, 1):
-        row["rank"] = position
+        row["rank"] = row["composite_order"] = position
 
     outcome = {(o["provider"], o["scenario_id"], o["repetition"]): o["outcome"] == "pass" for o in observed if o["completed"]}
     keys = sorted({(o["scenario_id"], o["repetition"]) for o in observed})
@@ -646,7 +655,7 @@ def report(payload, weights=None, group_balanced=None):
             row["rank"] = None
         if (not any(o["provider"] == row["provider"] and o["completed"] for o in observed)
                 or any(o["provider"] == row["provider"] and not o["completed"] for o in observed)):
-            row["composite"] = row["composite_median_only"] = None
+            row["composite"] = row["composite_median_only"] = row["composite_excluding_latency"] = None
     if incomplete:
         for pair in pairs:
             pair["better"] = None
@@ -655,10 +664,15 @@ def report(payload, weights=None, group_balanced=None):
     decisive = next((p for p in pairs if leader and runner_up and {p["a"], p["b"]} == {leader["provider"], runner_up["provider"]}), None)
     median_leader = max(scores, key=lambda r: r["composite_median_only"]) if observed and not incomplete else None
     eligible = [r["provider"] for r in scores if r["advances"]]
+    rank_excluding_latency(ranked, incomplete)
+    reference = next((r["provider"] for r in sorted(ranked, key=lambda r: r["rank_excluding_latency"] or math.inf)
+                      if r["advances"] and r["rank_excluding_latency"]), None)
     uncertainty = bakeoff_stats.cluster_uncertainty(observed, providers, weights, eligible,
-                                                    leader and leader["provider"], runner_up and runner_up["provider"], balanced)
-    sensitivity = bakeoff_stats.weight_sensitivity(
-        {r["provider"]: {d: r[d]["value"] for d in bakeoff_stats.COMPOSITE_KEYS} for r in scores}, eligible) if observed else None
+                                                    leader and leader["provider"], runner_up and runner_up["provider"], balanced,
+                                                    quality_reference=reference)
+    values = {r["provider"]: {d: r[d]["value"] for d in bakeoff_stats.COMPOSITE_KEYS} for r in scores}
+    sensitivity = bakeoff_stats.weight_sensitivity(values, eligible) if observed else None
+    sensitivity_quality = bakeoff_stats.weight_sensitivity(values, eligible, keys=bakeoff_stats.QUALITY_KEYS) if observed else None
     for row in ranked:
         for dimension, bounds in uncertainty["dimensions"][row["provider"]].items():
             lo, hi = bounds["lo"], bounds["hi"]
@@ -668,11 +682,32 @@ def report(payload, weights=None, group_balanced=None):
             row[dimension]["cluster_lo"], row[dimension]["cluster_hi"] = lo, hi
         row["composite_lo"], row["composite_hi"] = ((None, None) if row["composite"] is None
                                                     else (uncertainty["composite"][row["provider"]]["lo"], uncertainty["composite"][row["provider"]]["hi"]))
+        row["composite_excluding_latency_lo"], row["composite_excluding_latency_hi"] = (
+            (None, None) if row["composite_excluding_latency"] is None
+            else (uncertainty["quality"][row["provider"]]["lo"], uncertainty["quality"][row["provider"]]["hi"]))
     gap, quality_gap = uncertainty["leader_minus_runner_up"], uncertainty["quality_leader_minus_runner_up"]
     separable = bool(decisive and decisive["p_adjusted"] < 0.05)
     quality_lead = bool(quality_gap and quality_gap["lo"] is not None and quality_gap["lo"] > 0)
     timed = [r for r in latency if r["median_ms"] is not None]
     fastest = min(timed, key=lambda r: r["median_ms"])["provider"] if timed else None
+    # Without a lead on safety and correctness the scorecard names no first place: ranks give way to standings.
+    tied = bool(leader) and not (separable or quality_lead) and bool(runner_up and runner_up["advances"])
+    ranking = "incomplete" if not leader else "tied_on_quality" if tied else "ranked"
+    significant = {frozenset((p["a"], p["b"])) for p in pairs if p["better"]}
+    for row in ranked:
+        to_best = uncertainty["quality_gap"].get(row["provider"])
+        row["standing"] = (None if not leader else "eliminated" if not row["advances"] else "ranked" if not tied
+                           else "behind_on_quality" if row["provider"] != reference and (
+                               (to_best and to_best["lo"] is not None and to_best["lo"] > 0) or frozenset((row["provider"], reference)) in significant)
+                           else "tied")
+        if tied:
+            row["rank"] = None
+    # Random weightings reuse responsiveness; when latency is not like for like they are drawn over quality alone,
+    # and with no first place there is no rank to call stable.
+    basis = None if ranking != "ranked" else "all_dimensions" if comparability["comparable"] else "quality_only"
+    shown = {"all_dimensions": sensitivity, "quality_only": sensitivity_quality}.get(basis)
+    contrasts = dimension_contrasts(scores, pairs, bakeoff_stats.dimension_contrasts(
+        observed, providers, [(p["a"], p["b"]) for p in pairs], balanced), comparability, incomplete)
     return {
         "weights": weights, "dimensions": [{"dimension": d[0], "label": d[1], "weight": weights[d[0]], "measures": d[3]}
                                            for d in DIMENSIONS],
@@ -683,7 +718,7 @@ def report(payload, weights=None, group_balanced=None):
         "coverage": coverage,
         "assessors": summarise_assessors(observed),
         "metrics": bakeoff_metrics.summarise(providers, observed, payload.get("repetitions")),
-        "gates": gates, "scores": ranked, "pairs": pairs, "latency": latency, "cost": costs,
+        "gates": gates, "scores": ranked, "pairs": pairs, "contrasts": contrasts, "latency": latency, "cost": costs,
         "conditions": sorted(conditions.values(), key=lambda r: (r["kind"], r["order"], r["value"], r["provider"])),
         "verdict": {
             "leader": leader and leader["provider"], "runner_up": runner_up and runner_up["provider"],
@@ -696,18 +731,23 @@ def report(payload, weights=None, group_balanced=None):
             "leader_minus_runner_up": gap,  # the composite lead (includes speed); informative only
             "quality_lead": quality_gap,  # the lead on safety and correctness alone: the only lead that can name a winner
             "latency_leader": fastest,
+            "latency_comparable": comparability["comparable"],
+            "latency_comparability": comparability["status"],
             "speed_only_lead": None if not leader else bool(not (separable or quality_lead) and fastest == leader["provider"]),
-            "weight_win_share": sensitivity and sensitivity["win_share"].get(leader and leader["provider"]) if leader else None,
-            "rank_stable": (sensitivity["win_share"][leader["provider"]] >= bakeoff_stats.STABLE_SHARE) if leader and sensitivity else None,
+            "ranking": ranking,
+            "sensitivity_basis": basis,
+            "weight_win_share": shown["win_share"].get(leader["provider"]) if shown else None,
+            "rank_stable": (shown["win_share"][leader["provider"]] >= bakeoff_stats.STABLE_SHARE) if shown else None,
             "median_only_leader": median_leader and median_leader["provider"],
             "significant_pairs": [p for p in pairs if p["better"]],
             "eliminated": [g["provider"] for g in gates if g["runs"] and not g["advances"]],
             "final": pending == 0 and payload.get("state") not in {"paused", "cancelled"},
             "comparison_complete": not incomplete,
         },
-        "uncertainty": {**uncertainty, "sensitivity": sensitivity},
+        "uncertainty": {**uncertainty, "sensitivity": sensitivity, "sensitivity_quality": sensitivity_quality},
         "scoring": {"group_balanced": balanced, "ignored_weights": ignored,
                     "latency_targets_ms": dict(bakeoff_stats.LATENCY_TARGET_MS),
+                    "latency_comparability": comparability,
                     "responsiveness_mix": dict(bakeoff_stats.RESPONSIVENESS_MIX),
                     "severity_weights": dict(bakeoff_stats.SEVERITY_WEIGHTS)},
         "limits": {"repetitions": payload.get("repetitions"),
@@ -717,6 +757,63 @@ def report(payload, weights=None, group_balanced=None):
                    "cost_from_separate_runs": sorted({o["provider"] for o in observed
                                                       if (o.get("cost") or {}).get("separate_run")})},
     }
+
+
+ENDPOINTING_PAID = {"provider_vad", "automatic"}  # the provider decides when the caller finished, so its wait is in the figure
+
+
+def latency_comparability(rows):
+    """Whether first audio was measured the same way for every provider; sets ``latency_comparability`` on each row.
+
+    A provider told exactly when the caller finished (``explicit`` commit) pays no endpointing delay; one that detects the end
+    of speech itself does. Mixing the two, re-anchoring older runs at the commit, or not recording turn control at all makes
+    the latency figures, and the responsiveness score built on them, not like for like."""
+    explicit = sorted(r["provider"] for r in rows if "explicit" in r["turn_commit"])
+    endpointed = sorted(r["provider"] for r in rows if set(r["turn_commit"]) & ENDPOINTING_PAID)
+    mixed = bool(explicit and endpointed)
+    for r in rows:
+        r["latency_comparability"] = (None if not r["turns_measured"] else "legacy_commit_anchor" if "legacy_commit" in r["anchors"]
+                                      else "mixed_turn_control" if mixed else "not_recorded" if "not_recorded" in r["turn_commit"]
+                                      else "comparable")
+    seen = {r["latency_comparability"] for r in rows} - {None}
+    reasons = [s for s in ("mixed_turn_control", "legacy_commit_anchor", "not_recorded") if s in seen or (s == "mixed_turn_control" and mixed)]
+    return {"status": reasons[0] if reasons else ("comparable" if seen else None), "comparable": not reasons if seen else None,
+            "reasons": reasons, "explicit_commit": explicit, "provider_endpointing": endpointed,
+            "legacy_commit_anchor": sorted(r["provider"] for r in rows if r["latency_comparability"] == "legacy_commit_anchor"),
+            "not_recorded": sorted(r["provider"] for r in rows if "not_recorded" in r["turn_commit"])}
+
+
+def rank_excluding_latency(rows, incomplete):
+    """Competition rank on the composite without responsiveness (equal values share a rank); gate failures follow."""
+    key = {r["provider"]: (not r["advances"], -round(r["composite_excluding_latency"] or 0.0, 9)) for r in rows}
+    for r in rows:
+        r["rank_excluding_latency"] = (None if incomplete or r["composite_excluding_latency"] is None
+                                       else 1 + sum(key[o["provider"]] < key[r["provider"]] for o in rows))
+
+
+def dimension_contrasts(scores, pairs, intervals, comparability, incomplete):
+    """X over Y, dimension by dimension, for every pair: both values, the paired cluster-bootstrap interval for a minus b,
+    and whether the pair is separated. Assurance uses the head-to-head (Holm-adjusted McNemar) so it agrees with ``pairs``;
+    the rest need a bootstrap interval that excludes zero. Intervals are not corrected across dimensions."""
+    by = {r["provider"]: r for r in scores}
+    out = []
+    for pair in pairs:
+        a, b = by[pair["a"]], by[pair["b"]]
+        dims = {}
+        for d in bakeoff_stats.CONTRAST_KEYS:
+            va, vb = a[d]["value"], b[d]["value"]
+            lo, hi = intervals[(pair["a"], pair["b"])][d]
+            if d == "task_success":
+                favours = pair["better"]
+            else:
+                favours = (None if incomplete or va is None or vb is None or lo is None or lo <= 0 <= hi
+                           else pair["a"] if lo > 0 else pair["b"])
+            dims[d] = {"a": va, "b": vb, "diff": None if va is None or vb is None else va - vb, "lo": lo, "hi": hi,
+                       "separated": favours is not None, "favours": favours,
+                       **({"p_adjusted": pair["p_adjusted"]} if d == "task_success" else {}),
+                       **({"comparable": comparability["comparable"]} if d == "responsiveness" else {})}
+        out.append({"a": pair["a"], "b": pair["b"], "method": "paired scenario-cluster bootstrap", "dimensions": dims})
+    return out
 
 
 def _median(sorted_amounts):

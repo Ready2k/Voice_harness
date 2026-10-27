@@ -92,10 +92,47 @@ Implemented in `src/voice_harness/bakeoff_stats.py`; results are in `report.unce
   gives each scenario group equal weight (the mean of the group rates) for the rate dimensions, so a group with many scenarios
   no longer dominates. Those rows carry `balanced: true` and no Wilson interval; the bootstrap resamples scenarios the same way.
   The default stays per-scenario pooling.
+- **No first place without a quality lead.** When `verdict.no_clear_winner` holds and the runner-up passed the gates,
+  `verdict.ranking` is `tied_on_quality` (otherwise `ranked`, or `incomplete`). Every score row's `rank` is then null,
+  and `standing` takes its place. A provider is `tied` when its quality composite cannot be separated from the best
+  one: the paired bootstrap interval (`uncertainty.quality_gap`) includes zero and no Holm-significant head-to-head
+  separates them. Otherwise it is `behind_on_quality` (or `eliminated`). `composite_order` keeps the composite order
+  for reading. The page heads the column "Standing", shows "Tied", drops the leader highlight, and does not say
+  "would rank first" on median latency.
 - **Weight sensitivity.** `uncertainty.sensitivity` draws 2000 random weightings (uniform over the simplex) and reports
-  the share each gate-passing provider wins (`win_share`). `verdict.weight_win_share` is the leader's share and
-  `verdict.rank_stable` is true when it is at least 90%. The 90% line is a convention, not a derived threshold.
-  The bootstrap also gives `uncertainty.win_share` over scenario resamples.
+  the share each gate-passing provider wins (`win_share`). `uncertainty.sensitivity_quality` does the same over the
+  quality dimensions alone, without responsiveness. Exact ties split a draw, so identical providers are no longer
+  credited to whichever is listed first. `verdict.sensitivity_basis` says which check `verdict.weight_win_share` and
+  `verdict.rank_stable` come from: `all_dimensions`, or `quality_only` when latency is not like for like. Both are
+  null when there is no first place: every weighting would include responsiveness, so the check would only repeat
+  the latency difference. `rank_stable` is true when the leader's share is at least 90%. The 90% line is a
+  convention, not a derived threshold. The bootstrap also gives `uncertainty.win_share` and `quality_win_share` over
+  scenario resamples.
+- **Latency comparability.** Each latency row counts its timed turns by `turn_commit` (`explicit`, `provider_vad`,
+  `automatic`, or `not_recorded` for older observations) and by `anchor` (`speech_end`, `legacy_commit`,
+  `legacy_speech_end`, `not_recorded`). Under explicit commit the provider is told when the caller finished, so its
+  figure carries no end-of-speech detection delay. Under provider or automatic turn detection the figure includes that
+  delay. A row is `mixed_turn_control` when both kinds appear in one bake-off, `legacy_commit_anchor` when older turns
+  were re-anchored at the commit, `not_recorded` when turn control is unknown, and otherwise `comparable`.
+  `scoring.latency_comparability` lists the reasons and which providers fall on each side. `verdict.latency_comparable`
+  and `verdict.latency_comparability` summarise it. When latency is not comparable, the page marks responsiveness
+  with †, explains why in plain language (summary, scorecard, latency section and the first caveat), and calls the
+  fastest provider only "fastest measured". Confidence drops to at most medium.
+- **Composite without latency.** Every score row carries `composite_excluding_latency`: the quality composite (assurance,
+  factual, safe speech and robustness, re-weighted among themselves). It comes with a bootstrap interval
+  (`composite_excluding_latency_lo`/`_hi`) and `rank_excluding_latency` (competition rank, so equal values share a rank).
+  The scorecard shows both beside the full composite.
+- **Where providers differ.** `report.contrasts` compares every pair, one dimension at a time (assurance, factual, safe
+  speech, robustness, responsiveness). Each entry gives both values, the difference, and the paired scenario-cluster
+  bootstrap interval for a minus b (the cached resamples). `favours` names a provider only when that interval excludes
+  zero. For assurance it requires the Holm-adjusted head-to-head instead, so it agrees with `pairs`. Intervals are not
+  corrected across dimensions. The page reads the pairs among the top three as "X over Y on …" sentences, followed by
+  the dimensions where they are not separated.
+- **Re-scoring older bake-offs.** `scripts/rescore_bakeoff_report.py` takes an exported `report.json` or a stored payload.
+  It removes `CALLER_TRAIL_MS` from explicit-commit turns recorded before the latency-anchor fix and re-runs
+  `bakeoff.report`. It first checks that the unchanged input reproduces the stored composites. The 26 October
+  re-issue is in `artifacts/full-advanced-bakeoff-2026-10-26/rescored-2026-10-27/`. Its README explains why the
+  corrected figures lean towards the explicit-commit providers.
 - **Effect size and power.** Each pair reports `pass_rate_diff` with a clustered interval, `discordant_share`,
   `runs_needed_80` (paired runs for 80% power to confirm the observed difference) and `min_detectable_diff_80` (the
   smallest difference detectable with the runs in hand), using a normal approximation. Both are `null` when

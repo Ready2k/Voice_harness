@@ -27,8 +27,10 @@ test("leaders the outcomes can't separate are a tie, not a recommendation, and n
   const {lead, sub} = verdictText(report(), NAMES);
   assert.match(lead, /^No clear winner: Alpha Voice and Beta Voice can't be told apart on safety and correctness \(p = 1\.00\)\./);
   assert.match(lead, /Alpha Voice has the higher weighted composite, but that gap is not evidence of a real difference\./);
-  assert.match(lead, /median latency alone, Beta Voice would rank first/);
+  assert.doesNotMatch(lead, /would rank first/);  // a tie has no first place, on any latency measure
   assert.doesNotMatch(lead, /ranks first with|0\.99|0\.98/);
+  const ranked = verdictText(report({verdict: {...report().verdict, separable: true, no_clear_winner: false}}), NAMES).lead;
+  assert.match(ranked, /median latency alone, Beta Voice would rank first/);
   assert.match(sub, /Every provider passes the safety and availability gates\. No pair differs significantly/);
   assert.match(sub, /Fastest to first audio: Beta Voice \(median 860 ms\)\./);
 });
@@ -503,4 +505,77 @@ test("the scorecard is built from the report's dimensions, so a removed reliabil
   assert.match(page, /ignoredWeightsText\(body\.data\.report\.scoring\)/);
   const html = readFileSync(new URL("../../apps/web/bakeoff.html", import.meta.url), "utf8");
   assert.match(html, /id="bo-ignored-weights"/);
+});
+
+// ---- Scorecard honesty: latency that is not like for like, and leads that are speed only.
+const {contrastPairs, contrastText, latencyComparabilityText, rankExcludingLatencyLabel, rankLabel, turnControlText} = await import("../../apps/web/bakeoff-report.mjs");
+const MIXED = {status: "mixed_turn_control", comparable: false, reasons: ["mixed_turn_control", "legacy_commit_anchor"], explicit_commit: ["a"],
+  provider_endpointing: ["b"], legacy_commit_anchor: ["a"], not_recorded: []};
+
+test("latency measured differently per provider is caveated in plain language and never names a fastest provider as a ranking", () => {
+  const r = report({scoring: {latency_comparability: MIXED},
+    verdict: {...report().verdict, no_clear_winner: true, speed_only_lead: true, latency_leader: "b", latency_comparable: false, latency_comparability: "mixed_turn_control", ranking: "tied_on_quality"}});
+  const text = latencyComparabilityText(r, NAMES);
+  assert.match(text, /^Latency is not like for like\. Alpha Voice was told exactly when each caller turn ended \(explicit commit\), so its figure carries no end-of-speech detection delay; Beta Voice detected the end of speech itself and its figure includes that delay\./);
+  assert.match(text, /re-anchored at the turn commit[^]*leans in their favour; the true order lies between/);
+  assert.match(text, /Responsiveness \(†\) therefore cannot rank these providers: read the composite without latency beside it\.$/);
+  const {lead, sub} = verdictText(r, NAMES);
+  assert.match(lead, /Beta Voice had the fastest measured first audio, but latency was not measured the same way for every provider, and speed alone does not make a winner\./);
+  assert.doesNotMatch(lead, /The fastest provider is|would rank first/);
+  assert.match(sub, /Fastest measured first audio: Beta Voice \(median 860 ms\), not a like-for-like latency ranking\./);
+  const c = confidenceNote(report({...r, limits: {single_repetition: false, repetitions: 5}, verdict: {...r.verdict, separable: true, no_clear_winner: false}}));
+  assert.deepEqual([c.level, c.text], ["medium", "Medium confidence: n=5 per scenario, latency not measured like for like"]);
+  const unrecorded = {...MIXED, status: "not_recorded", reasons: ["not_recorded"], explicit_commit: [], provider_endpointing: [], legacy_commit_anchor: [], not_recorded: ["a", "b"]};
+  assert.match(latencyComparabilityText(report({scoring: {latency_comparability: unrecorded}, verdict: {...r.verdict}}), NAMES),
+    /^How turns were ended was not recorded for Alpha Voice, Beta Voice \(older runs\)/);
+  assert.equal(latencyComparabilityText(report({scoring: {latency_comparability: {...MIXED, comparable: true, reasons: []}}, verdict: {...r.verdict, latency_comparable: true}}), NAMES), null);
+  assert.equal(latencyComparabilityText(report(), NAMES), null);  // an older report has no comparability block
+  assert.equal(turnControlText({turn_commit: {explicit: 10}, anchors: {legacy_commit: 10}}), "Explicit commit (re-anchored at the commit)");
+  assert.equal(turnControlText({turn_commit: {provider_vad: 4, not_recorded: 1}, anchors: {}}), "Provider turn detection + Not recorded");
+});
+
+test("with no lead on quality the scorecard shows standings, not a first place, and keeps composite order for reading", () => {
+  assert.equal(rankLabel({rank: 2}), "2");
+  assert.equal(rankLabel({rank: null, standing: "tied"}), "Tied");
+  assert.equal(rankLabel({rank: null, standing: "behind_on_quality"}), "Behind on quality");
+  assert.equal(rankLabel({rank: null, standing: null}), "—");
+  const tied = {verdict: {ranking: "tied_on_quality"}};
+  assert.equal(rankExcludingLatencyLabel({rank_excluding_latency: 1, standing: "tied"}, tied), "1 (tied)");
+  assert.equal(rankExcludingLatencyLabel({rank_excluding_latency: 4, standing: "behind_on_quality"}, tied), "4");
+  assert.equal(rankExcludingLatencyLabel({rank_excluding_latency: 1, standing: "ranked"}, {verdict: {ranking: "ranked"}}), "1");
+  const out = scoresInRankOrder([{provider: "c", rank: null, composite_order: 3}, {provider: "a", rank: null, composite_order: 1}, {provider: "b", rank: null, composite_order: 2}]);
+  assert.deepEqual(out.map(s => s.provider), ["a", "b", "c"]);
+  assert.deepEqual(scoresInRankOrder([{provider: "b", rank: null}, {provider: "a", rank: null}]).map(s => s.provider), ["a", "b"]);
+});
+
+test("the random-weights check is withheld without a first place and says when it leaves responsiveness out", () => {
+  const sens = {sensitivity: {draws: 2000, win_share: {a: 1, b: 0}, stable_at: 0.9}, sensitivity_quality: {draws: 2000, win_share: {a: 0.55, b: 0.45}, stable_at: 0.9}};
+  const tied = report({uncertainty: sens, verdict: {...report().verdict, ranking: "tied_on_quality", rank_stable: null, sensitivity_basis: null}});
+  assert.equal(weightShares(tied), null);
+  assert.match(weightShareText(tied, NAMES), /^No random-weights stability check: no provider leads on safety and correctness, so there is no first place to test\./);
+  assert.doesNotMatch(weightShareText(tied, NAMES), /stable\.|100%/);
+  const quality = report({uncertainty: sens, verdict: {...report().verdict, ranking: "ranked", rank_stable: false, sensitivity_basis: "quality_only"}});
+  assert.match(weightShareText(quality, NAMES), /^Share of 2000 random weightings of the safety-and-correctness dimensions \(responsiveness left out: latency was not measured like for like\) each provider wins: Alpha Voice 55% · Beta Voice 45%\. No provider wins 90%/);
+  const all = report({uncertainty: sens, verdict: {...report().verdict, ranking: "ranked", rank_stable: true, sensitivity_basis: "all_dimensions"}});
+  assert.match(weightShareText(all, NAMES), /^Share of 2000 random weightings of all scored dimensions each provider wins: Alpha Voice 100% · Beta Voice 0%\. The leader wins at least 90% of them, so the ranking is stable\./);
+});
+
+test("pairwise contrasts say X over Y only where the evidence separates them, and list where it does not", () => {
+  const dims = {
+    task_success: {a: 0.99, b: 1, diff: -0.01, lo: -0.03, hi: 0, separated: false, favours: null, p_adjusted: 1},
+    factual: {a: 1, b: 0.84, diff: 0.16, lo: 0.05, hi: 0.6, separated: true, favours: "a"},
+    responsiveness: {a: 0.54, b: 0.57, diff: -0.03, lo: -0.06, hi: -0.01, separated: true, favours: "b", comparable: false},
+    robustness: {a: null, b: 1, separated: false},
+  };
+  const t = contrastText({a: "a", b: "b", dimensions: dims}, NAMES);
+  assert.equal(t.title, "Alpha Voice vs Beta Voice");
+  assert.deepEqual(t.separated, [
+    "Alpha Voice over Beta Voice on factual accuracy: 100% vs 84% (+16 points, 95% interval +5 to +60).",
+    "Beta Voice over Alpha Voice on responsiveness: 57% vs 54% (+3 points, 95% interval +1 to +6), but latency was not measured like for like, so this does not show which is faster."]);
+  assert.equal(t.tied, "Not separated on assurance pass rate (99% vs 100%, difference −3 to 0 points).");
+  const none = contrastText({a: "a", b: "b", dimensions: {factual: {a: 1, b: 1, lo: 0, hi: 0, separated: false}}}, NAMES);
+  assert.equal(none.tied, "Not separated on any dimension: factual accuracy (100% vs 100%, difference 0 to 0 points).");
+  const r = {scores: [{provider: "a", composite_order: 2}, {provider: "b", composite_order: 1}, {provider: "c", composite_order: 4}, {provider: "d", composite_order: 3}, {provider: "e", composite_order: 5, advances: false}],
+    contrasts: [{a: "a", b: "b"}, {a: "a", b: "c"}, {a: "b", b: "d"}, {a: "c", b: "e"}]};
+  assert.deepEqual(contrastPairs(r).map(c => c.a + c.b), ["ab", "bd"]);
 });

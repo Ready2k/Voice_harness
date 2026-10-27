@@ -1,0 +1,154 @@
+{
+ "after": [
+  {
+   "composite": 0.9197,
+   "composite_excluding_latency": 0.9952,
+   "composite_order": 1,
+   "median_ms": 936,
+   "p90_ms": 1272,
+   "provider": "xai-voice-live",
+   "rank": null,
+   "rank_excluding_latency": 3,
+   "responsiveness": 0.5658,
+   "standing": "tied"
+  },
+  {
+   "composite": 0.9184,
+   "composite_excluding_latency": 0.9984,
+   "composite_order": 2,
+   "median_ms": 843,
+   "p90_ms": 1795,
+   "provider": "nova-sonic-live",
+   "rank": null,
+   "rank_excluding_latency": 1,
+   "responsiveness": 0.544,
+   "standing": "tied"
+  },
+  {
+   "composite": 0.9148,
+   "composite_excluding_latency": 0.9968,
+   "composite_order": 3,
+   "median_ms": 1019,
+   "p90_ms": 1310,
+   "provider": "gemini-live",
+   "rank": null,
+   "rank_excluding_latency": 2,
+   "responsiveness": 0.5307,
+   "standing": "tied"
+  },
+  {
+   "composite": 0.8828,
+   "composite_excluding_latency": 0.9405,
+   "composite_order": 4,
+   "median_ms": 858,
+   "p90_ms": 1192,
+   "provider": "openai-realtime-live",
+   "rank": null,
+   "rank_excluding_latency": 5,
+   "responsiveness": 0.6122,
+   "standing": "tied"
+  },
+  {
+   "composite": 0.8367,
+   "composite_excluding_latency": 0.9643,
+   "composite_order": 5,
+   "median_ms": 1982,
+   "p90_ms": 3745,
+   "provider": "elevenlabs-live",
+   "rank": null,
+   "rank_excluding_latency": 4,
+   "responsiveness": 0.2394,
+   "standing": "tied"
+  }
+ ],
+ "before": [
+  {
+   "composite": 0.9184,
+   "composite_excluding_latency": 0.9984,
+   "composite_order": 1,
+   "median_ms": 843,
+   "p90_ms": 1795,
+   "provider": "nova-sonic-live",
+   "rank": null,
+   "rank_excluding_latency": 1,
+   "responsiveness": 0.544,
+   "standing": "tied"
+  },
+  {
+   "composite": 0.8665,
+   "composite_excluding_latency": 0.9952,
+   "composite_order": 2,
+   "median_ms": 2136,
+   "p90_ms": 2472,
+   "provider": "xai-voice-live",
+   "rank": null,
+   "rank_excluding_latency": 3,
+   "responsiveness": 0.2639,
+   "standing": "tied"
+  },
+  {
+   "composite": 0.8665,
+   "composite_excluding_latency": 0.9968,
+   "composite_order": 3,
+   "median_ms": 2219,
+   "p90_ms": 2510,
+   "provider": "gemini-live",
+   "rank": null,
+   "rank_excluding_latency": 2,
+   "responsiveness": 0.2565,
+   "standing": "tied"
+  },
+  {
+   "composite": 0.8367,
+   "composite_excluding_latency": 0.9643,
+   "composite_order": 4,
+   "median_ms": 1982,
+   "p90_ms": 3745,
+   "provider": "elevenlabs-live",
+   "rank": null,
+   "rank_excluding_latency": 4,
+   "responsiveness": 0.2394,
+   "standing": "tied"
+  },
+  {
+   "composite": 0.8231,
+   "composite_excluding_latency": 0.9405,
+   "composite_order": 5,
+   "median_ms": 2058,
+   "p90_ms": 2392,
+   "provider": "openai-realtime-live",
+   "rank": null,
+   "rank_excluding_latency": 5,
+   "responsiveness": 0.2735,
+   "standing": "tied"
+  }
+ ],
+ "explicit_commit": [
+  "gemini-live",
+  "openai-realtime-live",
+  "xai-voice-live"
+ ],
+ "trail_ms": 1200,
+ "turns_corrected": {
+  "gemini-live": 159,
+  "openai-realtime-live": 162,
+  "xai-voice-live": 159
+ },
+ "verdict_after": {
+  "latency_comparability": "mixed_turn_control",
+  "latency_comparable": false,
+  "latency_leader": "nova-sonic-live",
+  "leader": "xai-voice-live",
+  "no_clear_winner": true,
+  "quality_lead": {
+   "hi": 0.0,
+   "lo": -0.010714201437047334
+  },
+  "rank_stable": null,
+  "ranking": "tied_on_quality",
+  "runner_up": "nova-sonic-live",
+  "sensitivity_basis": null,
+  "speed_only_lead": false,
+  "weight_win_share": null
+ }
+}
