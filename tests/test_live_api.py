@@ -412,7 +412,8 @@ class LiveApi(unittest.TestCase):
         other = reference_judge(cfg("other"))
         _, events = self.completed_run(CARE, ([same, other], []), provider="xai-voice-live", adapter=XaiFakeAdapter(), events=True)
         independence = next(e["content"] for e in events if e["type"] == "judge.independence_recorded")
-        self.assertEqual(independence["tested"], {"provider": "xai", "model_id": "grok-voice-3.0", "family": "xai_grok_voice"})
+        self.assertEqual(independence["tested"], {"provider": "xai", "model_id": "grok-voice-3.0", "family": "xai_grok_voice",
+                                                  "host": "xai", "vendor": "xai"})
         verdicts = {j["judge_id"]: j for j in independence["judges"]}
         self.assertFalse(verdicts["xai-self"]["eligible"])
         self.assertIn("JUDGE_IS_TESTED_MODEL", verdicts["xai-self"]["reason_codes"])
@@ -467,7 +468,7 @@ class LiveApi(unittest.TestCase):
         _, events = self.completed_run(CARE, ([same, other], []), provider="gemini-live", adapter=GeminiFakeAdapter(), events=True)
         independence = next(e["content"] for e in events if e["type"] == "judge.independence_recorded")
         self.assertEqual(independence["tested"], {"provider": "google", "model_id": "gemini-3.8-live",
-                                                  "family": "google_gemini_live"})
+                                                  "family": "google_gemini_live", "host": "google", "vendor": "google"})
         verdicts = {j["judge_id"]: j for j in independence["judges"]}
         self.assertFalse(verdicts["gemini-self"]["eligible"])
         self.assertIn("JUDGE_IS_TESTED_MODEL", verdicts["gemini-self"]["reason_codes"])

@@ -35,6 +35,8 @@ class JudgeIdentity(Closed):
     prompt_template_id: Identifier
     evaluation_version: Identifier
     session_id: Identifier
+    host: Identifier | None = None  # serving platform (aws for any Bedrock model); None on older events
+    vendor: Identifier | None = None  # model maker (anthropic for a Bedrock Claude)
 
 
 class FindingRecord(Closed):
@@ -75,6 +77,8 @@ class TestedModel(Closed):
     provider: Identifier
     model_id: Identifier
     family: Identifier
+    host: Identifier | None = None
+    vendor: Identifier | None = None
 
 
 class JudgeEligibility(Closed):
@@ -82,6 +86,8 @@ class JudgeEligibility(Closed):
     provider: Identifier
     model_id: Identifier
     family: Identifier
+    host: Identifier | None = None
+    vendor: Identifier | None = None
     eligible: bool
     reason_codes: list[Identifier]
     disclosures: list[Identifier]

@@ -77,7 +77,8 @@ def assessor_identity(events: list[dict], tested: dict | None = None, database=N
         eligibility = next((j for j in (independence or {}).get("judges", []) if j["judge_id"] == identity["judge_id"]), {})
         judges.append({
             "judge_id": identity["judge_id"], "provider": identity["provider"], "model_id": identity["model_id"],
-            "family": identity["family"], "prompt_template_id": identity["prompt_template_id"],
+            "family": identity["family"], "host": identity.get("host") or eligibility.get("host"),
+            "vendor": identity.get("vendor") or eligibility.get("vendor"), "prompt_template_id": identity["prompt_template_id"],
             "evaluation_version": identity["evaluation_version"], "status": content["status"],
             "error_code": content["error_code"], "disclosures": list(eligibility.get("disclosures", [])),
             "temperature": content.get("temperature"), "temperature_fallback": content.get("temperature_fallback", False),
@@ -123,7 +124,7 @@ def summarise_assessors(observations: list[dict]) -> list[dict]:
         if info["judge_coverage"]:
             row["coverage"].add(info["judge_coverage"])
     return [{"provider": r["provider"], "runs": r["runs"], "runs_with_judge": r["runs_with_judge"],
-             "judge_models": [{k: j.get(k) for k in ("provider", "model_id", "family", "calibration", "temperature",
+             "judge_models": [{k: j.get(k) for k in ("provider", "model_id", "family", "host", "vendor", "calibration", "temperature",
                                                    "temperature_fallback", "model_version")}
                               for j in r["judges"].values()],
              "asr_models": [{"vendor": v, "model": m, "live": a["live"], "disagreements": a.get("disagreements", 0)} for (v, m), a in r["asr"].items()],

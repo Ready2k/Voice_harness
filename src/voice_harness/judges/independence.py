@@ -1,33 +1,55 @@
 """Per-run tested-model vs judge independence and eligibility (spec section 7).
 
-Eligibility is evaluated per run: a model is only excluded from judging itself. Two judges
-on the same provider/model do not establish independence (they count once).
+Eligibility is evaluated per run: a model is excluded from judging itself, and in a material benchmark a judge
+made by the tested model's vendor is excluded too (self-preference). Two judges on the same model do not
+establish independence (they count once). Identity is compared as ``host`` (who serves the model: Bedrock and
+Nova are both AWS) and ``vendor`` (who made it: a Bedrock Claude is Anthropic), not as raw provider labels.
 """
 
 from __future__ import annotations
 
-from .backends import JudgeConfig
+from .backends import JudgeConfig, model_host, model_vendor
 
 BLINDING_LIMITATIONS = [
-    "Provider names are masked in free text only; audio provider fingerprints may prevent complete blinding.",
+    "Provider-session events, identity keys and provider-issued ids are removed and free text is masked against "
+    "registry-derived identity tokens; reply style and tool-call behaviour may still fingerprint a provider.",
     "Judges see synthetic transcripts and ledger metadata, not audio.",
 ]
+SAME_HOST = "SAME_HOST_AS_TESTED_MODEL"
+SAME_VENDOR = "SAME_VENDOR_AS_TESTED_MODEL"
+SAME_PROVIDER = "SAME_PROVIDER_AS_TESTED_MODEL"  # kept for existing readers: raised with SAME_HOST
+SAME_VENDOR_MATERIAL = "SAME_VENDOR_IN_MATERIAL_BENCHMARK"
+
+
+def tested_identity(tested: dict) -> dict:
+    """The tested model with explicit ``host`` and ``vendor`` (registry values win over inference)."""
+    return {**tested, "host": tested.get("host") or model_host(tested["provider"]),
+            "vendor": tested.get("vendor") or model_vendor(tested["provider"], tested["model_id"], tested["family"])}
+
+
+def is_tested_model(config: JudgeConfig, tested: dict) -> bool:
+    return config.model_id == tested["model_id"] and config.vendor == tested_identity(tested)["vendor"]
 
 
 def assess(tested: dict, configs: list[JudgeConfig], *, required_judges: int, material_benchmark: bool,
-           order_seed: int, run_session_id: str) -> dict:
-    """Return the JudgeIndependenceRecorded content plus the eligible judge ids."""
+           order_seed: int, run_session_id: str, blinding: dict | None = None) -> dict:
+    """Return the JudgeIndependenceRecorded content plus the eligible judge ids.
+
+    ``blinding`` is the measured oracle blinding; without it the record does not claim identity was hidden."""
+    tested = tested_identity(tested)
     judges, independent = [], {}
     for config in configs:
         reasons, disclosures = [], []
-        if config.provider == tested["provider"] and config.model_id == tested["model_id"]:
+        same_host, same_vendor = config.host == tested["host"], config.vendor == tested["vendor"]
+        if is_tested_model(config, tested):
             reasons.append("JUDGE_IS_TESTED_MODEL")
         if config.session_id == run_session_id:
             reasons.append("JUDGE_SHARES_RUN_SESSION")
-        if config.family == tested["family"] and not reasons:
-            disclosures.append("SAME_FAMILY_AS_TESTED_MODEL")
-        if config.provider == tested["provider"] and not reasons:
-            disclosures.append("SAME_PROVIDER_AS_TESTED_MODEL")
+        if same_vendor and material_benchmark and not reasons:
+            reasons.append(SAME_VENDOR_MATERIAL)
+        if not reasons or reasons == [SAME_VENDOR_MATERIAL]:
+            disclosures += [code for code, hit in ((SAME_VENDOR, same_vendor), ("SAME_FAMILY_AS_TESTED_MODEL",
+                            config.family == tested["family"]), (SAME_HOST, same_host), (SAME_PROVIDER, same_host)) if hit]
         eligible = not reasons
         key = (config.provider, config.model_id)
         if eligible and key in independent:
@@ -36,22 +58,30 @@ def assess(tested: dict, configs: list[JudgeConfig], *, required_judges: int, ma
             independent[key] = config.judge_id
         judges.append({
             "judge_id": config.judge_id, "provider": config.provider, "model_id": config.model_id,
-            "family": config.family, "eligible": eligible, "reason_codes": reasons,
-            "disclosures": disclosures,
+            "family": config.family, "host": config.host, "vendor": config.vendor, "eligible": eligible,
+            "reason_codes": reasons, "disclosures": disclosures,
         })
     count = len(independent)
     complete = count >= required_judges
     return {
-        "tested": dict(tested), "judges": judges, "independent_judge_count": count,
+        "tested": tested, "judges": judges, "independent_judge_count": count,
         "required_judges": required_judges, "material_benchmark": material_benchmark,
         "coverage": "complete" if complete else "judge_coverage_incomplete",
         "cross_family_judge_present": any(
-            j["eligible"] and j["family"] != tested["family"] and j["provider"] != tested["provider"]
-            for j in judges
+            j["eligible"] and j["family"] != tested["family"] and j["vendor"] != tested["vendor"] for j in judges
         ),
-        "blinding": {"provider_identity_hidden": True, "limitations": list(BLINDING_LIMITATIONS)},
+        "blinding": blinding or {"provider_identity_hidden": False,
+                                 "limitations": ["Blinding was not measured for this record."]},
         "order_seed": order_seed, "execution_credentials_granted": False,
         "judge_session_ids": [c.session_id for c in configs], "run_session_id": run_session_id,
         "_independent_ids": set(independent.values()),
         "_eligible_ids": {j["judge_id"] for j in judges if j["eligible"]},
     }
+
+
+def measured_blinding(leaks: list[str]) -> dict:
+    """The blinding claim from a scan of the oracle actually sent to judges."""
+    limitations = list(BLINDING_LIMITATIONS)
+    if leaks:
+        limitations.insert(0, "Identity tokens survived masking: " + ", ".join(leaks[:20]))
+    return {"provider_identity_hidden": not leaks, "limitations": limitations}

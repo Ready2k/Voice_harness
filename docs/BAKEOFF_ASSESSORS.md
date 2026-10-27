@@ -5,8 +5,11 @@ Updated 22 October 2026.
 Each bake-off observation carries `assessors` (`judges/assessors.py::assessor_identity`), read from the run's
 ledger. It records which models produced the evidence, so a reader can judge it. It changes no verdict.
 
-- `judges[]`: judge id, provider, model id, family, prompt template, evaluation version, status, independence
-  disclosures (`SAME_PROVIDER_AS_TESTED_MODEL`, `SAME_FAMILY_AS_TESTED_MODEL`, `DUPLICATE_MODEL_NOT_INDEPENDENT`)
+- `judges[]`: judge id, provider, model id, family, `host` (who serves it: any Bedrock model is `aws`) and `vendor`
+  (who made it: a Bedrock Claude is `anthropic`, Nova is `amazon`), prompt template, evaluation version, status,
+  independence disclosures (`SAME_VENDOR_AS_TESTED_MODEL`, `SAME_HOST_AS_TESTED_MODEL`, `SAME_FAMILY_AS_TESTED_MODEL`,
+  `DUPLICATE_MODEL_NOT_INDEPENDENT`; `SAME_PROVIDER_AS_TESTED_MODEL` is kept and now means same host, so a Bedrock
+  judge on a Nova run raises it)
   and a `calibration` summary (newest stored holdout report for that exact judge, template and rubric: precision,
   recall, abstention, error rate and reviewer agreement per criterion; `no_calibration_report` if none). Holdout
   agreement is measured on synthetic labelled examples; it is not accuracy on live runs.
@@ -16,6 +19,27 @@ ledger. It records which models produced the evidence, so a reader can judge it.
   transcriber's vendor is the tested provider (OpenAI ASR scoring OpenAI Realtime).
 - `summarise_assessors(observations)` rolls these up per provider; `spot_check_sample(observations, per_group, seed)`
   picks a reproducible set of passes and non-passes per provider for human review.
+
+## Judge blinding and independence
+
+Updated 27 October 2026 (`PROVIDER_BIAS_REVIEW_2026-10-27.md` findings 4 and 6).
+
+- The judge oracle (`judges/oracle.py`) leaves out provider-session events (`adapter.native_event`,
+  `adapter.session_ready`, `cost.*`, `benchmark.adapter_metrics`), strips identity keys everywhere (the
+  `run.live_binding` `adapter` and `provider` session metadata, model/voice/region/endpoint/SDK fields, ASR and caller
+  backend names), replaces provider-issued `call_id`/`response_id`/`item_id` values with stable hashes (linkage kept),
+  and masks every remaining string case-insensitively. Mask tokens are derived from `live_providers` (config ids,
+  families, model ids, provider names and their distinctive parts), adapter class names, endpoint domains and default
+  voices read from the adapter sources, plus a brand list (`openai`, `gpt`, `amazon`, `aws`, `bedrock`, `nova`,
+  `google`, `gemini`, `xai`, `grok`, `elevenlabs`, ...) and known voice names. Spoken self-identification ("I'm
+  Gemini, made by Google") is masked the same way.
+- `blinding.provider_identity_hidden` is measured: the oracle actually sent is scanned for identity tokens, and any
+  survivor sets it false and is listed in `limitations`. It cannot detect reply style or tool-use habits, so a judge
+  may still guess a provider.
+- Same-vendor judges (an OpenAI judge on an OpenAI provider, a Bedrock Nova judge on Nova) are disclosed. In a
+  `material_benchmark` they are ineligible (`SAME_VENDOR_IN_MATERIAL_BENCHMARK`), because self-preference would
+  count toward coverage. Outside material benchmarks they still run, disclosed, and `cross_family_judge_present`
+  needs a judge whose vendor and family both differ from the tested model.
 
 ## ASR configuration
 
