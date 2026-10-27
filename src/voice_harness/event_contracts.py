@@ -664,6 +664,13 @@ class InputCallerAudio(Closed):
     stream_started_ms: Count
     stream_ended_ms: Count
     clock_domain_id: Identifier
+    # End of the caller's speech (the latency anchor) and, for explicit commits, when the turn was signalled after
+    # the common emulated endpointing delay. Absent on ledgers written before provider-transport-v2.
+    speech_ended_ms: Count | None = None
+    turn_signal_ms: Count | None = None
+    turn_commit: Literal["explicit", "provider_vad", "automatic"] | None = None
+    commit_delay_ms: Count | None = None
+    streamed_byte_count: Count | None = None
 
 
 class CallerSessionStarted(Closed):

@@ -6,8 +6,8 @@ Writes runs.json (one row per scenario x provider, with scenario conditions and 
 (one row per caller turn, with response latency) next to the input file.
 
 Latency is measured in the process clock domain shared by `input.caller_audio` and `adapter.native_event`:
-caller speech end is the end of the streamed caller audio minus the synthetic caller's trailing silence
-(TRAIL_MS, as passed by live_providers.run_live), and the first response audio is the provider's first audio
+caller speech end is the recorded `speech_ended_ms`; legacy ledgers anchor explicit commits at the end of the
+streamed audio and provider VAD at that end minus the synthetic caller's trailing silence (TRAIL_MS), and the first response audio is the provider's first audio
 event after the caller stopped speaking (earlier audio is the tail of the previous reply). Gemini Live sends audio and transcripts as one native type
 (serverContent) whose payloads are stored as hashes only, so its first audio is the first serverContent at
 least GEMINI_AUDIO_BYTES long; that figure is labelled as an estimate.
@@ -88,8 +88,13 @@ def main(path):
         # Ledger events carry monotonic_ns on the same process clock as received_ms (checked to within a few ms).
         tool_ms = [e["monotonic_ns"] / 1e6 for e in ledger if e["type"] == "tool.requested"]
         inputs = [e["content"] for e in ledger if e["type"] == "input.caller_audio"]
+        commit = next((((e["content"].get("provider") or {}).get("harness_transport") or {}).get("turn_commit")
+                       for e in ledger if e["type"] == "run.live_binding"), None)
         for index, turn in enumerate(inputs):
-            speech_end = turn["stream_ended_ms"] - TRAIL_MS
+            # Same anchor as bakeoff_metrics.speech_anchor: recorded speech end, else the legacy commit / estimate.
+            speech_end = (turn["speech_ended_ms"] if turn.get("speech_ended_ms") is not None
+                          else turn["stream_ended_ms"] if (turn.get("turn_commit") or commit) == "explicit"
+                          else turn["stream_ended_ms"] - TRAIL_MS)
             window_end = inputs[index + 1]["stream_started_ms"] if index + 1 < len(inputs) else float("inf")
             audio = [n["received_ms"] for n in natives
                      if is_audio(cell["provider"], n) and speech_end <= n["received_ms"] < window_end]

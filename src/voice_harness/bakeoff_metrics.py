@@ -63,6 +63,30 @@ def _arguments(expected_arguments, events):
     return detail
 
 
+def run_turn_commit(events):
+    """The run's turn-control mode as its binding recorded it (``harness_transport.turn_commit``), else None."""
+    for e in events:
+        if e["type"] == "run.live_binding":
+            return ((e["content"].get("provider") or {}).get("harness_transport") or {}).get("turn_commit")
+    return None
+
+
+def speech_anchor(content, run_commit, trail_ms):
+    """Where first-audio latency is measured from for one ``input.caller_audio`` turn.
+
+    Returns (anchor_ms, anchor, turn_commit, commit_delay_ms). ``speech_end``: the recorded end of speech; explicit
+    commits then include the common emulated endpointing delay. Legacy ledgers have no speech end: an explicit commit
+    sent after the whole trailing silence is anchored at the commit (``legacy_commit``, an endpointing allowance of
+    0 ms), since the provider could not answer earlier; provider VAD keeps the streamed end less the trailing silence
+    (``legacy_speech_end``)."""
+    commit = content.get("turn_commit") or run_commit
+    if content.get("speech_ended_ms") is not None:
+        return content["speech_ended_ms"], "speech_end", commit, content.get("commit_delay_ms")
+    if commit == "explicit":
+        return content["stream_ended_ms"], "legacy_commit", commit, 0
+    return content["stream_ended_ms"] - trail_ms, "legacy_speech_end", commit, None
+
+
 def observe_metrics(provider, definition, events, *, is_audio, trail_ms, tags=(), expected_arguments=None):
     """The ``metrics`` block for one run. ``is_audio(provider, native)`` says which native events carry audio."""
     expected = list(definition.get("expected_tool_sequence") or [])
@@ -95,10 +119,10 @@ def observe_metrics(provider, definition, events, *, is_audio, trail_ms, tags=()
                 result_ms[e["content"]["call_id"]] = e["monotonic_ns"] / 1e6
     tool_times = sorted([*result_ms.values(),
                          *(e["monotonic_ns"] / 1e6 for e in events if e["type"] == "tool.requested" and e.get("monotonic_ns"))])
-    turns = []
+    turns, run_commit = [], run_turn_commit(events)
     for index, entry in enumerate(inputs):
         content = entry["content"]
-        speech_end = content["stream_ended_ms"] - trail_ms
+        speech_end, anchor, commit, _delay = speech_anchor(content, run_commit, trail_ms)
         following = inputs[index + 1] if index + 1 < len(inputs) else None
         window_end = following["content"]["stream_started_ms"] if following else math.inf
         audio = sorted(n["received_ms"] for n in natives if is_audio(provider, n) and speech_end <= n["received_ms"] < window_end)
@@ -131,7 +155,7 @@ def observe_metrics(provider, definition, events, *, is_audio, trail_ms, tags=()
         elif audio:
             basis = "overlapped"
         turns.append({
-            "turn": index, "tool_results": len(results), "tool_to_audio_ms": to_audio, "speaking_at_result": speaking,
+            "turn": index, "anchor": anchor, "turn_commit": commit, "tool_results": len(results), "tool_to_audio_ms": to_audio, "speaking_at_result": speaking,
             "content_audio_ms": content_ms, "content_basis": basis, "acknowledged": ack,
             "long_gaps": len(gaps), "max_gap_ms": max(gaps) if gaps else None,
             "reply_ms": round(sum(u.get("byte_count", 0) / 2 / (u.get("rate") or 24000) for u in units) * 1000) if units else None,
