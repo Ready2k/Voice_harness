@@ -55,6 +55,75 @@
       "minLength": 1,
       "title": "Clock Domain Id",
       "type": "string"
+    },
+    "speech_ended_ms": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Speech Ended Ms"
+    },
+    "turn_signal_ms": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Turn Signal Ms"
+    },
+    "turn_commit": {
+      "anyOf": [
+        {
+          "enum": [
+            "explicit",
+            "provider_vad",
+            "automatic"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Turn Commit"
+    },
+    "commit_delay_ms": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Commit Delay Ms"
+    },
+    "streamed_byte_count": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Streamed Byte Count"
     }
   },
   "required": [

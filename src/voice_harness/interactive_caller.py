@@ -4,10 +4,9 @@ from __future__ import annotations
 
 import asyncio
 import hashlib
-import time
 
 from .canonical import canonical_json
-from .live_scenario import CHUNK_MS, RATE, LiveScenarioRunner, apply_profile
+from .live_scenario import CALLER_TRAIL_MS, CHUNK_MS, RATE, LiveScenarioRunner, apply_profile
 from .mcp_gateway import gateway
 from .resample import chunk
 from .semantic_checks import extract_claims
@@ -106,7 +105,7 @@ class RealtimeCaller:
 
 class InteractiveScenarioRunner(LiveScenarioRunner):
     def __init__(self, *args, caller, caller_config, evidence=None, duration_budget=None, **kwargs):
-        super().__init__(*args, caller_audio=None, **kwargs)
+        super().__init__(*args, caller_audio=None, trail_ms=CALLER_TRAIL_MS, **kwargs)
         self.caller, self.caller_config, self.evidence = caller, caller_config, evidence
         self.duration_budget = duration_budget if duration_budget is not None else caller_config["max_duration_seconds"]
         self._released = []
@@ -166,7 +165,7 @@ class InteractiveScenarioRunner(LiveScenarioRunner):
                         return
                     seen.append(normal)
                     pcm = apply_profile(pcm, self.entry["definition"]["audio_profile"], [], self.seed + index)
-                    pcm += bytes(RATE * 2 * 1200 // 1000)
+                    pcm += bytes(RATE * 2 * CALLER_TRAIL_MS // 1000)
                     retained = self.retain(pcm)
                     # The generated transcript is provider-reported evidence, not independent ASR.
                     self.record("caller.utterance", {"turn": index, "text": text,
@@ -178,10 +177,7 @@ class InteractiveScenarioRunner(LiveScenarioRunner):
                     self.driver.expected_claims = {k: v for k, v in self.driver.expected_claims.items()
                                                    if k != "allowed_amounts_minor"}
                     self._released = []
-                    started = int(time.monotonic() * 1000)
-                    await self._stream(pcm)
-                    await self.adapter.request_turn()
-                    self._record_input(index, {"customer": text}, pcm, started, int(time.monotonic() * 1000), retained=retained)
+                    await self._speak(index, {"customer": text}, pcm, retained=retained)
                     outcome, turn_errors = await self._await_turn(bank)
                     outcomes.append({"turn": index, "strict_speech_approval": outcome["strict_speech_approval"]})
                     errors.extend(turn_errors)

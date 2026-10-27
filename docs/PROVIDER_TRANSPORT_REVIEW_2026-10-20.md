@@ -13,6 +13,8 @@ All use paced 20 ms input chunks and 24 kHz output. Nova retains its silence pum
 
 Every new live binding records harness_transport (input mode, native turn control, rates, chunking, endpointing, truncation support, timeout and the current response budget). The fixed runner commits each completed caller clip. Adaptive calls already commit and now share the profile selection. The response timeout remains 45 seconds; it was not increased to conceal turn-detection stalls.
 
+Update 27 October (`provider-transport-v2`): explicit commits are now sent a common emulated endpointing delay (`commit_delay_ms`, default 500 ms) after the end of speech instead of after the whole 1200 ms trailing silence, which had been charged to OpenAI, xAI and Gemini as latency. Explicit commits stay in place for fixed callers; see `BAKEOFF_SAFEGUARDS.md`.
+
 ## Evidence
 
 The Gemini diagnostic reused identical noisy PCM and prompt/tool hashes in three sequential conditions: automatic/45 seconds timed out, explicit/45 seconds delivered £1,234.56, and automatic/120 seconds still timed out. See [diagnostic recordings and timelines](../artifacts/gemini-turn-diagnostic-2026-10-20/README.md).

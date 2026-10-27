@@ -51,6 +51,20 @@ that credentials or credit limits have recovered. Cancel also works while paused
 - Latency remains time to first provider audio, which may be an acknowledgement. It excludes playback and
   assessment delay and does not establish time to a useful answer. Intervals and paired p-values assume
   independence; repeated scenarios, shared outages and multiple comparisons limit their interpretation.
+- Latency is anchored at the recorded end of the caller's speech (`input.caller_audio.speech_ended_ms`), never
+  at the end of the harness's 1200 ms trailing silence. Provider-VAD providers (Nova, ElevenLabs, GPT-Live) hear
+  the silence and pay their own endpointing. Explicit-commit providers (OpenAI Realtime, xAI, Gemini) are sent the
+  commit a common emulated endpointing delay after the end of speech (`commit_delay_ms`, default 500 ms,
+  `HARNESS_COMMIT_DELAY_MS`) and the rest of the silence is not streamed (Gemini would reopen an activity). The
+  two endpointing costs are not identical, so each turn carries `anchor` and `turn_commit` and the observation
+  its run's `turn_commit`; comparisons across modes must be disclosed. Ledgers from before `provider-transport-v2`
+  have no speech end: explicit-commit runs are anchored at the commit (`legacy_commit`, no endpointing allowance,
+  slightly favouring them) and provider-VAD runs at the streamed end less the silence (`legacy_speech_end`).
+  Mode is read from the run binding's `harness_transport.turn_commit`, not the provider name;
+  `bakeoff.reobserve` re-anchors a stored bake-off from its ledgers.
+- The out-of-band cancellation confirmation reaches Nova as an interactive USER text turn (no non-interactive
+  mid-session text input is established for Nova Sonic); others get it as context only. The binding and the
+  observation record `confirmation_delivery` so those scenarios can be disclosed or excluded.
 - Scorecard voice costs include recorded earlier scored attempts. Preflight runs, including repeat checks
   on resume, are billable separately and excluded from that table and the launch estimate.
 

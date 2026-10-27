@@ -42,6 +42,8 @@ NATIVE_FLUSH_EVERY = 100
 LIVE_LIMITS = {"pending_audio_seconds": 120.0, "pending_audio_bytes": 120 * RATE * 2,
                "response_audio_seconds": 20.0, "response_audio_bytes": 20 * RATE * 2}
 CANCEL_TIMEOUT_S = 5.0
+# Silence after each synthetic caller utterance (lets provider VAD end the turn).
+CALLER_TRAIL_MS = 1200
 
 
 def degrade(pcm: bytes, *, snr_db=None, narrowband=False, seed=0) -> bytes:
@@ -77,13 +79,16 @@ CONTINUE = object()  # sentinel: the event does not settle the turn
 class LiveScenarioRunner:
     def __init__(self, engine, run_id, adapter, assessor, scenario_id, *, caller_audio, cost_recorder=None,
                  seed=0, turn_timeout_s=TURN_TIMEOUT_S, interrupt_mode="client", barge_after_tool=False,
-                 before_turn=None, provider_session=None):
+                 before_turn=None, provider_session=None, trail_ms=0):
         entry = catalogue_entry(scenario_id)
         if entry is None:
             raise ValueError("SCENARIO_NOT_IN_CATALOGUE")
         self.engine, self.run_id, self.adapter, self.entry = engine, run_id, adapter, entry
         self.caller_audio, self.seed, self.turn_timeout_s = caller_audio, seed, turn_timeout_s
         self.provider_session = provider_session  # requested/returned session metadata, recorded in the binding
+        transport = (provider_session or {}).get("harness_transport") or {}
+        self.turn_commit, self.trail_ms = transport.get("turn_commit"), trail_ms  # trail_ms: silence ending each clip
+        self.commit_delay_ms = transport.get("commit_delay_ms") if self.turn_commit == "explicit" else None
         self.before_turn = before_turn  # async (index) hook run before a caller turn, e.g. a trusted confirmation
         self.interrupt_mode = interrupt_mode  # "client": runner calls interrupt(); "vad": caller speech overlaps, provider VAD cuts in
         self.driver = AdapterTurnDriver(engine, run_id, assessor, cost_recorder=cost_recorder)
@@ -124,15 +129,42 @@ class LiveScenarioRunner:
                 "harness_mechanics": list(self.entry.get("mechanics", [])), "provider": self.provider_session,
             })
 
-    def _record_input(self, index, turn, pcm, started_ms, ended_ms, *, retained=False):
+    def _record_input(self, index, turn, pcm, started_ms, ended_ms, *, retained=False, timing=None):
         with self.engine.database.transaction(self.run_id) as tx:
             tx.event("orchestrator", "input.caller_audio", {
                 "turn": index, "source_text_sha256": hashlib.sha256(turn["customer"].encode()).hexdigest(),
                 "pcm_sha256": hashlib.sha256(pcm).hexdigest(), "byte_count": len(pcm), "sample_rate": RATE,
                 "audio_retained": retained, "transformations": [self.entry["definition"]["audio_profile"]],
                 "stream_started_ms": started_ms, "stream_ended_ms": ended_ms,
-                "clock_domain_id": PROCESS_CLOCK_DOMAIN,
+                "clock_domain_id": PROCESS_CLOCK_DOMAIN, **(timing or {}),
             })
+
+    async def _speak(self, index, turn, pcm, *, retained=False):
+        """Stream one caller clip, end the caller turn and record when speech ended and the turn was signalled.
+
+        Explicit-commit providers get ``request_turn()`` a common emulated endpointing delay (``commit_delay_ms``)
+        after the end of speech; the rest of the trailing silence is not sent, since Gemini reopens an activity on
+        later audio and manual OpenAI/xAI buffers ignore it. Provider-VAD providers hear the whole clip and pay their
+        own endpointing. Either way first audio is measured from ``speech_ended_ms``."""
+        explicit = self.turn_commit == "explicit" and self.commit_delay_ms is not None
+        speech_bytes = max(0, len(pcm) - self.trail_ms * RATE // 1000 * 2)
+        started = time.monotonic() * 1000
+        speech_end, sent = (None if speech_bytes else started), 0
+        for part in chunk(pcm, RATE, CHUNK_MS):
+            if explicit and speech_end is not None and time.monotonic() * 1000 >= speech_end + self.commit_delay_ms:
+                break
+            await self.adapter.send_audio(part, {"sample_count": len(part) // 2, "sample_rate": RATE})
+            await asyncio.sleep(CHUNK_MS / 1000)
+            sent += len(part)
+            if speech_end is None and sent >= speech_bytes:  # paced in real time: back off the trail in this chunk
+                speech_end = time.monotonic() * 1000 - (sent - speech_bytes) / 2 / RATE * 1000
+        if explicit and (wait := speech_end + self.commit_delay_ms - time.monotonic() * 1000) > 0:
+            await asyncio.sleep(wait / 1000)
+        signalled = time.monotonic() * 1000
+        await self.adapter.request_turn()  # Nova and other provider-VAD adapters implement this as a no-op
+        self._record_input(index, turn, pcm, int(started), int(time.monotonic() * 1000), retained=retained, timing={
+            "speech_ended_ms": int(speech_end), "turn_signal_ms": int(signalled) if explicit else None,
+            "turn_commit": self.turn_commit, "commit_delay_ms": self.commit_delay_ms, "streamed_byte_count": sent})
 
     def _record_fault_dispositions(self, outcomes):
         """One typed ``fault.disposition`` per declared fault: handled, not exercised, not handled or misconduct."""
@@ -150,11 +182,6 @@ class LiveScenarioRunner:
             f for f in self.entry["faults"]
             if f["kind"] == kind and (turn is None or f["at_turn"] == turn) and (tool is None or f["tool"] == tool)
         ]
-
-    async def _stream(self, pcm):
-        for part in chunk(pcm, RATE, CHUNK_MS):
-            await self.adapter.send_audio(part, {"sample_count": len(part) // 2, "sample_rate": RATE})
-            await asyncio.sleep(CHUNK_MS / 1000)
 
     async def _tool(self, bank, event):
         started = time.monotonic()
@@ -334,12 +361,7 @@ class LiveScenarioRunner:
                     self.pending_caller_pcm = pcm  # the audio about to be spoken, for observing a confirmation
                     if self.before_turn is not None:
                         await self.before_turn(index)
-                    started_ms = int(time.monotonic() * 1000)
-                    await self._stream(pcm)
-                    # Explicit commits for prerecorded input; Nova's implementation leaves endpointing
-                    # to its continuous provider-VAD stream rather than pretending it supports commits.
-                    await self.adapter.request_turn()
-                    self._record_input(index, turn, pcm, started_ms, int(time.monotonic() * 1000))
+                    await self._speak(index, turn, pcm)
                     # The next turn interrupts: stop at the first reply audio and speak over it.
                     barge = self._faults("caller_interrupts", turn=index + 1)
                     outcome, errors = await self._await_turn(bank, until_audio=bool(barge))

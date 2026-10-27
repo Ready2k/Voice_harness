@@ -16,7 +16,7 @@ from .asr import LIVE_FLAG, select_backend
 from .contracts import TOOLS as TOOL_CONTRACTS
 from .events import PROCESS_CLOCK_DOMAIN
 from .live_assessment import IndependentAssessor
-from .live_scenario import LIVE_LIMITS, RATE, TURN_TIMEOUT_S, LiveScenarioRunner
+from .live_scenario import CALLER_TRAIL_MS, LIVE_LIMITS, RATE, TURN_TIMEOUT_S, LiveScenarioRunner
 from .scenario_catalogue import catalogue_entry
 from .target_prompts import instructions as target_instructions
 from .target_prompts import provenance as prompt_provenance
@@ -76,9 +76,20 @@ TESTED_MODELS = {
 }
 
 
-# Silence after each synthetic caller utterance (lets provider VAD end the turn). Latency is measured from the end
-# of speech, so the bake-off subtracts this from the end of the streamed audio.
-CALLER_TRAIL_MS = 1200
+# Explicit-commit providers are told the turn ended this long after the end of speech: an emulated endpointing delay
+# in line with common server-VAD silence windows, so they are neither charged for the harness's trailing silence nor
+# excused all endpointing. Provider-VAD providers pay their own. ``HARNESS_COMMIT_DELAY_MS`` overrides it.
+COMMIT_DELAY_MS = 500
+
+
+def commit_delay_ms(environ=None):
+    """The configured emulated endpointing delay, clamped to the caller's trailing silence."""
+    environ = os.environ if environ is None else environ
+    try:
+        value = int(environ.get("HARNESS_COMMIT_DELAY_MS", COMMIT_DELAY_MS))
+    except ValueError:
+        value = COMMIT_DELAY_MS
+    return min(max(value, 0), CALLER_TRAIL_MS)
 
 
 class PreconditionFailed(Exception):
@@ -263,6 +274,8 @@ def _adapter(provider_config_id, prompt_profile="standardised-v2"):
 # from opening turns (and cutting the welcome), a short silence window still closes real turns promptly.
 MIC_VAD = {"threshold": 0.8, "silence_duration_ms": 700, "prefix_padding_ms": 300}
 MIC_VAD_PROVIDERS = ("openai-realtime-live", "xai-voice-live")
+# send_text(respond=False) supported: orchestrator context is added without asking for a reply.
+CONTEXT_ONLY = ("openai-live", "openai-realtime-live", "xai-voice-live", "gemini-live", "elevenlabs-live")
 
 
 def configure_transport(provider_config_id, config, caller_mode):
@@ -291,13 +304,15 @@ def configure_transport(provider_config_id, config, caller_mode):
         # Default end-of-speech detection answered 8-9 s after a short utterance in a room-mic session.
         config["activity_detection"] = {"endOfSpeechSensitivity": "END_SENSITIVITY_HIGH", "silenceDurationMs": 600,
                                         "prefixPaddingMs": 200}
+    commit = "provider_vad" if provider_vad else ("automatic" if detection == "server_vad" else "explicit")
     return {
-        "profile_version": "provider-transport-v1", "caller_mode": caller_mode,
+        "profile_version": "provider-transport-v2", "caller_mode": caller_mode,
         "turn_detection": detection, "endpointing": config.get("endpointing") if nova else None,
-        "turn_commit": "provider_vad" if provider_vad else ("automatic" if detection == "server_vad" else "explicit"),
+        "turn_commit": commit, "commit_delay_ms": commit_delay_ms() if commit == "explicit" else None,
         "harness_input_rate": RATE, "provider_input_rate": 16000 if provider_config_id in {
             "gemini-live", "nova-sonic-live"} else RATE,
-        "output_rate": RATE, "chunk_ms": 20, "caller_trailing_silence_ms": CALLER_TRAIL_MS if caller_mode == "fixed" else None,
+        "output_rate": RATE, "chunk_ms": 20,
+        "caller_trailing_silence_ms": CALLER_TRAIL_MS if caller_mode != "human_microphone" else None,
         "client_truncation": provider_config_id in {"openai-realtime-live", "xai-voice-live"},
         "turn_timeout_seconds": TURN_TIMEOUT_S if caller_mode != "human_microphone" else None,
         "response_audio_seconds": LIVE_LIMITS["response_audio_seconds"],
@@ -346,7 +361,11 @@ async def run_live(engine, run_id, provider_config_id, scenario_id, *, seed=0, c
     metadata["harness_transport"] = transport
     metadata["caller_mode"] = "fixed"
     metadata["caller_voice"] = describe_caller_voice(voice_env)
-    context_only = provider_config_id in ("openai-live", "openai-realtime-live", "xai-voice-live", "gemini-live", "elevenlabs-live")  # send_text(respond=False) supported
+    context_only = provider_config_id in CONTEXT_ONLY
+    # Nova has no established non-interactive mid-session text input, so its confirmation is a USER turn that
+    # triggers a reply; recorded so the report can disclose or exclude the asymmetry.
+    metadata["confirmation_delivery"] = (("context_only" if context_only else "interactive_turn")
+                                         if "out_of_band_confirmation" in catalogue_entry(scenario_id)["mechanics"] else None)
     from .cost_recorder import UsageRecorder
 
     tested = TESTED_MODELS[provider_config_id]
@@ -385,7 +404,7 @@ async def run_live(engine, run_id, provider_config_id, scenario_id, *, seed=0, c
     runner = LiveScenarioRunner(
         engine, run_id, adapter, assessor, scenario_id,
         caller_audio=lambda text: synth_caller_pcm(text, trail_ms=CALLER_TRAIL_MS, environ=voice_env), before_turn=before_turn, seed=seed,
-        provider_session=metadata, cost_recorder=recorder)
+        provider_session=metadata, cost_recorder=recorder, trail_ms=CALLER_TRAIL_MS)
     reason = "done"
     try:
         return await runner.run()
@@ -498,7 +517,7 @@ async def run_manual(engine, run_id, config, bridge):
         engine, run_id, adapter, IndependentAssessor(engine, select_backend()), config["scenario_id"], bridge=bridge,
         playback_mode=config["playback_mode"], journey_id=config.get("journey_id"), path=config.get("path", "happy"),
         provider_session=metadata, cost_recorder=recorder, seed=config["fixture_seed"],
-        context_only=provider_config_id in ("openai-live", "openai-realtime-live", "xai-voice-live", "gemini-live", "elevenlabs-live"))
+        context_only=provider_config_id in CONTEXT_ONLY)
     reason = "done"
     try:
         return await session.run()
@@ -510,4 +529,4 @@ async def run_manual(engine, run_id, config, bridge):
             await adapter.close(reason)
 
 
-__all__ = ["LIVE_LIMITS", "LIVE_PROVIDERS", "TESTED_MODELS", "auto_judges", "PreconditionFailed", "availability", "run_live", "run_manual"]
+__all__ = ["CALLER_TRAIL_MS", "COMMIT_DELAY_MS", "LIVE_LIMITS", "LIVE_PROVIDERS", "TESTED_MODELS", "auto_judges", "PreconditionFailed", "availability", "run_live", "run_manual"]

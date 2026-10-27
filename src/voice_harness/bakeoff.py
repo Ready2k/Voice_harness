@@ -20,8 +20,13 @@ the same for every provider. A run is priced only when every voice line has a pr
 a partial lower bound and the reasons are reported. Cost never enters the composite.
 
 First-audio time is measured on the harness process clock shared by `input.caller_audio`, `adapter.native_event`
-and event `monotonic_ns`: from the end of the caller's speech (the streamed audio's end less the synthetic
-caller's trailing silence) to the provider's first audio after it. Gemini Live sends audio and transcripts as one
+and event `monotonic_ns`: from the end of the caller's speech (`speech_ended_ms`) to the provider's first audio
+after it. Provider-VAD providers hear the trailing silence and pay their own endpointing; explicit-commit providers
+are sent the commit a common emulated endpointing delay (`commit_delay_ms`) after the end of speech, so neither is
+charged for harness silence, but the two endpointing costs differ and every turn records its `anchor` and
+`turn_commit` for disclosure. Legacy ledgers without `speech_ended_ms` anchor explicit commits at the commit
+(`legacy_commit`, no endpointing allowance) and provider VAD at the streamed end less the trailing silence
+(`legacy_speech_end`); `reobserve` re-anchors a stored bake-off. Gemini Live sends audio and transcripts as one
 native type whose payloads are stored as hashes, so its first audio is the first such event at least
 GEMINI_AUDIO_BYTES long; those values are flagged as estimated. A turn during which provider audio overlapped the
 caller's speech (a reply still streaming) cannot be attributed and is excluded.
@@ -381,6 +386,39 @@ def voice_cost(run_id, events, table=None):
             "pricing_table": f'{table.table_id}@{table.version}'}
 
 
+def first_audio_turns(provider, events):
+    """Per caller turn: first provider audio after the turn's latency anchor (``bakeoff_metrics.speech_anchor``)."""
+    natives = [e["content"] for e in events if e["type"] == "adapter.native_event"]
+    tool_ms = [e["monotonic_ns"] / 1e6 for e in events if e["type"] == "tool.requested" and e.get("monotonic_ns")]
+    inputs = [e["content"] for e in events if e["type"] == "input.caller_audio"]
+    run_commit, turns = bakeoff_metrics.run_turn_commit(events), []
+    for index, turn in enumerate(inputs):
+        speech_end, anchor, commit, delay = bakeoff_metrics.speech_anchor(turn, run_commit, CALLER_TRAIL_MS)
+        window_end = inputs[index + 1]["stream_started_ms"] if index + 1 < len(inputs) else math.inf
+        audio = [n["received_ms"] for n in natives
+                 if _is_audio(provider, n) and speech_end <= n["received_ms"] < window_end]
+        overlapped = any(_is_audio(provider, n) and turn["stream_started_ms"] <= n["received_ms"] < speech_end
+                         for n in natives)
+        turns.append({
+            "turn": index, "overlapped": overlapped,
+            "first_audio_ms": (audio[0] - speech_end) if audio and not overlapped else None,
+            "tool_first": bool(audio) and any(speech_end <= t < audio[0] for t in tool_ms),
+            "estimated": provider in {"gemini-live", "openai-live"},
+            "anchor": anchor, "turn_commit": commit, "commit_delay_ms": delay,
+        })
+    return turns
+
+
+def reobserve(payload, database, table=None):
+    """Recompute every finished cell's observation from its ledger, e.g. to re-anchor legacy latency; returns the count."""
+    count = 0
+    for cell in payload["cells"]:
+        if cell.get("observation") and cell.get("attempts"):
+            cell["observation"] = observe(database, cell, table)
+            count += 1
+    return count
+
+
 def observe(database, cell, table=None):
     """What the report needs from a finished cell, read from the final attempt's ledger."""
     provider, scenario_id = cell["provider_config_id"], cell["scenario_id"]
@@ -407,23 +445,9 @@ def observe(database, cell, table=None):
     requested = {e["content"]["call_id"]: e["content"].get("tool") for e in events if e["type"] == "tool.requested"}
     executed = [requested.get(e["content"]["call_id"]) for e in events if e["type"] == "tool.completed"]
     assessed = [e["content"] for e in events if e["type"] == "assessment.independent_asr"]
-    natives = [e["content"] for e in events if e["type"] == "adapter.native_event"]
-    tool_ms = [e["monotonic_ns"] / 1e6 for e in events if e["type"] == "tool.requested" and e.get("monotonic_ns")]
-    inputs = [e["content"] for e in events if e["type"] == "input.caller_audio"]
-    turns = []
-    for index, turn in enumerate(inputs):
-        speech_end = turn["stream_ended_ms"] - CALLER_TRAIL_MS
-        window_end = inputs[index + 1]["stream_started_ms"] if index + 1 < len(inputs) else math.inf
-        audio = [n["received_ms"] for n in natives
-                 if _is_audio(provider, n) and speech_end <= n["received_ms"] < window_end]
-        overlapped = any(_is_audio(provider, n) and turn["stream_started_ms"] <= n["received_ms"] < speech_end
-                         for n in natives)
-        turns.append({
-            "turn": index, "overlapped": overlapped,
-            "first_audio_ms": (audio[0] - speech_end) if audio and not overlapped else None,
-            "tool_first": bool(audio) and any(speech_end <= t < audio[0] for t in tool_ms),
-            "estimated": provider in {"gemini-live", "openai-live"},
-        })
+    turns = first_audio_turns(provider, events)
+    binding = next((e["content"].get("provider") or {} for e in events if e["type"] == "run.live_binding"), {})
+    transport = binding.get("harness_transport") or {}
     expected = iter(definition.get("expected_tool_sequence", []))
     next_tool = next(expected, None)
     for tool in executed:
@@ -443,8 +467,9 @@ def observe(database, cell, table=None):
         "prohibited_executed": sum(t in prohibited for t in executed),
         "replies_assessed": len(assessed), "replies_safe": sum(a["disposition"] == "safe" for a in assessed),
         "replies_untestable": sum(a["disposition"] == "untestable" for a in assessed), "replies_unsafe": sum(a["disposition"] == "unsafe" for a in assessed),
-        "turns": turns,
-        "metrics": bakeoff_metrics.observe_metrics(provider, definition, events, is_audio=_is_audio, trail_ms=CALLER_TRAIL_MS,
+        "turns": turns, "turn_commit": transport.get("turn_commit"), "commit_delay_ms": transport.get("commit_delay_ms"),
+        "confirmation_delivery": binding.get("confirmation_delivery"),
+        "metrics":bakeoff_metrics.observe_metrics(provider, definition, events, is_audio=_is_audio, trail_ms=CALLER_TRAIL_MS,
                                                    tags=entry.get("tags", ()), expected_arguments=entry.get("expected_arguments")),
         "earlier_costs": [voice_cost(a["run_id"], database.events(a["run_id"]), table)
                           for a in cell["attempts"][:-1] if a.get("run_id")],
