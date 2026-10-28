@@ -84,7 +84,7 @@ def agent_body(tools: list[dict[str, Any]], llm: str, instructions: str = "", vo
         "conversation_config": {
             "agent": {"first_message": "", "language": "en",
                       "prompt": {"prompt": instructions or "You are a bank phone assistant.", "llm": llm,
-                                 "temperature": 0, "tools": client_tools(tools)}},
+                                 "tools": client_tools(tools)}},  # no temperature: provider default (parity policy)
             "tts": {"voice_id": voice, "agent_output_audio_format": AUDIO_FORMAT},
             "asr": {"user_input_audio_format": AUDIO_FORMAT},
             "turn": {"turn_eagerness": "normal", "turn_timeout": -1},  # -1: never prompt a silent caller
@@ -93,6 +93,37 @@ def agent_body(tools: list[dict[str, Any]], llm: str, instructions: str = "", vo
             "agent": {"prompt": {"prompt": True, "llm": True}, "first_message": True, "language": True},
             "tts": {"voice_id": True}}}},
     }
+
+
+def config_fingerprint(tools: list[dict[str, Any]], llm: str) -> str:
+    """The agent configuration ``setup`` would write; a stored agent provisioned from another body is stale."""
+    return hashlib.sha256(json.dumps(agent_body(tools, llm), sort_keys=True).encode()).hexdigest()[:16]
+
+
+_LLM_VENDORS = (("gemini", "google"), ("gpt", "openai"), ("o1", "openai"), ("o3", "openai"), ("o4", "openai"),
+                ("claude", "anthropic"), ("grok", "xai"), ("qwen", "alibaba"), ("glm", "zhipu"))
+
+
+def llm_vendor(llm: str | None) -> str:
+    name = (llm or "").lower()
+    return next((v for prefix, v in _LLM_VENDORS if name.startswith(prefix)), "unknown")
+
+
+def agent_binding(tools: list[dict[str, Any]], *, session_llm: str | None = None, environ=None) -> dict[str, Any]:
+    """What the run's ElevenLabs agent is, as far as the harness knows: its LLM (the session does not echo it) and
+    whether the stored agent matches the current agent body. An agent provisioned before the parity policy keeps
+    its old sampling (``temperature: 0``) until ``setup`` is rerun, so ``config_current`` is false for it."""
+    environ = os.environ if environ is None else environ
+    state = load_state(environ)
+    foreign = bool(environ.get(AGENT_ENV)) and environ.get(AGENT_ENV) != state.get("agent_id")
+    llm = session_llm or (None if foreign else state.get("llm"))
+    current = (not foreign and bool(state.get("llm"))
+               and state.get("config_fingerprint") == config_fingerprint(tools, state["llm"]))
+    return {"agent_llm": llm, "agent_llm_vendor": llm_vendor(llm),
+            "agent_llm_source": "session_override" if session_llm else ("unknown" if foreign or not llm else "agent_state"),
+            "agent_config_current": current,
+            "agent_temperature": state.get("temperature", "provider_default") if current else
+            ("unknown" if foreign or not state else state.get("temperature", 0))}
 
 
 def setup(tools: list[dict[str, Any]], *, llm: str | None = None, environ=None, client=None) -> dict[str, Any]:
@@ -115,7 +146,8 @@ def setup(tools: list[dict[str, Any]], *, llm: str | None = None, environ=None, 
     if response.status_code >= 400:  # the body names the invalid field; it never echoes the key
         raise ValueError(f"ELEVENLABS_HTTP_{response.status_code}: {response.text[:600]}")
     new_id = existing or response.json()["agent_id"]
-    state = {"agent_id": new_id, "llm": llm, "tools_fingerprint": fingerprint(tools), "audio_format": AUDIO_FORMAT}
+    state = {"agent_id": new_id, "llm": llm, "tools_fingerprint": fingerprint(tools), "audio_format": AUDIO_FORMAT,
+             "config_fingerprint": config_fingerprint(tools, llm), "temperature": "provider_default"}
     path = state_path(environ)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(state, indent=2) + "\n")
@@ -141,7 +173,8 @@ def main(argv=None) -> int:
         return 0
     state = load_state()
     print(json.dumps({**state, "agent_id_from_env": bool(os.environ.get(AGENT_ENV)),
-                      "tools_current": state.get("tools_fingerprint") == fingerprint(TOOLS)}, indent=2))
+                      "tools_current": state.get("tools_fingerprint") == fingerprint(TOOLS),
+                      "config_current": agent_binding(TOOLS)["agent_config_current"]}, indent=2))
     return 0
 
 

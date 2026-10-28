@@ -741,6 +741,9 @@ class AdapterNativeEvent(Closed):
     omission_reason: Identifier | None
     received_ms: Count
     clock_domain_id: Identifier
+    # Decoded output-audio bytes in the event (0: none), derived from its shape. Absent on older ledgers, whose
+    # first-audio falls back to a size heuristic for Gemini.
+    audio_bytes: Count | None = None
 
 
 class AdapterSessionReady(Closed):

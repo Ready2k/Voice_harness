@@ -11,6 +11,11 @@ observation log, capability report or AC-09 run yet, so runs are labelled `diagn
    updates) the harness agent and records `.local/elevenlabs-agent.json` (git-ignored). `ELEVENLABS_AGENT_ID`
    overrides the stored id. Re-run `setup` whenever `live_providers.TOOLS` changes: sessions refuse a stale agent
    (`PROVIDER_AGENT_TOOLS_STALE`).
+3. Configuration parity (2026-10-27, `PROVIDER_CONFIG_PARITY.md`): `agent_body` no longer sets the LLM
+   `temperature: 0` (provider default, as for every provider). **An agent provisioned earlier keeps temperature 0 until
+   `setup` is rerun.** Sessions are not refused for this: each run records `agent_llm`, `agent_config_current` and
+   `sampling.stored_agent_temperature`, and the bake-off report flags the agent as outside the sampling policy.
+   `status` prints `config_current`.
 
 ## Differences from the other providers
 

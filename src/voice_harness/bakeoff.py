@@ -26,9 +26,10 @@ are sent the commit a common emulated endpointing delay (`commit_delay_ms`) afte
 charged for harness silence, but the two endpointing costs differ and every turn records its `anchor` and
 `turn_commit` for disclosure. Legacy ledgers without `speech_ended_ms` anchor explicit commits at the commit
 (`legacy_commit`, no endpointing allowance) and provider VAD at the streamed end less the trailing silence
-(`legacy_speech_end`); `reobserve` re-anchors a stored bake-off. Gemini Live sends audio and transcripts as one
-native type whose payloads are stored as hashes, so its first audio is the first such event at least
-GEMINI_AUDIO_BYTES long; those values are flagged as estimated. A turn during which provider audio overlapped the
+(`legacy_speech_end`); `reobserve` re-anchors a stored bake-off. Native events record `audio_bytes` (decoded
+output audio, from the event's shape), so first audio is exact; Gemini ledgers written before that field send audio
+and transcripts as one native type stored as hashes, so their first audio is the first such event at least
+GEMINI_AUDIO_BYTES long, flagged as estimated. A turn during which provider audio overlapped the
 caller's speech (a reply still streaming) cannot be attributed and is excluded.
 """
 
@@ -42,7 +43,7 @@ from typing import Annotated, Literal
 
 from pydantic import Field, model_validator
 
-from . import bakeoff_metrics, bakeoff_stats, cost
+from . import bakeoff_disclosure, bakeoff_metrics, bakeoff_stats, cost
 from .contracts import Closed, Identifier
 from .engine import identifier
 from .judges.assessors import assessor_identity, summarise_assessors
@@ -368,9 +369,12 @@ def _failure(database, run_id):
 def _is_audio(provider, native):
     if provider == "openai-live":
         return native["native_type"] == "harness.pcm_speech_detected"
-    if provider == "gemini-live":
-        return native["native_type"] == "serverContent" and native["payload_bytes"] >= GEMINI_AUDIO_BYTES
-    return native["native_type"] in AUDIO_TYPES
+    if native["native_type"] in AUDIO_TYPES:
+        return True
+    if native.get("audio_bytes") is not None:  # exact, from the event's shape (live_scenario.audio_bytes)
+        return native["audio_bytes"] > 0
+    # legacy Gemini ledger: payload size only, so first audio is estimated
+    return provider == "gemini-live" and native["native_type"] == "serverContent" and native["payload_bytes"] >= GEMINI_AUDIO_BYTES
 
 
 def voice_cost(run_id, events, table=None):
@@ -403,7 +407,7 @@ def first_audio_turns(provider, events):
             "turn": index, "overlapped": overlapped,
             "first_audio_ms": (audio[0] - speech_end) if audio and not overlapped else None,
             "tool_first": bool(audio) and any(speech_end <= t < audio[0] for t in tool_ms),
-            "estimated": provider in {"gemini-live", "openai-live"},
+            "estimated": provider == "openai-live" or (provider == "gemini-live" and any(n.get("audio_bytes") is None for n in natives)),
             "anchor": anchor, "turn_commit": commit, "commit_delay_ms": delay,
         })
     return turns
@@ -469,6 +473,7 @@ def observe(database, cell, table=None):
         "replies_untestable": sum(a["disposition"] == "untestable" for a in assessed), "replies_unsafe": sum(a["disposition"] == "unsafe" for a in assessed),
         "turns": turns, "turn_commit": transport.get("turn_commit"), "commit_delay_ms": transport.get("commit_delay_ms"),
         "confirmation_delivery": binding.get("confirmation_delivery"),
+        "parity": bakeoff_disclosure.parity(binding),
         "metrics":bakeoff_metrics.observe_metrics(provider, definition, events, is_audio=_is_audio, trail_ms=CALLER_TRAIL_MS,
                                                    tags=entry.get("tags", ()), expected_arguments=entry.get("expected_arguments")),
         "earlier_costs": [voice_cost(a["run_id"], database.events(a["run_id"]), table)
@@ -780,7 +785,8 @@ def report(payload, weights=None, group_balanced=None):
                    "latency_estimated_for": [r["provider"] for r in latency if r["estimated"]],
                    "pricing_tables": sorted({o["cost"]["pricing_table"] for o in observed if o.get("cost")}),
                    "cost_from_separate_runs": sorted({o["provider"] for o in observed
-                                                      if (o.get("cost") or {}).get("separate_run")})},
+                                                      if (o.get("cost") or {}).get("separate_run")}),
+                   "provider_disclosures": bakeoff_disclosure.disclose(providers, observed, payload.get("prompt_profile", "standardised-v2"))},
     }
 
 
