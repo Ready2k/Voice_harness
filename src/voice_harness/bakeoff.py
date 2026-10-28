@@ -813,6 +813,7 @@ def report(payload, weights=None, group_balanced=None):
         "scoring": {"group_balanced": balanced, "ignored_weights": ignored,
                     "latency_targets_ms": dict(bakeoff_stats.LATENCY_TARGET_MS),
                     "latency_comparability": comparability,
+                    "commit_delay_sensitivity": commit_delay_sensitivity(observed, ranked, weights),
                     "responsiveness_mix": dict(bakeoff_stats.RESPONSIVENESS_MIX),
                     "severity_weights": dict(bakeoff_stats.SEVERITY_WEIGHTS)},
         "limits": {"repetitions": payload.get("repetitions"),
@@ -851,6 +852,51 @@ def unjudged_criteria(observed, judge_configuration=None):
 
 
 ENDPOINTING_PAID = {"provider_vad", "automatic"}  # the provider decides when the caller finished, so its wait is in the figure
+
+
+COMMIT_DELAY_SENSITIVITY_MS = (300, 500, 700)  # around the 500 ms default: typical server-VAD silence windows
+
+
+def _shifted(t, delay):
+    """A timed turn's first audio as if its explicit commit had come ``delay`` ms after speech (others unchanged)."""
+    if t.get("turn_commit") == "explicit" and t.get("anchor") == "speech_end" and t.get("commit_delay_ms") is not None:
+        return t["first_audio_ms"] + delay - t["commit_delay_ms"]
+    return t["first_audio_ms"]
+
+
+def commit_delay_sensitivity(observed, scores, weights, delays=COMMIT_DELAY_SENSITIVITY_MS):
+    """Latency, responsiveness and composite re-timed with other emulated commit delays for explicit-commit providers.
+
+    Explicit-commit turns are anchored at the end of speech and told the turn ended after a stand-in for end-of-speech
+    detection, so each one moves by exactly (delay - recorded delay); provider-VAD turns are unchanged. First order:
+    it assumes a provider's processing time does not depend on when it is told. None when no turn qualifies."""
+    done = [o for o in observed if o.get("completed")]
+    shifted = [t for o in done for t in o["turns"] if t.get("first_audio_ms") is not None and _shifted(t, 0) != t["first_audio_ms"]]
+    if not shifted:
+        return None
+    ids = {id(t) for t in shifted}
+    adjusted = sorted({o["provider"] for o in done for t in o["turns"] if id(t) in ids})
+    recorded = sorted({t["commit_delay_ms"] for t in shifted})
+    variants = []
+    for delay in delays:
+        rows = []
+        for s in scores:
+            values = [_shifted(t, delay) for o in done if o["provider"] == s["provider"] for t in o["turns"] if t.get("first_audio_ms") is not None]
+            median, p90 = (None if not values else round(quantile(values, p)) for p in (0.5, 0.9))
+            resp = bakeoff_stats.responsiveness(median, p90) if median is not None else None
+            dims = {d[0]: (resp if d[0] == "responsiveness" else s[d[0]]["value"]) for d in DIMENSIONS}
+            rows.append({"provider": s["provider"], "median_ms": median, "p90_ms": p90, "responsiveness": resp,
+                         "composite": sum(weights[d] * (dims[d] or 0.0) for d in weights), "advances": s.get("advances", True)})
+        timed = [r for r in rows if r["median_ms"] is not None]
+        variants.append({"delay_ms": delay, "rows": rows,
+                         "fastest": min(timed, key=lambda r: (r["median_ms"], r["provider"]))["provider"] if timed else None,
+                         "median_order": [r["provider"] for r in sorted(timed, key=lambda r: (r["median_ms"], r["provider"]))],
+                         "composite_order": [r["provider"] for r in sorted(rows, key=lambda r: (not r["advances"], -round(r["composite"], 9), r["provider"]))]})
+    base = next((v for v in variants if len(recorded) == 1 and v["delay_ms"] == recorded[0]), variants[0])
+    return {"providers_adjusted": adjusted, "recorded_delay_ms": recorded, "delays_ms": list(delays), "variants": variants,
+            "fastest_changes": any(v["fastest"] != base["fastest"] for v in variants),
+            "median_order_changes": any(v["median_order"] != base["median_order"] for v in variants),
+            "composite_order_changes": any(v["composite_order"] != base["composite_order"] for v in variants)}
 
 
 def latency_comparability(rows):

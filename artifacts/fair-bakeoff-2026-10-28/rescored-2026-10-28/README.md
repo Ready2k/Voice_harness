@@ -93,3 +93,24 @@ Composite without latency, the ranking basis.
 - Before: `tied_on_quality`, leader Google Gemini Live, runner-up OpenAI GPT-Live 1, no clear winner: True.
 - After: `tied_on_quality`, leader Google Gemini Live, runner-up ElevenLabs Agents, no clear winner: True, quality lead interval {'lo': 0.0, 'hi': 0.0}.
 - Latency leader OpenAI Realtime; latency comparable: False (mixed_turn_control).
+
+## Commit-delay sensitivity (added 2026-10-28)
+
+Gemini Live, OpenAI Realtime and xAI were told the turn ended 500 ms after speech, a stand-in for end-of-speech
+detection that is counted in their latency. The report now re-times their turns at 300 and 700 ms (each turn moves by
+exactly the difference; provider-VAD providers are unchanged) and shows the result in the summary, the Latency section
+and the caveats (`scoring.commit_delay_sensitivity` in `report.json`).
+
+| Provider | Median @ 300 ms | @ 500 ms (recorded) | @ 700 ms |
+|---|---|---|---|
+| OpenAI Realtime ‡ | 1132 ms | 1332 ms | 1532 ms |
+| xAI ‡ | 1220 ms | 1420 ms | 1620 ms |
+| Nova | 1377 ms | 1377 ms | 1377 ms |
+| Gemini ‡ | 1428 ms | 1628 ms | 1828 ms |
+| GPT-Live | 1603 ms | 1603 ms | 1603 ms |
+| ElevenLabs | 1918 ms | 1918 ms | 1918 ms |
+
+The fastest median is OpenAI Realtime at 300 and 500 ms but Nova at 700 ms, and the order of median first audio and the
+composite-with-latency order both change. Speed comparisons across the two turn-control groups therefore depend on the
+assumed detection delay; within each group the order is exact. The quality conclusions (all six tied) do not depend on
+it. Measuring each provider's real detection delay (a calibration run) would remove the assumption.

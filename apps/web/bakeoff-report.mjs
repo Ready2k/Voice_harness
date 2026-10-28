@@ -77,7 +77,8 @@ export function verdictText(report, names) {
   const fastest = report.latency.filter(l => l.median_ms != null).sort((a, b) => a.median_ms - b.median_ms)[0];
   const sub = (v.eliminated.length ? `Eliminated at the safety and availability gates: ${v.eliminated.map(p => names[p]).join(", ")}. ` : "Every provider passes the safety and availability gates. ")
     + (v.significant_pairs.length ? `Significant head-to-head differences: ${v.significant_pairs.map(p => names[p.better] + " over " + names[p.better === p.a ? p.b : p.a]).join("; ")}. ` : "No pair differs significantly on outcomes. ")
-    + (fastest ? (unlike ? `Fastest measured first audio: ${names[fastest.provider]} (median ${ms(fastest.median_ms)}), not a like-for-like latency ranking.` : `Fastest to first audio: ${names[fastest.provider]} (median ${ms(fastest.median_ms)}).`) : "")
+    + (fastest ? (unlike ? `Fastest measured first audio: ${names[fastest.provider]} (median ${ms(fastest.median_ms)}), not a like-for-like latency ranking`
+        + (report.scoring?.commit_delay_sensitivity?.fastest_changes ? `; with a ${report.scoring.commit_delay_sensitivity.delays_ms.join("/")} ms emulated detection delay the fastest would be ${report.scoring.commit_delay_sensitivity.variants.map(v => names[v.fastest] ?? v.fastest).join(" / ")}, so even that depends on the assumption (see Latency).` : ".") : `Fastest to first audio: ${names[fastest.provider]} (median ${ms(fastest.median_ms)}).`) : "")
     + (v.final ? "" : ` ${report.progress.pending} runs still pending: results are provisional.`);
   return {lead: text, sub};
 }
@@ -277,6 +278,31 @@ export function latencyComparabilityText(report, names) {
     parts.push(`How turns were ended was not recorded for ${nameList(c.not_recorded, names)} (older runs), so it cannot be confirmed that latency was measured the same way for every provider.`);
   parts.push("Responsiveness (†) therefore cannot rank these providers: read the composite without latency beside it.");
   return parts.join(" ");
+}
+
+/** The emulated commit-delay sensitivity: a plain-language caveat and table rows, or null when no turn was re-timable.
+ *  Explicit-commit providers stand in a fixed delay for end-of-speech detection; this says what moves if it were 300 or 700 ms. */
+export function commitDelaySensitivity(report, names) {
+  const s = report.scoring?.commit_delay_sensitivity;
+  if (!s?.variants?.length) return null;
+  const who = nameList(s.providers_adjusted, names), recorded = s.recorded_delay_ms.join("/") + " ms";
+  const others = s.variants.filter(v => !s.recorded_delay_ms.includes(v.delay_ms));
+  const fastest = s.fastest_changes
+    ? "the fastest median changes: " + s.variants.map(v => `${names[v.fastest] ?? v.fastest} at ${v.delay_ms} ms`).join(", ")
+    : `${names[s.variants[0].fastest] ?? s.variants[0].fastest} stays fastest`;
+  const text = `Commit-delay sensitivity: ${who} ${s.providers_adjusted.length === 1 ? "was" : "were"} told the turn ended ${recorded} after speech, a stand-in for end-of-speech detection that is counted in ${s.providers_adjusted.length === 1 ? "its" : "their"} latency. `
+    + `Re-timed at ${others.map(v => v.delay_ms + " ms").join(" and ")} (the only change: each of ${s.providers_adjusted.length === 1 ? "its" : "their"} turns moves by the difference), ${fastest}; `
+    + `the order of median first audio ${s.median_order_changes ? "changes" : "does not change"}, and the composite order with latency ${s.composite_order_changes ? "changes" : "does not change"}. `
+    + (s.fastest_changes || s.median_order_changes
+      ? "So speed comparisons between these providers and the ones that detect the end of speech themselves depend on this assumption; within each group the order is exact. "
+      : "So the speed conclusions hold across this range. ")
+    + "First order: it assumes a provider's processing time does not depend on when it is told the turn ended.";
+  const rows = (s.variants[0]?.rows ?? []).map(r => [r.provider, ...s.variants.flatMap(v => {
+    const x = v.rows.find(y => y.provider === r.provider);
+    return [x?.median_ms == null ? "—" : `${x.median_ms} ms`, x?.composite == null ? "—" : x.composite.toFixed(3)];
+  })]);
+  return {text, rows, headers: ["Provider", ...s.variants.flatMap(v => [`Median @ ${v.delay_ms} ms`, `Composite @ ${v.delay_ms} ms`])],
+          adjusted: s.providers_adjusted};
 }
 
 /** Scorecard rank cell: the rank, or the standing when the report names no first place. */
@@ -594,8 +620,9 @@ export function renderReport(root, data, {heading: showHeading = true, reveal = 
   }
 
   const items = [], add = t => items.push(t);
-  const latencyCaveat = latencyComparabilityText(R, NAMES);
+  const latencyCaveat = latencyComparabilityText(R, NAMES), delaySens = commitDelaySensitivity(R, NAMES);
   if (latencyCaveat) add(latencyCaveat);
+  if (delaySens) add(delaySens.text);
   items.unshift(...unjudgedCaveats(R));  // first, so never behind the caveat toggle
   add(R.limits.single_repetition ? "The plan requests one run per scenario and provider. A single observation gives limited confidence."
     : `The plan requests ${R.limits.repetitions ?? "unspecified"} repetitions per scenario and provider. Evidence coverage shows what completed; head-to-heads pair completed runs by scenario and repetition.`);
@@ -747,6 +774,10 @@ export function renderReport(root, data, {heading: showHeading = true, reveal = 
     note("From the end of the caller's speech to the provider's first audio, one mark per caller turn. Diamonds are turns where the model called a tool before speaking, so the wait includes the tool round trip. Gated playback adds the same assessment wait for every provider; it is not included."),
     note(responsivenessNote(R.scoring)), ...(latencyNote ? [note(latencyNote)] : []),
     latencyLegend, latencyBox,
+    ...(delaySens ? [heading("Sensitivity", "If the emulated detection delay were different"), note(delaySens.text),
+      table(delaySens.headers, delaySens.rows.map(([p, ...cells]) => [(c => (delaySens.adjusted.includes(p) && c.append(" ‡"), c))(prov(p)), ...cells]),
+        delaySens.headers.map((_, i) => i).slice(1)),
+      note("‡ Re-timed: told the turn ended after the emulated delay. Unmarked providers detect the end of speech themselves, so their latency does not change with it.")] : []),
     table(["Provider", "Median", "90th percentile", "Direct reply median", "Tool-first median", "Turns tool-first", "Turns measured", "Responsiveness score", "Relative to fastest (secondary)", "Turn control"],
       R.latency.map(l => [prov(l.provider), ms(l.median_ms) + (l.estimated ? " *" : ""), ms(l.p90_ms), ms(l.direct_median_ms), ms(l.tool_first_median_ms), pct(l.tool_first_share), String(l.turns_measured),
         pct(by[l.provider]?.responsiveness?.value) + (unlike ? " †" : ""), by[l.provider]?.responsiveness_relative ? pct(by[l.provider].responsiveness_relative.value) : "—", turnControlText(l)]),

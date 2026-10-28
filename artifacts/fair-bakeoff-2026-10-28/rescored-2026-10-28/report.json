@@ -152652,6 +152652,236 @@
    }
   ],
   "scoring": {
+   "commit_delay_sensitivity": {
+    "composite_order_changes": true,
+    "delays_ms": [
+     300,
+     500,
+     700
+    ],
+    "fastest_changes": true,
+    "median_order_changes": true,
+    "providers_adjusted": [
+     "gemini-live",
+     "openai-realtime-live",
+     "xai-voice-live"
+    ],
+    "recorded_delay_ms": [
+     500
+    ],
+    "variants": [
+     {
+      "composite_order": [
+       "xai-voice-live",
+       "gemini-live",
+       "openai-live",
+       "nova-sonic-live",
+       "elevenlabs-live",
+       "openai-realtime-live"
+      ],
+      "delay_ms": 300,
+      "fastest": "openai-realtime-live",
+      "median_order": [
+       "openai-realtime-live",
+       "xai-voice-live",
+       "nova-sonic-live",
+       "gemini-live",
+       "openai-live",
+       "elevenlabs-live"
+      ],
+      "rows": [
+       {
+        "advances": true,
+        "composite": 0.9062356139509211,
+        "median_ms": 1428,
+        "p90_ms": 1629,
+        "provider": "gemini-live",
+        "responsiveness": 0.3971263152283626
+       },
+       {
+        "advances": true,
+        "composite": 0.8861718336700009,
+        "median_ms": 1918,
+        "p90_ms": 2977,
+        "provider": "elevenlabs-live",
+        "responsiveness": 0.2633677800222281
+       },
+       {
+        "advances": true,
+        "composite": 0.892974495245919,
+        "median_ms": 1603,
+        "p90_ms": 2307,
+        "provider": "openai-live",
+        "responsiveness": 0.3235336720098305
+       },
+       {
+        "advances": true,
+        "composite": 0.9062906341630971,
+        "median_ms": 1220,
+        "p90_ms": 1453,
+        "provider": "xai-voice-live",
+        "responsiveness": 0.4567523759021282
+       },
+       {
+        "advances": true,
+        "composite": 0.8890779930833486,
+        "median_ms": 1377,
+        "p90_ms": 1816,
+        "provider": "nova-sonic-live",
+        "responsiveness": 0.38891501561738523
+       },
+       {
+        "advances": true,
+        "composite": 0.8801881210485579,
+        "median_ms": 1132,
+        "p90_ms": 1507,
+        "provider": "openai-realtime-live",
+        "responsiveness": 0.47141607715232325
+       }
+      ]
+     },
+     {
+      "composite_order": [
+       "gemini-live",
+       "xai-voice-live",
+       "openai-live",
+       "nova-sonic-live",
+       "elevenlabs-live",
+       "openai-realtime-live"
+      ],
+      "delay_ms": 500,
+      "fastest": "openai-realtime-live",
+      "median_order": [
+       "openai-realtime-live",
+       "nova-sonic-live",
+       "xai-voice-live",
+       "openai-live",
+       "gemini-live",
+       "elevenlabs-live"
+      ],
+      "rows": [
+       {
+        "advances": true,
+        "composite": 0.8992490716274205,
+        "median_ms": 1628,
+        "p90_ms": 1829,
+        "provider": "gemini-live",
+        "responsiveness": 0.3505493664050252
+       },
+       {
+        "advances": true,
+        "composite": 0.8861718336700009,
+        "median_ms": 1918,
+        "p90_ms": 2977,
+        "provider": "elevenlabs-live",
+        "responsiveness": 0.2633677800222281
+       },
+       {
+        "advances": true,
+        "composite": 0.892974495245919,
+        "median_ms": 1603,
+        "p90_ms": 2307,
+        "provider": "openai-live",
+        "responsiveness": 0.3235336720098305
+       },
+       {
+        "advances": true,
+        "composite": 0.89718747248565,
+        "median_ms": 1420,
+        "p90_ms": 1653,
+        "provider": "xai-voice-live",
+        "responsiveness": 0.3960646313858144
+       },
+       {
+        "advances": true,
+        "composite": 0.8890779930833486,
+        "median_ms": 1377,
+        "p90_ms": 1816,
+        "provider": "nova-sonic-live",
+        "responsiveness": 0.38891501561738523
+       },
+       {
+        "advances": true,
+        "composite": 0.8704461702704234,
+        "median_ms": 1332,
+        "p90_ms": 1707,
+        "provider": "openai-realtime-live",
+        "responsiveness": 0.40646973863142577
+       }
+      ]
+     },
+     {
+      "composite_order": [
+       "gemini-live",
+       "openai-live",
+       "xai-voice-live",
+       "nova-sonic-live",
+       "elevenlabs-live",
+       "openai-realtime-live"
+      ],
+      "delay_ms": 700,
+      "fastest": "nova-sonic-live",
+      "median_order": [
+       "nova-sonic-live",
+       "openai-realtime-live",
+       "openai-live",
+       "xai-voice-live",
+       "gemini-live",
+       "elevenlabs-live"
+      ],
+      "rows": [
+       {
+        "advances": true,
+        "composite": 0.8937331091586295,
+        "median_ms": 1828,
+        "p90_ms": 2029,
+        "provider": "gemini-live",
+        "responsiveness": 0.3137762832797521
+       },
+       {
+        "advances": true,
+        "composite": 0.8861718336700009,
+        "median_ms": 1918,
+        "p90_ms": 2977,
+        "provider": "elevenlabs-live",
+        "responsiveness": 0.2633677800222281
+       },
+       {
+        "advances": true,
+        "composite": 0.892974495245919,
+        "median_ms": 1603,
+        "p90_ms": 2307,
+        "provider": "openai-live",
+        "responsiveness": 0.3235336720098305
+       },
+       {
+        "advances": true,
+        "composite": 0.8902285916065373,
+        "median_ms": 1620,
+        "p90_ms": 1853,
+        "provider": "xai-voice-live",
+        "responsiveness": 0.34967209219173
+       },
+       {
+        "advances": true,
+        "composite": 0.8890779930833486,
+        "median_ms": 1377,
+        "p90_ms": 1816,
+        "provider": "nova-sonic-live",
+        "responsiveness": 0.38891501561738523
+       },
+       {
+        "advances": true,
+        "composite": 0.8630881391528232,
+        "median_ms": 1532,
+        "p90_ms": 1907,
+        "provider": "openai-realtime-live",
+        "responsiveness": 0.35741619784742484
+       }
+      ]
+     }
+    ]
+   },
    "group_balanced": true,
    "ignored_weights": {},
    "latency_comparability": {

@@ -70,6 +70,38 @@ class LatencyComparability(unittest.TestCase):
         self.assertEqual([s["rank_excluding_latency"] for s in same["scores"]], [1, 1])  # equal values share a rank
 
 
+class CommitDelaySensitivity(unittest.TestCase):
+    def report(self, explicit_ms=1100, vad_ms=1000):
+        def delayed(observations, delay):
+            for o in observations:
+                for t in o["turns"]:
+                    t["commit_delay_ms"] = delay
+            return observations
+        explicit = delayed(marked([obs(OPENAI, f"s{i}", latencies=(explicit_ms,)) for i in range(4)], "explicit"), 500)
+        vad = delayed(marked([obs(NOVA, f"s{i}", latencies=(vad_ms,)) for i in range(4)], "provider_vad"), None)
+        return bakeoff.report(payload(explicit + vad))["scoring"]["commit_delay_sensitivity"]
+
+    def test_only_explicit_commit_turns_move_and_by_exactly_the_delay_difference(self):
+        s = self.report()
+        self.assertEqual((s["providers_adjusted"], s["recorded_delay_ms"], s["delays_ms"]), ([OPENAI], [500], [300, 500, 700]))
+        medians = {v["delay_ms"]: {r["provider"]: r["median_ms"] for r in v["rows"]} for v in s["variants"]}
+        self.assertEqual(medians, {300: {OPENAI: 900, NOVA: 1000}, 500: {OPENAI: 1100, NOVA: 1000}, 700: {OPENAI: 1300, NOVA: 1000}})
+
+    def test_it_says_when_the_fastest_provider_depends_on_the_assumed_delay(self):
+        flips = self.report(explicit_ms=1100, vad_ms=1000)  # 900 at 300 ms: the explicit provider becomes fastest
+        self.assertEqual([v["fastest"] for v in flips["variants"]], [OPENAI, NOVA, NOVA])
+        self.assertTrue(flips["fastest_changes"] and flips["median_order_changes"])
+        holds = self.report(explicit_ms=2000, vad_ms=1000)
+        self.assertFalse(holds["fastest_changes"] or holds["median_order_changes"])
+
+    def test_nothing_to_re_time_without_explicit_commits_anchored_at_speech(self):
+        r = bakeoff.report(payload(marked([obs(p, f"s{i}") for p in (OPENAI, NOVA) for i in range(4)], "provider_vad")))
+        self.assertIsNone(r["scoring"]["commit_delay_sensitivity"])
+        legacy = bakeoff.report(payload(marked([obs(OPENAI, f"s{i}") for i in range(4)], "explicit", "legacy_commit")
+                                        + marked([obs(NOVA, f"s{i}") for i in range(4)], "provider_vad")))
+        self.assertIsNone(legacy["scoring"]["commit_delay_sensitivity"])  # re-anchored legacy turns have no recorded delay
+
+
 class SpeedOnlyLeads(unittest.TestCase):
     def test_a_speed_only_lead_has_no_first_place_and_no_stability_claim(self):
         slow = [obs(OPENAI, f"s{i}", latencies=(1200, 1300)) for i in range(8)]

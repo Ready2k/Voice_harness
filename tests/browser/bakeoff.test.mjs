@@ -628,3 +628,28 @@ test("unjudged experience criteria become caveat lines", () => {
   assert.deepEqual(unjudgedCaveats({limits: {experience_criteria_unjudged: [{criterion_id: "CARE-01", caveat: "CARE-01 was not measured"}]}}),
     ["CARE-01 was not measured"]);
 });
+
+// ---- Emulated commit-delay sensitivity: what moves if the stand-in for end-of-speech detection were different.
+const {commitDelaySensitivity} = await import("../../apps/web/bakeoff-report.mjs");
+const SENS = {providers_adjusted: ["a"], recorded_delay_ms: [500], delays_ms: [300, 500, 700],
+  fastest_changes: true, median_order_changes: true, composite_order_changes: false,
+  variants: [300, 500, 700].map((d, i) => ({delay_ms: d, fastest: i < 2 ? "a" : "b",
+    rows: [{provider: "a", median_ms: 900 + i * 200, composite: 0.9}, {provider: "b", median_ms: 1200, composite: 0.8}]}))};
+
+test("the commit-delay sensitivity says which conclusions depend on the emulated detection delay", () => {
+  const s = commitDelaySensitivity(report({scoring: {commit_delay_sensitivity: SENS}}), NAMES);
+  assert.match(s.text, /^Commit-delay sensitivity: Alpha Voice was told the turn ended 500 ms after speech, a stand-in for end-of-speech detection that is counted in its latency\./);
+  assert.match(s.text, /Re-timed at 300 ms and 700 ms .*the fastest median changes: Alpha Voice at 300 ms, Alpha Voice at 500 ms, Beta Voice at 700 ms; the order of median first audio changes, and the composite order with latency does not change\./);
+  assert.match(s.text, /depend on this assumption; within each group the order is exact\./);
+  assert.deepEqual(s.headers, ["Provider", "Median @ 300 ms", "Composite @ 300 ms", "Median @ 500 ms", "Composite @ 500 ms", "Median @ 700 ms", "Composite @ 700 ms"]);
+  assert.deepEqual(s.rows[0], ["a", "900 ms", "0.900", "1100 ms", "0.900", "1300 ms", "0.900"]);
+  const holds = commitDelaySensitivity(report({scoring: {commit_delay_sensitivity: {...SENS, fastest_changes: false, median_order_changes: false}}}), NAMES);
+  assert.match(holds.text, /Alpha Voice stays fastest; .*So the speed conclusions hold across this range\./);
+  assert.equal(commitDelaySensitivity(report(), NAMES), null);
+});
+
+test("the summary's fastest-provider line is qualified when the fastest depends on the emulated delay", () => {
+  const r = report({scoring: {latency_comparability: {status: "mixed_turn_control", comparable: false, reasons: ["mixed_turn_control"], explicit_commit: ["a"], provider_endpointing: ["b"], legacy_commit_anchor: [], not_recorded: []}, commit_delay_sensitivity: SENS},
+    verdict: {...report().verdict, no_clear_winner: true, latency_comparable: false, ranking: "tied_on_quality"}});
+  assert.match(verdictText(r, NAMES).sub, /not a like-for-like latency ranking; with a 300\/500\/700 ms emulated detection delay the fastest would be Alpha Voice \/ Alpha Voice \/ Beta Voice, so even that depends on the assumption \(see Latency\)\./);
+});
