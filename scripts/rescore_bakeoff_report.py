@@ -89,12 +89,54 @@ def exclude_task_completion(payload, excluded=None):
     return marked
 
 
+def reassess_fact(payload, ledger):
+    """Re-evaluate failed FACT-01 runs with the current rubric against the read-only SQLite ``ledger``, in place.
+
+    FACT-01 v2 treats amounts parsed from an ambiguous spoken unit as unresolved rather than a mismatch. Only the FACT-01
+    verdict in the run's latest adjudication is replaced; the run outcome is then recomputed by the shipped
+    ``effective_from_events``. Returns [{run_id, provider, before, after}] for every verdict that changed."""
+    import sqlite3
+
+    from voice_harness.judges import rubric
+    from voice_harness.judges.review import effective_from_events
+    from voice_harness.judges.service import fixture_for, scenario_for
+
+    db = sqlite3.connect(f"file:{ledger}?mode=ro", uri=True)
+    changed = []
+    for cell in payload["cells"]:
+        o = cell.get("observation")
+        if not o or (o.get("criteria") or {}).get("FACT-01") != "fail":
+            continue
+        row = db.execute("SELECT payload FROM harness_runs WHERE run_id=?", (o["run_id"],)).fetchone()
+        if row is None:
+            raise SystemExit(f"run {o['run_id']} is not in the ledger; refusing to re-assess")
+        state = json.loads(row[0])
+        events = [json.loads(p) for (p,) in db.execute(
+            "SELECT payload FROM harness_events WHERE run_id=? ORDER BY sequence", (o["run_id"],))]
+        result = rubric.eval_fact(rubric.EvalContext(events, scenario_for(state), fixture_for(state)))
+        if result["verdict"] == "fail":
+            continue
+        adjudication = [e for e in events if e["type"] == "judge.adjudicated"][-1]
+        for entry in adjudication["content"]["criteria"]:
+            if entry["criterion_id"] == "FACT-01":
+                entry.update(verdict=result["verdict"], reason_codes=result["reason_codes"])
+        assurance = effective_from_events(events, o["run_id"])
+        o["criteria"]["FACT-01"], o["criterion_reasons"]["FACT-01"] = result["verdict"], result["reason_codes"]
+        o.update(outcome=assurance["overall_assurance"], model_behaviour=assurance.get("model_behaviour"),
+                 platform_enforcement=assurance.get("platform_enforcement"), fact_reassessed="FACT-01@v2")
+        changed.append({"run_id": o["run_id"], "provider": o["provider"], "scenario_id": o["scenario_id"],
+                        "before": "fail", "after": result["verdict"], "reason_codes": result["reason_codes"],
+                        "outcome": assurance["overall_assurance"]})
+    return changed
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("saved", help="exported report.json or stored bake-off payload")
     parser.add_argument("out_dir")
     parser.add_argument("--explicit", default=",".join(EXPLICIT), help="providers that ran on explicit commit")
     parser.add_argument("--trail-ms", type=int, default=TRAIL_MS)
+    parser.add_argument("--ledger", help="read-only SQLite ledger of the runs: re-assess failed FACT-01 runs with FACT-01 v2")
     args = parser.parse_args()
     saved = json.loads(Path(args.saved).read_text())
     payload = payload_from(saved)
@@ -108,10 +150,12 @@ def main():
     changed = correct(payload, tuple(args.explicit.split(",")), args.trail_ms)
     latency_only = bakeoff.report(payload, weights={**payload["weights"], "task_completion": 0.0})
     marked = exclude_task_completion(payload)
+    reassessed = reassess_fact(payload, args.ledger) if args.ledger else []
     payload["weights"] = dict(bakeoff.DEFAULT_WEIGHTS)
     title = (saved.get("title") or payload["name"]) + " (re-scored: latency re-anchored, task completion scored)"
     source = ((saved.get("source") or "Voice Harness ledger") + f" · Re-scored 2026-10-27: {args.trail_ms} ms trailing silence removed from"
-              " explicit-commit turns · 2026-10-28: task completion scored with the current default weights")
+              " explicit-commit turns · 2026-10-28: task completion scored with the current default weights"
+              + (f" · {len(reassessed)} FACT-01 failure(s) re-assessed with FACT-01 v2 (ambiguous spoken amount: unresolved)" if reassessed else ""))
     options = {"title": title, "source": source, "generated_at": "2026-10-27 (re-scored from " + (saved.get("generated_at") or "stored payload") + ")"}
     out = Path(args.out_dir)
     out.mkdir(parents=True, exist_ok=True)
@@ -120,7 +164,7 @@ def main():
     (out / "report.html").write_text(render(payload, **options))
     summary = {"turns_corrected": changed, "trail_ms": args.trail_ms, "explicit_commit": sorted(args.explicit.split(",")),
                "task_completion_excluded": {s: {"reason": EXCLUDE_TASK[s], "runs": n} for s, n in sorted(marked.items())},
-               "weights": data["report"]["weights"],
+               "weights": data["report"]["weights"], "fact_reassessed": reassessed,
                "before": table(original), "latency_only": table(latency_only), "after": table(data["report"]),
                "verdict_after": {k: data["report"]["verdict"][k] for k in (
                    "ranking", "leader", "runner_up", "no_clear_winner", "quality_lead", "latency_leader", "latency_comparable",

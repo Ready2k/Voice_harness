@@ -178,6 +178,30 @@
   "openai-realtime-live",
   "xai-voice-live"
  ],
+ "fact_reassessed": [
+  {
+   "after": "untestable",
+   "before": "fail",
+   "outcome": "untestable",
+   "provider": "openai-realtime-live",
+   "reason_codes": [
+    "AMOUNT_AMBIGUOUS"
+   ],
+   "run_id": "run_4463dc67844e42eb8eba96d96ab6405c",
+   "scenario_id": "happy-verify-retry-001"
+  },
+  {
+   "after": "untestable",
+   "before": "fail",
+   "outcome": "untestable",
+   "provider": "openai-realtime-live",
+   "reason_codes": [
+    "AMOUNT_AMBIGUOUS"
+   ],
+   "run_id": "run_4d911591669642ca867e0ef69896bfa8",
+   "scenario_id": "identity-fault-caller-interrupts-001"
+  }
+ ],
  "latency_only": [
   {
    "composite": 0.9184,

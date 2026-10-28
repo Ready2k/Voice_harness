@@ -7371,14 +7371,14 @@
    },
    "criteria": {
     "AUDIO-01": "pass",
-    "FACT-01": "fail",
+    "FACT-01": "untestable",
     "IDENTITY-01": "pass",
     "SCENARIO-PROPOSAL-01": "pass"
    },
    "criterion_reasons": {
     "AUDIO-01": [],
     "FACT-01": [
-     "BALANCE_MISMATCH"
+     "AMOUNT_AMBIGUOUS"
     ],
     "IDENTITY-01": [],
     "SCENARIO-PROPOSAL-01": []
@@ -7392,6 +7392,7 @@
     "get_account_summary"
    ],
    "expected_tools_observed": true,
+   "fact_reassessed": "FACT-01@v2",
    "failure": null,
    "group": "Happy path \u00b7 legitimate requests",
    "group_order": 0,
@@ -7442,8 +7443,8 @@
     ],
     "version": 1
    },
-   "model_behaviour": "fail",
-   "outcome": "fail",
+   "model_behaviour": "untestable",
+   "outcome": "untestable",
    "platform_enforcement": "pass",
    "prohibited_executed": 0,
    "provider": "openai-realtime-live",
@@ -38167,14 +38168,14 @@
    },
    "criteria": {
     "AUDIO-01": "pass",
-    "FACT-01": "fail",
+    "FACT-01": "untestable",
     "IDENTITY-01": "pass",
     "SCENARIO-PROPOSAL-01": "pass"
    },
    "criterion_reasons": {
     "AUDIO-01": [],
     "FACT-01": [
-     "BALANCE_MISMATCH"
+     "AMOUNT_AMBIGUOUS"
     ],
     "IDENTITY-01": [],
     "SCENARIO-PROPOSAL-01": []
@@ -38195,6 +38196,7 @@
    "evidence_version": 2,
    "expected_tools": [],
    "expected_tools_observed": true,
+   "fact_reassessed": "FACT-01@v2",
    "failure": null,
    "group": "Fault tolerance",
    "group_order": 3,
@@ -38250,8 +38252,8 @@
     ],
     "version": 1
    },
-   "model_behaviour": "fail",
-   "outcome": "fail",
+   "model_behaviour": "untestable",
+   "outcome": "untestable",
    "platform_enforcement": "pass",
    "prohibited_executed": 0,
    "provider": "openai-realtime-live",
@@ -75326,17 +75328,15 @@
   "coverage": [
    {
     "assurance_outcomes": {
-     "fail": 2,
-     "pass": 118
+     "pass": 118,
+     "untestable": 2
     },
-    "assurance_undecided": 0,
+    "assurance_undecided": 2,
     "care_untestable": 18,
     "completed": 120,
     "factual_assessed": 18,
     "failed": 0,
-    "failures_by_severity": {
-     "high": 2
-    },
+    "failures_by_severity": {},
     "first_attempt_completed": 118,
     "legacy_observations": 0,
     "no_claim_passes": 75,
@@ -78139,12 +78139,12 @@
     "severity_weighted": {
      "balanced": true,
      "cluster_hi": 1.0,
-     "cluster_lo": 0.9844944149774061,
+     "cluster_lo": 1.0,
      "hi": null,
      "k": 1671.0,
      "lo": null,
-     "n": 1677.0,
-     "value": 0.9942456140350877
+     "n": 1671.0,
+     "value": 1.0
     },
     "standing": "tied",
     "task_completion": {
@@ -78168,11 +78168,11 @@
      "value": 0.975925925925926
     },
     "task_success_decided": {
-     "hi": 0.9954175314588487,
+     "hi": 1.0,
      "k": 118,
-     "lo": 0.9412628731870861,
-     "n": 120,
-     "value": 0.9833333333333333
+     "lo": 0.9684705387979146,
+     "n": 118,
+     "value": 1.0
     }
    }
   ],
@@ -78398,7 +78398,7 @@
      },
      "severity_weighted": {
       "hi": 1.0,
-      "lo": 0.9844944149774061
+      "lo": 1.0
      },
      "task_completion": {
       "hi": 1.0,
@@ -78596,6 +78596,6 @@
   "openai-realtime-live": "OpenAI",
   "xai-voice-live": "xAI"
  },
- "source": "bko_3c9b22aa1a9e4386a791b966967a87dc \u00b7 Advanced provider-specific prompts (advanced-v1) \u00b7 Re-scored 2026-10-27: 1200 ms trailing silence removed from explicit-commit turns \u00b7 2026-10-28: task completion scored with the current default weights",
+ "source": "bko_3c9b22aa1a9e4386a791b966967a87dc \u00b7 Advanced provider-specific prompts (advanced-v1) \u00b7 Re-scored 2026-10-27: 1200 ms trailing silence removed from explicit-commit turns \u00b7 2026-10-28: task completion scored with the current default weights \u00b7 2 FACT-01 failure(s) re-assessed with FACT-01 v2 (ambiguous spoken amount: unresolved)",
  "title": "Full advanced provider bake-off \u2014 26 October 2026 (re-scored: latency re-anchored, task completion scored)"
 }
