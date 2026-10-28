@@ -10,9 +10,12 @@ src/voice_harness/   Python package (service, engine, adapters, judges, evidence
 apps/web/            operator UI: coverage, runs, review; PCM scheduler and AudioWorklet
 tests/               unittest suites; tests/browser/*.test.mjs (Node)
 contracts/           generated JSON Schemas and OpenAPI (regenerate; do not hand-edit)
-artifacts/           committed evidence: phase0 capability reports and probe logs, phase2 AC-09, phase4 runs
+artifacts/           committed evidence: phase0 capability reports and probe logs, phase2 AC-09, phase4 runs, bake-offs,
+                     judge calibration, vendor pricing tables
+reports/             dated human-readable reports and recordings
+site/                static research-archive site (published by .github/workflows/pages.yml)
 docs/                spec, per-phase status, per-topic notes, reviews
-scripts/             probe CLI, Bedrock calibration, AWS session helper, comparison renderer
+scripts/             probe CLI, provider matrix and bake-off helpers, report renderers, Bedrock calibration, AWS session helper
 infra/otel/          OTLP collector config
 compose.yaml         api, postgres, otel-collector; profiles for tests, browser-tests, benchmark, live
 ```
@@ -27,6 +30,8 @@ make audit         # pip-audit on requirements.lock
 make demo          # three mock scenarios through the API, verified bundles under /data/demo
 make benchmark     # component benchmark -> /data/phase1-baseline.json
 make stop
+make serve-live     # host API on :8766 for live runs (needs .env); make token / make token-host copy the operator token
+make golden / make recovery   # standalone fixtures
 ```
 
 Local development uses SQLite; Compose uses PostgreSQL. Run both before pushing: some behaviour (migrations,
@@ -42,7 +47,19 @@ PYTHONPATH=src .venv/bin/python -m voice_harness.generate_contracts   # after mo
 
 Tests use `unittest`, not pytest. After regenerating contracts, check `git diff contracts/` is intended.
 
-## Live provider benchmark
+## Bake-offs
+
+The current way to compare providers is a bake-off (`/client/bakeoff.html`, `bakeoff.py`, `/api/v1/bakeoffs`): the API
+schedules 2-5 providers' live runs, preflights each provider first (`BAKEOFF_SAFEGUARDS.md`), pauses on access or quota
+failure, and computes the report from the ledgers. Scoring and assessors are described in `BAKEOFF_ASSESSORS.md`;
+provider asymmetries are disclosed on the report (`PROVIDER_CONFIG_PARITY.md`, `PROVIDER_BIAS_REVIEW_2026-10-27.md`).
+Committed output for the 28 Oct run is `artifacts/fair-bakeoff-2026-10-28/`. Re-score with
+`scripts/rescore_bakeoff_report.py`.
+
+## Live provider benchmark (historical matrix runner)
+
+The `scripts/provider_matrix.py` flow below predates bake-offs. It ran 33 scenarios against the four providers then
+supported; the catalogue now has 40 scenarios and six provider configurations.
 
 New Gemini sessions use the pinned model `gemini-3.8-live` on Vertex AI in `us-central1`,
 with Application Default Credentials. The adapter resamples harness audio to 16 kHz mono PCM;
@@ -65,8 +82,8 @@ PYTHONPATH=src .venv/bin/python scripts/benchmark_report.py \
 
 The database must be the one used by that API process. The 2026-10-19 Gemini 3.8 rerun uses
 an isolated server on port 8767 and `.local/gemini38-data/development.sqlite`; substitute
-its token path and database when reproducing that report. All 33 live scenarios run against
-all four providers, with one sample per cell and at most two simultaneous runs per provider.
+its token path and database when reproducing that report. All 33 scenarios of that date ran against
+all four providers then supported, with one sample per cell and at most two simultaneous runs per provider.
 Keep failed attempts visible; any retry must preserve its first attempt. Component benchmarks
 (`make benchmark`) measure harness stages separately from conversational provider latency.
 
@@ -80,7 +97,8 @@ verification and the ASR credit limitation.
 | Layer | What it establishes | Where |
 |---|---|---|
 | Deterministic core | Enforcement mechanics: approvals, replay, races, tampering, retention, isolation, abrupt termination | `test_core`, `test_phase1`, `test_gaps*`, `test_release` (PostgreSQL) |
-| Adapter conformance | Event mapping per provider against recorded provider shapes; AC-09 harness | `test_openai_adapter`, `test_nova_*`, `test_xai_adapter`, `test_google_adapter`, `adapter_conformance.py` |
+| Adapter conformance | Event mapping per provider against recorded provider shapes; AC-09 harness | `test_openai_adapter`, `test_nova_*`, `test_xai_adapter`, `test_google_adapter`, `test_elevenlabs_adapter`, `adapter_conformance.py` |
+| Bake-off, manual, telephone | Scheduling, scoring statistics, disclosure, export; human sessions; telephone controller | `test_bakeoff*`, `test_manual_*`, `test_telephone_*`, `test_delegate_dialogue`, `test_interactive_caller` |
 | Live pipeline, scripted | Real API, runner, gateway and assessment with scripted adapter events and ASR | `test_live_api`, `test_phase4_*`, `test_live_review_fixes` |
 | Judges and evidence | Rubric, FACT/CONFIRM/fault evaluation, calibration, signing, cost, export | `test_judges`, `test_fact_faults_confirm`, `test_signing`, `test_cost*`, `test_signed_live_export` |
 | Browser | View-models and playback scheduling | `tests/browser/*.test.mjs` |
@@ -94,7 +112,7 @@ a running app, because unit tests have missed layout bugs before.
 
 ## CI
 
-`.github/workflows/phase1.yml`: `make lint`, `make audit`, image load with retry, then `make test` (Compose with
+`.github/workflows/phase1.yml` (the CI gate): `make lint`, `make audit`, image load with retry, then `make test` (Compose with
 PostgreSQL). Lessons recorded in the status docs: validate on PostgreSQL, not only SQLite; CI has no macOS
 speech tools, so live-run tests must not depend on them.
 
@@ -109,8 +127,8 @@ speech tools, so live-run tests must not depend on them.
 3. **AC-09.** Run live conformance (audio in, audio out, tool-result correlation, interruption, error) and store
    `artifacts/phase2/<family>-ac09.json` bound to the capability report id. Excluding a mandatory dimension
    prevents `passed`.
-4. **Register.** Add to `LIVE_PROVIDERS` and `TESTED_MODELS` in `live_providers.py`, the contract enums and
-   `coverage.py`; update `docs/phase0/PROVIDER_MATRIX.md` with observed values only.
+4. **Register.** Add to `LIVE_PROVIDERS` and `TESTED_MODELS` in `live_providers.py` (plus `LABELS` in
+   `telephone_providers.py` and the web `providers.mjs`), the contract enums and `coverage.py`; update `docs/phase0/PROVIDER_MATRIX.md` with observed values only.
 5. **Tests and notes.** Offline adapter tests against recorded shapes; one live smoke scenario; a
    `PHASE4_NOTES_<provider>.md` listing quirks and Unknowns.
 
@@ -126,7 +144,7 @@ Do not record provider prices unless verified, and do not attest provider terms 
 
 ## Security and secrets
 
-- Provider and judge keys come from the environment (`OPENAI_API_KEY`, `xAI_API_KEY`) or cloud credentials (AWS
+- Provider and judge keys come from the environment (`OPENAI_API_KEY`, `xAI_API_KEY`, `ELEVENLABS_API_KEY`) or cloud credentials (AWS
   session, Google ADC). They must never be logged, echoed, committed or written into artifacts. Exports record
   endpoint host, region and SDK versions, not credentials.
 - Operator and reviewer tokens are separate roles, compared in constant time; the operator token is generated at
@@ -161,6 +179,8 @@ Do not record provider prices unless verified, and do not attest provider terms 
 | Phase state | `PHASE1_STATUS.md`, `PHASE2_STATUS.md`, `PHASE3_STATUS.md`, `PHASE4_STATUS.md` |
 | Provider facts and Unknowns | `phase0/PROVIDER_MATRIX.md`, `phase0/DECISIONS.md`, `phase0/DOC_EVIDENCE.md` |
 | Provider quirks | `PHASE4_NOTES_*.md` |
+| Bake-offs | `BAKEOFF_SAFEGUARDS.md`, `BAKEOFF_ASSESSORS.md`, `ADVANCED_FULL_BAKEOFF.md` |
+| Telephone and caller pilots | `DELEGATE_PHONE_RUNBOOK.md`, `INTERACTIVE_CALLER_SCOPE.md` |
 | Reviews and rechecks | `CODE_SPEC_*.md`, `PHASE_REVIEW_2026-10-18.md` |
 | Reuse from the sibling project | `VOICE_S2S_REUSE_AUDIT.md` |
 

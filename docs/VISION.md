@@ -39,14 +39,15 @@ It does four things:
   (spec §2). Unknown stays Unknown. Capability reports expire after 7 days.
 - **Fail closed.** Missing evidence yields `untestable`, never a pass. An evidence-write failure blocks tool calls
   and releases. Empty independent ASR does not become "no claim made".
-- **No ranking.** The harness reports verified support per provider family. It does not score or rank providers,
-  and coverage exports carry `ranking: null`.
+- **No ranking from coverage.** Coverage reports verified support per provider family and carries `ranking: null`.
+  Bake-off reports do order providers, but only behind completeness and safety gates, with confidence intervals and
+  stated rank stability, and with provider asymmetries disclosed. Neither is a recommendation or a certification.
 - **Deterministic first.** AI judges are advisory. No calibration policy is approved and no AI blocking is enabled.
   A judge never mutates banking state or overrides a deterministic control.
 - **Independence.** The judge must not be the model under test. ASR for assessment is separate from the provider's
   own transcript.
 - **Honest limits.** Fixture audio is silence with scripted metadata, so fixture tests prove enforcement mechanics,
-  not recognition accuracy. Most live results are single samples. We say so.
+  not recognition accuracy. Single samples are called single samples; repeated sets say how many repetitions they have.
 - **No certification claim.** Passing this harness never means a model is compliant, safe or fit for deployment
   (spec §1, out of scope).
 
@@ -68,16 +69,15 @@ Phases follow spec §16 and are gated by acceptance criteria (AC-01…AC-21), no
 | 1 | Deterministic core: orchestrator, ledger, synthetic MCP bank, playback gate, mock provider | Complete |
 | 2 | First adapters and coverage: OpenAI Realtime, Amazon Nova Sonic, AC-09, AC-20 | Complete |
 | 3 | Judges and observability: signing, cost, calibration, review, comparison, independent ASR | Complete |
-| 4 | Breadth and depth: xAI Grok Voice and Gemini Live (both merged), scenario catalogue, faults, live API runs | In progress |
+| 4 | Breadth and depth: OpenAI GPT-Live, xAI Grok Voice, Gemini Live and ElevenLabs Agents, 40-scenario catalogue, faults, live API runs, manual sessions, bake-offs, telephone pilot | In progress |
 | 5 | Hardening: security review, load and chaos tests, reproducibility, regression gates | Ongoing |
 
 ### Next
 
-- Run the first cross-provider comparison on the catalogue, and keep capability reports current (they expire after 7 days).
-- Repeat live runs to get variance instead of single samples.
-- Build a calibration holdout from real live transcripts; the current synthetic holdout is exploratory.
-- Establish real tariffs (all shipped prices are `null`) so cost exports can be known.
+- Keep capability reports current (they expire after 7 days) and repeat the fair bake-off beyond 3 repetitions where variance is still wide.
+- Build a calibration holdout from real live transcripts; the current synthetic holdout is exploratory and no judge policy is approved.
+- Establish tariffs in the shipped table (it holds none; dated partial vendor tables exist under `artifacts/pricing/`) so default cost exports can be known.
 - Exercise reconnect/resume, direct MCP and audio alignment, which are Unknown for every provider.
-- Move the synthetic caller off macOS `say` so live runs can run inside the container.
+- Run live runs inside the container: the `openai_tts` caller removes the `say` dependency, but credentials and the live profile are not yet in Compose.
 
 See [Phase 4 status](PHASE4_STATUS.md) for what is not yet established.

@@ -18,7 +18,7 @@ flowchart LR
     API --> Core --> Ledger
     Core <--> MCP
     Core <--> Adapter[Provider adapter]
-    Adapter <-->|realtime audio + tools| Prov[(OpenAI / Nova / xAI / Gemini)]
+    Adapter <-->|realtime audio + tools| Prov[(OpenAI / Nova / xAI / Gemini / ElevenLabs)]
     Judges --> Ledger
     Core --> Judges
     Judges -.->|ASR, judge calls| Ext[(OpenAI / Bedrock)]
@@ -69,15 +69,17 @@ Package: `src/voice_harness/`.
 | Orchestration | `engine.py`, `execution.py`, `tool_lifecycle.py`, `inbound_queue.py` | Run lifecycle, ordering, cancellation, bounded queues, tool lifecycle and recovery |
 | Enforcement | `guardrail.py`, `policy.py`, `approvals.py`, `playback.py`, `verdicts.py`, `voice_confirmation.py` | Pre-execution and pre-playback decisions, signed single-use approval tokens, playback gate, spoken-consent classifier |
 | Synthetic world | `bank.py`, `mcp_server.py`, `mcp_gateway.py`, `data/` | Accounts, transactions, limits, identity state, fault injection; stdio MCP server and correlated gateway |
-| Providers | `adapters/` (`openai_realtime`, `nova_sonic`, `xai_voice`), `mock_provider.py`, `resample.py` | `LiveAdapter` protocol over canonical events; original provider payloads preserved |
-| Scenarios | `scenario_defs.py`, `scenario_catalogue.py`, `scenarios.py`, `live_scenario.py`, `caller_voice.py`, `model_simulator.py`, `simulator.py` | 3 mock built-ins and 24 live catalogue entries (persona × locale × audio profile, plus faults); synthetic caller speech; model-driven simulator branch |
-| Live runs | `live_providers.py`, `live_assessment.py`, `asr.py` | Availability checks, `run_live`, capability binding, independent-ASR assessment |
+| Providers | `adapters/` (`openai_live`, `openai_realtime`, `nova_sonic`, `xai_voice`, `google_gemini_live`, `elevenlabs_voice` + `elevenlabs_agent`), `mock_provider.py`, `resample.py` | `LiveAdapter` protocol over canonical events; original provider payloads preserved |
+| Scenarios | `scenario_defs.py`, `scenario_catalogue.py`, `scenarios.py`, `live_scenario.py`, `caller_voice.py`, `model_simulator.py`, `simulator.py` | 3 mock built-ins and 40 live catalogue entries in five groups (happy path, identity, vulnerable customers, faults, payments; persona × locale × audio profile, plus faults); synthetic caller speech (macOS `say` or opt-in `openai_tts`); model-driven simulator branch |
+| Live runs | `live_providers.py`, `live_assessment.py`, `asr.py`, `target_prompts.py`, `manual_session.py`, `interactive_caller.py` | Availability checks, `run_live`, capability binding, independent-ASR assessment, per-provider target prompts, human mic/text sessions, live-AI caller pilot |
+| Bake-off | `bakeoff.py`, `bakeoff_stats.py`, `bakeoff_metrics.py`, `bakeoff_disclosure.py`, `bakeoff_export.py`, `provider_balances.py` | API-scheduled multi-provider runs with preflight and pause/resume, gates, Wilson-interval scorecard, McNemar head-to-heads, first-audio latency, disclosed provider asymmetries, one-file HTML export |
+| Telephone pilot | `telephone_api.py`, `telephone_providers.py`, `telephone_setup.py`, `telephony_demo.py`, `delegate_dialogue.py` | Bounded delegate-agent phone pilot. Diagnostic only, not platform verification (see `DELEGATE_PHONE_RUNBOOK.md`) |
 | Judging | `judges/` (`rubric`, `facts`, `oracle`, `calibration`, `holdout`, `review`, `adjudicate`, `backends`, `independence`, …) | Rubric `banking.assurance.v1`, deterministic evaluators, AI judges, calibration, human review |
 | Evidence | `events.py`, `event_contracts.py`, `evidence.py`, `exports.py`, `canonical.py`, `signing.py`, `storage.py`, `relational.py`, `retention.py` | Hash-chained ledger, RFC 8785 canonical JSON, Ed25519-signed manifests, retention and tombstones |
 | Capability and coverage | `capability_report.py`, `probe.py`, `coverage.py`, `*_report.py`, `fault_dispositions.py` | Probes produce capability reports; coverage derives per-family state and never ranks |
 | Cost and measurement | `cost*.py`, `pricing.py`, `metrics.py`, `benchmark.py`, `websocket_benchmark.py`, `clock_*.py`, `telemetry.py`, `comparison*.py` | Cost lines (unknown unless priced), component benchmarks, OTLP export, comparison reports |
 | Contracts | `contracts.py`, `generate_contracts.py` | Closed pydantic models (unknown properties rejected); regenerates `contracts/` schemas and OpenAPI |
-| Web | `apps/web/` | Coverage (AC-20), runs, review pages; PCM scheduler and AudioWorklet playback; strict CSP, `textContent` rendering |
+| Web | `apps/web/` | Coverage (AC-20), runs, scenarios, review, compare, manual, bake-off, balances and telephone pages; PCM scheduler and AudioWorklet playback; strict CSP, `textContent` rendering |
 
 ## 4. Live run lifecycle
 
@@ -114,9 +116,11 @@ to the approval buffer, and independent ASR plus the assessor decide release. A 
   `untestable`, never a pass.
 - **Dispositions:** `pass`, `fail`, `untestable`, `not_applicable`. Supported failures are not masked by evidence
   gaps. Unexercised faults are distinguished from handled faults and cannot alone yield an overall pass.
-- **AI judges** (OpenAI `gpt-4.1-mini`, Bedrock Claude Haiku 4.5) are opt-in, independence-checked against the
-  tested model, calibrated on a synthetic holdout, and advisory. Calibration to date clears the numeric
-  thresholds for CARE-01 only; no policy is approved.
+- **AI judges** (OpenAI, default `gpt-6-luna`; Bedrock Claude Haiku 4.5) are opt-in, independence-checked against
+  the tested model (including multi-model providers such as `openai-live`), calibrated on a synthetic holdout, and
+  advisory. The 28 Oct calibration (`artifacts/judge-calibration-2026-10-28/`) shows numeric thresholds met for
+  some criteria only, differing by judge (e.g. `gpt-6-sol`: CARE-01, CONFIRM-01, IDENTITY-01; Haiku 4.5: CARE-01).
+  The holdout is synthetic, so this is not human validation. No policy is approved and nothing blocks.
 
 ## 6. Evidence
 
@@ -139,12 +143,14 @@ All adapters implement `LiveAdapter` and emit closed canonical events (audio out
 call, turn start and end, interrupted, usage, error). Unsupported features are declared, not faked
 (`CapabilityUnsupported`).
 
-| Family | Model | Transport | Coverage |
+| Config | Model | Transport | Coverage |
 |---|---|---|---|
+| `openai-live` | `gpt-live-1` (voice) + `gpt-6-luna` (backend) | WebSocket | No capability report or AC-09 yet (not in `coverage.py`), so runs are `diagnostic_unverified` |
 | OpenAI Realtime | `gpt-realtime-2.1` | WebSocket | Verified (AC-09 pass) |
 | Amazon Nova Sonic | `amazon.nova-2-5-sonic`, us-east-1 | Bedrock bidirectional stream via a Node bridge | Verified (AC-09 pass, interruption excluded) |
 | xAI Grok Voice | `grok-voice-3.0` | WebSocket | Verified (AC-09 5 of 5) |
 | Google Gemini Live | `gemini-3.8-live` | Vertex AI Live WebSocket, ADC | 3.8 live probe and AC-09 pass (client truncation excluded); version unresolved |
+| ElevenLabs Agents | `elevenlabs-agent` (agent LLM recorded per run) | Agents WebSocket, stored agent | No Phase 0 report or AC-09 yet, so runs are `diagnostic_unverified` (`PHASE4_NOTES_elevenlabs.md`) |
 
 Support state is *derived*, never asserted. `implemented_and_verified` needs an adapter, a valid unexpired
 capability report and a passing AC-09 result bound to that report. Provider quirks that shaped the adapters are
@@ -167,12 +173,14 @@ flowchart LR
 ```
 
 PostgreSQL and OTLP ports are internal to Compose. The API binds to loopback on 8765. Live provider runs currently
-need a macOS host because the default synthetic caller uses `say`/`afconvert`, or the opt-in `openai_tts` voice.
+need a host process (`make serve-live`, port 8766, credentials from `.env`) because the default synthetic caller uses
+macOS `say`/`afconvert`; the opt-in `openai_tts` voice removes that dependency but live runs still are not part of the
+Compose suite. A `pages.yml` workflow publishes the research archive; it is not part of the product.
 
 ## 9. Known limits
 
 - Fixture audio is silence, so mock-provider tests show enforcement mechanics, not audibility or ASR accuracy.
-- Live results are mostly single samples. Cost is `unknown` for real runs because no tariff is established.
+- Most live results are single samples; the 28 Oct fair bake-off (6 providers × 40 scenarios × 3 repetitions) is the first repeated set. The shipped pricing table has no tariffs, so cost is `unknown` unless `HARNESS_PRICING_TABLE` points at a dated vendor table (`artifacts/pricing/`, partial, primary-source).
 - Audio alignment, reconnect/resume and direct MCP are Unknown for every provider.
 - Narrowband and noise are simple synthetic shaping, not measured telephony.
 - Private signing keys live on disk; there is no KMS or HSM.

@@ -17,7 +17,8 @@ It is not a production banking service, and passing it is not a certification.
   audio), then advisory AI judges that are calibrated before they are trusted. Missing evidence is `untestable`,
   never a pass.
 - **Proves** with an append-only, hash-chained ledger exported as an Ed25519-signed bundle that verifies offline.
-- **Reports** verified support per provider family. It never ranks providers.
+- **Reports** verified support per provider family (coverage never ranks). Bake-off reports do order providers, behind
+  completeness and safety gates, with confidence intervals and disclosed provider asymmetries. Neither is a certification.
 
 Read next: [Vision](docs/VISION.md) · [Architecture](docs/ARCHITECTURE.md) · [Engineering guide](docs/ENGINEERING.md)
 

@@ -1,20 +1,30 @@
 # Phase 4 status (in progress)
 
-## Current position (2026-10-19, `dbbe37a`)
+## Current position (2026-10-28)
 
-- Four live providers run through the API, Runs page, manual sessions and bake-offs: `openai-realtime-live`
-  (`gpt-realtime-2.1`), `nova-sonic-live` (`amazon.nova-2-5-sonic`), `xai-voice-live` (`grok-voice-3.0`) and
-  `gemini-live` (`gemini-3.8-live`). All four are `implemented_and_verified` in coverage (see `PHASE2_STATUS.md`).
-- The catalogue has 33 live scenarios in five groups: 9 happy path, 12 identity protection, 6 vulnerable customers,
-  4 fault tolerance, 2 payment actions. 25 declare FACT-01.
-- Latest provider benchmark: `BENCHMARK_5350E4A_2026-10-19.md` (132 runs, one per scenario per provider, fault
+- Six live provider configurations run through the API, Runs page, manual sessions and bake-offs: `openai-live`
+  (`gpt-live-1`, backend `gpt-6-luna`), `openai-realtime-live` (`gpt-realtime-2.1`), `nova-sonic-live`
+  (`amazon.nova-2-5-sonic`), `xai-voice-live` (`grok-voice-3.0`), `gemini-live` (`gemini-3.8-live`) and
+  `elevenlabs-live` (stored agent, LLM recorded per run). The OpenAI Realtime, Nova, xAI and Gemini families are
+  `implemented_and_verified` while their capability reports are current. `openai-live` and `elevenlabs-live` have no
+  capability report or AC-09 result, so their runs are `diagnostic_unverified`.
+- The catalogue has 40 live scenarios in five groups: 9 happy path, 18 identity protection, 6 vulnerable customers,
+  4 fault tolerance, 3 payment actions. 31 declare FACT-01.
+- Latest comparison: the fair-harness bake-off of 2026-10-28 (`artifacts/fair-bakeoff-2026-10-28/`; 6 providers × 40
+  scenarios × 3 repetitions = 720 cells, all completed after two credit-related pauses and resumes; claims-v2 re-score
+  in `rescored-2026-10-28/`). Judged by `gpt-6-sol` and Claude Haiku 4.5, with independent OpenAI ASR. Bias remediation
+  is in `PROVIDER_BIAS_REVIEW_2026-10-27.md`; latency is disclosed as not like for like. Judge calibration follow-up:
+  `artifacts/judge-calibration-2026-10-28/` (synthetic holdout; numeric checks met for some criteria per judge, no
+  policy approved).
+- Earlier matrix benchmark (2026-10-19, four providers, `dbbe37a`, now superseded by the bake-off above):
+  `BENCHMARK_5350E4A_2026-10-19.md` is its latest rerun (132 runs, one per scenario per provider, fault
   isolation verified). It makes no provider recommendation because nine assessments were untestable after
   independent-ASR credits ran out. The earlier `GEMINI_3_8_BENCHMARK_2026-10-19.md` batch is historical (undeclared
   timeout injections).
-- Local validation at `dbbe37a`: 642 Python tests OK (8 skipped, SQLite), 71 browser tests. Compose/PostgreSQL not
-  re-run on this commit.
+- Test counts below (642 Python, 71 browser at `dbbe37a`) are from 2026-10-19 and have not been refreshed.
 - Bake-off reports show voice cost per run (see "Voice cost in the bake-off"); Nova runs need a re-run to be priced.
-- Still open: repeated samples (every live result is one sample per cell), locale-aware caller voice, judge
+- Still open: variance beyond 3 repetitions, capability reports and AC-09 for `openai-live` and `elevenlabs-live`,
+  locale-aware caller voice, judge
   calibration policy approval (blocking stays off), live runs inside the container (no credentials or `say` there),
   and the per-section "Still open" items below.
 
