@@ -4961,6 +4961,13 @@
       "date": "2026-10-28"
     },
     {
+      "path": "executive-special.html",
+      "title": "Explore the executive briefing",
+      "description": "How we engineered the voice harness, how the tests work, and the evidence behind the business decision.",
+      "status": "Executive briefing",
+      "date": "2026-10-28"
+    },
+    {
       "path": "artifacts/fair-bakeoff-2026-10-28/report.html",
       "title": "Fair bake-off \u00b7 original assessment",
       "description": "Original scoring retained for provenance. Read the final re-score first.",

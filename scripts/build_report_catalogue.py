@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 REPO = 'https://github.com/Ready2k/Voice_harness/blob/main/'
 FEATURES = [
     ('artifacts/fair-bakeoff-2026-10-28/rescored-2026-10-28/report.html', 'Fair bake-off · final re-score', 'Latest assessment of 720 cells: six providers, 40 scenarios, three repetitions. Re-scored evidence; no calls were rerun.', 'Current', '2026-10-28'),
+    ('executive-special.html', 'Explore the executive briefing', 'How we engineered the voice harness, how the tests work, and the evidence behind the business decision.', 'Executive briefing', '2026-10-28'),
     ('artifacts/fair-bakeoff-2026-10-28/report.html', 'Fair bake-off · original assessment', 'Original scoring retained for provenance. Read the final re-score first.', 'Original', '2026-10-28'),
     ('artifacts/full-advanced-bakeoff-2026-10-26/rescored-2026-10-27/report.html', 'Advanced bake-off · corrected assessment', 'Earlier 600-cell experiment, with corrected latency and task-completion scoring. Different setup from the fair bake-off.', 'Re-scored', '2026-10-27'),
     ('reports/gpt-live-1-evaluation-2026-10-27.html', 'GPT-Live 1 · single-model evaluation', 'Forty synthetic scenarios with assurance checks, task completion, latency and scoped costs.', 'Evaluation', '2026-10-27'),
@@ -31,7 +32,7 @@ def main():
         kind = {'html': 'Web report', 'md': 'Notes', 'pdf': 'PDF', 'wav': 'Audio', 'mp3': 'Audio', 'ogg': 'Audio', 'pcm': 'Audio', 'json': 'Data', 'jsonl': 'Data', 'gz': 'Archive', 'zip': 'Archive'}.get(path.suffix[1:].lower(), 'Other')
         # Markdown is best read in GitHub's renderer; all other files are served directly.
         entries.append(dict(path=name, title=path.stem.replace('-', ' ').replace('_', ' '), date=max(dates) if dates else '', kind=kind, size=path.stat().st_size, url=REPO + name if kind == 'Notes' else name, group='/'.join(path.parts[:2])))
-    features = [dict(path=p, title=t, description=d, status=s, date=dt) for p,t,d,s,dt in FEATURES if p in files]
+    features = [dict(path=p, title=t, description=d, status=s, date=dt) for p,t,d,s,dt in FEATURES if p in files or p == 'executive-special.html' and (ROOT / p).is_file()]
     payload = dict(latest=max((x['date'] for x in entries), default=''), entries=sorted(entries, key=lambda x:(x['date'], x['path']), reverse=True), features=features)
     sources = ['artifacts/voice-naturalness-2026-10-25/key.json']
     gpt_source = 'artifacts/gpt-live-voice-library-2026-10-28/key.json'
@@ -61,7 +62,7 @@ def main():
         if output == ROOT or ROOT in output.parents and output.parts[len(ROOT.parts):len(ROOT.parts)+1] in [('artifacts',), ('reports',), ('docs',), ('site',)]:
             raise SystemExit('Choose a staging directory outside source content')
         output.mkdir(parents=True)
-        for name in files + ['index.html', 'voice-library.html', 'executive-trust.html', 'executive-special.html', 'site/style.css', 'site/app.js', 'site/catalogue.json', 'site/voice-library.css', 'site/voice-library.js', 'site/voice-library.json', 'site/executive-special.css', 'site/executive-special.js', 'site/cx-review-data.json']:
+        for name in files + ['index.html', 'executive-special.html', 'site/executive-special.css', 'site/executive-special.js', 'voice-library.html', 'executive-trust.html', 'site/style.css', 'site/app.js', 'site/catalogue.json', 'site/voice-library.css', 'site/voice-library.js', 'site/voice-library.json', 'site/cx-review-data.json']:
             dest = output / name
             dest.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(ROOT / name, dest)
