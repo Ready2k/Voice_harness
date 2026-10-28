@@ -40,3 +40,17 @@ $('next').addEventListener('click', () => {if(position < queue.length-1) play(qu
 audio.addEventListener('ended', () => {if($('autonext').checked && position < queue.length-1) play(queue[position+1]);});
 audio.addEventListener('error', () => {$('playback-status').textContent='This recording could not be loaded. Try opening the source WAV.';});
 fetch('site/voice-library.json').then(r => {if(!r.ok) throw new Error('Manifest unavailable');return r.json();}).then(manifest => {data=manifest;const variants = data.providers.length; $('dataset-summary').textContent = `${data.clips.length} retained clips · ${variants} voice variants. Matched scripts recorded 25 and 28 October 2026; recording dates differ. Representative scripted speech, not per-run bake-off evidence. Delivery can vary with instructions, settings and context.`;render();}).catch(() => {$('library-status').textContent='The library could not be loaded. Reload or open the original listening page linked below.';});
+
+const matrixWrap = document.querySelector('.matrix-wrap');
+function updateMatrixNavigation() {
+  const remaining = matrixWrap.scrollWidth - matrixWrap.clientWidth - matrixWrap.scrollLeft;
+  $('matrix-navigation').hidden = matrixWrap.scrollWidth <= matrixWrap.clientWidth + 1;
+  $('voices-left').disabled = matrixWrap.scrollLeft <= 1;
+  $('voices-right').disabled = remaining <= 1;
+  document.querySelector('#matrix-navigation span').textContent = remaining <= 1 ? 'Last voice column · use ← to compare earlier voices' : 'More voices to the right — including GPT-Live →';
+}
+$('voices-left').addEventListener('click', () => matrixWrap.scrollBy({left: -350, behavior:'smooth'}));
+$('voices-right').addEventListener('click', () => matrixWrap.scrollBy({left: 350, behavior:'smooth'}));
+new ResizeObserver(updateMatrixNavigation).observe(matrixWrap);
+new MutationObserver(updateMatrixNavigation).observe($('matrix'), {childList:true});
+matrixWrap.addEventListener('scroll', updateMatrixNavigation, {passive:true});
