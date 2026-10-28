@@ -23,6 +23,7 @@ from .guardrail import POLICY_VERSION as CONTENT_POLICY_VERSION
 from .guardrail import evaluate_content
 from .scenario_catalogue import scenario_definition
 from .scenario_defs import definition_hash
+from .spoken_ids import canonical_arguments
 from .storage import Database
 
 
@@ -623,6 +624,7 @@ class Engine:
 
     def _bank_actual(self, tx, name, args, call_id):
         state = tx.state
+        args = canonical_arguments(args)  # spoken-form ids (TXN001, txn 001) are the canonical id; see spoken_ids
         now = self.clock()
         if name == "verify_identity":
             if state["attempts"] >= 3:

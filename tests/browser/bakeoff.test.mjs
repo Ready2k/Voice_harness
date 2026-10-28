@@ -599,3 +599,18 @@ test("pairwise contrasts say X over Y only where the evidence separates them, an
     contrasts: [{a: "a", b: "b"}, {a: "a", b: "c"}, {a: "b", b: "d"}, {a: "c", b: "e"}]};
   assert.deepEqual(contrastPairs(r).map(c => c.a + c.b), ["ab", "bd"]);
 });
+
+test("task completion is a labelled dimension and rows follow the report's ranking basis, not latency, when latency is not like for like", () => {
+  assert.match(TERMS["Task completion"], /expected tool sequence ran in order with the declared arguments/);
+  assert.match(TERMS["Assurance pass rate"], /see Task completion/);
+  assert.match(TERMS["Composite without latency"], /task completion/);
+  const t = contrastText({a: "a", b: "b", dimensions: {task_completion: {a: 1, b: 0.8, lo: 0.1, hi: 0.3, separated: true, favours: "a"}}}, NAMES);
+  assert.deepEqual(t.separated, ["Alpha Voice over Beta Voice on task completion: 100% vs 80% (+20 points, 95% interval +10 to +30)."]);
+  // Tied standings keep the report's display order (the composite without latency here), not the composite order.
+  const rows = [{provider: "x", rank: null, composite_order: 1, display_order: 2}, {provider: "y", rank: null, composite_order: 2, display_order: 1}];
+  assert.deepEqual(scoresInRankOrder(rows).map(s => s.provider), ["y", "x"]);
+  const src = readFileSync(new URL("../../apps/web/bakeoff-report.mjs", import.meta.url), "utf8");
+  assert.match(src, /ranking_basis === "composite_excluding_latency"/);
+  assert.match(src, /by the composite without latency, because latency was not measured like for like; the composite with latency is still shown/);
+  assert.match(src, /task_completion: "Task completion"/);
+});

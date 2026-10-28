@@ -1,6 +1,6 @@
 # Bake-off safeguards
 
-Updated 22 October 2026.
+Updated 28 October 2026.
 
 ## Before scored tests
 
@@ -40,8 +40,31 @@ that credentials or credit limits have recovered. Cancel also works while paused
   or poor noise handling. Completed-run assurance, noise breakdowns and paired comparisons exclude failed
   runs. Reliability still includes unsuccessful first attempts.
 - **Assurance pass rate** replaces the misleading “Task success” label. It checks mandatory assurance
-  criteria, not full customer-goal completion. Details also show whether the declared tool sequence was
-  observed; that is a limited execution check, not a complete task-success judge.
+  criteria, not full customer-goal completion. Whether the task got done is the separate **Task completion**
+  dimension (below).
+- **Task completion** (`task_completion`, scored since 28 October). Among completed runs of scenarios that declare an
+  expected tool sequence, the share where that sequence was executed in order and every executed call to a tool with
+  `expected_arguments` carried the declared values (`metrics.task_completed`). Scenarios with no expected tools are left
+  out of `n`, not counted as passes. Older observations fall back to `metrics.served` with no declared argument `wrong`,
+  then to `expected_tools_observed`. A re-score can leave a scenario out with a reason (`task_completion_excluded`);
+  coverage rows count `task_completion_scored` and `task_completion_excluded`. It has Wilson and scenario-clustered
+  intervals and pairwise contrasts like the other rates and is part of the composite, the composite without latency, the
+  quality-only sensitivity check and the quality-lead/tie logic. It is an execution check against the ledger: a correct tool
+  run followed by a wrong spoken answer is caught by FACT-01, not here. Why: in the 26 October bake-off Nova never called
+  `transfer_to_human` in `happy-handoff-001` (0/3) yet passed assurance, while OpenAI Realtime completed every expected
+  sequence and ranked last; assurance alone could not see it.
+- **Default weights (28 October).** Assurance 0.30, task completion 0.15, factual 0.20, safe speech 0.15, responsiveness
+  0.15, robustness 0.05. These are the original 0.30/0.20/0.15/0.15/0.05 mix with reliability's former 0.15 (now a gate)
+  given to task completion, instead of being spread proportionally (the 0.353/0.235/0.176/0.176/0.060 of 22 October).
+  Weights stored without `task_completion` (older bake-offs, older clients) give it its default 0.15 before normalising;
+  `Weights` accepts such payloads. A stored set with nothing but a reliability weight still falls back to the defaults.
+- **Spoken-form identifiers.** A caller can say "transaction txn_001" but cannot speak the underscore or the case. The
+  trusted bank (`engine._bank_actual`, via `spoken_ids`) therefore accepts `transaction_id`, `transaction_ids` and
+  `payment_id` case-insensitively with separators ignored (`TXN001`, `txn 001`, `txn-001` → `txn_001`; `payment 001` →
+  `payment_001`) and returns the canonical id. Digits must match exactly: `txn0001` is `txn_0001`, a different id (0001 and
+  001 are different spoken digit strings), and a bare `001` without the prefix is not accepted. The argument check in
+  `bakeoff_metrics` uses the same canonicalisation. Tool descriptions are unchanged, so the stored ElevenLabs agent needs no
+  re-provisioning. See `docs/SCENARIO_VALIDITY_AUDIT_2026-10-27.md`.
 - New observations distinguish factual passes with claims from `NO_AMOUNT_CLAIM`, and exclude the latter
   from the factual rate. Untestable speech is not counted as safe. Coverage shows completed/planned runs,
   factual checks, excluded no-claim passes, untestable care and older observations without those fields.
@@ -81,7 +104,7 @@ Implemented in `src/voice_harness/bakeoff_stats.py`; results are in `report.unce
 - **Multiple comparisons.** Every head-to-head keeps its raw exact McNemar `p_value` and adds a Holm-adjusted
   `p_adjusted`. `better`, `significant_pairs` and `separable` use the adjusted value.
 - **Clear winner: speed never decides.** `verdict.no_clear_winner` is false only when the leader beats the runner-up on
-  outcomes (Holm-adjusted McNemar) or leads on the safety-and-correctness dimensions (assurance pass rate, factual,
+  outcomes (Holm-adjusted McNemar) or leads on the safety-and-correctness dimensions (assurance pass rate, task completion, factual,
   safe speech, robustness, re-weighted among themselves) with a paired bootstrap interval that excludes zero
   (`verdict.quality_lead`). A faster provider with equal outcomes is "no clear winner": `verdict.speed_only_lead` is true,
   `verdict.latency_leader` names the fastest, and the composite lead (`verdict.leader_minus_runner_up`) is still
@@ -91,9 +114,10 @@ Implemented in `src/voice_harness/bakeoff_stats.py`; results are in `report.unce
   `scoring.responsiveness_mix`). A provider's score no longer depends on which rivals were run. The old
   relative-to-fastest figure is kept as `responsiveness_relative` on each score row. `composite_median_only` now judges
   latency on the median target alone.
-- **Reliability is a gate, not a score.** The 95% completion gate already covers it, so the scored dimensions are assurance,
+- **Reliability is a gate, not a score.** The 95% completion gate already covers it, so the scored dimensions are assurance, task completion (since 28 October),
   factual, safe speech, responsiveness and robustness; the former 0.30/0.20/0.15/0.15/0.05 weights were rescaled
-  proportionally (0.353/0.235/0.176/0.176/0.060, robustness taking the rounding remainder). A `reliability` weight stored by an
+  proportionally (0.353/0.235/0.176/0.176/0.060, robustness taking the rounding remainder); since 28 October that share
+  goes to task completion instead (above). A `reliability` weight stored by an
   older bake-off, or sent by an older client, is accepted, ignored, and listed in `scoring.ignored_weights`; the rest are
   normalised. First-attempt reliability stays on each score row, and coverage rows add `first_attempt_completed` and
   `retried`. Retried-then-completed runs therefore no longer lower the score, only the visible coverage.
@@ -132,21 +156,27 @@ Implemented in `src/voice_harness/bakeoff_stats.py`; results are in `report.unce
   and `verdict.latency_comparability` summarise it. When latency is not comparable, the page marks responsiveness
   with †, explains why in plain language (summary, scorecard, latency section and the first caveat), and calls the
   fastest provider only "fastest measured". Confidence drops to at most medium.
-- **Composite without latency.** Every score row carries `composite_excluding_latency`: the quality composite (assurance,
+- **Composite without latency.** Every score row carries `composite_excluding_latency`: the quality composite (assurance, task completion,
   factual, safe speech and robustness, re-weighted among themselves). It comes with a bootstrap interval
   (`composite_excluding_latency_lo`/`_hi`) and `rank_excluding_latency` (competition rank, so equal values share a rank).
   The scorecard shows both beside the full composite.
-- **Where providers differ.** `report.contrasts` compares every pair, one dimension at a time (assurance, factual, safe
+- **Ranking basis.** When latency is not comparable (`verdict.latency_comparable` false), the table is ordered, and ranked
+  when there is a first place, by `composite_excluding_latency` (the full composite breaks exact ties); the leader and runner-up
+  used for the quality-lead check follow the same order. `verdict.ranking_basis` says which (`composite` or
+  `composite_excluding_latency`), each row's `display_order` gives its position (kept when ranks give way to standings),
+  `composite_order` keeps the order on the full composite, and the composite stays visible. The scorecard caption says so.
+- **Where providers differ.** `report.contrasts` compares every pair, one dimension at a time (assurance, task completion, factual, safe
   speech, robustness, responsiveness). Each entry gives both values, the difference, and the paired scenario-cluster
   bootstrap interval for a minus b (the cached resamples). `favours` names a provider only when that interval excludes
   zero. For assurance it requires the Holm-adjusted head-to-head instead, so it agrees with `pairs`. Intervals are not
   corrected across dimensions. The page reads the pairs among the top three as "X over Y on …" sentences, followed by
   the dimensions where they are not separated.
 - **Re-scoring older bake-offs.** `scripts/rescore_bakeoff_report.py` takes an exported `report.json` or a stored payload.
-  It removes `CALLER_TRAIL_MS` from explicit-commit turns recorded before the latency-anchor fix and re-runs
-  `bakeoff.report`. It first checks that the unchanged input reproduces the stored composites. The 26 October
+  It removes `CALLER_TRAIL_MS` from explicit-commit turns recorded before the latency-anchor fix, leaves the scenarios in
+  `EXCLUDE_TASK` out of task completion with a reason, and re-runs `bakeoff.report` with the current default weights. It
+  first checks that the unchanged input reproduces the stored composites (task completion weighted 0). The 26 October
   re-issue is in `artifacts/full-advanced-bakeoff-2026-10-26/rescored-2026-10-27/`. Its README explains why the
-  corrected figures lean towards the explicit-commit providers.
+  corrected figures lean towards the explicit-commit providers and why `happy-transaction-details-001` is excluded.
 - **Effect size and power.** Each pair reports `pass_rate_diff` with a clustered interval, `discordant_share`,
   `runs_needed_80` (paired runs for 80% power to confirm the observed difference) and `min_detectable_diff_80` (the
   smallest difference detectable with the runs in hand), using a normal approximation. Both are `null` when

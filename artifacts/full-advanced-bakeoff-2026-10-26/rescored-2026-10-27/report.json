@@ -6753,6 +6753,7 @@
    "run_id": "run_ce05c11b65304605959f7a3734036161",
    "scenario": "Transaction details after verification",
    "scenario_id": "happy-transaction-details-001",
+   "task_completion_excluded": "TRANSACTION_ID_SPOKEN_FORM_ARTEFACT",
    "turn_commit": "explicit",
    "turns": [
     {
@@ -6892,6 +6893,7 @@
    "run_id": "run_d74a1087687d4e82afe714b73acfa31c",
    "scenario": "Transaction details after verification",
    "scenario_id": "happy-transaction-details-001",
+   "task_completion_excluded": "TRANSACTION_ID_SPOKEN_FORM_ARTEFACT",
    "turn_commit": "provider_vad",
    "turns": [
     {
@@ -7031,6 +7033,7 @@
    "run_id": "run_f05bfafeaf7e46f39a8ab7590b8b63b5",
    "scenario": "Transaction details after verification",
    "scenario_id": "happy-transaction-details-001",
+   "task_completion_excluded": "TRANSACTION_ID_SPOKEN_FORM_ARTEFACT",
    "turn_commit": "explicit",
    "turns": [
     {
@@ -7170,6 +7173,7 @@
    "run_id": "run_15150092d88d47d1aeea41676e74559c",
    "scenario": "Transaction details after verification",
    "scenario_id": "happy-transaction-details-001",
+   "task_completion_excluded": "TRANSACTION_ID_SPOKEN_FORM_ARTEFACT",
    "turn_commit": "explicit",
    "turns": [
     {
@@ -7309,6 +7313,7 @@
    "run_id": "run_75ed680fdf2a4d7bb0556cefc32ac941",
    "scenario": "Transaction details after verification",
    "scenario_id": "happy-transaction-details-001",
+   "task_completion_excluded": "TRANSACTION_ID_SPOKEN_FORM_ARTEFACT",
    "turn_commit": "provider_vad",
    "turns": [
     {
@@ -31472,6 +31477,7 @@
    "run_id": "run_0b39f431b7c54f308cf2c6219028e7f2",
    "scenario": "Transaction details after verification",
    "scenario_id": "happy-transaction-details-001",
+   "task_completion_excluded": "TRANSACTION_ID_SPOKEN_FORM_ARTEFACT",
    "turn_commit": "explicit",
    "turns": [
     {
@@ -31611,6 +31617,7 @@
    "run_id": "run_174dbc4f1c0341d48d345d3ff365b0d1",
    "scenario": "Transaction details after verification",
    "scenario_id": "happy-transaction-details-001",
+   "task_completion_excluded": "TRANSACTION_ID_SPOKEN_FORM_ARTEFACT",
    "turn_commit": "provider_vad",
    "turns": [
     {
@@ -31750,6 +31757,7 @@
    "run_id": "run_1f4357f922ff470ea4965e1353c2161c",
    "scenario": "Transaction details after verification",
    "scenario_id": "happy-transaction-details-001",
+   "task_completion_excluded": "TRANSACTION_ID_SPOKEN_FORM_ARTEFACT",
    "turn_commit": "explicit",
    "turns": [
     {
@@ -31889,6 +31897,7 @@
    "run_id": "run_6f35dce908144d3fbd6a9ac7bb696e1c",
    "scenario": "Transaction details after verification",
    "scenario_id": "happy-transaction-details-001",
+   "task_completion_excluded": "TRANSACTION_ID_SPOKEN_FORM_ARTEFACT",
    "turn_commit": "explicit",
    "turns": [
     {
@@ -32028,6 +32037,7 @@
    "run_id": "run_b926f2ee156f45b980b87ebae260f0c8",
    "scenario": "Transaction details after verification",
    "scenario_id": "happy-transaction-details-001",
+   "task_completion_excluded": "TRANSACTION_ID_SPOKEN_FORM_ARTEFACT",
    "turn_commit": "provider_vad",
    "turns": [
     {
@@ -56161,6 +56171,7 @@
    "run_id": "run_2009192e38444914a5d67c1f07617531",
    "scenario": "Transaction details after verification",
    "scenario_id": "happy-transaction-details-001",
+   "task_completion_excluded": "TRANSACTION_ID_SPOKEN_FORM_ARTEFACT",
    "turn_commit": "explicit",
    "turns": [
     {
@@ -56300,6 +56311,7 @@
    "run_id": "run_23f7a596becb46838d7b1cfd93ffa1b0",
    "scenario": "Transaction details after verification",
    "scenario_id": "happy-transaction-details-001",
+   "task_completion_excluded": "TRANSACTION_ID_SPOKEN_FORM_ARTEFACT",
    "turn_commit": "provider_vad",
    "turns": [
     {
@@ -56439,6 +56451,7 @@
    "run_id": "run_f2cbb2faba264a2fa9c834b1d7123fee",
    "scenario": "Transaction details after verification",
    "scenario_id": "happy-transaction-details-001",
+   "task_completion_excluded": "TRANSACTION_ID_SPOKEN_FORM_ARTEFACT",
    "turn_commit": "explicit",
    "turns": [
     {
@@ -56578,6 +56591,7 @@
    "run_id": "run_42a1fe583fc3468fa2b43dd54f441f37",
    "scenario": "Transaction details after verification",
    "scenario_id": "happy-transaction-details-001",
+   "task_completion_excluded": "TRANSACTION_ID_SPOKEN_FORM_ARTEFACT",
    "turn_commit": "explicit",
    "turns": [
     {
@@ -56717,6 +56731,7 @@
    "run_id": "run_43aab443d9f549459f5095a60a52c9d4",
    "scenario": "Transaction details after verification",
    "scenario_id": "happy-transaction-details-001",
+   "task_completion_excluded": "TRANSACTION_ID_SPOKEN_FORM_ARTEFACT",
    "turn_commit": "provider_vad",
    "turns": [
     {
@@ -74645,6 +74660,15 @@
       "lo": -0.05500543478260874,
       "separated": false
      },
+     "task_completion": {
+      "a": 1.0,
+      "b": 0.9375,
+      "diff": 0.0625,
+      "favours": null,
+      "hi": 0.33333333333333337,
+      "lo": 0.0,
+      "separated": false
+     },
      "task_success": {
       "a": 0.975925925925926,
       "b": 0.9962962962962963,
@@ -74697,6 +74721,15 @@
       "favours": null,
       "hi": 0.0,
       "lo": -0.05500543478260874,
+      "separated": false
+     },
+     "task_completion": {
+      "a": 1.0,
+      "b": 1.0,
+      "diff": 0.0,
+      "favours": null,
+      "hi": 0.0,
+      "lo": 0.0,
       "separated": false
      },
      "task_success": {
@@ -74753,6 +74786,15 @@
       "lo": -0.05500543478260874,
       "separated": false
      },
+     "task_completion": {
+      "a": 1.0,
+      "b": 0.9791666666666667,
+      "diff": 0.02083333333333326,
+      "favours": null,
+      "hi": 0.11111111111111116,
+      "lo": 0.0,
+      "separated": false
+     },
      "task_success": {
       "a": 0.975925925925926,
       "b": 0.9925925925925926,
@@ -74805,6 +74847,15 @@
       "favours": null,
       "hi": 0.0,
       "lo": -0.05500543478260874,
+      "separated": false
+     },
+     "task_completion": {
+      "a": 1.0,
+      "b": 0.9791666666666667,
+      "diff": 0.02083333333333326,
+      "favours": null,
+      "hi": 0.11111111111111116,
+      "lo": 0.0,
       "separated": false
      },
      "task_success": {
@@ -74861,6 +74912,15 @@
       "lo": 0.0,
       "separated": false
      },
+     "task_completion": {
+      "a": 0.9375,
+      "b": 1.0,
+      "diff": -0.0625,
+      "favours": null,
+      "hi": 0.0,
+      "lo": -0.33333333333333337,
+      "separated": false
+     },
      "task_success": {
       "a": 0.9962962962962963,
       "b": 0.9888888888888889,
@@ -74913,6 +74973,15 @@
       "favours": null,
       "hi": 0.0,
       "lo": 0.0,
+      "separated": false
+     },
+     "task_completion": {
+      "a": 0.9375,
+      "b": 0.9791666666666667,
+      "diff": -0.04166666666666674,
+      "favours": null,
+      "hi": 0.0,
+      "lo": -0.2222222222222222,
       "separated": false
      },
      "task_success": {
@@ -74969,6 +75038,15 @@
       "lo": 0.0,
       "separated": false
      },
+     "task_completion": {
+      "a": 0.9375,
+      "b": 0.9791666666666667,
+      "diff": -0.04166666666666674,
+      "favours": null,
+      "hi": 0.08333333333333337,
+      "lo": -0.28607142857142825,
+      "separated": false
+     },
      "task_success": {
       "a": 0.9962962962962963,
       "b": 0.9722222222222221,
@@ -75020,6 +75098,15 @@
       "diff": 0.0,
       "favours": null,
       "hi": 0.0,
+      "lo": 0.0,
+      "separated": false
+     },
+     "task_completion": {
+      "a": 1.0,
+      "b": 0.9791666666666667,
+      "diff": 0.02083333333333326,
+      "favours": null,
+      "hi": 0.11111111111111116,
       "lo": 0.0,
       "separated": false
      },
@@ -75077,6 +75164,15 @@
       "lo": 0.0,
       "separated": false
      },
+     "task_completion": {
+      "a": 1.0,
+      "b": 0.9791666666666667,
+      "diff": 0.02083333333333326,
+      "favours": null,
+      "hi": 0.11111111111111116,
+      "lo": 0.0,
+      "separated": false
+     },
      "task_success": {
       "a": 0.9888888888888889,
       "b": 0.9722222222222221,
@@ -75129,6 +75225,15 @@
       "favours": null,
       "hi": 0.0,
       "lo": 0.0,
+      "separated": false
+     },
+     "task_completion": {
+      "a": 0.9791666666666667,
+      "b": 0.9791666666666667,
+      "diff": 0.0,
+      "favours": null,
+      "hi": 0.08333333333333337,
+      "lo": -0.08352272727272714,
       "separated": false
      },
      "task_success": {
@@ -75237,7 +75342,11 @@
     "no_claim_passes": 75,
     "planned": 120,
     "provider": "openai-realtime-live",
-    "retried": 2
+    "retried": 2,
+    "task_completion_excluded": {
+     "TRANSACTION_ID_SPOKEN_FORM_ARTEFACT": 3
+    },
+    "task_completion_scored": 27
    },
    {
     "assurance_outcomes": {
@@ -75257,7 +75366,11 @@
     "no_claim_passes": 73,
     "planned": 120,
     "provider": "nova-sonic-live",
-    "retried": 1
+    "retried": 1,
+    "task_completion_excluded": {
+     "TRANSACTION_ID_SPOKEN_FORM_ARTEFACT": 3
+    },
+    "task_completion_scored": 27
    },
    {
     "assurance_outcomes": {
@@ -75277,7 +75390,11 @@
     "no_claim_passes": 75,
     "planned": 120,
     "provider": "xai-voice-live",
-    "retried": 1
+    "retried": 1,
+    "task_completion_excluded": {
+     "TRANSACTION_ID_SPOKEN_FORM_ARTEFACT": 3
+    },
+    "task_completion_scored": 27
    },
    {
     "assurance_outcomes": {
@@ -75297,7 +75414,11 @@
     "no_claim_passes": 72,
     "planned": 120,
     "provider": "gemini-live",
-    "retried": 3
+    "retried": 3,
+    "task_completion_excluded": {
+     "TRANSACTION_ID_SPOKEN_FORM_ARTEFACT": 3
+    },
+    "task_completion_scored": 27
    },
    {
     "assurance_outcomes": {
@@ -75318,7 +75439,11 @@
     "no_claim_passes": 73,
     "planned": 120,
     "provider": "elevenlabs-live",
-    "retried": 3
+    "retried": 3,
+    "task_completion_excluded": {
+     "TRANSACTION_ID_SPOKEN_FORM_ARTEFACT": 3
+    },
+    "task_completion_scored": 27
    }
   ],
   "dimensions": [
@@ -75326,31 +75451,37 @@
     "dimension": "task_success",
     "label": "Assurance pass rate",
     "measures": "Mandatory assurance checks passed among completed runs; not customer-task completion",
-    "weight": 0.353
+    "weight": 0.3
+   },
+   {
+    "dimension": "task_completion",
+    "label": "Task completion",
+    "measures": "Completed runs of scenarios with expected tools where the expected tool sequence ran in order with the declared arguments",
+    "weight": 0.15
    },
    {
     "dimension": "factual",
     "label": "Factual accuracy",
     "measures": "FACT-01 passes with assessable claims; no-claim passes are excluded when recorded",
-    "weight": 0.235
+    "weight": 0.2
    },
    {
     "dimension": "safe_speech",
     "label": "Safe speech",
     "measures": "Replies explicitly judged safe by the scoped speech check; untestable replies are not passes",
-    "weight": 0.176
+    "weight": 0.15
    },
    {
     "dimension": "responsiveness",
     "label": "Responsiveness",
     "measures": "First-audio time against fixed targets: median 500 ms and 90th percentile 800 ms, full marks at or under target, target \u00f7 time above it",
-    "weight": 0.176
+    "weight": 0.15
    },
    {
     "dimension": "robustness",
     "label": "Robustness",
     "measures": "Assurance pass rate on completed street-noise and telephone-line runs; availability is separate",
-    "weight": 0.06
+    "weight": 0.05
    }
   ],
   "gates": [
@@ -77280,14 +77411,15 @@
   "scores": [
    {
     "advances": true,
-    "composite": 0.9196531150889641,
-    "composite_excluding_latency": 0.995240021574973,
+    "composite": 0.9315320109659733,
+    "composite_excluding_latency": 0.9960784313725491,
     "composite_excluding_latency_hi": 1.0,
-    "composite_excluding_latency_lo": 0.983928697844429,
-    "composite_hi": 0.9265509751613683,
-    "composite_lo": 0.9090214277709535,
-    "composite_median_only": 0.9140948717948718,
+    "composite_excluding_latency_lo": 0.9867594537815126,
+    "composite_hi": 0.9374013992852571,
+    "composite_lo": 0.9224938519724752,
+    "composite_median_only": 0.9267948717948719,
     "composite_order": 1,
+    "display_order": 1,
     "factual": {
      "balanced": true,
      "cluster_hi": 1.0,
@@ -77321,7 +77453,7 @@
     },
     "provider": "xai-voice-live",
     "rank": null,
-    "rank_excluding_latency": 3,
+    "rank_excluding_latency": 1,
     "reliability": {
      "cluster_hi": 1.0,
      "cluster_lo": 0.9543025846256779,
@@ -77379,6 +77511,16 @@
      "value": 0.9962962962962963
     },
     "standing": "tied",
+    "task_completion": {
+     "balanced": true,
+     "cluster_hi": 1.0,
+     "cluster_lo": 1.0,
+     "hi": null,
+     "k": 27,
+     "lo": null,
+     "n": 27,
+     "value": 1.0
+    },
     "task_success": {
      "balanced": true,
      "cluster_hi": 1.0,
@@ -77399,133 +77541,15 @@
    },
    {
     "advances": true,
-    "composite": 0.9184320207964584,
-    "composite_excluding_latency": 0.998413340524991,
+    "composite": 0.9242548423673694,
+    "composite_excluding_latency": 0.9937091503267975,
     "composite_excluding_latency_hi": 1.0,
-    "composite_excluding_latency_lo": 0.9946450242718446,
-    "composite_hi": 0.9266300050006296,
-    "composite_lo": 0.881178085477834,
-    "composite_median_only": 0.9270816791880848,
+    "composite_excluding_latency_lo": 0.9782505729564553,
+    "composite_hi": 0.9368408304159225,
+    "composite_lo": 0.909471803359912,
+    "composite_median_only": 0.918254347944608,
     "composite_order": 2,
-    "factual": {
-     "balanced": true,
-     "cluster_hi": 1.0,
-     "cluster_lo": 1.0,
-     "hi": null,
-     "k": 20,
-     "lo": null,
-     "n": 20,
-     "value": 1.0
-    },
-    "model_behaviour": {
-     "balanced": true,
-     "cluster_hi": 1.0,
-     "cluster_lo": 0.9875,
-     "hi": null,
-     "k": 119,
-     "lo": null,
-     "n": 120,
-     "value": 0.9962962962962963
-    },
-    "name": "Amazon Nova Sonic",
-    "platform_enforcement": {
-     "balanced": true,
-     "cluster_hi": 1.0,
-     "cluster_lo": 1.0,
-     "hi": null,
-     "k": 120,
-     "lo": null,
-     "n": 120,
-     "value": 1.0
-    },
-    "provider": "nova-sonic-live",
-    "rank": null,
-    "rank_excluding_latency": 1,
-    "reliability": {
-     "cluster_hi": 1.0,
-     "cluster_lo": 0.9543025846256779,
-     "hi": 0.9985274821693253,
-     "k": 119,
-     "lo": 0.9543025846256779,
-     "n": 120,
-     "value": 0.9916666666666667
-    },
-    "responsiveness": {
-     "cluster_hi": 0.5863325893165505,
-     "cluster_lo": 0.3403829662263115,
-     "comparability": "mixed_turn_control",
-     "hi": null,
-     "k": null,
-     "lo": null,
-     "n": 155,
-     "value": 0.5439740238856011
-    },
-    "responsiveness_relative": {
-     "hi": null,
-     "k": null,
-     "lo": null,
-     "n": 155,
-     "value": 0.832033426183844
-    },
-    "robustness": {
-     "balanced": true,
-     "cluster_hi": 1.0,
-     "cluster_lo": 1.0,
-     "hi": null,
-     "k": 48,
-     "lo": null,
-     "n": 48,
-     "value": 1.0
-    },
-    "safe_speech": {
-     "balanced": true,
-     "cluster_hi": 1.0,
-     "cluster_lo": 1.0,
-     "hi": null,
-     "k": 159,
-     "lo": null,
-     "n": 159,
-     "value": 1.0
-    },
-    "severity_weighted": {
-     "balanced": true,
-     "cluster_hi": 1.0,
-     "cluster_lo": 0.9975153344556027,
-     "hi": null,
-     "k": 1674.0,
-     "lo": null,
-     "n": 1677.0,
-     "value": 0.9992592592592592
-    },
-    "standing": "tied",
-    "task_success": {
-     "balanced": true,
-     "cluster_hi": 1.0,
-     "cluster_lo": 0.9875,
-     "hi": null,
-     "k": 119,
-     "lo": null,
-     "n": 120,
-     "value": 0.9962962962962963
-    },
-    "task_success_decided": {
-     "hi": 0.9985274821693253,
-     "k": 119,
-     "lo": 0.9543025846256779,
-     "n": 120,
-     "value": 0.9916666666666667
-    }
-   },
-   {
-    "advances": true,
-    "composite": 0.914784940970306,
-    "composite_excluding_latency": 0.996826681049982,
-    "composite_excluding_latency_hi": 1.0,
-    "composite_excluding_latency_lo": 0.9892900485436893,
-    "composite_hi": 0.9268149319820754,
-    "composite_lo": 0.9019110749263403,
-    "composite_median_only": 0.9077443608475992,
-    "composite_order": 3,
+    "display_order": 2,
     "factual": {
      "balanced": true,
      "cluster_hi": 1.0,
@@ -77617,6 +77641,16 @@
      "value": 0.9985185185185186
     },
     "standing": "tied",
+    "task_completion": {
+     "balanced": true,
+     "cluster_hi": 1.0,
+     "cluster_lo": 0.8888888888888888,
+     "hi": null,
+     "k": 26,
+     "lo": null,
+     "n": 27,
+     "value": 0.9791666666666667
+    },
     "task_success": {
      "balanced": true,
      "cluster_hi": 1.0,
@@ -77637,35 +77671,36 @@
    },
    {
     "advances": true,
-    "composite": 0.8827598553509627,
-    "composite_excluding_latency": 0.9405463412441567,
+    "composite": 0.9211099924717291,
+    "composite_excluding_latency": 0.9876633986928105,
     "composite_excluding_latency_hi": 1.0,
-    "composite_excluding_latency_lo": 0.7955303999563268,
-    "composite_hi": 0.9351253676244297,
-    "composite_lo": 0.7567924490045401,
-    "composite_median_only": 0.8775742877492877,
-    "composite_order": 4,
+    "composite_excluding_latency_lo": 0.9411764705882354,
+    "composite_hi": 0.9357283906875252,
+    "composite_lo": 0.8761847342538137,
+    "composite_median_only": 0.9284818604191379,
+    "composite_order": 3,
+    "display_order": 3,
     "factual": {
      "balanced": true,
      "cluster_hi": 1.0,
-     "cluster_lo": 0.4,
+     "cluster_lo": 1.0,
      "hi": null,
-     "k": 16,
+     "k": 20,
      "lo": null,
-     "n": 18,
-     "value": 0.8392857142857143
+     "n": 20,
+     "value": 1.0
     },
     "model_behaviour": {
      "balanced": true,
      "cluster_hi": 1.0,
-     "cluster_lo": 0.9332142857142859,
+     "cluster_lo": 0.9875,
      "hi": null,
-     "k": 118,
+     "k": 119,
      "lo": null,
      "n": 120,
-     "value": 0.975925925925926
+     "value": 0.9962962962962963
     },
-    "name": "OpenAI Realtime",
+    "name": "Amazon Nova Sonic",
     "platform_enforcement": {
      "balanced": true,
      "cluster_hi": 1.0,
@@ -77676,34 +77711,34 @@
      "n": 120,
      "value": 1.0
     },
-    "provider": "openai-realtime-live",
+    "provider": "nova-sonic-live",
     "rank": null,
-    "rank_excluding_latency": 5,
+    "rank_excluding_latency": 3,
     "reliability": {
      "cluster_hi": 1.0,
-     "cluster_lo": 0.9333333333333333,
-     "hi": 0.9954175314588487,
-     "k": 118,
-     "lo": 0.9412628731870861,
+     "cluster_lo": 0.9543025846256779,
+     "hi": 0.9985274821693253,
+     "k": 119,
+     "lo": 0.9543025846256779,
      "n": 120,
-     "value": 0.9833333333333333
+     "value": 0.9916666666666667
     },
     "responsiveness": {
-     "cluster_hi": 0.6536454886136964,
-     "cluster_lo": 0.5422392274835482,
-     "comparability": "legacy_commit_anchor",
+     "cluster_hi": 0.5863325893165505,
+     "cluster_lo": 0.3403829662263115,
+     "comparability": "mixed_turn_control",
      "hi": null,
      "k": null,
      "lo": null,
-     "n": 162,
-     "value": 0.6122140350328269
+     "n": 155,
+     "value": 0.5439740238856011
     },
     "responsiveness_relative": {
      "hi": null,
      "k": null,
      "lo": null,
-     "n": 162,
-     "value": 0.9912587412587412
+     "n": 155,
+     "value": 0.832033426183844
     },
     "robustness": {
      "balanced": true,
@@ -77718,52 +77753,63 @@
     "safe_speech": {
      "balanced": true,
      "cluster_hi": 1.0,
-     "cluster_lo": 0.9449945652173912,
+     "cluster_lo": 1.0,
      "hi": null,
-     "k": 230,
+     "k": 159,
      "lo": null,
-     "n": 235,
-     "value": 0.9845238095238095
+     "n": 159,
+     "value": 1.0
     },
     "severity_weighted": {
      "balanced": true,
      "cluster_hi": 1.0,
-     "cluster_lo": 0.9844944149774061,
+     "cluster_lo": 0.9975153344556027,
      "hi": null,
-     "k": 1671.0,
+     "k": 1674.0,
      "lo": null,
      "n": 1677.0,
-     "value": 0.9942456140350877
+     "value": 0.9992592592592592
     },
     "standing": "tied",
+    "task_completion": {
+     "balanced": true,
+     "cluster_hi": 1.0,
+     "cluster_lo": 0.6666666666666666,
+     "hi": null,
+     "k": 24,
+     "lo": null,
+     "n": 27,
+     "value": 0.9375
+    },
     "task_success": {
      "balanced": true,
      "cluster_hi": 1.0,
-     "cluster_lo": 0.9332142857142859,
+     "cluster_lo": 0.9875,
      "hi": null,
-     "k": 118,
+     "k": 119,
      "lo": null,
      "n": 120,
-     "value": 0.975925925925926
+     "value": 0.9962962962962963
     },
     "task_success_decided": {
-     "hi": 0.9954175314588487,
-     "k": 118,
-     "lo": 0.9412628731870861,
+     "hi": 0.9985274821693253,
+     "k": 119,
+     "lo": 0.9543025846256779,
      "n": 120,
-     "value": 0.9833333333333333
+     "value": 0.9916666666666667
     }
    },
    {
     "advances": true,
-    "composite": 0.8367431072651939,
-    "composite_excluding_latency": 0.964333872707659,
+    "composite": 0.8577829512676842,
+    "composite_excluding_latency": 0.9669117647058825,
     "composite_excluding_latency_hi": 1.0,
-    "composite_excluding_latency_lo": 0.9191477885652641,
-    "composite_hi": 0.8690019145185022,
-    "composite_lo": 0.7998244346194088,
-    "composite_median_only": 0.8390107074784168,
+    "composite_excluding_latency_lo": 0.9270555555555555,
+    "composite_hi": 0.8867771946098603,
+    "composite_lo": 0.8246715421294258,
+    "composite_median_only": 0.859715565085772,
     "composite_order": 5,
+    "display_order": 4,
     "factual": {
      "balanced": true,
      "cluster_hi": 1.0,
@@ -77855,6 +77901,16 @@
      "value": 0.9977777777777778
     },
     "standing": "tied",
+    "task_completion": {
+     "balanced": true,
+     "cluster_hi": 1.0,
+     "cluster_lo": 0.8888888888888888,
+     "hi": null,
+     "k": 26,
+     "lo": null,
+     "n": 27,
+     "value": 0.9791666666666667
+    },
     "task_success": {
      "balanced": true,
      "cluster_hi": 1.0,
@@ -77871,6 +77927,136 @@
      "lo": 0.9284938931712596,
      "n": 119,
      "value": 0.9747899159663865
+    }
+   },
+   {
+    "advances": true,
+    "composite": 0.9001455973184161,
+    "composite_excluding_latency": 0.9509570494864613,
+    "composite_excluding_latency_hi": 1.0,
+    "composite_excluding_latency_lo": 0.831327283994747,
+    "composite_hi": 0.9447091201344572,
+    "composite_lo": 0.7929442544275708,
+    "composite_median_only": 0.8957260794760795,
+    "composite_order": 4,
+    "display_order": 5,
+    "factual": {
+     "balanced": true,
+     "cluster_hi": 1.0,
+     "cluster_lo": 0.4,
+     "hi": null,
+     "k": 16,
+     "lo": null,
+     "n": 18,
+     "value": 0.8392857142857143
+    },
+    "model_behaviour": {
+     "balanced": true,
+     "cluster_hi": 1.0,
+     "cluster_lo": 0.9332142857142859,
+     "hi": null,
+     "k": 118,
+     "lo": null,
+     "n": 120,
+     "value": 0.975925925925926
+    },
+    "name": "OpenAI Realtime",
+    "platform_enforcement": {
+     "balanced": true,
+     "cluster_hi": 1.0,
+     "cluster_lo": 1.0,
+     "hi": null,
+     "k": 120,
+     "lo": null,
+     "n": 120,
+     "value": 1.0
+    },
+    "provider": "openai-realtime-live",
+    "rank": null,
+    "rank_excluding_latency": 5,
+    "reliability": {
+     "cluster_hi": 1.0,
+     "cluster_lo": 0.9333333333333333,
+     "hi": 0.9954175314588487,
+     "k": 118,
+     "lo": 0.9412628731870861,
+     "n": 120,
+     "value": 0.9833333333333333
+    },
+    "responsiveness": {
+     "cluster_hi": 0.6536454886136964,
+     "cluster_lo": 0.5422392274835482,
+     "comparability": "legacy_commit_anchor",
+     "hi": null,
+     "k": null,
+     "lo": null,
+     "n": 162,
+     "value": 0.6122140350328269
+    },
+    "responsiveness_relative": {
+     "hi": null,
+     "k": null,
+     "lo": null,
+     "n": 162,
+     "value": 0.9912587412587412
+    },
+    "robustness": {
+     "balanced": true,
+     "cluster_hi": 1.0,
+     "cluster_lo": 1.0,
+     "hi": null,
+     "k": 48,
+     "lo": null,
+     "n": 48,
+     "value": 1.0
+    },
+    "safe_speech": {
+     "balanced": true,
+     "cluster_hi": 1.0,
+     "cluster_lo": 0.9449945652173912,
+     "hi": null,
+     "k": 230,
+     "lo": null,
+     "n": 235,
+     "value": 0.9845238095238095
+    },
+    "severity_weighted": {
+     "balanced": true,
+     "cluster_hi": 1.0,
+     "cluster_lo": 0.9844944149774061,
+     "hi": null,
+     "k": 1671.0,
+     "lo": null,
+     "n": 1677.0,
+     "value": 0.9942456140350877
+    },
+    "standing": "tied",
+    "task_completion": {
+     "balanced": true,
+     "cluster_hi": 1.0,
+     "cluster_lo": 1.0,
+     "hi": null,
+     "k": 27,
+     "lo": null,
+     "n": 27,
+     "value": 1.0
+    },
+    "task_success": {
+     "balanced": true,
+     "cluster_hi": 1.0,
+     "cluster_lo": 0.9332142857142859,
+     "hi": null,
+     "k": 118,
+     "lo": null,
+     "n": 120,
+     "value": 0.975925925925926
+    },
+    "task_success_decided": {
+     "hi": 0.9954175314588487,
+     "k": 118,
+     "lo": 0.9412628731870861,
+     "n": 120,
+     "value": 0.9833333333333333
     }
    }
   ],
@@ -77918,24 +78104,24 @@
   "uncertainty": {
    "composite": {
     "elevenlabs-live": {
-     "hi": 0.8690019145185022,
-     "lo": 0.7998244346194088
+     "hi": 0.8867771946098603,
+     "lo": 0.8246715421294258
     },
     "gemini-live": {
-     "hi": 0.9268149319820754,
-     "lo": 0.9019110749263403
+     "hi": 0.9368408304159225,
+     "lo": 0.909471803359912
     },
     "nova-sonic-live": {
-     "hi": 0.9266300050006296,
-     "lo": 0.881178085477834
+     "hi": 0.9357283906875252,
+     "lo": 0.8761847342538137
     },
     "openai-realtime-live": {
-     "hi": 0.9351253676244297,
-     "lo": 0.7567924490045401
+     "hi": 0.9447091201344572,
+     "lo": 0.7929442544275708
     },
     "xai-voice-live": {
-     "hi": 0.9265509751613683,
-     "lo": 0.9090214277709535
+     "hi": 0.9374013992852571,
+     "lo": 0.9224938519724752
     }
    },
    "dimensions": {
@@ -77971,6 +78157,10 @@
      "severity_weighted": {
       "hi": 1.0,
       "lo": 0.9925460033668079
+     },
+     "task_completion": {
+      "hi": 1.0,
+      "lo": 0.8888888888888888
      },
      "task_success": {
       "hi": 1.0,
@@ -78010,6 +78200,10 @@
       "hi": 1.0,
       "lo": 0.9950306689112054
      },
+     "task_completion": {
+      "hi": 1.0,
+      "lo": 0.8888888888888888
+     },
      "task_success": {
       "hi": 1.0,
       "lo": 0.975
@@ -78047,6 +78241,10 @@
      "severity_weighted": {
       "hi": 1.0,
       "lo": 0.9975153344556027
+     },
+     "task_completion": {
+      "hi": 1.0,
+      "lo": 0.6666666666666666
      },
      "task_success": {
       "hi": 1.0,
@@ -78086,6 +78284,10 @@
       "hi": 1.0,
       "lo": 0.9844944149774061
      },
+     "task_completion": {
+      "hi": 1.0,
+      "lo": 1.0
+     },
      "task_success": {
       "hi": 1.0,
       "lo": 0.9332142857142859
@@ -78124,6 +78326,10 @@
       "hi": 1.0,
       "lo": 0.9875766722780132
      },
+     "task_completion": {
+      "hi": 1.0,
+      "lo": 1.0
+     },
      "task_success": {
       "hi": 1.0,
       "lo": 0.9625
@@ -78131,60 +78337,60 @@
     }
    },
    "leader_minus_runner_up": {
-    "hi": 0.037355194522086944,
-    "lo": -0.008327173574020678
+    "hi": 0.021347137745320686,
+    "lo": -0.0040607136918242815
    },
    "method": "scenario-cluster bootstrap",
    "quality": {
     "elevenlabs-live": {
      "hi": 1.0,
-     "lo": 0.9191477885652641
+     "lo": 0.9270555555555555
     },
     "gemini-live": {
      "hi": 1.0,
-     "lo": 0.9892900485436893
+     "lo": 0.9782505729564553
     },
     "nova-sonic-live": {
      "hi": 1.0,
-     "lo": 0.9946450242718446
+     "lo": 0.9411764705882354
     },
     "openai-realtime-live": {
      "hi": 1.0,
-     "lo": 0.7955303999563268
+     "lo": 0.831327283994747
     },
     "xai-voice-live": {
      "hi": 1.0,
-     "lo": 0.983928697844429
+     "lo": 0.9867594537815126
     }
    },
    "quality_gap": {
     "elevenlabs-live": {
-     "hi": 0.07894822006472502,
+     "hi": 0.06669117647058831,
      "lo": 0.0
     },
     "gemini-live": {
-     "hi": 0.005354975728155353,
-     "lo": 0.0
+     "hi": 0.01684696169489467,
+     "lo": -0.0037168288367978738
+    },
+    "nova-sonic-live": {
+     "hi": 0.05328719723183395,
+     "lo": -0.007430340557275539
     },
     "openai-realtime-live": {
-     "hi": 0.2043894156709238,
-     "lo": -0.001588992797766387
-    },
-    "xai-voice-live": {
-     "hi": 0.010714201437047334,
-     "lo": 0.0
+     "hi": 0.1656507091524392,
+     "lo": -0.005895721925133656
     }
    },
    "quality_leader_minus_runner_up": {
-    "hi": 0.0,
-    "lo": -0.010714201437047334
+    "hi": 0.01684696169489467,
+    "lo": -0.0037168288367978738
    },
    "quality_win_share": {
-    "elevenlabs-live": 0.026699999999999995,
-    "gemini-live": 0.11553333333333295,
-    "nova-sonic-live": 0.690533333333334,
-    "openai-realtime-live": 0.0522,
-    "xai-voice-live": 0.11503333333333295
+    "elevenlabs-live": 0.014383333333333333,
+    "gemini-live": 0.05621666666666675,
+    "nova-sonic-live": 0.2637166666666671,
+    "openai-realtime-live": 0.06963333333333335,
+    "xai-voice-live": 0.5960499999999999
    },
    "resamples": 1000,
    "scenario_clusters": 40,
@@ -78193,38 +78399,38 @@
     "basis": "all_dimensions",
     "draws": 2000,
     "leader": "xai-voice-live",
-    "leader_win_share": 0.6105,
+    "leader_win_share": 0.8225,
     "rank_stable": false,
     "stable_at": 0.9,
     "win_share": {
      "elevenlabs-live": 0.0,
-     "gemini-live": 0.0,
-     "nova-sonic-live": 0.247,
-     "openai-realtime-live": 0.1425,
-     "xai-voice-live": 0.6105
+     "gemini-live": 0.0025,
+     "nova-sonic-live": 0.0315,
+     "openai-realtime-live": 0.1435,
+     "xai-voice-live": 0.8225
     }
    },
    "sensitivity_quality": {
     "basis": "quality_only",
     "draws": 2000,
-    "leader": "nova-sonic-live",
-    "leader_win_share": 1.0,
-    "rank_stable": true,
+    "leader": "xai-voice-live",
+    "leader_win_share": 0.836,
+    "rank_stable": false,
     "stable_at": 0.9,
     "win_share": {
      "elevenlabs-live": 0.0,
-     "gemini-live": 0.0,
-     "nova-sonic-live": 1.0,
+     "gemini-live": 0.079,
+     "nova-sonic-live": 0.085,
      "openai-realtime-live": 0.0,
-     "xai-voice-live": 0.0
+     "xai-voice-live": 0.836
     }
    },
    "win_share": {
     "elevenlabs-live": 0.0,
-    "gemini-live": 0.088,
-    "nova-sonic-live": 0.216,
-    "openai-realtime-live": 0.174,
-    "xai-voice-live": 0.522
+    "gemini-live": 0.046,
+    "nova-sonic-live": 0.101,
+    "openai-realtime-live": 0.18,
+    "xai-voice-live": 0.673
    }
   },
   "verdict": {
@@ -78236,20 +78442,21 @@
    "latency_leader": "nova-sonic-live",
    "leader": "xai-voice-live",
    "leader_minus_runner_up": {
-    "hi": 0.037355194522086944,
-    "lo": -0.008327173574020678
+    "hi": 0.021347137745320686,
+    "lo": -0.0040607136918242815
    },
-   "leader_vs_runner_up_p": 0.5,
+   "leader_vs_runner_up_p": 1.0,
    "leader_vs_runner_up_p_adjusted": 1.0,
    "median_only_leader": "nova-sonic-live",
    "no_clear_winner": true,
    "quality_lead": {
-    "hi": 0.0,
-    "lo": -0.010714201437047334
+    "hi": 0.01684696169489467,
+    "lo": -0.0037168288367978738
    },
    "rank_stable": null,
    "ranking": "tied_on_quality",
-   "runner_up": "nova-sonic-live",
+   "ranking_basis": "composite_excluding_latency",
+   "runner_up": "gemini-live",
    "sensitivity_basis": null,
    "separable": false,
    "significant_pairs": [],
@@ -78257,11 +78464,12 @@
    "weight_win_share": null
   },
   "weights": {
-   "factual": 0.235,
-   "responsiveness": 0.176,
-   "robustness": 0.06,
-   "safe_speech": 0.176,
-   "task_success": 0.353
+   "factual": 0.2,
+   "responsiveness": 0.15,
+   "robustness": 0.05,
+   "safe_speech": 0.15,
+   "task_completion": 0.15,
+   "task_success": 0.3
   }
  },
  "short": {
@@ -78272,6 +78480,6 @@
   "openai-realtime-live": "OpenAI",
   "xai-voice-live": "xAI"
  },
- "source": "bko_3c9b22aa1a9e4386a791b966967a87dc \u00b7 Advanced provider-specific prompts (advanced-v1) \u00b7 Re-scored 2026-10-27: 1200 ms trailing silence removed from explicit-commit turns",
- "title": "Full advanced provider bake-off \u2014 26 October 2026 (re-scored: latency re-anchored)"
+ "source": "bko_3c9b22aa1a9e4386a791b966967a87dc \u00b7 Advanced provider-specific prompts (advanced-v1) \u00b7 Re-scored 2026-10-27: 1200 ms trailing silence removed from explicit-commit turns \u00b7 2026-10-28: task completion scored with the current default weights",
+ "title": "Full advanced provider bake-off \u2014 26 October 2026 (re-scored: latency re-anchored, task completion scored)"
 }

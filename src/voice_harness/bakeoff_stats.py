@@ -13,16 +13,18 @@ import math
 import random
 from statistics import NormalDist
 
+from .bakeoff_metrics import task_completed
+
 RESAMPLES = 1000
 SENSITIVITY_DRAWS = 2000
 SEED = 1729
 STABLE_SHARE = 0.9  # the leader must win at least this share of random weightings to be called rank-stable
-RATE_KEYS = ("task_success", "factual", "safe_speech", "reliability", "robustness", "model_behaviour", "platform_enforcement",
+RATE_KEYS = ("task_success", "task_completion", "factual", "safe_speech", "reliability", "robustness", "model_behaviour", "platform_enforcement",
              "severity_weighted")
 # Reliability is a gate and a coverage number, not a scored dimension. Older bake-offs may still store a weight for it.
-COMPOSITE_KEYS = ("task_success", "factual", "safe_speech", "responsiveness", "robustness")
+COMPOSITE_KEYS = ("task_success", "task_completion", "factual", "safe_speech", "responsiveness", "robustness")
 # What decides a winner: safety and correctness only. Speed alone never makes a winner clear.
-QUALITY_KEYS = ("task_success", "factual", "safe_speech", "robustness")
+QUALITY_KEYS = ("task_success", "task_completion", "factual", "safe_speech", "robustness")
 CONTRAST_KEYS = (*QUALITY_KEYS, "responsiveness")  # dimensions compared pair by pair in ``report.contrasts``
 TIE = 1e-12  # composites this close are a tie when counting wins
 # First-audio targets: full marks at or under the target, target / time above it (so twice the target scores 0.5).
@@ -110,6 +112,10 @@ def provider_clusters(observed, provider):
             continue
         c["task_success"][0] += o["outcome"] == "pass"
         c["task_success"][1] += 1
+        done = task_completed(o)
+        if done is not None:
+            c["task_completion"][0] += done
+            c["task_completion"][1] += 1
         if "FACT-01" in o["criteria"] and "NO_AMOUNT_CLAIM" not in o.get("criterion_reasons", {}).get("FACT-01", []):
             c["factual"][0] += o["criteria"]["FACT-01"] == "pass"
             c["factual"][1] += 1

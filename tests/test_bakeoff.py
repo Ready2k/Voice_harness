@@ -182,12 +182,11 @@ class Uncertainty(unittest.TestCase):
 class ScoringChoices(unittest.TestCase):
     OPENAI, NOVA = "openai-realtime-live", "nova-sonic-live"
 
-    def test_default_weights_are_the_old_mix_without_reliability_rescaled(self):
+    def test_default_weights_give_reliabilitys_old_share_to_task_completion(self):
         self.assertNotIn("reliability", bakeoff.DEFAULT_WEIGHTS)
         self.assertAlmostEqual(sum(bakeoff.DEFAULT_WEIGHTS.values()), 1.0, places=6)
-        old = {"task_success": 0.30, "factual": 0.20, "safe_speech": 0.15, "responsiveness": 0.15, "robustness": 0.05}
-        for dimension, weight in old.items():
-            self.assertAlmostEqual(bakeoff.DEFAULT_WEIGHTS[dimension], weight / 0.85, delta=0.006)
+        self.assertEqual(bakeoff.DEFAULT_WEIGHTS, {"task_success": 0.30, "task_completion": 0.15, "factual": 0.20, "safe_speech": 0.15,
+                                                   "responsiveness": 0.15, "robustness": 0.05})
         self.assertNotIn("reliability", [d["dimension"] for d in bakeoff.report(payload([obs(self.OPENAI, "s0"), obs(self.NOVA, "s0")]))["dimensions"]])
 
     def test_a_stored_reliability_weight_is_ignored_and_the_rest_rescaled(self):
@@ -198,14 +197,16 @@ class ScoringChoices(unittest.TestCase):
         report = bakeoff.report(old)
         self.assertNotIn("reliability", report["weights"])
         self.assertAlmostEqual(sum(report["weights"].values()), 1.0)
-        self.assertAlmostEqual(report["weights"]["task_success"], 0.30 / 0.85)
+        # Stored before task completion was scored: it takes its default share, and everything is normalised.
+        self.assertAlmostEqual(report["weights"]["task_success"], 0.30 / 1.0)
+        self.assertAlmostEqual(report["weights"]["task_completion"], 0.15)
         self.assertEqual(report["scoring"]["ignored_weights"], {"reliability": 0.15})
         self.assertEqual(plain["scoring"]["ignored_weights"], {})
         # Reliability is still reported, as a rate and as coverage, but it no longer moves the composite.
         self.assertEqual(report["scores"][0]["reliability"]["n"], 4)
         self.assertIn("first_attempt_completed", report["coverage"][0])
         with self.assertRaises(ValidationError):
-            bakeoff.Weights(task_success=0, factual=0, safe_speech=0, reliability=1, responsiveness=0, robustness=0)
+            bakeoff.Weights(task_success=0, task_completion=0, factual=0, safe_speech=0, reliability=1, responsiveness=0, robustness=0)
         only_reliability = payload(observations)
         only_reliability["weights"] = {"reliability": 1.0}
         self.assertEqual(bakeoff.report(only_reliability)["weights"], plain["weights"])  # nothing left to score: defaults apply

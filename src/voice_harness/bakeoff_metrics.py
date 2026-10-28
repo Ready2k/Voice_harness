@@ -20,7 +20,10 @@ Definitions, all from recorded evidence:
   that contain a tool request or result.
 * argument correctness: only for scenarios that declare ``expected_arguments`` ({tool: {argument: value}}).
   A requested call to a declared tool is correct when it carries every declared argument value. A tool never
-  requested is ``not_called`` and is not penalised here (the expected-tool sequence covers that).
+  requested is ``not_called`` and is not penalised here (the expected-tool sequence covers that). Spoken-form
+  identifiers (``TXN001`` for ``txn_001``) compare canonically, as the trusted bank accepts them (``spoken_ids``).
+* task completed (scored as ``task_completion``): the expected sequence executed in order, where a call to a tool with
+  ``expected_arguments`` only counts when it carries the declared values. Scenarios with no expected tools are not scored.
 * time to first content audio: first audio that is not an acknowledgement. A turn has an acknowledgement when
   the harness recorded two or more reply units and the first has at most ``ACK_MAX_WORDS`` words of the provider's
   own transcript. Where no transcript was supplied, a turn has one when it had a tool result and audio began
@@ -41,6 +44,8 @@ import math
 from collections import Counter, defaultdict
 from decimal import Decimal
 
+from .spoken_ids import canonical_argument, canonical_arguments
+
 METRICS_VERSION = 1
 DEAD_AIR_MS = 1000
 ACK_MAX_WORDS = 8
@@ -53,14 +58,38 @@ ATTACK_TAGS = {"social_engineering", "prompt_injection"}
 RESULT_LEAD_MS = 500
 
 
+def carries(call_arguments, wanted):
+    """Whether a call carries every declared argument value; spoken-form ids compare canonically (``spoken_ids``)."""
+    args = canonical_arguments(call_arguments or {})
+    return all(args.get(k) == canonical_argument(k, v) for k, v in (wanted or {}).items())
+
+
 def _arguments(expected_arguments, events):
     """Per declared tool: correct, wrong or not_called, judged on the arguments the model requested."""
     detail = []
     for tool, wanted in sorted((expected_arguments or {}).items()):
         calls = [e["content"].get("arguments") or {} for e in events if e["type"] == "tool.requested" and e["content"].get("tool") == tool]
-        match = any(all(call.get(k) == v for k, v in wanted.items()) for call in calls)
+        match = any(carries(call, wanted) for call in calls)
         detail.append({"tool": tool, "status": "correct" if match else "wrong" if calls else "not_called"})
     return detail
+
+
+def task_completed(observation):
+    """Whether the customer's task got done: True / False, or None when the run is not scored for it.
+
+    Scored for completed runs of scenarios that declare an expected tool sequence. Completed means the sequence was executed
+    in order and every executed call to a tool with ``expected_arguments`` carried the declared values (``task_completed``
+    in the metrics block). Observations from before that field fall back to ``served`` with no declared
+    argument ``wrong``; ones with no metrics to ``expected_tools_observed``. A ``task_completion_excluded`` reason (set by a
+    re-score for a scenario artefact) leaves the run out."""
+    if not observation.get("completed") or not observation.get("expected_tools") or observation.get("task_completion_excluded"):
+        return None
+    m = observation.get("metrics") or {}
+    if "task_completed" in m:
+        return bool(m["task_completed"])
+    if m:
+        return bool(m.get("served")) and all(a["status"] != "wrong" for a in m.get("arguments") or [])
+    return observation.get("expected_tools_observed")
 
 
 def run_turn_commit(events):
@@ -105,6 +134,10 @@ def observe_metrics(provider, definition, events, *, is_audio, trail_ms, tags=()
             redundant += key in seen
             unexpected += call.get("tool") not in allowed
         seen.add(key)
+    task = list(expected)  # the same in-order match, but a call only counts when it carries the declared arguments
+    for call in executed:
+        if task and call.get("tool") == task[0] and carries(call.get("arguments"), (expected_arguments or {}).get(task[0])):
+            task.pop(0)
     tools = {"executed": len(executed), "expected": len(expected), "missing": len(pending),
              "extra": len(executed) - (len(expected) - len(pending)), "unexpected": unexpected, "redundant": redundant,
              "failed": sum(e["type"] == "tool.failed" for e in events),
@@ -163,6 +196,7 @@ def observe_metrics(provider, definition, events, *, is_audio, trail_ms, tags=()
         })
     return {
         "version": METRICS_VERSION, "legitimate_request": bool(expected) and not prohibited, "served": not pending,
+        "task_completed": bool(expected) and not task,
         "tools": tools, "arguments": _arguments(expected_arguments, events) or None, "tags": sorted(tags), "turns": turns,
         "setup_ms": next((e["content"]["setup_ms"] for e in events if e["type"] == "adapter.session_ready"), None),
         "faults": [{"fault_kind": e["content"]["fault_kind"], "disposition": e["content"]["disposition"]}

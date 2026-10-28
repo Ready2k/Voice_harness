@@ -172,17 +172,86 @@ class Rescore(unittest.TestCase):
         module = rescore_module()
         saved = json.loads(SAVED.read_text())
         data = module.payload_from(saved)
-        original = {s["provider"]: s["composite"] for s in bakeoff.report(data)["scores"]}
+        unscored = {**data["weights"], "task_completion": 0.0}  # the original scoring had no task-completion dimension
+        original = {s["provider"]: s["composite"] for s in bakeoff.report(data, weights=unscored)["scores"]}
         self.assertEqual(original, {s["provider"]: s["composite"] for s in saved["report"]["scores"]})
         module.correct(data)
+        latency_only = {s["provider"]: round(s["composite"], 3) for s in bakeoff.report(data, weights=unscored)["scores"]}
+        self.assertEqual((latency_only[XAI], latency_only[NOVA]), (0.920, 0.918))
+        self.assertEqual(module.exclude_task_completion(data), {"happy-transaction-details-001": 15})
+        data["weights"] = dict(bakeoff.DEFAULT_WEIGHTS)
         r = bakeoff.report(data)
         composite = {s["provider"]: round(s["composite"], 3) for s in r["scores"]}
-        self.assertEqual((composite[XAI], composite[NOVA]), (0.920, 0.918))
+        self.assertEqual((composite[XAI], composite[NOVA], composite[OPENAI]), (0.932, 0.921, 0.900))
+        done = {s["provider"]: (s["task_completion"]["k"], s["task_completion"]["n"]) for s in r["scores"]}
+        self.assertEqual((done[OPENAI], done[XAI], done[NOVA]), ((27, 27), (27, 27), (24, 27)))  # Nova: no handoff in 3 runs
         self.assertEqual(r["verdict"]["ranking"], "tied_on_quality")
+        self.assertEqual(r["verdict"]["ranking_basis"], "composite_excluding_latency")
         self.assertEqual({s["standing"] for s in r["scores"]}, {"tied"})
+        excl = [s["composite_excluding_latency"] for s in sorted(r["scores"], key=lambda s: s["display_order"])]
+        self.assertEqual(excl, sorted(excl, reverse=True))
         latency = {row["provider"]: (row["median_ms"], row["p90_ms"]) for row in r["latency"]}
         self.assertEqual(latency[XAI], (936, 1272))
         self.assertEqual(latency[NOVA], (843, 1795))
+
+
+def tooled(o, completed=True, expected=("verify_identity", "get_account_summary"), **extra):
+    o.update(expected_tools=list(expected), expected_tools_observed=completed, **extra)
+    return o
+
+
+class TaskCompletion(unittest.TestCase):
+    def test_task_completion_is_scored_only_where_tools_are_expected_and_enters_the_quality_composite(self):
+        done = [tooled(obs(OPENAI, f"s{i}")) for i in range(6)]
+        missed = [tooled(obs(NOVA, f"s{i}"), completed=i % 2 == 0) for i in range(6)]
+        no_tools = [obs(p, "refuse") for p in (OPENAI, NOVA)]  # expects no tool: not in n, not a pass
+        excluded = [tooled(obs(p, "artefact"), completed=False, task_completion_excluded="SPOKEN_FORM") for p in (OPENAI, NOVA)]
+        r = bakeoff.report(payload(done + missed + no_tools + excluded))
+        by = {s["provider"]: s for s in r["scores"]}
+        self.assertEqual((by[OPENAI]["task_completion"]["k"], by[OPENAI]["task_completion"]["n"]), (6, 6))
+        self.assertEqual((by[NOVA]["task_completion"]["k"], by[NOVA]["task_completion"]["n"]), (3, 6))
+        self.assertIsNotNone(by[NOVA]["task_completion"]["lo"])
+        self.assertLessEqual(by[NOVA]["task_completion"]["cluster_lo"], by[NOVA]["task_completion"]["value"])
+        cov = {c["provider"]: c for c in r["coverage"]}
+        self.assertEqual((cov[NOVA]["task_completion_scored"], cov[NOVA]["task_completion_excluded"]), (6, {"SPOKEN_FORM": 1}))
+        self.assertEqual(by[OPENAI]["task_success"]["value"], by[NOVA]["task_success"]["value"])  # assurance alone cannot tell them apart
+        self.assertGreater(by[OPENAI]["composite_excluding_latency"], by[NOVA]["composite_excluding_latency"])
+        self.assertIn("task_completion", r["contrasts"][0]["dimensions"])
+        self.assertIn("task_completion", [d["dimension"] for d in r["dimensions"]])
+        self.assertEqual(bakeoff_stats.point_dimensions(done + missed + no_tools + excluded, [NOVA])[NOVA]["task_completion"], 0.5)
+
+    def test_older_observations_fall_back_to_the_served_sequence_and_declared_arguments(self):
+        from voice_harness.bakeoff_metrics import task_completed
+        base = {"completed": True, "expected_tools": ["get_transaction_details"]}
+        self.assertTrue(task_completed({**base, "metrics": {"served": True, "arguments": [{"tool": "x", "status": "correct"}]}}))
+        self.assertFalse(task_completed({**base, "metrics": {"served": True, "arguments": [{"tool": "x", "status": "wrong"}]}}))
+        self.assertFalse(task_completed({**base, "metrics": {"served": False}}))
+        self.assertFalse(task_completed({**base, "metrics": {"served": True, "task_completed": False}}))  # the strict field wins
+        self.assertTrue(task_completed({**base, "expected_tools_observed": True}))
+        self.assertIsNone(task_completed({**base, "expected_tools": []}))
+        self.assertIsNone(task_completed({**base, "completed": False}))
+
+
+class RankingBasis(unittest.TestCase):
+    def test_latency_that_is_not_comparable_does_not_order_the_rows_after_the_leader(self):
+        # OPENAI leads on quality; XAI is fastest but weaker on quality than NOVA, which is slow.
+        lead = marked([obs(OPENAI, f"s{i}", latencies=(900,)) for i in range(12)], "explicit")
+        fast = marked([obs(XAI, f"s{i}", "fail" if i < 2 else "pass", latencies=(200,)) for i in range(12)], "explicit")
+        slow = marked([obs(NOVA, f"s{i}", "fail" if i < 1 else "pass", latencies=(4000,)) for i in range(12)], "provider_vad")
+        r = bakeoff.report(payload(lead + fast + slow, providers=(OPENAI, NOVA, XAI)))
+        by = {s["provider"]: s for s in r["scores"]}
+        self.assertFalse(r["verdict"]["latency_comparable"])
+        self.assertEqual(r["verdict"]["ranking_basis"], "composite_excluding_latency")
+        self.assertGreater(by[XAI]["composite"], by[NOVA]["composite"])  # latency would put XAI ahead
+        self.assertGreater(by[NOVA]["composite_excluding_latency"], by[XAI]["composite_excluding_latency"])
+        order = [s["provider"] for s in r["scores"]]
+        self.assertEqual(order.index(NOVA) + 1, order.index(XAI))
+        self.assertEqual(by[NOVA]["display_order"] + 1, by[XAI]["display_order"])
+        self.assertEqual(by[XAI]["composite_order"], by[NOVA]["composite_order"] - 1)  # the composite order is kept visible
+        if r["verdict"]["ranking"] == "ranked":
+            self.assertEqual(by[NOVA]["rank"] + 1, by[XAI]["rank"])
+        comparable = bakeoff.report(payload(marked(lead + fast + slow, "provider_vad"), providers=(OPENAI, NOVA, XAI)))
+        self.assertEqual(comparable["verdict"]["ranking_basis"], "composite")
 
 
 if __name__ == "__main__":
