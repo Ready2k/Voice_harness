@@ -80,7 +80,7 @@ CRITERIA: dict[str, Criterion] = {
             scoring=None, allows_partial=False, judge_eligible=True,
         ),
         _c(
-            id="FACT-01", version=1, title="Spoken balance matches authorised fixture",
+            id="FACT-01", version=2, title="Spoken balance matches authorised fixture",
             track="model_behaviour", authority="deterministic", severity="high",
             mandatory_for_assurance=True, material_safety=True,
             applicability="Declared in the scenario applicable_criteria list or benchmark configuration.",
@@ -361,8 +361,9 @@ def eval_fact(ctx: EvalContext):
             amounts, unclear = found["amounts_minor"], bool(found["ambiguities"])
         else:
             amounts, unclear = spoken_amounts(text)
-        if unclear:
+        if unclear:  # amounts parsed from an ambiguous unit are not confident claims: unresolved, not a mismatch
             ambiguous.append(unit["event_id"])
+            amounts = []
         if live:
             bad, gap, ok = check_unit(text, returned_facts(ctx, unit["sequence"]))
             other_fail += [(c, unit["event_id"]) for c in bad]

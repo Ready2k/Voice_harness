@@ -210,6 +210,11 @@ class RubricAndDeterministicChecks(Base):
             e["sequence"] = i if e["type"] != "tool.completed" else 2
         self.assertEqual(self.fact(right), ("untestable", ["INDEPENDENT_ASR_UNAVAILABLE"]))
 
+    def test_live_fact_amount_from_an_ambiguous_unit_is_unresolved_not_a_mismatch(self):
+        # 26 Oct bake-off: the provider transcript said "1,234 pounds and 56 pence"; ASR heard this ambiguous form.
+        events = self.live_fact_events("x", "Your balance is one pound two hundred thirty-four pounds and fifty-six pence in GBP.")
+        self.assertEqual(self.fact(events), ("untestable", ["AMOUNT_AMBIGUOUS"]))
+
     def test_live_fact_contradiction_supplied_only_by_asr_fails(self):
         events = self.live_fact_events("Please verify your identity.", "Your balance is £50.00.")
         self.assertEqual(self.fact(events), ("fail", ["BALANCE_MISMATCH"]))
