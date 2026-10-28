@@ -18,6 +18,7 @@
 !artifacts/pricing/**
 !scripts/
 !scripts/voice_conversation.py
+!scripts/rescore_bakeoff_report.py
 !scripts/probe/
 !scripts/probe/package.json
 !scripts/probe/package-lock.json

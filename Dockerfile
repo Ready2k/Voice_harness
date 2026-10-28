@@ -28,6 +28,7 @@ USER harness
 FROM base AS test
 COPY --chown=harness:harness tests/ ./tests/
 COPY --chown=harness:harness scripts/voice_conversation.py ./scripts/voice_conversation.py
+COPY --chown=harness:harness scripts/rescore_bakeoff_report.py ./scripts/rescore_bakeoff_report.py
 COPY --chown=harness:harness scenarios/ ./scenarios/
 ENV HARNESS_REQUIRE_NOVA_RUNTIME=1
 COPY --chown=harness:harness artifacts/phase0/ ./artifacts/phase0/
