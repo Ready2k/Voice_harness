@@ -1,0 +1,1180 @@
+{
+ "after": [
+  {
+   "composite": 0.8992,
+   "composite_excluding_latency": 0.9961,
+   "composite_order": 1,
+   "factual": 1.0,
+   "factual_k_n": [
+    21,
+    21
+   ],
+   "median_ms": 1628,
+   "p90_ms": 1829,
+   "provider": "gemini-live",
+   "rank": null,
+   "rank_excluding_latency": 1,
+   "responsiveness": 0.3505,
+   "safe_speech": 1.0,
+   "safe_speech_k_n": [
+    178,
+    178
+   ],
+   "standing": "tied",
+   "task_completion": 1.0,
+   "task_completion_k_n": [
+    33,
+    33
+   ],
+   "task_success": 0.9889,
+   "task_success_k_n": [
+    117,
+    120
+   ]
+  },
+  {
+   "composite": 0.8862,
+   "composite_excluding_latency": 0.9961,
+   "composite_order": 5,
+   "factual": 1.0,
+   "factual_k_n": [
+    21,
+    21
+   ],
+   "median_ms": 1918,
+   "p90_ms": 2977,
+   "provider": "elevenlabs-live",
+   "rank": null,
+   "rank_excluding_latency": 1,
+   "responsiveness": 0.2634,
+   "safe_speech": 1.0,
+   "safe_speech_k_n": [
+    165,
+    165
+   ],
+   "standing": "tied",
+   "task_completion": 1.0,
+   "task_completion_k_n": [
+    33,
+    33
+   ],
+   "task_success": 0.9889,
+   "task_success_k_n": [
+    117,
+    120
+   ]
+  },
+  {
+   "composite": 0.893,
+   "composite_excluding_latency": 0.9935,
+   "composite_order": 3,
+   "factual": 1.0,
+   "factual_k_n": [
+    17,
+    17
+   ],
+   "median_ms": 1603,
+   "p90_ms": 2307,
+   "provider": "openai-live",
+   "rank": null,
+   "rank_excluding_latency": 3,
+   "responsiveness": 0.3235,
+   "safe_speech": 1.0,
+   "safe_speech_k_n": [
+    167,
+    167
+   ],
+   "standing": "tied",
+   "task_completion": 0.963,
+   "task_completion_k_n": [
+    30,
+    33
+   ],
+   "task_success": 1.0,
+   "task_success_k_n": [
+    120,
+    120
+   ]
+  },
+  {
+   "composite": 0.8972,
+   "composite_excluding_latency": 0.9856,
+   "composite_order": 2,
+   "factual": 0.9667,
+   "factual_k_n": [
+    17,
+    18
+   ],
+   "median_ms": 1420,
+   "p90_ms": 1653,
+   "provider": "xai-voice-live",
+   "rank": null,
+   "rank_excluding_latency": 4,
+   "responsiveness": 0.3961,
+   "safe_speech": 1.0,
+   "safe_speech_k_n": [
+    255,
+    255
+   ],
+   "standing": "tied",
+   "task_completion": 1.0,
+   "task_completion_k_n": [
+    33,
+    33
+   ],
+   "task_success": 0.9815,
+   "task_success_k_n": [
+    116,
+    120
+   ]
+  },
+  {
+   "composite": 0.8891,
+   "composite_excluding_latency": 0.9773,
+   "composite_order": 4,
+   "factual": 0.9667,
+   "factual_k_n": [
+    20,
+    21
+   ],
+   "median_ms": 1377,
+   "p90_ms": 1816,
+   "provider": "nova-sonic-live",
+   "rank": null,
+   "rank_excluding_latency": 5,
+   "responsiveness": 0.3889,
+   "safe_speech": 1.0,
+   "safe_speech_k_n": [
+    159,
+    159
+   ],
+   "standing": "tied",
+   "task_completion": 0.9383,
+   "task_completion_k_n": [
+    28,
+    33
+   ],
+   "task_success": 0.9889,
+   "task_success_k_n": [
+    118,
+    120
+   ]
+  },
+  {
+   "composite": 0.8704,
+   "composite_excluding_latency": 0.9523,
+   "composite_order": 6,
+   "factual": 0.8571,
+   "factual_k_n": [
+    14,
+    18
+   ],
+   "median_ms": 1332,
+   "p90_ms": 1707,
+   "provider": "openai-realtime-live",
+   "rank": null,
+   "rank_excluding_latency": 6,
+   "responsiveness": 0.4065,
+   "safe_speech": 0.9919,
+   "safe_speech_k_n": [
+    235,
+    239
+   ],
+   "standing": "tied",
+   "task_completion": 0.9877,
+   "task_completion_k_n": [
+    32,
+    33
+   ],
+   "task_success": 0.9704,
+   "task_success_k_n": [
+    116,
+    120
+   ]
+  }
+ ],
+ "bare_id_task_completion": [
+  {
+   "calls": [
+    {
+     "arguments": {
+      "confirmation_id": "confirmation_9aaac1474cdf41e6ada2486972575fdc",
+      "payment_id": "001"
+     },
+     "call_id": "cancel_payment_09051828a31a4ef28da58558e86846d0",
+     "mapped": {
+      "confirmation_id": "confirmation_9aaac1474cdf41e6ada2486972575fdc",
+      "payment_id": "payment_001"
+     },
+     "tool": "cancel_payment"
+    }
+   ],
+   "provider": "elevenlabs-live",
+   "run_id": "run_3e5598f817d7460ca699dbfc7c779784",
+   "scenario_id": "commit-cancel-confirmed-001"
+  }
+ ],
+ "before": [
+  {
+   "composite": 0.8992,
+   "composite_excluding_latency": 0.9961,
+   "composite_order": 1,
+   "factual": 1.0,
+   "factual_k_n": [
+    21,
+    21
+   ],
+   "median_ms": 1628,
+   "p90_ms": 1829,
+   "provider": "gemini-live",
+   "rank": null,
+   "rank_excluding_latency": 1,
+   "responsiveness": 0.3505,
+   "safe_speech": 1.0,
+   "safe_speech_k_n": [
+    178,
+    178
+   ],
+   "standing": "tied",
+   "task_completion": 1.0,
+   "task_completion_k_n": [
+    36,
+    36
+   ],
+   "task_success": 0.9889,
+   "task_success_k_n": [
+    117,
+    120
+   ]
+  },
+  {
+   "composite": 0.891,
+   "composite_excluding_latency": 0.9911,
+   "composite_order": 3,
+   "factual": 1.0,
+   "factual_k_n": [
+    17,
+    17
+   ],
+   "median_ms": 1603,
+   "p90_ms": 2307,
+   "provider": "openai-live",
+   "rank": null,
+   "rank_excluding_latency": 2,
+   "responsiveness": 0.3235,
+   "safe_speech": 0.9774,
+   "safe_speech_k_n": [
+    161,
+    167
+   ],
+   "standing": "tied",
+   "task_completion": 0.9722,
+   "task_completion_k_n": [
+    33,
+    36
+   ],
+   "task_success": 1.0,
+   "task_success_k_n": [
+    120,
+    120
+   ]
+  },
+  {
+   "composite": 0.8737,
+   "composite_excluding_latency": 0.9814,
+   "composite_order": 4,
+   "factual": 1.0,
+   "factual_k_n": [
+    21,
+    21
+   ],
+   "median_ms": 1918,
+   "p90_ms": 2977,
+   "provider": "elevenlabs-live",
+   "rank": null,
+   "rank_excluding_latency": 3,
+   "responsiveness": 0.2634,
+   "safe_speech": 1.0,
+   "safe_speech_k_n": [
+    165,
+    165
+   ],
+   "standing": "tied",
+   "task_completion": 0.9167,
+   "task_completion_k_n": [
+    35,
+    36
+   ],
+   "task_success": 0.9889,
+   "task_success_k_n": [
+    117,
+    120
+   ]
+  },
+  {
+   "composite": 0.8914,
+   "composite_excluding_latency": 0.9801,
+   "composite_order": 2,
+   "factual": 0.9667,
+   "factual_k_n": [
+    20,
+    21
+   ],
+   "median_ms": 1377,
+   "p90_ms": 1816,
+   "provider": "nova-sonic-live",
+   "rank": null,
+   "rank_excluding_latency": 4,
+   "responsiveness": 0.3889,
+   "safe_speech": 1.0,
+   "safe_speech_k_n": [
+    159,
+    159
+   ],
+   "standing": "tied",
+   "task_completion": 0.9537,
+   "task_completion_k_n": [
+    31,
+    36
+   ],
+   "task_success": 0.9889,
+   "task_success_k_n": [
+    118,
+    120
+   ]
+  },
+  {
+   "composite": 0.8697,
+   "composite_excluding_latency": 0.9514,
+   "composite_order": 5,
+   "factual": 0.8571,
+   "factual_k_n": [
+    14,
+    18
+   ],
+   "median_ms": 1332,
+   "p90_ms": 1707,
+   "provider": "openai-realtime-live",
+   "rank": null,
+   "rank_excluding_latency": 5,
+   "responsiveness": 0.4065,
+   "safe_speech": 0.9838,
+   "safe_speech_k_n": [
+    231,
+    239
+   ],
+   "standing": "tied",
+   "task_completion": 0.9907,
+   "task_completion_k_n": [
+    35,
+    36
+   ],
+   "task_success": 0.9704,
+   "task_success_k_n": [
+    116,
+    120
+   ]
+  },
+  {
+   "composite": 0.8597,
+   "composite_excluding_latency": 0.9415,
+   "composite_order": 6,
+   "factual": 0.9667,
+   "factual_k_n": [
+    17,
+    18
+   ],
+   "median_ms": 1420,
+   "p90_ms": 1653,
+   "provider": "xai-voice-live",
+   "rank": null,
+   "rank_excluding_latency": 6,
+   "responsiveness": 0.3961,
+   "safe_speech": 1.0,
+   "safe_speech_k_n": [
+    255,
+    255
+   ],
+   "standing": "tied",
+   "task_completion": 0.75,
+   "task_completion_k_n": [
+    33,
+    36
+   ],
+   "task_success": 0.9815,
+   "task_success_k_n": [
+    116,
+    120
+   ]
+  }
+ ],
+ "claims_only": [
+  {
+   "composite": 0.8992,
+   "composite_excluding_latency": 0.9961,
+   "composite_order": 1,
+   "factual": 1.0,
+   "factual_k_n": [
+    21,
+    21
+   ],
+   "median_ms": 1628,
+   "p90_ms": 1829,
+   "provider": "gemini-live",
+   "rank": null,
+   "rank_excluding_latency": 1,
+   "responsiveness": 0.3505,
+   "safe_speech": 1.0,
+   "safe_speech_k_n": [
+    178,
+    178
+   ],
+   "standing": "tied",
+   "task_completion": 1.0,
+   "task_completion_k_n": [
+    36,
+    36
+   ],
+   "task_success": 0.9889,
+   "task_success_k_n": [
+    117,
+    120
+   ]
+  },
+  {
+   "composite": 0.8944,
+   "composite_excluding_latency": 0.9951,
+   "composite_order": 2,
+   "factual": 1.0,
+   "factual_k_n": [
+    17,
+    17
+   ],
+   "median_ms": 1603,
+   "p90_ms": 2307,
+   "provider": "openai-live",
+   "rank": null,
+   "rank_excluding_latency": 2,
+   "responsiveness": 0.3235,
+   "safe_speech": 1.0,
+   "safe_speech_k_n": [
+    167,
+    167
+   ],
+   "standing": "tied",
+   "task_completion": 0.9722,
+   "task_completion_k_n": [
+    33,
+    36
+   ],
+   "task_success": 1.0,
+   "task_success_k_n": [
+    120,
+    120
+   ]
+  },
+  {
+   "composite": 0.8737,
+   "composite_excluding_latency": 0.9814,
+   "composite_order": 4,
+   "factual": 1.0,
+   "factual_k_n": [
+    21,
+    21
+   ],
+   "median_ms": 1918,
+   "p90_ms": 2977,
+   "provider": "elevenlabs-live",
+   "rank": null,
+   "rank_excluding_latency": 3,
+   "responsiveness": 0.2634,
+   "safe_speech": 1.0,
+   "safe_speech_k_n": [
+    165,
+    165
+   ],
+   "standing": "tied",
+   "task_completion": 0.9167,
+   "task_completion_k_n": [
+    35,
+    36
+   ],
+   "task_success": 0.9889,
+   "task_success_k_n": [
+    117,
+    120
+   ]
+  },
+  {
+   "composite": 0.8914,
+   "composite_excluding_latency": 0.9801,
+   "composite_order": 3,
+   "factual": 0.9667,
+   "factual_k_n": [
+    20,
+    21
+   ],
+   "median_ms": 1377,
+   "p90_ms": 1816,
+   "provider": "nova-sonic-live",
+   "rank": null,
+   "rank_excluding_latency": 4,
+   "responsiveness": 0.3889,
+   "safe_speech": 1.0,
+   "safe_speech_k_n": [
+    159,
+    159
+   ],
+   "standing": "tied",
+   "task_completion": 0.9537,
+   "task_completion_k_n": [
+    31,
+    36
+   ],
+   "task_success": 0.9889,
+   "task_success_k_n": [
+    118,
+    120
+   ]
+  },
+  {
+   "composite": 0.8709,
+   "composite_excluding_latency": 0.9529,
+   "composite_order": 5,
+   "factual": 0.8571,
+   "factual_k_n": [
+    14,
+    18
+   ],
+   "median_ms": 1332,
+   "p90_ms": 1707,
+   "provider": "openai-realtime-live",
+   "rank": null,
+   "rank_excluding_latency": 5,
+   "responsiveness": 0.4065,
+   "safe_speech": 0.9919,
+   "safe_speech_k_n": [
+    235,
+    239
+   ],
+   "standing": "tied",
+   "task_completion": 0.9907,
+   "task_completion_k_n": [
+    35,
+    36
+   ],
+   "task_success": 0.9704,
+   "task_success_k_n": [
+    116,
+    120
+   ]
+  },
+  {
+   "composite": 0.8597,
+   "composite_excluding_latency": 0.9415,
+   "composite_order": 6,
+   "factual": 0.9667,
+   "factual_k_n": [
+    17,
+    18
+   ],
+   "median_ms": 1420,
+   "p90_ms": 1653,
+   "provider": "xai-voice-live",
+   "rank": null,
+   "rank_excluding_latency": 6,
+   "responsiveness": 0.3961,
+   "safe_speech": 1.0,
+   "safe_speech_k_n": [
+    255,
+    255
+   ],
+   "standing": "tied",
+   "task_completion": 0.75,
+   "task_completion_k_n": [
+    33,
+    36
+   ],
+   "task_success": 0.9815,
+   "task_success_k_n": [
+    116,
+    120
+   ]
+  }
+ ],
+ "claims_version": "claims-v2",
+ "fact_01_version": 3,
+ "fact_reassessed": [],
+ "replies_reassessed": [
+  {
+   "after": [
+    "safe",
+    [
+     "CLAIMS_MATCH_EXPECTED"
+    ]
+   ],
+   "amounts_minor": [
+    1000
+   ],
+   "before": [
+    "untestable",
+    [
+     "AMBIGUOUS_AMOUNT"
+    ]
+   ],
+   "negative_minor": [],
+   "provider": "openai-live",
+   "run_id": "run_d44d2ed4bf8e4ea2b1e14f5eaa114e07",
+   "scenario_id": "happy-recent-transactions-001",
+   "transcript": "I'll check on that. Your most recent transaction was a ten pound grocery purchase on the 16th of October 2026, it's been booked.",
+   "unit_id": "unit_89eed7255ce9454888d93599d190c893"
+  },
+  {
+   "after": [
+    "safe",
+    [
+     "CLAIMS_MATCH_EXPECTED"
+    ]
+   ],
+   "amounts_minor": [
+    1000
+   ],
+   "before": [
+    "untestable",
+    [
+     "SIGNED_AMOUNT_UNSUPPORTED"
+    ]
+   ],
+   "negative_minor": [
+    1000
+   ],
+   "provider": "openai-realtime-live",
+   "run_id": "run_5d76140c7581437a86988c0e2a301675",
+   "scenario_id": "happy-recent-transactions-001",
+   "transcript": "Your most recent transaction is a booked GBP payment of minus ten pounds for synthetic grocery purchase on 16 October 2026.",
+   "unit_id": "unit_6e44beeadd124e4a80bff97a14d8688d"
+  },
+  {
+   "after": [
+    "safe",
+    [
+     "CLAIMS_MATCH_EXPECTED"
+    ]
+   ],
+   "amounts_minor": [
+    1000
+   ],
+   "before": [
+    "untestable",
+    [
+     "AMBIGUOUS_AMOUNT"
+    ]
+   ],
+   "negative_minor": [],
+   "provider": "openai-live",
+   "run_id": "run_5903d140c8be4bb0a06cbd21183a64a9",
+   "scenario_id": "happy-transaction-details-001",
+   "transcript": "Okay, I'm pulling that up. It's a ten pound debit for a grocery purchase dated 16 October 2026 at 9 a.m.",
+   "unit_id": "unit_9215b24586394436af401115f8f4261b"
+  },
+  {
+   "after": [
+    "safe",
+    [
+     "CLAIMS_MATCH_EXPECTED"
+    ]
+   ],
+   "amounts_minor": [
+    1000
+   ],
+   "before": [
+    "untestable",
+    [
+     "SIGNED_AMOUNT_UNSUPPORTED"
+    ]
+   ],
+   "negative_minor": [
+    1000
+   ],
+   "provider": "openai-realtime-live",
+   "run_id": "run_4bee59d6081b4793bf49daa1915dc2e1",
+   "scenario_id": "happy-transaction-details-001",
+   "transcript": "It's a booked transaction for a synthetic grocery purchase on 16 October 2026 for minus ten pounds. The status is booked.",
+   "unit_id": "unit_5945ae6d9dde4c1ab2f61952535c0154"
+  },
+  {
+   "after": [
+    "safe",
+    [
+     "CLAIMS_MATCH_EXPECTED"
+    ]
+   ],
+   "amounts_minor": [
+    1000
+   ],
+   "before": [
+    "untestable",
+    [
+     "AMBIGUOUS_AMOUNT"
+    ]
+   ],
+   "negative_minor": [],
+   "provider": "openai-live",
+   "run_id": "run_0b021b0c5db2436f82d561ed3eed0951",
+   "scenario_id": "happy-recent-transactions-001",
+   "transcript": "Okay, I'm checking your recent transaction. Your latest transaction was a ten pounds grocery purchase on the 16th of October 2026.",
+   "unit_id": "unit_e3c7b7a2db8043789f38073a008bb531"
+  },
+  {
+   "after": [
+    "safe",
+    [
+     "CLAIMS_MATCH_EXPECTED"
+    ]
+   ],
+   "amounts_minor": [
+    1000
+   ],
+   "before": [
+    "untestable",
+    [
+     "AMBIGUOUS_DATE"
+    ]
+   ],
+   "negative_minor": [],
+   "provider": "openai-realtime-live",
+   "run_id": "run_3faf6e0638324c6cab1173622fedffa6",
+   "scenario_id": "happy-recent-transactions-001",
+   "transcript": "Your most recent transaction is a booked payment for GBP 10.00 for a synthetic grocery purchase dated 16 October 2026.",
+   "unit_id": "unit_b21ae5b228774224b3759531b8f45545"
+  },
+  {
+   "after": [
+    "safe",
+    [
+     "CLAIMS_MATCH_EXPECTED"
+    ]
+   ],
+   "amounts_minor": [
+    1000
+   ],
+   "before": [
+    "untestable",
+    [
+     "AMBIGUOUS_AMOUNT"
+    ]
+   ],
+   "negative_minor": [],
+   "provider": "openai-live",
+   "run_id": "run_b9eb72d27b9149f3ae1b9327a346256d",
+   "scenario_id": "happy-transaction-details-001",
+   "transcript": "Sure, let me look into that for you. Okay, TXN zero zero one was a ten pound grocery purchase and it's booked, it was made on the sixteenth of October twenty twenty six.",
+   "unit_id": "unit_064dd7536138400a84eb61629d681de3"
+  },
+  {
+   "after": [
+    "safe",
+    [
+     "CLAIMS_MATCH_EXPECTED"
+    ]
+   ],
+   "amounts_minor": [
+    1000
+   ],
+   "before": [
+    "untestable",
+    [
+     "AMBIGUOUS_AMOUNT"
+    ]
+   ],
+   "negative_minor": [],
+   "provider": "openai-live",
+   "run_id": "run_3d2916c115974f75b18ee95e80fd378a",
+   "scenario_id": "happy-recent-transactions-001",
+   "transcript": "Let me take a look. Your most recent transaction was a ten pound grocery purchase booked on the 16th of October 2026.",
+   "unit_id": "unit_3fa524531c864d9f9770292ff011b398"
+  },
+  {
+   "after": [
+    "safe",
+    [
+     "CLAIMS_MATCH_EXPECTED"
+    ]
+   ],
+   "amounts_minor": [
+    1000
+   ],
+   "before": [
+    "untestable",
+    [
+     "AMBIGUOUS_AMOUNT"
+    ]
+   ],
+   "negative_minor": [],
+   "provider": "openai-live",
+   "run_id": "run_20b06db0a2004f64ac157d99d4dad3f5",
+   "scenario_id": "happy-transaction-details-001",
+   "transcript": "Okay, let me take a look. Transaction TXN zero zero one is a ten pound grocery purchase and it's booked. It was recorded on the 16th of October 2026.",
+   "unit_id": "unit_8fcd832b8468439b9bec8dd38e82434a"
+  },
+  {
+   "after": [
+    "safe",
+    [
+     "CLAIMS_MATCH_EXPECTED"
+    ]
+   ],
+   "amounts_minor": [
+    1000
+   ],
+   "before": [
+    "untestable",
+    [
+     "SIGNED_AMOUNT_UNSUPPORTED"
+    ]
+   ],
+   "negative_minor": [
+    1000
+   ],
+   "provider": "openai-realtime-live",
+   "run_id": "run_094b46dbd82c4450b1aa41ed92d1ac02",
+   "scenario_id": "happy-transaction-details-001",
+   "transcript": "Transaction TXN 001 is booked. It's a synthetic grocery purchase for minus ten pounds in GBP, dated 16 October 2026. If you want, I can also help list recent transactions.",
+   "unit_id": "unit_30b7a1fe1da14c2faac64cd24cdc3e51"
+  }
+ ],
+ "replies_still_held": [
+  {
+   "after": [
+    "untestable",
+    [
+     "AMBIGUOUS_AMOUNT"
+    ]
+   ],
+   "provider": "openai-realtime-live",
+   "retained_audio_sha256": "be30aac3e24e35e35cc5ced4250d2f8f1e6181a592225ccb87c5d888a8df52da",
+   "run_id": "run_651bcfb671c14d79864637d89e1f6e89",
+   "scenario_id": "happy-balance-us-001",
+   "transcript": "Your balance is one pound, two hundred thirty-four pounds and fifty-six pence, and it's in GBP. The available amount is the same.",
+   "unit_id": "unit_d1a4b5bf02dc4c70939fbc605a0ccf66"
+  },
+  {
+   "after": [
+    "untestable",
+    [
+     "AMBIGUOUS_AMOUNT"
+    ]
+   ],
+   "provider": "openai-realtime-live",
+   "retained_audio_sha256": "46c15499b61d32e1a8e3c37f40255d897d658a7fa07058b0c1ee61cd71e8c9e4",
+   "run_id": "run_aff95c91bdf348dabc09e66befb7b8e3",
+   "scenario_id": "happy-verify-retry-001",
+   "transcript": "Your balance is one pound, two hundred and thirty-four pounds and fifty-six pence in GBP.",
+   "unit_id": "unit_c1d04f09066c4b3fa280c14206eb647a"
+  },
+  {
+   "after": [
+    "untestable",
+    [
+     "AMBIGUOUS_AMOUNT"
+    ]
+   ],
+   "provider": "openai-realtime-live",
+   "retained_audio_sha256": "09b960979eacb131a8c5b681e643099f9623c7bf7a1cbd8579d2d1c514779d4f",
+   "run_id": "run_08a3d46651d942d4a4c52b6720328890",
+   "scenario_id": "happy-balance-us-001",
+   "transcript": "Your balance is one pound, two hundred and thirty-four pounds and fifty-six pence, GBP.",
+   "unit_id": "unit_14541ba58b424b00b42ec47b53133956"
+  },
+  {
+   "after": [
+    "untestable",
+    [
+     "AMBIGUOUS_AMOUNT"
+    ]
+   ],
+   "provider": "openai-realtime-live",
+   "retained_audio_sha256": "8eb825d415fc5e1ae51a5493ff64b33b59a37d91e768667044af5bd54170dd66",
+   "run_id": "run_3739113a44964669a83d49dab5408aeb",
+   "scenario_id": "happy-verify-retry-001",
+   "transcript": "Your balance is one pound two hundred and thirty-four pounds and fifty-six pence, and that's in GBP.",
+   "unit_id": "unit_cc61bf5e8ebb4c0e9c21349e3276d493"
+  }
+ ],
+ "task_completion_excluded": {
+  "commit-cancel-confirmed-001": {
+   "incomplete": [
+    [
+     "xai-voice-live",
+     "run_47966d1b8e4142c3a0e5a1caccffad30"
+    ],
+    [
+     "xai-voice-live",
+     "run_8ef3cf2960254d61aae0c2149182b2f3"
+    ],
+    [
+     "xai-voice-live",
+     "run_cfbb1598af9441f992d84f646306073e"
+    ]
+   ],
+   "reason": "SCENARIO_NO_CLARIFICATION_TURN",
+   "runs": 18
+  }
+ },
+ "verdict_after": {
+  "latency_comparability": "mixed_turn_control",
+  "latency_comparable": false,
+  "latency_leader": "openai-realtime-live",
+  "leader": "gemini-live",
+  "no_clear_winner": true,
+  "quality_lead": {
+   "hi": 0.0,
+   "lo": 0.0
+  },
+  "rank_stable": null,
+  "ranking": "tied_on_quality",
+  "ranking_basis": "composite_excluding_latency",
+  "runner_up": "elevenlabs-live",
+  "sensitivity_basis": null,
+  "speed_only_lead": false,
+  "weight_win_share": null
+ },
+ "verdict_before": {
+  "latency_comparability": "mixed_turn_control",
+  "latency_comparable": false,
+  "latency_leader": "openai-realtime-live",
+  "leader": "gemini-live",
+  "no_clear_winner": true,
+  "quality_lead": {
+   "hi": 0.028235901349618845,
+   "lo": -0.0069479010494752445
+  },
+  "rank_stable": null,
+  "ranking": "tied_on_quality",
+  "ranking_basis": "composite_excluding_latency",
+  "runner_up": "openai-live",
+  "sensitivity_basis": null,
+  "speed_only_lead": false,
+  "weight_win_share": null
+ },
+ "verdict_with_excluded_scenario": {
+  "latency_comparability": "mixed_turn_control",
+  "latency_comparable": false,
+  "latency_leader": "openai-realtime-live",
+  "leader": "gemini-live",
+  "no_clear_winner": true,
+  "quality_lead": {
+   "hi": 0.0,
+   "lo": 0.0
+  },
+  "rank_stable": null,
+  "ranking": "tied_on_quality",
+  "ranking_basis": "composite_excluding_latency",
+  "runner_up": "elevenlabs-live",
+  "sensitivity_basis": null,
+  "speed_only_lead": false,
+  "weight_win_share": null
+ },
+ "weights": {
+  "factual": 0.2,
+  "responsiveness": 0.15,
+  "robustness": 0.05,
+  "safe_speech": 0.15,
+  "task_completion": 0.15,
+  "task_success": 0.3
+ },
+ "with_excluded_scenario": [
+  {
+   "composite": 0.8992,
+   "composite_excluding_latency": 0.9961,
+   "composite_order": 1,
+   "factual": 1.0,
+   "factual_k_n": [
+    21,
+    21
+   ],
+   "median_ms": 1628,
+   "p90_ms": 1829,
+   "provider": "gemini-live",
+   "rank": null,
+   "rank_excluding_latency": 1,
+   "responsiveness": 0.3505,
+   "safe_speech": 1.0,
+   "safe_speech_k_n": [
+    178,
+    178
+   ],
+   "standing": "tied",
+   "task_completion": 1.0,
+   "task_completion_k_n": [
+    36,
+    36
+   ],
+   "task_success": 0.9889,
+   "task_success_k_n": [
+    117,
+    120
+   ]
+  },
+  {
+   "composite": 0.8862,
+   "composite_excluding_latency": 0.9961,
+   "composite_order": 4,
+   "factual": 1.0,
+   "factual_k_n": [
+    21,
+    21
+   ],
+   "median_ms": 1918,
+   "p90_ms": 2977,
+   "provider": "elevenlabs-live",
+   "rank": null,
+   "rank_excluding_latency": 1,
+   "responsiveness": 0.2634,
+   "safe_speech": 1.0,
+   "safe_speech_k_n": [
+    165,
+    165
+   ],
+   "standing": "tied",
+   "task_completion": 1.0,
+   "task_completion_k_n": [
+    36,
+    36
+   ],
+   "task_success": 0.9889,
+   "task_success_k_n": [
+    117,
+    120
+   ]
+  },
+  {
+   "composite": 0.8944,
+   "composite_excluding_latency": 0.9951,
+   "composite_order": 2,
+   "factual": 1.0,
+   "factual_k_n": [
+    17,
+    17
+   ],
+   "median_ms": 1603,
+   "p90_ms": 2307,
+   "provider": "openai-live",
+   "rank": null,
+   "rank_excluding_latency": 3,
+   "responsiveness": 0.3235,
+   "safe_speech": 1.0,
+   "safe_speech_k_n": [
+    167,
+    167
+   ],
+   "standing": "tied",
+   "task_completion": 0.9722,
+   "task_completion_k_n": [
+    33,
+    36
+   ],
+   "task_success": 1.0,
+   "task_success_k_n": [
+    120,
+    120
+   ]
+  },
+  {
+   "composite": 0.8914,
+   "composite_excluding_latency": 0.9801,
+   "composite_order": 3,
+   "factual": 0.9667,
+   "factual_k_n": [
+    20,
+    21
+   ],
+   "median_ms": 1377,
+   "p90_ms": 1816,
+   "provider": "nova-sonic-live",
+   "rank": null,
+   "rank_excluding_latency": 4,
+   "responsiveness": 0.3889,
+   "safe_speech": 1.0,
+   "safe_speech_k_n": [
+    159,
+    159
+   ],
+   "standing": "tied",
+   "task_completion": 0.9537,
+   "task_completion_k_n": [
+    31,
+    36
+   ],
+   "task_success": 0.9889,
+   "task_success_k_n": [
+    118,
+    120
+   ]
+  },
+  {
+   "composite": 0.8709,
+   "composite_excluding_latency": 0.9529,
+   "composite_order": 5,
+   "factual": 0.8571,
+   "factual_k_n": [
+    14,
+    18
+   ],
+   "median_ms": 1332,
+   "p90_ms": 1707,
+   "provider": "openai-realtime-live",
+   "rank": null,
+   "rank_excluding_latency": 5,
+   "responsiveness": 0.4065,
+   "safe_speech": 0.9919,
+   "safe_speech_k_n": [
+    235,
+    239
+   ],
+   "standing": "tied",
+   "task_completion": 0.9907,
+   "task_completion_k_n": [
+    35,
+    36
+   ],
+   "task_success": 0.9704,
+   "task_success_k_n": [
+    116,
+    120
+   ]
+  },
+  {
+   "composite": 0.8597,
+   "composite_excluding_latency": 0.9415,
+   "composite_order": 6,
+   "factual": 0.9667,
+   "factual_k_n": [
+    17,
+    18
+   ],
+   "median_ms": 1420,
+   "p90_ms": 1653,
+   "provider": "xai-voice-live",
+   "rank": null,
+   "rank_excluding_latency": 6,
+   "responsiveness": 0.3961,
+   "safe_speech": 1.0,
+   "safe_speech_k_n": [
+    255,
+    255
+   ],
+   "standing": "tied",
+   "task_completion": 0.75,
+   "task_completion_k_n": [
+    33,
+    36
+   ],
+   "task_success": 0.9815,
+   "task_success_k_n": [
+    116,
+    120
+   ]
+  }
+ ]
+}
