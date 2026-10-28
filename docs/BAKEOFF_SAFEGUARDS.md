@@ -253,6 +253,33 @@ Overlap and first-versus-later-turn latency use the older per-turn fields, so th
 - **Fault dispositions** (`faults`). Counts of handled, not exercised, not handled and misconduct outcomes.
   Not-handled and misconduct already fail the run's assurance; this just shows them per provider.
 
+## Disputed reply audio and unjudged criteria
+
+Live runs used to keep only hashes of provider replies, so a disputed FACT-01 verdict (the provider's transcript says
+"1,234 pounds and 56 pence", the independent ASR hears something ambiguous) could not be settled by listening.
+`reply_retention.py` now keeps the held reply PCM, before approval, for any reply whose independent assessment is
+`unsafe` or `untestable`, whose claim extraction flagged ambiguity, or whose provider transcript and ASR transcript
+carry different amounts, plus a deterministic 5% spot-check sample of passing replies. Fixed-caller and AI-caller runs
+only; manual (human microphone) sessions are not retained. Each object is hash-addressed through `Evidence.put`
+(kind `provider_reply_audio`, classified `synthetic_session_provider_reply`, 7-day TTL, holds and purge as usual), so
+it is in the export bundle and checked by `verify_bundle`. Every decision is an `assessment.reply_audio` event with a
+`retention_reason`; at the per-run cap (12 MiB, about four minutes) a disputed reply is recorded as skipped
+(`RUN_RETENTION_CAP_REACHED`). The manifest's `retention.provider_reply_audio` summarises counts by reason.
+`VOICE_HARNESS_REPLY_RETENTION=off`, `..._BYTES` and `..._SAMPLE_RATE` configure it. `GET /api/v1/reviews/{id}`
+returns `retained_audio` (artifact ids of the units the criterion's evidence cites, else all retained replies of the
+run). The reviewer-role download still withholds raw audio bytes; an operator export carries them.
+
+The bake-off records the auto-judge configuration at launch (`judge_configuration`). `report()["limits"]
+["experience_criteria_unjudged"]` lists each judge-authority criterion (today CARE-01) that was untestable with
+`NO_JUDGE_RESULT`, with run counts and cause, and the report shows that line first among the caveats.
+
+Scenario definitions changed in catalogue version 2 (`happy-handoff-001`, `commit-cancel-confirmed-001`,
+`identity-fault-tool-latency-001`; see `SCENARIO_VALIDITY_AUDIT_2026-10-27.md`). A run launched without
+`scenario_version` takes the current one; a stated older version is refused (`SCENARIO_VERSION_NOT_RUNNABLE`). A run
+whose recorded scenario hash differs from the current definition is left out of task completion
+(`SCENARIO_DEFINITION_CHANGED`), as is a confirmed-cancellation run whose caller confirmation the harness did not
+authorise (`CONFIRMATION_NOT_AUTHORISED`).
+
 ## Verification
 
 Regression tests cover the all-provider preflight barrier, a voice reply without the required tool,

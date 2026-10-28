@@ -43,9 +43,10 @@ def _sha(text):
 
 
 class IndependentAssessor:
-    def __init__(self, engine, backend=None, cost_recorder=None):
+    def __init__(self, engine, backend=None, cost_recorder=None, retention=None):
         self.engine, self.backend = engine, backend
         self.cost_recorder = cost_recorder  # cost.UsageRecorder: records ASR usage (or unknown) per assessment
+        self.retention = retention  # reply_retention.ReplyRetention: keeps disputed/sampled reply PCM for review
 
     def status(self):
         return strict_speech_status(self.backend)
@@ -126,6 +127,8 @@ class IndependentAssessor:
                     "boundary": BOUNDARY,
                 },
             )
+        if self.retention is not None:  # before approval: a failed evidence write must not let the reply out
+            self.retention.consider(run_id, unit, check, replacement)
         # A spoken amount was accepted on the strength of the identity frozen into the job; the engine
         # re-checks that identity is still current, transactionally, when it issues the approval.
         expected = expected or {}

@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {safetyLabel, conditionRows, confidenceNote, costIsEmpty, costLimit, costRows, estimateCost, intervalFloor, latencyCap, ms, normaliseWeights, outcomeClass, outcomeLabel, pct, planSize, scenarioDiffers, scenarioGroups, usd, usdEstimate, joinParts, mergeGroups, scoresInRankOrder, verdictText, weightPercents, weightsAreCustom, weightsTotal,
+import {safetyLabel, unjudgedCaveats, conditionRows, confidenceNote, costIsEmpty, costLimit, costRows, estimateCost, intervalFloor, latencyCap, ms, normaliseWeights, outcomeClass, outcomeLabel, pct, planSize, scenarioDiffers, scenarioGroups, usd, usdEstimate, joinParts, mergeGroups, scoresInRankOrder, verdictText, weightPercents, weightsAreCustom, weightsTotal,
   CRITERIA, TERMS, assessorRows, calibrationText, disclosureText, ignoredWeightsText, intervalKind, intervalNote, judgeLabel, judgeTemperatureRecorded, metricsSections, pairReading, powerNotes, rateBounds, responsivenessNote, weightShareText, weightShares,
   csvCell, defaultRepetitions, failingRun, knownSpend, launchConfirmText, observationsCsv, overlapsLeader, providerProgress, rateText} from "../../apps/web/bakeoff-report.mjs";
 
@@ -613,4 +613,10 @@ test("task completion is a labelled dimension and rows follow the report's ranki
   assert.match(src, /ranking_basis === "composite_excluding_latency"/);
   assert.match(src, /by the composite without latency, because latency was not measured like for like; the composite with latency is still shown/);
   assert.match(src, /task_completion: "Task completion"/);
+});
+
+test("unjudged experience criteria become caveat lines", () => {
+  assert.deepEqual(unjudgedCaveats({limits: {}}), []);
+  assert.deepEqual(unjudgedCaveats({limits: {experience_criteria_unjudged: [{criterion_id: "CARE-01", caveat: "CARE-01 was not measured"}]}}),
+    ["CARE-01 was not measured"]);
 });

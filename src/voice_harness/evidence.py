@@ -11,6 +11,7 @@ from .coverage import FAMILIES, Coverage, build_registry, summarize
 from .engine import digest, identifier
 from .exports import embedded_schemas, schema_digests, versions
 from .relational import upsert_hold
+from .reply_retention import summary as reply_summary
 from .retention import is_tombstone, purge_metadata, tombstone_records, tombstone_valid
 
 
@@ -557,6 +558,8 @@ class Evidence:
                         "metadata_purge": "tombstoned_after_30d_unless_held",
                         "metadata_tombstones": tombstone_records(events),
                         "audio_purge": "tombstoned_after_ttl_unless_held",
+                        # Disputed/sampled provider replies are kept for review whatever audio_opt_in says.
+                        "provider_reply_audio": reply_summary(events),
                     },
                     "pricing": {
                         "table_version": None,

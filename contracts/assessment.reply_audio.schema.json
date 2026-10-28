@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Retention decision for one assessed reply (reply_retention.py): retained by hash, or skipped at the run cap.",
+  "properties": {
+    "unit_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Unit Id",
+      "type": "string"
+    },
+    "replacement_unit_id": {
+      "anyOf": [
+        {
+          "maxLength": 200,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Replacement Unit Id"
+    },
+    "audio_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Audio Sha256",
+      "type": "string"
+    },
+    "artifact_sha256": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Artifact Sha256"
+    },
+    "retention_reason": {
+      "enum": [
+        "assessment_unsafe",
+        "assessment_untestable",
+        "claim_ambiguous",
+        "transcript_amount_mismatch",
+        "spot_check_sample"
+      ],
+      "title": "Retention Reason",
+      "type": "string"
+    },
+    "disposition": {
+      "enum": [
+        "safe",
+        "unsafe",
+        "untestable"
+      ],
+      "title": "Disposition",
+      "type": "string"
+    },
+    "size_bytes": {
+      "minimum": 0,
+      "title": "Size Bytes",
+      "type": "integer"
+    },
+    "sample_rate": {
+      "minimum": 0,
+      "title": "Sample Rate",
+      "type": "integer"
+    },
+    "data_classification": {
+      "const": "synthetic_session_provider_reply",
+      "title": "Data Classification",
+      "type": "string"
+    },
+    "ttl_seconds": {
+      "minimum": 0,
+      "title": "Ttl Seconds",
+      "type": "integer"
+    },
+    "run_cap_bytes": {
+      "minimum": 0,
+      "title": "Run Cap Bytes",
+      "type": "integer"
+    },
+    "retained": {
+      "title": "Retained",
+      "type": "boolean"
+    },
+    "omission_reason": {
+      "anyOf": [
+        {
+          "const": "RUN_RETENTION_CAP_REACHED",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Omission Reason"
+    }
+  },
+  "required": [
+    "unit_id",
+    "replacement_unit_id",
+    "audio_sha256",
+    "artifact_sha256",
+    "retention_reason",
+    "disposition",
+    "size_bytes",
+    "sample_rate",
+    "data_classification",
+    "ttl_seconds",
+    "run_cap_bytes",
+    "retained",
+    "omission_reason"
+  ],
+  "title": "AssessmentReplyAudio",
+  "type": "object"
+}

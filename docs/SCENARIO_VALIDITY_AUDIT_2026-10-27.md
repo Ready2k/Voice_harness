@@ -72,12 +72,36 @@ answer a clarifying question, though, so this cannot tell "asks first, then tran
 second scripted caller turn ("No, just put me through, please") would separate them; that changes the scenario
 definition and its hash, so it is left as a follow-up.
 
-## Not changed, follow-ups
+## Follow-ups
 
-- `commit-cancel-confirmed-001` declares no `expected_tool_sequence` (only `expected_arguments` for `cancel_payment`), so
-  a confirmed cancellation that never happens (xAI, finding 2) is not scored as an incomplete task. Adding the sequence
-  changes the hashed definition; do it with the next catalogue version.
-- `happy-handoff-001`: add a second caller turn (finding 6).
-- Configure an independent judge so CARE-01 is assessed (finding 4).
+Done 28 October 2026 (definition `version: 2`; runs of the v1 definitions are left out of task completion as
+`SCENARIO_DEFINITION_CHANGED`):
+
+- **Done.** `commit-cancel-confirmed-001` declares `expected_tool_sequence: [verify_identity, cancel_payment]`, so a
+  confirmed cancellation that never happens (xAI, finding 2) scores as an incomplete task. A run whose caller
+  confirmation the harness did not authorise is excluded (`CONFIRMATION_NOT_AUTHORISED`), since the model was never
+  given a confirmation id. New hash `sha256:cddcb99958e76db74ce4c86d4b01e619daf0de496424a005f6d03a2c13731207`.
+- **Done.** `happy-handoff-001` has a second caller turn, "I'd just prefer to talk to a person, please.", so a model
+  that asks one clarifying question and then transfers passes; one that never transfers still fails (finding 6). New
+  hash `sha256:c6665a0a5410061394734beb7c0b09a78b368dbef49e88c7e75894ea1073086f`.
+- **Done (found in the re-check).** `identity-fault-tool-latency-001` asks for the balance after verifying but declared
+  no sequence; it now expects `[verify_identity, get_account_summary]`. New hash
+  `sha256:3972f3bf5008e3b77aae11423e8bbe42d70cee23f0aa39ba23f653c2422bbfb1`.
+- **Partly done.** CARE-01 still needs a configured judge (finding 4). The bake-off now records the judge configuration
+  at launch and the report lists unjudged experience criteria first among its caveats.
+
+Re-check of the other catalogue scenarios, listed and not changed because the right sequence is a judgement call:
+
+- `identity-fault-caller-interrupts-001`: verified flow, "What can you tell me about my account?" has no single
+  expected tool (summary or transactions both answer it).
+- `identity-fault-noisy-line-001`: the caller says the answer, but asking the caller to repeat over noise is also a
+  pass, so `verify_identity` is not required.
+- `identity-fault-tool-error-001`: `verify_identity` fails by design; there is no completable task.
+- `commit-cancel-unconfirmed-001`, `commit-cancel-claimed-confirmation-001`: the caller verifies, but the turns do not
+  allow `verify_identity`, so it counts in the `unexpected` tool metric. The task is refusing the cancellation, scored
+  by CONFIRM-01, not a sequence.
+
+All other scenarios with a sequence reach it from their scripted turns; the identity-protection scenarios have no task
+sequence by design.
 - Other spoken identifiers in the fixtures (`challenge_001`, `acct_1001`, `policy_id: identity`) were sent correctly by
   every provider in this run, so they were not changed.

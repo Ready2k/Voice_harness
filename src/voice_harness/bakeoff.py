@@ -145,7 +145,9 @@ class BakeoffStore:
             )
             db.execute("INSERT INTO harness_migrations VALUES (?) ON CONFLICT DO NOTHING", (MIGRATION_ID,))
 
-    def create(self, request: BakeoffRequest, clock=time.time):
+    def create(self, request: BakeoffRequest, clock=time.time, judges=None):
+        """``judges``: the auto-judge configuration at launch (``judge_configuration``), so the report can say why
+        judge-authority criteria went undecided."""
         if request.runs:
             cells = []
             seen = {}
@@ -175,6 +177,7 @@ class BakeoffStore:
             "providers": providers, "repetitions": request.repetitions if not request.runs else None,
             "prompt_profile": request.prompt_profile,
             "weights": request.weights.model_dump(), "group_balanced": request.group_balanced, "cells": cells,
+            **({"judge_configuration": judges} if judges is not None else {}),
         }
         with self.database.connection() as db:
             db.execute("INSERT INTO harness_bakeoffs VALUES (?, ?, ?, ?)",
@@ -456,6 +459,13 @@ def observe(database, cell, table=None):
     turns = first_audio_turns(provider, events)
     binding = next((e["content"].get("provider") or {} for e in events if e["type"] == "run.live_binding"), {})
     transport = binding.get("harness_transport") or {}
+    # A run of an earlier definition is not scored on a sequence its script was never written for, and a
+    # confirmed-cancellation run whose caller confirmation the harness did not authorise could not have cancelled.
+    ran_hash = next((e["content"].get("scenario_hash") for e in events if e["type"] == "run.live_binding"), None)
+    excluded = ("SCENARIO_DEFINITION_CHANGED" if ran_hash and ran_hash != entry["content_hash"].removeprefix("sha256:")
+                else "CONFIRMATION_NOT_AUTHORISED" if "out_of_band_confirmation" in entry.get("mechanics", ())
+                and not any(e["content"].get("authorised") for e in events if e["type"] == "confirmation.voice_observation")
+                else None)
     expected = iter(definition.get("expected_tool_sequence", []))
     next_tool = next(expected, None)
     for tool in executed:
@@ -469,6 +479,8 @@ def observe(database, cell, table=None):
         "evidence_version": 2,
         "expected_tools_observed": next_tool is None,
         "expected_tools": definition.get("expected_tool_sequence", []),
+        **({"task_completion_excluded": excluded} if excluded else {}),
+        "reply_audio_retained": sum(e["content"]["retained"] for e in events if e["type"] == "assessment.reply_audio"),
         "criterion_reasons": {cid: c.get("reason_codes", []) for cid, c in (assurance.get("criteria") or {}).items()
                               if c.get("applicable")},
         "criteria": {cid: c["verdict"] for cid, c in (assurance.get("criteria") or {}).items() if c.get("applicable")},
@@ -804,8 +816,33 @@ def report(payload, weights=None, group_balanced=None):
                    "pricing_tables": sorted({o["cost"]["pricing_table"] for o in observed if o.get("cost")}),
                    "cost_from_separate_runs": sorted({o["provider"] for o in observed
                                                       if (o.get("cost") or {}).get("separate_run")}),
+                   "judge_configuration": payload.get("judge_configuration"),
+                   "experience_criteria_unjudged": unjudged_criteria(observed, payload.get("judge_configuration")),
                    "provider_disclosures": bakeoff_disclosure.disclose(providers, observed, payload.get("prompt_profile", "standardised-v2"))},
     }
+
+
+def unjudged_criteria(observed, judge_configuration=None):
+    """Judge-authority criteria (e.g. CARE-01) left untestable because no judge result exists, with a one-line caveat."""
+    from .judges.rubric import CRITERIA
+
+    out = []
+    for cid in (c for c, spec in CRITERIA.items() if spec.authority == "judge"):
+        hit = [o for o in observed if o.get("completed") and o.get("criteria", {}).get(cid) == "untestable"
+               and "NO_JUDGE_RESULT" in o.get("criterion_reasons", {}).get(cid, [])]
+        applicable = sum(cid in o.get("criteria", {}) for o in observed if o.get("completed"))
+        if not hit:
+            continue
+        configured = [j for j in (judge_configuration or {}).get("auto_judges", []) if j.get("available")]
+        when = (judge_configuration or {}).get("recorded_at", "launch")
+        cause = (f"no judge was configured at {when}" if judge_configuration is not None and not configured
+                 else "no judge result was recorded" if judge_configuration is not None
+                 else "no judge result was recorded and the judge configuration was not recorded")
+        out.append({"criterion_id": cid, "title": CRITERIA[cid].title, "runs": len(hit), "applicable_runs": applicable,
+                    "providers": sorted({o["provider"] for o in hit}), "cause": cause,
+                    "caveat": f"{cid} ({CRITERIA[cid].title}) was not measured in {len(hit)} of {applicable} applicable "
+                              f"runs: {cause}. It is untestable for every provider, never a pass."})
+    return out
 
 
 ENDPOINTING_PAID = {"provider_vad", "automatic"}  # the provider decides when the caller finished, so its wait is in the figure

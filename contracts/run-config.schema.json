@@ -74,8 +74,9 @@
       "type": "string"
     },
     "scenario_version": {
-      "const": 1,
       "default": 1,
+      "maximum": 1000,
+      "minimum": 1,
       "title": "Scenario Version",
       "type": "integer"
     },
