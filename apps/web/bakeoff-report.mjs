@@ -148,7 +148,9 @@ export function confidenceNote(report, observations = []) {
   const singleModel = report.scores?.length === 1;
   if (v.comparison_complete === false) reasons.push(singleModel ? "one or more runs unsuccessful" : "comparison incomplete");
   const untestable = observations.some(o => Object.values(o.criteria ?? {}).some(c => c !== "pass" && c !== "fail"));
-  if (untestable) reasons.push(singleModel ? "some criteria untestable" : "some criteria untestable without judges");
+  // "without judges" only when the report records judge-only criteria left untestable for lack of a judge.
+  const unjudged = (report.limits?.experience_criteria_unjudged ?? []).length > 0;
+  if (untestable) reasons.push(unjudged && !singleModel ? "some criteria untestable without judges" : "some criteria untestable");
   const tied = !!(v.leader && v.runner_up && (v.no_clear_winner ?? !v.separable));
   if (tied) reasons.push("leaders not separable");
   if (!singleModel && v.rank_stable === false) reasons.push("ranking depends on the weights");
@@ -261,8 +263,14 @@ export function latencyComparabilityText(report, names) {
   const c = report.scoring?.latency_comparability, v = report.verdict ?? {};
   if (!c || v.latency_comparable !== false) return null;
   const parts = [];
-  if (c.reasons.includes("mixed_turn_control"))
-    parts.push(`Latency is not like for like. ${nameList(c.explicit_commit, names)} ${c.explicit_commit.length === 1 ? "was" : "were"} told exactly when each caller turn ended (explicit commit), so ${c.explicit_commit.length === 1 ? "its figure carries" : "their figures carry"} no end-of-speech detection delay; ${nameList(c.provider_endpointing, names)} detected the end of speech ${c.provider_endpointing.length === 1 ? "itself" : "themselves"} and ${c.provider_endpointing.length === 1 ? "its figure includes" : "their figures include"} that delay.`);
+  if (c.reasons.includes("mixed_turn_control")) {
+    // Re-anchored older runs were told exactly when the turn ended; current runs commit after a common emulated delay.
+    const legacy = c.explicit_commit.every(p => (c.legacy_commit_anchor ?? []).includes(p)), one = c.explicit_commit.length === 1;
+    const told = legacy
+      ? `told exactly when each caller turn ended (explicit commit), so ${one ? "its figure carries" : "their figures carry"} no end-of-speech detection delay`
+      : `told the caller turn had ended a fixed interval after speech stopped (explicit commit after a common emulated detection delay, 500 ms by default) rather than detecting it ${one ? "itself" : "themselves"}`;
+    parts.push(`Latency is not like for like. ${nameList(c.explicit_commit, names)} ${one ? "was" : "were"} ${told}; ${nameList(c.provider_endpointing, names)} detected the end of speech ${c.provider_endpointing.length === 1 ? "itself" : "themselves"} and ${c.provider_endpointing.length === 1 ? "its figure includes" : "their figures include"} that ${legacy ? "" : "real "}delay.`);
+  }
   if (c.reasons.includes("legacy_commit_anchor"))
     parts.push(`First audio for ${nameList(c.legacy_commit_anchor, names)} was re-anchored at the turn commit when these older runs were re-scored. That removes the trailing silence they were wrongly charged, but also any detection delay, so it now leans in their favour; the true order lies between the original and re-scored figures.`);
   if (c.reasons.includes("not_recorded"))

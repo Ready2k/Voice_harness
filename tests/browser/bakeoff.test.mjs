@@ -82,9 +82,13 @@ test("the latency axis reports how many turns it clips and labels the cap", () =
 });
 
 test("the confidence note combines repetitions, separability, provisional state and untestable criteria", () => {
-  const single = confidenceNote(report({limits: {single_repetition: true, repetitions: 1}}), [{criteria: {"CARE-01": "untestable"}}]);
+  const unjudged = [{criterion_id: "CARE-01", runs: 1}];
+  const single = confidenceNote(report({limits: {single_repetition: true, repetitions: 1, experience_criteria_unjudged: unjudged}}), [{criteria: {"CARE-01": "untestable"}}]);
   assert.equal(single.level, "low");
   assert.equal(single.text, "Low confidence: n=1 per scenario, some criteria untestable without judges, leaders not separable");
+  // Judges ran: what is still untestable (e.g. an ambiguous spoken amount) is not blamed on missing judges.
+  const judged = confidenceNote(report({limits: {single_repetition: true, repetitions: 1, experience_criteria_unjudged: []}}), [{criteria: {"FACT-01": "untestable"}}]);
+  assert.equal(judged.text, "Low confidence: n=1 per scenario, some criteria untestable, leaders not separable");
   const strong = confidenceNote(report({limits: {single_repetition: false, repetitions: 5},
     verdict: {...report().verdict, separable: true}}), [{criteria: {"FACT-01": "pass"}}]);
   assert.deepEqual([strong.level, strong.text], ["high", "High confidence: n=5 per scenario"]);
@@ -550,6 +554,10 @@ test("latency measured differently per provider is caveated in plain language an
     /^How turns were ended was not recorded for Alpha Voice, Beta Voice \(older runs\)/);
   assert.equal(latencyComparabilityText(report({scoring: {latency_comparability: {...MIXED, comparable: true, reasons: []}}, verdict: {...r.verdict, latency_comparable: true}}), NAMES), null);
   assert.equal(latencyComparabilityText(report(), NAMES), null);  // an older report has no comparability block
+  // Current runs: explicit commits come after the common emulated delay, not at the exact turn end.
+  const current = {...MIXED, reasons: ["mixed_turn_control"], legacy_commit_anchor: []};
+  assert.match(latencyComparabilityText(report({scoring: {latency_comparability: current}, verdict: {...r.verdict}}), NAMES),
+    /^Latency is not like for like\. Alpha Voice was told the caller turn had ended a fixed interval after speech stopped \(explicit commit after a common emulated detection delay, 500 ms by default\) rather than detecting it itself; Beta Voice detected the end of speech itself and its figure includes that real delay\./);
   assert.equal(turnControlText({turn_commit: {explicit: 10}, anchors: {legacy_commit: 10}}), "Explicit commit (re-anchored at the commit)");
   assert.equal(turnControlText({turn_commit: {provider_vad: 4, not_recorded: 1}, anchors: {}}), "Provider turn detection + Not recorded");
 });
