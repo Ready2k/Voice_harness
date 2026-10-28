@@ -165,7 +165,7 @@ footer{padding:30px 0 60px;color:var(--mut);font-size:14px}footer a{color:var(--
 </head>
 <body>
 <header class="top"><div class="wrap"><span class="b">◖◗ Trust, tested · Executive briefing</span>
-<a href="#how">Why believe it</a><a href="#fairness">Fairness</a><a href="#moments">Customer moments</a><a href="#scorecard">Scorecard</a><a href="#priorities">Your priorities</a><a href="#listen">Listen</a><a href="#next">Decision</a><a href="cx-review.html">Full evidence ↗</a></div></header>
+<a href="#how">Why believe it</a><a href="#fairness">Fairness</a><a href="#moments">Customer moments</a><a href="#scorecard">Scorecard</a><a href="#priorities">Your priorities</a><a href="#listen">Listen</a><a href="#next">Decision</a><a id="nav-evidence" href="artifacts/fair-bakeoff-2026-10-28/rescored-2026-10-28/report.html">Full evidence ↗</a></div></header>
 
 <div class="hero"><div class="wrap">
 <p class="eyebrow">Voice AI · Customer trust briefing</p>
@@ -287,7 +287,7 @@ footer{padding:30px 0 60px;color:var(--mut);font-size:14px}footer a{color:var(--
 <p class="caveat">Our current Amazon Connect experience has not been benchmarked here. Results for Amazon Nova Sonic do not establish performance for Nova 2.5 Sonic or a Connect deployment.</p>
 <details><summary>Evidence and methodology</summary>
 <p>Callers are synthetic and the bank is simulated; no real customer or money is involved. <span id="method-facts"></span> Independent checks decide whether the requested action happened, whether spoken facts matched, and whether protections held. These checks cover our scoped rules, not every risk, and don't prove regulatory compliance. Timing methods differ between services, so speed is indicative only.</p>
-<p><a href="cx-review.html">Open the full evidence explorer ↗</a> · <a id="full-report" href="#">Full technical report ↗</a></p></details>
+<p><a id="full-report" href="#">Full technical report ↗</a></p></details>
 </section>
 </main>
 <footer><div class="wrap"><span id="asof"></span><br>Voice Harness · Executive briefing · Draft for discussion · <a href="index.html">Research archive</a> · Press <b>P</b> for presenter mode</div></footer>
@@ -450,6 +450,7 @@ document.addEventListener('keydown',e=>{if(e.key==='p'&&!e.target.matches('input
 
 fetch('site/cx-review-data.json').then(r=>r.json()).then(d=>{S=d.studies[0];
   $('full-report').href=S.report;
+  $('nav-evidence').href=S.report;
   document.querySelectorAll('.reps').forEach(e=>e.textContent=S.repetitions);
   $('method-facts').textContent=`Each of the ${S.providers.length} services faced ${S.scenarios} situations, ${S.repetitions} times each.`;
   $('asof').textContent=`Figures from: ${S.title}. Generated ${S.generated}. They update when new assessments are added.`;
