@@ -54,6 +54,10 @@ MODEL_ID = "amazon.nova-2-5-sonic"
 REGION = "us-east-1"
 INPUT_RATE = 16000
 OUTPUT_RATE = 24000
+# Sampling is left to the provider (docs/PROVIDER_CONFIG_PARITY.md). maxTokens is a per-response output ceiling, not a
+# sampling setting; it is kept because every working Nova sessionStart sends it. 1024 is several times the text of
+# the longest reply the harness accepts (LIVE_LIMITS, 20 s of speech).
+DEFAULT_INFERENCE = {"maxTokens": 1024}
 CHUNK_MS = 20
 SILENCE_CHUNK = b"\x00" * (INPUT_RATE * CHUNK_MS // 1000 * 2)  # 640 bytes
 AUDIO_TIMEOUT_S = 55
@@ -260,7 +264,7 @@ class NovaSonicAdapter:
                               "inputSchema": {"json": json.dumps(t.get("input_schema") or t.get("parameters")
                                                                  or {"type": "object", "properties": {}})}}}
                 for t in tools]}
-        inf = {"maxTokens": 1024, "topP": 0.9, "temperature": 0.2, **(config.get("inference") or {})}
+        inf = {**DEFAULT_INFERENCE, **(config.get("inference") or {})}
         await self._send({"sessionStart": {
             "inferenceConfiguration": inf,
             "turnDetectionConfiguration": {"endpointingSensitivity": config.get("endpointing", "MEDIUM")}}})

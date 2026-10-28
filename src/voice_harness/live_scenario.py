@@ -46,6 +46,28 @@ CANCEL_TIMEOUT_S = 5.0
 CALLER_TRAIL_MS = 1200
 
 
+def _b64_len(value):
+    return len(value) * 3 // 4 - value.count("=", -2) if isinstance(value, str) else 0
+
+
+def audio_bytes(payload):
+    """Decoded bytes of provider output audio carried by one native event (0 if none), from its shape alone, so
+    first-audio does not have to guess from the stored payload size. Covers Gemini ``serverContent.modelTurn``
+    inline audio, OpenAI/xAI ``response.output_audio.delta``, Nova ``audioOutput`` and ElevenLabs ``audio``."""
+    if not isinstance(payload, dict):
+        return 0
+    if payload.get("type") in ("response.output_audio.delta", "response.audio.delta"):
+        return _b64_len(payload.get("delta"))
+    if payload.get("type") == "audio":
+        return _b64_len((payload.get("audio_event") or {}).get("audio_base_64"))
+    if isinstance(payload.get("audioOutput"), dict):
+        return _b64_len(payload["audioOutput"].get("content"))
+    turn = (payload.get("serverContent") or {}).get("modelTurn") if isinstance(payload.get("serverContent"), dict) else None
+    parts = turn.get("parts") if isinstance(turn, dict) else None
+    return sum(_b64_len(p["inlineData"].get("data")) for p in parts or () if isinstance(p, dict)
+               and isinstance(p.get("inlineData"), dict) and str(p["inlineData"].get("mimeType", "audio")).startswith("audio"))
+
+
 def degrade(pcm: bytes, *, snr_db=None, narrowband=False, seed=0) -> bytes:
     """Deterministic noise at ``snr_db`` and optional narrowband (8 kHz sample-and-hold) shaping."""
     samples = array.array("h")
@@ -108,6 +130,7 @@ class LiveScenarioRunner:
             "payload_sha256": hashlib.sha256(encoded).hexdigest(), "payload_bytes": len(encoded),
             "payload_retained": False, "omission_reason": "HASH_ONLY_PAYLOAD_NOT_STORED",
             "received_ms": int(time.monotonic() * 1000), "clock_domain_id": PROCESS_CLOCK_DOMAIN,
+            "audio_bytes": audio_bytes(payload),
         })
         if len(self._native) >= NATIVE_FLUSH_EVERY:
             self._flush_native()  # bounded memory, and a mid-turn crash loses at most this many records

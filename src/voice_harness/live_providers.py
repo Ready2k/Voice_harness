@@ -12,7 +12,7 @@ import os
 import time
 from contextlib import suppress
 
-from .asr import LIVE_FLAG, select_backend
+from .asr import LIVE_FLAG, asr_vendor, select_backend
 from .contracts import TOOLS as TOOL_CONTRACTS
 from .events import PROCESS_CLOCK_DOMAIN
 from .live_assessment import IndependentAssessor
@@ -71,7 +71,7 @@ TESTED_MODELS = {
     "xai-voice-live": {"provider": "xai", "model_id": "grok-voice-3.0", "family": "xai_grok_voice"},
     # Vertex AI publisher model; setupComplete returns no version, so the pinned name is all there is
     "gemini-live": {"provider": "google", "model_id": "gemini-3.8-live", "family": "google_gemini_live"},
-    # The agent's LLM (default gemini-2.5-flash, see adapters/elevenlabs_agent.py) is not echoed by the session.
+    # The agent LLM (default gemini-2.5-flash) is not echoed by the session; each run records it as agent_llm.
     "elevenlabs-live": {"provider": "elevenlabs", "model_id": "elevenlabs-agent", "family": "elevenlabs_agents"},
 }
 
@@ -218,6 +218,63 @@ def connection_binding(adapter):
     region = region if isinstance(region, str) and re.fullmatch(r"[a-z0-9-]{1,32}", region) else None
     versions = {str(k)[:80]: (str(v)[:40] if v else None) for k, v in (info.get("sdk_versions") or {}).items()}
     return {"endpoint_host": host, "region": region, "sdk_versions": versions}
+
+
+# Configuration parity (docs/PROVIDER_CONFIG_PARITY.md): no provider gets sampling overrides unless a bake-off selects
+# a common profile every provider in it supports (none is defined yet). Output voices stay vendor defaults: recorded,
+# not equalised.
+SAMPLING_POLICY = "provider_default"
+DEFAULT_VOICES = {"openai-live": "marin", "openai-realtime-live": "marin", "nova-sonic-live": "matthew",
+                  "xai-voice-live": "ara", "gemini-live": None, "elevenlabs-live": "JBFqnCBsd6RMkjVDRZzb"}
+VOICE_NAMES = {"JBFqnCBsd6RMkjVDRZzb": "George"}
+
+
+def sampling_binding(provider_config_id, config, agent=None):
+    """The sampling policy and every generation setting actually sent; ``conforms`` is false when a provider runs
+    with an override the policy does not allow (a stale ElevenLabs agent), None when that is unknown."""
+    sent, limits = {}, {}
+    if provider_config_id == "nova-sonic-live":
+        from .adapters.nova_sonic import DEFAULT_INFERENCE
+
+        inference = {**DEFAULT_INFERENCE, **(config.get("inference") or {})}
+        limits = {k: v for k, v in inference.items() if k == "maxTokens"}
+        sent = {k: v for k, v in inference.items() if k != "maxTokens"}
+    out = {"policy": SAMPLING_POLICY, "overrides_sent": sent, "output_limits": limits, "conforms": not sent}
+    if agent is not None:
+        stored = agent.get("agent_temperature")
+        out["stored_agent_temperature"] = stored
+        out["conforms"] = (not sent and stored == "provider_default") if stored != "unknown" else None
+    return out
+
+
+def voice_binding(provider_config_id, config):
+    requested = config.get("voice")
+    voice = requested or DEFAULT_VOICES.get(provider_config_id)
+    return {"id": voice, "name": VOICE_NAMES.get(voice, voice) if voice else None,
+            "source": "requested" if requested else ("adapter_default" if voice else "provider_default")}
+
+
+def asr_binding(provider_config_id, backend, agent=None):
+    """Who decides safe-speech: the independent ASR vendor against the tested vendor (and an ElevenLabs agent's LLM)."""
+    tested = TESTED_MODELS[provider_config_id]["provider"]
+    if backend is None:
+        return {"backend": None, "model": None, "vendor": None, "tested_vendor": tested, "relation": "NO_LIVE_ASR"}
+    vendor = asr_vendor(backend.name)
+    same = vendor in {tested, (agent or {}).get("agent_llm_vendor")}
+    return {"backend": backend.name, "model": backend.model, "vendor": vendor, "tested_vendor": tested,
+            "relation": "SAME_VENDOR_ASR" if same else ("UNKNOWN_VENDOR_ASR" if vendor == "unknown" else "INDEPENDENT_VENDOR_ASR")}
+
+
+def parity_binding(provider_config_id, config, asr_backend=None):
+    """Provider-specific asymmetries that can move scores, recorded on every run binding for the report to disclose."""
+    agent = None
+    if provider_config_id == "elevenlabs-live":
+        from .adapters.elevenlabs_agent import agent_binding
+
+        agent = agent_binding(config.get("tools") or TOOLS, session_llm=config.get("llm"))
+    return {"sampling": sampling_binding(provider_config_id, config, agent),
+            "output_voice": voice_binding(provider_config_id, config),
+            "asr": asr_binding(provider_config_id, asr_backend, agent), **(agent or {})}
 
 
 def session_metadata(provider_config_id, requested_model_id, receipt, connection=None, prompt_profile="standardised-v2"):
@@ -375,6 +432,7 @@ async def run_live(engine, run_id, provider_config_id, scenario_id, *, seed=0, c
         adapter.usage_sink = recorder.observe
 
     assessor = IndependentAssessor(engine, select_backend())
+    metadata.update(parity_binding(provider_config_id, config, assessor.backend))
 
     async def before_turn(index):
         # The cancellation scenario needs a trusted confirmation the model cannot invent: issued by the
@@ -447,12 +505,14 @@ async def _run_interactive(engine, run_id, provider_config_id, scenario_id, call
         metadata["requested_voice"] = config.get("voice") or {
             "nova-sonic-live": "matthew", "xai-voice-live": "ara"}.get(provider_config_id)
         metadata["caller_voice"] = {**configuration(caller_config), "session": caller_receipt}
+        assessor = IndependentAssessor(engine, select_backend())
+        metadata.update(parity_binding(provider_config_id, config, assessor.backend))
         recorder = UsageRecorder(engine.database, run_id, provider=metadata["family"],
                                  model=TESTED_MODELS[provider_config_id]["model_id"])
         if provider_config_id == "openai-live":
             adapter.usage_sink = recorder.observe
         runner = InteractiveScenarioRunner(
-            engine, run_id, adapter, IndependentAssessor(engine, select_backend()), scenario_id,
+            engine, run_id, adapter, assessor, scenario_id,
             caller=caller, caller_config=caller_config, evidence=evidence, seed=seed,
             duration_budget=max(0, deadline - time.monotonic()),
             provider_session=metadata, cost_recorder=recorder)
@@ -508,13 +568,15 @@ async def run_manual(engine, run_id, config, bridge):
                                 connection_binding(adapter), prompt_profile=prompt_profile)
     metadata["harness_transport"] = transport
     metadata["caller_voice"] = {"backend": "human_microphone"}
+    assessor = IndependentAssessor(engine, select_backend())
+    metadata.update(parity_binding(provider_config_id, adapter_config, assessor.backend))
     tested = TESTED_MODELS[provider_config_id]
     recorder = UsageRecorder(engine.database, run_id, provider=metadata["family"], model=tested["model_id"],
                              region=getattr(adapter, "region", None))
     if provider_config_id == "openai-live":
         adapter.usage_sink = recorder.observe
     session = ManualSession(
-        engine, run_id, adapter, IndependentAssessor(engine, select_backend()), config["scenario_id"], bridge=bridge,
+        engine, run_id, adapter, assessor, config["scenario_id"], bridge=bridge,
         playback_mode=config["playback_mode"], journey_id=config.get("journey_id"), path=config.get("path", "happy"),
         provider_session=metadata, cost_recorder=recorder, seed=config["fixture_seed"],
         context_only=provider_config_id in CONTEXT_ONLY)

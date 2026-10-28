@@ -85,6 +85,14 @@ def instructions(profile, provider=None):
     raise ValueError("ADVANCED_PROMPT_REQUIRES_LIVE_PROVIDER")
 
 
+def delta(profile, provider):
+    """Lines a provider's instructions add to the profile's common core (advanced-v1: STANDARDISED_V2 + ADVANCED_STYLE),
+    so a vendor-tuned comparison shows what each vendor was given beyond what every vendor was given."""
+    core = {"advanced-v1": STANDARDISED_V2 + ADVANCED_STYLE, "conversational-v1": STANDARDISED_V2 + CONVERSATIONAL_STYLE}.get(profile, STANDARDISED_V2)
+    common = {line.strip() for line in core.splitlines()}
+    return [line.strip() for line in instructions(profile, provider).splitlines() if line.strip() and line.strip() not in common]
+
+
 def provenance(profile, text, tools):
     """Bind the actual instructions and tool schemas, rather than just a display label."""
     tool_json = json.dumps(tools, sort_keys=True, separators=(",", ":"), ensure_ascii=False)

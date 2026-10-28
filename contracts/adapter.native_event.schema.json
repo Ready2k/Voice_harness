@@ -51,6 +51,19 @@
       "minLength": 1,
       "title": "Clock Domain Id",
       "type": "string"
+    },
+    "audio_bytes": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Audio Bytes"
     }
   },
   "required": [
