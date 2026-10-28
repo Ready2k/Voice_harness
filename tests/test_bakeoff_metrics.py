@@ -109,10 +109,11 @@ class Arguments(unittest.TestCase):
         self.assertEqual(self.status(retry)[0]["status"], "correct")
 
     def test_spoken_forms_of_the_identifier_are_correct_but_different_digits_are_not(self):
-        for spoken in ("TXN001", "txn 001", "txn-001", "Txn_001"):
+        # A bare 001 in a transaction_id field names the declared id (spoken_ids); 1 and 0001 are other digits.
+        for spoken in ("TXN001", "txn 001", "txn-001", "Txn_001", "001"):
             ledger = Ledger().call("1", "get_transaction_details", arguments={"transaction_id": spoken})
             self.assertEqual(self.status(ledger)[0]["status"], "correct", spoken)
-        for other in ("txn0001", "txn01", "001", "txn_002"):
+        for other in ("txn0001", "txn01", "1", "0001", "002", "txn_002"):
             ledger = Ledger().call("1", "get_transaction_details", arguments={"transaction_id": other})
             self.assertEqual(self.status(ledger)[0]["status"], "wrong", other)
 

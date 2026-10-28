@@ -4,6 +4,12 @@ Normalises spoken GBP amounts and dates to comparable values. Anything that can 
 more than one way (``one fifty pounds``, ``03/04``) is reported as ambiguous and the
 verdict is ``untestable``; ambiguity is never resolved in favour of approval. This is a
 rule engine, not a claim of perfect semantic safety.
+
+claims-v2 (28 October 2026): a leading article is not a number (``a ten pound debit`` is 1000, ``a hundred pounds``
+still 10000); ``GBP 10.00`` parses like ``£10.00`` and ``10.00 GBP``; ``minus``/``negative``/``-`` directly before an
+amount is a signed claim (``negative_minor``) that only a tool fact with that signed value can approve (a wrong sign is
+``SIGN_MISMATCH``). A sign word not attached to an amount, an arithmetic ``X minus Y``, ``overdrawn`` and ``in the red``
+stay ``SIGNED_AMOUNT_UNSUPPORTED``.
 """
 
 from __future__ import annotations
@@ -15,6 +21,7 @@ UNITS = {w: i for i, w in enumerate(
     "sixteen seventeen eighteen nineteen".split())}
 TENS = {w: 10 * (i + 2) for i, w in enumerate("twenty thirty forty fifty sixty seventy eighty ninety".split())}
 NUMBER_VOCAB = set(UNITS) | set(TENS) | {"hundred", "thousand", "and", "a"}
+CLAIMS_VERSION = "claims-v2"
 CURRENCY_WORDS = {"pound", "pounds", "quid", "sterling"}
 PENCE_WORDS = {"pence", "penny", "pennies", "p"}
 MONTHS = {
@@ -37,7 +44,7 @@ _ORD_RE = "|".join(sorted(map(re.escape, ORDINALS), key=len, reverse=True))
 _MONTH_RE = "|".join(sorted(MONTHS, key=len, reverse=True))
 
 DIGIT_AMOUNT = re.compile(
-    r"(?:£\s?(?P<a>\d{1,3}(?:,\d{3})+|\d+)(?:\.(?P<ad>\d{1,2}))?"
+    r"(?:(?:£|\bgbp)\s?(?P<a>\d{1,3}(?:,\d{3})+|\d+)(?:\.(?P<ad>\d{1,2}))?"
     r"|(?P<b>\d{1,3}(?:,\d{3})+|\d+)(?:\.(?P<bd>\d{1,2}))?\s*(?:pounds?|quid|gbp)\b)"
     r"(?:\s*(?:and\s+)?(?P<pence>\d{1,2})\s*(?:pence|p)\b)?"
 )
@@ -50,6 +57,9 @@ NUMERIC_DATE = re.compile(r"\b(?P<a>\d{1,2})[/.](?P<b>\d{1,2})(?:[/.](?P<y>\d{4}
 # Constructs the rule engine cannot read faithfully: another currency, or a signed/overdrawn balance.
 FOREIGN_CURRENCY = re.compile(r"[$€¥]|\b(?:dollars?|euros?|usd|eur|cents?|bucks|yen)\b")
 SIGNED_AMOUNT = re.compile(r"\b(?:minus|negative|overdrawn|in the red)\b|-\s?£|£\s?-|-\s?\d[\d,.]*\s*(?:pounds?|quid|gbp)\b")
+# A sign attached to the amount that follows it; an amount just before the sign makes it arithmetic, not a sign.
+SIGN_BEFORE = re.compile(r"(?:\b(?:minus|negative)\s+|(?:^|(?<=\s))-\s?)$")
+AMOUNT_BEFORE = re.compile(r"(?:\d|£|\b(?:pounds?|quid|pence|p|gbp|sterling))[\s,]*$")
 
 
 def _blank(text, span):
@@ -59,7 +69,8 @@ def _blank(text, span):
 def _number_run(tokens):
     """Value of a number-word run, or None when ambiguous/unparseable."""
     words = list(tokens)
-    while words and words[0] == "and":
+    # "and" and an article ("a ten pound debit") lead nothing; "a hundred"/"a thousand" is one hundred/thousand.
+    while words and (words[0] == "and" or (words[0] == "a" and words[1:2] and words[1] not in {"hundred", "thousand"})):
         words.pop(0)
     while words and words[-1] == "and":
         words.pop()
@@ -155,17 +166,24 @@ def _valid(day, month):
     return day is not None and 1 <= day <= 31 and 1 <= month <= 12
 
 
-def extract_claims(text: str, located=None) -> dict:
-    """Spoken amounts (minor units), dates and ambiguity codes found in ``text``.
+def _sign(lowered, start):
+    """Span of a sign attached to the amount at ``start``, or None."""
+    match = SIGN_BEFORE.search(lowered[:start])
+    if match is None or AMOUNT_BEFORE.search(lowered[: match.start()]):
+        return None
+    return match.span()
 
-    ``located`` (optional list) receives (amount, start, end) for every amount, for clause-level attribution.
+
+def extract_claims(text: str, located=None) -> dict:
+    """Spoken amounts (minor units, unsigned), dates and ambiguity codes found in ``text``.
+
+    ``negative_minor`` lists the magnitudes spoken with an attached minus sign. ``located`` (optional list) receives
+    (amount, start, end, negative) for every amount, for clause-level attribution.
     """
     lowered = text.lower()
-    amounts, ambiguities, dates = [], [], []
+    amounts, ambiguities, dates, spans = [], [], [], []
     if FOREIGN_CURRENCY.search(lowered):
         ambiguities.append("UNSUPPORTED_CURRENCY")
-    if SIGNED_AMOUNT.search(lowered):
-        ambiguities.append("SIGNED_AMOUNT_UNSUPPORTED")  # sign is not tracked, so it is never approved
     working = lowered
     for match in list(DIGIT_AMOUNT.finditer(working)):
         whole, fraction = match.group("a") or match.group("b"), match.group("ad") or match.group("bd") or ""
@@ -175,12 +193,21 @@ def extract_claims(text: str, located=None) -> dict:
             continue
         pence = int(fraction.ljust(2, "0")) if fraction else int(match.group("pence") or 0)
         amounts.append(pounds * 100 + pence)
-        if located is not None:
-            located.append((pounds * 100 + pence, *match.span()))
+        spans.append((pounds * 100 + pence, *match.span()))
         working = _blank(working, match.span())
-    word_amounts, word_ambiguities = _word_amounts(working, located)
+    word_amounts, word_ambiguities = _word_amounts(working, spans)
     amounts += word_amounts
     ambiguities += word_ambiguities
+    unsigned, negative = lowered, []
+    for amount, start, end in spans:
+        sign = _sign(lowered, start)
+        if sign:
+            negative.append(amount)
+            unsigned = _blank(unsigned, sign)
+        if located is not None:
+            located.append((amount, start, end, bool(sign)))
+    if SIGNED_AMOUNT.search(unsigned):
+        ambiguities.append("SIGNED_AMOUNT_UNSUPPORTED")  # a sign not attached to one amount is never approved
     for match in list(ISO_DATE.finditer(working)):
         if _valid(int(match["d"]), int(match["m"])):
             dates.append({"day": int(match["d"]), "month": int(match["m"]), "year": int(match["y"])})
@@ -205,7 +232,17 @@ def extract_claims(text: str, located=None) -> dict:
             dates.append({"day": a, "month": b, "year": year})
         else:
             ambiguities.append("AMBIGUOUS_DATE")  # DD/MM versus MM/DD, or not a date
-    return {"amounts_minor": sorted(amounts), "dates": dates, "ambiguities": sorted(set(ambiguities))}
+    return {"amounts_minor": sorted(amounts), "negative_minor": sorted(negative), "dates": dates,
+            "ambiguities": sorted(set(ambiguities)), "version": CLAIMS_VERSION}
+
+
+def signed_amounts(claims):
+    """The claimed amounts with spoken signs applied: a "minus ten pounds" is -1000, an unsigned "ten pounds" 1000."""
+    out = list(claims["amounts_minor"])
+    for amount in claims.get("negative_minor", []):
+        out.remove(amount)
+        out.append(-amount)
+    return sorted(out)
 
 
 def _expected_date(value):
@@ -248,7 +285,7 @@ def _clause_families(lowered, located):
     A family is attributed to an amount only from its own clause; a clause naming none, or several, is unresolved.
     """
     out, previous = {}, 0
-    for amount, start, end in sorted(located, key=lambda item: item[1]):
+    for amount, start, end, _ in sorted(located, key=lambda item: item[1]):
         names = {n for n, pattern in FIELD_FAMILIES.items() if pattern.search(lowered[previous:start])}
         if "available" in names:
             names.discard("balance")
@@ -288,30 +325,28 @@ def semantic_check(text: str, expected: dict | None) -> dict:
             unsafe = True
             reasons.append("ACCOUNT_MISMATCH")
     clause = _clause_families(text.lower(), located)
-    by_amount = {}  # amount -> field families named in its own clause
-    for amount, start, _ in located:
-        by_amount.setdefault(amount, []).append(clause[(amount, start)])
-    for amount in claims["amounts_minor"]:
-        if amount in exp_amounts:
+    for amount, start, _, negative in sorted(located, key=lambda item: item[1]):
+        value = -amount if negative else amount
+        if value in exp_amounts:
             continue
-        families = by_amount[amount].pop(0) if by_amount.get(amount) else set()
+        families = clause[(amount, start)]  # field families named in this amount's own clause
         scope = families or mentioned
-        # Speech carries no sign (signed wording abstains), so a debit of -1000 is spoken as ten pounds.
-        matching = [f for f in facts if abs(f["amount_minor"]) == amount]
-        if matching and amount not in allowed and len(mentioned) > 1 and len(families) != 1:
+        # An unsigned amount may voice a debit's magnitude (-1000 spoken as ten pounds); a spoken sign must be the fact's.
+        matching = [f for f in facts if (f["amount_minor"] == value if negative else abs(f["amount_minor"]) == amount)]
+        if matching and value not in allowed and len(mentioned) > 1 and len(families) != 1:
             # Several fields are in play but this amount's own clause does not name exactly one: the association
             # cannot be resolved, so it is held rather than approved on a response-wide keyword match.
             ambiguous_association = True
             continue
-        if amount in allowed or (matching and (not scope or any(_fact_family(f["field"]) in scope
-                                                                for f in matching))):
+        if value in allowed or (matching and (not scope or any(_fact_family(f["field"]) in scope
+                                                               for f in matching))):
             continue
+        unsafe = True
         if matching:
-            unsafe = True
             reasons.append("FIELD_MISMATCH")
-            continue
-        if amount not in allowed:
-            unsafe = True
+        elif negative and (amount in exp_amounts or amount in allowed or any(abs(f["amount_minor"]) == amount for f in facts)):
+            reasons.append("SIGN_MISMATCH")  # the right figure with a sign the source does not carry
+        else:
             reasons.append("AMOUNT_MISMATCH" if exp_amounts else "UNEXPECTED_AMOUNT")
     date_facts = expected.get("allowed_date_facts", [])
     if "verified_account_id" in expected:

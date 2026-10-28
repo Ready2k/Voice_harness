@@ -62,8 +62,11 @@ that credentials or credit limits have recovered. Cancel also works while paused
   trusted bank (`engine._bank_actual`, via `spoken_ids`) therefore accepts `transaction_id`, `transaction_ids` and
   `payment_id` case-insensitively with separators ignored (`TXN001`, `txn 001`, `txn-001` → `txn_001`; `payment 001` →
   `payment_001`) and returns the canonical id. Digits must match exactly: `txn0001` is `txn_0001`, a different id (0001 and
-  001 are different spoken digit strings), and a bare `001` without the prefix is not accepted. The argument check in
-  `bakeoff_metrics` uses the same canonicalisation. Tool descriptions are unchanged, so the stored ElevenLabs agent needs no
+  001 are different spoken digit strings). A bare number (`001`) is accepted only in a field that names the id type
+  (`payment_id`, `transaction_id(s)`) and only when exactly one id the bank holds of that type has exactly those digits
+  (28 October; ElevenLabs sent `payment_id: "001"` after "cancel payment … zero zero one"); `1`, `0001`, a bare number in
+  any other field, or one with no known ids stays as sent and is `NOT_FOUND`. The argument check in `bakeoff_metrics` uses
+  the same canonicalisation, resolving a bare number only against the declared id. Tool descriptions are unchanged, so the stored ElevenLabs agent needs no
   re-provisioning. See `docs/SCENARIO_VALIDITY_AUDIT_2026-10-27.md`.
 - New observations distinguish factual passes with claims from `NO_AMOUNT_CLAIM`, and exclude the latter
   from the factual rate. Untestable speech is not counted as safe. Coverage shows completed/planned runs,
@@ -188,12 +191,30 @@ Implemented in `src/voice_harness/bakeoff_stats.py`; results are in `report.unce
   zero. For assurance it requires the Holm-adjusted head-to-head instead, so it agrees with `pairs`. Intervals are not
   corrected across dimensions. The page reads the pairs among the top three as "X over Y on …" sentences, followed by
   the dimensions where they are not separated.
+- **Spoken claims, claims-v2 (28 October).** `semantic_checks.extract_claims` drives both the playback gate and live
+  FACT-01, so it never invents an amount and keeps anything genuinely ambiguous untestable. In the 28 October bake-off all
+  14 untestable replies came from the two OpenAI voices, on natural forms the parser misread: "a ten pound debit" (the
+  article was read as a number word), "GBP 10.00" (read as a date), and a faithful "minus ten pounds" for the tool's
+  -1000 debit. claims-v2: a leading article before a number that is not "hundred"/"thousand" is dropped; `GBP` before a
+  digit amount is a currency like `£`; a `minus`/`negative`/`-` directly before an amount is a signed claim
+  (`negative_minor`; `signed_amounts`) that only a fact with that signed value approves. An unsigned amount may still voice a
+  debit's magnitude, as before. A wrong sign is `SIGN_MISMATCH` (unsafe), a wrong magnitude still unsafe; a sign not attached
+  to one amount, arithmetic ("ten pounds minus five pounds"), `£-10`, "overdrawn" and "in the red" stay
+  `SIGNED_AMOUNT_UNSUPPORTED`. Run-together figures ("one pound, two hundred and thirty-four pounds and fifty-six pence")
+  stay `AMBIGUOUS_AMOUNT`. Every claims dict records `version: claims-v2` (in `assessment.independent_asr`); FACT-01 is
+  v3 because it now compares a spoken sign (a "minus" balance fails). Two-ASR agreement compares signed amounts.
 - **Re-scoring older bake-offs.** `scripts/rescore_bakeoff_report.py` takes an exported `report.json` or a stored payload.
   It removes `CALLER_TRAIL_MS` from explicit-commit turns recorded before the latency-anchor fix, leaves the scenarios in
   `EXCLUDE_TASK` out of task completion with a reason, and re-runs `bakeoff.report` with the current default weights. It
   first checks that the unchanged input reproduces the stored composites (task completion weighted 0). The 26 October
   re-issue is in `artifacts/full-advanced-bakeoff-2026-10-26/rescored-2026-10-27/`. Its README explains why the
   corrected figures lean towards the explicit-commit providers and why `happy-transaction-details-001` is excluded.
+  `--claims --ledger` is the 28 October final re-score (`artifacts/fair-bakeoff-2026-10-28/rescored-2026-10-28/`): it
+  reproduces the stored composites with the stored weights, re-checks every reply from the stored, hash-verified
+  independent ASR text with the shipped `live_assessment.check_transcript`, re-evaluates FACT-01, counts a `NOT_FOUND` call
+  whose id now maps under the bare-number rule (with an accepted, unexpired, unconsumed confirmation) towards task
+  completion, and leaves `commit-cancel-confirmed-001` out of task completion (`SCENARIO_NO_CLARIFICATION_TURN`) with a
+  with/without sensitivity table.
 - **Effect size and power.** Each pair reports `pass_rate_diff` with a clustered interval, `discordant_share`,
   `runs_needed_80` (paired runs for 80% power to confirm the observed difference) and `min_detectable_diff_80` (the
   smallest difference detectable with the runs in hand), using a normal approximation. Both are `null` when
@@ -291,7 +312,9 @@ The bake-off records the auto-judge configuration at launch (`judge_configuratio
 `NO_JUDGE_RESULT`, with run counts and cause, and the report shows that line first among the caveats.
 
 Scenario definitions changed in catalogue version 2 (`happy-handoff-001`, `commit-cancel-confirmed-001`,
-`identity-fault-tool-latency-001`; see `SCENARIO_VALIDITY_AUDIT_2026-10-27.md`). A run launched without
+`identity-fault-tool-latency-001`; see `SCENARIO_VALIDITY_AUDIT_2026-10-27.md`). `commit-cancel-confirmed-001` is version 3 (28
+October): the caller says "Yes please, cancel payment zero zero one now." and a third turn, "It's payment zero zero one.",
+answers a model that asks for the id. A run launched without
 `scenario_version` takes the current one; a stated older version is refused (`SCENARIO_VERSION_NOT_RUNNABLE`). A run
 whose recorded scenario hash differs from the current definition is left out of task completion
 (`SCENARIO_DEFINITION_CHANGED`), as is a confirmed-cancellation run whose caller confirmation the harness did not

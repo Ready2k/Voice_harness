@@ -189,12 +189,12 @@ class DualAsr:
 
 
 def claims_key(text: str) -> tuple:
-    """The amounts, dates and ambiguity codes a transcript yields, in a comparable form."""
-    from .semantic_checks import extract_claims
+    """The amounts (with spoken signs), dates and ambiguity codes a transcript yields, in a comparable form."""
+    from .semantic_checks import extract_claims, signed_amounts
 
     found = extract_claims(text)
     dates = sorted((d["day"], d["month"], d["year"] or 0) for d in found["dates"])
-    return tuple(found["amounts_minor"]), tuple(dates), tuple(found["ambiguities"])
+    return tuple(signed_amounts(found)), tuple(dates), tuple(found["ambiguities"])
 
 
 def agree(first: str, second: str) -> bool:

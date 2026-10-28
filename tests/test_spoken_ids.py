@@ -33,9 +33,11 @@ class Bank(Base):
 
     def test_a_different_number_is_still_not_found(self):
         self.verified()
-        for i, other in enumerate(("txn0001", "txn01", "001")):
+        for i, other in enumerate(("txn0001", "txn01", "1", "0001", "002")):
             result = self.lookup(f"n{i}", other)
             self.assertEqual((result["status"], result["error_code"]), ("denied", "NOT_FOUND"), other)
+        # A bare 001 in transaction_id names the one known transaction with exactly those digits (spoken_ids).
+        self.assertEqual(self.lookup("b1", "001")["structured_content"]["transaction_id"], "txn_001")
 
     def test_fraud_case_accepts_spoken_transaction_ids(self):
         self.verified()

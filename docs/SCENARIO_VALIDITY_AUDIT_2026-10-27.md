@@ -87,6 +87,19 @@ Done 28 October 2026 (definition `version: 2`; runs of the v1 definitions are le
 - **Done (found in the re-check).** `identity-fault-tool-latency-001` asks for the balance after verifying but declared
   no sequence; it now expects `[verify_identity, get_account_summary]`. New hash
   `sha256:3972f3bf5008e3b77aae11423e8bbe42d70cee23f0aa39ba23f653c2422bbfb1`.
+- **Done 28 October (v3, after the 28 October bake-off).** `commit-cancel-confirmed-001` said "cancel payment
+  payment_001", which TTS speaks as "payment payment … zero zero one", and had no turn after it. OpenAI Realtime, Nova and
+  Gemini sent `payment_001`, GPT-Live `payment 001`, ElevenLabs a bare `001` once (`run_3e5598f817d7460ca699dbfc7c779784`,
+  denied `NOT_FOUND`), and xAI asked "I still need the payment ID … Do you have it?" in all three runs
+  (`run_cfbb1598af9441f992d84f646306073e`, `run_8ef3cf2960254d61aae0c2149182b2f3`, `run_47966d1b8e4142c3a0e5a1caccffad30`)
+  and could not finish. The caller now says "Yes please, cancel payment zero zero one now." (still an affirmation for the
+  confirmation observer) and a third turn, "It's payment zero zero one.", gives the id to a model that asks; it is spoken
+  in every run; a repeat cancellation after success returns `not_cancellable` and changes nothing, so it cannot
+  double-count. A bare number
+  in a typed id field is accepted when it names exactly one known id of that type (`spoken_ids`). New hash
+  `sha256:733d6a5b893f40071c8f80e7f0a4b5781b6b59a187bacb169ba65c1f3b962234` (v2 was `cddcb999…`);
+  `commit-cancel-unconfirmed-001` keeps its v1 wording and hash. The 28 October re-score leaves the v2 runs out of task
+  completion (`SCENARIO_NO_CLARIFICATION_TURN`).
 - **Partly done.** CARE-01 still needs a configured judge (finding 4). The bake-off now records the judge configuration
   at launch and the report lists unjudged experience criteria first among its caveats.
 

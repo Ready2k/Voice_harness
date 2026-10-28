@@ -21,7 +21,8 @@ Definitions, all from recorded evidence:
 * argument correctness: only for scenarios that declare ``expected_arguments`` ({tool: {argument: value}}).
   A requested call to a declared tool is correct when it carries every declared argument value. A tool never
   requested is ``not_called`` and is not penalised here (the expected-tool sequence covers that). Spoken-form
-  identifiers (``TXN001`` for ``txn_001``) compare canonically, as the trusted bank accepts them (``spoken_ids``).
+  identifiers (``TXN001`` for ``txn_001``, a bare ``001`` in ``payment_id`` for ``payment_001``) compare canonically, as
+  the trusted bank accepts them (``spoken_ids``); a bare number resolves only against the declared id.
 * task completed (scored as ``task_completion``): the expected sequence executed in order, where a call to a tool with
   ``expected_arguments`` only counts when it carries the declared values. Scenarios with no expected tools are not scored.
 * time to first content audio: first audio that is not an acknowledgement. A turn has an acknowledgement when
@@ -44,7 +45,7 @@ import math
 from collections import Counter, defaultdict
 from decimal import Decimal
 
-from .spoken_ids import canonical_argument, canonical_arguments
+from .spoken_ids import PREFIXES, canonical_argument, canonical_arguments
 
 METRICS_VERSION = 1
 DEAD_AIR_MS = 1000
@@ -60,7 +61,11 @@ RESULT_LEAD_MS = 500
 
 def carries(call_arguments, wanted):
     """Whether a call carries every declared argument value; spoken-form ids compare canonically (``spoken_ids``)."""
-    args = canonical_arguments(call_arguments or {})
+    known = {}
+    for k, v in (wanted or {}).items():
+        if k in PREFIXES:
+            known.setdefault(PREFIXES[k], []).extend(canonical_argument(k, v) if isinstance(v, list) else [canonical_argument(k, v)])
+    args = canonical_arguments(call_arguments or {}, known)
     return all(args.get(k) == canonical_argument(k, v) for k, v in (wanted or {}).items())
 
 

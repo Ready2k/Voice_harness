@@ -196,6 +196,7 @@ class FaultDispositions(unittest.TestCase):
 class VoiceConfirmation(unittest.TestCase):
     def test_reply_classification_is_conservative(self):
         self.assertEqual(classify_reply("Yes please, cancel payment payment_001 now.")[0], "affirm")
+        self.assertEqual(classify_reply("Yes please, cancel payment zero zero one now.")[0], "affirm")
         for text, choice in (("No, don't cancel it", "deny"), ("Yes, no wait, stop", "ambiguous"),
                              ("Please verify me", "ambiguous"), ("", "ambiguous"), ("   ", "ambiguous")):
             self.assertEqual(classify_reply(text)[0], choice, text)

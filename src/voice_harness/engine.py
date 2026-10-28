@@ -624,7 +624,8 @@ class Engine:
 
     def _bank_actual(self, tx, name, args, call_id):
         state = tx.state
-        args = canonical_arguments(args)  # spoken-form ids (TXN001, txn 001) are the canonical id; see spoken_ids
+        # Spoken-form ids (TXN001, txn 001, a bare 001 that names one known id of the field's type); see spoken_ids.
+        args = canonical_arguments(args, {"payment": list(state["payments"]), "txn": ["txn_001"]})
         now = self.clock()
         if name == "verify_identity":
             if state["attempts"] >= 3:

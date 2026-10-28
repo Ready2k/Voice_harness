@@ -127,7 +127,14 @@ class ScenarioVersions(unittest.TestCase):
         self.assertIn("person", handoff["turns"][1]["customer"])
         self.assertEqual(handoff["expected_tool_sequence"], ["transfer_to_human"])
         confirmed = catalogue_entry("commit-cancel-confirmed-001")["definition"]
-        self.assertEqual((confirmed["version"], confirmed["expected_tool_sequence"]), (2, ["verify_identity", "cancel_payment"]))
+        self.assertEqual((confirmed["version"], confirmed["expected_tool_sequence"]), (3, ["verify_identity", "cancel_payment"]))
+        # v3: the id as spoken, and a further turn repeating it for a model that asks (xAI never got the id in v2).
+        self.assertEqual([t["customer"] for t in confirmed["turns"][1:]],
+                         ["Yes please, cancel payment zero zero one now.", "It's payment zero zero one."])
+        self.assertEqual(catalogue_entry("commit-cancel-confirmed-001")["content_hash"],
+                         "sha256:733d6a5b893f40071c8f80e7f0a4b5781b6b59a187bacb169ba65c1f3b962234")
+        self.assertEqual(catalogue_entry("commit-cancel-unconfirmed-001")["content_hash"],
+                         "sha256:72327c427b53c32eeeaeb444d9bea13ed317180c60660232f7f19444974635cd")
         latency = catalogue_entry("identity-fault-tool-latency-001")["definition"]
         self.assertEqual((latency["version"], latency["expected_tool_sequence"]),
                          (2, ["verify_identity", "get_account_summary"]))

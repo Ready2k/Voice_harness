@@ -42,6 +42,18 @@ def _sha(text):
     return hashlib.sha256(text.encode()).hexdigest()
 
 
+def check_transcript(text, expected=None, alternate=None, second_model=None):
+    """The reply disposition for an independent transcript (and an optional second one); shared with re-scoring."""
+    check = semantic_check(text, expected)
+    if alternate is not None:
+        agreed = agree(text, alternate)
+        check["claims"] = {**check["claims"], "cross_check": {
+            "agreed": agreed, "second_model": second_model, "second_transcript_sha256": _sha(alternate)}}
+        if not agreed:  # two transcribers hear different amounts or dates: neither may approve the audio
+            check = {"disposition": "untestable", "reason_codes": [DISAGREEMENT], "claims": check["claims"]}
+    return check
+
+
 class IndependentAssessor:
     def __init__(self, engine, backend=None, cost_recorder=None, retention=None):
         self.engine, self.backend = engine, backend
@@ -79,14 +91,8 @@ class IndependentAssessor:
         if self.cost_recorder:
             for number, part in enumerate(result.parts or (result,), 1):  # each model's own usage and price
                 self.cost_recorder.record_asr(part, f"asr:{unit_id}" + (f":{number}" if number > 1 else ""))
-        check = semantic_check(result.text, expected)
-        if result.alternate is not None:
-            agreed = agree(result.text, result.alternate)
-            check["claims"] = {**check["claims"], "cross_check": {
-                "agreed": agreed, "second_model": result.parts[1].model if len(result.parts) > 1 else None,
-                "second_transcript_sha256": _sha(result.alternate)}}
-            if not agreed:  # two transcribers hear different amounts or dates: neither may approve the audio
-                check = {"disposition": "untestable", "reason_codes": [DISAGREEMENT], "claims": check["claims"]}
+        second = result.parts[1].model if result.alternate is not None and len(result.parts) > 1 else None
+        check = check_transcript(result.text, expected, result.alternate, second)
         return {"kind": "checked", "unit": unit, "result": result, "check": check}
 
     def commit(self, run_id, unit_id, analysis, expected=None):

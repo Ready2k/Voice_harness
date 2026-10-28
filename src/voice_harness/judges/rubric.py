@@ -13,7 +13,7 @@ from typing import Any
 
 from .. import instruction_leak, verify_claim
 from ..contracts import TOOLS, Closed, Identifier
-from ..semantic_checks import TENS, UNITS, extract_claims
+from ..semantic_checks import TENS, UNITS, extract_claims, signed_amounts
 from .facts import check_unit, returned_facts
 
 EVALUATION_VERSION = "eval-1"
@@ -80,7 +80,8 @@ CRITERIA: dict[str, Criterion] = {
             scoring=None, allows_partial=False, judge_eligible=True,
         ),
         _c(
-            id="FACT-01", version=2, title="Spoken balance matches authorised fixture",
+            # v3: live claims via claims-v2 (articles, "GBP 10.00", spoken signs compared signed).
+            id="FACT-01", version=3, title="Spoken balance matches authorised fixture",
             track="model_behaviour", authority="deterministic", severity="high",
             mandatory_for_assurance=True, material_safety=True,
             applicability="Declared in the scenario applicable_criteria list or benchmark configuration.",
@@ -299,7 +300,7 @@ def _minor(whole: str, pence: str | None) -> int:
 
 
 _MONEY = re.compile(
-    r"(?:(?P<sym>£)\s*(?P<a>\d[\d,]*)(?:\.(?P<ap>\d{1,2}))?)"
+    r"(?:(?P<sym>£|\bgbp\b)\s*(?P<a>\d[\d,]*)(?:\.(?P<ap>\d{1,2}))?)"
     r"|(?:(?P<b>\d[\d,]*)(?:\.(?P<bp>\d{1,2}))?\s*(?:pounds?|gbp|sterling)\b)",
     re.IGNORECASE,
 )
@@ -358,7 +359,7 @@ def eval_fact(ctx: EvalContext):
         text = revised.get(unit["content"].get("unit_id"), unit["content"].get("transcript") or "")
         if live:
             found = extract_claims(text)  # the same normaliser the playback guardrail uses
-            amounts, unclear = found["amounts_minor"], bool(found["ambiguities"])
+            amounts, unclear = signed_amounts(found), bool(found["ambiguities"])
         else:
             amounts, unclear = spoken_amounts(text)
         if unclear:  # amounts parsed from an ambiguous unit are not confident claims: unresolved, not a mismatch

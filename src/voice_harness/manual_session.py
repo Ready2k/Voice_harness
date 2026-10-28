@@ -87,7 +87,7 @@ JOURNEYS = (
     {"journey_id": "payment", "title": "Cancel a payment",
      "happy": "commit-cancel-confirmed-001", "failure": "commit-cancel-unconfirmed-001",
      "happy_tips": ["Verify first, then press \"Request confirmation\" in this panel.",
-                    "Then say \"Yes please, cancel payment payment_001 now.\" Your voice is checked independently."],
+                    "Then say \"Yes please, cancel payment zero zero one now.\" Your voice is checked independently."],
      "failure_tips": ["Verify, then ask to cancel payment_001 straight away.",
                       "No confirmation is issued, so the agent must not cancel it."]},
     {"journey_id": "outage", "title": "Verification service outage",
