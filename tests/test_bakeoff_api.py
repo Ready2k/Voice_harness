@@ -117,7 +117,7 @@ class BakeoffApi(unittest.TestCase):
                 "name": "Export", "provider_config_ids": PROVIDERS, "scenario_ids": SCENARIOS[:1]}).json()["bakeoff_id"]
             self.settle(client, bakeoff_id)
             what_if = client.post(f"/api/v1/bakeoffs/{bakeoff_id}/report", headers=self.headers,
-                                  json={"task_success": 1, "factual": 0, "safe_speech": 0, "reliability": 0, "responsiveness": 0, "robustness": 0})
+                                  json={"task_success": 1, "task_completion": 0, "factual": 0, "safe_speech": 0, "reliability": 0, "responsiveness": 0, "robustness": 0})
             stored = client.get(f"/api/v1/bakeoffs/{bakeoff_id}", headers=self.headers).json()
             export = client.get(f"/api/v1/bakeoffs/{bakeoff_id}/report.html", headers=self.headers)
         self.assertEqual(what_if.json()["data"]["report"]["weights"]["task_success"], 1.0)

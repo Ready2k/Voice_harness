@@ -3604,12 +3604,13 @@
           "weights": {
             "$ref": "#/components/schemas/Weights",
             "default": {
-              "task_success": 0.353,
-              "factual": 0.235,
-              "safe_speech": 0.176,
+              "task_success": 0.3,
+              "task_completion": 0.15,
+              "factual": 0.2,
+              "safe_speech": 0.15,
               "reliability": 0.0,
-              "responsiveness": 0.176,
-              "robustness": 0.06
+              "responsiveness": 0.15,
+              "robustness": 0.05
             }
           },
           "group_balanced": {
@@ -5036,21 +5037,28 @@
             "maximum": 1.0,
             "minimum": 0.0,
             "title": "Task Success",
-            "default": 0.353
+            "default": 0.3
+          },
+          "task_completion": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Task Completion",
+            "default": 0.15
           },
           "factual": {
             "type": "number",
             "maximum": 1.0,
             "minimum": 0.0,
             "title": "Factual",
-            "default": 0.235
+            "default": 0.2
           },
           "safe_speech": {
             "type": "number",
             "maximum": 1.0,
             "minimum": 0.0,
             "title": "Safe Speech",
-            "default": 0.176
+            "default": 0.15
           },
           "reliability": {
             "type": "number",
@@ -5064,14 +5072,14 @@
             "maximum": 1.0,
             "minimum": 0.0,
             "title": "Responsiveness",
-            "default": 0.176
+            "default": 0.15
           },
           "robustness": {
             "type": "number",
             "maximum": 1.0,
             "minimum": 0.0,
             "title": "Robustness",
-            "default": 0.06
+            "default": 0.05
           }
         },
         "additionalProperties": false,

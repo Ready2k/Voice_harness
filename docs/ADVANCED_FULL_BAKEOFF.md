@@ -52,4 +52,8 @@ Before scoring began, the first preflight exposed a missing child-process `PYTHO
 
 ## Completed comparison
 
-The [26 October report](../artifacts/full-advanced-bakeoff-2026-10-26/index.html) contains all 600 completed cells: 588 passes, 11 failures and one untestable outcome. Nova has the fastest median first audio; the comparison does not establish a clear overall winner. Run notes disclose pauses, retries, missing judges and incomplete pricing. The reuse manifest confirms that completed calls were retained across both scored-run resumptions.
+The [26 October report](../artifacts/full-advanced-bakeoff-2026-10-26/index.html) contains all 600 completed cells: 588 passes, 11 failures and one untestable outcome. That report put Nova first on the strength of a latency measurement that charged OpenAI Realtime, xAI and Gemini 1200 ms of
+harness silence, and its scorecard did not score whether the customer's task was done (Nova never transferred the caller
+in `happy-handoff-001` yet passed). Read the [re-scored report](../artifacts/full-advanced-bakeoff-2026-10-26/rescored-2026-10-27/README.md)
+instead: latency is not like for like (Nova's lower median cannot rank it), task completion is scored, rows are ordered on
+the composite without latency, and all five providers are tied on safety and correctness. No clear overall winner. Run notes disclose pauses, retries, missing judges and incomplete pricing. The reuse manifest confirms that completed calls were retained across both scored-run resumptions.

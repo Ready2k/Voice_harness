@@ -151,9 +151,10 @@ export const CRITERIA = {
 };
 /** Glossary entries for the report's own terms, shown with the criteria. */
 export const TERMS = {
-  "Assurance pass rate": "Share of completed runs where every mandatory assurance check passed. It is not whether the caller's task was completed.",
+  "Assurance pass rate": "Share of completed runs where every mandatory assurance check passed. It is not whether the caller's task was completed: see Task completion.",
+  "Task completion": "Share of completed runs, among scenarios that expect tools, where the expected tool sequence ran in order with the declared arguments (for example the right transaction). Scenarios that expect no tool are left out, not counted as passes.",
   "Composite": "Weighted sum of the scorecard dimensions, 0 to 1. A ranking aid, not a measurement; the head-to-head decides whether two providers differ.",
-  "Composite without latency": "The composite over safety and correctness alone (assurance, factual, safe speech, robustness, re-weighted among themselves). Read it when latency was not measured like for like.",
+  "Composite without latency": "The composite over safety and correctness alone (assurance, task completion, factual, safe speech, robustness, re-weighted among themselves). Read it when latency was not measured like for like.",
   "Severity-weighted assurance": "Criterion verdicts weighted by severity (critical counts most). Shown beside the pass rate and not part of the composite.",
   "Eliminated at gates": "A prohibited tool ran, an identity, confirmation or audio check failed, or too few runs completed.",
 };
@@ -259,11 +260,11 @@ export function rankExcludingLatencyLabel(s, report) {
   return String(s.rank_excluding_latency) + (report.verdict?.ranking === "tied_on_quality" && s.standing === "tied" ? " (tied)" : "");
 }
 
-const CONTRAST_LABEL = {task_success: "assurance pass rate", factual: "factual accuracy", safe_speech: "safe speech", robustness: "robustness", responsiveness: "responsiveness"};
+const CONTRAST_LABEL = {task_success: "assurance pass rate", task_completion: "task completion", factual: "factual accuracy", safe_speech: "safe speech", robustness: "robustness", responsiveness: "responsiveness"};
 const pts = v => (Math.round(v * 100) > 0 ? "+" : Math.round(v * 100) < 0 ? "−" : "") + Math.abs(Math.round(v * 100));
-/** The pairs worth reading first: every pair among the top three gate-passing providers in composite order. */
+/** The pairs worth reading first: every pair among the top three gate-passing providers in scorecard order. */
 export function contrastPairs(report) {
-  const top = [...report.scores].filter(s => s.advances !== false).sort((a, b) => (a.composite_order ?? 99) - (b.composite_order ?? 99)).slice(0, 3).map(s => s.provider);
+  const top = [...report.scores].filter(s => s.advances !== false).sort((a, b) => (a.display_order ?? a.composite_order ?? 99) - (b.display_order ?? b.composite_order ?? 99)).slice(0, 3).map(s => s.provider);
   return (report.contrasts ?? []).filter(c => top.includes(c.a) && top.includes(c.b));
 }
 /** X over Y, dimension by dimension, for one pair: {title, separated: [sentences], tied: sentence or null}. */
@@ -461,9 +462,10 @@ export function estimateCost(costs, providers, runsPerProvider) {
   return {usd, missing};
 }
 
-/** Scorecard order: rank (advancing providers by composite, then those eliminated at the gates by composite), ties by provider id.
- *  With no rank (no first place, or an incomplete comparison) the composite order is kept for reading. */
-const order = s => s.rank ?? s.composite_order ?? Infinity;
+/** Scorecard order: rank (advancing providers by the ranking basis, then those eliminated at the gates), ties by provider id.
+ *  With no rank (no first place, or an incomplete comparison) the report's display order is kept for reading; older reports
+ *  have only the composite order. The basis is the composite without latency when latency was not measured like for like. */
+const order = s => s.rank ?? s.display_order ?? s.composite_order ?? Infinity;
 export const scoresInRankOrder = scores => [...scores].sort((a, b) => (order(a) - order(b) || 0) || (a.provider < b.provider ? -1 : 1));
 
 /** Scenario groups merged by name, ordered by the lowest group_order seen (then name): [{group, order}]. */
@@ -618,7 +620,7 @@ export function renderReport(root, data, {heading: showHeading = true, reveal = 
       + "Reliability is judged here, not scored: a run that failed and then completed on retry is not penalised, but \"Completed first try\" and \"Retried runs\" keep those retries visible."))));
   const DIMS = (R.dimensions ?? []).map(d => d.dimension), hasSeverity = R.scores.some(x => x.severity_weighted?.value != null);
   const SCORE_DIMENSIONS = [...DIMS, ...(hasSeverity ? ["severity_weighted"] : [])];
-  const DIM_LABEL = {task_success: "Assurance pass rate", factual: "Factual", safe_speech: "Safe speech", responsiveness: "Responsiveness", robustness: "Robustness",
+  const DIM_LABEL = {task_success: "Assurance pass rate", task_completion: "Task completion", factual: "Factual", safe_speech: "Safe speech", responsiveness: "Responsiveness", robustness: "Robustness",
     reliability: "Reliability", severity_weighted: "Severity-weighted assurance"};
   const kind = intervalKind(R, SCORE_DIMENSIONS);
   const leaderRow = R.verdict.leader ? by[R.verdict.leader] : null;  // no leader while the comparison is incomplete
@@ -637,6 +639,7 @@ export function renderReport(root, data, {heading: showHeading = true, reveal = 
     return f;
   };
   const tiedRanking = R.verdict.ranking === "tied_on_quality", unlike = R.verdict.latency_comparable === false;
+  const byQuality = R.verdict.ranking_basis === "composite_excluding_latency";
   const hasExcl = R.scores.some(s => s.composite_excluding_latency !== undefined);
   const exclCell = s => {
     const f = document.createDocumentFragment();
@@ -668,8 +671,9 @@ export function renderReport(root, data, {heading: showHeading = true, reveal = 
   const latencyNote = latencyComparabilityText(R, NAMES);
   const scoreNotes = [
     ...(tiedRanking ? ["No first place: no provider leads on safety and correctness (neither the head-to-head nor the paired interval separates the leaders), so the scorecard shows standings, not ranks. "
-      + "Tied means its safety-and-correctness score can't be separated from the best one; rows stay in composite order for reading only."] : []),
+      + "Tied means its safety-and-correctness score can't be separated from the best one; rows stay in " + (byQuality ? "order of the composite without latency" : "composite order") + " for reading only."] : []),
     ...(latencyNote ? [latencyNote] : []),
+    ...(byQuality ? ["Rows are " + (tiedRanking ? "ordered" : "ordered and ranked") + " by the composite without latency, because latency was not measured like for like; the composite with latency is still shown."] : []),
     "Figures in brackets are 95% intervals; ≈ marks an interval that overlaps the leader's, so that dimension can't separate them. Overlapping bars mean the same. " + intervalNote(kind),
     responsivenessNote(R.scoring) + " The axis starts at the lowest score, not at 0; an interval cut off at the edge is marked with an arrow (hover for the exact bound).",
     ...(hasSeverity ? ["Severity-weighted assurance weights each criterion by its severity and is shown beside the pass rate; it is not in the composite."] : []),
@@ -844,6 +848,8 @@ export function renderReport(root, data, {heading: showHeading = true, reveal = 
         ["Model behaviour", words(o.model_behaviour) || "—"], ["Platform enforcement", words(o.platform_enforcement) || "—"],
         ["Criteria", Object.entries(o.criteria).map(([c, v]) => `${c} ${v}`).join(", ") || "—"],
         ["Expected tool steps", o.expected_tools_observed == null ? "Not recorded" : (o.expected_tools_observed ? "Observed" : "Missing steps") + " (not full task completion)"],
+        ...(o.metrics?.task_completed != null && o.expected_tools?.length ? [["Task completed", o.metrics.task_completed ? "Yes: expected tools ran in order with the declared arguments" : "No"]] : []),
+        ...(o.task_completion_excluded ? [["Task completion", "Not scored: " + words(o.task_completion_excluded)]] : []),
         ["Replies", `${o.replies_assessed ?? 0} assessed, ${o.replies_unsafe ?? 0} held as unsafe`], ["First audio", turns || "—"],
         ["Attempts", o.attempts > 1 ? `${o.attempts} (earlier: ${o.earlier_failures.map(words).filter(Boolean).join(", ") || "did not complete"})` : "1"],
         ...(o.failure ? [["Failure", failureText(o.failure)]] : []), ["Run", o.run_id ?? "—"]]) detail.append(el("dt", null, k), el("dd", null, v));

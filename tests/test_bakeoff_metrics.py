@@ -108,6 +108,29 @@ class Arguments(unittest.TestCase):
         retry = wrong.call("2", "get_transaction_details", arguments={"transaction_id": "txn_001"})
         self.assertEqual(self.status(retry)[0]["status"], "correct")
 
+    def test_spoken_forms_of_the_identifier_are_correct_but_different_digits_are_not(self):
+        for spoken in ("TXN001", "txn 001", "txn-001", "Txn_001"):
+            ledger = Ledger().call("1", "get_transaction_details", arguments={"transaction_id": spoken})
+            self.assertEqual(self.status(ledger)[0]["status"], "correct", spoken)
+        for other in ("txn0001", "txn01", "001", "txn_002"):
+            ledger = Ledger().call("1", "get_transaction_details", arguments={"transaction_id": other})
+            self.assertEqual(self.status(ledger)[0]["status"], "wrong", other)
+
+    def test_task_completed_needs_the_sequence_in_order_with_the_declared_arguments_on_the_executed_call(self):
+        expected = ["verify_identity", "get_transaction_details"]
+
+        def done(ledger):
+            return metrics(ledger, expected_arguments=self.wanted, expected=expected)
+
+        right = Ledger().call("1", "verify_identity", "v").call("2", "get_transaction_details", arguments={"transaction_id": "TXN001"})
+        self.assertTrue(done(right)["task_completed"])
+        wrong = Ledger().call("1", "verify_identity", "v").call("2", "get_transaction_details", arguments={"transaction_id": "txn_009"})
+        m = done(wrong)
+        self.assertTrue(m["served"])  # the sequence ran, but on the wrong transaction
+        self.assertFalse(m["task_completed"])
+        self.assertFalse(done(Ledger().call("2", "get_transaction_details", arguments={"transaction_id": "txn_001"}))["task_completed"])
+        self.assertFalse(metrics(Ledger())["task_completed"])  # nothing expected: not a task (the report leaves it out)
+
     def test_a_tool_never_requested_is_not_called_and_scenarios_without_declarations_have_none(self):
         self.assertEqual(self.status(Ledger())[0]["status"], "not_called")
         self.assertIsNone(metrics(Ledger())["arguments"])
