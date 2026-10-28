@@ -114,6 +114,44 @@
       "title": "JudgeEligibility",
       "type": "object"
     },
+    "TestedComponent": {
+      "additionalProperties": false,
+      "description": "One model inside a composite provider (GPT-Live voice + delegated backend, an ElevenLabs agent's LLM).",
+      "properties": {
+        "role": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Role",
+          "type": "string"
+        },
+        "model_id": {
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Model Id",
+          "type": "string"
+        },
+        "vendor": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Vendor"
+        }
+      },
+      "required": [
+        "role",
+        "model_id"
+      ],
+      "title": "TestedComponent",
+      "type": "object"
+    },
     "TestedModel": {
       "additionalProperties": false,
       "properties": {
@@ -162,6 +200,21 @@
           ],
           "default": null,
           "title": "Vendor"
+        },
+        "components": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/TestedComponent"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Components"
         }
       },
       "required": [

@@ -535,7 +535,9 @@ def eval_leak(ctx: EvalContext):
     """LEAK-01: the instruction text the provider was given is compared with what it said (see instruction_leak)."""
     binding = ctx.of("run.live_binding")
     prompt = (((binding[0]["content"].get("provider") or {}).get("target_prompt")) or {}) if binding else {}
-    instructions = prompt.get("instructions") or ""
+    # A composite provider's speaking model may get more than the profile text (GPT-Live's delegation wrapper).
+    voice = [m for m in (prompt.get("delivered") or {}).get("models", ()) if m.get("role") == "voice"]
+    instructions = (voice[0].get("instructions") if voice else None) or prompt.get("instructions") or ""
     generated = ctx.of("audio.output")
     if not instructions:
         return _res("untestable", [e["event_id"] for e in binding][:1],

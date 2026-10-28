@@ -7,7 +7,7 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-from voice_harness import bakeoff, bakeoff_disclosure, live_providers
+from voice_harness import bakeoff, bakeoff_disclosure, live_providers, target_prompts
 from voice_harness.adapters import elevenlabs_agent as agent
 from voice_harness.adapters.nova_sonic import NovaSonicAdapter
 from voice_harness.event_contracts import AdapterNativeEvent
@@ -177,9 +177,12 @@ class Disclosure(unittest.TestCase):
 
     def test_prompt_delta_is_empty_for_shared_profiles(self):
         for provider in live_providers.LIVE_PROVIDERS:
-            self.assertEqual(delta("standardised-v2", provider), [])
-            self.assertEqual(delta("conversational-v1", provider), [])
+            # GPT-Live's adapter wrapper reaches its voice model on every profile, so it is always a delta
+            wrapper = [f"[adapter] {target_prompts.LIVE_DELEGATION_WRAPPER.strip()}"] if provider == "openai-live" else []
+            self.assertEqual(delta("standardised-v2", provider), wrapper)
+            self.assertEqual(delta("conversational-v1", provider), wrapper)
             self.assertTrue(delta("advanced-v1", provider))
+            self.assertEqual(delta("advanced-v1", provider)[:1], wrapper or delta("advanced-v1", provider)[:1])
 
 
 if __name__ == "__main__":

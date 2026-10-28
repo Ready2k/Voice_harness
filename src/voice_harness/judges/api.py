@@ -21,6 +21,7 @@ class TestedBody(_Body):
     provider: str = Field(min_length=1, max_length=100)
     model_id: str = Field(min_length=1, max_length=200)
     family: str = Field(min_length=1, max_length=100)
+    components: list[dict[str, str]] | None = Field(default=None, max_length=8)  # role, model_id[, vendor]
 
 
 class AssessBody(_Body):

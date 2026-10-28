@@ -60,6 +60,35 @@ Phone manner:
 """
 
 
+# GPT-Live delegation wrapper (gpt-live-delegation-v1): the openai-live adapter puts this in front of the profile's
+# instructions for the voice model only; the delegated backend model gets the profile text unchanged. Recorded in
+# the run's prompt provenance (``delivered``) and disclosed as a prompt delta on every profile. Its first sentence
+# duplicates STANDARDISED_V2's British-English line; the wording is kept as evaluated (27 Oct 2026).
+LIVE_DELEGATION_WRAPPER_ID = "gpt-live-delegation-v1"
+LIVE_DELEGATION_WRAPPER = ("Speak natural, concise British English. Delegate banking questions and actions to the backend. "
+                           "Never invent results or claim success before the backend confirms it. ")
+
+
+def live_voice_instructions(text):
+    return LIVE_DELEGATION_WRAPPER + text
+
+
+def adapter_wrapper(provider):
+    """Text an adapter adds to the voice model's instructions beyond the profile (None: delivered verbatim)."""
+    return LIVE_DELEGATION_WRAPPER.strip() if provider == "openai-live" else None
+
+
+def delivered(provider, text, model_id=None, backend_model_id=None):
+    """The exact instructions each model of a provider receives, with hashes; None if one model gets ``text`` verbatim."""
+    if provider != "openai-live":
+        return None
+    voice = live_voice_instructions(text)
+    return {"wrapper_id": LIVE_DELEGATION_WRAPPER_ID, "models": [
+        {"role": "voice", "model_id": model_id, "instructions": voice, "instructions_sha256": hashlib.sha256(voice.encode()).hexdigest()},
+        {"role": "backend", "model_id": backend_model_id, "instructions": text,
+         "instructions_sha256": hashlib.sha256(text.encode()).hexdigest()}]}
+
+
 def instructions(profile, provider=None):
     if profile == "standardised-v2":
         return STANDARDISED_V2
@@ -87,13 +116,16 @@ def instructions(profile, provider=None):
 
 def delta(profile, provider):
     """Lines a provider's instructions add to the profile's common core (advanced-v1: STANDARDISED_V2 + ADVANCED_STYLE),
-    so a vendor-tuned comparison shows what each vendor was given beyond what every vendor was given."""
+    so a vendor-tuned comparison shows what each vendor was given beyond what every vendor was given. An adapter
+    wrapper (GPT-Live's delegation line, sent to its voice model) is listed first, prefixed ``[adapter]``."""
     core = {"advanced-v1": STANDARDISED_V2 + ADVANCED_STYLE, "conversational-v1": STANDARDISED_V2 + CONVERSATIONAL_STYLE}.get(profile, STANDARDISED_V2)
     common = {line.strip() for line in core.splitlines()}
-    return [line.strip() for line in instructions(profile, provider).splitlines() if line.strip() and line.strip() not in common]
+    wrapper = adapter_wrapper(provider)
+    return ([f"[adapter] {wrapper}"] if wrapper else []) + [
+        line.strip() for line in instructions(profile, provider).splitlines() if line.strip() and line.strip() not in common]
 
 
-def provenance(profile, text, tools):
+def provenance(profile, text, tools, delivered_to=None):
     """Bind the actual instructions and tool schemas, rather than just a display label."""
     tool_json = json.dumps(tools, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
     return {
@@ -104,4 +136,5 @@ def provenance(profile, text, tools):
         "tools": tools,
         "tools_sha256": hashlib.sha256(tool_json.encode()).hexdigest(),
         "vendor_tuned": profile == "advanced-v1",
+        **({"delivered": delivered_to} if delivered_to else {}),
     }

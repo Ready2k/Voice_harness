@@ -15,8 +15,8 @@ import time
 import uuid
 from typing import Any
 
-import numpy as np
-
+from ..audio_activity import RMS_THRESHOLD_PCM16, audible
+from ..target_prompts import live_voice_instructions
 from . import (
     AudioOut,
     CapabilityUnsupported,
@@ -33,6 +33,13 @@ from .openai_realtime import SAMPLE_RATE, OpenAIRealtimeAdapter, synth_caller_pc
 DEFAULT_URL = "wss://api.openai.com/v1/live/sessions"
 DEFAULT_MODEL = "gpt-live-1"
 DEFAULT_BACKEND = "gpt-6-luna"
+FRAME_BYTES = 960  # 20 ms of 24 kHz PCM16
+# Reply grouping, measured on the 27 Oct 2026 evaluation ledger (56 replies; derivation in docs/OPENAI_LIVE.md).
+REPLY_SILENCE_MS = 800  # longest pause inside a reply with no backend work: 700 ms (p99 600, n=77)
+RESULT_VOICE_GRACE_S = 1.5  # backend completion -> its result voiced: p100 1.10 s (p95 0.95, n=28)
+CALLER_GRACE_S = 2.5  # caller speech end -> delegation created: p100 2.2 s (n=29)
+INPUT_JITTER_S = 0.1  # caller frames still arriving: wait for them rather than splice silence into speech
+TURN_BOUNDARY = f"harness_pcm_silence_{REPLY_SILENCE_MS}ms_backend_aware_diagnostic"
 
 
 class OpenAILiveAdapter(OpenAIRealtimeAdapter):
@@ -47,7 +54,11 @@ class OpenAILiveAdapter(OpenAIRealtimeAdapter):
         self._silent_samples = 0
         self._texts = {"user": "", "assistant": ""}
         self._backend_active = False
-        self._reply_not_before = 0.0
+        self._reply_not_before = 0.0  # caller grace: no reply ends until CALLER_GRACE_S after audible caller audio
+        self._completed_at = float("-inf")  # last backend completion
+        self._result_voiced = True  # speech has started since that completion
+        self._last_input = float("-inf")
+        self._last_sent = None
         self._seen_calls = set()
         self._backend_instructions = ""
         self._closing = False
@@ -64,8 +75,7 @@ class OpenAILiveAdapter(OpenAIRealtimeAdapter):
         return {**super().capabilities(), "provider": "openai_live", "model_id": self._model,
                 "interrupt_truncate": "unsupported", "interrupt_truncate_note": "Live has no truncate primitive",
                 "usage": "session.closed and nested response.completed", "capability_report_id": None,
-                "turn_boundary": "harness_pcm_silence_900ms_diagnostic", "full_duplex": True,
-                "backend_model_id": self.backend_model}
+                "turn_boundary": TURN_BOUNDARY, "full_duplex": True, "backend_model_id": self.backend_model}
 
     async def open_session(self, config: dict[str, Any]):
         import websockets
@@ -91,8 +101,7 @@ class OpenAILiveAdapter(OpenAIRealtimeAdapter):
         self._backend_instructions = instructions
         session = {
             "model": self._model,
-            "instructions": "Speak natural, concise British English. Delegate banking questions and actions to the backend. "
-                            "Never invent results or claim success before the backend confirms it. " + instructions,
+            "instructions": live_voice_instructions(instructions),  # recorded as target_prompt.delivered
             "audio": {"format": {"type": "audio/pcm", "rate": SAMPLE_RATE},
                       "output": {"voice": config.get("voice", "marin")}},
             "delegation": {"type": "responses", "responses": {
@@ -111,37 +120,54 @@ class OpenAILiveAdapter(OpenAIRealtimeAdapter):
         resolved = started.get("session", {})
         return {"session_id": self.session_id, "provider_session_id": resolved.get("id"),
                 "model_id": resolved.get("model", self._model), "backend_model_id": self.backend_model,
-                "turn_boundary": "harness_pcm_silence_900ms_diagnostic"}
+                "turn_boundary": TURN_BOUNDARY}
+
+    def _caller_spoke(self):
+        self._reply_not_before = max(self._reply_not_before, time.monotonic() + CALLER_GRACE_S)
 
     async def _audio_clock(self):
-        # Continuous, paced input (including silence) advances the Live session clock.
+        # Continuous input (silence included) advances the Live session clock. Paced against one monotonic schedule,
+        # so per-frame overhead never accumulates into lag. Caller frames go out as the harness supplies them (it
+        # paces in real time); silence is sent only when no caller audio is in flight, never spliced into speech.
+        due = time.monotonic()
         while not self._closing:
-            queued = True
             try:
                 frame = self._input.get_nowait()
             except asyncio.QueueEmpty:
-                frame = bytes(960)
-                queued = False
-            if frame and float(np.sqrt(np.mean(np.frombuffer(frame, dtype="<i2").astype(float) ** 2))) > 100:
-                self._reply_not_before = max(self._reply_not_before, time.monotonic() + 3.0)
-            await self._send({"type": "session.input_audio.append", "audio": base64.b64encode(frame).decode()})
-            if queued:
+                if time.monotonic() - self._last_input < INPUT_JITTER_S:
+                    await asyncio.sleep(0.002)
+                    due = max(due, time.monotonic())
+                    continue
+                frame = None
+            pcm = frame or bytes(FRAME_BYTES)
+            if frame and audible(frame):
+                self._caller_spoke()
+            await self._send({"type": "session.input_audio.append", "audio": base64.b64encode(pcm).decode()})
+            if frame is not None:
+                self._last_sent = time.monotonic()
                 self._input.task_done()
-            await asyncio.sleep(len(frame) / (SAMPLE_RATE * 2))
+            due += len(pcm) / (SAMPLE_RATE * 2)
+            if (delay := due - time.monotonic()) > 0:
+                await asyncio.sleep(delay)
 
     async def send_audio(self, data, metadata):
         if self.closed or not data or len(data) != metadata["sample_count"] * 2:
             raise ValueError("INVALID_AUDIO")
         if metadata.get("sample_rate", SAMPLE_RATE) != SAMPLE_RATE:
             raise ValueError("INVALID_AUDIO_RATE")
-        if float(np.sqrt(np.mean(np.frombuffer(data, dtype="<i2").astype(float) ** 2))) > 100:
-            self._reply_not_before = max(self._reply_not_before, time.monotonic() + 3.0)
-        for offset in range(0, len(data), 960):
-            await self._input.put(data[offset:offset + 960])
+        if audible(data):
+            self._caller_spoke()
+        self._last_input = time.monotonic()
+        for offset in range(0, len(data), FRAME_BYTES):
+            await self._input.put(data[offset:offset + FRAME_BYTES])
 
     async def request_turn(self):
-        # Live owns endpointing; never send Realtime commit/response commands.
+        # Live owns endpointing; never send Realtime commit/response commands. Returns once the final queued caller
+        # frame is sent; the marker records that moment, so lag behind the harness's speech_ended_ms is measurable.
         await self._input.join()
+        if self.native_sink is not None and self._last_sent is not None:
+            self.native_sink(self.NATIVE_NAME, "harness.caller_audio_flushed",
+                             {"last_frame_sent_ms": int(self._last_sent * 1000)})
 
     async def send_text(self, text, *, respond=True):
         if not respond:
@@ -167,6 +193,10 @@ class OpenAILiveAdapter(OpenAIRealtimeAdapter):
         return {"local_send": "accepted", "provider_acknowledgement": "unconfirmed", "call_id": call_id}
 
     async def interrupt(self, item_id, audio_end_ms):
+        # No truncate or cancel: Live may keep voicing the cut-off reply. Close the local grouping so the cut-in ends
+        # that reply here, as a provider turn end would, and later speech starts a new reply.
+        if self._response_id is not None:
+            self._finish_speech()
         raise CapabilityUnsupported("Live does not support history truncation")
 
     async def configure_turn_detection(self, turn_detection):
@@ -178,6 +208,12 @@ class OpenAILiveAdapter(OpenAIRealtimeAdapter):
             self._response_id = f"live_speech_{self._speech_serial}"
             self._item_id = self._response_id
             self._emit(TurnStart)
+
+    def _reply_complete(self):
+        now = time.monotonic()
+        return (self._silent_samples >= SAMPLE_RATE * REPLY_SILENCE_MS // 1000 and not self._backend_active
+                and not self._pending_calls and now >= self._reply_not_before
+                and (self._result_voiced or now >= self._completed_at + RESULT_VOICE_GRACE_S))
 
     def _finish_speech(self):
         for role, text in self._texts.items():
@@ -196,22 +232,28 @@ class OpenAILiveAdapter(OpenAIRealtimeAdapter):
             if len(pcm) % 2:
                 self._emit(ProviderError, code="INVALID_PROVIDER_AUDIO", fatal=True)
                 return
-            speech = bool(pcm) and float(np.sqrt(np.mean(np.frombuffer(pcm, dtype="<i2").astype(float) ** 2))) > 100
-            if speech:
+            if pcm and audible(pcm):
                 if self.native_sink is not None:
                     self.native_sink(self.NATIVE_NAME, "harness.pcm_speech_detected", {
-                        "source_event_id": ev.get("event_id"), "rms_threshold_pcm16": 100,
+                        "source_event_id": ev.get("event_id"), "rms_threshold_pcm16": RMS_THRESHOLD_PCM16,
                         "sample_count": len(pcm) // 2,
                     })
+                if self._response_id is None or self._silent_samples:
+                    self._result_voiced = True  # a speech onset: any completed backend result is now being voiced
                 self._start_speech()
                 self._silent_samples = 0
-            elif self._response_id is not None:
-                self._silent_samples += len(pcm) // 2
-            if self._response_id is not None:
                 self._emit(AudioOut, item_id=self._item_id, pcm=pcm, sample_count=len(pcm) // 2)
-                if (self._silent_samples >= SAMPLE_RATE * .9 and not self._backend_active
-                        and not self._pending_calls and time.monotonic() >= self._reply_not_before):
+            elif self._response_id is not None:
+                # The stream is continuous: each pause is passed on in real time up to REPLY_SILENCE_MS, so a backend
+                # wait does not fill the reply (and its 20 s audio cap) with silence packet-streaming providers never send.
+                kept = max(0, SAMPLE_RATE * REPLY_SILENCE_MS // 1000 - self._silent_samples) * 2
+                self._silent_samples += len(pcm) // 2
+                if kept and (part := pcm[:kept]):
+                    self._emit(AudioOut, item_id=self._item_id, pcm=part, sample_count=len(part) // 2)
+                if self._reply_complete():
                     self._finish_speech()
+        elif t == "session.delegation.created":
+            self._backend_active = True  # arrives just before its response.created
         elif t in ("session.input_transcript.delta", "session.output_transcript.delta"):
             role = "user" if t == "session.input_transcript.delta" else "assistant"
             text = ev.get("delta", "")
@@ -236,12 +278,9 @@ class OpenAILiveAdapter(OpenAIRealtimeAdapter):
                     self._pending_calls.add(item["call_id"])
                     self._emit(ToolCall, call_id=item["call_id"], name=item["name"], arguments=args)
             elif kind in ("response.completed", "response.failed", "response.cancelled", "response.incomplete"):
-                self._backend_active = False
-                # Live can finish an acknowledgement before it begins voicing a
-                # delegated result. Backend completion is not a speech boundary.
-                # Allow the voice engine to consume that result before settling.
-                self._reply_not_before = time.monotonic() + 3.0
-                self._silent_samples = 0
+                # Not a speech boundary: Live may finish an acknowledgement before voicing the delegated result,
+                # so the reply stays open until speech resumes or RESULT_VOICE_GRACE_S passes.
+                self._backend_active, self._result_voiced, self._completed_at = False, False, time.monotonic()
                 response = nested.get("response", {})
                 if response.get("usage"):
                     self._emit(Usage, raw={"backend_model_id": self.backend_model, "backend_usage": response["usage"],

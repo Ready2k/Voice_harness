@@ -26,7 +26,9 @@ UNFINISHED = {"queued", "running", "evaluating"}
 
 def _identity(tested: dict | None) -> tuple[str, ...]:
     """Tested-model tokens masked on top of the registry list (its model id is distinctive; labels like 'local' are not)."""
-    return tuple(t for t in [(tested or {}).get("model_id")] if t and len(t) >= 4)
+    tested = tested or {}
+    ids = [tested.get("model_id"), *(c.get("model_id") for c in tested.get("components") or ())]
+    return tuple(dict.fromkeys(t for t in ids if t and len(t) >= 4))
 
 
 def emit(tx, kind: str, content: dict, causes=(), source: str = "judge") -> str:

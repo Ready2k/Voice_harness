@@ -64,6 +64,18 @@
       ],
       "default": null,
       "title": "Audio Bytes"
+    },
+    "audible": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Audible"
     }
   },
   "required": [

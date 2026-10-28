@@ -788,6 +788,9 @@ class AdapterNativeEvent(Closed):
     # Decoded output-audio bytes in the event (0: none), derived from its shape. Absent on older ledgers, whose
     # first-audio falls back to a size heuristic for Gemini.
     audio_bytes: Count | None = None
+    # Whether that audio is audible (``audio_activity``: PCM16 RMS above 100), the one first-audio definition used
+    # for every provider; None when the event carries no audio or the ledger predates the flag.
+    audible: bool | None = None
 
 
 class AdapterSessionReady(Closed):

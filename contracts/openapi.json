@@ -4980,6 +4980,24 @@
             "maxLength": 100,
             "minLength": 1,
             "title": "Family"
+          },
+          "components": {
+            "anyOf": [
+              {
+                "items": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object"
+                },
+                "type": "array",
+                "maxItems": 8
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Components"
           }
         },
         "additionalProperties": false,

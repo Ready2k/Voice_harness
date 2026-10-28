@@ -26,6 +26,7 @@ from .live_scenario import (
 )
 from .reply_retention import ReplyRetention
 from .scenario_catalogue import catalogue_entry
+from .target_prompts import delivered as prompt_delivered
 from .target_prompts import instructions as target_instructions
 from .target_prompts import provenance as prompt_provenance
 from .voice_confirmation import observe
@@ -70,17 +71,21 @@ for _name, _description in {
 LIVE_PROVIDERS = {"openai-live": "openai_live", "openai-realtime-live": "openai_realtime", "nova-sonic-live": "aws_nova_sonic",
                   "xai-voice-live": "xai_grok_voice", "gemini-live": "google_gemini_live",
                   "elevenlabs-live": "elevenlabs_agents"}
-# The model under test, as recorded for judge independence checks (a judge must not be the tested model).
+# The model under test, as recorded for judge independence checks (a judge must not be the tested model). A provider
+# built from several models lists them as ``components``; a judge matching any of them is the tested model.
 TESTED_MODELS = {
-    "openai-live": {"provider": "openai", "model_id": "gpt-live-1", "family": "openai_live"},
+    "openai-live": {"provider": "openai", "model_id": "gpt-live-1", "family": "openai_live", "components": [
+        {"role": "voice", "model_id": "gpt-live-1"}, {"role": "backend", "model_id": "gpt-6-luna"}]},
     "openai-realtime-live": {"provider": "openai", "model_id": "gpt-realtime-2.1", "family": "openai_realtime"},
     "nova-sonic-live": {"provider": "aws", "model_id": "amazon.nova-2-5-sonic", "family": "aws_nova_sonic"},
     # pinned versioned name; the grok-voice-latest alias is never used for runs
     "xai-voice-live": {"provider": "xai", "model_id": "grok-voice-3.0", "family": "xai_grok_voice"},
     # Vertex AI publisher model; setupComplete returns no version, so the pinned name is all there is
     "gemini-live": {"provider": "google", "model_id": "gemini-3.8-live", "family": "google_gemini_live"},
-    # The agent LLM (default gemini-2.5-flash) is not echoed by the session; each run records it as agent_llm.
-    "elevenlabs-live": {"provider": "elevenlabs", "model_id": "elevenlabs-agent", "family": "elevenlabs_agents"},
+    # The agent LLM is not echoed by the session; each run records it as agent_llm. The component is the provisioned
+    # default (ELEVENLABS_AGENT_LLM overrides it at import), so an agent set up with another LLM must set that too.
+    "elevenlabs-live": {"provider": "elevenlabs", "model_id": "elevenlabs-agent", "family": "elevenlabs_agents", "components": [
+        {"role": "agent_llm", "model_id": os.environ.get("ELEVENLABS_AGENT_LLM") or "gemini-2.5-flash"}]},
 }
 
 
@@ -289,6 +294,10 @@ def session_metadata(provider_config_id, requested_model_id, receipt, connection
     """Requested and returned session metadata, including public prompt provenance; never credentials."""
     receipt = receipt if isinstance(receipt, dict) else {}
     tested = TESTED_MODELS[provider_config_id]
+    text = LEGACY_INSTRUCTIONS if prompt_profile == "legacy-v1" else target_instructions(prompt_profile, provider_config_id)
+    components = {c["role"]: c["model_id"] for c in tested.get("components", ())}
+    delivered_to = prompt_delivered(provider_config_id, text, receipt.get("model_id") or requested_model_id,
+                                    receipt.get("backend_model_id") or components.get("backend"))
     return {
         "provider_config_id": provider_config_id, "adapter": tested["family"], "family": FAMILIES[provider_config_id],
         "requested_model_id": requested_model_id, "returned_model_id": receipt.get("model_id"),
@@ -296,9 +305,17 @@ def session_metadata(provider_config_id, requested_model_id, receipt, connection
         **({"backend_model_id": receipt.get("backend_model_id"), "turn_boundary": receipt.get("turn_boundary")}
            if provider_config_id == "openai-live" else {}),
         **capability_binding(provider_config_id),
-        "target_prompt": prompt_provenance(prompt_profile, LEGACY_INSTRUCTIONS if prompt_profile == "legacy-v1" else target_instructions(prompt_profile, provider_config_id), TOOLS),
+        "target_prompt": prompt_provenance(prompt_profile, text, TOOLS, delivered_to),
+        "context_channel": CONTEXT_CHANNELS[provider_config_id],
         **(connection or {}),
     }
+
+
+# Where send_text(respond=False) puts orchestrator context (e.g. the cancellation confirmation): its authority differs.
+# GPT-Live has no runtime user-message command, so its context is appended to the voice and backend instructions.
+CONTEXT_CHANNELS = {"openai-live": "instructions_append", "openai-realtime-live": "user_message_item",
+                    "xai-voice-live": "user_message_item", "gemini-live": "user_turn_incomplete",
+                    "elevenlabs-live": "contextual_update", "nova-sonic-live": "interactive_user_turn"}
 
 
 def _adapter(provider_config_id, prompt_profile="standardised-v2"):

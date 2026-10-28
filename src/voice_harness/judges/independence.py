@@ -22,13 +22,24 @@ SAME_VENDOR_MATERIAL = "SAME_VENDOR_IN_MATERIAL_BENCHMARK"
 
 
 def tested_identity(tested: dict) -> dict:
-    """The tested model with explicit ``host`` and ``vendor`` (registry values win over inference)."""
-    return {**tested, "host": tested.get("host") or model_host(tested["provider"]),
-            "vendor": tested.get("vendor") or model_vendor(tested["provider"], tested["model_id"], tested["family"])}
+    """The tested model with explicit ``host`` and ``vendor`` (registry values win over inference). ``components``
+    (e.g. GPT-Live's voice model and delegated backend, an ElevenLabs agent's LLM) each get a ``vendor`` too."""
+    out = {**tested, "host": tested.get("host") or model_host(tested["provider"]),
+           "vendor": tested.get("vendor") or model_vendor(tested["provider"], tested["model_id"], tested["family"])}
+    if tested.get("components"):
+        out["components"] = [{**c, "vendor": c.get("vendor") or model_vendor(tested["provider"], c["model_id"], "")}
+                             for c in tested["components"]]
+    return out
+
+
+def tested_models(tested: dict) -> set[tuple[str, str]]:
+    """(model_id, vendor) of every model the run tests: the registered model and each component."""
+    tested = tested_identity(tested)
+    return {(tested["model_id"], tested["vendor"]), *((c["model_id"], c["vendor"]) for c in tested.get("components") or ())}
 
 
 def is_tested_model(config: JudgeConfig, tested: dict) -> bool:
-    return config.model_id == tested["model_id"] and config.vendor == tested_identity(tested)["vendor"]
+    return (config.model_id, config.vendor) in tested_models(tested)
 
 
 def assess(tested: dict, configs: list[JudgeConfig], *, required_judges: int, material_benchmark: bool,
@@ -38,10 +49,12 @@ def assess(tested: dict, configs: list[JudgeConfig], *, required_judges: int, ma
     ``blinding`` is the measured oracle blinding; without it the record does not claim identity was hidden."""
     tested = tested_identity(tested)
     judges, independent = [], {}
+    models = tested_models(tested)
     for config in configs:
         reasons, disclosures = [], []
-        same_host, same_vendor = config.host == tested["host"], config.vendor == tested["vendor"]
-        if is_tested_model(config, tested):
+        same_host = config.host == tested["host"]
+        same_vendor = config.vendor in {tested["vendor"], *(c["vendor"] for c in tested.get("components") or ())}
+        if (config.model_id, config.vendor) in models:
             reasons.append("JUDGE_IS_TESTED_MODEL")
         if config.session_id == run_session_id:
             reasons.append("JUDGE_SHARES_RUN_SESSION")
@@ -68,7 +81,8 @@ def assess(tested: dict, configs: list[JudgeConfig], *, required_judges: int, ma
         "required_judges": required_judges, "material_benchmark": material_benchmark,
         "coverage": "complete" if complete else "judge_coverage_incomplete",
         "cross_family_judge_present": any(
-            j["eligible"] and j["family"] != tested["family"] and j["vendor"] != tested["vendor"] for j in judges
+            j["eligible"] and j["family"] != tested["family"] and j["vendor"] != tested["vendor"]
+            and j["vendor"] not in {c["vendor"] for c in tested.get("components") or ()} for j in judges
         ),
         "blinding": blinding or {"provider_identity_hidden": False,
                                  "limitations": ["Blinding was not measured for this record."]},

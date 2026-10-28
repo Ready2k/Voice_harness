@@ -374,8 +374,13 @@ def _failure(database, run_id):
 
 # --------------------------------------------------------------------------------------------- evidence
 def _is_audio(provider, native):
+    """Whether a native event is provider audio for first-audio and dead-air timing. Where recorded, the common
+    ``audible`` flag (audio_activity: PCM16 RMS > 100) decides for every provider; GPT-Live's continuous stream is
+    timed by its adapter's ``harness.pcm_speech_detected`` markers, which apply the same threshold."""
     if provider == "openai-live":
         return native["native_type"] == "harness.pcm_speech_detected"
+    if native.get("audible") is not None:
+        return native["audible"]
     if native["native_type"] in AUDIO_TYPES:
         return True
     if native.get("audio_bytes") is not None:  # exact, from the event's shape (live_scenario.audio_bytes)

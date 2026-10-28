@@ -28,9 +28,9 @@ against them. `≠` in the report marks a setting that is not equal across the c
 | Output voice | marin | marin | matthew | ara | provider default | George | **No**: `output_voice`, report caveat |
 | LLM | the speech model | speech model + delegated backend (`backend_model_id`) | the speech model | the speech model | the speech model | agent LLM (default `gemini-2.5-flash`) | **No**: `agent_llm`, `agent_llm_vendor`; report names the LLM |
 | Client truncation | yes | no | no | yes | no | no | **No**: `client_truncation` |
-| Confirmation delivery | context only | context only | interactive USER turn | context only | context only | context only | **No**: `confirmation_delivery` |
+| Confirmation delivery | context only (user message) | context only (appended instructions) | interactive USER turn | context only (user message) | context only (user turn) | context only (contextual update) | **No**: `confirmation_delivery`, `context_channel` |
 | ASR vs tested vendor | **same vendor** | **same vendor** | independent | independent | independent | independent (same if agent LLM is OpenAI) | **No**: `asr.relation`, report limitation |
-| Prompt (advanced-v1 only) | + pacing lines | + delegation line | + "direct answer first" | restructured sections | + concern line | section headings | **No** (vendor-tuned track): `prompt_delta` per provider; standardised/conversational are identical |
+| Prompt | advanced-v1: + pacing lines | every profile: + adapter delegation wrapper to the voice model (`[adapter]` delta, `target_prompt.delivered`); advanced-v1: + delegation line | + "direct answer first" | restructured sections | + concern line | section headings | **No**: `prompt_delta` per provider; standardised/conversational profile text is identical, GPT-Live adds its wrapper |
 
 ## Decisions
 

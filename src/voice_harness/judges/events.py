@@ -72,6 +72,14 @@ class RubricEvaluated(Closed):
     findings: list[FindingRecord]
 
 
+class TestedComponent(Closed):
+    """One model inside a composite provider (GPT-Live voice + delegated backend, an ElevenLabs agent's LLM)."""
+    __test__ = False
+    role: Identifier
+    model_id: Identifier
+    vendor: Identifier | None = None
+
+
 class TestedModel(Closed):
     __test__ = False
     provider: Identifier
@@ -79,6 +87,7 @@ class TestedModel(Closed):
     family: Identifier
     host: Identifier | None = None
     vendor: Identifier | None = None
+    components: list[TestedComponent] | None = None
 
 
 class JudgeEligibility(Closed):

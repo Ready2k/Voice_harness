@@ -9,7 +9,7 @@ lists every setting that is not equal across the compared providers, so an X-ove
 from __future__ import annotations
 
 from .live_providers import SAMPLING_POLICY, TESTED_MODELS
-from .target_prompts import delta
+from .target_prompts import LIVE_DELEGATION_WRAPPER_ID, delta
 
 NOT_RECORDED = "not_recorded"
 
@@ -34,6 +34,7 @@ def parity(binding):
         "turn_commit": transport.get("turn_commit"), "commit_delay_ms": transport.get("commit_delay_ms"),
         "provider_input_rate": transport.get("provider_input_rate"), "client_truncation": transport.get("client_truncation"),
         "confirmation_delivery": binding.get("confirmation_delivery"),
+        "context_channel": binding.get("context_channel"),
         "prompt_profile": (binding.get("target_prompt") or {}).get("profile"),
     }
 
@@ -67,8 +68,10 @@ def disclose(providers, observed, prompt_profile="standardised-v2"):
             "turn_commit": _one(_values(mine, "turn_commit")), "commit_delay_ms": _one(_values(mine, "commit_delay_ms", "not_applicable")),
             "provider_input_rate": _one(_values(mine, "provider_input_rate")),
             "client_truncation": _one(_values(mine, "client_truncation")),
-            "confirmation_delivery": _one(_values([r for r in mine if r.get("confirmation_delivery")], "confirmation_delivery") or [None]),
-            "prompt_delta": delta(prompt_profile, provider) if prompt_profile == "advanced-v1" else [],
+            "confirmation_delivery": _one(sorted({r["confirmation_delivery"] + (f" via {r['context_channel']}" if r.get("context_channel") else "")
+                                                 for r in mine if r.get("confirmation_delivery")}) or [None]),
+            # standardised and conversational profiles are identical text, so only an adapter wrapper shows there
+            "prompt_delta": delta(prompt_profile, provider) if prompt_profile != "legacy-v1" else [],
         }
         rows.append(row)
         per[provider] = row
@@ -97,6 +100,17 @@ def disclose(providers, observed, prompt_profile="standardised-v2"):
                            + "); the session does not echo the LLM, so it is taken from the provisioned agent.")
     if "voice" in differs:
         limitations.append("Output voices are each vendor's default and differ; listening-quality scores compare voices as well as models.")
+    if "openai-live" in providers:
+        limitations.append("GPT-Live's voice model also receives the adapter's delegation wrapper (" + LIVE_DELEGATION_WRAPPER_ID
+                           + ", recorded in target_prompt.delivered) on every prompt profile; its tools and reasoning run on "
+                           "the delegated backend model, which gets the profile text alone.")
+        limitations.append("GPT-Live has no reply-complete event: its replies are grouped from output silence and backend "
+                           "state (docs/OPENAI_LIVE.md), so each turn ends about 0.8 s after its last speech. That wait is not "
+                           "in first-audio latency but is in turn duration, and GPT-Live voice is billed by session duration, "
+                           "which includes harness waits (turn boundaries, assessment holds) that token-billed providers are not charged for.")
+        if any(per[p]["confirmation_delivery"] is not None for p in providers):
+            limitations.append("Orchestrator context reaches GPT-Live as appended instructions (it has no runtime user message), "
+                               "where other context-only providers receive a user-level message or contextual update.")
     if prompt_profile == "advanced-v1":
         limitations.append("advanced-v1 prompts are vendor-tuned: each provider's prompt_delta lists what it got beyond the common core.")
     return {"sampling_policy": SAMPLING_POLICY, "prompt_profile": prompt_profile, "providers": rows,
