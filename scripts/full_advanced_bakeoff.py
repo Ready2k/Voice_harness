@@ -33,6 +33,8 @@ def main():
     parser.add_argument("--data", type=Path, required=True)
     parser.add_argument("--repetitions", type=int, default=3, choices=range(1, 4))
     parser.add_argument("--resume", action="store_true", help="Recheck and resume a paused bake-off after fixing its cause")
+    parser.add_argument("--name", default="Full advanced provider bake-off — 26 October 2026")
+    parser.add_argument("--providers", help="comma-separated provider_config_ids (default: every live provider)")
     args = parser.parse_args()
     load_environment()
     # MCP tools run in a child interpreter, which does not inherit this script's sys.path changes.
@@ -47,10 +49,11 @@ def main():
     store = bakeoff.BakeoffStore(database)
     headers = {"Authorization": "Bearer " + (args.data / "operator-token").read_text().strip()}
     run_file = args.out / "launch.json"
-    request = {"name": "Full advanced provider bake-off — 26 October 2026", "prompt_profile": "advanced-v1",
-               "provider_config_ids": list(bakeoff.NAMES), "repetitions": args.repetitions,
+    providers = args.providers.split(",") if args.providers else list(bakeoff.NAMES)
+    request = {"name": args.name, "prompt_profile": "advanced-v1",
+               "provider_config_ids": providers, "repetitions": args.repetitions,
                "group_balanced": True}
-    prompts = {p: provenance("advanced-v1", instructions("advanced-v1", p), live_providers.TOOLS) for p in bakeoff.NAMES}
+    prompts = {p: provenance("advanced-v1", instructions("advanced-v1", p), live_providers.TOOLS) for p in providers}
     prompt_file = args.out / "prompts.json"
     if prompt_file.exists() and json.loads(prompt_file.read_text()) != prompts:
         if run_file.exists():
@@ -97,7 +100,7 @@ def main():
             '<title>Full advanced bake-off</title><style>body{font:18px/1.6 system-ui;max-width:850px;'
             'margin:40px auto;padding:0 20px}</style><h1>Full advanced bake-off</h1>'
             f'<p>Status: <strong>{html.escape(status["state"])}</strong> · {status["cells_done"]} of {status["cells"]} cells finished.</p>'
-            '<p>Five providers, 40 scenarios and three repetitions. Advanced provider-specific style with full banking tools '
+            f'<p>{len(providers)} providers, {len({c["scenario_id"] for c in payload["cells"]})} scenarios and {args.repetitions} repetitions. Advanced provider-specific style with full banking tools '
             'and strict verification and speech gates.</p><p><a href="report.html">Open assessed report</a></p>'
             '<p><a href="run-notes.md">Run notes and limitations</a></p>'
             '<p>A paused or incomplete report is provisional; it is not a completed provider comparison.</p></html>')
