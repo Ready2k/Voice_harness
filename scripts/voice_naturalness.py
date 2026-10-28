@@ -13,12 +13,14 @@ not needed until ``report``; the rating page shows only blind ids.
 import argparse
 import asyncio
 import base64
+import hashlib
 import json
 import os
 import random
 import secrets
 import sys
 import wave
+from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -35,6 +37,7 @@ LINES = [
 NUMERIC_LINES = {1, 5}  # amounts are transcribed as digits, so word similarity is lower
 PHONE_LINES = 2  # the first lines are also rendered through a narrowband telephone line
 VARIANTS = [  # (label, provider_config_id, voice override)
+    ("OpenAI GPT-Live 1 (Marin)", "openai-live", "marin"),
     ("OpenAI Realtime", "openai-realtime-live", None),
     ("Amazon Nova Sonic", "nova-sonic-live", None),
     ("xAI Grok Voice", "xai-voice-live", None),
@@ -77,17 +80,17 @@ def same_words(line, said):
     return difflib.SequenceMatcher(None, words(line), words(said)).ratio() >= 0.9
 
 
-async def speak(provider, voice, text, timeout=60):
+async def speak(provider, voice, text, timeout=60, metadata=None):
     """One fresh session: the provider's PCM (24 kHz) for ``text``. ElevenLabs' agent LLM sometimes answers the line
     instead of reading it, so its own transcript is checked and the line retried."""
     for _attempt in range(4):
-        pcm, said = await speak_once(provider, voice, text, timeout)
+        pcm, said = await speak_once(provider, voice, text, timeout, metadata)
         if provider != "elevenlabs-live" or same_words(text, said):
             return pcm
     raise RuntimeError(f"NOT_VERBATIM: {said[:80]}")
 
 
-async def speak_once(provider, voice, text, timeout=60):
+async def speak_once(provider, voice, text, timeout=60, metadata=None):
     from voice_harness import live_providers as lp
 
     adapter, config = lp._adapter(provider)
@@ -96,11 +99,21 @@ async def speak_once(provider, voice, text, timeout=60):
     lp.configure_transport(provider, config, "fixed")
     if voice:
         config["voice"] = voice
-    await adapter.open_session(config)
+    receipt = await adapter.open_session(config)
+    if metadata is not None:
+        from voice_harness.target_prompts import live_voice_instructions
+        delivered = live_voice_instructions(READ_ALOUD) if provider == "openai-live" else READ_ALOUD
+        metadata.update(provider_config_id=provider, recorded_at=datetime.now(timezone.utc).isoformat(),
+                        configuration=config, receipt=receipt, instructions=READ_ALOUD,
+                        delivered_voice_instructions=delivered,
+                        prompt_sha256=hashlib.sha256(delivered.encode()).hexdigest())
     pcm, said = bytearray(), []
     try:
-        await adapter.send_text(f'Repeat this aloud, word for word, and nothing else: "{text}"'
-                                if provider == "elevenlabs-live" else text)
+        caller_text = (f'Repeat this aloud, word for word, and nothing else: "{text}"'
+                       if provider in {"elevenlabs-live", "openai-live"} else text)
+        if metadata is not None:
+            metadata["caller_text"] = caller_text
+        await adapter.send_text(caller_text)
 
         async def collect():
             async for event in adapter.receive():
@@ -119,13 +132,17 @@ async def speak_once(provider, voice, text, timeout=60):
         await asyncio.wait_for(collect(), timeout)
     finally:
         await adapter.close("done")
+    if metadata is not None:
+        metadata["provider_transcript"] = " ".join(said)
     return bytes(pcm), " ".join(said)
 
 
-def render(out):
+def render(out, providers=None):
     from voice_harness.live_scenario import degrade
 
     load_env()
+    if (out / "key.json").exists():
+        raise SystemExit("Output already contains a recording set; choose a new directory")
     out.mkdir(parents=True, exist_ok=True)
     (out / "clips").mkdir(exist_ok=True)
     rng = random.Random(secrets.randbits(32))  # noqa: S311  # nosec B311 -- display order, not security
@@ -133,9 +150,14 @@ def render(out):
 
     async def run():
         for label, provider, voice in VARIANTS:
+            if providers and provider not in providers:
+                continue
             for index, text in enumerate(LINES):
                 try:
-                    pcm = await speak(provider, voice, text)
+                    metadata = {}
+                    pcm = await speak(provider, voice, text, metadata=metadata)
+                    if not pcm:
+                        raise RuntimeError("EMPTY_AUDIO")
                 except Exception as exc:  # one provider failing must not lose the others
                     failures.append({"provider": label, "line": index, "error": f"{type(exc).__name__}: {exc}"[:200]})
                     print("FAILED", label, index, exc, flush=True)
@@ -146,7 +168,7 @@ def render(out):
                 for condition, audio in conditions:
                     clip = secrets.token_hex(4)
                     write_wav(out / "clips" / f"{clip}.wav", audio)
-                    key[clip] = {"provider": label, "line": index, "condition": condition, "seconds": len(audio) / 48000}
+                    key[clip] = {"provider": label, "line": index, "condition": condition, "seconds": len(audio) / 48000, "metadata": metadata}
                 print("ok", label, index, flush=True)
 
     asyncio.run(run())
@@ -357,8 +379,9 @@ def main():
     parser.add_argument("command", choices=["render", "judge", "verify", "report"])
     parser.add_argument("--out", required=True, type=Path)
     parser.add_argument("--ratings")
+    parser.add_argument("--provider", action="append", choices=sorted({v[1] for v in VARIANTS}), help="Record only this provider (repeatable)")
     args = parser.parse_args()
-    {"render": lambda: render(args.out), "judge": lambda: judge(args.out), "verify": lambda: verify(args.out),
+    {"render": lambda: render(args.out, args.provider), "judge": lambda: judge(args.out), "verify": lambda: verify(args.out),
      "report": lambda: report(args.out, args.ratings)}[args.command]()
 
 

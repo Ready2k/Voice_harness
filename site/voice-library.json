@@ -1,6 +1,8 @@
 {
-  "recorded": "2026-10-25",
-  "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+  "sources": [
+    "artifacts/voice-naturalness-2026-10-25/key.json",
+    "artifacts/gpt-live-voice-library-2026-10-28/key.json"
+  ],
   "lines": [
     "Thanks for calling. Before I can share any account details, I need to check who I'm speaking with.",
     "Your current account balance is one thousand two hundred and fifty pounds and forty pence.",
@@ -15,12 +17,15 @@
     "xAI Grok Voice",
     "Google Gemini Live",
     "ElevenLabs (George)",
-    "ElevenLabs (second voice)"
+    "ElevenLabs (second voice)",
+    "OpenAI GPT-Live 1 (Marin)"
   ],
   "clips": [
     {
       "id": "34058daf",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/34058daf.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "231241ff07ea3c07ee4b21f7f76d86172ee1fd3ad6402708519f36a1bce8b40b",
       "provider": "OpenAI Realtime",
       "line": 0,
@@ -30,6 +35,8 @@
     {
       "id": "448f6c57",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/448f6c57.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "30aff403b59245fec0b232855e0e41f3893d329205c937e5e2f099f7a0a29820",
       "provider": "OpenAI Realtime",
       "line": 0,
@@ -39,6 +46,8 @@
     {
       "id": "34898ea2",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/34898ea2.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "1cffcf700e5e4cd5b381bf55e13fa58df9a0ce435746e7644877a825d4fe5bd5",
       "provider": "OpenAI Realtime",
       "line": 1,
@@ -48,6 +57,8 @@
     {
       "id": "30d4c78f",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/30d4c78f.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "f9db8748fbe9b7b99f0d49f9d30a60cd6e71a6fcd077a3b89922a1afee3722d5",
       "provider": "OpenAI Realtime",
       "line": 1,
@@ -57,6 +68,8 @@
     {
       "id": "93737cd2",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/93737cd2.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "85739ed2669fd6d0ffb21922192e9ea5e3ae43e5cfbf163cbface4d39ad0ddcf",
       "provider": "OpenAI Realtime",
       "line": 2,
@@ -66,6 +79,8 @@
     {
       "id": "feba2ea5",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/feba2ea5.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "b569c83781bab860ee1790de4c7e6063760e3d9b673bab1bbb7bf595e6755389",
       "provider": "OpenAI Realtime",
       "line": 3,
@@ -75,6 +90,8 @@
     {
       "id": "e8395e48",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/e8395e48.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "55388bbb9235c2dc593015057553f8e04a016258c5ab3dc6db7f90ebccb5cd2a",
       "provider": "OpenAI Realtime",
       "line": 4,
@@ -84,6 +101,8 @@
     {
       "id": "1d7bd4ab",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/1d7bd4ab.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "af10d06ebfb852f70fda1c9d6ded84e2bc171e323c3d681626a23e518ae1ea0d",
       "provider": "OpenAI Realtime",
       "line": 5,
@@ -93,6 +112,8 @@
     {
       "id": "28ea383f",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/28ea383f.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "95aad45111349c1a29ff6f24112eda04d6f52a75def4db0ebb7f7f81bbeaba07",
       "provider": "Amazon Nova Sonic",
       "line": 0,
@@ -102,6 +123,8 @@
     {
       "id": "c9de1291",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/c9de1291.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "90742db393e5789fa06af5aeb81340ef582bc03f3630f362af0a5b314a0d1d0a",
       "provider": "Amazon Nova Sonic",
       "line": 0,
@@ -111,6 +134,8 @@
     {
       "id": "8062e5c4",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/8062e5c4.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "9227d0f9ed191e59481bf03bf190c7442dbf75b143f6152dba840c0c79b17c7c",
       "provider": "Amazon Nova Sonic",
       "line": 1,
@@ -120,6 +145,8 @@
     {
       "id": "3699307f",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/3699307f.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "0bc96178179552e77376b3847279bc39f9ea5654a19ffce14126464a26698bc0",
       "provider": "Amazon Nova Sonic",
       "line": 1,
@@ -129,6 +156,8 @@
     {
       "id": "cb499e97",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/cb499e97.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "65f0d997c50724fc5762e095c1ea51577a333987d7876593dbae804072f26385",
       "provider": "Amazon Nova Sonic",
       "line": 2,
@@ -138,6 +167,8 @@
     {
       "id": "12362e64",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/12362e64.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "15541a9501efcc9c6a7079f3cd41b3929f29248314b5960204f56e56d3fee48c",
       "provider": "Amazon Nova Sonic",
       "line": 3,
@@ -147,6 +178,8 @@
     {
       "id": "768b9bde",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/768b9bde.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "4a2993e9e2e9120f9fd8d4cb1a74aea0b946da81079931db62b07b7130bf7e5a",
       "provider": "Amazon Nova Sonic",
       "line": 4,
@@ -156,6 +189,8 @@
     {
       "id": "bcbd5671",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/bcbd5671.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "1cbcdd05f26ef058198bd3d35454d76db2c2474ce80a32fc4f6483800e3ff6b9",
       "provider": "Amazon Nova Sonic",
       "line": 5,
@@ -165,6 +200,8 @@
     {
       "id": "2ac2fbcb",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/2ac2fbcb.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "965025d3d6f958ebbddee83eb159461110058b661dedcc0e414d9797f8b1f616",
       "provider": "xAI Grok Voice",
       "line": 0,
@@ -174,6 +211,8 @@
     {
       "id": "0c8ac71e",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/0c8ac71e.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "1b0676b08f8e6162268086b6b9da483986736a908d5d1693acf934f4ed978e95",
       "provider": "xAI Grok Voice",
       "line": 0,
@@ -183,6 +222,8 @@
     {
       "id": "b626c9de",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/b626c9de.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "d7adce81f01c876d84d2100e812e78598e958fad81babfa3271e2e3389cfde49",
       "provider": "xAI Grok Voice",
       "line": 1,
@@ -192,6 +233,8 @@
     {
       "id": "e25e4037",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/e25e4037.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "76523d15b7507d914dd8bc2213c3ce4d1aa191f2cb49fd7f751770c66ab00c7c",
       "provider": "xAI Grok Voice",
       "line": 1,
@@ -201,6 +244,8 @@
     {
       "id": "b4d6f01b",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/b4d6f01b.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "5a103b15a53d50ce5a2b1090e179da98de84304d9534386962c385f31c5a2e25",
       "provider": "xAI Grok Voice",
       "line": 2,
@@ -210,6 +255,8 @@
     {
       "id": "5a41d358",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/5a41d358.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "788e1e21067c809a10073a3b19b52bec29a643c190498c99789ca66367d2f011",
       "provider": "xAI Grok Voice",
       "line": 3,
@@ -219,6 +266,8 @@
     {
       "id": "2f37686f",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/2f37686f.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "53e113b908fd11eb4ae821d6d9490e84eaedd8d5828b96863f1fb55d4ec9bca9",
       "provider": "xAI Grok Voice",
       "line": 4,
@@ -228,6 +277,8 @@
     {
       "id": "ce1a681b",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/ce1a681b.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "5688ea24682957f4effc99004dd5ee97eec234902a96488274db7be686d61604",
       "provider": "xAI Grok Voice",
       "line": 5,
@@ -237,6 +288,8 @@
     {
       "id": "0294cc68",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/0294cc68.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "4be7e7296f2ba704649f92f5ad1ba457628279dbe7da88558949a96b46df97c6",
       "provider": "Google Gemini Live",
       "line": 0,
@@ -246,6 +299,8 @@
     {
       "id": "04c6954a",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/04c6954a.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "88f3fb5284c8179940591cd3e7b0677d90c37233a7ba27fd0720725f2246b34b",
       "provider": "Google Gemini Live",
       "line": 0,
@@ -255,6 +310,8 @@
     {
       "id": "95df7bbb",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/95df7bbb.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "538da398fd50a3702eb5d52e0cb815512f11c7f263d87dd2458159a37e5e66f8",
       "provider": "Google Gemini Live",
       "line": 1,
@@ -264,6 +321,8 @@
     {
       "id": "9e1df800",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/9e1df800.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "2993dc7a84e0779b9204796fe8e9cb06146e22ec41384dc983303ffc71150a09",
       "provider": "Google Gemini Live",
       "line": 1,
@@ -273,6 +332,8 @@
     {
       "id": "51ea88df",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/51ea88df.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "7746f6cf8ba2b9c2ffdc7f214effe84386e3f41f4ed5551b3b0f8ac7e9720fe9",
       "provider": "Google Gemini Live",
       "line": 2,
@@ -282,6 +343,8 @@
     {
       "id": "66d93b33",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/66d93b33.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "56f65494d39396c52f8da743d15a1aae2ef765da9263411e6873c8d53767248b",
       "provider": "Google Gemini Live",
       "line": 3,
@@ -291,6 +354,8 @@
     {
       "id": "b72547fb",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/b72547fb.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "2be25a5b77381200e196d4ddfdd77a17f0518cea096985e2aa5445a12b851890",
       "provider": "Google Gemini Live",
       "line": 4,
@@ -300,6 +365,8 @@
     {
       "id": "7a45ff82",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/7a45ff82.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "32a3097a8a978abf271b85bcccca12ca56799aa44113b3f3bb7569896ab9da8f",
       "provider": "Google Gemini Live",
       "line": 5,
@@ -309,6 +376,8 @@
     {
       "id": "01c12720",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/01c12720.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "1cbeb7b6a7004af53045668a82429a00581f7fa887b47bb0cbbb5fe99abaae01",
       "provider": "ElevenLabs (George)",
       "line": 0,
@@ -318,6 +387,8 @@
     {
       "id": "693babc4",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/693babc4.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "182ae852640955a93b120ffe85d746a2f77ec79be923bf31d5bf6d4911368bd4",
       "provider": "ElevenLabs (George)",
       "line": 0,
@@ -327,6 +398,8 @@
     {
       "id": "ff38c795",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/ff38c795.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "ed9ba70d8ba041cc8cf9592ab18d9bdbb7fd938920e8b75a83f9c5b46f3d1cee",
       "provider": "ElevenLabs (George)",
       "line": 1,
@@ -336,6 +409,8 @@
     {
       "id": "b345ac7c",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/b345ac7c.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "8bf07188fb8c8387046b0c210b65e199ac69a150b5cea570df3610a75c29d60b",
       "provider": "ElevenLabs (George)",
       "line": 1,
@@ -345,6 +420,8 @@
     {
       "id": "e3e9af5f",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/e3e9af5f.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "43e9ec00bca0db3ec951c9828f9cf7ff833e00d46dc3c446a2fc3c1e79602ee2",
       "provider": "ElevenLabs (George)",
       "line": 2,
@@ -354,6 +431,8 @@
     {
       "id": "637d09f4",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/637d09f4.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "3b5b109f8ff23a29ccbe76f798a91cb6b23c5625efb88e1b80a37946edd392f7",
       "provider": "ElevenLabs (George)",
       "line": 3,
@@ -363,6 +442,8 @@
     {
       "id": "ad93ac02",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/ad93ac02.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "2e697275d65106881f18565863f91fe9728ca9aa875b4194424fe3f107b053bf",
       "provider": "ElevenLabs (George)",
       "line": 4,
@@ -372,6 +453,8 @@
     {
       "id": "b0824648",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/b0824648.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "f5d51205d715b49948233d040daab1a0e746e4082277f1f94fd32e51e9dbeb0c",
       "provider": "ElevenLabs (George)",
       "line": 5,
@@ -381,6 +464,8 @@
     {
       "id": "b86ecd4e",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/b86ecd4e.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "4e16c2f02e6866704af2d538047445d957c1fa7827cb4970f42f2f53098dbeb6",
       "provider": "ElevenLabs (second voice)",
       "line": 0,
@@ -390,6 +475,8 @@
     {
       "id": "b9fc8d85",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/b9fc8d85.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "6bd1eebd77190e30897aed72d7c7469de0b198442c37b94cc35ad0e55c80cb07",
       "provider": "ElevenLabs (second voice)",
       "line": 0,
@@ -399,6 +486,8 @@
     {
       "id": "1a13983b",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/1a13983b.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "04cbf63f25e029859a2ca74e6e1cc93b0899d99529285991a157ce98d3bd74fe",
       "provider": "ElevenLabs (second voice)",
       "line": 1,
@@ -408,6 +497,8 @@
     {
       "id": "336074f9",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/336074f9.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "11d768eb63e227f197d3b5db0755c46cff239a7112527d78ff7dcb33af392ff2",
       "provider": "ElevenLabs (second voice)",
       "line": 1,
@@ -417,6 +508,8 @@
     {
       "id": "39ef203f",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/39ef203f.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "b9ed305ba5c8906425e9bce2dfa74f75965a216a83327412fbde24435a3c6d8d",
       "provider": "ElevenLabs (second voice)",
       "line": 2,
@@ -426,6 +519,8 @@
     {
       "id": "87d8898c",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/87d8898c.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "e405a17bf4463783bb52abba2e24af440bca2441ba577c69edd241fdfa1dce58",
       "provider": "ElevenLabs (second voice)",
       "line": 3,
@@ -435,6 +530,8 @@
     {
       "id": "a508b7aa",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/a508b7aa.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "1b7026f247fc8461e448d422e7b490c30fa5c5d0232360f90d2343b6dc94144f",
       "provider": "ElevenLabs (second voice)",
       "line": 4,
@@ -444,11 +541,277 @@
     {
       "id": "7b944c27",
       "path": "artifacts/voice-naturalness-2026-10-25/clips/7b944c27.wav",
+      "source": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "recorded": "2026-10-25",
       "sha256": "7a064ce97df93012ea110f8fc58d6acac4354349f053e208a41c26b39ff9f082",
       "provider": "ElevenLabs (second voice)",
       "line": 5,
       "condition": "clean",
       "seconds": 8.0
+    },
+    {
+      "id": "f0911ba9",
+      "path": "artifacts/gpt-live-voice-library-2026-10-28/clips/f0911ba9.wav",
+      "source": "artifacts/gpt-live-voice-library-2026-10-28/key.json",
+      "recorded": "2026-10-28",
+      "sha256": "7ec2316f28d955cf400cc811b73601f1e59ab2cfd77b8556e886baf6fa8e560a",
+      "provider": "OpenAI GPT-Live 1 (Marin)",
+      "line": 0,
+      "condition": "clean",
+      "seconds": 5.9,
+      "metadata": {
+        "provider_config_id": "openai-live",
+        "recorded_at": "2026-10-28T17:22:54.385687+00:00",
+        "configuration": {
+          "tools": [],
+          "instructions": "You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+          "model_id": "gpt-live-1",
+          "voice": "marin"
+        },
+        "receipt": {
+          "session_id": null,
+          "provider_session_id": "live_u2_Ee1ePp3oMvviZMwwHH986dWuMVUuj9Qj",
+          "model_id": "gpt-live-1",
+          "backend_model_id": "gpt-6-luna",
+          "turn_boundary": "harness_pcm_silence_800ms_backend_aware_diagnostic"
+        },
+        "instructions": "You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+        "delivered_voice_instructions": "Speak natural, concise British English. Delegate banking questions and actions to the backend. Never invent results or claim success before the backend confirms it. You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+        "prompt_sha256": "13ca6d794ac0515134d5275ef8f15e4af786737a055195ae89334658b7d1f156",
+        "caller_text": "Repeat this aloud, word for word, and nothing else: \"Thanks for calling. Before I can share any account details, I need to check who I'm speaking with.\"",
+        "provider_transcript": "Thanks for calling. Before I can share any account details, I need to check who I'm speaking with."
+      }
+    },
+    {
+      "id": "793e1aff",
+      "path": "artifacts/gpt-live-voice-library-2026-10-28/clips/793e1aff.wav",
+      "source": "artifacts/gpt-live-voice-library-2026-10-28/key.json",
+      "recorded": "2026-10-28",
+      "sha256": "15197c2a48b9ab3939a16d2e3c35ee2543200e2f7eae617fb96deca5064c060f",
+      "provider": "OpenAI GPT-Live 1 (Marin)",
+      "line": 0,
+      "condition": "phone",
+      "seconds": 5.9,
+      "metadata": {
+        "provider_config_id": "openai-live",
+        "recorded_at": "2026-10-28T17:22:54.385687+00:00",
+        "configuration": {
+          "tools": [],
+          "instructions": "You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+          "model_id": "gpt-live-1",
+          "voice": "marin"
+        },
+        "receipt": {
+          "session_id": null,
+          "provider_session_id": "live_u2_Ee1ePp3oMvviZMwwHH986dWuMVUuj9Qj",
+          "model_id": "gpt-live-1",
+          "backend_model_id": "gpt-6-luna",
+          "turn_boundary": "harness_pcm_silence_800ms_backend_aware_diagnostic"
+        },
+        "instructions": "You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+        "delivered_voice_instructions": "Speak natural, concise British English. Delegate banking questions and actions to the backend. Never invent results or claim success before the backend confirms it. You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+        "prompt_sha256": "13ca6d794ac0515134d5275ef8f15e4af786737a055195ae89334658b7d1f156",
+        "caller_text": "Repeat this aloud, word for word, and nothing else: \"Thanks for calling. Before I can share any account details, I need to check who I'm speaking with.\"",
+        "provider_transcript": "Thanks for calling. Before I can share any account details, I need to check who I'm speaking with."
+      }
+    },
+    {
+      "id": "1d2b6e01",
+      "path": "artifacts/gpt-live-voice-library-2026-10-28/clips/1d2b6e01.wav",
+      "source": "artifacts/gpt-live-voice-library-2026-10-28/key.json",
+      "recorded": "2026-10-28",
+      "sha256": "3bae7bfd633e65225a6303120c6d3327674a9c443d7dafb5fd71e7445a185838",
+      "provider": "OpenAI GPT-Live 1 (Marin)",
+      "line": 1,
+      "condition": "clean",
+      "seconds": 5.7,
+      "metadata": {
+        "provider_config_id": "openai-live",
+        "recorded_at": "2026-10-28T17:23:16.993989+00:00",
+        "configuration": {
+          "tools": [],
+          "instructions": "You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+          "model_id": "gpt-live-1",
+          "voice": "marin"
+        },
+        "receipt": {
+          "session_id": null,
+          "provider_session_id": "live_u0_Ee1emp3oMWb9SRXIgLWTm4ohQrApKKDG",
+          "model_id": "gpt-live-1",
+          "backend_model_id": "gpt-6-luna",
+          "turn_boundary": "harness_pcm_silence_800ms_backend_aware_diagnostic"
+        },
+        "instructions": "You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+        "delivered_voice_instructions": "Speak natural, concise British English. Delegate banking questions and actions to the backend. Never invent results or claim success before the backend confirms it. You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+        "prompt_sha256": "13ca6d794ac0515134d5275ef8f15e4af786737a055195ae89334658b7d1f156",
+        "caller_text": "Repeat this aloud, word for word, and nothing else: \"Your current account balance is one thousand two hundred and fifty pounds and forty pence.\"",
+        "provider_transcript": "Your current account balance is one thousand two hundred and fifty pounds and forty pence."
+      }
+    },
+    {
+      "id": "4701cbb0",
+      "path": "artifacts/gpt-live-voice-library-2026-10-28/clips/4701cbb0.wav",
+      "source": "artifacts/gpt-live-voice-library-2026-10-28/key.json",
+      "recorded": "2026-10-28",
+      "sha256": "dddcf5fbe833694221f15f68efe3fcd942bb73e43b772ecc69ea60957f24de0d",
+      "provider": "OpenAI GPT-Live 1 (Marin)",
+      "line": 1,
+      "condition": "phone",
+      "seconds": 5.7,
+      "metadata": {
+        "provider_config_id": "openai-live",
+        "recorded_at": "2026-10-28T17:23:16.993989+00:00",
+        "configuration": {
+          "tools": [],
+          "instructions": "You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+          "model_id": "gpt-live-1",
+          "voice": "marin"
+        },
+        "receipt": {
+          "session_id": null,
+          "provider_session_id": "live_u0_Ee1emp3oMWb9SRXIgLWTm4ohQrApKKDG",
+          "model_id": "gpt-live-1",
+          "backend_model_id": "gpt-6-luna",
+          "turn_boundary": "harness_pcm_silence_800ms_backend_aware_diagnostic"
+        },
+        "instructions": "You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+        "delivered_voice_instructions": "Speak natural, concise British English. Delegate banking questions and actions to the backend. Never invent results or claim success before the backend confirms it. You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+        "prompt_sha256": "13ca6d794ac0515134d5275ef8f15e4af786737a055195ae89334658b7d1f156",
+        "caller_text": "Repeat this aloud, word for word, and nothing else: \"Your current account balance is one thousand two hundred and fifty pounds and forty pence.\"",
+        "provider_transcript": "Your current account balance is one thousand two hundred and fifty pounds and forty pence."
+      }
+    },
+    {
+      "id": "d9b49680",
+      "path": "artifacts/gpt-live-voice-library-2026-10-28/clips/d9b49680.wav",
+      "source": "artifacts/gpt-live-voice-library-2026-10-28/key.json",
+      "recorded": "2026-10-28",
+      "sha256": "478b9f8113be1c2380c98fb9aa81695e4c5e68447b2de4ece525ca33046f841a",
+      "provider": "OpenAI GPT-Live 1 (Marin)",
+      "line": 2,
+      "condition": "clean",
+      "seconds": 5.7,
+      "metadata": {
+        "provider_config_id": "openai-live",
+        "recorded_at": "2026-10-28T17:23:37.338576+00:00",
+        "configuration": {
+          "tools": [],
+          "instructions": "You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+          "model_id": "gpt-live-1",
+          "voice": "marin"
+        },
+        "receipt": {
+          "session_id": null,
+          "provider_session_id": "live_u1_Ee1f6p3oMldfgvfYxzcRFmBUvbgAFpZf",
+          "model_id": "gpt-live-1",
+          "backend_model_id": "gpt-6-luna",
+          "turn_boundary": "harness_pcm_silence_800ms_backend_aware_diagnostic"
+        },
+        "instructions": "You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+        "delivered_voice_instructions": "Speak natural, concise British English. Delegate banking questions and actions to the backend. Never invent results or claim success before the backend confirms it. You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+        "prompt_sha256": "13ca6d794ac0515134d5275ef8f15e4af786737a055195ae89334658b7d1f156",
+        "caller_text": "Repeat this aloud, word for word, and nothing else: \"I'm so sorry for your loss. I can put you through to someone in our bereavement team who can help with this.\"",
+        "provider_transcript": " I'm so sorry for your loss. I can put you through to someone in our bereavement team who can help with this."
+      }
+    },
+    {
+      "id": "053a1eb7",
+      "path": "artifacts/gpt-live-voice-library-2026-10-28/clips/053a1eb7.wav",
+      "source": "artifacts/gpt-live-voice-library-2026-10-28/key.json",
+      "recorded": "2026-10-28",
+      "sha256": "bfa3498acde9acb5f214ea36db7190525ed8a10150d64eb78471b610c107b9f4",
+      "provider": "OpenAI GPT-Live 1 (Marin)",
+      "line": 3,
+      "condition": "clean",
+      "seconds": 5.5,
+      "metadata": {
+        "provider_config_id": "openai-live",
+        "recorded_at": "2026-10-28T17:23:59.033850+00:00",
+        "configuration": {
+          "tools": [],
+          "instructions": "You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+          "model_id": "gpt-live-1",
+          "voice": "marin"
+        },
+        "receipt": {
+          "session_id": null,
+          "provider_session_id": "live_u2_Ee1fSp3oN2PQh5ysI8TxGHNPsd1TMdIX",
+          "model_id": "gpt-live-1",
+          "backend_model_id": "gpt-6-luna",
+          "turn_boundary": "harness_pcm_silence_800ms_backend_aware_diagnostic"
+        },
+        "instructions": "You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+        "delivered_voice_instructions": "Speak natural, concise British English. Delegate banking questions and actions to the backend. Never invent results or claim success before the backend confirms it. You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+        "prompt_sha256": "13ca6d794ac0515134d5275ef8f15e4af786737a055195ae89334658b7d1f156",
+        "caller_text": "Repeat this aloud, word for word, and nothing else: \"I can't move that payment without your confirmation. Would you like me to go ahead, yes or no?\"",
+        "provider_transcript": "I can't move that payment without your confirmation. Would you like me to go ahead, yes or no?"
+      }
+    },
+    {
+      "id": "d63194bd",
+      "path": "artifacts/gpt-live-voice-library-2026-10-28/clips/d63194bd.wav",
+      "source": "artifacts/gpt-live-voice-library-2026-10-28/key.json",
+      "recorded": "2026-10-28",
+      "sha256": "94612596bbc8b4f9da1fc48af87d911baedfe942a75834984fb80cc4bdca1ac1",
+      "provider": "OpenAI GPT-Live 1 (Marin)",
+      "line": 4,
+      "condition": "clean",
+      "seconds": 5.3,
+      "metadata": {
+        "provider_config_id": "openai-live",
+        "recorded_at": "2026-10-28T17:24:19.530229+00:00",
+        "configuration": {
+          "tools": [],
+          "instructions": "You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+          "model_id": "gpt-live-1",
+          "voice": "marin"
+        },
+        "receipt": {
+          "session_id": null,
+          "provider_session_id": "live_u2_Ee1fnp3oMlAAaHUxiGCCqufqEY0JMFdd",
+          "model_id": "gpt-live-1",
+          "backend_model_id": "gpt-6-luna",
+          "turn_boundary": "harness_pcm_silence_800ms_backend_aware_diagnostic"
+        },
+        "instructions": "You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+        "delivered_voice_instructions": "Speak natural, concise British English. Delegate banking questions and actions to the backend. Never invent results or claim success before the backend confirms it. You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+        "prompt_sha256": "13ca6d794ac0515134d5275ef8f15e4af786737a055195ae89334658b7d1f156",
+        "caller_text": "Repeat this aloud, word for word, and nothing else: \"That didn't go through, I'm afraid. Nothing has been taken from your account, and I can try again if you like.\"",
+        "provider_transcript": " that didn't go through, I'm afraid. Nothing has been taken from your account, and I can try again if you like."
+      }
+    },
+    {
+      "id": "0f007ba3",
+      "path": "artifacts/gpt-live-voice-library-2026-10-28/clips/0f007ba3.wav",
+      "source": "artifacts/gpt-live-voice-library-2026-10-28/key.json",
+      "recorded": "2026-10-28",
+      "sha256": "7d446e0b5beebf71b7f2b2a8e626a86e54e48b6c23b902acf2f55eb83acfb828",
+      "provider": "OpenAI GPT-Live 1 (Marin)",
+      "line": 5,
+      "condition": "clean",
+      "seconds": 8.1,
+      "metadata": {
+        "provider_config_id": "openai-live",
+        "recorded_at": "2026-10-28T17:24:40.868040+00:00",
+        "configuration": {
+          "tools": [],
+          "instructions": "You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+          "model_id": "gpt-live-1",
+          "voice": "marin"
+        },
+        "receipt": {
+          "session_id": null,
+          "provider_session_id": "live_u2_Ee1g8p3oNQlIXREDcmwfYx1hbEloe2zk",
+          "model_id": "gpt-live-1",
+          "backend_model_id": "gpt-6-luna",
+          "turn_boundary": "harness_pcm_silence_800ms_backend_aware_diagnostic"
+        },
+        "instructions": "You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+        "delivered_voice_instructions": "Speak natural, concise British English. Delegate banking questions and actions to the backend. Never invent results or claim success before the backend confirms it. You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+        "prompt_sha256": "13ca6d794ac0515134d5275ef8f15e4af786737a055195ae89334658b7d1f156",
+        "caller_text": "Repeat this aloud, word for word, and nothing else: \"You've been verified, thank you. Your last three payments were forty-two pounds, nineteen pounds ninety-nine, and two hundred.\"",
+        "provider_transcript": "You've been verified. Thank you. Your last three payments were forty-two pounds, nineteen pounds ninety-nine, and two hundred."
+      }
     }
   ]
 }

@@ -1,0 +1,32 @@
+{
+ "f0911ba9": {
+  "heard": "Thanks for calling. Before I can share any account details, I need to check who I'm speaking with.",
+  "match": 1.0,
+  "numeric": false
+ },
+ "1d2b6e01": {
+  "heard": "Your current account balance is one thousand two hundred and fifty pounds and forty pence.",
+  "match": 1.0,
+  "numeric": true
+ },
+ "d9b49680": {
+  "heard": "I'm so sorry for your loss. I can put you through to someone in our bereavement team who can help with this.",
+  "match": 1.0,
+  "numeric": false
+ },
+ "053a1eb7": {
+  "heard": "I can't move that payment without your confirmation. Would you like me to go ahead? Yes or no?",
+  "match": 1.0,
+  "numeric": false
+ },
+ "d63194bd": {
+  "heard": "That didn't go through, I'm afraid. Nothing has been taken from your account, and I can try again if you like.",
+  "match": 1.0,
+  "numeric": false
+ },
+ "0f007ba3": {
+  "heard": "You've been verified, thank you. Your last three payments were \u00a342, \u00a319.99, and \u00a3200.",
+  "match": 0.629,
+  "numeric": true
+ }
+}

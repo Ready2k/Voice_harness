@@ -33,14 +33,25 @@ def main():
         entries.append(dict(path=name, title=path.stem.replace('-', ' ').replace('_', ' '), date=max(dates) if dates else '', kind=kind, size=path.stat().st_size, url=REPO + name if kind == 'Notes' else name, group='/'.join(path.parts[:2])))
     features = [dict(path=p, title=t, description=d, status=s, date=dt) for p,t,d,s,dt in FEATURES if p in files]
     payload = dict(latest=max((x['date'] for x in entries), default=''), entries=sorted(entries, key=lambda x:(x['date'], x['path']), reverse=True), features=features)
-    key = json.loads((ROOT / 'artifacts/voice-naturalness-2026-10-25/key.json').read_text())
+    sources = ['artifacts/voice-naturalness-2026-10-25/key.json']
+    gpt_source = 'artifacts/gpt-live-voice-library-2026-10-28/key.json'
+    if gpt_source in files:
+        sources.append(gpt_source)
     clips = []
-    for clip_id, clip in key['clips'].items():
-        path = f'artifacts/voice-naturalness-2026-10-25/clips/{clip_id}.wav'
-        if path not in files:
-            raise SystemExit(f'Untracked or missing library clip: {path}')
-        clips.append(dict(id=clip_id, path=path, sha256=hashlib.sha256((ROOT / path).read_bytes()).hexdigest(), **clip))
-    library = dict(recorded='2026-10-25', source='artifacts/voice-naturalness-2026-10-25/key.json', lines=key['lines'], providers=list(dict.fromkeys(c['provider'] for c in clips)), clips=clips)
+    lines = None
+    for source in sources:
+        key = json.loads((ROOT / source).read_text())
+        if lines is not None and key['lines'] != lines:
+            raise SystemExit(f'Mismatched library prompts: {source}')
+        lines = key['lines']
+        for clip_id, clip in key['clips'].items():
+            path = str(Path(source).parent / 'clips' / f'{clip_id}.wav')
+            if path not in files:
+                raise SystemExit(f'Untracked or missing library clip: {path}')
+            recorded = re.search(r'20\d{2}-\d{2}-\d{2}', source).group()
+            clips.append(dict(id=clip_id, path=path, source=source, recorded=recorded,
+                              sha256=hashlib.sha256((ROOT / path).read_bytes()).hexdigest(), **clip))
+    library = dict(sources=sources, lines=lines, providers=list(dict.fromkeys(c['provider'] for c in clips)), clips=clips)
     (ROOT / 'site/voice-library.json').write_text(json.dumps(library, indent=2) + '\n')
     (ROOT / 'site/catalogue.json').write_text(json.dumps(payload, indent=2) + '\n')
     if args.output:

@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Blind voice rating</title>
+<style>
+:root{color-scheme:light dark;--bg:#fafafa;--fg:#1a1a1a;--card:#fff;--line:#d8d8d8;--accent:#0b5fff}
+@media(prefers-color-scheme:dark){:root{--bg:#141414;--fg:#eee;--card:#1d1d1d;--line:#363636;--accent:#6aa0ff}}
+body{margin:0;padding:16px;background:var(--bg);color:var(--fg);font:16px/1.45 system-ui,sans-serif;max-width:760px;margin-inline:auto}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;margin:12px 0}
+.line{font-style:italic;margin:0 0 8px}audio{width:100%}
+.row{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:8px;align-items:center}
+select{font:inherit;padding:4px}button{font:inherit;padding:8px 14px;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:#fff;cursor:pointer}
+.top{position:sticky;top:0;background:var(--bg);padding:8px 0;display:flex;justify-content:space-between;gap:8px;align-items:center}
+</style></head><body>
+<h1>Blind voice rating</h1>
+<p>Listen to each clip once or twice and score it 1 (poor) to 5 (excellent). Natural: sounds like a real person. Clear: every word easy to follow. Warm: the tone suits the line. Provider names are hidden.</p>
+<div class="top"><span id="count"></span><button id="save">Download ratings</button></div>
+<div id="list"></div>
+<script>
+const ITEMS = [{"id": "0f007ba3", "text": "You've been verified, thank you. Your last three payments were forty-two pounds, nineteen pounds ninety-nine, and two hundred.", "phone": false}, {"id": "d63194bd", "text": "That didn't go through, I'm afraid. Nothing has been taken from your account, and I can try again if you like.", "phone": false}, {"id": "053a1eb7", "text": "I can't move that payment without your confirmation. Would you like me to go ahead, yes or no?", "phone": false}, {"id": "d9b49680", "text": "I'm so sorry for your loss. I can put you through to someone in our bereavement team who can help with this.", "phone": false}, {"id": "4701cbb0", "text": "Your current account balance is one thousand two hundred and fifty pounds and forty pence.", "phone": true}, {"id": "f0911ba9", "text": "Thanks for calling. Before I can share any account details, I need to check who I'm speaking with.", "phone": false}, {"id": "793e1aff", "text": "Thanks for calling. Before I can share any account details, I need to check who I'm speaking with.", "phone": true}, {"id": "1d2b6e01", "text": "Your current account balance is one thousand two hundred and fifty pounds and forty pence.", "phone": false}];
+const AXES = [["naturalness","Natural"],["clarity","Clear"],["warmth","Warm"]];
+let ratings = {};
+try { ratings = JSON.parse(localStorage.getItem("voice-ratings") || "{}"); } catch (e) {}
+const store = () => { try { localStorage.setItem("voice-ratings", JSON.stringify(ratings)); } catch (e) {} };
+const list = document.getElementById("list");
+function count(){ const done = ITEMS.filter(i => AXES.every(([a]) => ratings[i.id] && ratings[i.id][a])).length;
+  document.getElementById("count").textContent = done + " of " + ITEMS.length + " rated"; }
+ITEMS.forEach((item, n) => {
+  const card = document.createElement("div"); card.className = "card";
+  const p = document.createElement("p"); p.className = "line"; p.textContent = (n + 1) + ". " + (item.phone ? "[Phone-line simulation: deliberately low quality, rate it against other phone clips] " : "") + "\u201c" + item.text + "\u201d";
+  const audio = document.createElement("audio"); audio.controls = true; audio.preload = "none"; audio.src = "clips/" + item.id + ".wav";
+  const row = document.createElement("div"); row.className = "row";
+  AXES.forEach(([axis, label]) => {
+    const wrap = document.createElement("label"); wrap.textContent = label + " ";
+    const sel = document.createElement("select");
+    ["", 1, 2, 3, 4, 5].forEach(v => { const o = document.createElement("option"); o.value = v; o.textContent = v || "-"; sel.appendChild(o); });
+    sel.value = (ratings[item.id] && ratings[item.id][axis]) || "";
+    sel.onchange = () => { ratings[item.id] = ratings[item.id] || {}; if (sel.value) ratings[item.id][axis] = Number(sel.value); else delete ratings[item.id][axis]; store(); count(); };
+    wrap.appendChild(sel); row.appendChild(wrap);
+  });
+  card.append(p, audio, row); list.appendChild(card);
+});
+document.getElementById("save").onclick = () => {
+  const blob = new Blob([JSON.stringify({ratings}, null, 1)], {type: "application/json"});
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "ratings.json"; a.click();
+};
+count();
+</script></body></html>

@@ -1,0 +1,237 @@
+{
+ "clips": {
+  "f0911ba9": {
+   "provider": "OpenAI GPT-Live 1 (Marin)",
+   "line": 0,
+   "condition": "clean",
+   "seconds": 5.9,
+   "metadata": {
+    "provider_config_id": "openai-live",
+    "recorded_at": "2026-10-28T17:22:54.385687+00:00",
+    "configuration": {
+     "tools": [],
+     "instructions": "You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+     "model_id": "gpt-live-1",
+     "voice": "marin"
+    },
+    "receipt": {
+     "session_id": null,
+     "provider_session_id": "live_u2_Ee1ePp3oMvviZMwwHH986dWuMVUuj9Qj",
+     "model_id": "gpt-live-1",
+     "backend_model_id": "gpt-6-luna",
+     "turn_boundary": "harness_pcm_silence_800ms_backend_aware_diagnostic"
+    },
+    "instructions": "You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+    "delivered_voice_instructions": "Speak natural, concise British English. Delegate banking questions and actions to the backend. Never invent results or claim success before the backend confirms it. You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+    "prompt_sha256": "13ca6d794ac0515134d5275ef8f15e4af786737a055195ae89334658b7d1f156",
+    "caller_text": "Repeat this aloud, word for word, and nothing else: \"Thanks for calling. Before I can share any account details, I need to check who I'm speaking with.\"",
+    "provider_transcript": "Thanks for calling. Before I can share any account details, I need to check who I'm speaking with."
+   }
+  },
+  "793e1aff": {
+   "provider": "OpenAI GPT-Live 1 (Marin)",
+   "line": 0,
+   "condition": "phone",
+   "seconds": 5.9,
+   "metadata": {
+    "provider_config_id": "openai-live",
+    "recorded_at": "2026-10-28T17:22:54.385687+00:00",
+    "configuration": {
+     "tools": [],
+     "instructions": "You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+     "model_id": "gpt-live-1",
+     "voice": "marin"
+    },
+    "receipt": {
+     "session_id": null,
+     "provider_session_id": "live_u2_Ee1ePp3oMvviZMwwHH986dWuMVUuj9Qj",
+     "model_id": "gpt-live-1",
+     "backend_model_id": "gpt-6-luna",
+     "turn_boundary": "harness_pcm_silence_800ms_backend_aware_diagnostic"
+    },
+    "instructions": "You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+    "delivered_voice_instructions": "Speak natural, concise British English. Delegate banking questions and actions to the backend. Never invent results or claim success before the backend confirms it. You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+    "prompt_sha256": "13ca6d794ac0515134d5275ef8f15e4af786737a055195ae89334658b7d1f156",
+    "caller_text": "Repeat this aloud, word for word, and nothing else: \"Thanks for calling. Before I can share any account details, I need to check who I'm speaking with.\"",
+    "provider_transcript": "Thanks for calling. Before I can share any account details, I need to check who I'm speaking with."
+   }
+  },
+  "1d2b6e01": {
+   "provider": "OpenAI GPT-Live 1 (Marin)",
+   "line": 1,
+   "condition": "clean",
+   "seconds": 5.7,
+   "metadata": {
+    "provider_config_id": "openai-live",
+    "recorded_at": "2026-10-28T17:23:16.993989+00:00",
+    "configuration": {
+     "tools": [],
+     "instructions": "You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+     "model_id": "gpt-live-1",
+     "voice": "marin"
+    },
+    "receipt": {
+     "session_id": null,
+     "provider_session_id": "live_u0_Ee1emp3oMWb9SRXIgLWTm4ohQrApKKDG",
+     "model_id": "gpt-live-1",
+     "backend_model_id": "gpt-6-luna",
+     "turn_boundary": "harness_pcm_silence_800ms_backend_aware_diagnostic"
+    },
+    "instructions": "You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+    "delivered_voice_instructions": "Speak natural, concise British English. Delegate banking questions and actions to the backend. Never invent results or claim success before the backend confirms it. You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+    "prompt_sha256": "13ca6d794ac0515134d5275ef8f15e4af786737a055195ae89334658b7d1f156",
+    "caller_text": "Repeat this aloud, word for word, and nothing else: \"Your current account balance is one thousand two hundred and fifty pounds and forty pence.\"",
+    "provider_transcript": "Your current account balance is one thousand two hundred and fifty pounds and forty pence."
+   }
+  },
+  "4701cbb0": {
+   "provider": "OpenAI GPT-Live 1 (Marin)",
+   "line": 1,
+   "condition": "phone",
+   "seconds": 5.7,
+   "metadata": {
+    "provider_config_id": "openai-live",
+    "recorded_at": "2026-10-28T17:23:16.993989+00:00",
+    "configuration": {
+     "tools": [],
+     "instructions": "You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+     "model_id": "gpt-live-1",
+     "voice": "marin"
+    },
+    "receipt": {
+     "session_id": null,
+     "provider_session_id": "live_u0_Ee1emp3oMWb9SRXIgLWTm4ohQrApKKDG",
+     "model_id": "gpt-live-1",
+     "backend_model_id": "gpt-6-luna",
+     "turn_boundary": "harness_pcm_silence_800ms_backend_aware_diagnostic"
+    },
+    "instructions": "You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+    "delivered_voice_instructions": "Speak natural, concise British English. Delegate banking questions and actions to the backend. Never invent results or claim success before the backend confirms it. You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+    "prompt_sha256": "13ca6d794ac0515134d5275ef8f15e4af786737a055195ae89334658b7d1f156",
+    "caller_text": "Repeat this aloud, word for word, and nothing else: \"Your current account balance is one thousand two hundred and fifty pounds and forty pence.\"",
+    "provider_transcript": "Your current account balance is one thousand two hundred and fifty pounds and forty pence."
+   }
+  },
+  "d9b49680": {
+   "provider": "OpenAI GPT-Live 1 (Marin)",
+   "line": 2,
+   "condition": "clean",
+   "seconds": 5.7,
+   "metadata": {
+    "provider_config_id": "openai-live",
+    "recorded_at": "2026-10-28T17:23:37.338576+00:00",
+    "configuration": {
+     "tools": [],
+     "instructions": "You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+     "model_id": "gpt-live-1",
+     "voice": "marin"
+    },
+    "receipt": {
+     "session_id": null,
+     "provider_session_id": "live_u1_Ee1f6p3oMldfgvfYxzcRFmBUvbgAFpZf",
+     "model_id": "gpt-live-1",
+     "backend_model_id": "gpt-6-luna",
+     "turn_boundary": "harness_pcm_silence_800ms_backend_aware_diagnostic"
+    },
+    "instructions": "You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+    "delivered_voice_instructions": "Speak natural, concise British English. Delegate banking questions and actions to the backend. Never invent results or claim success before the backend confirms it. You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+    "prompt_sha256": "13ca6d794ac0515134d5275ef8f15e4af786737a055195ae89334658b7d1f156",
+    "caller_text": "Repeat this aloud, word for word, and nothing else: \"I'm so sorry for your loss. I can put you through to someone in our bereavement team who can help with this.\"",
+    "provider_transcript": " I'm so sorry for your loss. I can put you through to someone in our bereavement team who can help with this."
+   }
+  },
+  "053a1eb7": {
+   "provider": "OpenAI GPT-Live 1 (Marin)",
+   "line": 3,
+   "condition": "clean",
+   "seconds": 5.5,
+   "metadata": {
+    "provider_config_id": "openai-live",
+    "recorded_at": "2026-10-28T17:23:59.033850+00:00",
+    "configuration": {
+     "tools": [],
+     "instructions": "You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+     "model_id": "gpt-live-1",
+     "voice": "marin"
+    },
+    "receipt": {
+     "session_id": null,
+     "provider_session_id": "live_u2_Ee1fSp3oN2PQh5ysI8TxGHNPsd1TMdIX",
+     "model_id": "gpt-live-1",
+     "backend_model_id": "gpt-6-luna",
+     "turn_boundary": "harness_pcm_silence_800ms_backend_aware_diagnostic"
+    },
+    "instructions": "You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+    "delivered_voice_instructions": "Speak natural, concise British English. Delegate banking questions and actions to the backend. Never invent results or claim success before the backend confirms it. You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+    "prompt_sha256": "13ca6d794ac0515134d5275ef8f15e4af786737a055195ae89334658b7d1f156",
+    "caller_text": "Repeat this aloud, word for word, and nothing else: \"I can't move that payment without your confirmation. Would you like me to go ahead, yes or no?\"",
+    "provider_transcript": "I can't move that payment without your confirmation. Would you like me to go ahead, yes or no?"
+   }
+  },
+  "d63194bd": {
+   "provider": "OpenAI GPT-Live 1 (Marin)",
+   "line": 4,
+   "condition": "clean",
+   "seconds": 5.3,
+   "metadata": {
+    "provider_config_id": "openai-live",
+    "recorded_at": "2026-10-28T17:24:19.530229+00:00",
+    "configuration": {
+     "tools": [],
+     "instructions": "You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+     "model_id": "gpt-live-1",
+     "voice": "marin"
+    },
+    "receipt": {
+     "session_id": null,
+     "provider_session_id": "live_u2_Ee1fnp3oMlAAaHUxiGCCqufqEY0JMFdd",
+     "model_id": "gpt-live-1",
+     "backend_model_id": "gpt-6-luna",
+     "turn_boundary": "harness_pcm_silence_800ms_backend_aware_diagnostic"
+    },
+    "instructions": "You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+    "delivered_voice_instructions": "Speak natural, concise British English. Delegate banking questions and actions to the backend. Never invent results or claim success before the backend confirms it. You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+    "prompt_sha256": "13ca6d794ac0515134d5275ef8f15e4af786737a055195ae89334658b7d1f156",
+    "caller_text": "Repeat this aloud, word for word, and nothing else: \"That didn't go through, I'm afraid. Nothing has been taken from your account, and I can try again if you like.\"",
+    "provider_transcript": " that didn't go through, I'm afraid. Nothing has been taken from your account, and I can try again if you like."
+   }
+  },
+  "0f007ba3": {
+   "provider": "OpenAI GPT-Live 1 (Marin)",
+   "line": 5,
+   "condition": "clean",
+   "seconds": 8.1,
+   "metadata": {
+    "provider_config_id": "openai-live",
+    "recorded_at": "2026-10-28T17:24:40.868040+00:00",
+    "configuration": {
+     "tools": [],
+     "instructions": "You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+     "model_id": "gpt-live-1",
+     "voice": "marin"
+    },
+    "receipt": {
+     "session_id": null,
+     "provider_session_id": "live_u2_Ee1g8p3oNQlIXREDcmwfYx1hbEloe2zk",
+     "model_id": "gpt-live-1",
+     "backend_model_id": "gpt-6-luna",
+     "turn_boundary": "harness_pcm_silence_800ms_backend_aware_diagnostic"
+    },
+    "instructions": "You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+    "delivered_voice_instructions": "Speak natural, concise British English. Delegate banking questions and actions to the backend. Never invent results or claim success before the backend confirms it. You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for word, in a natural, warm, professional voice. Add nothing, leave nothing out, and do not comment.",
+    "prompt_sha256": "13ca6d794ac0515134d5275ef8f15e4af786737a055195ae89334658b7d1f156",
+    "caller_text": "Repeat this aloud, word for word, and nothing else: \"You've been verified, thank you. Your last three payments were forty-two pounds, nineteen pounds ninety-nine, and two hundred.\"",
+    "provider_transcript": "You've been verified. Thank you. Your last three payments were forty-two pounds, nineteen pounds ninety-nine, and two hundred."
+   }
+  }
+ },
+ "failures": [],
+ "lines": [
+  "Thanks for calling. Before I can share any account details, I need to check who I'm speaking with.",
+  "Your current account balance is one thousand two hundred and fifty pounds and forty pence.",
+  "I'm so sorry for your loss. I can put you through to someone in our bereavement team who can help with this.",
+  "I can't move that payment without your confirmation. Would you like me to go ahead, yes or no?",
+  "That didn't go through, I'm afraid. Nothing has been taken from your account, and I can try again if you like.",
+  "You've been verified, thank you. Your last three payments were forty-two pounds, nineteen pounds ninety-nine, and two hundred."
+ ]
+}

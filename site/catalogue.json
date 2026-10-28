@@ -2,6 +2,114 @@
   "latest": "2026-10-28",
   "entries": [
     {
+      "path": "artifacts/gpt-live-voice-library-2026-10-28/verify.json",
+      "title": "verify",
+      "date": "2026-10-28",
+      "kind": "Data",
+      "size": 1016,
+      "url": "artifacts/gpt-live-voice-library-2026-10-28/verify.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gpt-live-voice-library-2026-10-28/rate.html",
+      "title": "rate",
+      "date": "2026-10-28",
+      "kind": "Web report",
+      "size": 4727,
+      "url": "artifacts/gpt-live-voice-library-2026-10-28/rate.html",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gpt-live-voice-library-2026-10-28/key.json",
+      "title": "key",
+      "date": "2026-10-28",
+      "kind": "Data",
+      "size": 15645,
+      "url": "artifacts/gpt-live-voice-library-2026-10-28/key.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gpt-live-voice-library-2026-10-28/clips/f0911ba9.wav",
+      "title": "f0911ba9",
+      "date": "2026-10-28",
+      "kind": "Audio",
+      "size": 283244,
+      "url": "artifacts/gpt-live-voice-library-2026-10-28/clips/f0911ba9.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gpt-live-voice-library-2026-10-28/clips/d9b49680.wav",
+      "title": "d9b49680",
+      "date": "2026-10-28",
+      "kind": "Audio",
+      "size": 273644,
+      "url": "artifacts/gpt-live-voice-library-2026-10-28/clips/d9b49680.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gpt-live-voice-library-2026-10-28/clips/d63194bd.wav",
+      "title": "d63194bd",
+      "date": "2026-10-28",
+      "kind": "Audio",
+      "size": 254444,
+      "url": "artifacts/gpt-live-voice-library-2026-10-28/clips/d63194bd.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gpt-live-voice-library-2026-10-28/clips/793e1aff.wav",
+      "title": "793e1aff",
+      "date": "2026-10-28",
+      "kind": "Audio",
+      "size": 283244,
+      "url": "artifacts/gpt-live-voice-library-2026-10-28/clips/793e1aff.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gpt-live-voice-library-2026-10-28/clips/4701cbb0.wav",
+      "title": "4701cbb0",
+      "date": "2026-10-28",
+      "kind": "Audio",
+      "size": 273644,
+      "url": "artifacts/gpt-live-voice-library-2026-10-28/clips/4701cbb0.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gpt-live-voice-library-2026-10-28/clips/1d2b6e01.wav",
+      "title": "1d2b6e01",
+      "date": "2026-10-28",
+      "kind": "Audio",
+      "size": 273644,
+      "url": "artifacts/gpt-live-voice-library-2026-10-28/clips/1d2b6e01.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gpt-live-voice-library-2026-10-28/clips/0f007ba3.wav",
+      "title": "0f007ba3",
+      "date": "2026-10-28",
+      "kind": "Audio",
+      "size": 388844,
+      "url": "artifacts/gpt-live-voice-library-2026-10-28/clips/0f007ba3.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gpt-live-voice-library-2026-10-28/clips/053a1eb7.wav",
+      "title": "053a1eb7",
+      "date": "2026-10-28",
+      "kind": "Audio",
+      "size": 264044,
+      "url": "artifacts/gpt-live-voice-library-2026-10-28/clips/053a1eb7.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gpt-live-voice-library-2026-10-28/README.md",
+      "title": "README",
+      "date": "2026-10-28",
+      "kind": "Notes",
+      "size": 2787,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/artifacts/gpt-live-voice-library-2026-10-28/README.md",
+      "group": "//Users"
+    },
+    {
       "path": "artifacts/fair-bakeoff-2026-10-28/verified-prompt-bindings.json",
       "title": "verified prompt bindings",
       "date": "2026-10-28",
