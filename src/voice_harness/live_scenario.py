@@ -27,6 +27,7 @@ import random
 import time
 
 from .adapters import CapabilityUnsupported
+from .audio_activity import audible_payload
 from .events import PROCESS_CLOCK_DOMAIN
 from .fault_dispositions import classify
 from .live_assessment import AdapterTurnDriver
@@ -177,7 +178,7 @@ class LiveScenarioRunner:
             "payload_sha256": hashlib.sha256(encoded).hexdigest(), "payload_bytes": len(encoded),
             "payload_retained": False, "omission_reason": "HASH_ONLY_PAYLOAD_NOT_STORED",
             "received_ms": int(time.monotonic() * 1000), "clock_domain_id": PROCESS_CLOCK_DOMAIN,
-            "audio_bytes": audio_bytes(payload),
+            "audio_bytes": audio_bytes(payload), "audible": audible_payload(payload),
         })
         if len(self._native) >= NATIVE_FLUSH_EVERY:
             self._flush_native()  # bounded memory, and a mid-turn crash loses at most this many records
@@ -231,13 +232,16 @@ class LiveScenarioRunner:
         for part in chunk(pcm, RATE, CHUNK_MS):
             if explicit and speech_end is not None and time.monotonic() * 1000 >= speech_end + self.commit_delay_ms:
                 break
+            # Deadline pacing against the clip start: per-chunk overhead never accumulates into a slow stream.
+            if (due := started + sent / 2 / RATE * 1000 - time.monotonic() * 1000) > 0:
+                await asyncio.sleep(due / 1000)
+            sent_at = time.monotonic() * 1000
             await self.adapter.send_audio(part, {"sample_count": len(part) // 2, "sample_rate": RATE})
-            await asyncio.sleep(CHUNK_MS / 1000)
+            if speech_end is None and sent + len(part) >= speech_bytes:  # speech ends inside this chunk
+                speech_end = sent_at + (speech_bytes - sent) / 2 / RATE * 1000
             sent += len(part)
-            if speech_end is None and sent >= speech_bytes:  # paced in real time: back off the trail in this chunk
-                speech_end = time.monotonic() * 1000 - (sent - speech_bytes) / 2 / RATE * 1000
-        if explicit and (wait := speech_end + self.commit_delay_ms - time.monotonic() * 1000) > 0:
-            await asyncio.sleep(wait / 1000)
+        if explicit and (remaining := speech_end + self.commit_delay_ms - time.monotonic() * 1000) > 0:
+            await asyncio.sleep(remaining / 1000)
         signalled = time.monotonic() * 1000
         await self.adapter.request_turn()  # Nova and other provider-VAD adapters implement this as a no-op
         self._record_input(index, turn, pcm, int(started), int(time.monotonic() * 1000), retained=retained, timing={

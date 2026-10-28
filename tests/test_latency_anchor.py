@@ -111,6 +111,33 @@ class EndpointingParity(unittest.TestCase):
         self.assertGreater(legacy["first_audio_ms"] - vad["first_audio_ms"], TRAIL_MS - DELAY_MS - TOLERANCE_MS)
 
 
+class SlowSendAdapter(FixedDelayAdapter):
+    """Each send costs 5 ms, as a real websocket write can: a sleep-after-send loop would run 25% slow."""
+
+    async def send_audio(self, data, metadata):
+        await asyncio.sleep(0.005)
+        await super().send_audio(data, metadata)
+
+
+class StreamPacing(unittest.TestCase):
+    def test_caller_audio_is_deadline_paced_and_caller_wait_stays_a_label(self):
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        database = Database(str(Path(directory.name) / "t.sqlite"))
+        engine = Engine(database)
+        run = engine.create(RunConfig().model_dump())
+        long_clip = struct.pack(f"<{24 * 1000}h", *([8000, -8000] * 12000)) + bytes(RATE * 2 * TRAIL_MS // 1000)
+        runner = LiveScenarioRunner(engine, run, SlowSendAdapter(False), IndependentAssessor(engine, ScriptedAsr(queue=["Hello."] * 4)),
+                                    "happy-policy-question-001", caller_audio=lambda text: long_clip, turn_timeout_s=10,
+                                    provider_session={"harness_transport": {"turn_commit": "explicit", "commit_delay_ms": DELAY_MS}},
+                                    trail_ms=TRAIL_MS)
+        asyncio.run(runner.run())
+        caller = next(e["content"] for e in database.events(run) if e["type"] == "input.caller_audio")
+        # 1000 ms of speech is delivered in about 1000 ms, not 1250 ms.
+        self.assertLess(abs(caller["speech_ended_ms"] - caller["stream_started_ms"] - 1000), TOLERANCE_MS)
+        self.assertEqual(caller["caller_wait"], "first_turn")
+
+
 class LegacyAnchors(unittest.TestCase):
     def ledger(self, commit, **turn):
         return [{"type": "run.live_binding", "content": {"provider": {"harness_transport": {"turn_commit": commit}}}},
