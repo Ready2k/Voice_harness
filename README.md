@@ -89,3 +89,7 @@ Acceptance coverage is mapped in [Phase 1 status](docs/PHASE1_STATUS.md) and the
 
 GPT-Live 1 is available as **OpenAI GPT-Live 1** (`openai-live`), separately from Realtime.
 See [configuration, diagnostic limitations and the live smoke test](docs/OPENAI_LIVE.md).
+
+## Published research archive
+
+The [GitHub Pages hub](https://ready2k.github.io/Voice_harness/) brings together the latest assessments, earlier experiments, listening pages and supporting artifacts. See [site/README.md](site/README.md) for publishing and catalogue maintenance.

@@ -1,0 +1,4891 @@
+{
+  "latest": "2026-10-28",
+  "entries": [
+    {
+      "path": "artifacts/fair-bakeoff-2026-10-28/verified-prompt-bindings.json",
+      "title": "verified prompt bindings",
+      "date": "2026-10-28",
+      "kind": "Data",
+      "size": 58031,
+      "url": "artifacts/fair-bakeoff-2026-10-28/verified-prompt-bindings.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/fair-bakeoff-2026-10-28/status.json",
+      "title": "status",
+      "date": "2026-10-28",
+      "kind": "Data",
+      "size": 41877,
+      "url": "artifacts/fair-bakeoff-2026-10-28/status.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/fair-bakeoff-2026-10-28/run-notes.md",
+      "title": "run notes",
+      "date": "2026-10-28",
+      "kind": "Notes",
+      "size": 2781,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/artifacts/fair-bakeoff-2026-10-28/run-notes.md",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/fair-bakeoff-2026-10-28/rescored-2026-10-28/summary.json",
+      "title": "summary",
+      "date": "2026-10-28",
+      "kind": "Data",
+      "size": 23905,
+      "url": "artifacts/fair-bakeoff-2026-10-28/rescored-2026-10-28/summary.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/fair-bakeoff-2026-10-28/rescored-2026-10-28/report.md",
+      "title": "report",
+      "date": "2026-10-28",
+      "kind": "Notes",
+      "size": 17941,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/artifacts/fair-bakeoff-2026-10-28/rescored-2026-10-28/report.md",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/fair-bakeoff-2026-10-28/rescored-2026-10-28/report.json",
+      "title": "report",
+      "date": "2026-10-28",
+      "kind": "Data",
+      "size": 3889181,
+      "url": "artifacts/fair-bakeoff-2026-10-28/rescored-2026-10-28/report.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/fair-bakeoff-2026-10-28/rescored-2026-10-28/report.html",
+      "title": "report",
+      "date": "2026-10-28",
+      "kind": "Web report",
+      "size": 3000264,
+      "url": "artifacts/fair-bakeoff-2026-10-28/rescored-2026-10-28/report.html",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/fair-bakeoff-2026-10-28/rescored-2026-10-28/README.md",
+      "title": "README",
+      "date": "2026-10-28",
+      "kind": "Notes",
+      "size": 11250,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/artifacts/fair-bakeoff-2026-10-28/rescored-2026-10-28/README.md",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/fair-bakeoff-2026-10-28/report.json",
+      "title": "report",
+      "date": "2026-10-28",
+      "kind": "Data",
+      "size": 4601684,
+      "url": "artifacts/fair-bakeoff-2026-10-28/report.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/fair-bakeoff-2026-10-28/report.html",
+      "title": "report",
+      "date": "2026-10-28",
+      "kind": "Web report",
+      "size": 2992678,
+      "url": "artifacts/fair-bakeoff-2026-10-28/report.html",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/fair-bakeoff-2026-10-28/prompts.json",
+      "title": "prompts",
+      "date": "2026-10-28",
+      "kind": "Data",
+      "size": 51507,
+      "url": "artifacts/fair-bakeoff-2026-10-28/prompts.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/fair-bakeoff-2026-10-28/payload.json",
+      "title": "payload",
+      "date": "2026-10-28",
+      "kind": "Data",
+      "size": 5086501,
+      "url": "artifacts/fair-bakeoff-2026-10-28/payload.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/fair-bakeoff-2026-10-28/launch.json",
+      "title": "launch",
+      "date": "2026-10-28",
+      "kind": "Data",
+      "size": 455,
+      "url": "artifacts/fair-bakeoff-2026-10-28/launch.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/fair-bakeoff-2026-10-28/index.html",
+      "title": "index",
+      "date": "2026-10-28",
+      "kind": "Web report",
+      "size": 957,
+      "url": "artifacts/fair-bakeoff-2026-10-28/index.html",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/gpt-live-1-listening-2026-10-27.html",
+      "title": "gpt live 1 listening 2026 10 27",
+      "date": "2026-10-27",
+      "kind": "Web report",
+      "size": 3011014,
+      "url": "reports/gpt-live-1-listening-2026-10-27.html",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/gpt-live-1-evaluation-2026-10-27.html",
+      "title": "gpt live 1 evaluation 2026 10 27",
+      "date": "2026-10-27",
+      "kind": "Web report",
+      "size": 203474,
+      "url": "reports/gpt-live-1-evaluation-2026-10-27.html",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/SCENARIO_VALIDITY_AUDIT_2026-10-27.md",
+      "title": "SCENARIO VALIDITY AUDIT 2026 10 27",
+      "date": "2026-10-27",
+      "kind": "Notes",
+      "size": 10395,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/SCENARIO_VALIDITY_AUDIT_2026-10-27.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/PROVIDER_BIAS_REVIEW_2026-10-27.md",
+      "title": "PROVIDER BIAS REVIEW 2026 10 27",
+      "date": "2026-10-27",
+      "kind": "Notes",
+      "size": 12741,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/PROVIDER_BIAS_REVIEW_2026-10-27.md",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gpt-live-evaluation-2026-10-27/transcripts.json",
+      "title": "transcripts",
+      "date": "2026-10-27",
+      "kind": "Data",
+      "size": 16453,
+      "url": "artifacts/gpt-live-evaluation-2026-10-27/transcripts.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gpt-live-evaluation-2026-10-27/summary.json",
+      "title": "summary",
+      "date": "2026-10-27",
+      "kind": "Data",
+      "size": 7749,
+      "url": "artifacts/gpt-live-evaluation-2026-10-27/summary.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gpt-live-evaluation-2026-10-27/report-data.json",
+      "title": "report data",
+      "date": "2026-10-27",
+      "kind": "Data",
+      "size": 178968,
+      "url": "artifacts/gpt-live-evaluation-2026-10-27/report-data.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gpt-live-evaluation-2026-10-27/public-keys.json",
+      "title": "public keys",
+      "date": "2026-10-27",
+      "kind": "Data",
+      "size": 531,
+      "url": "artifacts/gpt-live-evaluation-2026-10-27/public-keys.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gpt-live-evaluation-2026-10-27/pricing.json",
+      "title": "pricing",
+      "date": "2026-10-27",
+      "kind": "Data",
+      "size": 53280,
+      "url": "artifacts/gpt-live-evaluation-2026-10-27/pricing.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gpt-live-evaluation-2026-10-27/preflight-settling.json",
+      "title": "preflight settling",
+      "date": "2026-10-27",
+      "kind": "Data",
+      "size": 15226,
+      "url": "artifacts/gpt-live-evaluation-2026-10-27/preflight-settling.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gpt-live-evaluation-2026-10-27/preflight-input-settling.json",
+      "title": "preflight input settling",
+      "date": "2026-10-27",
+      "kind": "Data",
+      "size": 15271,
+      "url": "artifacts/gpt-live-evaluation-2026-10-27/preflight-input-settling.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gpt-live-evaluation-2026-10-27/plan.json",
+      "title": "plan",
+      "date": "2026-10-27",
+      "kind": "Data",
+      "size": 3231,
+      "url": "artifacts/gpt-live-evaluation-2026-10-27/plan.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gpt-live-evaluation-2026-10-27/matrix.json",
+      "title": "matrix",
+      "date": "2026-10-27",
+      "kind": "Data",
+      "size": 15301,
+      "url": "artifacts/gpt-live-evaluation-2026-10-27/matrix.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gpt-live-evaluation-2026-10-27/matrix-full.json",
+      "title": "matrix full",
+      "date": "2026-10-27",
+      "kind": "Data",
+      "size": 49426,
+      "url": "artifacts/gpt-live-evaluation-2026-10-27/matrix-full.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gpt-live-evaluation-2026-10-27/listening-samples.json",
+      "title": "listening samples",
+      "date": "2026-10-27",
+      "kind": "Data",
+      "size": 1878,
+      "url": "artifacts/gpt-live-evaluation-2026-10-27/listening-samples.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gpt-live-evaluation-2026-10-27/identity-bereaved-en-gb-clean-001.wav",
+      "title": "identity bereaved en gb clean 001",
+      "date": "2026-10-27",
+      "kind": "Audio",
+      "size": 484844,
+      "url": "artifacts/gpt-live-evaluation-2026-10-27/identity-bereaved-en-gb-clean-001.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gpt-live-evaluation-2026-10-27/happy-recent-transactions-001.wav",
+      "title": "happy recent transactions 001",
+      "date": "2026-10-27",
+      "kind": "Audio",
+      "size": 681644,
+      "url": "artifacts/gpt-live-evaluation-2026-10-27/happy-recent-transactions-001.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gpt-live-evaluation-2026-10-27/happy-balance-clean-001.wav",
+      "title": "happy balance clean 001",
+      "date": "2026-10-27",
+      "kind": "Audio",
+      "size": 1089644,
+      "url": "artifacts/gpt-live-evaluation-2026-10-27/happy-balance-clean-001.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gpt-live-evaluation-2026-10-27/evidence.jsonl.gz",
+      "title": "evidence.jsonl",
+      "date": "2026-10-27",
+      "kind": "Archive",
+      "size": 3270178,
+      "url": "artifacts/gpt-live-evaluation-2026-10-27/evidence.jsonl.gz",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gpt-live-evaluation-2026-10-27/evidence-index.json",
+      "title": "evidence index",
+      "date": "2026-10-27",
+      "kind": "Data",
+      "size": 13777,
+      "url": "artifacts/gpt-live-evaluation-2026-10-27/evidence-index.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gpt-live-evaluation-2026-10-27/README.md",
+      "title": "README",
+      "date": "2026-10-27",
+      "kind": "Notes",
+      "size": 5323,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/artifacts/gpt-live-evaluation-2026-10-27/README.md",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/full-advanced-bakeoff-2026-10-26/rescored-2026-10-27/summary.json",
+      "title": "summary",
+      "date": "2026-10-27",
+      "kind": "Data",
+      "size": 6934,
+      "url": "artifacts/full-advanced-bakeoff-2026-10-26/rescored-2026-10-27/summary.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/full-advanced-bakeoff-2026-10-26/rescored-2026-10-27/report.json",
+      "title": "report",
+      "date": "2026-10-27",
+      "kind": "Data",
+      "size": 1836657,
+      "url": "artifacts/full-advanced-bakeoff-2026-10-26/rescored-2026-10-27/report.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/full-advanced-bakeoff-2026-10-26/rescored-2026-10-27/report.html",
+      "title": "report",
+      "date": "2026-10-27",
+      "kind": "Web report",
+      "size": 1465761,
+      "url": "artifacts/full-advanced-bakeoff-2026-10-26/rescored-2026-10-27/report.html",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/full-advanced-bakeoff-2026-10-26/rescored-2026-10-27/README.md",
+      "title": "README",
+      "date": "2026-10-27",
+      "kind": "Notes",
+      "size": 6604,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/artifacts/full-advanced-bakeoff-2026-10-26/rescored-2026-10-27/README.md",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/full-advanced-bakeoff-2026-10-26/verified-prompt-bindings.json",
+      "title": "verified prompt bindings",
+      "date": "2026-10-26",
+      "kind": "Data",
+      "size": 42942,
+      "url": "artifacts/full-advanced-bakeoff-2026-10-26/verified-prompt-bindings.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/full-advanced-bakeoff-2026-10-26/status.json",
+      "title": "status",
+      "date": "2026-10-26",
+      "kind": "Data",
+      "size": 19484,
+      "url": "artifacts/full-advanced-bakeoff-2026-10-26/status.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/full-advanced-bakeoff-2026-10-26/run-notes.md",
+      "title": "run notes",
+      "date": "2026-10-26",
+      "kind": "Notes",
+      "size": 3645,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/artifacts/full-advanced-bakeoff-2026-10-26/run-notes.md",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/full-advanced-bakeoff-2026-10-26/reuse-manifest.json",
+      "title": "reuse manifest",
+      "date": "2026-10-26",
+      "kind": "Data",
+      "size": 163196,
+      "url": "artifacts/full-advanced-bakeoff-2026-10-26/reuse-manifest.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/full-advanced-bakeoff-2026-10-26/report.json",
+      "title": "report",
+      "date": "2026-10-26",
+      "kind": "Data",
+      "size": 2058437,
+      "url": "artifacts/full-advanced-bakeoff-2026-10-26/report.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/full-advanced-bakeoff-2026-10-26/report.html",
+      "title": "report",
+      "date": "2026-10-26",
+      "kind": "Web report",
+      "size": 1373403,
+      "url": "artifacts/full-advanced-bakeoff-2026-10-26/report.html",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/full-advanced-bakeoff-2026-10-26/prompts.json",
+      "title": "prompts",
+      "date": "2026-10-26",
+      "kind": "Data",
+      "size": 42942,
+      "url": "artifacts/full-advanced-bakeoff-2026-10-26/prompts.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/full-advanced-bakeoff-2026-10-26/prompt-history/5d9b71199ff982d14382a91ae504d1bcf2c72cdf33c1160d3a350c24fdd972fd.json",
+      "title": "5d9b71199ff982d14382a91ae504d1bcf2c72cdf33c1160d3a350c24fdd972fd",
+      "date": "2026-10-26",
+      "kind": "Data",
+      "size": 41692,
+      "url": "artifacts/full-advanced-bakeoff-2026-10-26/prompt-history/5d9b71199ff982d14382a91ae504d1bcf2c72cdf33c1160d3a350c24fdd972fd.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/full-advanced-bakeoff-2026-10-26/payload.json",
+      "title": "payload",
+      "date": "2026-10-26",
+      "kind": "Data",
+      "size": 2417070,
+      "url": "artifacts/full-advanced-bakeoff-2026-10-26/payload.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/full-advanced-bakeoff-2026-10-26/launch.json",
+      "title": "launch",
+      "date": "2026-10-26",
+      "kind": "Data",
+      "size": 435,
+      "url": "artifacts/full-advanced-bakeoff-2026-10-26/launch.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/full-advanced-bakeoff-2026-10-26/index.html",
+      "title": "index",
+      "date": "2026-10-26",
+      "kind": "Web report",
+      "size": 706,
+      "url": "artifacts/full-advanced-bakeoff-2026-10-26/index.html",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/verify.json",
+      "title": "verify",
+      "date": "2026-10-25",
+      "kind": "Data",
+      "size": 5951,
+      "url": "artifacts/voice-naturalness-2026-10-25/verify.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/report.md",
+      "title": "report",
+      "date": "2026-10-25",
+      "kind": "Notes",
+      "size": 1464,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/artifacts/voice-naturalness-2026-10-25/report.md",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/rate.html",
+      "title": "rate",
+      "date": "2026-10-25",
+      "kind": "Web report",
+      "size": 10778,
+      "url": "artifacts/voice-naturalness-2026-10-25/rate.html",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "title": "key",
+      "date": "2026-10-25",
+      "kind": "Data",
+      "size": 6345,
+      "url": "artifacts/voice-naturalness-2026-10-25/key.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/judge.json",
+      "title": "judge",
+      "date": "2026-10-25",
+      "kind": "Data",
+      "size": 8017,
+      "url": "artifacts/voice-naturalness-2026-10-25/judge.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/ff38c795.wav",
+      "title": "ff38c795",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 253484,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/ff38c795.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/feba2ea5.wav",
+      "title": "feba2ea5",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 324044,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/feba2ea5.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/e8395e48.wav",
+      "title": "e8395e48",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 288044,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/e8395e48.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/e3e9af5f.wav",
+      "title": "e3e9af5f",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 288044,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/e3e9af5f.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/e25e4037.wav",
+      "title": "e25e4037",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 229964,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/e25e4037.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/ce1a681b.wav",
+      "title": "ce1a681b",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 352844,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/ce1a681b.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/cb499e97.wav",
+      "title": "cb499e97",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 263084,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/cb499e97.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/c9de1291.wav",
+      "title": "c9de1291",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 215084,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/c9de1291.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/bcbd5671.wav",
+      "title": "bcbd5671",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 339884,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/bcbd5671.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/b9fc8d85.wav",
+      "title": "b9fc8d85",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 272684,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/b9fc8d85.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/b86ecd4e.wav",
+      "title": "b86ecd4e",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 272684,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/b86ecd4e.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/b72547fb.wav",
+      "title": "b72547fb",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 300526,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/b72547fb.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/b626c9de.wav",
+      "title": "b626c9de",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 229964,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/b626c9de.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/b4d6f01b.wav",
+      "title": "b4d6f01b",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 260684,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/b4d6f01b.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/b345ac7c.wav",
+      "title": "b345ac7c",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 253484,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/b345ac7c.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/b0824648.wav",
+      "title": "b0824648",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 384044,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/b0824648.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/ad93ac02.wav",
+      "title": "ad93ac02",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 295724,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/ad93ac02.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/a508b7aa.wav",
+      "title": "a508b7aa",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 307244,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/a508b7aa.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/9e1df800.wav",
+      "title": "9e1df800",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 295726,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/9e1df800.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/95df7bbb.wav",
+      "title": "95df7bbb",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 295726,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/95df7bbb.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/93737cd2.wav",
+      "title": "93737cd2",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 285644,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/93737cd2.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/87d8898c.wav",
+      "title": "87d8898c",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 268844,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/87d8898c.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/8062e5c4.wav",
+      "title": "8062e5c4",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 241964,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/8062e5c4.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/7b944c27.wav",
+      "title": "7b944c27",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 384044,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/7b944c27.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/7a45ff82.wav",
+      "title": "7a45ff82",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 421004,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/7a45ff82.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/768b9bde.wav",
+      "title": "768b9bde",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 251564,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/768b9bde.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/693babc4.wav",
+      "title": "693babc4",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 276524,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/693babc4.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/66d93b33.wav",
+      "title": "66d93b33",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 307244,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/66d93b33.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/637d09f4.wav",
+      "title": "637d09f4",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 272684,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/637d09f4.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/5a41d358.wav",
+      "title": "5a41d358",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 229964,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/5a41d358.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/51ea88df.wav",
+      "title": "51ea88df",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 300526,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/51ea88df.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/448f6c57.wav",
+      "title": "448f6c57",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 259244,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/448f6c57.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/39ef203f.wav",
+      "title": "39ef203f",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 291884,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/39ef203f.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/3699307f.wav",
+      "title": "3699307f",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 241964,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/3699307f.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/34898ea2.wav",
+      "title": "34898ea2",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 283244,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/34898ea2.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/34058daf.wav",
+      "title": "34058daf",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 259244,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/34058daf.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/336074f9.wav",
+      "title": "336074f9",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 265004,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/336074f9.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/30d4c78f.wav",
+      "title": "30d4c78f",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 283244,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/30d4c78f.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/2f37686f.wav",
+      "title": "2f37686f",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 276044,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/2f37686f.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/2ac2fbcb.wav",
+      "title": "2ac2fbcb",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 245324,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/2ac2fbcb.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/28ea383f.wav",
+      "title": "28ea383f",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 215084,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/28ea383f.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/1d7bd4ab.wav",
+      "title": "1d7bd4ab",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 427244,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/1d7bd4ab.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/1a13983b.wav",
+      "title": "1a13983b",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 265004,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/1a13983b.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/12362e64.wav",
+      "title": "12362e64",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 228524,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/12362e64.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/0c8ac71e.wav",
+      "title": "0c8ac71e",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 245324,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/0c8ac71e.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/04c6954a.wav",
+      "title": "04c6954a",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 268846,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/04c6954a.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/0294cc68.wav",
+      "title": "0294cc68",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 268846,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/0294cc68.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/clips/01c12720.wav",
+      "title": "01c12720",
+      "date": "2026-10-25",
+      "kind": "Audio",
+      "size": 276524,
+      "url": "artifacts/voice-naturalness-2026-10-25/clips/01c12720.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/README.md",
+      "title": "README",
+      "date": "2026-10-25",
+      "kind": "Notes",
+      "size": 1563,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/artifacts/voice-naturalness-2026-10-25/README.md",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/pricing/vendor-pricing-2026-10-24.json",
+      "title": "vendor pricing 2026 10 24",
+      "date": "2026-10-24",
+      "kind": "Data",
+      "size": 52073,
+      "url": "artifacts/pricing/vendor-pricing-2026-10-24.json",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/timing-tuned-tests-2026-10-21.zip",
+      "title": "timing tuned tests 2026 10 21",
+      "date": "2026-10-21",
+      "kind": "Archive",
+      "size": 1254102,
+      "url": "reports/timing-tuned-tests-2026-10-21.zip",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/spoken-routing-test-2026-10-21.zip",
+      "title": "spoken routing test 2026 10 21",
+      "date": "2026-10-21",
+      "kind": "Archive",
+      "size": 303914,
+      "url": "reports/spoken-routing-test-2026-10-21.zip",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/timing-tuned-2026-10-21-attempt-2/summary.json",
+      "title": "summary",
+      "date": "2026-10-21",
+      "kind": "Data",
+      "size": 2426,
+      "url": "reports/recordings/timing-tuned-2026-10-21-attempt-2/summary.json",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/timing-tuned-2026-10-21-attempt-2/sent.wav",
+      "title": "sent",
+      "date": "2026-10-21",
+      "kind": "Audio",
+      "size": 99244,
+      "url": "reports/recordings/timing-tuned-2026-10-21-attempt-2/sent.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/timing-tuned-2026-10-21-attempt-2/remote.wav",
+      "title": "remote",
+      "date": "2026-10-21",
+      "kind": "Audio",
+      "size": 1226924,
+      "url": "reports/recordings/timing-tuned-2026-10-21-attempt-2/remote.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/timing-tuned-2026-10-21-attempt-2/remote-transcript.txt",
+      "title": "remote transcript",
+      "date": "2026-10-21",
+      "kind": "Other",
+      "size": 429,
+      "url": "reports/recordings/timing-tuned-2026-10-21-attempt-2/remote-transcript.txt",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/timing-tuned-2026-10-21-attempt-2/playback-manifest.json",
+      "title": "playback manifest",
+      "date": "2026-10-21",
+      "kind": "Data",
+      "size": 1035,
+      "url": "reports/recordings/timing-tuned-2026-10-21-attempt-2/playback-manifest.json",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/timing-tuned-2026-10-21-attempt-2/manifest.json",
+      "title": "manifest",
+      "date": "2026-10-21",
+      "kind": "Data",
+      "size": 742,
+      "url": "reports/recordings/timing-tuned-2026-10-21-attempt-2/manifest.json",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/timing-tuned-2026-10-21-attempt-2/index.html",
+      "title": "index",
+      "date": "2026-10-21",
+      "kind": "Web report",
+      "size": 25056,
+      "url": "reports/recordings/timing-tuned-2026-10-21-attempt-2/index.html",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/timing-tuned-2026-10-21-attempt-2/events.jsonl",
+      "title": "events",
+      "date": "2026-10-21",
+      "kind": "Data",
+      "size": 115083,
+      "url": "reports/recordings/timing-tuned-2026-10-21-attempt-2/events.jsonl",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/timing-tuned-2026-10-21-attempt-2/conversation.wav",
+      "title": "conversation",
+      "date": "2026-10-21",
+      "kind": "Audio",
+      "size": 1282648,
+      "url": "reports/recordings/timing-tuned-2026-10-21-attempt-2/conversation.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/timing-tuned-2026-10-21-attempt-2/conversation-stereo.wav",
+      "title": "conversation stereo",
+      "date": "2026-10-21",
+      "kind": "Audio",
+      "size": 2565252,
+      "url": "reports/recordings/timing-tuned-2026-10-21-attempt-2/conversation-stereo.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/timing-tuned-2026-10-21-attempt-2/audio-timing.json",
+      "title": "audio timing",
+      "date": "2026-10-21",
+      "kind": "Data",
+      "size": 627202,
+      "url": "reports/recordings/timing-tuned-2026-10-21-attempt-2/audio-timing.json",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/timing-tuned-2026-10-21-attempt-2/alignment.json",
+      "title": "alignment",
+      "date": "2026-10-21",
+      "kind": "Data",
+      "size": 548226,
+      "url": "reports/recordings/timing-tuned-2026-10-21-attempt-2/alignment.json",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/timing-tuned-2026-10-21-attempt-2/README.md",
+      "title": "README",
+      "date": "2026-10-21",
+      "kind": "Notes",
+      "size": 1338,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/reports/recordings/timing-tuned-2026-10-21-attempt-2/README.md",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/timing-tuned-2026-10-21-attempt-1/summary.json",
+      "title": "summary",
+      "date": "2026-10-21",
+      "kind": "Data",
+      "size": 2177,
+      "url": "reports/recordings/timing-tuned-2026-10-21-attempt-1/summary.json",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/timing-tuned-2026-10-21-attempt-1/sent.wav",
+      "title": "sent",
+      "date": "2026-10-21",
+      "kind": "Audio",
+      "size": 44,
+      "url": "reports/recordings/timing-tuned-2026-10-21-attempt-1/sent.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/timing-tuned-2026-10-21-attempt-1/remote.wav",
+      "title": "remote",
+      "date": "2026-10-21",
+      "kind": "Audio",
+      "size": 307564,
+      "url": "reports/recordings/timing-tuned-2026-10-21-attempt-1/remote.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/timing-tuned-2026-10-21-attempt-1/remote-transcript.txt",
+      "title": "remote transcript",
+      "date": "2026-10-21",
+      "kind": "Other",
+      "size": 131,
+      "url": "reports/recordings/timing-tuned-2026-10-21-attempt-1/remote-transcript.txt",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/timing-tuned-2026-10-21-attempt-1/playback-manifest.json",
+      "title": "playback manifest",
+      "date": "2026-10-21",
+      "kind": "Data",
+      "size": 1035,
+      "url": "reports/recordings/timing-tuned-2026-10-21-attempt-1/playback-manifest.json",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/timing-tuned-2026-10-21-attempt-1/manifest.json",
+      "title": "manifest",
+      "date": "2026-10-21",
+      "kind": "Data",
+      "size": 742,
+      "url": "reports/recordings/timing-tuned-2026-10-21-attempt-1/manifest.json",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/timing-tuned-2026-10-21-attempt-1/index.html",
+      "title": "index",
+      "date": "2026-10-21",
+      "kind": "Web report",
+      "size": 22416,
+      "url": "reports/recordings/timing-tuned-2026-10-21-attempt-1/index.html",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/timing-tuned-2026-10-21-attempt-1/events.jsonl",
+      "title": "events",
+      "date": "2026-10-21",
+      "kind": "Data",
+      "size": 48360,
+      "url": "reports/recordings/timing-tuned-2026-10-21-attempt-1/events.jsonl",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/timing-tuned-2026-10-21-attempt-1/conversation.wav",
+      "title": "conversation",
+      "date": "2026-10-21",
+      "kind": "Audio",
+      "size": 344038,
+      "url": "reports/recordings/timing-tuned-2026-10-21-attempt-1/conversation.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/timing-tuned-2026-10-21-attempt-1/conversation-stereo.wav",
+      "title": "conversation stereo",
+      "date": "2026-10-21",
+      "kind": "Audio",
+      "size": 688032,
+      "url": "reports/recordings/timing-tuned-2026-10-21-attempt-1/conversation-stereo.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/timing-tuned-2026-10-21-attempt-1/audio-timing.json",
+      "title": "audio timing",
+      "date": "2026-10-21",
+      "kind": "Data",
+      "size": 145668,
+      "url": "reports/recordings/timing-tuned-2026-10-21-attempt-1/audio-timing.json",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/timing-tuned-2026-10-21-attempt-1/alignment.json",
+      "title": "alignment",
+      "date": "2026-10-21",
+      "kind": "Data",
+      "size": 137109,
+      "url": "reports/recordings/timing-tuned-2026-10-21-attempt-1/alignment.json",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/timing-tuned-2026-10-21-attempt-1/README.md",
+      "title": "README",
+      "date": "2026-10-21",
+      "kind": "Notes",
+      "size": 838,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/reports/recordings/timing-tuned-2026-10-21-attempt-1/README.md",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/spoken-routing-2026-10-21/summary.json",
+      "title": "summary",
+      "date": "2026-10-21",
+      "kind": "Data",
+      "size": 2128,
+      "url": "reports/recordings/spoken-routing-2026-10-21/summary.json",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/spoken-routing-2026-10-21/sent.wav",
+      "title": "sent",
+      "date": "2026-10-21",
+      "kind": "Audio",
+      "size": 56844,
+      "url": "reports/recordings/spoken-routing-2026-10-21/sent.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/spoken-routing-2026-10-21/remote.wav",
+      "title": "remote",
+      "date": "2026-10-21",
+      "kind": "Audio",
+      "size": 312364,
+      "url": "reports/recordings/spoken-routing-2026-10-21/remote.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/spoken-routing-2026-10-21/remote-transcript.txt",
+      "title": "remote transcript",
+      "date": "2026-10-21",
+      "kind": "Other",
+      "size": 128,
+      "url": "reports/recordings/spoken-routing-2026-10-21/remote-transcript.txt",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/spoken-routing-2026-10-21/playback-manifest.json",
+      "title": "playback manifest",
+      "date": "2026-10-21",
+      "kind": "Data",
+      "size": 1035,
+      "url": "reports/recordings/spoken-routing-2026-10-21/playback-manifest.json",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/spoken-routing-2026-10-21/manifest.json",
+      "title": "manifest",
+      "date": "2026-10-21",
+      "kind": "Data",
+      "size": 742,
+      "url": "reports/recordings/spoken-routing-2026-10-21/manifest.json",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/spoken-routing-2026-10-21/index.html",
+      "title": "index",
+      "date": "2026-10-21",
+      "kind": "Web report",
+      "size": 23050,
+      "url": "reports/recordings/spoken-routing-2026-10-21/index.html",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/spoken-routing-2026-10-21/events.jsonl",
+      "title": "events",
+      "date": "2026-10-21",
+      "kind": "Data",
+      "size": 36090,
+      "url": "reports/recordings/spoken-routing-2026-10-21/events.jsonl",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/spoken-routing-2026-10-21/conversation.wav",
+      "title": "conversation",
+      "date": "2026-10-21",
+      "kind": "Audio",
+      "size": 312364,
+      "url": "reports/recordings/spoken-routing-2026-10-21/conversation.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/spoken-routing-2026-10-21/conversation-stereo.wav",
+      "title": "conversation stereo",
+      "date": "2026-10-21",
+      "kind": "Audio",
+      "size": 624684,
+      "url": "reports/recordings/spoken-routing-2026-10-21/conversation-stereo.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/spoken-routing-2026-10-21/audio-timing.json",
+      "title": "audio timing",
+      "date": "2026-10-21",
+      "kind": "Data",
+      "size": 172589,
+      "url": "reports/recordings/spoken-routing-2026-10-21/audio-timing.json",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/spoken-routing-2026-10-21/alignment.json",
+      "title": "alignment",
+      "date": "2026-10-21",
+      "kind": "Data",
+      "size": 139274,
+      "url": "reports/recordings/spoken-routing-2026-10-21/alignment.json",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/spoken-routing-2026-10-21/README.md",
+      "title": "README",
+      "date": "2026-10-21",
+      "kind": "Notes",
+      "size": 1354,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/reports/recordings/spoken-routing-2026-10-21/README.md",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/lost-wallet-2026-10-21/summary.json",
+      "title": "summary",
+      "date": "2026-10-21",
+      "kind": "Data",
+      "size": 661,
+      "url": "reports/recordings/lost-wallet-2026-10-21/summary.json",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/lost-wallet-2026-10-21/sent.wav",
+      "title": "sent",
+      "date": "2026-10-21",
+      "kind": "Audio",
+      "size": 124844,
+      "url": "reports/recordings/lost-wallet-2026-10-21/sent.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/lost-wallet-2026-10-21/remote.wav",
+      "title": "remote",
+      "date": "2026-10-21",
+      "kind": "Audio",
+      "size": 1633004,
+      "url": "reports/recordings/lost-wallet-2026-10-21/remote.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/lost-wallet-2026-10-21/remote-transcript.txt",
+      "title": "remote transcript",
+      "date": "2026-10-21",
+      "kind": "Other",
+      "size": 572,
+      "url": "reports/recordings/lost-wallet-2026-10-21/remote-transcript.txt",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/lost-wallet-2026-10-21/playback-manifest.json",
+      "title": "playback manifest",
+      "date": "2026-10-21",
+      "kind": "Data",
+      "size": 945,
+      "url": "reports/recordings/lost-wallet-2026-10-21/playback-manifest.json",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/lost-wallet-2026-10-21/manifest.json",
+      "title": "manifest",
+      "date": "2026-10-21",
+      "kind": "Data",
+      "size": 649,
+      "url": "reports/recordings/lost-wallet-2026-10-21/manifest.json",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/lost-wallet-2026-10-21/index.html",
+      "title": "index",
+      "date": "2026-10-21",
+      "kind": "Web report",
+      "size": 25278,
+      "url": "reports/recordings/lost-wallet-2026-10-21/index.html",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/lost-wallet-2026-10-21/events.jsonl",
+      "title": "events",
+      "date": "2026-10-21",
+      "kind": "Data",
+      "size": 70485,
+      "url": "reports/recordings/lost-wallet-2026-10-21/events.jsonl",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/lost-wallet-2026-10-21/conversation.wav",
+      "title": "conversation",
+      "date": "2026-10-21",
+      "kind": "Audio",
+      "size": 1700860,
+      "url": "reports/recordings/lost-wallet-2026-10-21/conversation.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/lost-wallet-2026-10-21/conversation-stereo.wav",
+      "title": "conversation stereo",
+      "date": "2026-10-21",
+      "kind": "Audio",
+      "size": 3401676,
+      "url": "reports/recordings/lost-wallet-2026-10-21/conversation-stereo.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/lost-wallet-2026-10-21/alignment.json",
+      "title": "alignment",
+      "date": "2026-10-21",
+      "kind": "Data",
+      "size": 1675,
+      "url": "reports/recordings/lost-wallet-2026-10-21/alignment.json",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/lost-wallet-2026-10-21/README.md",
+      "title": "README",
+      "date": "2026-10-21",
+      "kind": "Notes",
+      "size": 2916,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/reports/recordings/lost-wallet-2026-10-21/README.md",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/adaptive-wallet-2026-10-21-attempt-2/summary.json",
+      "title": "summary",
+      "date": "2026-10-21",
+      "kind": "Data",
+      "size": 2412,
+      "url": "reports/recordings/adaptive-wallet-2026-10-21-attempt-2/summary.json",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/adaptive-wallet-2026-10-21-attempt-2/sent.wav",
+      "title": "sent",
+      "date": "2026-10-21",
+      "kind": "Audio",
+      "size": 158444,
+      "url": "reports/recordings/adaptive-wallet-2026-10-21-attempt-2/sent.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/adaptive-wallet-2026-10-21-attempt-2/remote.wav",
+      "title": "remote",
+      "date": "2026-10-21",
+      "kind": "Audio",
+      "size": 1245164,
+      "url": "reports/recordings/adaptive-wallet-2026-10-21-attempt-2/remote.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/adaptive-wallet-2026-10-21-attempt-2/remote-transcript.txt",
+      "title": "remote transcript",
+      "date": "2026-10-21",
+      "kind": "Other",
+      "size": 451,
+      "url": "reports/recordings/adaptive-wallet-2026-10-21-attempt-2/remote-transcript.txt",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/adaptive-wallet-2026-10-21-attempt-2/playback-manifest.json",
+      "title": "playback manifest",
+      "date": "2026-10-21",
+      "kind": "Data",
+      "size": 1035,
+      "url": "reports/recordings/adaptive-wallet-2026-10-21-attempt-2/playback-manifest.json",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/adaptive-wallet-2026-10-21-attempt-2/manifest.json",
+      "title": "manifest",
+      "date": "2026-10-21",
+      "kind": "Data",
+      "size": 742,
+      "url": "reports/recordings/adaptive-wallet-2026-10-21-attempt-2/manifest.json",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/adaptive-wallet-2026-10-21-attempt-2/index.html",
+      "title": "index",
+      "date": "2026-10-21",
+      "kind": "Web report",
+      "size": 24630,
+      "url": "reports/recordings/adaptive-wallet-2026-10-21-attempt-2/index.html",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/adaptive-wallet-2026-10-21-attempt-2/events.jsonl",
+      "title": "events",
+      "date": "2026-10-21",
+      "kind": "Data",
+      "size": 74737,
+      "url": "reports/recordings/adaptive-wallet-2026-10-21-attempt-2/events.jsonl",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/adaptive-wallet-2026-10-21-attempt-2/conversation.wav",
+      "title": "conversation",
+      "date": "2026-10-21",
+      "kind": "Audio",
+      "size": 1300584,
+      "url": "reports/recordings/adaptive-wallet-2026-10-21-attempt-2/conversation.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/adaptive-wallet-2026-10-21-attempt-2/conversation-stereo.wav",
+      "title": "conversation stereo",
+      "date": "2026-10-21",
+      "kind": "Audio",
+      "size": 2601124,
+      "url": "reports/recordings/adaptive-wallet-2026-10-21-attempt-2/conversation-stereo.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/adaptive-wallet-2026-10-21-attempt-2/audio-timing.json",
+      "title": "audio timing",
+      "date": "2026-10-21",
+      "kind": "Data",
+      "size": 661080,
+      "url": "reports/recordings/adaptive-wallet-2026-10-21-attempt-2/audio-timing.json",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/adaptive-wallet-2026-10-21-attempt-2/alignment.json",
+      "title": "alignment",
+      "date": "2026-10-21",
+      "kind": "Data",
+      "size": 556375,
+      "url": "reports/recordings/adaptive-wallet-2026-10-21-attempt-2/alignment.json",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/adaptive-wallet-2026-10-21-attempt-2/README.md",
+      "title": "README",
+      "date": "2026-10-21",
+      "kind": "Notes",
+      "size": 1156,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/reports/recordings/adaptive-wallet-2026-10-21-attempt-2/README.md",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/adaptive-wallet-2026-10-21-attempt-1/summary.json",
+      "title": "summary",
+      "date": "2026-10-21",
+      "kind": "Data",
+      "size": 2402,
+      "url": "reports/recordings/adaptive-wallet-2026-10-21-attempt-1/summary.json",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/adaptive-wallet-2026-10-21-attempt-1/sent.wav",
+      "title": "sent",
+      "date": "2026-10-21",
+      "kind": "Audio",
+      "size": 230444,
+      "url": "reports/recordings/adaptive-wallet-2026-10-21-attempt-1/sent.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/adaptive-wallet-2026-10-21-attempt-1/remote.wav",
+      "title": "remote",
+      "date": "2026-10-21",
+      "kind": "Audio",
+      "size": 1315884,
+      "url": "reports/recordings/adaptive-wallet-2026-10-21-attempt-1/remote.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/adaptive-wallet-2026-10-21-attempt-1/remote-transcript.txt",
+      "title": "remote transcript",
+      "date": "2026-10-21",
+      "kind": "Other",
+      "size": 457,
+      "url": "reports/recordings/adaptive-wallet-2026-10-21-attempt-1/remote-transcript.txt",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/adaptive-wallet-2026-10-21-attempt-1/playback-manifest.json",
+      "title": "playback manifest",
+      "date": "2026-10-21",
+      "kind": "Data",
+      "size": 1035,
+      "url": "reports/recordings/adaptive-wallet-2026-10-21-attempt-1/playback-manifest.json",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/adaptive-wallet-2026-10-21-attempt-1/manifest.json",
+      "title": "manifest",
+      "date": "2026-10-21",
+      "kind": "Data",
+      "size": 742,
+      "url": "reports/recordings/adaptive-wallet-2026-10-21-attempt-1/manifest.json",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/adaptive-wallet-2026-10-21-attempt-1/index.html",
+      "title": "index",
+      "date": "2026-10-21",
+      "kind": "Web report",
+      "size": 24886,
+      "url": "reports/recordings/adaptive-wallet-2026-10-21-attempt-1/index.html",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/adaptive-wallet-2026-10-21-attempt-1/events.jsonl",
+      "title": "events",
+      "date": "2026-10-21",
+      "kind": "Data",
+      "size": 70340,
+      "url": "reports/recordings/adaptive-wallet-2026-10-21-attempt-1/events.jsonl",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/adaptive-wallet-2026-10-21-attempt-1/conversation.wav",
+      "title": "conversation",
+      "date": "2026-10-21",
+      "kind": "Audio",
+      "size": 1368852,
+      "url": "reports/recordings/adaptive-wallet-2026-10-21-attempt-1/conversation.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/adaptive-wallet-2026-10-21-attempt-1/conversation-stereo.wav",
+      "title": "conversation stereo",
+      "date": "2026-10-21",
+      "kind": "Audio",
+      "size": 2737660,
+      "url": "reports/recordings/adaptive-wallet-2026-10-21-attempt-1/conversation-stereo.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/adaptive-wallet-2026-10-21-attempt-1/audio-timing.json",
+      "title": "audio timing",
+      "date": "2026-10-21",
+      "kind": "Data",
+      "size": 725807,
+      "url": "reports/recordings/adaptive-wallet-2026-10-21-attempt-1/audio-timing.json",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/adaptive-wallet-2026-10-21-attempt-1/alignment.json",
+      "title": "alignment",
+      "date": "2026-10-21",
+      "kind": "Data",
+      "size": 587840,
+      "url": "reports/recordings/adaptive-wallet-2026-10-21-attempt-1/alignment.json",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/recordings/adaptive-wallet-2026-10-21-attempt-1/README.md",
+      "title": "README",
+      "date": "2026-10-21",
+      "kind": "Notes",
+      "size": 907,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/reports/recordings/adaptive-wallet-2026-10-21-attempt-1/README.md",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/lost-wallet-recording-2026-10-21.zip",
+      "title": "lost wallet recording 2026 10 21",
+      "date": "2026-10-21",
+      "kind": "Archive",
+      "size": 1171182,
+      "url": "reports/lost-wallet-recording-2026-10-21.zip",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/delegate-timing-tuning-2026-10-21.md",
+      "title": "delegate timing tuning 2026 10 21",
+      "date": "2026-10-21",
+      "kind": "Notes",
+      "size": 4650,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/reports/delegate-timing-tuning-2026-10-21.md",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/delegate-phone-proof-2026-10-21.md",
+      "title": "delegate phone proof 2026 10 21",
+      "date": "2026-10-21",
+      "kind": "Notes",
+      "size": 5202,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/reports/delegate-phone-proof-2026-10-21.md",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/delegate-lost-wallet-2026-10-21.md",
+      "title": "delegate lost wallet 2026 10 21",
+      "date": "2026-10-21",
+      "kind": "Notes",
+      "size": 11904,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/reports/delegate-lost-wallet-2026-10-21.md",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/adaptive-wallet-live-test-2026-10-21.zip",
+      "title": "adaptive wallet live test 2026 10 21",
+      "date": "2026-10-21",
+      "kind": "Archive",
+      "size": 2331064,
+      "url": "reports/adaptive-wallet-live-test-2026-10-21.zip",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/adaptive-wallet-live-test-2026-10-21.md",
+      "title": "adaptive wallet live test 2026 10 21",
+      "date": "2026-10-21",
+      "kind": "Notes",
+      "size": 4713,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/reports/adaptive-wallet-live-test-2026-10-21.md",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/voice-provider-prompts-standardised-v2-2026-10-20.html",
+      "title": "voice provider prompts standardised v2 2026 10 20",
+      "date": "2026-10-20",
+      "kind": "Web report",
+      "size": 169591,
+      "url": "reports/voice-provider-prompts-standardised-v2-2026-10-20.html",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/provider-transport-v1-2026-10-20.html",
+      "title": "provider transport v1 2026 10 20",
+      "date": "2026-10-20",
+      "kind": "Web report",
+      "size": 169825,
+      "url": "reports/provider-transport-v1-2026-10-20.html",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/UI_UX_REVIEW_2026-10-20.md",
+      "title": "UI UX REVIEW 2026 10 20",
+      "date": "2026-10-20",
+      "kind": "Notes",
+      "size": 3935,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/UI_UX_REVIEW_2026-10-20.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/SCENARIO_PROMPT_REVIEW_2026-10-20.md",
+      "title": "SCENARIO PROMPT REVIEW 2026 10 20",
+      "date": "2026-10-20",
+      "kind": "Notes",
+      "size": 4841,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/SCENARIO_PROMPT_REVIEW_2026-10-20.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/PROVIDER_TRANSPORT_REVIEW_2026-10-20.md",
+      "title": "PROVIDER TRANSPORT REVIEW 2026 10 20",
+      "date": "2026-10-20",
+      "kind": "Notes",
+      "size": 5681,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/PROVIDER_TRANSPORT_REVIEW_2026-10-20.md",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-provider-listening-v2-nova-fix-2026-10-20/results.json",
+      "title": "results",
+      "date": "2026-10-20",
+      "kind": "Data",
+      "size": 1514,
+      "url": "artifacts/voice-provider-listening-v2-nova-fix-2026-10-20/results.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-provider-listening-v2-nova-fix-2026-10-20/nova-sonic-live.wav",
+      "title": "nova sonic live",
+      "date": "2026-10-20",
+      "kind": "Audio",
+      "size": 1763084,
+      "url": "artifacts/voice-provider-listening-v2-nova-fix-2026-10-20/nova-sonic-live.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-provider-listening-v2-nova-fix-2026-10-20/listen.html",
+      "title": "listen",
+      "date": "2026-10-20",
+      "kind": "Web report",
+      "size": 2352854,
+      "url": "artifacts/voice-provider-listening-v2-nova-fix-2026-10-20/listen.html",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-provider-listening-v2-2026-10-20/xai-voice-live.wav",
+      "title": "xai voice live",
+      "date": "2026-10-20",
+      "kind": "Audio",
+      "size": 1548524,
+      "url": "artifacts/voice-provider-listening-v2-2026-10-20/xai-voice-live.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-provider-listening-v2-2026-10-20/results.json",
+      "title": "results",
+      "date": "2026-10-20",
+      "kind": "Data",
+      "size": 5809,
+      "url": "artifacts/voice-provider-listening-v2-2026-10-20/results.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-provider-listening-v2-2026-10-20/prompt-provenance.json",
+      "title": "prompt provenance",
+      "date": "2026-10-20",
+      "kind": "Data",
+      "size": 1259,
+      "url": "artifacts/voice-provider-listening-v2-2026-10-20/prompt-provenance.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-provider-listening-v2-2026-10-20/openai-realtime-live.wav",
+      "title": "openai realtime live",
+      "date": "2026-10-20",
+      "kind": "Audio",
+      "size": 2030444,
+      "url": "artifacts/voice-provider-listening-v2-2026-10-20/openai-realtime-live.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-provider-listening-v2-2026-10-20/nova-sonic-live.wav",
+      "title": "nova sonic live",
+      "date": "2026-10-20",
+      "kind": "Audio",
+      "size": 1493324,
+      "url": "artifacts/voice-provider-listening-v2-2026-10-20/nova-sonic-live.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-provider-listening-v2-2026-10-20/listen.html",
+      "title": "listen",
+      "date": "2026-10-20",
+      "kind": "Web report",
+      "size": 9225742,
+      "url": "artifacts/voice-provider-listening-v2-2026-10-20/listen.html",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-provider-listening-v2-2026-10-20/gemini-live.wav",
+      "title": "gemini live",
+      "date": "2026-10-20",
+      "kind": "Audio",
+      "size": 1843246,
+      "url": "artifacts/voice-provider-listening-v2-2026-10-20/gemini-live.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-provider-listening-v2-2026-10-20/README.md",
+      "title": "README",
+      "date": "2026-10-20",
+      "kind": "Notes",
+      "size": 1631,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/artifacts/voice-provider-listening-v2-2026-10-20/README.md",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-provider-listening-2026-10-20/xai-voice-live.wav",
+      "title": "xai voice live",
+      "date": "2026-10-20",
+      "kind": "Audio",
+      "size": 1500044,
+      "url": "artifacts/voice-provider-listening-2026-10-20/xai-voice-live.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-provider-listening-2026-10-20/results.json",
+      "title": "results",
+      "date": "2026-10-20",
+      "kind": "Data",
+      "size": 6638,
+      "url": "artifacts/voice-provider-listening-2026-10-20/results.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-provider-listening-2026-10-20/openai-realtime-live.wav",
+      "title": "openai realtime live",
+      "date": "2026-10-20",
+      "kind": "Audio",
+      "size": 1689644,
+      "url": "artifacts/voice-provider-listening-2026-10-20/openai-realtime-live.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-provider-listening-2026-10-20/nova-sonic-live.wav",
+      "title": "nova sonic live",
+      "date": "2026-10-20",
+      "kind": "Audio",
+      "size": 2729804,
+      "url": "artifacts/voice-provider-listening-2026-10-20/nova-sonic-live.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-provider-listening-2026-10-20/listen.html",
+      "title": "listen",
+      "date": "2026-10-20",
+      "kind": "Web report",
+      "size": 9656592,
+      "url": "artifacts/voice-provider-listening-2026-10-20/listen.html",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-provider-listening-2026-10-20/gemini-live.wav",
+      "title": "gemini live",
+      "date": "2026-10-20",
+      "kind": "Audio",
+      "size": 1319086,
+      "url": "artifacts/voice-provider-listening-2026-10-20/gemini-live.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/provider-transport-v1-2026-10-20/openai-policy-final20.json",
+      "title": "openai policy final20",
+      "date": "2026-10-20",
+      "kind": "Data",
+      "size": 808,
+      "url": "artifacts/provider-transport-v1-2026-10-20/openai-policy-final20.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/provider-transport-v1-2026-10-20/openai-policy-budget-diagnostic.json",
+      "title": "openai policy budget diagnostic",
+      "date": "2026-10-20",
+      "kind": "Data",
+      "size": 719,
+      "url": "artifacts/provider-transport-v1-2026-10-20/openai-policy-budget-diagnostic.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/provider-transport-v1-2026-10-20/audit.json",
+      "title": "audit",
+      "date": "2026-10-20",
+      "kind": "Data",
+      "size": 159288,
+      "url": "artifacts/provider-transport-v1-2026-10-20/audit.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/provider-matrix/matrix-standardised-v2-recheck-xai-2026-10-20.json",
+      "title": "matrix standardised v2 recheck xai 2026 10 20",
+      "date": "2026-10-20",
+      "kind": "Data",
+      "size": 12916,
+      "url": "artifacts/provider-matrix/matrix-standardised-v2-recheck-xai-2026-10-20.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/provider-matrix/matrix-standardised-v2-recheck-openai-2026-10-20.json",
+      "title": "matrix standardised v2 recheck openai 2026 10 20",
+      "date": "2026-10-20",
+      "kind": "Data",
+      "size": 13163,
+      "url": "artifacts/provider-matrix/matrix-standardised-v2-recheck-openai-2026-10-20.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/provider-matrix/matrix-standardised-v2-recheck-nova-2026-10-20.json",
+      "title": "matrix standardised v2 recheck nova 2026 10 20",
+      "date": "2026-10-20",
+      "kind": "Data",
+      "size": 12622,
+      "url": "artifacts/provider-matrix/matrix-standardised-v2-recheck-nova-2026-10-20.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/provider-matrix/matrix-standardised-v2-recheck-gemini-us-2026-10-20.json",
+      "title": "matrix standardised v2 recheck gemini us 2026 10 20",
+      "date": "2026-10-20",
+      "kind": "Data",
+      "size": 12427,
+      "url": "artifacts/provider-matrix/matrix-standardised-v2-recheck-gemini-us-2026-10-20.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/provider-matrix/matrix-standardised-v2-recheck-gemini-2026-10-20.json",
+      "title": "matrix standardised v2 recheck gemini 2026 10 20",
+      "date": "2026-10-20",
+      "kind": "Data",
+      "size": 14989,
+      "url": "artifacts/provider-matrix/matrix-standardised-v2-recheck-gemini-2026-10-20.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/provider-matrix/matrix-standardised-v2-2026-10-20.json",
+      "title": "matrix standardised v2 2026 10 20",
+      "date": "2026-10-20",
+      "kind": "Data",
+      "size": 131885,
+      "url": "artifacts/provider-matrix/matrix-standardised-v2-2026-10-20.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/provider-matrix/matrix-provider-transport-v1-2026-10-20.json",
+      "title": "matrix provider transport v1 2026 10 20",
+      "date": "2026-10-20",
+      "kind": "Data",
+      "size": 133712,
+      "url": "artifacts/provider-matrix/matrix-provider-transport-v1-2026-10-20.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/prompt-audit-v2-2026-10-20/audit.json",
+      "title": "audit",
+      "date": "2026-10-20",
+      "kind": "Data",
+      "size": 144677,
+      "url": "artifacts/prompt-audit-v2-2026-10-20/audit.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/interactive-caller-pilot-cedar-2026-10-20.json",
+      "title": "interactive caller pilot cedar 2026 10 20",
+      "date": "2026-10-20",
+      "kind": "Data",
+      "size": 2685,
+      "url": "artifacts/interactive-caller-pilot-cedar-2026-10-20.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/interactive-caller-pilot-2026-10-20.json",
+      "title": "interactive caller pilot 2026 10 20",
+      "date": "2026-10-20",
+      "kind": "Data",
+      "size": 2405,
+      "url": "artifacts/interactive-caller-pilot-2026-10-20.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/interactive-caller-pilot-2026-10-20-vad.json",
+      "title": "interactive caller pilot 2026 10 20 vad",
+      "date": "2026-10-20",
+      "kind": "Data",
+      "size": 2551,
+      "url": "artifacts/interactive-caller-pilot-2026-10-20-vad.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/interactive-caller-pilot-2026-10-20-initial.json",
+      "title": "interactive caller pilot 2026 10 20 initial",
+      "date": "2026-10-20",
+      "kind": "Data",
+      "size": 1684,
+      "url": "artifacts/interactive-caller-pilot-2026-10-20-initial.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/interactive-caller-demo-cedar-2026-10-20.wav",
+      "title": "interactive caller demo cedar 2026 10 20",
+      "date": "2026-10-20",
+      "kind": "Audio",
+      "size": 1713644,
+      "url": "artifacts/interactive-caller-demo-cedar-2026-10-20.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/interactive-caller-demo-2026-10-20.wav",
+      "title": "interactive caller demo 2026 10 20",
+      "date": "2026-10-20",
+      "kind": "Audio",
+      "size": 1507244,
+      "url": "artifacts/interactive-caller-demo-2026-10-20.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gemini-turn-diagnostic-2026-10-20/results.json",
+      "title": "results",
+      "date": "2026-10-20",
+      "kind": "Data",
+      "size": 6791,
+      "url": "artifacts/gemini-turn-diagnostic-2026-10-20/results.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gemini-turn-diagnostic-2026-10-20/explicit-45s.wav",
+      "title": "explicit 45s",
+      "date": "2026-10-20",
+      "kind": "Audio",
+      "size": 1079146,
+      "url": "artifacts/gemini-turn-diagnostic-2026-10-20/explicit-45s.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gemini-turn-diagnostic-2026-10-20/automatic-45s.wav",
+      "title": "automatic 45s",
+      "date": "2026-10-20",
+      "kind": "Audio",
+      "size": 719144,
+      "url": "artifacts/gemini-turn-diagnostic-2026-10-20/automatic-45s.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gemini-turn-diagnostic-2026-10-20/automatic-120s.wav",
+      "title": "automatic 120s",
+      "date": "2026-10-20",
+      "kind": "Audio",
+      "size": 750824,
+      "url": "artifacts/gemini-turn-diagnostic-2026-10-20/automatic-120s.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gemini-turn-diagnostic-2026-10-20/README.md",
+      "title": "README",
+      "date": "2026-10-20",
+      "kind": "Notes",
+      "size": 2568,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/artifacts/gemini-turn-diagnostic-2026-10-20/README.md",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gemini-street-listening-2026-10-20/recording.json",
+      "title": "recording",
+      "date": "2026-10-20",
+      "kind": "Data",
+      "size": 1157,
+      "url": "artifacts/gemini-street-listening-2026-10-20/recording.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gemini-street-listening-2026-10-20/listen.html",
+      "title": "listen",
+      "date": "2026-10-20",
+      "kind": "Web report",
+      "size": 1058,
+      "url": "artifacts/gemini-street-listening-2026-10-20/listen.html",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gemini-street-listening-2026-10-20/gemini-street-released.wav",
+      "title": "gemini street released",
+      "date": "2026-10-20",
+      "kind": "Audio",
+      "size": 746984,
+      "url": "artifacts/gemini-street-listening-2026-10-20/gemini-street-released.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gemini-street-listening-2026-10-20/gemini-street-generated.wav",
+      "title": "gemini street generated",
+      "date": "2026-10-20",
+      "kind": "Audio",
+      "size": 746984,
+      "url": "artifacts/gemini-street-listening-2026-10-20/gemini-street-generated.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/voice-provider-benchmark-gemini38-2026-10-19.pdf",
+      "title": "voice provider benchmark gemini38 2026 10 19",
+      "date": "2026-10-19",
+      "kind": "PDF",
+      "size": 673979,
+      "url": "reports/voice-provider-benchmark-gemini38-2026-10-19.pdf",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/voice-provider-benchmark-gemini38-2026-10-19.html",
+      "title": "voice provider benchmark gemini38 2026 10 19",
+      "date": "2026-10-19",
+      "kind": "Web report",
+      "size": 138424,
+      "url": "reports/voice-provider-benchmark-gemini38-2026-10-19.html",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/voice-provider-benchmark-5350e4a-2026-10-19.pdf",
+      "title": "voice provider benchmark 5350e4a 2026 10 19",
+      "date": "2026-10-19",
+      "kind": "PDF",
+      "size": 684295,
+      "url": "reports/voice-provider-benchmark-5350e4a-2026-10-19.pdf",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/voice-provider-benchmark-5350e4a-2026-10-19.html",
+      "title": "voice provider benchmark 5350e4a 2026 10 19",
+      "date": "2026-10-19",
+      "kind": "Web report",
+      "size": 139646,
+      "url": "reports/voice-provider-benchmark-5350e4a-2026-10-19.html",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/voice-provider-benchmark-5350e4a-2026-10-19-cost.html",
+      "title": "voice provider benchmark 5350e4a 2026 10 19 cost",
+      "date": "2026-10-19",
+      "kind": "Web report",
+      "size": 165429,
+      "url": "reports/voice-provider-benchmark-5350e4a-2026-10-19-cost.html",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/voice-provider-benchmark-2026-10-19.pdf",
+      "title": "voice provider benchmark 2026 10 19",
+      "date": "2026-10-19",
+      "kind": "PDF",
+      "size": 852944,
+      "url": "reports/voice-provider-benchmark-2026-10-19.pdf",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/voice-provider-benchmark-2026-10-19.html",
+      "title": "voice provider benchmark 2026 10 19",
+      "date": "2026-10-19",
+      "kind": "Web report",
+      "size": 137790,
+      "url": "reports/voice-provider-benchmark-2026-10-19.html",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/GEMINI_3_8_BENCHMARK_2026-10-19.md",
+      "title": "GEMINI 3 8 BENCHMARK 2026 10 19",
+      "date": "2026-10-19",
+      "kind": "Notes",
+      "size": 6624,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/GEMINI_3_8_BENCHMARK_2026-10-19.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/BENCHMARK_5350E4A_2026-10-19.md",
+      "title": "BENCHMARK 5350E4A 2026 10 19",
+      "date": "2026-10-19",
+      "kind": "Notes",
+      "size": 5614,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/BENCHMARK_5350E4A_2026-10-19.md",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/report-matrix-fix-2026-10-19.json",
+      "title": "report matrix fix 2026 10 19",
+      "date": "2026-10-19",
+      "kind": "Data",
+      "size": 1391,
+      "url": "artifacts/report-matrix-fix-2026-10-19.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/provider-matrix/matrix-nova-cost-2026-10-19.json",
+      "title": "matrix nova cost 2026 10 19",
+      "date": "2026-10-19",
+      "kind": "Data",
+      "size": 41698,
+      "url": "artifacts/provider-matrix/matrix-nova-cost-2026-10-19.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/provider-matrix/matrix-gemini38-2026-10-19.json",
+      "title": "matrix gemini38 2026 10 19",
+      "date": "2026-10-19",
+      "kind": "Data",
+      "size": 127053,
+      "url": "artifacts/provider-matrix/matrix-gemini38-2026-10-19.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/provider-matrix/matrix-5350e4a-2026-10-19.json",
+      "title": "matrix 5350e4a 2026 10 19",
+      "date": "2026-10-19",
+      "kind": "Data",
+      "size": 126864,
+      "url": "artifacts/provider-matrix/matrix-5350e4a-2026-10-19.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/provider-matrix/matrix-2026-10-19.json",
+      "title": "matrix 2026 10 19",
+      "date": "2026-10-19",
+      "kind": "Data",
+      "size": 131477,
+      "url": "artifacts/provider-matrix/matrix-2026-10-19.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/pricing/vendor-pricing-2026-10-19.json",
+      "title": "vendor pricing 2026 10 19",
+      "date": "2026-10-19",
+      "kind": "Data",
+      "size": 33593,
+      "url": "artifacts/pricing/vendor-pricing-2026-10-19.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/google_gemini-probe-2026-10-19T11-19-49-451Z.jsonl",
+      "title": "google gemini probe 2026 10 19T11 19 49 451Z",
+      "date": "2026-10-19",
+      "kind": "Data",
+      "size": 190004,
+      "url": "artifacts/phase0/google_gemini-probe-2026-10-19T11-19-49-451Z.jsonl",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/google_gemini-probe-2026-10-19T11-18-39-732Z.jsonl",
+      "title": "google gemini probe 2026 10 19T11 18 39 732Z",
+      "date": "2026-10-19",
+      "kind": "Data",
+      "size": 27506,
+      "url": "artifacts/phase0/google_gemini-probe-2026-10-19T11-18-39-732Z.jsonl",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/google_gemini-observations-2026-10-19T11-19-49-451Z.json",
+      "title": "google gemini observations 2026 10 19T11 19 49 451Z",
+      "date": "2026-10-19",
+      "kind": "Data",
+      "size": 4966,
+      "url": "artifacts/phase0/google_gemini-observations-2026-10-19T11-19-49-451Z.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/google_gemini-observations-2026-10-19T11-18-39-732Z.json",
+      "title": "google gemini observations 2026 10 19T11 18 39 732Z",
+      "date": "2026-10-19",
+      "kind": "Data",
+      "size": 3843,
+      "url": "artifacts/phase0/google_gemini-observations-2026-10-19T11-18-39-732Z.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/interactive-caller-pilot-2026-10-19.json",
+      "title": "interactive caller pilot 2026 10 19",
+      "date": "2026-10-19",
+      "kind": "Data",
+      "size": 364,
+      "url": "artifacts/interactive-caller-pilot-2026-10-19.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gemini38/validation-2026-10-19.json",
+      "title": "validation 2026 10 19",
+      "date": "2026-10-19",
+      "kind": "Data",
+      "size": 2135,
+      "url": "artifacts/gemini38/validation-2026-10-19.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gemini38/component-benchmark-2026-10-19.json",
+      "title": "component benchmark 2026 10 19",
+      "date": "2026-10-19",
+      "kind": "Data",
+      "size": 15118248,
+      "url": "artifacts/gemini38/component-benchmark-2026-10-19.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gemini38/benchmark-summary-2026-10-19.json",
+      "title": "benchmark summary 2026 10 19",
+      "date": "2026-10-19",
+      "kind": "Data",
+      "size": 18179,
+      "url": "artifacts/gemini38/benchmark-summary-2026-10-19.json",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/UI_UX_CAPABILITY_AUDIT_2026-10-18.md",
+      "title": "UI UX CAPABILITY AUDIT 2026 10 18",
+      "date": "2026-10-18",
+      "kind": "Notes",
+      "size": 5779,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/UI_UX_CAPABILITY_AUDIT_2026-10-18.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/PHASE_REVIEW_2026-10-18.md",
+      "title": "PHASE REVIEW 2026 10 18",
+      "date": "2026-10-18",
+      "kind": "Notes",
+      "size": 5210,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/PHASE_REVIEW_2026-10-18.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/CODE_SPEC_REVIEW_2026-10-18.md",
+      "title": "CODE SPEC REVIEW 2026 10 18",
+      "date": "2026-10-18",
+      "kind": "Notes",
+      "size": 19073,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/CODE_SPEC_REVIEW_2026-10-18.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/CODE_SPEC_RECHECK_2026-10-18.md",
+      "title": "CODE SPEC RECHECK 2026 10 18",
+      "date": "2026-10-18",
+      "kind": "Notes",
+      "size": 17210,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/CODE_SPEC_RECHECK_2026-10-18.md",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/pricing/vendor-pricing-2026-10-18.json",
+      "title": "vendor pricing 2026 10 18",
+      "date": "2026-10-18",
+      "kind": "Data",
+      "size": 24492,
+      "url": "artifacts/pricing/vendor-pricing-2026-10-18.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase1-recheck-baseline-2026-10-18.provenance.json",
+      "title": "phase1 recheck baseline 2026 10 18.provenance",
+      "date": "2026-10-18",
+      "kind": "Data",
+      "size": 32608,
+      "url": "artifacts/phase1-recheck-baseline-2026-10-18.provenance.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase1-recheck-baseline-2026-10-18.json",
+      "title": "phase1 recheck baseline 2026 10 18",
+      "date": "2026-10-18",
+      "kind": "Data",
+      "size": 15118260,
+      "url": "artifacts/phase1-recheck-baseline-2026-10-18.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/xai-probe-2026-10-18T19-06-51-161Z.jsonl",
+      "title": "xai probe 2026 10 18T19 06 51 161Z",
+      "date": "2026-10-18",
+      "kind": "Data",
+      "size": 143332,
+      "url": "artifacts/phase0/xai-probe-2026-10-18T19-06-51-161Z.jsonl",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/xai-observations-2026-10-18T19-06-51-161Z.json",
+      "title": "xai observations 2026 10 18T19 06 51 161Z",
+      "date": "2026-10-18",
+      "kind": "Data",
+      "size": 5814,
+      "url": "artifacts/phase0/xai-observations-2026-10-18T19-06-51-161Z.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/google_gemini-probe-2026-10-18T19-36-31-115Z.jsonl",
+      "title": "google gemini probe 2026 10 18T19 36 31 115Z",
+      "date": "2026-10-18",
+      "kind": "Data",
+      "size": 182685,
+      "url": "artifacts/phase0/google_gemini-probe-2026-10-18T19-36-31-115Z.jsonl",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/google_gemini-observations-2026-10-18T19-36-31-115Z.json",
+      "title": "google gemini observations 2026 10 18T19 36 31 115Z",
+      "date": "2026-10-18",
+      "kind": "Data",
+      "size": 4608,
+      "url": "artifacts/phase0/google_gemini-observations-2026-10-18T19-36-31-115Z.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/matched-websocket-check-31ccddd-vs-89fa78f-2026-10-18.json",
+      "title": "matched websocket check 31ccddd vs 89fa78f 2026 10 18",
+      "date": "2026-10-18",
+      "kind": "Data",
+      "size": 1303359,
+      "url": "artifacts/matched-websocket-check-31ccddd-vs-89fa78f-2026-10-18.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/matched-latency-89fa78f-control-rerun-2026-10-18.json",
+      "title": "matched latency 89fa78f control rerun 2026 10 18",
+      "date": "2026-10-18",
+      "kind": "Data",
+      "size": 15118242,
+      "url": "artifacts/matched-latency-89fa78f-control-rerun-2026-10-18.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/matched-latency-89fa78f-2026-10-18.json",
+      "title": "matched latency 89fa78f 2026 10 18",
+      "date": "2026-10-18",
+      "kind": "Data",
+      "size": 15118252,
+      "url": "artifacts/matched-latency-89fa78f-2026-10-18.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/matched-latency-37732bb-vs-89fa78f-2026-10-18.json",
+      "title": "matched latency 37732bb vs 89fa78f 2026 10 18",
+      "date": "2026-10-18",
+      "kind": "Data",
+      "size": 16584,
+      "url": "artifacts/matched-latency-37732bb-vs-89fa78f-2026-10-18.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/matched-latency-37732bb-2026-10-18.json",
+      "title": "matched latency 37732bb 2026 10 18",
+      "date": "2026-10-18",
+      "kind": "Data",
+      "size": 15118222,
+      "url": "artifacts/matched-latency-37732bb-2026-10-18.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/matched-latency-31ccddd-vs-89fa78f-2026-10-18.json",
+      "title": "matched latency 31ccddd vs 89fa78f 2026 10 18",
+      "date": "2026-10-18",
+      "kind": "Data",
+      "size": 69307,
+      "url": "artifacts/matched-latency-31ccddd-vs-89fa78f-2026-10-18.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/matched-latency-31ccddd-2026-10-18.json",
+      "title": "matched latency 31ccddd 2026 10 18",
+      "date": "2026-10-18",
+      "kind": "Data",
+      "size": 15118237,
+      "url": "artifacts/matched-latency-31ccddd-2026-10-18.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/code-spec-retest-8e2b402-2026-10-18.json",
+      "title": "code spec retest 8e2b402 2026 10 18",
+      "date": "2026-10-18",
+      "kind": "Data",
+      "size": 5494,
+      "url": "artifacts/code-spec-retest-8e2b402-2026-10-18.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/openai-probe-2026-10-17T11-19-46-325Z.jsonl",
+      "title": "openai probe 2026 10 17T11 19 46 325Z",
+      "date": "2026-10-17",
+      "kind": "Data",
+      "size": 141086,
+      "url": "artifacts/phase0/openai-probe-2026-10-17T11-19-46-325Z.jsonl",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/openai-probe-2026-10-17T11-19-29-428Z.jsonl",
+      "title": "openai probe 2026 10 17T11 19 29 428Z",
+      "date": "2026-10-17",
+      "kind": "Data",
+      "size": 61071,
+      "url": "artifacts/phase0/openai-probe-2026-10-17T11-19-29-428Z.jsonl",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/openai-observations-2026-10-17T11-19-46-325Z.json",
+      "title": "openai observations 2026 10 17T11 19 46 325Z",
+      "date": "2026-10-17",
+      "kind": "Data",
+      "size": 3326,
+      "url": "artifacts/phase0/openai-observations-2026-10-17T11-19-46-325Z.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/openai-observations-2026-10-17T11-19-29-428Z.json",
+      "title": "openai observations 2026 10 17T11 19 29 428Z",
+      "date": "2026-10-17",
+      "kind": "Data",
+      "size": 2926,
+      "url": "artifacts/phase0/openai-observations-2026-10-17T11-19-29-428Z.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/nova-probe-2026-10-17T12-15-23-874Z.jsonl",
+      "title": "nova probe 2026 10 17T12 15 23 874Z",
+      "date": "2026-10-17",
+      "kind": "Data",
+      "size": 178454,
+      "url": "artifacts/phase0/nova-probe-2026-10-17T12-15-23-874Z.jsonl",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/nova-observations-2026-10-17T12-15-23-874Z.json",
+      "title": "nova observations 2026 10 17T12 15 23 874Z",
+      "date": "2026-10-17",
+      "kind": "Data",
+      "size": 7179,
+      "url": "artifacts/phase0/nova-observations-2026-10-17T12-15-23-874Z.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/openai-probe-2026-10-16T22-31-44-780Z.jsonl",
+      "title": "openai probe 2026 10 16T22 31 44 780Z",
+      "date": "2026-10-16",
+      "kind": "Data",
+      "size": 136322,
+      "url": "artifacts/phase0/openai-probe-2026-10-16T22-31-44-780Z.jsonl",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/openai-probe-2026-10-16T22-31-04-605Z.jsonl",
+      "title": "openai probe 2026 10 16T22 31 04 605Z",
+      "date": "2026-10-16",
+      "kind": "Data",
+      "size": 110070,
+      "url": "artifacts/phase0/openai-probe-2026-10-16T22-31-04-605Z.jsonl",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/openai-probe-2026-10-16T22-24-36-874Z.jsonl",
+      "title": "openai probe 2026 10 16T22 24 36 874Z",
+      "date": "2026-10-16",
+      "kind": "Data",
+      "size": 64793,
+      "url": "artifacts/phase0/openai-probe-2026-10-16T22-24-36-874Z.jsonl",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/openai-observations-2026-10-16T22-31-44-780Z.json",
+      "title": "openai observations 2026 10 16T22 31 44 780Z",
+      "date": "2026-10-16",
+      "kind": "Data",
+      "size": 3326,
+      "url": "artifacts/phase0/openai-observations-2026-10-16T22-31-44-780Z.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/openai-observations-2026-10-16T22-31-04-605Z.json",
+      "title": "openai observations 2026 10 16T22 31 04 605Z",
+      "date": "2026-10-16",
+      "kind": "Data",
+      "size": 3280,
+      "url": "artifacts/phase0/openai-observations-2026-10-16T22-31-04-605Z.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/openai-observations-2026-10-16T22-24-36-874Z.json",
+      "title": "openai observations 2026 10 16T22 24 36 874Z",
+      "date": "2026-10-16",
+      "kind": "Data",
+      "size": 2869,
+      "url": "artifacts/phase0/openai-observations-2026-10-16T22-24-36-874Z.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/nova-probe-2026-10-16T22-29-06-028Z.jsonl",
+      "title": "nova probe 2026 10 16T22 29 06 028Z",
+      "date": "2026-10-16",
+      "kind": "Data",
+      "size": 179211,
+      "url": "artifacts/phase0/nova-probe-2026-10-16T22-29-06-028Z.jsonl",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/nova-probe-2026-10-16T22-28-14-393Z.jsonl",
+      "title": "nova probe 2026 10 16T22 28 14 393Z",
+      "date": "2026-10-16",
+      "kind": "Data",
+      "size": 181302,
+      "url": "artifacts/phase0/nova-probe-2026-10-16T22-28-14-393Z.jsonl",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/nova-probe-2026-10-16T22-21-40-853Z.jsonl",
+      "title": "nova probe 2026 10 16T22 21 40 853Z",
+      "date": "2026-10-16",
+      "kind": "Data",
+      "size": 121475,
+      "url": "artifacts/phase0/nova-probe-2026-10-16T22-21-40-853Z.jsonl",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/nova-probe-2026-10-16T22-18-44-590Z.jsonl",
+      "title": "nova probe 2026 10 16T22 18 44 590Z",
+      "date": "2026-10-16",
+      "kind": "Data",
+      "size": 24634,
+      "url": "artifacts/phase0/nova-probe-2026-10-16T22-18-44-590Z.jsonl",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/nova-observations-2026-10-16T22-29-06-028Z.json",
+      "title": "nova observations 2026 10 16T22 29 06 028Z",
+      "date": "2026-10-16",
+      "kind": "Data",
+      "size": 7199,
+      "url": "artifacts/phase0/nova-observations-2026-10-16T22-29-06-028Z.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/nova-observations-2026-10-16T22-28-14-393Z.json",
+      "title": "nova observations 2026 10 16T22 28 14 393Z",
+      "date": "2026-10-16",
+      "kind": "Data",
+      "size": 7184,
+      "url": "artifacts/phase0/nova-observations-2026-10-16T22-28-14-393Z.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/nova-observations-2026-10-16T22-21-40-853Z.json",
+      "title": "nova observations 2026 10 16T22 21 40 853Z",
+      "date": "2026-10-16",
+      "kind": "Data",
+      "size": 5027,
+      "url": "artifacts/phase0/nova-observations-2026-10-16T22-21-40-853Z.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/nova-observations-2026-10-16T22-18-44-590Z.json",
+      "title": "nova observations 2026 10 16T22 18 44 590Z",
+      "date": "2026-10-16",
+      "kind": "Data",
+      "size": 2007,
+      "url": "artifacts/phase0/nova-observations-2026-10-16T22-18-44-590Z.json",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/voice_evals_spec_v0.3.md",
+      "title": "voice evals spec v0.3",
+      "date": "",
+      "kind": "Notes",
+      "size": 110178,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/voice_evals_spec_v0.3.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/phase0/PROVIDER_MATRIX.md",
+      "title": "PROVIDER MATRIX",
+      "date": "",
+      "kind": "Notes",
+      "size": 6852,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/phase0/PROVIDER_MATRIX.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/phase0/DOC_EVIDENCE.md",
+      "title": "DOC EVIDENCE",
+      "date": "",
+      "kind": "Notes",
+      "size": 14935,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/phase0/DOC_EVIDENCE.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/phase0/DECISIONS.md",
+      "title": "DECISIONS",
+      "date": "",
+      "kind": "Notes",
+      "size": 1474,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/phase0/DECISIONS.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/VOICE_S2S_REUSE_AUDIT.md",
+      "title": "VOICE S2S REUSE AUDIT",
+      "date": "",
+      "kind": "Notes",
+      "size": 4583,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/VOICE_S2S_REUSE_AUDIT.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/VOICE_CONVERSATION_COMPARISON.md",
+      "title": "VOICE CONVERSATION COMPARISON",
+      "date": "",
+      "kind": "Notes",
+      "size": 10264,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/VOICE_CONVERSATION_COMPARISON.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/VISION.md",
+      "title": "VISION",
+      "date": "",
+      "kind": "Notes",
+      "size": 5238,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/VISION.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/UX_TODO.md",
+      "title": "UX TODO",
+      "date": "",
+      "kind": "Notes",
+      "size": 4697,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/UX_TODO.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/TARGET_PROMPTS.md",
+      "title": "TARGET PROMPTS",
+      "date": "",
+      "kind": "Notes",
+      "size": 3421,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/TARGET_PROMPTS.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/PROVIDER_CONFIG_PARITY.md",
+      "title": "PROVIDER CONFIG PARITY",
+      "date": "",
+      "kind": "Notes",
+      "size": 5241,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/PROVIDER_CONFIG_PARITY.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/PROVIDER_BALANCES.md",
+      "title": "PROVIDER BALANCES",
+      "date": "",
+      "kind": "Notes",
+      "size": 5633,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/PROVIDER_BALANCES.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/PHASE4_STATUS.md",
+      "title": "PHASE4 STATUS",
+      "date": "",
+      "kind": "Notes",
+      "size": 39487,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/PHASE4_STATUS.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/PHASE4_NOTES_xai.md",
+      "title": "PHASE4 NOTES xai",
+      "date": "",
+      "kind": "Notes",
+      "size": 7290,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/PHASE4_NOTES_xai.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/PHASE4_NOTES_signed_export.md",
+      "title": "PHASE4 NOTES signed export",
+      "date": "",
+      "kind": "Notes",
+      "size": 2097,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/PHASE4_NOTES_signed_export.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/PHASE4_NOTES_latency.md",
+      "title": "PHASE4 NOTES latency",
+      "date": "",
+      "kind": "Notes",
+      "size": 2163,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/PHASE4_NOTES_latency.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/PHASE4_NOTES_interrupt_probe.md",
+      "title": "PHASE4 NOTES interrupt probe",
+      "date": "",
+      "kind": "Notes",
+      "size": 908,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/PHASE4_NOTES_interrupt_probe.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/PHASE4_NOTES_google.md",
+      "title": "PHASE4 NOTES google",
+      "date": "",
+      "kind": "Notes",
+      "size": 8951,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/PHASE4_NOTES_google.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/PHASE4_NOTES_fact_faults_confirm.md",
+      "title": "PHASE4 NOTES fact faults confirm",
+      "date": "",
+      "kind": "Notes",
+      "size": 4858,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/PHASE4_NOTES_fact_faults_confirm.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/PHASE4_NOTES_elevenlabs.md",
+      "title": "PHASE4 NOTES elevenlabs",
+      "date": "",
+      "kind": "Notes",
+      "size": 4497,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/PHASE4_NOTES_elevenlabs.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/PHASE4_NOTES_caller_voice.md",
+      "title": "PHASE4 NOTES caller voice",
+      "date": "",
+      "kind": "Notes",
+      "size": 1454,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/PHASE4_NOTES_caller_voice.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/PHASE4_NOTES_bedrock_calibration.md",
+      "title": "PHASE4 NOTES bedrock calibration",
+      "date": "",
+      "kind": "Notes",
+      "size": 4206,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/PHASE4_NOTES_bedrock_calibration.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/PHASE3_STATUS.md",
+      "title": "PHASE3 STATUS",
+      "date": "",
+      "kind": "Notes",
+      "size": 36059,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/PHASE3_STATUS.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/PHASE2_STATUS.md",
+      "title": "PHASE2 STATUS",
+      "date": "",
+      "kind": "Notes",
+      "size": 5008,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/PHASE2_STATUS.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/PHASE1_STATUS.md",
+      "title": "PHASE1 STATUS",
+      "date": "",
+      "kind": "Notes",
+      "size": 13941,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/PHASE1_STATUS.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/PHASE1_CONFORMANCE_AUDIT.md",
+      "title": "PHASE1 CONFORMANCE AUDIT",
+      "date": "",
+      "kind": "Notes",
+      "size": 63537,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/PHASE1_CONFORMANCE_AUDIT.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/OPENAI_LIVE.md",
+      "title": "OPENAI LIVE",
+      "date": "",
+      "kind": "Notes",
+      "size": 9667,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/OPENAI_LIVE.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/INTERACTIVE_CALLER_SCOPE.md",
+      "title": "INTERACTIVE CALLER SCOPE",
+      "date": "",
+      "kind": "Notes",
+      "size": 15915,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/INTERACTIVE_CALLER_SCOPE.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/ENGINEERING.md",
+      "title": "ENGINEERING",
+      "date": "",
+      "kind": "Notes",
+      "size": 10142,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/ENGINEERING.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/DELEGATE_PHONE_RUNBOOK.md",
+      "title": "DELEGATE PHONE RUNBOOK",
+      "date": "",
+      "kind": "Notes",
+      "size": 28017,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/DELEGATE_PHONE_RUNBOOK.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/DELEGATE_AGENT_SPEC.md",
+      "title": "DELEGATE AGENT SPEC",
+      "date": "",
+      "kind": "Notes",
+      "size": 34384,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/DELEGATE_AGENT_SPEC.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/DELEGATE_ADAPTIVE_SCOPE.md",
+      "title": "DELEGATE ADAPTIVE SCOPE",
+      "date": "",
+      "kind": "Notes",
+      "size": 7431,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/DELEGATE_ADAPTIVE_SCOPE.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/CODE_SPEC_RECHECK_8e2b402.md",
+      "title": "CODE SPEC RECHECK 8e2b402",
+      "date": "",
+      "kind": "Notes",
+      "size": 6844,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/CODE_SPEC_RECHECK_8e2b402.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/CODE_SPEC_RECHECK_89fa78f.md",
+      "title": "CODE SPEC RECHECK 89fa78f",
+      "date": "",
+      "kind": "Notes",
+      "size": 13547,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/CODE_SPEC_RECHECK_89fa78f.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/CODE_SPEC_RECHECK_8160559.md",
+      "title": "CODE SPEC RECHECK 8160559",
+      "date": "",
+      "kind": "Notes",
+      "size": 11509,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/CODE_SPEC_RECHECK_8160559.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/CODE_SPEC_RECHECK_497faeb.md",
+      "title": "CODE SPEC RECHECK 497faeb",
+      "date": "",
+      "kind": "Notes",
+      "size": 6122,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/CODE_SPEC_RECHECK_497faeb.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/CODE_SPEC_RECHECK_31ccddd.md",
+      "title": "CODE SPEC RECHECK 31ccddd",
+      "date": "",
+      "kind": "Notes",
+      "size": 11285,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/CODE_SPEC_RECHECK_31ccddd.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/BAKEOFF_SAFEGUARDS.md",
+      "title": "BAKEOFF SAFEGUARDS",
+      "date": "",
+      "kind": "Notes",
+      "size": 37022,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/BAKEOFF_SAFEGUARDS.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/BAKEOFF_ASSESSORS.md",
+      "title": "BAKEOFF ASSESSORS",
+      "date": "",
+      "kind": "Notes",
+      "size": 9139,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/BAKEOFF_ASSESSORS.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "title": "ARCHITECTURE",
+      "date": "",
+      "kind": "Notes",
+      "size": 10320,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/ARCHITECTURE.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/ADVANCED_FULL_BAKEOFF.md",
+      "title": "ADVANCED FULL BAKEOFF",
+      "date": "",
+      "kind": "Notes",
+      "size": 5440,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/ADVANCED_FULL_BAKEOFF.md",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/setup-attempts/initial-results.json",
+      "title": "initial results",
+      "date": "",
+      "kind": "Data",
+      "size": 53991,
+      "url": "artifacts/voice-conversation-v1/setup-attempts/initial-results.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/setup-attempts/f4b0e61cebd5180a.wav",
+      "title": "f4b0e61cebd5180a",
+      "date": "",
+      "kind": "Audio",
+      "size": 5129920,
+      "url": "artifacts/voice-conversation-v1/setup-attempts/f4b0e61cebd5180a.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/setup-attempts/ade3789ee02ee47d.wav",
+      "title": "ade3789ee02ee47d",
+      "date": "",
+      "kind": "Audio",
+      "size": 3399408,
+      "url": "artifacts/voice-conversation-v1/setup-attempts/ade3789ee02ee47d.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/setup-attempts/a1b4d785ac1a20e9.wav",
+      "title": "a1b4d785ac1a20e9",
+      "date": "",
+      "kind": "Audio",
+      "size": 205264,
+      "url": "artifacts/voice-conversation-v1/setup-attempts/a1b4d785ac1a20e9.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/setup-attempts/916672756e98d6d2.wav",
+      "title": "916672756e98d6d2",
+      "date": "",
+      "kind": "Audio",
+      "size": 205260,
+      "url": "artifacts/voice-conversation-v1/setup-attempts/916672756e98d6d2.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/setup-attempts/6cfe9455e0cadb3f.wav",
+      "title": "6cfe9455e0cadb3f",
+      "date": "",
+      "kind": "Audio",
+      "size": 205264,
+      "url": "artifacts/voice-conversation-v1/setup-attempts/6cfe9455e0cadb3f.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/setup-attempts/41d8dedd83742be6.wav",
+      "title": "41d8dedd83742be6",
+      "date": "",
+      "kind": "Audio",
+      "size": 3437180,
+      "url": "artifacts/voice-conversation-v1/setup-attempts/41d8dedd83742be6.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/setup-attempts/36ff01295b784608.wav",
+      "title": "36ff01295b784608",
+      "date": "",
+      "kind": "Audio",
+      "size": 205264,
+      "url": "artifacts/voice-conversation-v1/setup-attempts/36ff01295b784608.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/setup-attempts/05f20793573c5aa7.wav",
+      "title": "05f20793573c5aa7",
+      "date": "",
+      "kind": "Audio",
+      "size": 4159832,
+      "url": "artifacts/voice-conversation-v1/setup-attempts/05f20793573c5aa7.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/run-notes.md",
+      "title": "run notes",
+      "date": "",
+      "kind": "Notes",
+      "size": 3506,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/artifacts/voice-conversation-v1/run-notes.md",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/results.json",
+      "title": "results",
+      "date": "",
+      "kind": "Data",
+      "size": 309402,
+      "url": "artifacts/voice-conversation-v1/results.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/report.md",
+      "title": "report",
+      "date": "",
+      "kind": "Notes",
+      "size": 2883,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/artifacts/voice-conversation-v1/report.md",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/rate.html",
+      "title": "rate",
+      "date": "",
+      "kind": "Web report",
+      "size": 22319,
+      "url": "artifacts/voice-conversation-v1/rate.html",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/plan.json",
+      "title": "plan",
+      "date": "",
+      "kind": "Data",
+      "size": 36002,
+      "url": "artifacts/voice-conversation-v1/plan.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/index.html",
+      "title": "index",
+      "date": "",
+      "kind": "Web report",
+      "size": 1709,
+      "url": "artifacts/voice-conversation-v1/index.html",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/ffad2b1a83aafdc3.wav",
+      "title": "ffad2b1a83aafdc3",
+      "date": "",
+      "kind": "Audio",
+      "size": 2706768,
+      "url": "artifacts/voice-conversation-v1/clips/ffad2b1a83aafdc3.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/fe13f26527a9a890.wav",
+      "title": "fe13f26527a9a890",
+      "date": "",
+      "kind": "Audio",
+      "size": 3761956,
+      "url": "artifacts/voice-conversation-v1/clips/fe13f26527a9a890.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/fb58cfe0f4373a1d.wav",
+      "title": "fb58cfe0f4373a1d",
+      "date": "",
+      "kind": "Audio",
+      "size": 3755960,
+      "url": "artifacts/voice-conversation-v1/clips/fb58cfe0f4373a1d.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/fb1db52d1971ef75.wav",
+      "title": "fb1db52d1971ef75",
+      "date": "",
+      "kind": "Audio",
+      "size": 6590152,
+      "url": "artifacts/voice-conversation-v1/clips/fb1db52d1971ef75.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/f782b2ed97316eb4.wav",
+      "title": "f782b2ed97316eb4",
+      "date": "",
+      "kind": "Audio",
+      "size": 4383840,
+      "url": "artifacts/voice-conversation-v1/clips/f782b2ed97316eb4.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/f65a289601de778a.wav",
+      "title": "f65a289601de778a",
+      "date": "",
+      "kind": "Audio",
+      "size": 3483140,
+      "url": "artifacts/voice-conversation-v1/clips/f65a289601de778a.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/f4b0e61cebd5180a.wav",
+      "title": "f4b0e61cebd5180a",
+      "date": "",
+      "kind": "Audio",
+      "size": 4182936,
+      "url": "artifacts/voice-conversation-v1/clips/f4b0e61cebd5180a.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/f062bbec00b479bf.wav",
+      "title": "f062bbec00b479bf",
+      "date": "",
+      "kind": "Audio",
+      "size": 4321616,
+      "url": "artifacts/voice-conversation-v1/clips/f062bbec00b479bf.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/f03b80d084351eca.wav",
+      "title": "f03b80d084351eca",
+      "date": "",
+      "kind": "Audio",
+      "size": 4863804,
+      "url": "artifacts/voice-conversation-v1/clips/f03b80d084351eca.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/eed47f9f4a4e2ccd.wav",
+      "title": "eed47f9f4a4e2ccd",
+      "date": "",
+      "kind": "Audio",
+      "size": 4794048,
+      "url": "artifacts/voice-conversation-v1/clips/eed47f9f4a4e2ccd.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/ee2fd38d557cdc81.wav",
+      "title": "ee2fd38d557cdc81",
+      "date": "",
+      "kind": "Audio",
+      "size": 2545652,
+      "url": "artifacts/voice-conversation-v1/clips/ee2fd38d557cdc81.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/ed3882f8ad01e722.wav",
+      "title": "ed3882f8ad01e722",
+      "date": "",
+      "kind": "Audio",
+      "size": 3482232,
+      "url": "artifacts/voice-conversation-v1/clips/ed3882f8ad01e722.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/ec2d40aec33b594e.wav",
+      "title": "ec2d40aec33b594e",
+      "date": "",
+      "kind": "Audio",
+      "size": 2936308,
+      "url": "artifacts/voice-conversation-v1/clips/ec2d40aec33b594e.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/ea25bdc78c77447d.wav",
+      "title": "ea25bdc78c77447d",
+      "date": "",
+      "kind": "Audio",
+      "size": 2945904,
+      "url": "artifacts/voice-conversation-v1/clips/ea25bdc78c77447d.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/e83c9097691b624d.wav",
+      "title": "e83c9097691b624d",
+      "date": "",
+      "kind": "Audio",
+      "size": 3496572,
+      "url": "artifacts/voice-conversation-v1/clips/e83c9097691b624d.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/e692263639e88f21.wav",
+      "title": "e692263639e88f21",
+      "date": "",
+      "kind": "Audio",
+      "size": 3514116,
+      "url": "artifacts/voice-conversation-v1/clips/e692263639e88f21.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/e417b18efe709b0e.wav",
+      "title": "e417b18efe709b0e",
+      "date": "",
+      "kind": "Audio",
+      "size": 2621620,
+      "url": "artifacts/voice-conversation-v1/clips/e417b18efe709b0e.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/e3e48b1206959683.wav",
+      "title": "e3e48b1206959683",
+      "date": "",
+      "kind": "Audio",
+      "size": 3751348,
+      "url": "artifacts/voice-conversation-v1/clips/e3e48b1206959683.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/e3a5b14ac0db083f.wav",
+      "title": "e3a5b14ac0db083f",
+      "date": "",
+      "kind": "Audio",
+      "size": 3753064,
+      "url": "artifacts/voice-conversation-v1/clips/e3a5b14ac0db083f.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/e1c75a9e0844cd18.wav",
+      "title": "e1c75a9e0844cd18",
+      "date": "",
+      "kind": "Audio",
+      "size": 2285968,
+      "url": "artifacts/voice-conversation-v1/clips/e1c75a9e0844cd18.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/e1a77c71e803c85b.wav",
+      "title": "e1a77c71e803c85b",
+      "date": "",
+      "kind": "Audio",
+      "size": 3428952,
+      "url": "artifacts/voice-conversation-v1/clips/e1a77c71e803c85b.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/dc683b33d0f8c8a5.wav",
+      "title": "dc683b33d0f8c8a5",
+      "date": "",
+      "kind": "Audio",
+      "size": 3432028,
+      "url": "artifacts/voice-conversation-v1/clips/dc683b33d0f8c8a5.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/dc3bd2bc5a17b730.wav",
+      "title": "dc3bd2bc5a17b730",
+      "date": "",
+      "kind": "Audio",
+      "size": 3345968,
+      "url": "artifacts/voice-conversation-v1/clips/dc3bd2bc5a17b730.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/dbfb3bb81d57c4ae.wav",
+      "title": "dbfb3bb81d57c4ae",
+      "date": "",
+      "kind": "Audio",
+      "size": 2951476,
+      "url": "artifacts/voice-conversation-v1/clips/dbfb3bb81d57c4ae.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/da82ae60fa9ee786.wav",
+      "title": "da82ae60fa9ee786",
+      "date": "",
+      "kind": "Audio",
+      "size": 4239604,
+      "url": "artifacts/voice-conversation-v1/clips/da82ae60fa9ee786.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/d9838d96c7f51f4d.wav",
+      "title": "d9838d96c7f51f4d",
+      "date": "",
+      "kind": "Audio",
+      "size": 2780308,
+      "url": "artifacts/voice-conversation-v1/clips/d9838d96c7f51f4d.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/d5d5a43652ef7b01.wav",
+      "title": "d5d5a43652ef7b01",
+      "date": "",
+      "kind": "Audio",
+      "size": 3486048,
+      "url": "artifacts/voice-conversation-v1/clips/d5d5a43652ef7b01.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/d4ced3805ea26c08.wav",
+      "title": "d4ced3805ea26c08",
+      "date": "",
+      "kind": "Audio",
+      "size": 4534092,
+      "url": "artifacts/voice-conversation-v1/clips/d4ced3805ea26c08.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/d3a8e5ee3a2c5c03.wav",
+      "title": "d3a8e5ee3a2c5c03",
+      "date": "",
+      "kind": "Audio",
+      "size": 3354528,
+      "url": "artifacts/voice-conversation-v1/clips/d3a8e5ee3a2c5c03.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/d2920076c525a8cc.wav",
+      "title": "d2920076c525a8cc",
+      "date": "",
+      "kind": "Audio",
+      "size": 4466452,
+      "url": "artifacts/voice-conversation-v1/clips/d2920076c525a8cc.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/cfa2ead7518ac80d.wav",
+      "title": "cfa2ead7518ac80d",
+      "date": "",
+      "kind": "Audio",
+      "size": 3402440,
+      "url": "artifacts/voice-conversation-v1/clips/cfa2ead7518ac80d.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/ccf221b5922c1f42.wav",
+      "title": "ccf221b5922c1f42",
+      "date": "",
+      "kind": "Audio",
+      "size": 3901624,
+      "url": "artifacts/voice-conversation-v1/clips/ccf221b5922c1f42.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/c7cb4bd25a103fe1.wav",
+      "title": "c7cb4bd25a103fe1",
+      "date": "",
+      "kind": "Audio",
+      "size": 5027776,
+      "url": "artifacts/voice-conversation-v1/clips/c7cb4bd25a103fe1.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/c4bc8037fbc477f0.wav",
+      "title": "c4bc8037fbc477f0",
+      "date": "",
+      "kind": "Audio",
+      "size": 2795564,
+      "url": "artifacts/voice-conversation-v1/clips/c4bc8037fbc477f0.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/c4371ab756d6b1ad.wav",
+      "title": "c4371ab756d6b1ad",
+      "date": "",
+      "kind": "Audio",
+      "size": 3348884,
+      "url": "artifacts/voice-conversation-v1/clips/c4371ab756d6b1ad.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/c06681ea523a1bdc.wav",
+      "title": "c06681ea523a1bdc",
+      "date": "",
+      "kind": "Audio",
+      "size": 3712496,
+      "url": "artifacts/voice-conversation-v1/clips/c06681ea523a1bdc.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/bead921752f3b0ad.wav",
+      "title": "bead921752f3b0ad",
+      "date": "",
+      "kind": "Audio",
+      "size": 6478808,
+      "url": "artifacts/voice-conversation-v1/clips/bead921752f3b0ad.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/bb4456a4a0125c0d.wav",
+      "title": "bb4456a4a0125c0d",
+      "date": "",
+      "kind": "Audio",
+      "size": 2392724,
+      "url": "artifacts/voice-conversation-v1/clips/bb4456a4a0125c0d.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/b8ee131ea876f8a7.wav",
+      "title": "b8ee131ea876f8a7",
+      "date": "",
+      "kind": "Audio",
+      "size": 2478368,
+      "url": "artifacts/voice-conversation-v1/clips/b8ee131ea876f8a7.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/b432eec906dee819.wav",
+      "title": "b432eec906dee819",
+      "date": "",
+      "kind": "Audio",
+      "size": 2732544,
+      "url": "artifacts/voice-conversation-v1/clips/b432eec906dee819.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/b328fe4c07000ac2.wav",
+      "title": "b328fe4c07000ac2",
+      "date": "",
+      "kind": "Audio",
+      "size": 3334420,
+      "url": "artifacts/voice-conversation-v1/clips/b328fe4c07000ac2.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/b26c49eb34857ab0.wav",
+      "title": "b26c49eb34857ab0",
+      "date": "",
+      "kind": "Audio",
+      "size": 2741628,
+      "url": "artifacts/voice-conversation-v1/clips/b26c49eb34857ab0.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/ade3789ee02ee47d.wav",
+      "title": "ade3789ee02ee47d",
+      "date": "",
+      "kind": "Audio",
+      "size": 3835592,
+      "url": "artifacts/voice-conversation-v1/clips/ade3789ee02ee47d.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/add94d13d2ceafac.wav",
+      "title": "add94d13d2ceafac",
+      "date": "",
+      "kind": "Audio",
+      "size": 4387248,
+      "url": "artifacts/voice-conversation-v1/clips/add94d13d2ceafac.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/a9c15c22a1f46a99.wav",
+      "title": "a9c15c22a1f46a99",
+      "date": "",
+      "kind": "Audio",
+      "size": 4324032,
+      "url": "artifacts/voice-conversation-v1/clips/a9c15c22a1f46a99.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/a962a2069d773c2c.wav",
+      "title": "a962a2069d773c2c",
+      "date": "",
+      "kind": "Audio",
+      "size": 3430156,
+      "url": "artifacts/voice-conversation-v1/clips/a962a2069d773c2c.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/a9532a436777bbcb.wav",
+      "title": "a9532a436777bbcb",
+      "date": "",
+      "kind": "Audio",
+      "size": 4338928,
+      "url": "artifacts/voice-conversation-v1/clips/a9532a436777bbcb.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/a413b690240c2166.wav",
+      "title": "a413b690240c2166",
+      "date": "",
+      "kind": "Audio",
+      "size": 2828636,
+      "url": "artifacts/voice-conversation-v1/clips/a413b690240c2166.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/a3f991525592bf9b.wav",
+      "title": "a3f991525592bf9b",
+      "date": "",
+      "kind": "Audio",
+      "size": 4208612,
+      "url": "artifacts/voice-conversation-v1/clips/a3f991525592bf9b.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/a1b4d785ac1a20e9.wav",
+      "title": "a1b4d785ac1a20e9",
+      "date": "",
+      "kind": "Audio",
+      "size": 3070820,
+      "url": "artifacts/voice-conversation-v1/clips/a1b4d785ac1a20e9.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/9ef541822962da7d.wav",
+      "title": "9ef541822962da7d",
+      "date": "",
+      "kind": "Audio",
+      "size": 4249252,
+      "url": "artifacts/voice-conversation-v1/clips/9ef541822962da7d.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/9c5d681a4dd1a573.wav",
+      "title": "9c5d681a4dd1a573",
+      "date": "",
+      "kind": "Audio",
+      "size": 3444136,
+      "url": "artifacts/voice-conversation-v1/clips/9c5d681a4dd1a573.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/95905f67d3b37f92.wav",
+      "title": "95905f67d3b37f92",
+      "date": "",
+      "kind": "Audio",
+      "size": 4955560,
+      "url": "artifacts/voice-conversation-v1/clips/95905f67d3b37f92.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/93b37418af7178d5.wav",
+      "title": "93b37418af7178d5",
+      "date": "",
+      "kind": "Audio",
+      "size": 3192276,
+      "url": "artifacts/voice-conversation-v1/clips/93b37418af7178d5.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/916672756e98d6d2.wav",
+      "title": "916672756e98d6d2",
+      "date": "",
+      "kind": "Audio",
+      "size": 2827992,
+      "url": "artifacts/voice-conversation-v1/clips/916672756e98d6d2.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/9080ab9774624a50.wav",
+      "title": "9080ab9774624a50",
+      "date": "",
+      "kind": "Audio",
+      "size": 3256736,
+      "url": "artifacts/voice-conversation-v1/clips/9080ab9774624a50.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/8c3751306148fb3a.wav",
+      "title": "8c3751306148fb3a",
+      "date": "",
+      "kind": "Audio",
+      "size": 3733144,
+      "url": "artifacts/voice-conversation-v1/clips/8c3751306148fb3a.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/82de71c9202b2680.wav",
+      "title": "82de71c9202b2680",
+      "date": "",
+      "kind": "Audio",
+      "size": 3770676,
+      "url": "artifacts/voice-conversation-v1/clips/82de71c9202b2680.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/8099575d360149a5.wav",
+      "title": "8099575d360149a5",
+      "date": "",
+      "kind": "Audio",
+      "size": 3819572,
+      "url": "artifacts/voice-conversation-v1/clips/8099575d360149a5.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/7e524b34ccde3953.wav",
+      "title": "7e524b34ccde3953",
+      "date": "",
+      "kind": "Audio",
+      "size": 2811072,
+      "url": "artifacts/voice-conversation-v1/clips/7e524b34ccde3953.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/7cde761cc9ac1860.wav",
+      "title": "7cde761cc9ac1860",
+      "date": "",
+      "kind": "Audio",
+      "size": 4421044,
+      "url": "artifacts/voice-conversation-v1/clips/7cde761cc9ac1860.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/7b5c5f9c1bfde541.wav",
+      "title": "7b5c5f9c1bfde541",
+      "date": "",
+      "kind": "Audio",
+      "size": 2745640,
+      "url": "artifacts/voice-conversation-v1/clips/7b5c5f9c1bfde541.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/77b934a77dcb3c5a.wav",
+      "title": "77b934a77dcb3c5a",
+      "date": "",
+      "kind": "Audio",
+      "size": 3838936,
+      "url": "artifacts/voice-conversation-v1/clips/77b934a77dcb3c5a.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/77388eea75f38ab6.wav",
+      "title": "77388eea75f38ab6",
+      "date": "",
+      "kind": "Audio",
+      "size": 3534072,
+      "url": "artifacts/voice-conversation-v1/clips/77388eea75f38ab6.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/761a3bf93f92721e.wav",
+      "title": "761a3bf93f92721e",
+      "date": "",
+      "kind": "Audio",
+      "size": 6261280,
+      "url": "artifacts/voice-conversation-v1/clips/761a3bf93f92721e.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/759e0e0ab5aaeaae.wav",
+      "title": "759e0e0ab5aaeaae",
+      "date": "",
+      "kind": "Audio",
+      "size": 4370684,
+      "url": "artifacts/voice-conversation-v1/clips/759e0e0ab5aaeaae.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/70751f9a8576caaf.wav",
+      "title": "70751f9a8576caaf",
+      "date": "",
+      "kind": "Audio",
+      "size": 4133416,
+      "url": "artifacts/voice-conversation-v1/clips/70751f9a8576caaf.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/705d2d7c5a0fca69.wav",
+      "title": "705d2d7c5a0fca69",
+      "date": "",
+      "kind": "Audio",
+      "size": 6124308,
+      "url": "artifacts/voice-conversation-v1/clips/705d2d7c5a0fca69.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/6cfe9455e0cadb3f.wav",
+      "title": "6cfe9455e0cadb3f",
+      "date": "",
+      "kind": "Audio",
+      "size": 2960488,
+      "url": "artifacts/voice-conversation-v1/clips/6cfe9455e0cadb3f.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/68b3aab5619722b3.wav",
+      "title": "68b3aab5619722b3",
+      "date": "",
+      "kind": "Audio",
+      "size": 3348040,
+      "url": "artifacts/voice-conversation-v1/clips/68b3aab5619722b3.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/67602bc217dca729.wav",
+      "title": "67602bc217dca729",
+      "date": "",
+      "kind": "Audio",
+      "size": 3102856,
+      "url": "artifacts/voice-conversation-v1/clips/67602bc217dca729.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/65a9799549978d4f.wav",
+      "title": "65a9799549978d4f",
+      "date": "",
+      "kind": "Audio",
+      "size": 2618372,
+      "url": "artifacts/voice-conversation-v1/clips/65a9799549978d4f.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/633d891f41c762e9.wav",
+      "title": "633d891f41c762e9",
+      "date": "",
+      "kind": "Audio",
+      "size": 5451684,
+      "url": "artifacts/voice-conversation-v1/clips/633d891f41c762e9.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/5e93b845da766a9f.wav",
+      "title": "5e93b845da766a9f",
+      "date": "",
+      "kind": "Audio",
+      "size": 4315952,
+      "url": "artifacts/voice-conversation-v1/clips/5e93b845da766a9f.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/5e440df6f464b180.wav",
+      "title": "5e440df6f464b180",
+      "date": "",
+      "kind": "Audio",
+      "size": 2630028,
+      "url": "artifacts/voice-conversation-v1/clips/5e440df6f464b180.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/5c358cae7f6bbbee.wav",
+      "title": "5c358cae7f6bbbee",
+      "date": "",
+      "kind": "Audio",
+      "size": 5357984,
+      "url": "artifacts/voice-conversation-v1/clips/5c358cae7f6bbbee.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/5be350e3b0bab920.wav",
+      "title": "5be350e3b0bab920",
+      "date": "",
+      "kind": "Audio",
+      "size": 4443516,
+      "url": "artifacts/voice-conversation-v1/clips/5be350e3b0bab920.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/58322b5404096648.wav",
+      "title": "58322b5404096648",
+      "date": "",
+      "kind": "Audio",
+      "size": 3601148,
+      "url": "artifacts/voice-conversation-v1/clips/58322b5404096648.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/58200eb2ad82cfb6.wav",
+      "title": "58200eb2ad82cfb6",
+      "date": "",
+      "kind": "Audio",
+      "size": 4932168,
+      "url": "artifacts/voice-conversation-v1/clips/58200eb2ad82cfb6.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/580c2f801f3641fa.wav",
+      "title": "580c2f801f3641fa",
+      "date": "",
+      "kind": "Audio",
+      "size": 2630008,
+      "url": "artifacts/voice-conversation-v1/clips/580c2f801f3641fa.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/55516d08d1029ced.wav",
+      "title": "55516d08d1029ced",
+      "date": "",
+      "kind": "Audio",
+      "size": 4863808,
+      "url": "artifacts/voice-conversation-v1/clips/55516d08d1029ced.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/5532e5c697e1ee1a.wav",
+      "title": "5532e5c697e1ee1a",
+      "date": "",
+      "kind": "Audio",
+      "size": 4057276,
+      "url": "artifacts/voice-conversation-v1/clips/5532e5c697e1ee1a.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/54dfa362204abf49.wav",
+      "title": "54dfa362204abf49",
+      "date": "",
+      "kind": "Audio",
+      "size": 2798492,
+      "url": "artifacts/voice-conversation-v1/clips/54dfa362204abf49.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/50ae01c0fa71ae1c.wav",
+      "title": "50ae01c0fa71ae1c",
+      "date": "",
+      "kind": "Audio",
+      "size": 3758188,
+      "url": "artifacts/voice-conversation-v1/clips/50ae01c0fa71ae1c.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/509b58990d683726.wav",
+      "title": "509b58990d683726",
+      "date": "",
+      "kind": "Audio",
+      "size": 3976920,
+      "url": "artifacts/voice-conversation-v1/clips/509b58990d683726.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/4dde3bbce9fb849d.wav",
+      "title": "4dde3bbce9fb849d",
+      "date": "",
+      "kind": "Audio",
+      "size": 4305984,
+      "url": "artifacts/voice-conversation-v1/clips/4dde3bbce9fb849d.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/4b5eeffe06292fe1.wav",
+      "title": "4b5eeffe06292fe1",
+      "date": "",
+      "kind": "Audio",
+      "size": 4260284,
+      "url": "artifacts/voice-conversation-v1/clips/4b5eeffe06292fe1.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/4ac748c7d9e2037e.wav",
+      "title": "4ac748c7d9e2037e",
+      "date": "",
+      "kind": "Audio",
+      "size": 3429732,
+      "url": "artifacts/voice-conversation-v1/clips/4ac748c7d9e2037e.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/436dfcf559576718.wav",
+      "title": "436dfcf559576718",
+      "date": "",
+      "kind": "Audio",
+      "size": 4523412,
+      "url": "artifacts/voice-conversation-v1/clips/436dfcf559576718.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/4349502ea2678b05.wav",
+      "title": "4349502ea2678b05",
+      "date": "",
+      "kind": "Audio",
+      "size": 3557004,
+      "url": "artifacts/voice-conversation-v1/clips/4349502ea2678b05.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/41d8dedd83742be6.wav",
+      "title": "41d8dedd83742be6",
+      "date": "",
+      "kind": "Audio",
+      "size": 3875232,
+      "url": "artifacts/voice-conversation-v1/clips/41d8dedd83742be6.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/417eeaa46ffe5d6e.wav",
+      "title": "417eeaa46ffe5d6e",
+      "date": "",
+      "kind": "Audio",
+      "size": 2759540,
+      "url": "artifacts/voice-conversation-v1/clips/417eeaa46ffe5d6e.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/40e682673f50786b.wav",
+      "title": "40e682673f50786b",
+      "date": "",
+      "kind": "Audio",
+      "size": 3339584,
+      "url": "artifacts/voice-conversation-v1/clips/40e682673f50786b.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/3ac78a20c3e7e42f.wav",
+      "title": "3ac78a20c3e7e42f",
+      "date": "",
+      "kind": "Audio",
+      "size": 4999184,
+      "url": "artifacts/voice-conversation-v1/clips/3ac78a20c3e7e42f.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/38a37a642ce82010.wav",
+      "title": "38a37a642ce82010",
+      "date": "",
+      "kind": "Audio",
+      "size": 3812468,
+      "url": "artifacts/voice-conversation-v1/clips/38a37a642ce82010.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/36ff01295b784608.wav",
+      "title": "36ff01295b784608",
+      "date": "",
+      "kind": "Audio",
+      "size": 2836404,
+      "url": "artifacts/voice-conversation-v1/clips/36ff01295b784608.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/339a81e90856d422.wav",
+      "title": "339a81e90856d422",
+      "date": "",
+      "kind": "Audio",
+      "size": 4500112,
+      "url": "artifacts/voice-conversation-v1/clips/339a81e90856d422.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/3275033ca7cb0365.wav",
+      "title": "3275033ca7cb0365",
+      "date": "",
+      "kind": "Audio",
+      "size": 4702996,
+      "url": "artifacts/voice-conversation-v1/clips/3275033ca7cb0365.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/30dc06d90e515891.wav",
+      "title": "30dc06d90e515891",
+      "date": "",
+      "kind": "Audio",
+      "size": 3511368,
+      "url": "artifacts/voice-conversation-v1/clips/30dc06d90e515891.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/2d33e0f9662bc3cd.wav",
+      "title": "2d33e0f9662bc3cd",
+      "date": "",
+      "kind": "Audio",
+      "size": 5048996,
+      "url": "artifacts/voice-conversation-v1/clips/2d33e0f9662bc3cd.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/2a85417763a3e611.wav",
+      "title": "2a85417763a3e611",
+      "date": "",
+      "kind": "Audio",
+      "size": 6537236,
+      "url": "artifacts/voice-conversation-v1/clips/2a85417763a3e611.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/2963f4db8cc38d69.wav",
+      "title": "2963f4db8cc38d69",
+      "date": "",
+      "kind": "Audio",
+      "size": 3364728,
+      "url": "artifacts/voice-conversation-v1/clips/2963f4db8cc38d69.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/25a0a3ba7d9fba5a.wav",
+      "title": "25a0a3ba7d9fba5a",
+      "date": "",
+      "kind": "Audio",
+      "size": 3735552,
+      "url": "artifacts/voice-conversation-v1/clips/25a0a3ba7d9fba5a.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/253c07f17b657cf9.wav",
+      "title": "253c07f17b657cf9",
+      "date": "",
+      "kind": "Audio",
+      "size": 4142472,
+      "url": "artifacts/voice-conversation-v1/clips/253c07f17b657cf9.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/23f6c108ea9e4751.wav",
+      "title": "23f6c108ea9e4751",
+      "date": "",
+      "kind": "Audio",
+      "size": 6734916,
+      "url": "artifacts/voice-conversation-v1/clips/23f6c108ea9e4751.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/1a59a4f806d7440d.wav",
+      "title": "1a59a4f806d7440d",
+      "date": "",
+      "kind": "Audio",
+      "size": 5359568,
+      "url": "artifacts/voice-conversation-v1/clips/1a59a4f806d7440d.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/1704b9e4135a544a.wav",
+      "title": "1704b9e4135a544a",
+      "date": "",
+      "kind": "Audio",
+      "size": 3782840,
+      "url": "artifacts/voice-conversation-v1/clips/1704b9e4135a544a.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/1237a292678cf641.wav",
+      "title": "1237a292678cf641",
+      "date": "",
+      "kind": "Audio",
+      "size": 7511844,
+      "url": "artifacts/voice-conversation-v1/clips/1237a292678cf641.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/0de6985bbd25c7dc.wav",
+      "title": "0de6985bbd25c7dc",
+      "date": "",
+      "kind": "Audio",
+      "size": 4778772,
+      "url": "artifacts/voice-conversation-v1/clips/0de6985bbd25c7dc.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/0d3947d76d246060.wav",
+      "title": "0d3947d76d246060",
+      "date": "",
+      "kind": "Audio",
+      "size": 3357736,
+      "url": "artifacts/voice-conversation-v1/clips/0d3947d76d246060.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/0ce11866d19dfd99.wav",
+      "title": "0ce11866d19dfd99",
+      "date": "",
+      "kind": "Audio",
+      "size": 5482288,
+      "url": "artifacts/voice-conversation-v1/clips/0ce11866d19dfd99.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/0cd58725d1bba0f4.wav",
+      "title": "0cd58725d1bba0f4",
+      "date": "",
+      "kind": "Audio",
+      "size": 4159288,
+      "url": "artifacts/voice-conversation-v1/clips/0cd58725d1bba0f4.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/0c5d8ea62e61da5f.wav",
+      "title": "0c5d8ea62e61da5f",
+      "date": "",
+      "kind": "Audio",
+      "size": 3961428,
+      "url": "artifacts/voice-conversation-v1/clips/0c5d8ea62e61da5f.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/0bcf78d3c9741625.wav",
+      "title": "0bcf78d3c9741625",
+      "date": "",
+      "kind": "Audio",
+      "size": 2874308,
+      "url": "artifacts/voice-conversation-v1/clips/0bcf78d3c9741625.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/0b5400d45f94ce58.wav",
+      "title": "0b5400d45f94ce58",
+      "date": "",
+      "kind": "Audio",
+      "size": 5148472,
+      "url": "artifacts/voice-conversation-v1/clips/0b5400d45f94ce58.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/0b025cf612c36b81.wav",
+      "title": "0b025cf612c36b81",
+      "date": "",
+      "kind": "Audio",
+      "size": 7129476,
+      "url": "artifacts/voice-conversation-v1/clips/0b025cf612c36b81.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/095b53944a927935.wav",
+      "title": "095b53944a927935",
+      "date": "",
+      "kind": "Audio",
+      "size": 4927640,
+      "url": "artifacts/voice-conversation-v1/clips/095b53944a927935.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/063d81a51e70a980.wav",
+      "title": "063d81a51e70a980",
+      "date": "",
+      "kind": "Audio",
+      "size": 3526892,
+      "url": "artifacts/voice-conversation-v1/clips/063d81a51e70a980.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/05f20793573c5aa7.wav",
+      "title": "05f20793573c5aa7",
+      "date": "",
+      "kind": "Audio",
+      "size": 3748808,
+      "url": "artifacts/voice-conversation-v1/clips/05f20793573c5aa7.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/clips/0207b7f372d0a2d0.wav",
+      "title": "0207b7f372d0a2d0",
+      "date": "",
+      "kind": "Audio",
+      "size": 3365476,
+      "url": "artifacts/voice-conversation-v1/clips/0207b7f372d0a2d0.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/caller/manifest.json",
+      "title": "manifest",
+      "date": "",
+      "kind": "Data",
+      "size": 3929,
+      "url": "artifacts/voice-conversation-v1/caller/manifest.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/caller/lost-card-2.wav",
+      "title": "lost card 2",
+      "date": "",
+      "kind": "Audio",
+      "size": 186884,
+      "url": "artifacts/voice-conversation-v1/caller/lost-card-2.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/caller/lost-card-1.wav",
+      "title": "lost card 1",
+      "date": "",
+      "kind": "Audio",
+      "size": 188556,
+      "url": "artifacts/voice-conversation-v1/caller/lost-card-1.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/caller/lost-card-0.wav",
+      "title": "lost card 0",
+      "date": "",
+      "kind": "Audio",
+      "size": 220478,
+      "url": "artifacts/voice-conversation-v1/caller/lost-card-0.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/caller/failed-payment-2.wav",
+      "title": "failed payment 2",
+      "date": "",
+      "kind": "Audio",
+      "size": 199912,
+      "url": "artifacts/voice-conversation-v1/caller/failed-payment-2.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/caller/failed-payment-1.wav",
+      "title": "failed payment 1",
+      "date": "",
+      "kind": "Audio",
+      "size": 172814,
+      "url": "artifacts/voice-conversation-v1/caller/failed-payment-1.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/caller/failed-payment-0.wav",
+      "title": "failed payment 0",
+      "date": "",
+      "kind": "Audio",
+      "size": 217264,
+      "url": "artifacts/voice-conversation-v1/caller/failed-payment-0.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/caller/correction-2.wav",
+      "title": "correction 2",
+      "date": "",
+      "kind": "Audio",
+      "size": 175146,
+      "url": "artifacts/voice-conversation-v1/caller/correction-2.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/caller/correction-1.wav",
+      "title": "correction 1",
+      "date": "",
+      "kind": "Audio",
+      "size": 286526,
+      "url": "artifacts/voice-conversation-v1/caller/correction-1.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/caller/correction-0.wav",
+      "title": "correction 0",
+      "date": "",
+      "kind": "Audio",
+      "size": 225336,
+      "url": "artifacts/voice-conversation-v1/caller/correction-0.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/caller/continuity-2.wav",
+      "title": "continuity 2",
+      "date": "",
+      "kind": "Audio",
+      "size": 174018,
+      "url": "artifacts/voice-conversation-v1/caller/continuity-2.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/caller/continuity-1.wav",
+      "title": "continuity 1",
+      "date": "",
+      "kind": "Audio",
+      "size": 128286,
+      "url": "artifacts/voice-conversation-v1/caller/continuity-1.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/caller/continuity-0.wav",
+      "title": "continuity 0",
+      "date": "",
+      "kind": "Audio",
+      "size": 279798,
+      "url": "artifacts/voice-conversation-v1/caller/continuity-0.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/caller/bereavement-2.wav",
+      "title": "bereavement 2",
+      "date": "",
+      "kind": "Audio",
+      "size": 147828,
+      "url": "artifacts/voice-conversation-v1/caller/bereavement-2.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/caller/bereavement-1.wav",
+      "title": "bereavement 1",
+      "date": "",
+      "kind": "Audio",
+      "size": 178266,
+      "url": "artifacts/voice-conversation-v1/caller/bereavement-1.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/caller/bereavement-0.wav",
+      "title": "bereavement 0",
+      "date": "",
+      "kind": "Audio",
+      "size": 208592,
+      "url": "artifacts/voice-conversation-v1/caller/bereavement-0.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/caller/balance-2.wav",
+      "title": "balance 2",
+      "date": "",
+      "kind": "Audio",
+      "size": 191900,
+      "url": "artifacts/voice-conversation-v1/caller/balance-2.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/caller/balance-1.wav",
+      "title": "balance 1",
+      "date": "",
+      "kind": "Audio",
+      "size": 133832,
+      "url": "artifacts/voice-conversation-v1/caller/balance-1.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v1/caller/balance-0.wav",
+      "title": "balance 0",
+      "date": "",
+      "kind": "Audio",
+      "size": 102652,
+      "url": "artifacts/voice-conversation-v1/caller/balance-0.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-comparisons/index.html",
+      "title": "index",
+      "date": "",
+      "kind": "Web report",
+      "size": 1482,
+      "url": "artifacts/voice-comparisons/index.html",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/ui/run-comparison.png",
+      "title": "run comparison",
+      "date": "",
+      "kind": "Other",
+      "size": 89773,
+      "url": "artifacts/ui/run-comparison.png",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/ui/provider-readiness.png",
+      "title": "provider readiness",
+      "date": "",
+      "kind": "Other",
+      "size": 50290,
+      "url": "artifacts/ui/provider-readiness.png",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/ui/polished-workspace.png",
+      "title": "polished workspace",
+      "date": "",
+      "kind": "Other",
+      "size": 91544,
+      "url": "artifacts/ui/polished-workspace.png",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/ui/polished-review.png",
+      "title": "polished review",
+      "date": "",
+      "kind": "Other",
+      "size": 68084,
+      "url": "artifacts/ui/polished-review.png",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/ui/live-execution-graph.png",
+      "title": "live execution graph",
+      "date": "",
+      "kind": "Other",
+      "size": 35411,
+      "url": "artifacts/ui/live-execution-graph.png",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/ui/consultant-followup-20261020.png",
+      "title": "consultant followup 20261020",
+      "date": "",
+      "kind": "Other",
+      "size": 90421,
+      "url": "artifacts/ui/consultant-followup-20261020.png",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/provider-matrix/turns.json",
+      "title": "turns",
+      "date": "",
+      "kind": "Data",
+      "size": 65376,
+      "url": "artifacts/provider-matrix/turns.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/provider-matrix/runs.json",
+      "title": "runs",
+      "date": "",
+      "kind": "Data",
+      "size": 92681,
+      "url": "artifacts/provider-matrix/runs.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/provider-matrix/index.html",
+      "title": "index",
+      "date": "",
+      "kind": "Web report",
+      "size": 24599,
+      "url": "artifacts/provider-matrix/index.html",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/provider-matrix/criteria.json",
+      "title": "criteria",
+      "date": "",
+      "kind": "Data",
+      "size": 121928,
+      "url": "artifacts/provider-matrix/criteria.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/provider-matrix/cells.json",
+      "title": "cells",
+      "date": "",
+      "kind": "Data",
+      "size": 83970,
+      "url": "artifacts/provider-matrix/cells.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/provider-matrix/bakeoff.html",
+      "title": "bakeoff",
+      "date": "",
+      "kind": "Web report",
+      "size": 35703,
+      "url": "artifacts/provider-matrix/bakeoff.html",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase4/xai-live-smoke-bundle.json",
+      "title": "xai live smoke bundle",
+      "date": "",
+      "kind": "Data",
+      "size": 323489,
+      "url": "artifacts/phase4/xai-live-smoke-bundle.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase4/judge-calibration-openai-gpt-4.1-mini.json",
+      "title": "judge calibration openai gpt 4.1 mini",
+      "date": "",
+      "kind": "Data",
+      "size": 18696,
+      "url": "artifacts/phase4/judge-calibration-openai-gpt-4.1-mini.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase4/judge-calibration-claude-haiku-4-5.json",
+      "title": "judge calibration claude haiku 4 5",
+      "date": "",
+      "kind": "Data",
+      "size": 19729,
+      "url": "artifacts/phase4/judge-calibration-claude-haiku-4-5.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase4/google-gemini-live-smoke-bundle.json",
+      "title": "google gemini live smoke bundle",
+      "date": "",
+      "kind": "Data",
+      "size": 391565,
+      "url": "artifacts/phase4/google-gemini-live-smoke-bundle.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase4/comparison.html",
+      "title": "comparison",
+      "date": "",
+      "kind": "Web report",
+      "size": 5054,
+      "url": "artifacts/phase4/comparison.html",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase2/xai_grok_voice-ac09.json",
+      "title": "xai grok voice ac09",
+      "date": "",
+      "kind": "Data",
+      "size": 1047,
+      "url": "artifacts/phase2/xai_grok_voice-ac09.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase2/openai-ac09.json",
+      "title": "openai ac09",
+      "date": "",
+      "kind": "Data",
+      "size": 935,
+      "url": "artifacts/phase2/openai-ac09.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase2/google_gemini_live-ac09.json",
+      "title": "google gemini live ac09",
+      "date": "",
+      "kind": "Data",
+      "size": 652,
+      "url": "artifacts/phase2/google_gemini_live-ac09.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase2/aws_nova_sonic-ac09.json",
+      "title": "aws nova sonic ac09",
+      "date": "",
+      "kind": "Data",
+      "size": 659,
+      "url": "artifacts/phase2/aws_nova_sonic-ac09.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase1-post-gap-baseline.json",
+      "title": "phase1 post gap baseline",
+      "date": "",
+      "kind": "Data",
+      "size": 14956230,
+      "url": "artifacts/phase1-post-gap-baseline.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase1-post-audit-baseline.json",
+      "title": "phase1 post audit baseline",
+      "date": "",
+      "kind": "Data",
+      "size": 14956244,
+      "url": "artifacts/phase1-post-audit-baseline.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase1-final-baseline.json",
+      "title": "phase1 final baseline",
+      "date": "",
+      "kind": "Data",
+      "size": 14794248,
+      "url": "artifacts/phase1-final-baseline.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase1-baseline.json",
+      "title": "phase1 baseline",
+      "date": "",
+      "kind": "Data",
+      "size": 19017,
+      "url": "artifacts/phase1-baseline.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase1-baseline-pooled.json",
+      "title": "phase1 baseline pooled",
+      "date": "",
+      "kind": "Data",
+      "size": 19017,
+      "url": "artifacts/phase1-baseline-pooled.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase1-baseline-final.json",
+      "title": "phase1 baseline final",
+      "date": "",
+      "kind": "Data",
+      "size": 26892,
+      "url": "artifacts/phase1-baseline-final.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/xai-capability-report.json",
+      "title": "xai capability report",
+      "date": "",
+      "kind": "Data",
+      "size": 9668,
+      "url": "artifacts/phase0/xai-capability-report.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/openai-capability-report.json",
+      "title": "openai capability report",
+      "date": "",
+      "kind": "Data",
+      "size": 7611,
+      "url": "artifacts/phase0/openai-capability-report.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/nova-capability-report.json",
+      "title": "nova capability report",
+      "date": "",
+      "kind": "Data",
+      "size": 9263,
+      "url": "artifacts/phase0/nova-capability-report.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/google_gemini-capability-report.json",
+      "title": "google gemini capability report",
+      "date": "",
+      "kind": "Data",
+      "size": 8771,
+      "url": "artifacts/phase0/google_gemini-capability-report.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/golden-run.json",
+      "title": "golden run",
+      "date": "",
+      "kind": "Data",
+      "size": 21087,
+      "url": "artifacts/golden-run.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gemini38/phase2/google_gemini_live-ac09.json",
+      "title": "google gemini live ac09",
+      "date": "",
+      "kind": "Data",
+      "size": 652,
+      "url": "artifacts/gemini38/phase2/google_gemini_live-ac09.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gemini38/baseline/google_gemini_live-ac09.json",
+      "title": "google gemini live ac09",
+      "date": "",
+      "kind": "Data",
+      "size": 715,
+      "url": "artifacts/gemini38/baseline/google_gemini_live-ac09.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/gemini38/baseline/google_gemini-capability-report.json",
+      "title": "google gemini capability report",
+      "date": "",
+      "kind": "Data",
+      "size": 9297,
+      "url": "artifacts/gemini38/baseline/google_gemini-capability-report.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/benchmark-5350e4a/validation.json",
+      "title": "validation",
+      "date": "",
+      "kind": "Data",
+      "size": 2649,
+      "url": "artifacts/benchmark-5350e4a/validation.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/benchmark-5350e4a/summary.json",
+      "title": "summary",
+      "date": "",
+      "kind": "Data",
+      "size": 22400,
+      "url": "artifacts/benchmark-5350e4a/summary.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/benchmark-5350e4a/provenance.json",
+      "title": "provenance",
+      "date": "",
+      "kind": "Data",
+      "size": 1112,
+      "url": "artifacts/benchmark-5350e4a/provenance.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/benchmark-5350e4a/prior-fault-audit.json",
+      "title": "prior fault audit",
+      "date": "",
+      "kind": "Data",
+      "size": 4449,
+      "url": "artifacts/benchmark-5350e4a/prior-fault-audit.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/benchmark-5350e4a/component-benchmark.json",
+      "title": "component benchmark",
+      "date": "",
+      "kind": "Data",
+      "size": 15118237,
+      "url": "artifacts/benchmark-5350e4a/component-benchmark.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/benchmark-5350e4a/asr-limited-runs.json",
+      "title": "asr limited runs",
+      "date": "",
+      "kind": "Data",
+      "size": 3869,
+      "url": "artifacts/benchmark-5350e4a/asr-limited-runs.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/benchmark-5350e4a/asr-availability-check.json",
+      "title": "asr availability check",
+      "date": "",
+      "kind": "Data",
+      "size": 162,
+      "url": "artifacts/benchmark-5350e4a/asr-availability-check.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/benchmark-5350e4a/annotate_report.py",
+      "title": "annotate report",
+      "date": "",
+      "kind": "Other",
+      "size": 3390,
+      "url": "artifacts/benchmark-5350e4a/annotate_report.py",
+      "group": "//Users"
+    }
+  ],
+  "features": [
+    {
+      "path": "artifacts/fair-bakeoff-2026-10-28/rescored-2026-10-28/report.html",
+      "title": "Fair bake-off \u00b7 final re-score",
+      "description": "Latest assessment of 720 cells: six providers, 40 scenarios, three repetitions. Re-scored evidence; no calls were rerun.",
+      "status": "Current",
+      "date": "2026-10-28"
+    },
+    {
+      "path": "artifacts/fair-bakeoff-2026-10-28/report.html",
+      "title": "Fair bake-off \u00b7 original assessment",
+      "description": "Original scoring retained for provenance. Read the final re-score first.",
+      "status": "Original",
+      "date": "2026-10-28"
+    },
+    {
+      "path": "artifacts/full-advanced-bakeoff-2026-10-26/rescored-2026-10-27/report.html",
+      "title": "Advanced bake-off \u00b7 corrected assessment",
+      "description": "Earlier 600-cell experiment, with corrected latency and task-completion scoring. Different setup from the fair bake-off.",
+      "status": "Re-scored",
+      "date": "2026-10-27"
+    },
+    {
+      "path": "reports/gpt-live-1-evaluation-2026-10-27.html",
+      "title": "GPT-Live 1 \u00b7 single-model evaluation",
+      "description": "Forty synthetic scenarios with assurance checks, task completion, latency and scoped costs.",
+      "status": "Evaluation",
+      "date": "2026-10-27"
+    },
+    {
+      "path": "reports/gpt-live-1-listening-2026-10-27.html",
+      "title": "GPT-Live 1 \u00b7 listening room",
+      "description": "Selected assistant speech with audio players and transcripts. Use the evaluation for measured latency.",
+      "status": "Listening",
+      "date": "2026-10-27"
+    },
+    {
+      "path": "artifacts/voice-naturalness-2026-10-25/rate.html",
+      "title": "Voice naturalness \u00b7 listening study",
+      "description": "Listen to and rate the retained voice samples.",
+      "status": "Listening",
+      "date": "2026-10-25"
+    }
+  ]
+}
