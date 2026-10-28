@@ -227,6 +227,10 @@ def examples():
                 "buffered_item_ids": ["item_b"], "generation_epoch": 2, "released": False,
                 "unkeyed_quarantine": False,
             },
+            "interruption.stale_ignored": {
+                "turn": 1, "item_id": "item_a", "provider_turn_id": None, "reason": "RESPONSE_ALREADY_ENDED",
+                "received_ms": 3100, "clock_domain_id": "process_fixture",
+            },
             "input.caller_audio": {
                 "turn": 0, "source_text_sha256": _h("text"), "pcm_sha256": pcm, "byte_count": 96000,
                 "sample_rate": 24000, "audio_retained": False, "transformations": ["clean_studio"],

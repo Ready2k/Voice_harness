@@ -16,7 +16,14 @@ from .asr import LIVE_FLAG, asr_vendor, select_backend
 from .contracts import TOOLS as TOOL_CONTRACTS
 from .events import PROCESS_CLOCK_DOMAIN
 from .live_assessment import IndependentAssessor
-from .live_scenario import CALLER_TRAIL_MS, LIVE_LIMITS, RATE, TURN_TIMEOUT_S, LiveScenarioRunner
+from .live_scenario import (
+    CALLER_TRAIL_MS,
+    CALLER_TURN_GAP_MS,
+    LIVE_LIMITS,
+    RATE,
+    TURN_TIMEOUT_S,
+    LiveScenarioRunner,
+)
 from .reply_retention import ReplyRetention
 from .scenario_catalogue import catalogue_entry
 from .target_prompts import instructions as target_instructions
@@ -364,13 +371,15 @@ def configure_transport(provider_config_id, config, caller_mode):
                                         "prefixPaddingMs": 200}
     commit = "provider_vad" if provider_vad else ("automatic" if detection == "server_vad" else "explicit")
     return {
-        "profile_version": "provider-transport-v2", "caller_mode": caller_mode,
+        "profile_version": "provider-transport-v3", "caller_mode": caller_mode,
         "turn_detection": detection, "endpointing": config.get("endpointing") if nova else None,
         "turn_commit": commit, "commit_delay_ms": commit_delay_ms() if commit == "explicit" else None,
         "harness_input_rate": RATE, "provider_input_rate": 16000 if provider_config_id in {
             "gemini-live", "nova-sonic-live"} else RATE,
         "output_rate": RATE, "chunk_ms": 20,
         "caller_trailing_silence_ms": CALLER_TRAIL_MS if caller_mode != "human_microphone" else None,
+        # Synthetic callers speak only after the previous reply would have finished playing, plus this gap.
+        "caller_turn_gap_ms": CALLER_TURN_GAP_MS if caller_mode != "human_microphone" else None,
         "client_truncation": provider_config_id in {"openai-realtime-live", "xai-voice-live"},
         "turn_timeout_seconds": TURN_TIMEOUT_S if caller_mode != "human_microphone" else None,
         "response_audio_seconds": LIVE_LIMITS["response_audio_seconds"],

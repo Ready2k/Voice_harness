@@ -9,6 +9,12 @@ policy and fault evidence are the same as for mock runs.  Declared faults:
 * ``tool_latency`` -> delay before the gateway call
 * ``caller_interrupts`` -> the next caller turn starts while the assistant is still speaking
 * ``background_noise`` / audio profile -> deterministic noise at the declared SNR
+
+Unless ``caller_interrupts`` targets it, a caller turn waits until the previous reply would have finished playing
+at real time (replies arrive faster than real time and are held for assessment) plus ``CALLER_TURN_GAP_MS``, as a
+real caller would. A provider
+interruption for a response that has already ended is stale: it is recorded (``interruption.stale_ignored``) and
+never cancels the current turn's reply.
 """
 
 from __future__ import annotations
@@ -44,6 +50,8 @@ LIVE_LIMITS = {"pending_audio_seconds": 120.0, "pending_audio_bytes": 120 * RATE
 CANCEL_TIMEOUT_S = 5.0
 # Silence after each synthetic caller utterance (lets provider VAD end the turn).
 CALLER_TRAIL_MS = 1200
+# Common pause between the end of the previous reply's real-time playback and the caller's next turn.
+CALLER_TURN_GAP_MS = 300
 
 
 def _b64_len(value):
@@ -122,6 +130,45 @@ class LiveScenarioRunner:
         if hasattr(adapter, "native_sink"):
             adapter.native_sink = self._on_native
         self.tool_calls_expected = barge_after_tool  # barge in on the reply that follows a tool result
+        self.turn_gap_ms = transport.get("caller_turn_gap_ms", CALLER_TURN_GAP_MS)  # None: never wait (microphone)
+        self._playback_end = None  # monotonic ms at which received reply audio would finish playing at real time
+        # Provider responses as seen by the runner: an interruption is only applied to one still open.
+        self._response_open, self._open_items, self._ended_items = False, set(), set()
+        self._stale_end, self._turn_index = (), 0  # (turn_id,): the stale interruption's own turn_end, still due
+
+    def _note_audio(self, event):
+        """Reply audio plays back to back at real time from receipt; audio of a retired response is never heard."""
+        item = getattr(event, "item_id", None)
+        if item and item in getattr(self.driver, "_dead_responses", ()):
+            return
+        now = time.monotonic() * 1000
+        self._playback_end = max(self._playback_end or now, now) + len(event.pcm) / 2 / event.sample_rate * 1000
+        self._response_open, self._stale_end = True, ()
+        if item:
+            self._open_items.add(item)
+
+    def _end_response(self):
+        self._ended_items |= self._open_items
+        self._open_items, self._response_open = set(), False
+
+    def _stale(self, event, assessing):
+        """Why an interruption cannot refer to a reply still playing (None: it can). A reply still being assessed
+        has not been heard yet, so its interruption is always applied."""
+        if assessing:
+            return None
+        item = getattr(event, "item_id", None)
+        if item and item in self._ended_items and item not in self._open_items:
+            return "RESPONSE_ALREADY_ENDED"
+        return None if self._response_open else "NO_RESPONSE_OPEN"
+
+    def _ignore_stale(self, event, reason):
+        self._stale_end = (event.turn_id,)  # a provider that closes the cut response also ends it: not this turn's end
+        # Its identity is still retired (late frames of it are refused) but the engine epoch and this turn are untouched.
+        self.driver._mark_dead(getattr(event, "item_id", None))
+        with self.engine.database.transaction(self.run_id) as tx:
+            tx.event("orchestrator", "interruption.stale_ignored", {
+                "turn": self._turn_index, "item_id": getattr(event, "item_id", None), "provider_turn_id": event.turn_id,
+                "reason": reason, "received_ms": int(time.monotonic() * 1000), "clock_domain_id": PROCESS_CLOCK_DOMAIN})
 
     def _on_native(self, adapter_name, native_type, payload):
         encoded = json.dumps(payload, sort_keys=True, default=str).encode()
@@ -162,13 +209,21 @@ class LiveScenarioRunner:
                 "clock_domain_id": PROCESS_CLOCK_DOMAIN, **(timing or {}),
             })
 
-    async def _speak(self, index, turn, pcm, *, retained=False):
+    async def _speak(self, index, turn, pcm, *, retained=False, hold=True):
         """Stream one caller clip, end the caller turn and record when speech ended and the turn was signalled.
+
+        With ``hold`` (every turn but a ``caller_interrupts`` target) the caller first waits until the previous reply
+        would have finished playing at real time, plus the common ``turn_gap_ms``.
 
         Explicit-commit providers get ``request_turn()`` a common emulated endpointing delay (``commit_delay_ms``)
         after the end of speech; the rest of the trailing silence is not sent, since Gemini reopens an activity on
         later audio and manual OpenAI/xAI buffers ignore it. Provider-VAD providers hear the whole clip and pay their
         own endpointing. Either way first audio is measured from ``speech_ended_ms``."""
+        self._turn_index, reply_end, waited = index, self._playback_end, 0
+        wait = "barge_in" if not hold else "first_turn" if not index else "no_reply_audio" if reply_end is None else "after_reply"
+        if wait == "after_reply" and self.turn_gap_ms is not None and (
+                waited := max(0, reply_end + self.turn_gap_ms - time.monotonic() * 1000)):
+            await asyncio.sleep(waited / 1000)
         explicit = self.turn_commit == "explicit" and self.commit_delay_ms is not None
         speech_bytes = max(0, len(pcm) - self.trail_ms * RATE // 1000 * 2)
         started = time.monotonic() * 1000
@@ -187,7 +242,9 @@ class LiveScenarioRunner:
         await self.adapter.request_turn()  # Nova and other provider-VAD adapters implement this as a no-op
         self._record_input(index, turn, pcm, int(started), int(time.monotonic() * 1000), retained=retained, timing={
             "speech_ended_ms": int(speech_end), "turn_signal_ms": int(signalled) if explicit else None,
-            "turn_commit": self.turn_commit, "commit_delay_ms": self.commit_delay_ms, "streamed_byte_count": sent})
+            "turn_commit": self.turn_commit, "commit_delay_ms": self.commit_delay_ms, "streamed_byte_count": sent,
+            "caller_wait": wait, "reply_playback_end_ms": int(reply_end) if reply_end is not None else None,
+            "caller_turn_gap_ms": self.turn_gap_ms, "caller_waited_ms": round(waited)})
 
     def _record_fault_dispositions(self, outcomes):
         """One typed ``fault.disposition`` per declared fault: handled, not exercised, not handled or misconduct."""
@@ -237,8 +294,9 @@ class LiveScenarioRunner:
             self.interrupt_results.append({"generation_cancelled": "failed", "error": type(error).__name__})
         self.driver.interrupt()
 
-    async def _await_turn(self, bank, until_audio=False):
-        """Pump adapter events until a turn_end (or fatal error / timeout); ``until_audio`` stops at the first reply audio."""
+    async def _await_turn(self, bank, until_audio=False, screen=True):
+        """Pump adapter events until a turn_end (or fatal error / timeout); ``until_audio`` stops at the first reply audio.
+        ``screen`` drops stale interruptions (off for a ``caller_interrupts`` target, whose overlap is the fault)."""
         errors = []
         follow_up = False  # a tool result was submitted, so the provider's next response belongs to this same turn
         tool_seen = False  # a tool-using reply speaks again after its result; that long reply is the barge-in target
@@ -256,6 +314,7 @@ class LiveScenarioRunner:
                 # Playback is simulated at real time: the caller cuts in 500 ms into the reply.
                 await asyncio.sleep(0.5)
                 self._cancelled_ends += 1
+                self._playback_end = time.monotonic() * 1000  # playback stops where the caller cut in
                 if self.interrupt_mode == "client":
                     try:
                         receipt = await self.adapter.interrupt(getattr(event, "item_id", None), PLAYED_MS_WHILE_HELD)
@@ -317,11 +376,23 @@ class LiveScenarioRunner:
                         if event.fatal:
                             return None
                     if event.type == "interrupted":
+                        if screen and (stale := self._stale(event, running)):
+                            self._ignore_stale(event, stale)
+                            continue
                         self.interruptions += 1
+                        if self._playback_end is not None:  # the cut reply stops playing now
+                            self._playback_end = min(self._playback_end, time.monotonic() * 1000)
+                        self._end_response()
+                    if event.type == "audio_out":
+                        self._note_audio(event)
                     if event.type == "turn_start":
-                        response_active = True
+                        response_active, self._response_open, self._stale_end = True, True, ()
                         settled = None
                     if event.type == "turn_end":
+                        if self._stale_end and self._stale_end[0] == event.turn_id and not self._response_open:
+                            self._stale_end = ()  # the stale cut response's own end; this turn's reply is still due
+                            continue
+                        self._end_response()
                         response_active = False
                         # Bind continuation to this response before ASR can finish out of order.
                         continues, follow_up = follow_up, False
@@ -384,10 +455,11 @@ class LiveScenarioRunner:
                     self.pending_caller_pcm = pcm  # the audio about to be spoken, for observing a confirmation
                     if self.before_turn is not None:
                         await self.before_turn(index)
-                    await self._speak(index, turn, pcm)
+                    barged = bool(self._faults("caller_interrupts", turn=index))  # this turn speaks over the reply
+                    await self._speak(index, turn, pcm, hold=not barged)
                     # The next turn interrupts: stop at the first reply audio and speak over it.
                     barge = self._faults("caller_interrupts", turn=index + 1)
-                    outcome, errors = await self._await_turn(bank, until_audio=bool(barge))
+                    outcome, errors = await self._await_turn(bank, until_audio=bool(barge), screen=not barged)
                     outcomes.append({"turn": index, "strict_speech_approval": outcome["strict_speech_approval"]})
                     turn_errors.extend(errors)
                     self._flush_native()

@@ -85,6 +85,23 @@ that credentials or credit limits have recovered. Cancel also works while paused
   slightly favouring them) and provider-VAD runs at the streamed end less the silence (`legacy_speech_end`).
   Mode is read from the run binding's `harness_transport.turn_commit`, not the provider name;
   `bakeoff.reobserve` re-anchors a stored bake-off from its ledgers.
+- Caller turn-taking (`provider-transport-v3`). Replies arrive faster than real time and are held for assessment, so
+  the fixed caller used to start its next turn while the previous reply would still have been playing; provider-VAD
+  providers (Nova, ElevenLabs, sometimes xAI) then reported unplanned interruptions (26 Oct ledger, scenarios without
+  a `caller_interrupts` fault: ElevenLabs 36, Nova 23, xAI 3, OpenAI 0, Gemini 0). Every caller turn now waits until
+  the previous reply's received audio would have finished playing back to back from receipt, plus a common
+  `caller_turn_gap_ms` (300 ms, recorded in `harness_transport`); a reply cut by an interruption stops playing at the
+  cut. `input.caller_audio` records `caller_wait`, `reply_playback_end_ms` and `caller_waited_ms`. A
+  `caller_interrupts` target turn does not wait (`caller_wait: barge_in`). The same rule applies to the live_ai
+  caller, which already heard released audio at real time before replying, so it rarely waits.
+- A provider interruption that cannot refer to a reply still playing (its item belongs to a response that already
+  ended, or no response is open, and no reply is still being assessed) is stale: it is recorded as
+  `interruption.stale_ignored`, its item is still retired (late frames refused), but it neither interrupts the engine
+  nor settles the turn, and the stale cut response's own turn end is skipped. An interruption arriving while a reply
+  is still held for assessment is always applied, so nothing unheard can be released after it. Before this, xAI's cancelled
+  `response.done` at the confirmation commit settled `commit-cancel-confirmed-001` as `no_audio` and dropped the
+  reply that would have called `cancel_payment`. A `caller_interrupts` target turn is not screened. Ledgers before
+  `provider-transport-v3` should be read with these turns in mind.
 - The out-of-band cancellation confirmation reaches Nova as an interactive USER text turn (no non-interactive
   mid-session text input is established for Nova Sonic); others get it as context only. The binding and the
   observation record `confirmation_delivery` so those scenarios can be disclosed or excluded.

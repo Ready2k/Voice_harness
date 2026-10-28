@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "A provider interruption for a response that had already ended (or with none open) was not applied: it must\nnot cancel the current turn's reply. The provider's own history may still have been cut.",
+  "properties": {
+    "turn": {
+      "minimum": 0,
+      "title": "Turn",
+      "type": "integer"
+    },
+    "item_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Item Id"
+    },
+    "provider_turn_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Provider Turn Id"
+    },
+    "reason": {
+      "enum": [
+        "RESPONSE_ALREADY_ENDED",
+        "NO_RESPONSE_OPEN"
+      ],
+      "title": "Reason",
+      "type": "string"
+    },
+    "received_ms": {
+      "minimum": 0,
+      "title": "Received Ms",
+      "type": "integer"
+    },
+    "clock_domain_id": {
+      "maxLength": 200,
+      "minLength": 1,
+      "title": "Clock Domain Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "turn",
+    "item_id",
+    "provider_turn_id",
+    "reason",
+    "received_ms",
+    "clock_domain_id"
+  ],
+  "title": "InterruptionStaleIgnored",
+  "type": "object"
+}

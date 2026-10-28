@@ -124,6 +124,63 @@
       ],
       "default": null,
       "title": "Streamed Byte Count"
+    },
+    "caller_wait": {
+      "anyOf": [
+        {
+          "enum": [
+            "first_turn",
+            "after_reply",
+            "barge_in",
+            "no_reply_audio"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Caller Wait"
+    },
+    "reply_playback_end_ms": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Reply Playback End Ms"
+    },
+    "caller_turn_gap_ms": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Caller Turn Gap Ms"
+    },
+    "caller_waited_ms": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Caller Waited Ms"
     }
   },
   "required": [

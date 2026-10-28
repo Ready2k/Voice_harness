@@ -697,6 +697,24 @@ class InputCallerAudio(Closed):
     turn_commit: Literal["explicit", "provider_vad", "automatic"] | None = None
     commit_delay_ms: Count | None = None
     streamed_byte_count: Count | None = None
+    # Fixed callers wait for the previous reply to finish playing at real time plus a common gap before speaking,
+    # unless a caller_interrupts fault targets the turn. Absent on ledgers written before provider-transport-v3.
+    caller_wait: Literal["first_turn", "after_reply", "barge_in", "no_reply_audio"] | None = None
+    reply_playback_end_ms: Count | None = None
+    caller_turn_gap_ms: Count | None = None
+    caller_waited_ms: Count | None = None
+
+
+class InterruptionStaleIgnored(Closed):
+    """A provider interruption for a response that had already ended (or with none open) was not applied: it must
+    not cancel the current turn's reply. The provider's own history may still have been cut."""
+
+    turn: Count
+    item_id: str | None
+    provider_turn_id: str | None
+    reason: Literal["RESPONSE_ALREADY_ENDED", "NO_RESPONSE_OPEN"]
+    received_ms: Count
+    clock_domain_id: Identifier
 
 
 class CallerSessionStarted(Closed):
@@ -791,6 +809,7 @@ EVENT_CONTENT_CONTRACTS.update(
         "caller.utterance": CallerUtterance,
         "caller.agent_audio": CallerAgentAudio,
         "assessment.abandoned": AssessmentAbandoned,
+        "interruption.stale_ignored": InterruptionStaleIgnored,
         "adapter.native_event": AdapterNativeEvent,
         "adapter.session_ready": AdapterSessionReady,
         "fault.disposition": FaultDisposition,
