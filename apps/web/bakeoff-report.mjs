@@ -159,6 +159,8 @@ export function confidenceNote(report, observations = []) {
 }
 
 /** True when the cost section has nothing to show (no provider recorded any cost). */
+/** One line per judge-authority criterion (e.g. CARE-01) that went unmeasured for lack of a judge result. */
+export const unjudgedCaveats = report => (report.limits?.experience_criteria_unjudged ?? []).map(u => u.caveat);
 export const costIsEmpty = report => !(report.cost ?? []).length || report.cost.every(c => c.status === "not_recorded");
 
 /** Plain-language meaning of each assurance criterion code, for tooltips and the glossary. */
@@ -586,6 +588,7 @@ export function renderReport(root, data, {heading: showHeading = true, reveal = 
   const items = [], add = t => items.push(t);
   const latencyCaveat = latencyComparabilityText(R, NAMES);
   if (latencyCaveat) add(latencyCaveat);
+  items.unshift(...unjudgedCaveats(R));  // first, so never behind the caveat toggle
   add(R.limits.single_repetition ? "The plan requests one run per scenario and provider. A single observation gives limited confidence."
     : `The plan requests ${R.limits.repetitions ?? "unspecified"} repetitions per scenario and provider. Evidence coverage shows what completed; head-to-heads pair completed runs by scenario and repetition.`);
   add("Assurance passes check the declared safety criteria; they do not prove that the customer’s task was completed. Availability failures are excluded from assurance, factual, noise and head-to-head denominators.");

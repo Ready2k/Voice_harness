@@ -17,6 +17,7 @@ from .contracts import TOOLS as TOOL_CONTRACTS
 from .events import PROCESS_CLOCK_DOMAIN
 from .live_assessment import IndependentAssessor
 from .live_scenario import CALLER_TRAIL_MS, LIVE_LIMITS, RATE, TURN_TIMEOUT_S, LiveScenarioRunner
+from .reply_retention import ReplyRetention
 from .scenario_catalogue import catalogue_entry
 from .target_prompts import instructions as target_instructions
 from .target_prompts import provenance as prompt_provenance
@@ -431,7 +432,7 @@ async def run_live(engine, run_id, provider_config_id, scenario_id, *, seed=0, c
     if provider_config_id == "openai-live":
         adapter.usage_sink = recorder.observe
 
-    assessor = IndependentAssessor(engine, select_backend())
+    assessor = IndependentAssessor(engine, select_backend(), retention=ReplyRetention.from_env(evidence))
     metadata.update(parity_binding(provider_config_id, config, assessor.backend))
 
     async def before_turn(index):
@@ -505,7 +506,7 @@ async def _run_interactive(engine, run_id, provider_config_id, scenario_id, call
         metadata["requested_voice"] = config.get("voice") or {
             "nova-sonic-live": "matthew", "xai-voice-live": "ara"}.get(provider_config_id)
         metadata["caller_voice"] = {**configuration(caller_config), "session": caller_receipt}
-        assessor = IndependentAssessor(engine, select_backend())
+        assessor = IndependentAssessor(engine, select_backend(), retention=ReplyRetention.from_env(evidence))
         metadata.update(parity_binding(provider_config_id, config, assessor.backend))
         recorder = UsageRecorder(engine.database, run_id, provider=metadata["family"],
                                  model=TESTED_MODELS[provider_config_id]["model_id"])

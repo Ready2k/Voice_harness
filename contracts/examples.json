@@ -1147,6 +1147,21 @@
     "reason": "NO_ASR_BACKEND_CONFIGURED",
     "strict_speech_approval": "unavailable"
   },
+  "assessment.reply_audio": {
+    "unit_id": "unit_001",
+    "replacement_unit_id": "unit_002",
+    "audio_sha256": "2a9569d5160893662a5c3579f2531ac3250dcb5a42a2a4832c5503e28424b8d8",
+    "artifact_sha256": "2a9569d5160893662a5c3579f2531ac3250dcb5a42a2a4832c5503e28424b8d8",
+    "retention_reason": "assessment_untestable",
+    "disposition": "untestable",
+    "size_bytes": 960,
+    "sample_rate": 24000,
+    "data_classification": "synthetic_session_provider_reply",
+    "ttl_seconds": 604800,
+    "run_cap_bytes": 12582912,
+    "retained": true,
+    "omission_reason": null
+  },
   "benchmark.adapter_metrics": {
     "response_id": "response_001",
     "unit_id": "unit_001",

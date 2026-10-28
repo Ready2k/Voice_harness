@@ -199,6 +199,12 @@ def examples():
                 "claims": {"amounts_minor": [15000], "dates": [], "ambiguities": []},
                 "expected": {"amounts_minor": [15000]}, "boundary": "whole_response_no_alignment",
             },
+            "assessment.reply_audio": {
+                "unit_id": "unit_001", "replacement_unit_id": "unit_002", "audio_sha256": pcm, "artifact_sha256": pcm,
+                "retention_reason": "assessment_untestable", "disposition": "untestable", "size_bytes": 960,
+                "sample_rate": 24000, "data_classification": "synthetic_session_provider_reply", "ttl_seconds": 604800,
+                "run_cap_bytes": 12582912, "retained": True, "omission_reason": None,
+            },
             "assessment.asr_unavailable": {
                 "unit_id": "unit_001", "audio_sha256": pcm, "reason": "NO_ASR_BACKEND_CONFIGURED",
                 "strict_speech_approval": "unavailable",

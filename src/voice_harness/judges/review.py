@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import time
 
-from .. import fault_dispositions
+from .. import fault_dispositions, reply_retention
 from . import adjudicate, store
 from .rubric import CRITERIA
 from .service import emit
@@ -185,7 +185,20 @@ def list_queue(database, state: str | None = None, after: str = "", limit: int =
     return {"items": items, "next_cursor": items[-1]["review_id"] if len(rows) > limit else None}
 
 
+def retained_audio(events: list[dict], review: dict) -> list[dict]:
+    """Retained reply audio a reviewer can listen to for this criterion: the units its evidence cites, else the run's."""
+    state = replay(events)
+    adjudication = state["adjudications"].get(review["evaluation_id"])
+    entry = next((c for c in (adjudication or {}).get("content", {}).get("criteria", [])
+                  if c["criterion_id"] == review["criterion_id"]), {})
+    cited = set(entry.get("evidence_event_ids") or [])
+    units = {e["content"].get("unit_id") for e in events if e["event_id"] in cited and "tombstone" not in e}
+    return reply_retention.for_units(events, units - {None}) or reply_retention.for_units(events)
+
+
 def get_review(database, review_id: str) -> dict:
     run_id = _transition(database, review_id)
-    review = replay(database.events(run_id))["reviews"][review_id]
-    return {**review, "run_id": run_id, "criterion": CRITERIA[review["criterion_id"]].model_dump()}
+    events = database.events(run_id)
+    review = replay(events)["reviews"][review_id]
+    return {**review, "run_id": run_id, "criterion": CRITERIA[review["criterion_id"]].model_dump(),
+            "retained_audio": retained_audio(events, review)}

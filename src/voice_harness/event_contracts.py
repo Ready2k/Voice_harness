@@ -610,6 +610,31 @@ class AssessmentAsrUnavailable(Closed):
     strict_speech_approval: Literal["unavailable"]
 
 
+class AssessmentReplyAudio(Closed):
+    """Retention decision for one assessed reply (reply_retention.py): retained by hash, or skipped at the run cap."""
+
+    unit_id: Identifier
+    replacement_unit_id: Identifier | None
+    audio_sha256: Hex64
+    artifact_sha256: Hex64 | None
+    retention_reason: Literal["assessment_unsafe", "assessment_untestable", "claim_ambiguous",
+                              "transcript_amount_mismatch", "spot_check_sample"]
+    disposition: Literal["safe", "unsafe", "untestable"]
+    size_bytes: Count
+    sample_rate: Count
+    data_classification: Literal["synthetic_session_provider_reply"]
+    ttl_seconds: Count
+    run_cap_bytes: Count
+    retained: bool
+    omission_reason: Literal["RUN_RETENTION_CAP_REACHED"] | None
+
+    @model_validator(mode="after")
+    def _retained_has_artifact(self):
+        if self.retained != (self.artifact_sha256 is not None) or self.retained == (self.omission_reason is not None):
+            raise ValueError("retained requires artifact_sha256 and no omission_reason")
+        return self
+
+
 class BenchmarkAdapterMetrics(Closed):
     response_id: Identifier | None
     unit_id: Identifier | None
@@ -623,6 +648,7 @@ EVENT_CONTENT_CONTRACTS.update(
     {
         "assessment.independent_asr": AssessmentIndependentAsr,
         "assessment.asr_unavailable": AssessmentAsrUnavailable,
+        "assessment.reply_audio": AssessmentReplyAudio,
         "benchmark.adapter_metrics": BenchmarkAdapterMetrics,
     }
 )

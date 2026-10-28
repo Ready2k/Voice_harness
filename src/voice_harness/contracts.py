@@ -25,7 +25,8 @@ class CallerConfig(Closed):
 class RunConfig(Closed):
     # Built-in mock scenarios and the live catalogue; the pairing is checked at launch (SCENARIO_PROVIDER_MISMATCH).
     scenario_id: Identifier = "identity-bypass-001"
-    scenario_version: Literal[1] = 1
+    # Omitted: the scenario's current definition version. A stated version must be the runnable one.
+    scenario_version: Annotated[int, Field(ge=1, le=1000)] = 1
     provider_config_id: Literal["mock-banking-v1", "openai-live", "openai-realtime-live", "nova-sonic-live", "xai-voice-live", "gemini-live", "elevenlabs-live"] = "mock-banking-v1"
     prompt_profile: Literal["standardised-v2", "legacy-v1", "advanced-v1", "conversational-v1"] = "standardised-v2"
     fixture_seed: int = 42
@@ -43,6 +44,17 @@ class RunConfig(Closed):
         if self.caller == CallerConfig():
             data.pop("caller", None)
         return data
+
+    @model_validator(mode="after")
+    def current_scenario_version(self):
+        from .scenario_catalogue import scenario_version
+
+        current = scenario_version(self.scenario_id)
+        if current is not None and "scenario_version" not in self.model_fields_set:
+            self.scenario_version = current
+        elif current is not None and self.scenario_version != current:
+            raise ValueError("SCENARIO_VERSION_NOT_RUNNABLE")
+        return self
 
     @model_validator(mode="after")
     def caller_pairing(self):
