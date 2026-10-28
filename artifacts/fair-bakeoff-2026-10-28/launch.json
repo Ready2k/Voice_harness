@@ -1,0 +1,18 @@
+{
+  "bakeoff_id": "bko_851d76efa4ea410e91f30524c20d10e1",
+  "request": {
+    "name": "Fair-harness provider bake-off \u2014 28 October 2026",
+    "prompt_profile": "advanced-v1",
+    "provider_config_ids": [
+      "openai-live",
+      "openai-realtime-live",
+      "nova-sonic-live",
+      "xai-voice-live",
+      "gemini-live",
+      "elevenlabs-live"
+    ],
+    "repetitions": 3,
+    "group_balanced": true
+  },
+  "created_at": "2026-10-28T08:10:42Z"
+}
