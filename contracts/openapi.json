@@ -3623,7 +3623,7 @@
               "$ref": "#/components/schemas/ImportedRun"
             },
             "type": "array",
-            "maxItems": 600,
+            "maxItems": 720,
             "title": "Runs",
             "default": []
           }
