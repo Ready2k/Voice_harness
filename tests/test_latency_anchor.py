@@ -148,7 +148,7 @@ class TransportProfile(unittest.TestCase):
     def test_explicit_commits_record_the_common_delay_and_vad_records_none(self):
         for provider, delay in (("xai-voice-live", COMMIT_DELAY_MS), ("nova-sonic-live", None), ("openai-live", None)):
             profile = configure_transport(provider, {}, "fixed")
-            self.assertEqual((profile["profile_version"], profile["commit_delay_ms"]), ("provider-transport-v2", delay))
+            self.assertEqual((profile["profile_version"], profile["commit_delay_ms"]), ("provider-transport-v3", delay))
         self.assertIsNone(configure_transport("gemini-live", {}, "human_microphone")["commit_delay_ms"])
 
     def test_delay_override_is_clamped_to_the_trailing_silence(self):

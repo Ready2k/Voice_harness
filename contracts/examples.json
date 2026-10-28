@@ -1261,6 +1261,14 @@
     "released": false,
     "unkeyed_quarantine": false
   },
+  "interruption.stale_ignored": {
+    "turn": 1,
+    "item_id": "item_a",
+    "provider_turn_id": null,
+    "reason": "RESPONSE_ALREADY_ENDED",
+    "received_ms": 3100,
+    "clock_domain_id": "process_fixture"
+  },
   "adapter.native_event": {
     "adapter": "openai_realtime",
     "native_type": "response.output_audio.delta",

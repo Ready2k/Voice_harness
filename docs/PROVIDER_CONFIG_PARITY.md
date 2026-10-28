@@ -21,6 +21,7 @@ against them. `≠` in the report marks a setting that is not equal across the c
 | Setting | OpenAI Realtime | GPT-Live 1 | Nova Sonic | xAI Grok Voice | Gemini Live | ElevenLabs Agents | Equal? / disclosed as |
 |---|---|---|---|---|---|---|---|
 | Turn control | explicit commit | provider VAD | provider VAD (endpointing MEDIUM) | explicit commit | explicit commit | provider VAD | **No**: `turn_commit`, latency comparability |
+| Caller turn-taking | waits for reply playback + 300 ms | same | same | same | same | same | Yes (`provider-transport-v3`): `caller_turn_gap_ms`, `input.caller_audio.caller_waited_ms`; stale provider interruptions ignored and recorded (`interruption.stale_ignored`) |
 | Commit delay | 500 ms | n/a | n/a | 500 ms | 500 ms | n/a | **No**: VAD providers hear 1.2 s trailing silence and pay their own endpointing; `commit_delay_ms` |
 | Provider input rate | 24 kHz | 24 kHz | 16 kHz | 24 kHz | 16 kHz | 24 kHz | **No**: `provider_input_rate` |
 | Sampling sent | none | none | none (`maxTokens` 1024 output ceiling) | none | none | none per session; stored agent: see below | Yes after this change; `sampling`, `output_limits` ≠ |
