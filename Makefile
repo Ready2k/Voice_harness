@@ -70,7 +70,7 @@ benchmark: init
 # Regression gate: rerun the reference benchmark and compare with artifacts/perf-baseline.json (see docs/PHASE5_STATUS.md).
 perf-gate: benchmark
 	docker compose run --rm --no-deps --entrypoint cat benchmark /data/phase1-baseline.json > .local/perf-run.json
-	PYTHONPATH=src python3 -m voice_harness.perf_gate check .local/perf-run.json
+	PYTHONPATH=src python3 -m voice_harness.perf_gate check .local/perf-run.json $(if $(PERF_BASELINE),--baseline $(PERF_BASELINE))
 
 infra:
 	docker compose --profile infra up -d postgres otel-collector

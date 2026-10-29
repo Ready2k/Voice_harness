@@ -1,12 +1,12 @@
 {
   "benchmark_version": "phase1-reference-v1",
   "environment": {
-    "cgroup_cpu_max": "800000 100000",
+    "cgroup_cpu_max": "400000 100000",
     "cgroup_memory_max": "1073741824",
-    "cpu_count": 12,
+    "cpu_count": 4,
     "cpu_scope": "harness_process_only",
-    "max_rss_native_units": 85008,
-    "platform": "Linux-7.2.12-orbstack-00394-gbecdd6130068-aarch64-with-glibc2.36",
+    "max_rss_native_units": 100932,
+    "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.36",
     "python": "3.13.16",
     "rss_unit": "KiB",
     "storage": "postgresql"
@@ -14,80 +14,81 @@
   "profiles": {
     "component/sessions=1/scale=1/instrumented=False": {
       "count": 1000,
-      "p50_ms": 6.477125,
-      "p95_ms": 9.50375
+      "p50_ms": 2.125184,
+      "p95_ms": 2.441445
     },
     "component/sessions=1/scale=1/instrumented=True": {
       "count": 1000,
-      "p50_ms": 5.642709,
-      "p95_ms": 8.5795
+      "p50_ms": 2.133009,
+      "p95_ms": 2.372106
     },
     "component/sessions=1/scale=4/instrumented=False": {
       "count": 1000,
-      "p50_ms": 5.520709,
-      "p95_ms": 8.025833
+      "p50_ms": 2.202751,
+      "p95_ms": 2.513882
     },
     "component/sessions=1/scale=4/instrumented=True": {
       "count": 1000,
-      "p50_ms": 5.585458,
-      "p95_ms": 8.1275
+      "p50_ms": 2.090319,
+      "p95_ms": 2.386594
     },
     "component/sessions=10/scale=1/instrumented=False": {
       "count": 1000,
-      "p50_ms": 7.429709,
-      "p95_ms": 10.184
+      "p50_ms": 19.15677,
+      "p95_ms": 25.510676
     },
     "component/sessions=10/scale=1/instrumented=True": {
       "count": 1000,
-      "p50_ms": 7.501416,
-      "p95_ms": 9.700916
+      "p50_ms": 19.654412,
+      "p95_ms": 26.445974
     },
     "component/sessions=10/scale=4/instrumented=False": {
       "count": 1000,
-      "p50_ms": 8.090917,
-      "p95_ms": 10.247083
+      "p50_ms": 19.099264,
+      "p95_ms": 26.501178
     },
     "component/sessions=10/scale=4/instrumented=True": {
       "count": 1000,
-      "p50_ms": 7.180625,
-      "p95_ms": 10.288917
+      "p50_ms": 19.390112,
+      "p95_ms": 26.757445
     },
     "component/sessions=5/scale=1/instrumented=False": {
       "count": 1000,
-      "p50_ms": 8.395209,
-      "p95_ms": 11.574708
+      "p50_ms": 6.443234,
+      "p95_ms": 8.061141
     },
     "component/sessions=5/scale=1/instrumented=True": {
       "count": 1000,
-      "p50_ms": 8.168167,
-      "p95_ms": 10.75125
+      "p50_ms": 7.23057,
+      "p95_ms": 8.731047
     },
     "component/sessions=5/scale=4/instrumented=False": {
       "count": 1000,
-      "p50_ms": 8.833875,
-      "p95_ms": 12.173291
+      "p50_ms": 7.655513,
+      "p95_ms": 9.218135
     },
     "component/sessions=5/scale=4/instrumented=True": {
       "count": 1000,
-      "p50_ms": 7.603458,
-      "p95_ms": 11.166333
+      "p50_ms": 7.456553,
+      "p95_ms": 9.21407
     },
     "websocket/sessions=1": {
       "count": 1000,
-      "p50_ms": 6.938125,
-      "p95_ms": 9.554958
+      "p50_ms": 2.638697,
+      "p95_ms": 2.954328
     },
     "websocket/sessions=10": {
       "count": 1000,
-      "p50_ms": 2.427416,
-      "p95_ms": 4.553125
+      "p50_ms": 37.090301,
+      "p95_ms": 45.494581
     },
     "websocket/sessions=5": {
       "count": 1000,
-      "p50_ms": 3.484875,
-      "p95_ms": 6.473208
+      "p50_ms": 2.399379,
+      "p95_ms": 4.940667
     }
   },
+  "provenance": "GitHub Actions ubuntu-24.04 runner (4 vCPU), BENCHMARK_CPUS=4, run 40852009154 (commit of the 4-CPU change). Not comparable with a developer machine: use PERF_BASELINE=<file> locally.",
   "schema": "perf-baseline-v1",
-  "source_hash": "7d5f84937b36cc8d6d3638d9dc4fb872309e1447d915b603272078745bccbeef"
+  "source_hash": "5cc4f7c8cf7f7a793a4f85e8f7f1836430a6d376897d7d6688082c095d46b6d6"
 }
