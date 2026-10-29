@@ -1,7 +1,7 @@
 # Secret file mode: 600 locally; CI runners need 644 so the non-root test container (different uid) can read it.
 SECRET_MODE ?= 600
 
-.PHONY: serve-live token-host token nova-live-container lint audit build test test-db golden recovery infra stop up init benchmark load-test perf-gate demo
+.PHONY: serve-live token-host token nova-live-container lint audit build test test-db golden recovery infra stop up init benchmark chaos-postgres load-test perf-gate demo
 
 init:
 	@mkdir -p .local
@@ -66,6 +66,12 @@ recovery:
 
 benchmark: init
 	docker compose run --build --rm benchmark
+
+# Real PostgreSQL outage: stop the database for 6s while a driver keeps issuing tool calls, then verify the ledger (no spend).
+chaos-postgres: test-db
+	docker compose build tests
+	@docker compose run --rm tests python -m voice_harness.chaos_postgres 25 & driver=$$!; \
+		sleep 8; docker compose stop postgres; sleep 6; docker compose up -d --wait postgres; wait $$driver
 
 # Stepped-concurrency load test of the harness (mock provider, no spend); writes /data/phase5-load.json and .local/load-run.json.
 load-test: init
