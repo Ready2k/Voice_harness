@@ -69,3 +69,9 @@ The catalogue builder derives `site/voice-library.json` from the original `key.j
 ### GPT-Live extension (28 October)
 
 The library also merges `artifacts/gpt-live-voice-library-2026-10-28/key.json`: six GPT-Live 1 / Marin scripts plus two telephone derivatives, bringing the total to 56 clips across seven variants. This export records model, voice, backend, date, delivered prompt and provider transcripts; its independent ASR results are retained alongside it. The builder checks exact script equality before merging sources. Older samples retain unknown model/voice labels. Per-column recording dates disclose the different batches.
+
+## Test setup transparency
+
+`test-setup.html` is generated from the dated `prompts.json`, `verified-prompt-bindings.json` and re-scored `report.json` files listed in `scripts/build_test_setup.py`. Run `python3 scripts/build_test_setup.py` after changing the template (`site/test-setup.template.html`) or adding an experiment to that explicit list. The Pages workflow regenerates it before staging. `site/test-setup.js` renders the selectors, configurations, exact texts and evidence links using text content.
+
+Never substitute current model defaults for historical gaps. Shared and differing prompt lines are computed from the selected experiment's saved texts, not current prompt constants. Configuration variants retain observation counts; assessor records come from the selected re-scored revision. Hash checks compare files and manifests only; this page does not reverify ledger signatures or vendor execution. Report model labels remain report labels, not independently resolved versions. Keep raw evidence artifacts unchanged.

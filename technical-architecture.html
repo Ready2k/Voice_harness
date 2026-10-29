@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Voice Harness technical diagrams: implementation components, enforcement contracts and deployment boundaries.">
+<title>Additional Info — Voice Harness architecture</title>
+<link rel="stylesheet" href="site/executive-special.css"><link rel="icon" href="favicon.ico" sizes="any">
+<style>
+body.engineering-page{background:#f7f9fb}.engineering-page header{position:static;height:auto;min-height:86px;background:#fff}.engineering-page header>a:last-child{margin-left:auto;font-size:.9rem}.engineering-main{max-width:1480px;margin:auto;padding:4rem 5%}.engineering-main h1{font-size:clamp(2.3rem,5vw,4rem);margin:1rem 0}.engineering-main h2{font-size:1.8rem;letter-spacing:-.035em}.engineering-main .intro{max-width:820px;color:#52616d;line-height:1.7}.engineering-main .engineering-section{margin:3.5rem 0}.engineering-nav{display:flex;gap:1rem;flex-wrap:wrap;margin-top:1.5rem}.engineering-nav a{padding:.6rem 1rem;background:#fff;border:1px solid #cbd5df;border-radius:5px;text-underline-offset:3px;font-size:.85rem}.engineering-page .system-map{background:#fff;border-color:#cbd5df}.engineering-page .system-diagram{min-width:1140px;font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.engineering-page .map-boundary{fill:#f5f8fb;stroke:#8195a7;stroke-dasharray:7 5}.engineering-page .map-node rect{fill:white;stroke:#8195a7;rx:2}.engineering-page .map-title{font-size:16px;fill:#172c42}.engineering-page .map-note{font-size:12px;fill:#40566b}.engineering-page .map-label{font-size:12px;fill:#40566b;letter-spacing:1px}.engineering-page .map-edge-label{font-size:12px;stroke:#f5f8fb;fill:#315b73}.engineering-page .map-provider rect{fill:#172b2b}.engineering-page .map-provider .map-title,.engineering-page .map-provider .map-note{fill:#fff}.engineering-page .map-advisory rect{fill:#fbf5e8}.engineering-page .map-scroll-hint{display:block}.engineering-page .system-map figcaption{color:#40566b}.contract-table-wrap{overflow-x:auto}.contract-table{width:100%;border-collapse:collapse;background:white;font-size:.9rem;line-height:1.6}.contract-table th,.contract-table td{text-align:left;vertical-align:top;padding:1rem;border:1px solid #d5dee6}.contract-table th{background:#edf2f6}.contract-table th:first-child{width:22%}.engineering-main code{font-size:.85em}.engineering-note{border-left:3px solid #8195a7;padding:.4rem 1rem;color:#52616d;font-size:.88rem;line-height:1.65}.engineering-sources{display:flex;flex-wrap:wrap;gap:1rem;font-size:.9rem}.engineering-page footer{padding:2rem 5%}.deployment-diagram{min-width:1000px!important}.engineering-section:target{scroll-margin-top:1.5rem}@media(max-width:600px){.engineering-main{padding:2rem 5%}.engineering-page header{padding:1rem 5%;flex-wrap:wrap}.engineering-page header>a:last-child{margin-left:0}.contract-table{min-width:650px}}@media print{.engineering-page header,.engineering-nav,.map-scroll-hint{display:none!important}.engineering-main{max-width:none;padding:0}.engineering-page .system-diagram{min-width:0!important}.engineering-section{break-before:page}.engineering-page .system-map-scroll{overflow:visible}.engineering-page .system-map{break-inside:avoid}}
+</style>
+</head>
+<body class="tech-page engineering-page">
+<header><a class="brand" href="index.html"><img class="mark" src="site/voice-harness-mark.svg" alt="" width="48" height="48">Voice Harness</a><a href="how-it-works.html#system">← Back to how it works</a></header>
+<main class="engineering-main">
+<p class="kicker">ADDITIONAL INFO / ENGINEERING REFERENCE</p>
+<h1>Under the hood.</h1>
+<p class="intro">Implementation components, the contracts between them, and the boundaries that matter. Start with the logical runtime view; the deployment view below shows which pieces share a process or environment.</p>
+<nav class="engineering-nav" aria-label="Technical diagrams"><a href="#components">Component diagram</a><a href="#contracts">Boundary contracts</a><a href="#deployment">Deployment diagram</a><a href="#sources">Source references</a><a href="test-setup.html">Test setup &amp; prompts ↗</a></nav>
+<section class="engineering-section" id="components">
+<h2>01 / Runtime component diagram</h2>
+<p class="engineering-note">Module paths are relative to <code>src/voice_harness/</code>, except <code>apps/web/</code>. These are logical responsibilities: the approval buffer and playback gate are part of the same <code>PlaybackGate</code> implementation. This is not a microservice deployment map.</p>
+<figure class="system-map"><p class="map-scroll-hint">Scroll horizontally on smaller screens. The boundary contracts below provide a text reference.</p><div class="system-map-scroll" tabindex="0" role="region" aria-label="Runtime component diagram; horizontally scrollable">
+<svg class="system-diagram" viewBox="0 0 1200 1160" role="img" aria-labelledby="system-map-title system-map-desc" xmlns="http://www.w3.org/2000/svg">
+<title id="system-map-title">Voice Harness implementation components and contracts</title>
+<desc id="system-map-desc">An operator configures the orchestrator. The scenario runner sends synthetic caller audio through a provider adapter to the external voice service. The adapter returns canonical events to the orchestrator. Tool proposals pass through a guardrail and MCP gateway to a synthetic bank; tool results return through the adapter. Provider audio enters an approval buffer. Independent transcription and assessment inform policy, which controls the playback gate. Only approved audio reaches the client scheduler. Events and decisions from both paths enter a hash-chained evidence ledger for assessment, review and signed export. Optional AI judges are advisory.</desc>
+<defs>
+<marker id="map-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+<path d="M0 0 10 5 0 10Z" fill="#397763"/>
+</marker>
+<marker id="map-evidence-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+<path d="M0 0 10 5 0 10Z" fill="#7b6852"/>
+</marker>
+</defs>
+<rect class="map-boundary" x="20" y="175" width="1160" height="950" rx="12"/>
+<text class="map-label" x="45" y="202">LOGICAL COMPONENTS / NOT SEPARATE DEPLOYED SERVICES</text>
+<g class="map-node map-external">
+<rect x="420" y="20" width="300" height="90" rx="7"/>
+<text class="map-title" x="436" y="49">HTTP / WebSocket API</text>
+<text class="map-note" x="436" y="73">api.py · auth.py</text>
+<text class="map-note" x="436" y="92">Operator / reviewer access</text>
+</g>
+<g class="map-node map-provider">
+<rect x="820" y="20" width="330" height="90" rx="7"/>
+<text class="map-title" x="836" y="49">External voice provider</text>
+<text class="map-note" x="836" y="73">Provider-specific realtime transport</text>
+<text class="map-note" x="836" y="92">Audio, transcripts, tool proposals</text>
+</g>
+<path class="map-link " d="M570 110 V240" marker-end="url(#map-arrow)"/>
+<text class="map-edge-label" x="585" y="150">POST /api/v1/runs</text>
+<path class="map-link " d="M985 110 V240" marker-end="url(#map-arrow)" marker-start="url(#map-arrow)"/>
+<text class="map-edge-label" x="1000" y="150">provider transport</text>
+<g class="map-node ">
+<rect x="60" y="240" width="270" height="90" rx="7"/>
+<text class="map-title" x="76" y="269">LiveScenarioRunner</text>
+<text class="map-note" x="76" y="293">live_scenario.py · caller_voice.py</text>
+<text class="map-note" x="76" y="312">Synthesised caller / 20 ms chunks</text>
+</g>
+<g class="map-node ">
+<rect x="420" y="240" width="300" height="90" rx="7"/>
+<text class="map-title" x="436" y="269">Engine + AdapterTurnDriver</text>
+<text class="map-note" x="436" y="293">engine.py · live_assessment.py</text>
+<text class="map-note" x="436" y="312">Run state / tool and audio routing</text>
+</g>
+<g class="map-node ">
+<rect x="820" y="240" width="330" height="90" rx="7"/>
+<text class="map-title" x="836" y="269">LiveAdapter protocol</text>
+<text class="map-note" x="836" y="293">adapters/ · event_contracts.py</text>
+<text class="map-note" x="836" y="312">Canonical events + original payloads</text>
+</g>
+<path class="map-link " d="M420 285 H330" marker-end="url(#map-arrow)"/>
+<text class="map-edge-label" x="345" y="272">control</text>
+<path class="map-link " d="M820 285 H720" marker-end="url(#map-arrow)" marker-start="url(#map-arrow)"/>
+<text class="map-edge-label" x="730" y="267">events ↔</text>
+<text class="map-edge-label" x="733" y="309">results</text>
+<path class="map-link " d="M195 240 V220 H850 V240" marker-end="url(#map-arrow)"/>
+<text class="map-edge-label" x="330" y="215">caller audio</text>
+<path class="map-link " d="M450 330 V365 H40 V470 H60" marker-end="url(#map-arrow)"/>
+<text class="map-edge-label" x="65" y="392">tool proposals</text>
+<path class="map-link " d="M40 470 V670 H60" marker-end="url(#map-arrow)"/>
+<text class="map-edge-label" x="65" y="590">provider audio</text>
+<text class="map-label" x="60" y="426">01 / ACTION PATH</text>
+<g class="map-node ">
+<rect x="60" y="445" width="270" height="90" rx="7"/>
+<text class="map-title" x="76" y="474">Guardrail + approvals</text>
+<text class="map-note" x="76" y="498">guardrail.py · approvals.py</text>
+<text class="map-note" x="76" y="517">Identity / single-use confirmation</text>
+</g>
+<g class="map-node ">
+<rect x="420" y="445" width="300" height="90" rx="7"/>
+<text class="map-title" x="436" y="474">Gateway</text>
+<text class="map-note" x="436" y="498">mcp_gateway.py</text>
+<text class="map-note" x="436" y="517">Correlated stdio MCP requests</text>
+</g>
+<g class="map-node ">
+<rect x="820" y="445" width="330" height="90" rx="7"/>
+<text class="map-title" x="836" y="474">MCP server / bank</text>
+<text class="map-note" x="836" y="498">mcp_server.py · bank.py</text>
+<text class="map-note" x="836" y="517">Per-run synthetic state</text>
+</g>
+<path class="map-link " d="M330 490 H420" marker-end="url(#map-arrow)"/>
+<text class="map-edge-label" x="342" y="477">permitted</text>
+<path class="map-link " d="M720 490 H820" marker-end="url(#map-arrow)"/>
+<text class="map-edge-label" x="743" y="477">execute</text>
+<path class="map-link " d="M985 445 V360 H1030 V330" marker-end="url(#map-arrow)"/>
+<text class="map-edge-label" x="745" y="351">tool results → adapter → service</text>
+<text class="map-label" x="60" y="626">02 / AUDIO PATH</text>
+<g class="map-node ">
+<rect x="60" y="645" width="270" height="90" rx="7"/>
+<text class="map-title" x="76" y="674">PlaybackGate.hold()</text>
+<text class="map-note" x="76" y="698">playback.py · ApprovalUnit</text>
+<text class="map-note" x="76" y="717">PCM / hash / range / epochs</text>
+</g>
+<g class="map-node ">
+<rect x="650" y="645" width="230" height="90" rx="7"/>
+<text class="map-title" x="666" y="674">PlaybackGate</text>
+<text class="map-note" x="666" y="698">playback.py · release()</text>
+<text class="map-note" x="666" y="717">Session / hash / epochs</text>
+</g>
+<g class="map-node ">
+<rect x="940" y="645" width="210" height="90" rx="7"/>
+<text class="map-title" x="956" y="674">Web audio client</text>
+<text class="map-note" x="956" y="698">apps/web/</text>
+<text class="map-note" x="956" y="717">PCM / AudioWorklet</text>
+</g>
+<path class="map-link " d="M330 690 H650" marker-end="url(#map-arrow)"/>
+<text class="map-edge-label" x="430" y="676">pending audio</text>
+<path class="map-link " d="M880 690 H940" marker-end="url(#map-arrow)"/>
+<text class="map-edge-label" x="893" y="676">PCM</text>
+<g class="map-node ">
+<rect x="60" y="805" width="270" height="90" rx="7"/>
+<text class="map-title" x="76" y="834">Independent transcription</text>
+<text class="map-note" x="76" y="858">asr.py</text>
+<text class="map-note" x="76" y="877">Provider-independent spoken text</text>
+</g>
+<g class="map-node ">
+<rect x="380" y="805" width="230" height="90" rx="7"/>
+<text class="map-title" x="396" y="834">Live assessment</text>
+<text class="map-note" x="396" y="858">live_assessment.py</text>
+<text class="map-note" x="396" y="877">Facts vs. tools / references</text>
+</g>
+<g class="map-node ">
+<rect x="650" y="805" width="230" height="90" rx="7"/>
+<text class="map-title" x="666" y="834">Policy decision</text>
+<text class="map-note" x="666" y="858">policy.py</text>
+<text class="map-note" x="666" y="877">Release / block disposition</text>
+</g>
+<g class="map-node map-advisory">
+<rect x="940" y="805" width="210" height="90" rx="7"/>
+<text class="map-title" x="956" y="834">AI judge backends</text>
+<text class="map-note" x="956" y="858">judges/</text>
+<text class="map-note" x="956" y="877">Opt-in / advisory only</text>
+</g>
+<path class="map-link " d="M195 735 V805" marker-end="url(#map-arrow)"/>
+<text class="map-edge-label" x="210" y="778">audio copy</text>
+<path class="map-link " d="M330 850 H380" marker-end="url(#map-arrow)"/>
+<path class="map-link " d="M610 850 H650" marker-end="url(#map-arrow)"/>
+<path class="map-link " d="M765 805 V735" marker-end="url(#map-arrow)"/>
+<text class="map-edge-label" x="780" y="794">release decision</text>
+<path class="map-link map-advisory-link" d="M1045 805 V770 H495 V805" marker-end="url(#map-arrow)"/>
+<text class="map-edge-label" x="510" y="758">advisory findings</text>
+<path class="map-link map-evidence" d="M1165 490 V955 H555 V1010" marker-end="url(#map-evidence-arrow)"/>
+<path class="map-link map-evidence" d="M1150 490 H1165" marker-end="url(#map-evidence-arrow)"/>
+<path class="map-link map-evidence" d="M1150 690 H1165" marker-end="url(#map-evidence-arrow)"/>
+<path class="map-link map-evidence" d="M495 895 V955 H555" marker-end="url(#map-evidence-arrow)"/>
+<text class="map-label" x="60" y="942">03 / EVIDENCE ACROSS THE RUN</text>
+<text class="map-note" x="60" y="975">Events and decisions are recorded</text>
+<text class="map-note" x="60" y="995">throughout the run.</text>
+<g class="map-node ">
+<rect x="60" y="1010" width="270" height="90" rx="7"/>
+<text class="map-title" x="76" y="1039">Assessment / review</text>
+<text class="map-note" x="76" y="1063">judges/ · apps/web/</text>
+<text class="map-note" x="76" y="1082">Model vs. platform outcomes</text>
+</g>
+<g class="map-node ">
+<rect x="420" y="1010" width="300" height="90" rx="7"/>
+<text class="map-title" x="436" y="1039">Evidence persistence</text>
+<text class="map-note" x="436" y="1063">evidence.py · storage.py</text>
+<text class="map-note" x="436" y="1082">Hash chain / relational backend</text>
+</g>
+<g class="map-node ">
+<rect x="820" y="1010" width="330" height="90" rx="7"/>
+<text class="map-title" x="836" y="1039">Export / offline verifier</text>
+<text class="map-note" x="836" y="1063">exports.py · signing.py</text>
+<text class="map-note" x="836" y="1082">Canonical manifest / Ed25519</text>
+</g>
+<path class="map-link " d="M420 1055 H330" marker-end="url(#map-arrow)"/>
+<path class="map-link " d="M720 1055 H820" marker-end="url(#map-arrow)"/>
+<text class="map-edge-label" x="745" y="1042">export</text>
+</svg>
+</div><figcaption><span><i class="map-key"></i> Runtime / control exchange</span><span><i class="map-key map-key-dashed"></i> Labelled advisory / evidence flow</span><span>External provider above the dashed harness boundary.</span></figcaption></figure>
+</section>
+<section class="engineering-section" id="contracts"><h2>02 / Boundary contracts</h2>
+<div class="contract-table-wrap" tabindex="0" role="region" aria-label="Boundary contracts; horizontally scrollable"><table class="contract-table"><thead><tr><th scope="col">Boundary</th><th scope="col">Payload / contract</th><th scope="col">Invariant</th></tr></thead><tbody>
+<tr><th scope="row">API → run lifecycle</th><td><code>POST /api/v1/runs</code>; scenario and provider binding; queued → probing → running → evaluating → completed.</td><td>Cancellation and failure are distinct outcomes. Cancellation emits no completed event, assessment or assurance.</td></tr>
+<tr><th scope="row">Provider → adapter → driver</th><td><code>LiveAdapter</code> events: audio, transcripts, tool calls, turn boundaries, interruption, usage and errors.</td><td>Closed event contracts reject unknown fields; original provider payloads remain available. Unsupported capabilities are declared.</td></tr>
+<tr><th scope="row">Guardrail → MCP gateway</th><td>Tool proposal, identity state and confirmation / approval state; correlated requests and results.</td><td>Protected calls must pass checks before execution. Confirmations and approval tokens are single-use and consumed transactionally; bank state is isolated per run.</td></tr>
+<tr><th scope="row">Held audio → release</th><td><code>ApprovalUnit</code> binds PCM hash, sample range and epochs. <code>ReleaseToken</code> binds unit, hash, client session, epochs and expiry.</td><td>Pending audio cannot bypass the gate. Stale or mismatched approvals cannot authorise a release. Each release is recorded.</td></tr>
+<tr><th scope="row">ASR / assessment → policy</th><td>Independent transcription compared with tool results and reference facts; optional AI judge findings.</td><td>AI signals are advisory under the current policy. A blocked misstatement remains a model failure; missing evidence can be <code>untestable</code>.</td></tr>
+<tr><th scope="row">Runtime → ledger → export</th><td>Append-only event hash chain; RFC 8785 canonical manifest; Ed25519 signature and artifact hashes.</td><td>Evidence-write failure blocks calls and releases. Offline verification requires a trusted key ring obtained out of band; purges are recorded as tombstones.</td></tr>
+</tbody></table></div></section>
+<section class="engineering-section" id="deployment"><h2>03 / Local deployment boundaries</h2>
+<p class="engineering-note">Compose fixtures and host live runs use separate service instances and data directories. The default macOS caller uses <code>say</code> / <code>afconvert</code>; <code>openai_tts</code> is an opt-in alternative. This view describes local development, not a production deployment.</p>
+<figure class="system-map"><div class="system-map-scroll" tabindex="0" role="region" aria-label="Local deployment diagram; horizontally scrollable">
+<svg class="system-diagram deployment-diagram" viewBox="0 0 1200 850" role="img" aria-labelledby="deploy-title deploy-desc" xmlns="http://www.w3.org/2000/svg">
+<title id="deploy-title">Separate Compose fixture and host live-run environments</title><desc id="deploy-desc">A browser connects to the Compose API on localhost port 8765 or the host API on port 8766. Compose contains the API, synthetic MCP bank, PostgreSQL and an OTLP collector. The host live API has a separate data directory and connects to external voice providers and independent ASR or optional judge services. PostgreSQL and collector ports remain internal to Compose. The host API can optionally export traces, metrics and logs to a reachable OTLP collector when OTEL_EXPORTER_OTLP_ENDPOINT is set; make serve-live does not configure one by default.</desc>
+<rect class="map-boundary" x="35" y="180" width="540" height="475" rx="4"/><rect class="map-boundary" x="625" y="180" width="540" height="475" rx="4"/>
+<text class="map-label" x="55" y="210">DOCKER COMPOSE / FIXTURE RUNS</text><text class="map-label" x="645" y="210">HOST PROCESS / LIVE RUNS</text>
+<g class="map-node"><rect x="400" y="20" width="400" height="80"/><text class="map-title" x="420" y="50">Browser / operator</text><text class="map-note" x="420" y="75">Authenticated HTTP + WebSocket</text></g>
+<path class="map-link" d="M480 100 V140 H305 V245" marker-end="url(#map-arrow)"/><path class="map-link" d="M720 100 V140 H895 V245" marker-end="url(#map-arrow)"/>
+<text class="map-edge-label" x="85" y="133">127.0.0.1:8765</text><text class="map-edge-label" x="930" y="133">127.0.0.1:8766</text>
+<g class="map-node"><rect x="65" y="245" width="480" height="95"/><text class="map-title" x="85" y="275">FastAPI + engine + mock provider</text><text class="map-note" x="85" y="300">Controls / assessment / evidence in API process</text><text class="map-note" x="85" y="321">Synthetic bank via stdio MCP subprocess</text></g>
+<g class="map-node"><rect x="655" y="245" width="480" height="95"/><text class="map-title" x="675" y="275">Host API + live runner + adapters</text><text class="map-note" x="675" y="300">make serve-live / caller / telemetry.py</text><text class="map-note" x="675" y="321">Controls + synthetic bank via stdio MCP</text></g>
+<path class="map-link" d="M190 340 V410" marker-end="url(#map-arrow)"/><path class="map-link map-advisory-link" d="M425 340 V410" marker-end="url(#map-arrow)"/>
+<text class="map-edge-label" x="75" y="380">persist</text><text class="map-edge-label" x="435" y="380">telemetry</text>
+<g class="map-node"><rect x="65" y="410" width="235" height="95"/><text class="map-title" x="80" y="440">PostgreSQL + volume</text><text class="map-note" x="80" y="465">Run state / ledger</text><text class="map-note" x="80" y="486">Evidence artifact volume</text></g>
+<g class="map-node"><rect x="330" y="410" width="215" height="95"/><text class="map-title" x="345" y="440">OTLP collector</text><text class="map-note" x="345" y="465">Traces / metrics / logs</text><text class="map-note" x="345" y="486">Not the evidence ledger</text></g>
+<text class="map-note" x="65" y="570">Database and collector ports stay internal.</text><text class="map-note" x="65" y="593">Mock fixtures exercise enforcement mechanics;</text><text class="map-note" x="65" y="616">silent fixture PCM does not measure ASR accuracy.</text>
+<path class="map-link" d="M765 340 V410" marker-end="url(#map-arrow)"/><path class="map-link" d="M1025 340 V365 H1147 V700 H1025 V730" marker-end="url(#map-arrow)"/>
+<text class="map-edge-label" x="675" y="380">persist</text><text class="map-edge-label" x="1038" y="720">network</text>
+<g class="map-node"><rect x="655" y="410" width="225" height="95"/><text class="map-title" x="670" y="440">Host data directory</text><text class="map-note" x="670" y="465">.local/host-data</text><text class="map-note" x="670" y="486">Separate local state</text></g>
+<g class="map-node map-provider"><rect x="910" y="730" width="225" height="95"/><text class="map-title" x="925" y="760">External services</text><text class="map-note" x="925" y="785">Voice provider / ASR</text><text class="map-note" x="925" y="806">Opt-in judge backends</text></g>
+<path class="map-link map-advisory-link" d="M680 340 V365 H640 V700 H765 V730" marker-end="url(#map-arrow)"/>
+<text class="map-edge-label" x="655" y="687">optional OTLP export</text>
+<g class="map-node"><rect x="655" y="730" width="225" height="95"/><text class="map-title" x="670" y="760">Optional collector</text><text class="map-note" x="670" y="785">Reachable OTLP endpoint</text><text class="map-note" x="670" y="806">Traces / metrics / logs</text></g>
+<text class="map-note" x="655" y="570">External services are outside the host process.</text><text class="map-note" x="655" y="593">Live runs are opt-in and require credentials.</text><text class="map-note" x="655" y="616">Host data is separate from Compose volumes.</text>
+</svg></div><figcaption>Solid arrows: service calls / persistence. Dashed arrows: observability; the host collector connection is optional. Telemetry export failures do not invalidate ledger persistence.</figcaption></figure>
+<p class="engineering-note"><strong>Live-run telemetry:</strong> both API instances initialise <code>telemetry.py</code>. Exporters are enabled only when <code>OTEL_EXPORTER_OTLP_ENDPOINT</code> is set. Compose sets it to <code>http://otel-collector:4318</code>; <code>make serve-live</code> can inherit it from the environment or <code>.env</code>, but sets no default and starts no collector. The Compose collector is not exposed to the host. Live export therefore needs a separately reachable collector or an explicitly configured connection to the existing one. The diagram shows this capability, not a verified running connection.</p>
+</section>
+<section class="engineering-section" id="sources"><h2>04 / Trace it to source</h2><p class="intro">These diagrams explain the current implementation at component level. Source documents and phase status notes remain authoritative for capability support and limitations.</p>
+<div class="engineering-sources"><a href="https://github.com/Ready2k/Voice_harness/blob/main/docs/ARCHITECTURE.md">Architecture ↗</a><a href="https://github.com/Ready2k/Voice_harness/blob/main/docs/ENGINEERING.md">Engineering guide ↗</a><a href="https://github.com/Ready2k/Voice_harness/tree/main/src/voice_harness">Core source ↗</a><a href="https://github.com/Ready2k/Voice_harness/tree/main/contracts">Generated contracts ↗</a></div></section>
+</main><footer><a href="how-it-works.html#system">← How it works</a><span>Voice Harness / Technical architecture</span></footer>
+</body></html>
