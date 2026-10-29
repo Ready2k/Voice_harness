@@ -12,7 +12,7 @@ from .engine import digest, identifier
 from .exports import embedded_schemas, schema_digests, versions
 from .relational import upsert_hold
 from .reply_retention import summary as reply_summary
-from .retention import is_tombstone, purge_metadata, tombstone_records, tombstone_valid
+from .retention import TERMINAL_STATES, is_tombstone, purge_metadata, tombstone_records, tombstone_valid
 
 
 def is_mock(config):
@@ -95,6 +95,7 @@ def known_limitations(config, events):
 
 class Evidence:
     GRACE_SECONDS = 7 * 86400
+    AUDIO_SECONDS = 7 * 86400  # default synthetic-audio retention (spec section 10)
 
     def __init__(self, database, root, clock=time.time, coverage=None, signer=None):
         self.database, self.root, self.clock = database, Path(root), clock
@@ -465,6 +466,17 @@ class Evidence:
                         return True
                 return False
 
+            if tx.state["state"] in TERMINAL_STATES:
+                # The held PCM inside each approval unit is a second copy of the audio: it expires with the
+                # artifacts (seven days), under the same hold protection, and never while the run can still release it.
+                for unit in tx.state["units"].values():
+                    if (
+                        unit.get("pcm")
+                        and unit["created_at"] + self.AUDIO_SECONDS <= now
+                        and not protected(unit["audio_sha256"])
+                    ):
+                        del unit["pcm"]
+                        unit["pcm_purged_at"] = now
             for sha, artifact in tx.state["artifacts"].items():
                 if (
                     artifact["available"]

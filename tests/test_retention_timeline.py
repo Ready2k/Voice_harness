@@ -198,17 +198,125 @@ class Timeline(unittest.TestCase):
                     out[name] = " ".join(json.dumps(dict(r), default=str) for r in rows)
             return out
 
-    @unittest.expectedFailure
-    def test_KNOWN_GAP_tombstoning_removes_content_from_projection_tables(self):
-        """RT-02 tombstones ledger payloads only. Transcript text, tool-result messages and judge rationales stay
-        readable in harness_transcript_segments, harness_tool_calls, harness_judge_findings and the run state after
-        30 days. Remove @expectedFailure when the projections are purged (or the spec exempts them)."""
+    def test_tombstoning_removes_content_from_projection_tables_and_run_state(self):
+        """Transcript text, tool-result messages and judge rationales are purged everywhere with the ledger payloads."""
         originals = prose(self.database.events(self.run))
         self.age_to(31)
         self.assertTrue(self.sweep())
         leaks = {table: [s for s in originals if s in text] for table, text in self.tables_text().items()}
         leaks = {table: found for table, found in leaks.items() if found and table != "harness_events"}
         self.assertEqual(leaks, {}, "purged content is still readable outside the ledger")
+
+    def test_scrubbed_rows_keep_their_hashes_outcomes_and_citations(self):
+        before = self.database.get(self.run)
+        call_id, call = next(iter(before["calls"].items()))
+        with self.database.connection() as db:
+            hashes = {r["revision_id"]: r["text_hash"] for r in db.execute("SELECT revision_id, text_hash FROM harness_transcript_segments WHERE run_id=?", (self.run,)).fetchall()}
+            verdicts = {r["finding_id"]: r["verdict"] for r in db.execute("SELECT finding_id, verdict FROM harness_judge_findings WHERE run_id=?", (self.run,)).fetchall()}
+        self.assertTrue(hashes and verdicts)
+        self.age_to(31)
+        self.sweep()
+        after = self.database.get(self.run)["calls"][call_id]["result"]
+        self.assertEqual((after["status"], after["error_code"], after["evidence_event_ids"]), (call["result"]["status"], call["result"]["error_code"], call["result"]["evidence_event_ids"]))
+        self.assertNotIn("error", after)
+        self.assertEqual(after["tombstone"]["reason"], "retention_expired")
+        with self.database.connection() as db:
+            self.assertEqual(hashes, {r["revision_id"]: r["text_hash"] for r in db.execute("SELECT revision_id, text_hash FROM harness_transcript_segments WHERE run_id=?", (self.run,)).fetchall()})
+            self.assertEqual(verdicts, {r["finding_id"]: r["verdict"] for r in db.execute("SELECT finding_id, verdict FROM harness_judge_findings WHERE run_id=?", (self.run,)).fetchall()})
+            self.assertEqual({r["text_value"] for r in db.execute("SELECT text_value FROM harness_transcript_segments WHERE run_id=?", (self.run,)).fetchall()}, {""})
+        self.assert_verifies()
+
+    def test_runs_tombstoned_before_the_scrub_existed_are_backfilled(self):
+        self.age_to(31)
+        self.sweep()
+        with self.database.transaction(self.run) as tx:  # put back what the old sweep left behind
+            tx.db.execute("UPDATE harness_transcript_segments SET text_value='legacy transcript text' WHERE run_id=?", (self.run,))
+            tx.db.execute("UPDATE harness_judge_findings SET rationale='legacy judge rationale' WHERE run_id=?", (self.run,))
+        text = " ".join(self.tables_text().values())
+        self.assertIn("legacy transcript text", text)
+        self.assertEqual(self.sweep(), [], "nothing new is eligible, yet the next sweep must still scrub")
+        text = " ".join(self.tables_text().values())
+        self.assertNotIn("legacy transcript text", text)
+        self.assertNotIn("legacy judge rationale", text)
+
+    def test_a_run_wide_hold_keeps_projection_content_until_the_hold_and_grace_end(self):
+        self.age_to(5)
+        self.evidence.hold(self.run, "dispute", "owner", self.evidence.clock() + 60 * DAY, "k")  # expires day 65
+        originals = prose(self.database.events(self.run))
+        for day in (31, 66):
+            self.age_to(day)
+            self.assertEqual(self.sweep(), [])
+            text = " ".join(self.tables_text().values())
+            self.assertTrue([s for s in originals if s in text], f"content scrubbed under a live hold (day {day})")
+        self.age_to(73)
+        self.assertTrue(self.sweep())
+        self.assertEqual({t: [s for s in originals if s in x] for t, x in self.tables_text().items() if t != "harness_events" and [s for s in originals if s in x]}, {})
+
+    def test_a_finding_hold_keeps_its_judge_run_rationale_and_scrubs_the_rest(self):
+        events = self.database.events(self.run)
+        judged = next(e for e in events if e["type"] == "judge.completed")
+        finding = judged["event_id"] + ":" + judged["content"]["findings"][0]["criterion_id"]
+        self.evidence.hold(self.run, "dispute", "owner", self.evidence.clock() + 90 * DAY, "k", finding_ids=[finding])
+        self.age_to(31)
+        self.assertTrue(self.sweep())
+        with self.database.connection() as db:
+            rationales = [r["rationale"] for r in db.execute("SELECT rationale FROM harness_judge_findings WHERE run_id=? AND judge_run_id=?", (self.run, judged["event_id"])).fetchall()]
+        self.assertTrue(rationales and all(rationales), "a held finding must stay readable")
+        self.assert_verifies()
+
+    def new_unfinished_run(self, pcm):
+        run = self.engine.create(RunConfig().model_dump())
+        self.engine.hold_audio(run, pcm, transcript="held words that must not outlive the audio")
+        return run
+
+    def run_state_text(self, run):
+        with self.database.connection() as db:
+            return json.dumps(self.database.decoded(db.execute("SELECT payload FROM harness_runs WHERE run_id=?", (run,)).fetchone()["payload"]))
+
+    def test_audio_copy_in_run_state_expires_with_the_seven_day_audio(self):
+        import base64
+
+        pcm = bytes(range(1, 251)) * 4
+        run = self.new_unfinished_run(pcm)
+        encoded = base64.b64encode(pcm).decode()
+        with self.database.transaction(run) as tx:
+            tx.state["state"] = "completed"
+        for day in (0, 6):
+            self.age_to(day)
+            self.evidence.purge(run)
+            self.assertIn(encoded, self.run_state_text(run), f"audio dropped early (day {day})")
+        self.age_to(8)
+        self.evidence.purge(run)
+        state = self.run_state_text(run)
+        self.assertNotIn(encoded, state)
+        self.assertIn("pcm_purged_at", state)
+        self.assertTrue(verify_bundle(self.evidence.bundle(run)))
+
+    def test_audio_copy_is_kept_while_the_run_can_still_release_it(self):
+        import base64
+
+        pcm = bytes(range(1, 251)) * 4
+        run = self.new_unfinished_run(pcm)
+        self.age_to(40)
+        self.evidence.purge(run)
+        self.assertIn(base64.b64encode(pcm).decode(), self.run_state_text(run))
+
+    def test_a_hold_keeps_the_audio_copy_through_its_grace(self):
+        import base64
+
+        pcm = bytes(range(1, 251)) * 4
+        run = self.new_unfinished_run(pcm)
+        with self.database.transaction(run) as tx:
+            tx.state["state"] = "completed"
+        self.evidence.hold(run, "dispute", "owner", self.evidence.clock() + 20 * DAY, "k")  # expires day 20, grace to 27
+        encoded = base64.b64encode(pcm).decode()
+        for day in (8, 26):
+            self.age_to(day)
+            self.evidence.purge(run)
+            self.assertIn(encoded, self.run_state_text(run), f"held audio dropped (day {day})")
+        self.age_to(28)
+        self.evidence.purge(run)
+        self.assertNotIn(encoded, self.run_state_text(run))
 
     def test_ledger_table_itself_holds_no_purged_content(self):
         originals = prose(self.database.events(self.run))

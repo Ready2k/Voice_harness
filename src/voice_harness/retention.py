@@ -91,6 +91,51 @@ def _protection(state, events, now, grace):
     return everything, ids
 
 
+def _result_stub(result, now):
+    """A tool result without its body: outcome, error code and citations stay, content does not."""
+    return {
+        "call_id": result["call_id"],
+        "status": result["status"],
+        "structured_content": None,
+        "error_code": result.get("error_code"),
+        "evidence_event_ids": result["evidence_event_ids"],
+        "tombstone": {"reason": TOMBSTONE_REASON, "tombstoned_at": now, "content_sha256": digest(result)},
+    }
+
+
+def scrub_projections(tx, database, run_id, tombstoned, now):
+    """Remove human-readable content that duplicates tombstoned ledger payloads outside the ledger.
+
+    ``tombstoned`` is the set of event ids whose payload is tombstoned (now or earlier); rows tied to
+    events a hold still protects are therefore left alone. Hashes, ids, verdicts and outcomes stay.
+    Idempotent, so it also backfills runs tombstoned before this existed. Returns rows/fields scrubbed."""
+    scrubbed = 0
+    for call in tx.state["calls"].values():  # the tool_calls rows are rewritten from this state on commit
+        result = call.get("result")
+        ids = result.get("evidence_event_ids") if isinstance(result, dict) else None
+        if ids and "tombstone" not in result and set(ids) <= tombstoned:
+            call["result"] = _result_stub(result, now)
+            scrubbed += 1
+    for unit in tx.state["units"].values():
+        if unit.get("transcript") and unit.get("output_event_id") in tombstoned:
+            unit["transcript"] = ""
+            unit["transcript_tombstoned_at"] = now
+            scrubbed += 1
+    for row in tx.db.execute(
+        "SELECT revision_id, event_id FROM harness_transcript_segments WHERE run_id=? AND text_value<>''", (run_id,)
+    ).fetchall():
+        if row["event_id"] in tombstoned:
+            tx.db.execute("UPDATE harness_transcript_segments SET text_value='' WHERE revision_id=?", (row["revision_id"],))
+            scrubbed += 1
+    for row in tx.db.execute(
+        "SELECT finding_id, judge_run_id FROM harness_judge_findings WHERE run_id=? AND rationale<>''", (run_id,)
+    ).fetchall():
+        if row["judge_run_id"] in tombstoned:
+            tx.db.execute("UPDATE harness_judge_findings SET rationale='' WHERE finding_id=?", (row["finding_id"],))
+            scrubbed += 1
+    return scrubbed
+
+
 def purge_metadata(evidence, run_id, *, ttl=METADATA_TTL_SECONDS):
     """Tombstone expired, unheld event payloads of a terminal run; returns sequences."""
     now = evidence.clock()
@@ -111,7 +156,9 @@ def purge_metadata(evidence, run_id, *, ttl=METADATA_TTL_SECONDS):
             for e in live
             if e["event_id"] not in protected and _epoch(e["occurred_at"]) + ttl <= now
         ]
+        already = {e["event_id"] for e in events if is_tombstone(e)}
         if not eligible:
+            scrub_projections(tx, evidence.database, run_id, already, now)
             return []
         if evidence.database.postgres:
             # Only this transaction may pass the append-only trigger, and only for
@@ -126,6 +173,7 @@ def purge_metadata(evidence, run_id, *, ttl=METADATA_TTL_SECONDS):
                     event["sequence"],
                 ),
             )
+        scrub_projections(tx, evidence.database, run_id, already | {e["event_id"] for e in eligible}, now)
         sequences = [e["sequence"] for e in eligible]
         tx.event(
             "orchestrator",
