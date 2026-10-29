@@ -1,7 +1,7 @@
 # Secret file mode: 600 locally; CI runners need 644 so the non-root test container (different uid) can read it.
 SECRET_MODE ?= 600
 
-.PHONY: serve-live token-host token nova-live-container lint audit build test test-db golden recovery infra stop up init benchmark perf-gate demo
+.PHONY: serve-live token-host token nova-live-container lint audit build test test-db golden recovery infra stop up init benchmark load-test perf-gate demo
 
 init:
 	@mkdir -p .local
@@ -66,6 +66,11 @@ recovery:
 
 benchmark: init
 	docker compose run --build --rm benchmark
+
+# Stepped-concurrency load test of the harness (mock provider, no spend); writes /data/phase5-load.json and .local/load-run.json.
+load-test: init
+	docker compose run --build --rm load-test
+	docker compose run --rm --no-deps --entrypoint cat load-test /data/phase5-load.json > .local/load-run.json
 
 # Regression gate: rerun the reference benchmark and compare with artifacts/perf-baseline.json (see docs/PHASE5_STATUS.md).
 perf-gate: benchmark

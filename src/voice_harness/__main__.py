@@ -18,6 +18,10 @@ def main() -> None:
     bench = sub.add_parser("benchmark")
     bench.add_argument("--output", default="/data/phase1-baseline.json")
     bench.add_argument("--observations", type=int, default=1000)
+    load = sub.add_parser("load-test")
+    load.add_argument("--output", default="/data/phase5-load.json")
+    load.add_argument("--observations", type=int, default=1000)
+    load.add_argument("--steps", type=int, nargs="+", default=[1, 6, 12, 24])
     verify = sub.add_parser("verify-bundle")
     verify.add_argument("path")
     verify.add_argument("--public-key", action="append", default=[], help="trusted PEM/base64 key or key-ring JSON (repeatable)")
@@ -48,6 +52,13 @@ def main() -> None:
             args.output, args.observations, os.environ.get("HARNESS_DATABASE_URL")
         )
         print(json.dumps({"output": args.output, "profiles": len(result["profiles"])}))
+    elif args.command == "load-test":
+        import os
+
+        from .load_test import load_test
+
+        result = load_test(args.output, tuple(args.steps), args.observations, os.environ.get("HARNESS_DATABASE_URL"))
+        print(json.dumps({"output": args.output, "steps": len(result["steps"]), "knee_sessions": result["knee_sessions"]}))
     elif args.command == "verify-bundle":
         from pathlib import Path
 

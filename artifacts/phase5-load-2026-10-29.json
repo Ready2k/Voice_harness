@@ -1,0 +1,149 @@
+{
+  "schema_version": "0.3",
+  "load_test_version": "phase5-harness-v1",
+  "status": "measured_load_test",
+  "environment": {
+    "platform": "Linux-7.2.12-orbstack-00394-gbecdd6130068-aarch64-with-glibc2.36",
+    "python": "3.13.16",
+    "cpu_count": 12,
+    "rss_unit": "KiB",
+    "cgroup_cpu_max": "800000 100000",
+    "cgroup_memory_max": "1073741824",
+    "storage": "postgresql"
+  },
+  "config": {
+    "steps": [
+      1,
+      6,
+      12,
+      24
+    ],
+    "observations_per_step": 1000,
+    "pace_ms": 20,
+    "warmup_per_session": 10
+  },
+  "steps": [
+    {
+      "sessions": 1,
+      "observations": 1000,
+      "turn_latency": {
+        "count": 1000,
+        "min_ms": 1.799706,
+        "max_ms": 18.494887,
+        "p50_ms": 5.94474,
+        "p95_ms": 8.503236,
+        "p99_ms": 10.145484,
+        "p99_status": "descriptive"
+      },
+      "pacing_lag": {
+        "count": 1000,
+        "min_ms": 0.074000933636853,
+        "max_ms": 5.207160607824335,
+        "p50_ms": 2.0612169910236844,
+        "p95_ms": 3.260608924392727,
+        "p99_ms": 3.706269622853142,
+        "p99_status": "descriptive"
+      },
+      "elapsed_seconds": 20.203657765999196,
+      "cpu_seconds": 2.3814617460000003,
+      "cpu_cores_used": 0.1178728017264166,
+      "throughput_turns_s": 49.49598788408024,
+      "offered_turns_s": 50.0,
+      "max_rss_after_step": 68852
+    },
+    {
+      "sessions": 6,
+      "observations": 1002,
+      "turn_latency": {
+        "count": 1002,
+        "min_ms": 2.316413,
+        "max_ms": 17.298638,
+        "p50_ms": 8.098654,
+        "p95_ms": 11.563857,
+        "p99_ms": 13.573686,
+        "p99_status": "descriptive"
+      },
+      "pacing_lag": {
+        "count": 1002,
+        "min_ms": 0.06579995442734798,
+        "max_ms": 5.869583931598754,
+        "p50_ms": 1.5427979860760388,
+        "p95_ms": 3.005110968842928,
+        "p99_ms": 3.8042779924580827,
+        "p99_status": "descriptive"
+      },
+      "elapsed_seconds": 3.5430237040000065,
+      "cpu_seconds": 1.3099403690000004,
+      "cpu_cores_used": 0.3697238512745773,
+      "throughput_turns_s": 282.8092848683911,
+      "offered_turns_s": 300.0,
+      "max_rss_after_step": 69396
+    },
+    {
+      "sessions": 12,
+      "observations": 1008,
+      "turn_latency": {
+        "count": 1008,
+        "min_ms": 1.51254,
+        "max_ms": 21.635424,
+        "p50_ms": 4.957284,
+        "p95_ms": 8.882069,
+        "p99_ms": 12.238981,
+        "p99_status": "descriptive"
+      },
+      "pacing_lag": {
+        "count": 1008,
+        "min_ms": 0.007442993592121638,
+        "max_ms": 3.8195079878278193,
+        "p50_ms": 1.0910129776675603,
+        "p95_ms": 2.8461289612096152,
+        "p99_ms": 3.397178960767633,
+        "p99_status": "descriptive"
+      },
+      "elapsed_seconds": 1.8908307049996438,
+      "cpu_seconds": 0.6431236309999999,
+      "cpu_cores_used": 0.34012755837922626,
+      "throughput_turns_s": 533.0990222100238,
+      "offered_turns_s": 600.0,
+      "max_rss_after_step": 70484
+    },
+    {
+      "sessions": 24,
+      "observations": 1200,
+      "turn_latency": {
+        "count": 1200,
+        "min_ms": 1.295206,
+        "max_ms": 42.327223,
+        "p50_ms": 7.216613,
+        "p95_ms": 20.475217,
+        "p99_ms": 35.725775,
+        "p99_status": "descriptive"
+      },
+      "pacing_lag": {
+        "count": 1200,
+        "min_ms": 0.013552986274589784,
+        "max_ms": 59.56934099594946,
+        "p50_ms": 0.9975719904105063,
+        "p95_ms": 17.015382992212835,
+        "p99_ms": 39.93289199479477,
+        "p99_status": "descriptive"
+      },
+      "elapsed_seconds": 1.2220870739993188,
+      "cpu_seconds": 0.8183152490000003,
+      "cpu_cores_used": 0.6696047003607015,
+      "throughput_turns_s": 981.9267591735193,
+      "offered_turns_s": 1200.0,
+      "max_rss_after_step": 72484
+    }
+  ],
+  "knee_sessions": 24,
+  "knee_rule": "first step with turn p95 > 2.0x the single-session p95",
+  "source_hash": "03106fb3d080da03d50e6a410f671ee999e785ef2d5496c84807afed65d7f0f0",
+  "limitations": [
+    "Measures the harness turn path (encode, policy, durable write, playback gate) with mocked speech; no provider, ASR or network",
+    "Sessions are threads in one process, like the API; this is not a multi-process or multi-host scale test",
+    "Results depend on the container CPU/memory limits and are not comparable across machines",
+    "Synchronous ledger: there is no queue to measure, so backpressure appears as durable-write time inside turn latency",
+    "Evidence-write failure behaviour is covered by the chaos tests (PHASE5_STATUS item 4), not here"
+  ]
+}

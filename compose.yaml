@@ -58,6 +58,24 @@ services:
       postgres:
         condition: service_healthy
 
+  load-test:
+    <<: *sandbox
+    cpus: ${BENCHMARK_CPUS:-8}  # reference profile is 8; CI runners have 4
+    mem_limit: 1g
+    profiles: [load-test]
+    build:
+      context: .
+      target: runtime
+    command: [load-test]
+    environment:
+      HARNESS_DATABASE_URL: postgresql://harness@postgres/voice_harness
+      HARNESS_DB_PASSWORD_FILE: /run/secrets/postgres_password
+    secrets: [postgres_password]
+    volumes: ["evidence:/data"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+
   tests:
     <<: *sandbox
     profiles: [test]

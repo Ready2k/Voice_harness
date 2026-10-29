@@ -22,13 +22,24 @@ Order is a suggestion; the first item unblocks trusting the rest.
 |---|------|------|--------|-----------|
 | 1 | Re-run `make test` on Compose/PostgreSQL for the current commit | Phase 1 gate | done 2026-10-29 | CI run 40845575584 (commit of the voice_naturalness image fix): `make lint`, `make audit` and `make test` on Compose/PostgreSQL all passed. Test counts not recorded |
 | 2 | Performance regression gate | regression gates | done 2026-10-29 | Implemented (`make perf-gate`, `voice_harness.perf_gate`, `artifacts/perf-baseline.json`, CI step); the first CI run (40852009154) failed against a baseline taken on a Mac: the 4-vCPU runner is faster at 1 session (p95 about 2.4 ms against 9 ms) but about 2.5x slower at 10 sessions (component p95 25-27 ms, WebSocket p50 37 ms / p95 45 ms against 4.5 ms), so the baseline was rebuilt from that CI run. CI passed twice against it (run 40853813868, original and rerun); runner spread is wide (10-session component p95 17-26 ms), so the tolerance is coarse and only catches large regressions. The 10-session saturation on 4 vCPUs is an input to item 3. CI compares `make benchmark` output to a stored baseline with a stated tolerance and fails on a miss |
-| 3 | Load test: concurrent sessions | §18 | open | Sessions, CPU, memory, queue depth/bytes, JSON cost, persistence backpressure measured at stepped concurrency; artifact and command in repo |
+| 3 | Harness load test (scoped down 2026-10-29) | §11, §18 | done 2026-10-29 | `make load-test` (`voice_harness.load_test`, mock provider, no spend, not in CI) steps 1/6/12/24 concurrent sessions and reports turn latency, pacing lag, CPU and throughput. Result: `artifacts/phase5-load-2026-10-29.json`. It measures the harness as the instrument, not any provider: bake-offs run up to about 6 providers at once, so the question is how much concurrency is safe before the harness skews provider timings. Runtime selection (§18) is deferred until a real scale requirement exists |
 | 4 | Chaos tests | chaos | open | DB outage, slow/failed evidence write, collector down, provider disconnect mid-turn: evidence-write failure blocks tool calls and releases, trace-export failure loses no ledger data |
 | 5 | Retention tests | retention | open | Executable test of the 30-day tombstone and export behaviour over time, not just unit-level |
 | 6 | Reproducibility checks | reproducibility | open | Same scenario and seed gives the same ledger hash; contracts drift check stays green in CI |
 | 7 | Security review | security review | open | Review of auth (operator token), approval-token single use, WebSocket origin, export/download links, secrets handling; findings tracked |
 | 8 | Dependency audit | pinning | open | Vulnerability scan of `requirements.lock`, npm lockfiles and base-image digests; update cadence documented |
 | 9 | Optional: WebRTC transport | §13 | deferred | Only after 3 and 4, and only with an equally enforceable playback gate |
+
+## Load test result (2026-10-29, PostgreSQL, 8-CPU container limit, mock provider)
+
+| Sessions | Turn p95 (ms) | Pacing lag p95 (ms) | Throughput / offered (turns/s) | CPU cores used |
+|---|---|---|---|---|
+| 1 | 8.5 | 3.3 | 49 / 50 | 0.12 |
+| 6 | 11.6 | 3.0 | 283 / 300 | 0.37 |
+| 12 | 8.9 | 2.8 | 533 / 600 | 0.34 |
+| 24 | 20.5 | 17.0 | 982 / 1200 | 0.67 |
+
+Up to 12 concurrent sessions (twice the largest bake-off) the harness adds roughly 3 ms of scheduling lag. At 24 it falls behind its own schedule (82% of offered turns, lag p95 17 ms) while using under one core, so the limit is single-process serialization, not CPU. One run; single-run figures carry the runner variance seen in the perf gate. Not measured here: memory limits, multi-process or multi-host scale, evidence-write failure (item 4). Findings that follow: keep bake-off concurrency at or below 12 sessions per process, and do not read first-audio latency taken above that as harness-free.
 
 ## Carried over from Phase 4
 
