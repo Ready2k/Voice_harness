@@ -20,7 +20,7 @@ import random
 import secrets
 import sys
 import wave
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -103,7 +103,7 @@ async def speak_once(provider, voice, text, timeout=60, metadata=None):
     if metadata is not None:
         from voice_harness.target_prompts import live_voice_instructions
         delivered = live_voice_instructions(READ_ALOUD) if provider == "openai-live" else READ_ALOUD
-        metadata.update(provider_config_id=provider, recorded_at=datetime.now(timezone.utc).isoformat(),
+        metadata.update(provider_config_id=provider, recorded_at=datetime.now(UTC).isoformat(),
                         configuration=config, receipt=receipt, instructions=READ_ALOUD,
                         delivered_voice_instructions=delivered,
                         prompt_sha256=hashlib.sha256(delivered.encode()).hexdigest())

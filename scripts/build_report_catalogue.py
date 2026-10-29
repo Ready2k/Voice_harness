@@ -23,7 +23,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, help='Stage the Pages site in this new directory')
     args = parser.parse_args()
-    tracked = subprocess.check_output(['git', 'ls-files', '-z', 'artifacts', 'reports', 'docs'], cwd=ROOT).decode().split('\0')
+    tracked = subprocess.check_output([shutil.which('git') or 'git', 'ls-files', '-z', 'artifacts', 'reports', 'docs'], cwd=ROOT).decode().split('\0')  # noqa: S603
     files = [p for p in tracked if p and (ROOT / p).is_file()]
     entries = []
     for name in files:
