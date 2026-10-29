@@ -37,6 +37,19 @@ def summarize(result):
     }
 
 
+def merge(summaries):
+    """Combine several runs' summaries into one baseline holding the worst p50/p95 seen per profile."""
+    merged = {**summaries[0], "runs_merged": len(summaries), "profiles": {}}
+    for key in summaries[0]["profiles"]:
+        rows = [summary["profiles"][key] for summary in summaries]
+        merged["profiles"][key] = {
+            "p50_ms": max(r["p50_ms"] for r in rows),
+            "p95_ms": max(r["p95_ms"] for r in rows),
+            "count": min(r["count"] for r in rows),
+        }
+    return merged
+
+
 def _hard_failures(result):
     problems = []
     for profile in result["profiles"]:
@@ -81,14 +94,15 @@ def main(argv=None):
     gate.add_argument("--factor", type=float, default=FACTOR)
     gate.add_argument("--floor-ms", type=float, default=FLOOR_MS)
     base = sub.add_parser("baseline")
-    base.add_argument("result")
+    base.add_argument("result", nargs="+", help="one or more benchmark outputs; the worst p95 per profile is kept")
     base.add_argument("--output", default="artifacts/perf-baseline.json")
     args = parser.parse_args(argv)
-    result = json.loads(Path(args.result).read_text())
     if args.command == "baseline":
-        Path(args.output).write_text(json.dumps(summarize(result), indent=2, sort_keys=True) + "\n")
-        print(f"wrote {args.output}")
+        summaries = [summarize(json.loads(Path(path).read_text())) for path in args.result]
+        Path(args.output).write_text(json.dumps(merge(summaries), indent=2, sort_keys=True) + "\n")
+        print(f"wrote {args.output} from {len(summaries)} run(s)")
         return 0
+    result = json.loads(Path(args.result).read_text())
     baseline = json.loads(Path(args.baseline).read_text())
     problems, rows = check(result, baseline, args.factor, args.floor_ms)
     for key, base_p95, got_p95, limit in rows:

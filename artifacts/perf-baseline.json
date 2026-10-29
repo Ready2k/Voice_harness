@@ -14,81 +14,82 @@
   "profiles": {
     "component/sessions=1/scale=1/instrumented=False": {
       "count": 1000,
-      "p50_ms": 2.125184,
-      "p95_ms": 2.441445
+      "p50_ms": 2.314935,
+      "p95_ms": 2.919192
     },
     "component/sessions=1/scale=1/instrumented=True": {
       "count": 1000,
-      "p50_ms": 2.133009,
-      "p95_ms": 2.372106
+      "p50_ms": 2.320436,
+      "p95_ms": 2.841931
     },
     "component/sessions=1/scale=4/instrumented=False": {
       "count": 1000,
-      "p50_ms": 2.202751,
-      "p95_ms": 2.513882
+      "p50_ms": 2.346185,
+      "p95_ms": 2.91065
     },
     "component/sessions=1/scale=4/instrumented=True": {
       "count": 1000,
-      "p50_ms": 2.090319,
-      "p95_ms": 2.386594
+      "p50_ms": 2.369065,
+      "p95_ms": 2.935676
     },
     "component/sessions=10/scale=1/instrumented=False": {
       "count": 1000,
-      "p50_ms": 19.15677,
-      "p95_ms": 25.510676
+      "p50_ms": 19.330085,
+      "p95_ms": 26.141661
     },
     "component/sessions=10/scale=1/instrumented=True": {
       "count": 1000,
-      "p50_ms": 19.654412,
-      "p95_ms": 26.445974
+      "p50_ms": 20.143647,
+      "p95_ms": 27.468925
     },
     "component/sessions=10/scale=4/instrumented=False": {
       "count": 1000,
-      "p50_ms": 19.099264,
-      "p95_ms": 26.501178
+      "p50_ms": 19.794181,
+      "p95_ms": 27.152328
     },
     "component/sessions=10/scale=4/instrumented=True": {
       "count": 1000,
-      "p50_ms": 19.390112,
-      "p95_ms": 26.757445
+      "p50_ms": 19.890424,
+      "p95_ms": 26.987998
     },
     "component/sessions=5/scale=1/instrumented=False": {
       "count": 1000,
       "p50_ms": 6.443234,
-      "p95_ms": 8.061141
+      "p95_ms": 8.272288
     },
     "component/sessions=5/scale=1/instrumented=True": {
       "count": 1000,
-      "p50_ms": 7.23057,
-      "p95_ms": 8.731047
+      "p50_ms": 7.593563,
+      "p95_ms": 9.443506
     },
     "component/sessions=5/scale=4/instrumented=False": {
       "count": 1000,
-      "p50_ms": 7.655513,
-      "p95_ms": 9.218135
+      "p50_ms": 8.116374,
+      "p95_ms": 9.783896
     },
     "component/sessions=5/scale=4/instrumented=True": {
       "count": 1000,
-      "p50_ms": 7.456553,
-      "p95_ms": 9.21407
+      "p50_ms": 7.815873,
+      "p95_ms": 9.781136
     },
     "websocket/sessions=1": {
       "count": 1000,
-      "p50_ms": 2.638697,
-      "p95_ms": 2.954328
+      "p50_ms": 3.002275,
+      "p95_ms": 3.705332
     },
     "websocket/sessions=10": {
       "count": 1000,
-      "p50_ms": 37.090301,
-      "p95_ms": 45.494581
+      "p50_ms": 38.972706,
+      "p95_ms": 47.724196
     },
     "websocket/sessions=5": {
       "count": 1000,
-      "p50_ms": 2.399379,
-      "p95_ms": 4.940667
+      "p50_ms": 19.396555,
+      "p95_ms": 24.015875
     }
   },
-  "provenance": "GitHub Actions ubuntu-24.04 runner (4 vCPU), BENCHMARK_CPUS=4, run 40852009154 (commit of the 4-CPU change). Not comparable with a developer machine: use PERF_BASELINE=<file> locally.",
+  "provenance": "Worst p95 per profile across 4 GitHub Actions ubuntu-24.04 runs (4 vCPU, BENCHMARK_CPUS=4): 40852009154, 40853813868, 40857717192, 40858484834. websocket/sessions=5 is bimodal on shared runners (about 3-5 ms, occasionally 24 ms). Not comparable with a developer machine: use PERF_BASELINE=<file> locally.",
+  "runs_merged": 4,
   "schema": "perf-baseline-v1",
   "source_hash": "5cc4f7c8cf7f7a793a4f85e8f7f1836430a6d376897d7d6688082c095d46b6d6"
 }

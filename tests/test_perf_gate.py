@@ -60,6 +60,14 @@ class PerfGate(unittest.TestCase):
         self.assertTrue(any("not in baseline" in p for p in problems))
         self.assertTrue(any("missing from run" in p for p in problems))
 
+    def test_merge_keeps_the_worst_p95_so_one_lucky_run_cannot_set_the_bar(self):
+        merged = perf_gate.merge([perf_gate.summarize(run(p95=5.0)), perf_gate.summarize(run(p95=24.0)), perf_gate.summarize(run(p95=3.0, count=1200))])
+        self.assertEqual(merged["runs_merged"], 3)
+        self.assertEqual({v["p95_ms"] for v in merged["profiles"].values()}, {24.0})
+        self.assertEqual({v["count"] for v in merged["profiles"].values()}, {1000})
+        self.assertEqual(perf_gate.check(run(p95=40.0), merged)[0], [])
+        self.assertTrue(perf_gate.check(run(p95=60.0), merged)[0])
+
     def test_cli_exit_codes(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
