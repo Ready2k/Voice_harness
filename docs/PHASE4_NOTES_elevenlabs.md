@@ -2,7 +2,9 @@
 
 Status: implemented, unit-tested against an offline fake server and smoke-tested live on 2026-10-25 (text probe, then
 `happy-balance-clean-001` and `identity-fault-caller-interrupts-001` through `run_live`). There is no Phase 0
-observation log, capability report or AC-09 run yet, so runs are labelled `diagnostic_unverified`.
+observation log, capability report or AC-09 run yet. **Update 2026-10-29:** `scripts/probe/elevenlabs_probe.py`,
+`elevenlabs_report.py` and an AC-09 run (interruption excluded) now exist; coverage is `implemented_and_verified` while
+report `cap_elevenlabs_agents_20261029` is current (7 days).
 
 ## Setup
 
@@ -47,7 +49,7 @@ observation log, capability report or AC-09 run yet, so runs are labelled `diagn
 
 Whether `turn_timeout: -1` is honoured over long silences; `contextual_update` semantics (confirmation scenarios);
 user transcript timing; the billing/usage source; agent LLM variance (default `gemini-2.5-flash`). Next steps:
-`scripts/probe/elevenlabs_probe.py`, a report builder and an AC-09 run, as for the other providers.
+re-probe before the report expires; operator terms attestation.
 
 ## Turn detection fixes (2026-10-25 bake-off)
 

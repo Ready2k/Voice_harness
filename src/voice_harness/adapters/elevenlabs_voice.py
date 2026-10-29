@@ -435,7 +435,7 @@ def conformance_factory():
             await adapter.send_text("Say hello.")
         elif dimension == "tool_result_correlation":
             await asyncio.sleep(3)  # let the greeting finish
-            await adapter.send_text("What is the balance for account ACC-001?")
+            await adapter.send_text("Use your policy tool to look up the identity verification policy and tell me what it says.")
         return None  # interruption is not exercised through the AC-09 driver: truncation is unsupported (excluded)
 
     return adapter, prime

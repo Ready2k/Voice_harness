@@ -11,7 +11,7 @@
     },
     "tool_result_correlation": {
       "status": "pass",
-      "call_id": "call_273162"
+      "call_id": "call_7222"
     },
     "interruption": {
       "status": "excluded",
@@ -26,5 +26,5 @@
   },
   "failures": [],
   "passed": true,
-  "capability_report_id": "cap_google_gemini_3_8_live_20261019"
+  "capability_report_id": "cap_google_gemini_3_8_live_20261028"
 }

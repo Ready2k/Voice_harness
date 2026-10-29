@@ -37,6 +37,14 @@ def main(argv: list[str] | None = None) -> int:
     og.add_argument("path")
     og.add_argument("--report-id", required=True)
     og.add_argument("--attest", action="store_true", help="record the operator terms attestation")
+    oe = sub.add_parser("from-elevenlabs-observations", help="build a report from elevenlabs_probe.py output")
+    oe.add_argument("path")
+    oe.add_argument("--report-id", required=True)
+    oe.add_argument("--attest", action="store_true", help="record the operator terms attestation")
+    ol = sub.add_parser("from-openai-live-observations", help="build a report from openai_live_probe.py output")
+    ol.add_argument("path")
+    ol.add_argument("--report-id", required=True)
+    ol.add_argument("--attest", action="store_true", help="record the operator terms attestation")
     sub.add_parser("schema", help="print the JSON Schema")
     a = ap.parse_args(argv)
 
@@ -61,6 +69,16 @@ def main(argv: list[str] | None = None) -> int:
         from .xai_report import load as load_xai
 
         print(load_xai(a.path, a.report_id, OPERATOR_ATTESTATION if a.attest else None).model_dump_json(indent=2))
+        return 0
+    if a.cmd == "from-openai-live-observations":
+        from .openai_live_report import load as load_openai_live
+
+        print(load_openai_live(a.path, a.report_id, OPERATOR_ATTESTATION if a.attest else None).model_dump_json(indent=2))
+        return 0
+    if a.cmd == "from-elevenlabs-observations":
+        from .elevenlabs_report import load as load_elevenlabs
+
+        print(load_elevenlabs(a.path, a.report_id, OPERATOR_ATTESTATION if a.attest else None).model_dump_json(indent=2))
         return 0
     if a.cmd == "from-google-observations":
         from .google_report import load as load_google

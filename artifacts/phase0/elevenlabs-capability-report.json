@@ -1,0 +1,233 @@
+{
+  "schema_version": 1,
+  "report_id": "cap_elevenlabs_agents_20261029",
+  "provider_family": "elevenlabs_agents",
+  "api_surface": "agents conversation websocket wss://api.elevenlabs.io/v1/convai/conversation",
+  "region": null,
+  "requested_model_id": "elevenlabs-agent",
+  "returned_model_id": null,
+  "version_unresolved": true,
+  "checked_at": "2026-10-29T00:00:08.902334+00:00",
+  "expires_at": "2026-11-05T00:00:08.902334+00:00",
+  "adapter_version": "elevenlabs_probe.py/0",
+  "sdk_version": "websockets 17.2 python 3.12.12",
+  "effective_session_config": {
+    "raw_event_log": "artifacts/phase0/elevenlabs-probe-2026-10-28T23-59-33-534Z.jsonl",
+    "audio": "pcm_24000 in and out",
+    "turn_detection": "server VAD only; no manual commit",
+    "initiation_metadata_keys": [
+      "agent_output_audio_format",
+      "persistent_session_token",
+      "user_input_audio_format"
+    ],
+    "agent_llm": "not echoed by the session; recorded per run by the harness"
+  },
+  "operator_terms_attestation": null,
+  "rows": [
+    {
+      "name": "input_codecs_rates",
+      "status": "observed",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": [
+          "el_ev_2"
+        ]
+      },
+      "limitations": [
+        "pcm_24000 echoed in conversation_initiation_metadata; other formats untested",
+        "user_input_audio_format=pcm_24000"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "output_codecs_rates",
+      "status": "observed",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": [
+          "el_ev_2"
+        ]
+      },
+      "limitations": [
+        "pcm_24000 echoed in conversation_initiation_metadata; other formats untested",
+        "agent_output_audio_format=pcm_24000"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "audio_in",
+      "status": "observed",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": [
+          "el_ev_22",
+          "el_ev_230"
+        ]
+      },
+      "limitations": [
+        "synthetic speech streamed as user_audio_chunk frames was transcribed; the server needs trailing silence to detect the end of speech",
+        "synthetic speech streamed as user_audio_chunk frames",
+        "user_transcript received: 'What is the balance for account ACC001?'"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "audio_out",
+      "status": "observed",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": [
+          "el_ev_8"
+        ]
+      },
+      "limitations": [
+        "audio events with audio_base_64 (pcm_24000)",
+        "audio events carry audio_base_64 (pcm_24000)"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "tool_arguments_and_results",
+      "status": "observed",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": [
+          "el_ev_4",
+          "el_ev_5",
+          "el_ev_6"
+        ]
+      },
+      "limitations": [
+        "client_tool_call by tool_call_id, client_tool_result by the same id, spoken reply used the result; tools are stored on the agent, not per session",
+        "client_tool_call get_policy_text {\"policy_id\": \"identity\", \"version\": \"1\"}",
+        "client_tool_result sent by tool_call_id",
+        "agent_tool_response echoed the result (an acknowledgement, not a delivery guarantee)"
+      ],
+      "tool_mode": "gateway_bridge"
+    },
+    {
+      "name": "transcript_finality",
+      "status": "observed",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": [
+          "el_ev_7",
+          "el_ev_230"
+        ]
+      },
+      "limitations": [
+        "agent_response and user_transcript are final text only; agent_response can arrive before its audio has finished",
+        "agent_response carries final text only; no deltas",
+        "user_transcript is final text only"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "audio_alignment",
+      "status": "unknown",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": []
+      },
+      "limitations": [
+        "no alignment fields were examined",
+        "no alignment or timing fields were examined; none are used"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "turn_signalling",
+      "status": "observed",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": [
+          "el_ev_7",
+          "el_ev_299"
+        ]
+      },
+      "limitations": [
+        "no response start or end marker; turn boundaries are inferred from agent_response, tool calls, audio quiet and interruption",
+        "no response start/end marker: agent_response is the only text-level turn boundary",
+        "interruption ends the in-flight agent response"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "cancel_truncate",
+      "status": "observed",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": [
+          "el_ev_299"
+        ]
+      },
+      "limitations": [
+        "server interruption on barge-in; there is no client cancel or truncate message, so audio_end_ms cannot be reported to the server",
+        "server interruption event on caller speech during agent audio",
+        "no client cancel or truncate message exists; the adapter declares interrupt_truncate unsupported"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "usage_granularity",
+      "status": "unsupported",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": [
+          "el_ev_2"
+        ]
+      },
+      "limitations": [
+        "usage event seen on the socket",
+        "no usage or cost event among ['agent_response', 'agent_response_correction', 'agent_tool_response', 'audio', 'client_tool_call', 'conversation_initiation_metadata', 'interruption', 'user_transcript']; usage is not reported on the socket"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "reconnect_resume",
+      "status": "unknown",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": [
+          "el_ev_467"
+        ]
+      },
+      "limitations": [
+        "a fresh connection works; resume was not exercised",
+        "fresh connection after close succeeded; no resume message exists in the documented protocol or was tried"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "direct_mcp",
+      "status": "unknown",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": []
+      },
+      "limitations": [
+        "not exercised; tools are client tools bridged by the harness gateway"
+      ],
+      "tool_mode": null
+    }
+  ],
+  "limitations": [
+    "The platform has no single model id: the agent's LLM is part of what is under test and is not observable on the socket",
+    "Barge-in was exercised with one synthetic phrase only",
+    "No client cancel or truncate message exists, so AC-09 excludes the interruption dimension (detection only)",
+    "No row cites documentation",
+    "Terms, retention, quotas and pricing need operator attestation; none is recorded here"
+  ]
+}

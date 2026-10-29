@@ -1,0 +1,107 @@
+{
+  "meta": {
+    "startedAt": "2026-10-28T23:59:33.534399+00:00",
+    "python": "3.12.12",
+    "websockets": "17.2",
+    "initiationMetadata": {
+      "agent_output_audio_format": "pcm_24000",
+      "user_input_audio_format": "pcm_24000",
+      "persistent_session_token": null
+    },
+    "eventTypes": [
+      "agent_response",
+      "agent_response_correction",
+      "agent_tool_response",
+      "audio",
+      "client_tool_call",
+      "conversation_initiation_metadata",
+      "interruption",
+      "user_transcript"
+    ]
+  },
+  "evidence": {
+    "input_codecs_rates": [
+      "el_ev_2"
+    ],
+    "output_codecs_rates": [
+      "el_ev_2"
+    ],
+    "tool_arguments_and_results": [
+      "el_ev_4",
+      "el_ev_5",
+      "el_ev_6"
+    ],
+    "transcript_finality": [
+      "el_ev_7",
+      "el_ev_230"
+    ],
+    "turn_signalling": [
+      "el_ev_7",
+      "el_ev_299"
+    ],
+    "audio_out": [
+      "el_ev_8"
+    ],
+    "audio_in": [
+      "el_ev_22",
+      "el_ev_230"
+    ],
+    "cancel_truncate": [
+      "el_ev_299"
+    ],
+    "reconnect_resume": [
+      "el_ev_467"
+    ]
+  },
+  "notes": {
+    "input_codecs_rates": [
+      "user_input_audio_format=pcm_24000"
+    ],
+    "output_codecs_rates": [
+      "agent_output_audio_format=pcm_24000"
+    ],
+    "model_discovery": [
+      "the metadata event names no model or LLM; the agent's configured LLM is not observable on the socket"
+    ],
+    "tool_arguments_and_results": [
+      "client_tool_call get_policy_text {\"policy_id\": \"identity\", \"version\": \"1\"}",
+      "client_tool_result sent by tool_call_id",
+      "agent_tool_response echoed the result (an acknowledgement, not a delivery guarantee)"
+    ],
+    "transcript_finality": [
+      "agent_response carries final text only; no deltas",
+      "user_transcript is final text only"
+    ],
+    "turn_signalling": [
+      "no response start/end marker: agent_response is the only text-level turn boundary",
+      "interruption ends the in-flight agent response"
+    ],
+    "audio_out": [
+      "audio events carry audio_base_64 (pcm_24000)"
+    ],
+    "audio_in": [
+      "synthetic speech streamed as user_audio_chunk frames",
+      "user_transcript received: 'What is the balance for account ACC001?'"
+    ],
+    "cancel_truncate": [
+      "server interruption event on caller speech during agent audio",
+      "no client cancel or truncate message exists; the adapter declares interrupt_truncate unsupported"
+    ],
+    "usage_granularity": [
+      "no usage or cost event among ['agent_response', 'agent_response_correction', 'agent_tool_response', 'audio', 'client_tool_call', 'conversation_initiation_metadata', 'interruption', 'user_transcript']; usage is not reported on the socket"
+    ],
+    "audio_alignment": [
+      "no alignment or timing fields were examined; none are used"
+    ],
+    "error_handling": [
+      "unknown client event type -> no reply; connection open"
+    ],
+    "reconnect_resume": [
+      "fresh connection after close succeeded; no resume message exists in the documented protocol or was tried"
+    ]
+  },
+  "log_file": "artifacts/phase0/elevenlabs-probe-2026-10-28T23-59-33-534Z.jsonl",
+  "flags": {
+    "sdk": "websockets 17.2 python 3.12.12"
+  }
+}

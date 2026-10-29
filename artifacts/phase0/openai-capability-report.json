@@ -1,23 +1,23 @@
 {
   "schema_version": 1,
-  "report_id": "cap_openai_gpt_realtime_2_1_20261017",
+  "report_id": "cap_openai_gpt_realtime_2_1_20261028",
   "provider_family": "openai",
   "api_surface": "realtime websocket wss://api.openai.com/v1/realtime",
   "region": null,
   "requested_model_id": "gpt-realtime-2.1",
   "returned_model_id": "gpt-realtime-2.1",
   "version_unresolved": false,
-  "checked_at": "2026-10-17T11:20:18.795999+00:00",
-  "expires_at": "2026-10-24T11:20:18.795999+00:00",
+  "checked_at": "2026-10-28T23:56:05.302620+00:00",
+  "expires_at": "2026-11-04T23:56:05.302620+00:00",
   "adapter_version": "openai_probe.mjs/0",
   "sdk_version": "ws@8.18.3 node v24.9.0",
   "effective_session_config": {
-    "raw_event_log": "artifacts/phase0/openai-probe-2026-10-17T11-19-46-325Z.jsonl",
+    "raw_event_log": "artifacts/phase0/openai-probe-2026-10-28T23-55-01-276Z.jsonl",
     "audio": "audio/pcm 24000 in and out, voice marin",
     "turn_detection": null,
     "model_doc": "https://developers.openai.com/api/docs/models/gpt-realtime-2.1"
   },
-  "operator_terms_attestation": "2026-10-16, James Cregeen (operator): reviewed the current retention, quota and pricing terms for AWS Bedrock (Nova 2.5 Sonic) and OpenAI Realtime and accepts them for Phase 0/1 testing with synthetic data only; no real customer data.",
+  "operator_terms_attestation": null,
   "rows": [
     {
       "name": "input_codecs_rates",
@@ -58,14 +58,12 @@
         "doc_url": "https://developers.openai.com/api/docs/guides/realtime-conversations",
         "doc_retrieved_at": "2026-10-16",
         "probe_event_ids": [
-          "oai_ev_53",
-          "oai_ev_387"
+          "oai_ev_48"
         ]
       },
       "limitations": [
         "silence append + commit; synthetic speech recognised in the --speech-wav stage",
-        "append + commit accepted (input_audio_buffer.committed); recognition not exercised",
-        "speech recognised: \"Stop, please stop and listen to me for a moment.\""
+        "append + commit accepted (input_audio_buffer.committed); recognition not exercised"
       ],
       "tool_mode": null
     },
@@ -77,8 +75,7 @@
         "doc_retrieved_at": "2026-10-16",
         "probe_event_ids": [
           "oai_ev_16",
-          "oai_ev_103",
-          "oai_ev_406"
+          "oai_ev_100"
         ]
       },
       "limitations": [
@@ -93,8 +90,8 @@
         "doc_url": "https://developers.openai.com/api/docs/guides/realtime-conversations",
         "doc_retrieved_at": "2026-10-16",
         "probe_event_ids": [
-          "oai_ev_49",
-          "oai_ev_52"
+          "oai_ev_45",
+          "oai_ev_47"
         ]
       },
       "limitations": [
@@ -111,7 +108,7 @@
         "doc_url": "https://developers.openai.com/api/docs/guides/realtime-conversations",
         "doc_retrieved_at": "2026-10-16",
         "probe_event_ids": [
-          "oai_ev_42"
+          "oai_ev_38"
         ]
       },
       "limitations": [
@@ -142,7 +139,7 @@
         "doc_retrieved_at": "2026-10-16",
         "probe_event_ids": [
           "oai_ev_4",
-          "oai_ev_49"
+          "oai_ev_45"
         ]
       },
       "limitations": [
@@ -159,16 +156,14 @@
         "doc_url": "https://developers.openai.com/api/docs/guides/realtime-conversations",
         "doc_retrieved_at": "2026-10-16",
         "probe_event_ids": [
-          "oai_ev_84",
-          "oai_ev_127",
-          "oai_ev_134",
-          "oai_ev_356"
+          "oai_ev_80",
+          "oai_ev_82"
         ]
       },
       "limitations": [
         "server VAD speech_started cancels the in-flight response; response.cancel and conversation.item.truncate acknowledged. Truncate on an already-cancelled item was acknowledged in one run and silent in another",
         "response.cancel -> response.done status=cancelled",
-        "truncate result: none"
+        "conversation.item.truncate -> conversation.item.truncated"
       ],
       "tool_mode": null
     },
@@ -179,7 +174,7 @@
         "doc_url": "https://developers.openai.com/api/docs/guides/realtime-conversations",
         "doc_retrieved_at": "2026-10-16",
         "probe_event_ids": [
-          "oai_ev_49"
+          "oai_ev_45"
         ]
       },
       "limitations": [
@@ -195,7 +190,7 @@
         "doc_url": null,
         "doc_retrieved_at": null,
         "probe_event_ids": [
-          "oai_ev_448"
+          "oai_ev_133"
         ]
       },
       "limitations": [

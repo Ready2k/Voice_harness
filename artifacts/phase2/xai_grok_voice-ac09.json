@@ -11,7 +11,7 @@
     },
     "tool_result_correlation": {
       "status": "pass",
-      "call_id": "call-0b10058c-6ee5-4f60-becc-9b9aebf37225-0"
+      "call_id": "call-9ff9bff1-d241-4914-a7e5-3834e154b911-0"
     },
     "interruption": {
       "status": "pass",
@@ -20,15 +20,15 @@
         "path": "provider_speech_detection",
         "turn_detection": "manual",
         "speech_ms": 4616,
-        "stream_s": 4.95
+        "stream_s": 4.94
       },
       "audio_chunks_after_interrupt": 0,
       "audio_stop_ms": 0,
-      "generated_audio_ms": 1406,
-      "interrupted_audio_end_ms": 246,
+      "generated_audio_ms": 2385,
+      "interrupted_audio_end_ms": 250,
       "truncate": {
-        "item_id": "3ce47753-6cef-422a-ba20-736db7a09369",
-        "audio_end_ms": 246,
+        "item_id": "799db25d-5a0b-475a-96bc-f34db5d2d679",
+        "audio_end_ms": 250,
         "history_truncation": "acknowledged"
       }
     },
@@ -39,5 +39,5 @@
   "excluded": {},
   "failures": [],
   "passed": true,
-  "capability_report_id": "cap_xai_grok_voice_3_0_20261018"
+  "capability_report_id": "cap_xai_grok_voice_3_0_20261028"
 }

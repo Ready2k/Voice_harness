@@ -322,3 +322,27 @@ class OpenAILiveAdapter(OpenAIRealtimeAdapter):
                 if not waiter.done():
                     waiter.cancel()
         await super().close(reason)
+
+
+def conformance_factory():
+    """AC-09 driver: (adapter, prime). Config is baked in; the harness opens with only a session id."""
+    tool = {"name": "get_policy_text", "description": "Look up the identity verification policy text.",
+            "parameters": {"type": "object", "properties": {"policy_id": {"type": "string"}}, "required": ["policy_id"]}}
+
+    class _Conformance(OpenAILiveAdapter):
+        async def open_session(self, config):
+            return await super().open_session({
+                **config, "tools": [tool],
+                "instructions": "Banking test assistant. Keep answers to one short sentence. Use get_policy_text for policy questions."})
+
+    adapter = _Conformance()
+
+    async def prime(dimension: str):
+        if dimension == "audio_out":
+            await adapter.send_text("Say hello.")
+        elif dimension == "tool_result_correlation":
+            await asyncio.sleep(3)  # let the greeting finish
+            await adapter.send_text("Use your policy tool to look up the identity verification policy and tell me what it says.")
+        return None  # interruption is not exercised: Live has no truncate primitive (excluded)
+
+    return adapter, prime

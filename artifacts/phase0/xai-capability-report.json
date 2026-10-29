@@ -1,25 +1,25 @@
 {
   "schema_version": 1,
-  "report_id": "cap_xai_grok_voice_3_0_20261018",
+  "report_id": "cap_xai_grok_voice_3_0_20261028",
   "provider_family": "xai_grok_voice",
   "api_surface": "realtime websocket wss://api.x.ai/v1/realtime",
   "region": null,
   "requested_model_id": "grok-voice-3.0",
   "returned_model_id": "grok-voice-3.0",
   "version_unresolved": false,
-  "checked_at": "2026-10-18T19:07:28.570636+00:00",
-  "expires_at": "2026-10-25T19:07:28.570636+00:00",
+  "checked_at": "2026-10-28T23:56:05.142538+00:00",
+  "expires_at": "2026-11-04T23:56:05.142538+00:00",
   "adapter_version": "xai_probe.py/0",
-  "sdk_version": "websockets 17.2 python 3.11.13",
+  "sdk_version": "websockets 17.2 python 3.12.12",
   "effective_session_config": {
-    "raw_event_log": "artifacts/phase0/xai-probe-2026-10-18T19-06-51-161Z.jsonl",
+    "raw_event_log": "artifacts/phase0/xai-probe-2026-10-28T23-55-01-216Z.jsonl",
     "audio": "audio/pcm 24000 in and out",
     "voice": "xai_ara",
     "turn_detection": "null (manual) and server_vad were both exercised",
     "input_transcription": "grok-transcribe",
     "model_doc": "https://docs.x.ai/developers/models"
   },
-  "operator_terms_attestation": "2026-10-18, James Cregeen (operator): reviewed the current retention, quota and pricing terms for xAI Grok Voice and Google Gemini Live (Vertex AI) and accepts them for testing with synthetic data only; no real customer data.",
+  "operator_terms_attestation": null,
   "rows": [
     {
       "name": "input_codecs_rates",
@@ -60,7 +60,7 @@
         "doc_url": "https://docs.x.ai/developers/model-capabilities/audio/speech-to-speech",
         "doc_retrieved_at": "2026-10-16",
         "probe_event_ids": [
-          "xai_ev_180"
+          "xai_ev_191"
         ]
       },
       "limitations": [
@@ -116,7 +116,7 @@
         "doc_retrieved_at": "2026-10-16",
         "probe_event_ids": [
           "xai_ev_21",
-          "xai_ev_180"
+          "xai_ev_191"
         ]
       },
       "limitations": [
@@ -149,9 +149,9 @@
         "probe_event_ids": [
           "xai_ev_8",
           "xai_ev_30",
-          "xai_ev_53",
-          "xai_ev_173",
-          "xai_ev_318"
+          "xai_ev_54",
+          "xai_ev_169",
+          "xai_ev_316"
         ]
       },
       "limitations": [
@@ -159,7 +159,7 @@
         "session.updated accepted turn_detection=null (manual)",
         "response.done status=completed (tool-calling response)",
         "response.done status=completed",
-        "server_vad input_audio_buffer.speech_started 1285 ms after speech began streaming",
+        "server_vad input_audio_buffer.speech_started 1209 ms after speech began streaming",
         "server_vad input_audio_buffer.speech_stopped"
       ],
       "tool_mode": null
@@ -171,10 +171,10 @@
         "doc_url": "https://docs.x.ai/developers/model-capabilities/audio/speech-to-speech",
         "doc_retrieved_at": "2026-10-16",
         "probe_event_ids": [
-          "xai_ev_70",
-          "xai_ev_72",
-          "xai_ev_173",
-          "xai_ev_172"
+          "xai_ev_69",
+          "xai_ev_71",
+          "xai_ev_169",
+          "xai_ev_168"
         ]
       },
       "limitations": [
@@ -182,7 +182,7 @@
         "response.cancel -> response.done status=cancelled",
         "conversation.item.truncate -> conversation.item.truncated",
         "server_vad speech_started while the assistant was generating",
-        "the in-flight response ended at speech_started: response.done status=completed, output=0 items, 12264 ms of audio generated (uninterrupted answers to this prompt were about 2 minutes); no distinct cancelled status",
+        "the in-flight response ended at speech_started: response.done status=completed, output=0 items, 12907 ms of audio generated (uninterrupted answers to this prompt were about 2 minutes); no distinct cancelled status",
         "conversation.item.truncate on the server_vad-cut item: conversation.item.truncated; response.output_item.done for that item seen=False"
       ],
       "tool_mode": null
@@ -194,12 +194,12 @@
         "doc_url": "https://docs.x.ai/developers/model-capabilities/audio/speech-to-speech",
         "doc_retrieved_at": "2026-10-16",
         "probe_event_ids": [
-          "xai_ev_53"
+          "xai_ev_54"
         ]
       },
       "limitations": [
         "response.done carries a top-level usage object (token details, output_audio_seconds, billable_audio_seconds); response.usage inside it is empty",
-        "response.done usage keys: input_tokens,input_token_details,output_tokens,output_token_details,total_tokens,output_audio_seconds,billable_audio_seconds; in={'text_tokens': 0, 'audio_tokens': 0, 'grok_tokens': 0}; out={'text_tokens': 15, 'audio_tokens': 368, 'grok_tokens': 0}"
+        "response.done usage keys: input_tokens,input_token_details,output_tokens,output_token_details,total_tokens,output_audio_seconds,billable_audio_seconds; in={'text_tokens': 0, 'audio_tokens': 0, 'grok_tokens': 0}; out={'text_tokens': 23, 'audio_tokens': 352, 'grok_tokens': 0}"
       ],
       "tool_mode": null
     },
@@ -210,7 +210,7 @@
         "doc_url": null,
         "doc_retrieved_at": null,
         "probe_event_ids": [
-          "xai_ev_422"
+          "xai_ev_424"
         ]
       },
       "limitations": [

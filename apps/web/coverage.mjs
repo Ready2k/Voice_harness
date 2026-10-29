@@ -11,6 +11,7 @@ export const STATE_LABEL = {
 // Provider family (coverage API) -> live provider configuration ID (/api/v1/live-providers).
 export const FAMILY_CONFIG = {
   openai: "openai-realtime-live",
+  openai_live: "openai-live",
   aws_nova_sonic: "nova-sonic-live",
   xai_grok_voice: "xai-voice-live",
   google_gemini_live: "gemini-live",
@@ -42,6 +43,12 @@ export function reverifyPlan(family) {
     google_gemini_live: { needs: "Google Application Default Credentials (for example gcloud auth application-default login).",
       probe: "PYTHONPATH=src .venv/bin/python scripts/probe/google_gemini_probe.py --region us-central1",
       build: BUILD + "from-google-observations artifacts/phase0/google_gemini-observations-<timestamp>.json --report-id <report-id>" },
+    openai_live: { needs: "OPENAI_API_KEY set in the environment.",
+      probe: "PYTHONPATH=src .venv/bin/python scripts/probe/openai_live_probe.py",
+      build: BUILD + "from-openai-live-observations artifacts/phase0/openai_live-observations-<timestamp>.json --report-id <report-id>" },
+    elevenlabs_agents: { needs: "ELEVENLABS_API_KEY set in the environment and a stored agent (python -m voice_harness.adapters.elevenlabs_agent setup).",
+      probe: "PYTHONPATH=src .venv/bin/python scripts/probe/elevenlabs_probe.py",
+      build: BUILD + "from-elevenlabs-observations artifacts/phase0/elevenlabs-observations-<timestamp>.json --report-id <report-id>" },
   };
   return plans[family] ?? null;
 }

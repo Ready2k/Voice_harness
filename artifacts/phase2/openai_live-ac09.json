@@ -1,0 +1,30 @@
+{
+  "provider": "openai_live",
+  "model_id": "gpt-live-1",
+  "dimensions": {
+    "audio_in": {
+      "status": "pass"
+    },
+    "audio_out": {
+      "status": "pass",
+      "chunks": 1
+    },
+    "tool_result_correlation": {
+      "status": "pass",
+      "call_id": "call_12mGkd3TtROvzwSb1B57lfZa"
+    },
+    "interruption": {
+      "status": "excluded",
+      "reason": "interrupt_truncate unsupported (explicit)"
+    },
+    "error": {
+      "status": "pass"
+    }
+  },
+  "excluded": {
+    "interruption": "interrupt_truncate unsupported (explicit)"
+  },
+  "failures": [],
+  "passed": true,
+  "capability_report_id": "cap_openai_live_gpt_live_1_20261029"
+}

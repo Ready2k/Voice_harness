@@ -1,0 +1,30 @@
+{
+  "provider": "elevenlabs_agents",
+  "model_id": "elevenlabs-agent",
+  "dimensions": {
+    "audio_in": {
+      "status": "pass"
+    },
+    "audio_out": {
+      "status": "pass",
+      "chunks": 1
+    },
+    "tool_result_correlation": {
+      "status": "pass",
+      "call_id": "get_policy_text_8595b01bf70b4e18af28bb4642fb75ab"
+    },
+    "interruption": {
+      "status": "excluded",
+      "reason": "interrupt_truncate unsupported (explicit)"
+    },
+    "error": {
+      "status": "pass"
+    }
+  },
+  "excluded": {
+    "interruption": "interrupt_truncate unsupported (explicit)"
+  },
+  "failures": [],
+  "passed": true,
+  "capability_report_id": "cap_elevenlabs_agents_20261029"
+}

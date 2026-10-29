@@ -1,0 +1,222 @@
+{
+  "schema_version": 1,
+  "report_id": "cap_openai_live_gpt_live_1_20261029",
+  "provider_family": "openai_live",
+  "api_surface": "live websocket wss://api.openai.com/v1/live/sessions",
+  "region": null,
+  "requested_model_id": "gpt-live-1",
+  "returned_model_id": "gpt-live-1",
+  "version_unresolved": true,
+  "checked_at": "2026-10-29T00:02:12.138683+00:00",
+  "expires_at": "2026-11-05T00:02:12.138683+00:00",
+  "adapter_version": "openai_live_probe.py/0",
+  "sdk_version": "harness adapter openai_live python 3.12.12",
+  "effective_session_config": {
+    "raw_event_log": "artifacts/phase0/openai_live-probe-2026-10-29T00-01-14-887Z.jsonl",
+    "audio": "audio/pcm 24000 in and out",
+    "backend_model_id": "gpt-6-luna",
+    "turn_detection": "provider endpointing; the harness never sends commit or response.create for audio turns"
+  },
+  "operator_terms_attestation": null,
+  "rows": [
+    {
+      "name": "input_codecs_rates",
+      "status": "observed",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": [
+          "olv_ev_1"
+        ]
+      },
+      "limitations": [
+        "session.start declared audio/pcm 24 kHz and session.started accepted it; other rates untested",
+        "session.start declared audio/pcm 24 kHz and session.started accepted it"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "output_codecs_rates",
+      "status": "observed",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": [
+          "olv_ev_1"
+        ]
+      },
+      "limitations": [
+        "audio/pcm 24 kHz output deltas; other rates untested",
+        "session.start declared audio/pcm 24 kHz and session.started accepted it"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "audio_in",
+      "status": "observed",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": [
+          "olv_ev_519"
+        ]
+      },
+      "limitations": [
+        "synthetic speech streamed as session.input_audio.append frames (continuous input, silence included) was transcribed",
+        "synthetic speech transcribed: 'What does your policy say about identity verification'"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "audio_out",
+      "status": "observed",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": [
+          "olv_ev_89"
+        ]
+      },
+      "limitations": [
+        "session.output_audio.delta events",
+        "session.output_audio.delta (pcm 24 kHz)"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "tool_arguments_and_results",
+      "status": "observed",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": [
+          "olv_ev_109"
+        ]
+      },
+      "limitations": [
+        "tools are delegated to a backend model: a function_call appears inside response.event and its result goes back as a response item; harness-bridged",
+        "tool_call get_policy_text {\"policy_id\": \"identity_verification\"} (delegated function call)",
+        "tool result submitted: {\"local_send\": \"accepted\", \"provider_acknowledgement\": \"unconfirmed\", \"call_id\": \"call_NjM1ExL5hoWb7"
+      ],
+      "tool_mode": "gateway_bridge"
+    },
+    {
+      "name": "transcript_finality",
+      "status": "observed",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": [
+          "olv_ev_286"
+        ]
+      },
+      "limitations": [
+        "input and output transcripts arrive as session.*_transcript.delta fragments; the adapter assembles the final text",
+        "session.*_transcript.delta events assembled into a final transcript by the adapter",
+        "session.*_transcript.delta events assembled into a final transcript by the adapter"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "audio_alignment",
+      "status": "unknown",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": []
+      },
+      "limitations": [
+        "no alignment fields were examined",
+        "no alignment fields were examined"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "turn_signalling",
+      "status": "observed",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": [
+          "olv_ev_286"
+        ]
+      },
+      "limitations": [
+        "no turn-start marker; nested response.completed ends a reply; the harness groups replies by audio silence and backend activity, which is a tuned diagnostic heuristic",
+        "response.completed (nested in response.event) ends a reply; no turn-start marker"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "cancel_truncate",
+      "status": "unknown",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": []
+      },
+      "limitations": [
+        "Live has no truncate primitive and no cancel was exercised",
+        "Live has no truncate primitive and no client cancel was exercised; the adapter declares interrupt_truncate unsupported"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "usage_granularity",
+      "status": "observed",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": [
+          "olv_ev_114",
+          "olv_ev_150",
+          "olv_ev_259"
+        ]
+      },
+      "limitations": [
+        "session.usage.updated and session.closed carry usage; per-response usage nested in response.completed",
+        "session.usage.updated / session.closed usage",
+        "session.usage.updated / session.closed usage",
+        "session.usage.updated / session.closed usage"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "reconnect_resume",
+      "status": "unknown",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": [
+          "olv_ev_523"
+        ]
+      },
+      "limitations": [
+        "a fresh session works; resume was not exercised",
+        "fresh session after close succeeded; no resume message was tried"
+      ],
+      "tool_mode": null
+    },
+    {
+      "name": "direct_mcp",
+      "status": "unknown",
+      "evidence": {
+        "doc_url": null,
+        "doc_retrieved_at": null,
+        "probe_event_ids": []
+      },
+      "limitations": [
+        "not exercised; tools are delegated function calls bridged by the harness gateway",
+        "not exercised; tools are delegated function calls bridged by the harness gateway"
+      ],
+      "tool_mode": null
+    }
+  ],
+  "limitations": [
+    "The probe drives the harness adapter and records its native provider events; session setup passes through the adapter",
+    "Voice model gpt-live-1 delegates tool use and reasoning to backend gpt-6-luna; both are under test",
+    "Live has no truncate primitive, so AC-09 excludes the interruption dimension (detection only)",
+    "No row cites documentation",
+    "Terms, retention, quotas and pricing need operator attestation; none is recorded here"
+  ]
+}

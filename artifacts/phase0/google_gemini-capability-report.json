@@ -1,18 +1,18 @@
 {
   "schema_version": 1,
-  "report_id": "cap_google_gemini_3_8_live_20261019",
+  "report_id": "cap_google_gemini_3_8_live_20261028",
   "provider_family": "google_gemini_live",
   "api_surface": "Vertex AI Live websocket wss://us-central1-aiplatform.googleapis.com/ws/google.cloud.aiplatform.v1.LlmBidiService/BidiGenerateContent",
   "region": "us-central1",
   "requested_model_id": "gemini-3.8-live",
   "returned_model_id": null,
   "version_unresolved": true,
-  "checked_at": "2026-10-19T11:21:44.456582+00:00",
-  "expires_at": "2026-10-26T11:21:44.456582+00:00",
+  "checked_at": "2026-10-28T23:57:11.939210+00:00",
+  "expires_at": "2026-11-04T23:57:11.939210+00:00",
   "adapter_version": "google_gemini_probe.py/0",
   "sdk_version": "websockets 17.2 python 3.12.12",
   "effective_session_config": {
-    "raw_event_log": "artifacts/phase0/google_gemini-probe-2026-10-19T11-19-49-451Z.jsonl",
+    "raw_event_log": "artifacts/phase0/google_gemini-probe-2026-10-28T23-55-01-309Z.jsonl",
     "audio": "16 kHz PCM in, 24 kHz PCM out (inferred)",
     "response_modalities": "AUDIO",
     "turn_detection": "automatic activity detection (server) used for speech; text turns via clientContent",
@@ -29,7 +29,7 @@
         "doc_retrieved_at": null,
         "probe_event_ids": [
           "gem_ev_6",
-          "gem_ev_95"
+          "gem_ev_91"
         ]
       },
       "limitations": [
@@ -50,7 +50,7 @@
         ]
       },
       "limitations": [
-        "audio/pcm; 282722 bytes imply 5.89 seconds at 24 kHz versus 6.2 seconds from 155 audio tokens; rate is inferred."
+        "audio/pcm without a rate in the mime type; 24 kHz inferred from byte count against the reported audio token count (4.71 s vs 4.72 s), not declared by the server"
       ],
       "tool_mode": null
     },
@@ -61,14 +61,14 @@
         "doc_url": null,
         "doc_retrieved_at": null,
         "probe_event_ids": [
-          "gem_ev_361",
-          "gem_ev_414"
+          "gem_ev_357",
+          "gem_ev_408"
         ]
       },
       "limitations": [
         "synthetic speech streamed under automatic activity detection was transcribed and answered",
-        "speech transcribed (1 inputTranscription messages, 5794 ms to the first); text: 'Hello, can you hear me? Please tell me which bank this is.'",
-        "model replied to streamed speech (audio_out count 27 chunks)"
+        "speech transcribed (1 inputTranscription messages, 5748 ms to the first); text: 'Hello, can you hear me? Please tell me which bank this is.'",
+        "model replied to streamed speech (audio_out count 25 chunks)"
       ],
       "tool_mode": null
     },
@@ -117,7 +117,7 @@
         "doc_retrieved_at": null,
         "probe_event_ids": [
           "gem_ev_14",
-          "gem_ev_361"
+          "gem_ev_357"
         ]
       },
       "limitations": [
@@ -149,8 +149,8 @@
         "doc_retrieved_at": null,
         "probe_event_ids": [
           "gem_ev_11",
-          "gem_ev_53",
-          "gem_ev_414"
+          "gem_ev_52",
+          "gem_ev_408"
         ]
       },
       "limitations": [
@@ -168,12 +168,12 @@
         "doc_url": null,
         "doc_retrieved_at": null,
         "probe_event_ids": [
-          "gem_ev_457"
+          "gem_ev_450"
         ]
       },
       "limitations": [
         "serverContent.interrupted on barge-in; there is no client cancel or truncate message, so audio_end_ms cannot be reported to the server",
-        "serverContent.interrupted 580 ms after speech began streaming",
+        "serverContent.interrupted 575 ms after speech began streaming",
         "the protocol has no cancel or truncate client message (message types: setup, clientContent, realtimeInput, toolResponse)"
       ],
       "tool_mode": null
@@ -185,12 +185,12 @@
         "doc_url": null,
         "doc_retrieved_at": null,
         "probe_event_ids": [
-          "gem_ev_53"
+          "gem_ev_52"
         ]
       },
       "limitations": [
         "usageMetadata on the turnComplete message: prompt and candidate token counts split by modality; no prices recorded",
-        "usageMetadata with the turnComplete message: keys ['candidatesTokenCount', 'candidatesTokensDetails', 'promptTokenCount', 'promptTokensDetails', 'thoughtsTokenCount', 'totalTokenCount']; prompt=[{'modality': 'TEXT', 'tokenCount': 94}]; candidates=[{'modality': 'AUDIO', 'tokenCount': 155}, {'modality': 'TEXT', 'tokenCount': 20}]"
+        "usageMetadata with the turnComplete message: keys ['candidatesTokenCount', 'candidatesTokensDetails', 'promptTokenCount', 'promptTokensDetails', 'thoughtsTokenCount', 'totalTokenCount']; prompt=[{'modality': 'TEXT', 'tokenCount': 94}]; candidates=[{'modality': 'TEXT', 'tokenCount': 20}, {'modality': 'AUDIO', 'tokenCount': 150}]"
       ],
       "tool_mode": null
     },
@@ -201,7 +201,7 @@
         "doc_url": null,
         "doc_retrieved_at": null,
         "probe_event_ids": [
-          "gem_ev_69"
+          "gem_ev_68"
         ]
       },
       "limitations": [
@@ -227,11 +227,12 @@
     }
   ],
   "limitations": [
-    "Pinned gemini-3.8-live; setupComplete returns no model version, so resolution is unresolved.",
-    "Only us-central1 accepted setup; global rejected this model for the current project.",
-    "One synthetic speech and interruption probe; no client truncate support. Audio continued after the interruption marker; see probe observations for counts.",
-    "Audio output inferred as 24 kHz from bytes and usage; no per-chunk timing alignment.",
-    "Handle-based session resume was not exercised.",
-    "No new operator terms attestation was made; see the historical operator attestation separately."
+    "Pinned gemini-3.8-live; the server returns no model version, so the version is unresolved",
+    "Only region us-central1 was used for runs; the global endpoint refused this model at connect (setupComplete=False, closed={\"error\": \"ConnectionClosedError\", \"code\": 1008, \"reason\": \"Publisher model `projects/696762117239/locations/global/publishers/google/models/gemini-3.8-live` wa)",
+    "Server speech detection ends the in-flight answer; audio arrives faster than real time (about 4x in one sample)",
+    "Barge-in was exercised with one synthetic (macOS say) phrase only",
+    "No cancel or truncate client message exists, so AC-09 excludes the interruption dimension (detection only)",
+    "No row cites documentation: the Vertex Live pages were only partly readable",
+    "Terms, retention, quotas and pricing need operator attestation; the existing operator attestation does not cover Google"
   ]
 }

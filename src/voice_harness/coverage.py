@@ -89,10 +89,11 @@ def verified_report(
     )
 
 
-FAMILIES = ("openai", "aws_nova_sonic", "xai_grok_voice", "google_gemini_live", "elevenlabs_agents")
+FAMILIES = ("openai", "openai_live", "aws_nova_sonic", "xai_grok_voice", "google_gemini_live", "elevenlabs_agents")
 # Adapter module per family; absence of the module means NO_ADAPTER.
 ADAPTER_MODULES = {
     "openai": "voice_harness.adapters.openai_realtime",
+    "openai_live": "voice_harness.adapters.openai_live",
     "aws_nova_sonic": "voice_harness.adapters.nova_sonic",
     "xai_grok_voice": "voice_harness.adapters.xai_voice",
     "google_gemini_live": "voice_harness.adapters.google_gemini_live",

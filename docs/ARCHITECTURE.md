@@ -145,12 +145,12 @@ call, turn start and end, interrupted, usage, error). Unsupported features are d
 
 | Config | Model | Transport | Coverage |
 |---|---|---|---|
-| `openai-live` | `gpt-live-1` (voice) + `gpt-6-luna` (backend) | WebSocket | No capability report or AC-09 yet (not in `coverage.py`), so runs are `diagnostic_unverified` |
+| `openai-live` | `gpt-live-1` (voice) + `gpt-6-luna` (backend) | WebSocket | Probe `openai_live_probe.py` (drives the adapter), AC-09 pass with interruption excluded (no truncate primitive); own coverage family `openai_live` |
 | OpenAI Realtime | `gpt-realtime-2.1` | WebSocket | Verified (AC-09 pass) |
 | Amazon Nova Sonic | `amazon.nova-2-5-sonic`, us-east-1 | Bedrock bidirectional stream via a Node bridge | Verified (AC-09 pass, interruption excluded) |
 | xAI Grok Voice | `grok-voice-3.0` | WebSocket | Verified (AC-09 5 of 5) |
 | Google Gemini Live | `gemini-3.8-live` | Vertex AI Live WebSocket, ADC | 3.8 live probe and AC-09 pass (client truncation excluded); version unresolved |
-| ElevenLabs Agents | `elevenlabs-agent` (agent LLM recorded per run) | Agents WebSocket, stored agent | No Phase 0 report or AC-09 yet, so runs are `diagnostic_unverified` (`PHASE4_NOTES_elevenlabs.md`) |
+| ElevenLabs Agents | `elevenlabs-agent` (agent LLM recorded per run) | Agents WebSocket, stored agent | Probe `elevenlabs_probe.py`, AC-09 pass with interruption excluded (no client truncate); `PHASE4_NOTES_elevenlabs.md` |
 
 Support state is *derived*, never asserted. `implemented_and_verified` needs an adapter, a valid unexpired
 capability report and a passing AC-09 result bound to that report. Provider quirks that shaped the adapters are

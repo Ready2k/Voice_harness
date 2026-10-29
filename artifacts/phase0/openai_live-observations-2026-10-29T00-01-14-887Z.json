@@ -1,0 +1,106 @@
+{
+  "meta": {
+    "startedAt": "2026-10-29T00:01:14.887754+00:00",
+    "python": "3.12.12",
+    "sessionStarted": {
+      "model_id": "gpt-live-1",
+      "backend_model_id": "gpt-6-luna"
+    },
+    "eventTypes": [
+      "harness.caller_audio_flushed",
+      "harness.pcm_speech_detected",
+      "response.event",
+      "session.closed",
+      "session.delegation.created",
+      "session.input_transcript.delta",
+      "session.output_audio.delta",
+      "session.output_transcript.delta",
+      "session.started",
+      "session.usage.updated"
+    ]
+  },
+  "evidence": {
+    "input_codecs_rates": [
+      "olv_ev_1"
+    ],
+    "output_codecs_rates": [
+      "olv_ev_1"
+    ],
+    "audio_out": [
+      "olv_ev_89"
+    ],
+    "tool_arguments_and_results": [
+      "olv_ev_109",
+      "olv_ev_109"
+    ],
+    "usage_granularity": [
+      "olv_ev_114",
+      "olv_ev_150",
+      "olv_ev_259"
+    ],
+    "transcript_finality": [
+      "olv_ev_286",
+      "olv_ev_286"
+    ],
+    "turn_signalling": [
+      "olv_ev_286"
+    ],
+    "audio_in": [
+      "olv_ev_519"
+    ],
+    "reconnect_resume": [
+      "olv_ev_523"
+    ]
+  },
+  "notes": {
+    "input_codecs_rates": [
+      "session.start declared audio/pcm 24 kHz and session.started accepted it"
+    ],
+    "output_codecs_rates": [
+      "session.start declared audio/pcm 24 kHz and session.started accepted it"
+    ],
+    "model_discovery": [
+      "session.started model=gpt-live-1"
+    ],
+    "audio_out": [
+      "session.output_audio.delta (pcm 24 kHz)"
+    ],
+    "tool_arguments_and_results": [
+      "tool_call get_policy_text {\"policy_id\": \"identity_verification\"} (delegated function call)",
+      "tool result submitted: {\"local_send\": \"accepted\", \"provider_acknowledgement\": \"unconfirmed\", \"call_id\": \"call_NjM1ExL5hoWb7"
+    ],
+    "usage_granularity": [
+      "session.usage.updated / session.closed usage",
+      "session.usage.updated / session.closed usage",
+      "session.usage.updated / session.closed usage"
+    ],
+    "transcript_finality": [
+      "session.*_transcript.delta events assembled into a final transcript by the adapter",
+      "session.*_transcript.delta events assembled into a final transcript by the adapter"
+    ],
+    "turn_signalling": [
+      "response.completed (nested in response.event) ends a reply; no turn-start marker"
+    ],
+    "audio_in": [
+      "synthetic speech transcribed: 'What does your policy say about identity verification'"
+    ],
+    "cancel_truncate": [
+      "Live has no truncate primitive and no client cancel was exercised; the adapter declares interrupt_truncate unsupported"
+    ],
+    "audio_alignment": [
+      "no alignment fields were examined"
+    ],
+    "direct_mcp": [
+      "not exercised; tools are delegated function calls bridged by the harness gateway"
+    ],
+    "reconnect_resume": [
+      "fresh session after close succeeded; no resume message was tried"
+    ]
+  },
+  "log_file": "artifacts/phase0/openai_live-probe-2026-10-29T00-01-14-887Z.jsonl",
+  "flags": {
+    "sdk": "harness adapter openai_live python 3.12.12",
+    "model": "gpt-live-1",
+    "backend": "gpt-6-luna"
+  }
+}

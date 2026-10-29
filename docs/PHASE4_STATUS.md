@@ -5,9 +5,14 @@
 - Six live provider configurations run through the API, Runs page, manual sessions and bake-offs: `openai-live`
   (`gpt-live-1`, backend `gpt-6-luna`), `openai-realtime-live` (`gpt-realtime-2.1`), `nova-sonic-live`
   (`amazon.nova-2-5-sonic`), `xai-voice-live` (`grok-voice-3.0`), `gemini-live` (`gemini-3.8-live`) and
-  `elevenlabs-live` (stored agent, LLM recorded per run). The OpenAI Realtime, Nova, xAI and Gemini families are
-  `implemented_and_verified` while their capability reports are current. `openai-live` and `elevenlabs-live` have no
-  capability report or AC-09 result, so their runs are `diagnostic_unverified`.
+  `elevenlabs-live` (stored agent, LLM recorded per run). Coverage has six families. On 2026-10-29 the OpenAI Realtime,
+  OpenAI Live (`openai_live`, new), xAI, Gemini and ElevenLabs reports were re-probed (reports dated 20261028/29) and AC-09
+  re-run: all five are `implemented_and_verified` until their reports expire on 2026-11-04/05. Nova's report expired
+  2026-10-24 and was not refreshed (the AWS session needs a fresh MFA: `./scripts/aws-session.sh <MFA>`, then `nova_probe.mjs`
+  and `from-nova-observations`, then `make nova-live-container`), so `nova-sonic-live` is `diagnostic_unverified`.
+  Interruption is excluded from AC-09 for Gemini, ElevenLabs and OpenAI Live (no client truncate). The OpenAI Live and
+  ElevenLabs probes cite no documentation and carry no operator terms attestation. The OpenAI Live probe drives the
+  harness adapter rather than a raw socket.
 - The catalogue has 40 live scenarios in five groups: 9 happy path, 18 identity protection, 6 vulnerable customers,
   4 fault tolerance, 3 payment actions. 31 declare FACT-01.
 - Latest comparison: the fair-harness bake-off of 2026-10-28 (`artifacts/fair-bakeoff-2026-10-28/`; 6 providers × 40
@@ -23,7 +28,7 @@
   timeout injections).
 - Test counts below (642 Python, 71 browser at `dbbe37a`) are from 2026-10-19 and have not been refreshed.
 - Bake-off reports show voice cost per run (see "Voice cost in the bake-off"); Nova runs need a re-run to be priced.
-- Still open: variance beyond 3 repetitions, capability reports and AC-09 for `openai-live` and `elevenlabs-live`,
+- Still open: variance beyond 3 repetitions, a fresh Nova report and AC-09, operator terms attestation for the newer providers,
   locale-aware caller voice, judge
   calibration policy approval (blocking stays off), live runs inside the container (no credentials or `say` there),
   and the per-section "Still open" items below.
@@ -84,11 +89,11 @@ The sections below are a chronological log; earlier counts and open items are su
 
 ## Not yet established
 
-- Repeated samples: every live run is a single sample. (Nova runner use was listed here and is now done; see later sections.)
+- (Superseded: the 2026-10-28 fair bake-off ran 3 repetitions per cell; variance beyond that is still open. Nova runner use is done.)
 - Live-model chooser for the AC-16 simulator (`model_simulator.py` is offline-tested with an injected chooser: model picks branch, oracle rejected, bad output attributed to the simulator with fallback, hashed prompt/config recorded; `OpenAIChooser` (opt-in `VOICE_HARNESS_LIVE_JUDGES=openai`) added). Synthetic commit (AC-15) is tested through the real MCP gateway with a scripted adapter (`tests/test_phase4_commit.py`: denial before identity/confirmation, single-use consumption, changed-amount invalidation, restart idempotency); a live model has not been driven to propose a commit.
 - (Superseded: OpenAI vs Nova comparisons were run, then four-provider bake-offs; see Current position.)
-- The synthetic caller uses macOS `say`; the catalogue declares locales but `say` voice selection is not
-  yet locale-aware. Narrowband/noise are simple synthetic shaping, not measured telephony.
+- The default synthetic caller uses macOS `say` (the opt-in `openai_tts` voice avoids it); the catalogue declares locales but
+  `say` voice selection is not yet locale-aware. Narrowband/noise are simple synthetic shaping, not measured telephony.
 - (Superseded: the xAI and Google adapters were merged later; see their sections below.)
 
 ## Response to the 2026-10-18 code/spec review

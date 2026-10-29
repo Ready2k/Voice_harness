@@ -419,7 +419,7 @@ class LiveApi(unittest.TestCase):
         self.assertIn("JUDGE_IS_TESTED_MODEL", verdicts["xai-self"]["reason_codes"])
         self.assertTrue(verdicts["other"]["eligible"])
         probing = next(e["content"] for e in events if e["type"] == "run.probing")
-        self.assertEqual(probing["capability_report_id"], "cap_xai_grok_voice_3_0_20261018")
+        self.assertEqual(probing["capability_report_id"], "cap_xai_grok_voice_3_0_20261028")
 
     def test_an_xai_live_export_describes_the_xai_session_and_verifies_offline(self):
         from voice_harness.evidence import verify_bundle
@@ -474,7 +474,7 @@ class LiveApi(unittest.TestCase):
         self.assertIn("JUDGE_IS_TESTED_MODEL", verdicts["gemini-self"]["reason_codes"])
         self.assertTrue(verdicts["other"]["eligible"])
         probing = next(e["content"] for e in events if e["type"] == "run.probing")
-        self.assertEqual(probing["capability_report_id"], "cap_google_gemini_3_8_live_20261019")
+        self.assertEqual(probing["capability_report_id"], "cap_google_gemini_3_8_live_20261028")
 
     def test_a_gemini_live_export_records_an_unresolved_version_and_verifies_offline(self):
         from voice_harness.evidence import verify_bundle

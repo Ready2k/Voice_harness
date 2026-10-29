@@ -238,7 +238,7 @@ class LiveAdapterTests(unittest.IsolatedAsyncioTestCase):
         transport = configure_transport('openai-live', config, 'fixed')
         self.assertEqual(transport['turn_commit'], 'provider_vad')
         self.assertFalse(transport['client_truncation'])
-        self.assertEqual(capability_binding('openai-live')['capability_status'], 'diagnostic_unverified')
+        self.assertEqual(capability_binding('openai-live')['capability_status'], 'verified')
 
     async def test_startup_error_is_prompt_and_cleans_up(self):
         async def server(ws):
