@@ -70,7 +70,8 @@ Phases follow spec §16 and are gated by acceptance criteria (AC-01…AC-21), no
 | 2 | First adapters and coverage: OpenAI Realtime, Amazon Nova Sonic, AC-09, AC-20 | Complete |
 | 3 | Judges and observability: signing, cost, calibration, review, comparison, independent ASR | Complete |
 | 4 | Breadth and depth: OpenAI GPT-Live, xAI Grok Voice, Gemini Live and ElevenLabs Agents, 40-scenario catalogue, faults, live API runs, manual sessions, bake-offs, telephone pilot | Complete (gates met 2026-10-29) |
-| 5 | Hardening: security review, load and chaos tests, reproducibility, regression gates | Ongoing |
+| 5 | Hardening: security review, load and chaos tests, reproducibility, regression gates | Complete (2026-10-29) |
+| 6 | Transport latency study: does WebRTC lower first-audio latency for real callers? Separate from the scorecard, playback gate unchanged | Proposed ([spec](PHASE6_SPEC.md)) |
 
 ### Next
 
@@ -80,4 +81,4 @@ Phases follow spec §16 and are gated by acceptance criteria (AC-01…AC-21), no
 - Exercise reconnect/resume, direct MCP and audio alignment, which are Unknown for every provider.
 - Run live runs inside the container: the `openai_tts` caller removes the `say` dependency, but credentials and the live profile are not yet in Compose.
 
-See [Phase 4 status](PHASE4_STATUS.md) for what is carried into Phase 5, and [Phase 5 status](PHASE5_STATUS.md) for the hardening backlog.
+See [Phase 4 status](PHASE4_STATUS.md) for what is carried into Phase 5, [Phase 5 status](PHASE5_STATUS.md) for the hardening backlog, and the [Phase 6 spec](PHASE6_SPEC.md) for what is proposed next.

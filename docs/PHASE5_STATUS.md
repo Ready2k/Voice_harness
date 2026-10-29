@@ -1,7 +1,7 @@
-# Phase 5 status (hardening, ongoing; opened 2026-10-29)
+# Phase 5 status (hardening, complete 2026-10-29; opened 2026-10-29)
 
 Spec §16: "Security review, dependency pinning, load tests, chaos tests, retention tests, reproducibility checks, and
-regression gates in CI." Phase 5 has no pass/fail gate; it is a backlog that is worked down. Nothing below is marked done
+regression gates in CI." Phase 5 has no pass/fail gate; it was a backlog that was worked down, and items 1-8 are done. Nothing below is marked done
 unless a command and a result are recorded next to it. Spec §18 (runtime selection) and §11 require Phase 5 load tests to measure concurrent
 sessions, CPU, memory, queue depth, JSON serialization cost and persistence backpressure before a production-scale runtime
 is chosen; Phase 1's component benchmark (`make benchmark`) is the baseline this phase extends, not replaces.
@@ -28,7 +28,7 @@ Order is a suggestion; the first item unblocks trusting the rest.
 | 6 | Reproducibility checks | reproducibility | done 2026-10-29 | `tests/test_reproducibility.py` (in `make test`, SQLite and PostgreSQL): the same scenario and seed give the same normalised ledger digest for all three built-in scenarios, a different seed gives a different one, and the digest changes when a decision changes. Raw event hashes can never match between runs (random event, run and session ids, monotonic and wall-clock times are inside the hash chain), so the digest drops those fields and renumbers ids by first appearance, which keeps the causation graph in the comparison. Also dropped, because they are measured or random rather than decided: `latency_ms`, OpenTelemetry trace/span ids, approval `token_id`, and ISO timestamps inside tool results (`as_of`). Mutation check: an unseeded simulator draw fails four tests. The contracts drift check (`tests/test_contracts_in_sync.py`) already runs in the container suite, so it is in CI through `make test` |
 | 7 | Security review | security review | done 2026-10-29 | `tests/test_security_review.py` (15 tests, in `make test`) plus a read of `auth.py`, the API middleware, the WebSocket admission path, export routes and the image build. No exploitable defect found; low-severity observations recorded below, none fixed because none changes the loopback-only threat model. Eight mutations (route without auth, origin policy off, WebSocket origin ignored, reusable / unbound / non-expiring ticket, reviewer write, token mode 0644, `unsafe-inline` CSP) each fail a specific test. Approval-token single use and replay were already covered by the AC-15 tests in `tests/test_release.py` and the chaos tests (token not consumed on outage), so they were reviewed, not duplicated |
 | 8 | Dependency audit | pinning | done 2026-10-29 | `make audit` (pip-audit on `requirements.lock`, now also `npm audit` on `scripts/probe`) reports 0 vulnerabilities; trivy agrees on both lockfiles. New opt-in `make image-scan` (trivy, HIGH/CRITICAL with a fix) found fixable OpenSSL (CVE-2026-84782) in the Python and PostgreSQL bases: digests bumped to python 3.13.18 and a rebuilt postgres 17.11, and `make test` passes on both (1123 tests OK, 9 skipped). Update cadence is in `docs/ENGINEERING.md` (Dependency cadence). Accepted, recorded below |
-| 9 | Optional: WebRTC transport | §13 | deferred | Only after 3 and 4, and only with an equally enforceable playback gate |
+| 9 | Optional: WebRTC transport | §13 | moved to Phase 6 | Not built as a transport. Reframed as a labelled latency study that leaves the playback gate unchanged: see `docs/PHASE6_SPEC.md` |
 
 ## Retention findings (2026-10-29)
 

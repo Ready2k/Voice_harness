@@ -28,7 +28,7 @@ Delegate agent extension: the [specification](docs/DELEGATE_AGENT_SPEC.md) is st
 
 ## Status
 
-Phases 0-4 are complete (Phase 4 gates met 2026-10-29); Phase 5 (hardening) is ongoing: items 1-8 of its backlog are done (CI on PostgreSQL, performance gate, load test, chaos tests, retention tests, reproducibility checks, security review, dependency audit); only the deferred WebRTC option remains. See [Phase 5 status](docs/PHASE5_STATUS.md). Provider
+Phases 0-5 are complete (Phase 4 gates met and Phase 5 hardening finished 2026-10-29); Phase 5 covered (CI on PostgreSQL, performance gate, load test, chaos tests, retention tests, reproducibility checks, security review, dependency audit). A proposed Phase 6 transport latency study is in [its spec](docs/PHASE6_SPEC.md). See [Phase 5 status](docs/PHASE5_STATUS.md). Provider
 families are `implemented_and_verified` only while their capability reports are current (7-day expiry); check the Coverage page for the live state. The 28 October fair bake-off (6 providers × 40 scenarios × 3 repetitions) is the first repeated-sample set. No AI judge policy is approved
 (blocking is off), and no real prices are established. See [Phase 4 status](docs/PHASE4_STATUS.md).
 
