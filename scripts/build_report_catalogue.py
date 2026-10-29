@@ -62,7 +62,7 @@ def main():
         if output == ROOT or ROOT in output.parents and output.parts[len(ROOT.parts):len(ROOT.parts)+1] in [('artifacts',), ('reports',), ('docs',), ('site',)]:
             raise SystemExit('Choose a staging directory outside source content')
         output.mkdir(parents=True)
-        for name in files + ['index.html', 'vision.html', 'how-it-works.html', 'executive-special.html', 'site/executive-special.css', 'site/executive-special.js', 'voice-library.html', 'executive-trust.html', 'site/style.css', 'site/app.js', 'site/catalogue.json', 'site/voice-library.css', 'site/voice-library.js', 'site/voice-library.json', 'site/cx-review-data.json']:
+        for name in files + ['favicon.ico', 'site/voice-harness-mark.svg', 'index.html', 'vision.html', 'how-it-works.html', 'executive-special.html', 'site/executive-special.css', 'site/executive-special.js', 'voice-library.html', 'executive-trust.html', 'site/style.css', 'site/app.js', 'site/catalogue.json', 'site/voice-library.css', 'site/voice-library.js', 'site/voice-library.json', 'site/cx-review-data.json']:
             dest = output / name
             dest.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(ROOT / name, dest)
