@@ -62,22 +62,30 @@ def main():
                  'xai-voice-live': 'xAI Grok Voice', 'gemini-live': 'Google Gemini Live', 'elevenlabs-live': 'ElevenLabs Agents'}
         voices = {'ZF6FPAbjXT4488VcRRnw': 'Amelia'}
         flac = json.loads((conversations / 'clips/flac-manifest.json').read_text())
+
+        def flac_seconds(path):
+            header = path.read_bytes()[:42]  # fLaC marker, block header, then STREAMINFO
+            rate = (header[18] << 12) | (header[19] << 4) | (header[20] >> 4)
+            samples = ((header[21] & 0x0F) << 32) | int.from_bytes(header[22:26], 'big')
+            return round(samples / rate, 1)
+
         cells = []
         for job in plan['jobs']:
             result = results.get(job['id'])
-            if job['condition'] != 'tuned' or job['repetition'] != 1 or not result or result['state'] != 'completed':
+            if job['repetition'] != 1 or not result or result['state'] != 'completed':
                 continue
-            profile = plan['profiles'][job['provider']]['tuned']
+            profile = plan['profiles'][job['provider']][job['condition']]
             clip = f"artifacts/voice-conversation-v2/clips/{job['id']}.flac"
-            cells.append(dict(id=job['id'], provider=names[job['provider']], scenario=job['scenario'], path=clip,
-                              model=result.get('returned_model_id') or profile['model_id'], voice=voices.get(profile['voice'], profile['voice'] or 'provider default'),
+            cells.append(dict(id=job['id'], provider=names[job['provider']], scenario=job['scenario'], condition=job['condition'], path=clip,
+                              seconds=flac_seconds(ROOT / clip), model=result.get('returned_model_id') or profile['model_id'],
+                              voice=voices.get(profile['voice'], profile['voice'] or 'provider default'),
                               prompt_sha256=result['configuration']['prompt_sha256'], wav_sha256=flac[job['id']]['wav_sha256'],
                               flac_sha256=flac[job['id']]['flac_sha256']))
         order = list(names.values())
-        cells.sort(key=lambda c: order.index(c['provider']))
-        scenarios = [dict(id=x['id'], title=x['title']) for x in plan['scenarios']]
+        cells.sort(key=lambda c: (order.index(c['provider']), c['condition'] != 'common'))
+        scenarios = [dict(id=x['id'], title=x['title'], turns=x['turns'], review=x['review']) for x in plan['scenarios']]
         (ROOT / 'site/voice-conversations.json').write_text(json.dumps(dict(
-            source='artifacts/voice-conversation-v2/plan.json', providers=order, scenarios=scenarios, clips=cells), indent=2) + '\n')
+            source='artifacts/voice-conversation-v2/plan.json', recorded=plan['created_at'][:10], providers=order, scenarios=scenarios, clips=cells), indent=2) + '\n')
     (ROOT / 'site/voice-library.json').write_text(json.dumps(library, indent=2) + '\n')
     (ROOT / 'site/catalogue.json').write_text(json.dumps(payload, indent=2) + '\n')
     if args.output:
