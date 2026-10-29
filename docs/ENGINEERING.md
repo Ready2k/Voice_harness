@@ -30,7 +30,7 @@ make audit         # pip-audit on requirements.lock, npm audit on scripts/probe
 make image-scan    # trivy on the built api image (opt-in, not in CI)
 make demo          # three mock scenarios through the API, verified bundles under /data/demo
 make benchmark     # component benchmark -> /data/phase1-baseline.json
-make perf-gate     # benchmark compared with artifacts/perf-baseline.json (CI runs this)
+make perf-gate     # benchmark compared with artifacts/perf-baseline.json (CI runs this); a failure is rerun once from a fresh benchmark
 make load-test     # harness concurrency steps, mock provider, no spend (not in CI)
 make chaos-postgres # stop the real PostgreSQL container mid-run (opt-in, not in CI)
 make stop
