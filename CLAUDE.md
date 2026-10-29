@@ -15,6 +15,7 @@ make up          # init secrets, build and start api + otel-collector (API on 12
 make test        # container suite (tests + browser-tests); this is what CI runs
 make demo        # run 3 scenarios through the API, save verified bundles under /data/demo
 make benchmark   # component benchmark -> /data/phase1-baseline.json
+make perf-gate   # benchmark vs artifacts/perf-baseline.json (CI); make load-test / make chaos-postgres are opt-in, not in CI
 make golden      # standalone identity-bypass fixture
 make recovery    # standalone SQLite recovery fixture
 make stop        # compose down (keeps volumes)

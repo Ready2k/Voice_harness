@@ -29,6 +29,9 @@ make lint          # ruff + bandit
 make audit         # pip-audit on requirements.lock
 make demo          # three mock scenarios through the API, verified bundles under /data/demo
 make benchmark     # component benchmark -> /data/phase1-baseline.json
+make perf-gate     # benchmark compared with artifacts/perf-baseline.json (CI runs this)
+make load-test     # harness concurrency steps, mock provider, no spend (not in CI)
+make chaos-postgres # stop the real PostgreSQL container mid-run (opt-in, not in CI)
 make stop
 make serve-live     # host API on :8766 for live runs (needs .env); make token / make token-host copy the operator token
 make golden / make recovery   # standalone fixtures
