@@ -16,6 +16,7 @@ FEATURES = [
     ('artifacts/full-advanced-bakeoff-2026-10-26/rescored-2026-10-27/report.html', 'Advanced bake-off · corrected assessment', 'Earlier 600-cell experiment, with corrected latency and task-completion scoring. Different setup from the fair bake-off.', 'Re-scored', '2026-10-27'),
     ('reports/gpt-live-1-evaluation-2026-10-27.html', 'GPT-Live 1 · single-model evaluation', 'Forty synthetic scenarios with assurance checks, task completion, latency and scoped costs.', 'Evaluation', '2026-10-27'),
     ('reports/gpt-live-1-listening-2026-10-27.html', 'GPT-Live 1 · listening room', 'Selected assistant speech with audio players and transcripts. Use the evaluation for measured latency.', 'Listening', '2026-10-27'),
+    ('artifacts/voice-conversation-v2/rate.html', 'Voice conversation · blind listening study', 'Common against provider-tuned prompts in 144 three-turn conversations, with British female assistant and British male caller voices. Ratings pending.', 'Listening', '2026-10-29'),
     ('artifacts/voice-naturalness-2026-10-25/rate.html', 'Voice naturalness · listening study', 'Listen to and rate the retained voice samples.', 'Listening', '2026-10-25'),
 ]
 
@@ -29,7 +30,7 @@ def main():
     for name in files:
         path = ROOT / name
         dates = re.findall(r'20\d{2}-\d{2}-\d{2}', name)
-        kind = {'html': 'Web report', 'md': 'Notes', 'pdf': 'PDF', 'wav': 'Audio', 'mp3': 'Audio', 'ogg': 'Audio', 'pcm': 'Audio', 'json': 'Data', 'jsonl': 'Data', 'gz': 'Archive', 'zip': 'Archive'}.get(path.suffix[1:].lower(), 'Other')
+        kind = {'html': 'Web report', 'md': 'Notes', 'pdf': 'PDF', 'wav': 'Audio', 'flac': 'Audio', 'mp3': 'Audio', 'ogg': 'Audio', 'pcm': 'Audio', 'json': 'Data', 'jsonl': 'Data', 'gz': 'Archive', 'zip': 'Archive'}.get(path.suffix[1:].lower(), 'Other')
         # Markdown is best read in GitHub's renderer; all other files are served directly.
         entries.append(dict(path=name, title=path.stem.replace('-', ' ').replace('_', ' '), date=max(dates) if dates else '', kind=kind, size=path.stat().st_size, url=REPO + name if kind == 'Notes' else name, group='/'.join(path.parts[:2])))
     features = [dict(path=p, title=t, description=d, status=s, date=dt) for p,t,d,s,dt in FEATURES if p in files or p == 'executive-special.html' and (ROOT / p).is_file()]

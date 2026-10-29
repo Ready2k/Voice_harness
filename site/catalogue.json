@@ -1,6 +1,240 @@
 {
-  "latest": "2026-10-28",
+  "latest": "2026-10-29",
   "entries": [
+    {
+      "path": "artifacts/pricing/vendor-pricing-2026-10-29.json",
+      "title": "vendor pricing 2026 10 29",
+      "date": "2026-10-29",
+      "kind": "Data",
+      "size": 72691,
+      "url": "artifacts/pricing/vendor-pricing-2026-10-29.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase5-load-2026-10-29.json",
+      "title": "phase5 load 2026 10 29",
+      "date": "2026-10-29",
+      "kind": "Data",
+      "size": 4614,
+      "url": "artifacts/phase5-load-2026-10-29.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/openai_live-probe-2026-10-29T00-01-14-887Z.jsonl",
+      "title": "openai live probe 2026 10 29T00 01 14 887Z",
+      "date": "2026-10-29",
+      "kind": "Data",
+      "size": 154398,
+      "url": "artifacts/phase0/openai_live-probe-2026-10-29T00-01-14-887Z.jsonl",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/openai_live-observations-2026-10-29T00-01-14-887Z.json",
+      "title": "openai live observations 2026 10 29T00 01 14 887Z",
+      "date": "2026-10-29",
+      "kind": "Data",
+      "size": 3129,
+      "url": "artifacts/phase0/openai_live-observations-2026-10-29T00-01-14-887Z.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/nova-probe-2026-10-29T08-15-31-058Z.jsonl",
+      "title": "nova probe 2026 10 29T08 15 31 058Z",
+      "date": "2026-10-29",
+      "kind": "Data",
+      "size": 177871,
+      "url": "artifacts/phase0/nova-probe-2026-10-29T08-15-31-058Z.jsonl",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/nova-probe-2026-10-29T08-15-06-303Z.jsonl",
+      "title": "nova probe 2026 10 29T08 15 06 303Z",
+      "date": "2026-10-29",
+      "kind": "Data",
+      "size": 169147,
+      "url": "artifacts/phase0/nova-probe-2026-10-29T08-15-06-303Z.jsonl",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/nova-observations-2026-10-29T08-15-31-058Z.json",
+      "title": "nova observations 2026 10 29T08 15 31 058Z",
+      "date": "2026-10-29",
+      "kind": "Data",
+      "size": 7250,
+      "url": "artifacts/phase0/nova-observations-2026-10-29T08-15-31-058Z.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/nova-observations-2026-10-29T08-15-06-303Z.json",
+      "title": "nova observations 2026 10 29T08 15 06 303Z",
+      "date": "2026-10-29",
+      "kind": "Data",
+      "size": 6111,
+      "url": "artifacts/phase0/nova-observations-2026-10-29T08-15-06-303Z.json",
+      "group": "//Users"
+    },
+    {
+      "path": "reports/gpt-live-vs-realtime-2026-10-28.md",
+      "title": "gpt live vs realtime 2026 10 28",
+      "date": "2026-10-28",
+      "kind": "Notes",
+      "size": 3279,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/reports/gpt-live-vs-realtime-2026-10-28.md",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/xai-probe-2026-10-28T23-55-01-216Z.jsonl",
+      "title": "xai probe 2026 10 28T23 55 01 216Z",
+      "date": "2026-10-28",
+      "kind": "Data",
+      "size": 144532,
+      "url": "artifacts/phase0/xai-probe-2026-10-28T23-55-01-216Z.jsonl",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/xai-observations-2026-10-28T23-55-01-216Z.json",
+      "title": "xai observations 2026 10 28T23 55 01 216Z",
+      "date": "2026-10-28",
+      "kind": "Data",
+      "size": 5814,
+      "url": "artifacts/phase0/xai-observations-2026-10-28T23-55-01-216Z.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/openai-probe-2026-10-28T23-55-01-276Z.jsonl",
+      "title": "openai probe 2026 10 28T23 55 01 276Z",
+      "date": "2026-10-28",
+      "kind": "Data",
+      "size": 55119,
+      "url": "artifacts/phase0/openai-probe-2026-10-28T23-55-01-276Z.jsonl",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/openai-observations-2026-10-28T23-55-01-276Z.json",
+      "title": "openai observations 2026 10 28T23 55 01 276Z",
+      "date": "2026-10-28",
+      "kind": "Data",
+      "size": 2925,
+      "url": "artifacts/phase0/openai-observations-2026-10-28T23-55-01-276Z.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/google_gemini-probe-2026-10-28T23-55-01-309Z.jsonl",
+      "title": "google gemini probe 2026 10 28T23 55 01 309Z",
+      "date": "2026-10-28",
+      "kind": "Data",
+      "size": 188092,
+      "url": "artifacts/phase0/google_gemini-probe-2026-10-28T23-55-01-309Z.jsonl",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/google_gemini-observations-2026-10-28T23-55-01-309Z.json",
+      "title": "google gemini observations 2026 10 28T23 55 01 309Z",
+      "date": "2026-10-28",
+      "kind": "Data",
+      "size": 4966,
+      "url": "artifacts/phase0/google_gemini-observations-2026-10-28T23-55-01-309Z.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/elevenlabs-probe-2026-10-28T23-59-33-534Z.jsonl",
+      "title": "elevenlabs probe 2026 10 28T23 59 33 534Z",
+      "date": "2026-10-28",
+      "kind": "Data",
+      "size": 107740,
+      "url": "artifacts/phase0/elevenlabs-probe-2026-10-28T23-59-33-534Z.jsonl",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/elevenlabs-observations-2026-10-28T23-59-33-534Z.json",
+      "title": "elevenlabs observations 2026 10 28T23 59 33 534Z",
+      "date": "2026-10-28",
+      "kind": "Data",
+      "size": 3212,
+      "url": "artifacts/phase0/elevenlabs-observations-2026-10-28T23-59-33-534Z.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/judge-calibration-2026-10-28/runner.py",
+      "title": "runner",
+      "date": "2026-10-28",
+      "kind": "Other",
+      "size": 3456,
+      "url": "artifacts/judge-calibration-2026-10-28/runner.py",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/judge-calibration-2026-10-28/openai-gpt-6-sol.json",
+      "title": "openai gpt 6 sol",
+      "date": "2026-10-28",
+      "kind": "Data",
+      "size": 22841,
+      "url": "artifacts/judge-calibration-2026-10-28/openai-gpt-6-sol.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/judge-calibration-2026-10-28/openai-gpt-6-sol-responses.json",
+      "title": "openai gpt 6 sol responses",
+      "date": "2026-10-28",
+      "kind": "Data",
+      "size": 140200,
+      "url": "artifacts/judge-calibration-2026-10-28/openai-gpt-6-sol-responses.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/judge-calibration-2026-10-28/openai-gpt-6-sol-policy.json",
+      "title": "openai gpt 6 sol policy",
+      "date": "2026-10-28",
+      "kind": "Data",
+      "size": 2536,
+      "url": "artifacts/judge-calibration-2026-10-28/openai-gpt-6-sol-policy.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/judge-calibration-2026-10-28/manifest.json",
+      "title": "manifest",
+      "date": "2026-10-28",
+      "kind": "Data",
+      "size": 989,
+      "url": "artifacts/judge-calibration-2026-10-28/manifest.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/judge-calibration-2026-10-28/bedrock-haiku-4-5.json",
+      "title": "bedrock haiku 4 5",
+      "date": "2026-10-28",
+      "kind": "Data",
+      "size": 23314,
+      "url": "artifacts/judge-calibration-2026-10-28/bedrock-haiku-4-5.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/judge-calibration-2026-10-28/bedrock-haiku-4-5-responses.json",
+      "title": "bedrock haiku 4 5 responses",
+      "date": "2026-10-28",
+      "kind": "Data",
+      "size": 298702,
+      "url": "artifacts/judge-calibration-2026-10-28/bedrock-haiku-4-5-responses.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/judge-calibration-2026-10-28/bedrock-haiku-4-5-policy.json",
+      "title": "bedrock haiku 4 5 policy",
+      "date": "2026-10-28",
+      "kind": "Data",
+      "size": 2575,
+      "url": "artifacts/judge-calibration-2026-10-28/bedrock-haiku-4-5-policy.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/judge-calibration-2026-10-28/README.md",
+      "title": "README",
+      "date": "2026-10-28",
+      "kind": "Notes",
+      "size": 4233,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/artifacts/judge-calibration-2026-10-28/README.md",
+      "group": "//Users"
+    },
     {
       "path": "artifacts/gpt-live-voice-library-2026-10-28/verify.json",
       "title": "verify",
@@ -159,7 +393,7 @@
       "title": "report",
       "date": "2026-10-28",
       "kind": "Data",
-      "size": 3889181,
+      "size": 3890080,
       "url": "artifacts/fair-bakeoff-2026-10-28/rescored-2026-10-28/report.json",
       "group": "//Users"
     },
@@ -168,7 +402,7 @@
       "title": "report",
       "date": "2026-10-28",
       "kind": "Web report",
-      "size": 3000264,
+      "size": 3001714,
       "url": "artifacts/fair-bakeoff-2026-10-28/rescored-2026-10-28/report.html",
       "group": "//Users"
     },
@@ -177,7 +411,7 @@
       "title": "README",
       "date": "2026-10-28",
       "kind": "Notes",
-      "size": 11250,
+      "size": 11962,
       "url": "https://github.com/Ready2k/Voice_harness/blob/main/artifacts/fair-bakeoff-2026-10-28/rescored-2026-10-28/README.md",
       "group": "//Users"
     },
@@ -231,7 +465,7 @@
       "title": "index",
       "date": "2026-10-28",
       "kind": "Web report",
-      "size": 957,
+      "size": 1064,
       "url": "artifacts/fair-bakeoff-2026-10-28/index.html",
       "group": "//Users"
     },
@@ -2859,7 +3093,7 @@
       "title": "VOICE CONVERSATION COMPARISON",
       "date": "",
       "kind": "Notes",
-      "size": 10264,
+      "size": 10813,
       "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/VOICE_CONVERSATION_COMPARISON.md",
       "group": "//Users"
     },
@@ -2868,7 +3102,7 @@
       "title": "VISION",
       "date": "",
       "kind": "Notes",
-      "size": 5238,
+      "size": 6001,
       "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/VISION.md",
       "group": "//Users"
     },
@@ -2895,7 +3129,7 @@
       "title": "PROVIDER CONFIG PARITY",
       "date": "",
       "kind": "Notes",
-      "size": 5241,
+      "size": 5373,
       "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/PROVIDER_CONFIG_PARITY.md",
       "group": "//Users"
     },
@@ -2909,11 +3143,47 @@
       "group": "//Users"
     },
     {
+      "path": "docs/PHASE6_SPEC.md",
+      "title": "PHASE6 SPEC",
+      "date": "",
+      "kind": "Notes",
+      "size": 4585,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/PHASE6_SPEC.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/PHASE6_NOTES_transport_survey.md",
+      "title": "PHASE6 NOTES transport survey",
+      "date": "",
+      "kind": "Notes",
+      "size": 9809,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/PHASE6_NOTES_transport_survey.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/PHASE6_NOTES_design.md",
+      "title": "PHASE6 NOTES design",
+      "date": "",
+      "kind": "Notes",
+      "size": 8284,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/PHASE6_NOTES_design.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/PHASE5_STATUS.md",
+      "title": "PHASE5 STATUS",
+      "date": "",
+      "kind": "Notes",
+      "size": 16416,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/PHASE5_STATUS.md",
+      "group": "//Users"
+    },
+    {
       "path": "docs/PHASE4_STATUS.md",
       "title": "PHASE4 STATUS",
       "date": "",
       "kind": "Notes",
-      "size": 39487,
+      "size": 45320,
       "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/PHASE4_STATUS.md",
       "group": "//Users"
     },
@@ -2922,7 +3192,7 @@
       "title": "PHASE4 NOTES xai",
       "date": "",
       "kind": "Notes",
-      "size": 7290,
+      "size": 7668,
       "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/PHASE4_NOTES_xai.md",
       "group": "//Users"
     },
@@ -2976,7 +3246,7 @@
       "title": "PHASE4 NOTES elevenlabs",
       "date": "",
       "kind": "Notes",
-      "size": 4497,
+      "size": 5510,
       "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/PHASE4_NOTES_elevenlabs.md",
       "group": "//Users"
     },
@@ -3012,7 +3282,7 @@
       "title": "PHASE2 STATUS",
       "date": "",
       "kind": "Notes",
-      "size": 5008,
+      "size": 5281,
       "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/PHASE2_STATUS.md",
       "group": "//Users"
     },
@@ -3053,11 +3323,20 @@
       "group": "//Users"
     },
     {
+      "path": "docs/EXECUTIVE_BRIEFING_REFRESH.md",
+      "title": "EXECUTIVE BRIEFING REFRESH",
+      "date": "",
+      "kind": "Notes",
+      "size": 2014,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/EXECUTIVE_BRIEFING_REFRESH.md",
+      "group": "//Users"
+    },
+    {
       "path": "docs/ENGINEERING.md",
       "title": "ENGINEERING",
       "date": "",
       "kind": "Notes",
-      "size": 10142,
+      "size": 15006,
       "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/ENGINEERING.md",
       "group": "//Users"
     },
@@ -3147,7 +3426,7 @@
       "title": "BAKEOFF ASSESSORS",
       "date": "",
       "kind": "Notes",
-      "size": 9139,
+      "size": 9170,
       "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/BAKEOFF_ASSESSORS.md",
       "group": "//Users"
     },
@@ -3156,7 +3435,7 @@
       "title": "ARCHITECTURE",
       "date": "",
       "kind": "Notes",
-      "size": 10320,
+      "size": 12492,
       "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/ARCHITECTURE.md",
       "group": "//Users"
     },
@@ -3167,6 +3446,1518 @@
       "kind": "Notes",
       "size": 5440,
       "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/ADVANCED_FULL_BAKEOFF.md",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/results.json",
+      "title": "results",
+      "date": "",
+      "kind": "Data",
+      "size": 371445,
+      "url": "artifacts/voice-conversation-v2/results.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/rate.html",
+      "title": "rate",
+      "date": "",
+      "kind": "Web report",
+      "size": 26759,
+      "url": "artifacts/voice-conversation-v2/rate.html",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/plan.json",
+      "title": "plan",
+      "date": "",
+      "kind": "Data",
+      "size": 42326,
+      "url": "artifacts/voice-conversation-v2/plan.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/index.html",
+      "title": "index",
+      "date": "",
+      "kind": "Web report",
+      "size": 1565,
+      "url": "artifacts/voice-conversation-v2/index.html",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/flac-manifest.json",
+      "title": "flac manifest",
+      "date": "",
+      "kind": "Data",
+      "size": 41331,
+      "url": "artifacts/voice-conversation-v2/clips/flac-manifest.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/fbd4e0f17fc44e73.flac",
+      "title": "fbd4e0f17fc44e73",
+      "date": "",
+      "kind": "Audio",
+      "size": 621568,
+      "url": "artifacts/voice-conversation-v2/clips/fbd4e0f17fc44e73.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/fb6b59ddf502f8f3.flac",
+      "title": "fb6b59ddf502f8f3",
+      "date": "",
+      "kind": "Audio",
+      "size": 896271,
+      "url": "artifacts/voice-conversation-v2/clips/fb6b59ddf502f8f3.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/f7675d14bdf66cc2.flac",
+      "title": "f7675d14bdf66cc2",
+      "date": "",
+      "kind": "Audio",
+      "size": 1196750,
+      "url": "artifacts/voice-conversation-v2/clips/f7675d14bdf66cc2.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/f52465deb9305b6e.flac",
+      "title": "f52465deb9305b6e",
+      "date": "",
+      "kind": "Audio",
+      "size": 673291,
+      "url": "artifacts/voice-conversation-v2/clips/f52465deb9305b6e.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/f52298220dc2a5b3.flac",
+      "title": "f52298220dc2a5b3",
+      "date": "",
+      "kind": "Audio",
+      "size": 911073,
+      "url": "artifacts/voice-conversation-v2/clips/f52298220dc2a5b3.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/f4f4ea67965fc971.flac",
+      "title": "f4f4ea67965fc971",
+      "date": "",
+      "kind": "Audio",
+      "size": 826161,
+      "url": "artifacts/voice-conversation-v2/clips/f4f4ea67965fc971.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/f44501f0aa256d51.flac",
+      "title": "f44501f0aa256d51",
+      "date": "",
+      "kind": "Audio",
+      "size": 654201,
+      "url": "artifacts/voice-conversation-v2/clips/f44501f0aa256d51.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/f2bbefd9f7917404.flac",
+      "title": "f2bbefd9f7917404",
+      "date": "",
+      "kind": "Audio",
+      "size": 661235,
+      "url": "artifacts/voice-conversation-v2/clips/f2bbefd9f7917404.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/f2006e9723a8eab7.flac",
+      "title": "f2006e9723a8eab7",
+      "date": "",
+      "kind": "Audio",
+      "size": 789899,
+      "url": "artifacts/voice-conversation-v2/clips/f2006e9723a8eab7.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/ee858c839ec3b7ab.flac",
+      "title": "ee858c839ec3b7ab",
+      "date": "",
+      "kind": "Audio",
+      "size": 1036972,
+      "url": "artifacts/voice-conversation-v2/clips/ee858c839ec3b7ab.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/ed7220ec0a8ee209.flac",
+      "title": "ed7220ec0a8ee209",
+      "date": "",
+      "kind": "Audio",
+      "size": 803328,
+      "url": "artifacts/voice-conversation-v2/clips/ed7220ec0a8ee209.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/eb8493e4ef32905e.flac",
+      "title": "eb8493e4ef32905e",
+      "date": "",
+      "kind": "Audio",
+      "size": 624408,
+      "url": "artifacts/voice-conversation-v2/clips/eb8493e4ef32905e.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/eb3b3970995f2b93.flac",
+      "title": "eb3b3970995f2b93",
+      "date": "",
+      "kind": "Audio",
+      "size": 1709241,
+      "url": "artifacts/voice-conversation-v2/clips/eb3b3970995f2b93.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/e9eae113bbf5abb8.flac",
+      "title": "e9eae113bbf5abb8",
+      "date": "",
+      "kind": "Audio",
+      "size": 825836,
+      "url": "artifacts/voice-conversation-v2/clips/e9eae113bbf5abb8.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/e9424881bbf22244.flac",
+      "title": "e9424881bbf22244",
+      "date": "",
+      "kind": "Audio",
+      "size": 752102,
+      "url": "artifacts/voice-conversation-v2/clips/e9424881bbf22244.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/e64085d548f3f1e1.flac",
+      "title": "e64085d548f3f1e1",
+      "date": "",
+      "kind": "Audio",
+      "size": 991500,
+      "url": "artifacts/voice-conversation-v2/clips/e64085d548f3f1e1.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/e5460adea5d14b98.flac",
+      "title": "e5460adea5d14b98",
+      "date": "",
+      "kind": "Audio",
+      "size": 1291011,
+      "url": "artifacts/voice-conversation-v2/clips/e5460adea5d14b98.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/e47a7de7106043ed.flac",
+      "title": "e47a7de7106043ed",
+      "date": "",
+      "kind": "Audio",
+      "size": 1225351,
+      "url": "artifacts/voice-conversation-v2/clips/e47a7de7106043ed.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/e3875c2a6ba56516.flac",
+      "title": "e3875c2a6ba56516",
+      "date": "",
+      "kind": "Audio",
+      "size": 1047807,
+      "url": "artifacts/voice-conversation-v2/clips/e3875c2a6ba56516.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/e379e7ebccc6bac6.flac",
+      "title": "e379e7ebccc6bac6",
+      "date": "",
+      "kind": "Audio",
+      "size": 1800718,
+      "url": "artifacts/voice-conversation-v2/clips/e379e7ebccc6bac6.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/e2da3df2ea9edc61.flac",
+      "title": "e2da3df2ea9edc61",
+      "date": "",
+      "kind": "Audio",
+      "size": 920528,
+      "url": "artifacts/voice-conversation-v2/clips/e2da3df2ea9edc61.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/e2115ee0deddb43a.flac",
+      "title": "e2115ee0deddb43a",
+      "date": "",
+      "kind": "Audio",
+      "size": 1087605,
+      "url": "artifacts/voice-conversation-v2/clips/e2115ee0deddb43a.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/dc28e2dea10ccce5.flac",
+      "title": "dc28e2dea10ccce5",
+      "date": "",
+      "kind": "Audio",
+      "size": 1272570,
+      "url": "artifacts/voice-conversation-v2/clips/dc28e2dea10ccce5.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/db4671218495df7f.flac",
+      "title": "db4671218495df7f",
+      "date": "",
+      "kind": "Audio",
+      "size": 1089969,
+      "url": "artifacts/voice-conversation-v2/clips/db4671218495df7f.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/da5cf4d75559ad30.flac",
+      "title": "da5cf4d75559ad30",
+      "date": "",
+      "kind": "Audio",
+      "size": 2028744,
+      "url": "artifacts/voice-conversation-v2/clips/da5cf4d75559ad30.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/d66a3e0cfddedc35.flac",
+      "title": "d66a3e0cfddedc35",
+      "date": "",
+      "kind": "Audio",
+      "size": 800632,
+      "url": "artifacts/voice-conversation-v2/clips/d66a3e0cfddedc35.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/d305935c8f1019ed.flac",
+      "title": "d305935c8f1019ed",
+      "date": "",
+      "kind": "Audio",
+      "size": 1278138,
+      "url": "artifacts/voice-conversation-v2/clips/d305935c8f1019ed.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/d1a7ba8e22e3c6e6.flac",
+      "title": "d1a7ba8e22e3c6e6",
+      "date": "",
+      "kind": "Audio",
+      "size": 1734077,
+      "url": "artifacts/voice-conversation-v2/clips/d1a7ba8e22e3c6e6.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/d169a1c2e049b83d.flac",
+      "title": "d169a1c2e049b83d",
+      "date": "",
+      "kind": "Audio",
+      "size": 641404,
+      "url": "artifacts/voice-conversation-v2/clips/d169a1c2e049b83d.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/cef6e4bc59b53951.flac",
+      "title": "cef6e4bc59b53951",
+      "date": "",
+      "kind": "Audio",
+      "size": 1189842,
+      "url": "artifacts/voice-conversation-v2/clips/cef6e4bc59b53951.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/ce537e91a876ca8d.flac",
+      "title": "ce537e91a876ca8d",
+      "date": "",
+      "kind": "Audio",
+      "size": 1183329,
+      "url": "artifacts/voice-conversation-v2/clips/ce537e91a876ca8d.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/cc4f6bc1891f9a1c.flac",
+      "title": "cc4f6bc1891f9a1c",
+      "date": "",
+      "kind": "Audio",
+      "size": 1090914,
+      "url": "artifacts/voice-conversation-v2/clips/cc4f6bc1891f9a1c.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/c9cd0dc6b1766428.flac",
+      "title": "c9cd0dc6b1766428",
+      "date": "",
+      "kind": "Audio",
+      "size": 1311640,
+      "url": "artifacts/voice-conversation-v2/clips/c9cd0dc6b1766428.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/be499cb9d26543d5.flac",
+      "title": "be499cb9d26543d5",
+      "date": "",
+      "kind": "Audio",
+      "size": 959889,
+      "url": "artifacts/voice-conversation-v2/clips/be499cb9d26543d5.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/bdcabc3c50c03e8e.flac",
+      "title": "bdcabc3c50c03e8e",
+      "date": "",
+      "kind": "Audio",
+      "size": 1241872,
+      "url": "artifacts/voice-conversation-v2/clips/bdcabc3c50c03e8e.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/ba99243b34cd62ab.flac",
+      "title": "ba99243b34cd62ab",
+      "date": "",
+      "kind": "Audio",
+      "size": 877731,
+      "url": "artifacts/voice-conversation-v2/clips/ba99243b34cd62ab.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/b8fca4f675ca133a.flac",
+      "title": "b8fca4f675ca133a",
+      "date": "",
+      "kind": "Audio",
+      "size": 600097,
+      "url": "artifacts/voice-conversation-v2/clips/b8fca4f675ca133a.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/b7b814fc29870b76.flac",
+      "title": "b7b814fc29870b76",
+      "date": "",
+      "kind": "Audio",
+      "size": 886550,
+      "url": "artifacts/voice-conversation-v2/clips/b7b814fc29870b76.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/b6af2bd680da540e.flac",
+      "title": "b6af2bd680da540e",
+      "date": "",
+      "kind": "Audio",
+      "size": 1267834,
+      "url": "artifacts/voice-conversation-v2/clips/b6af2bd680da540e.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/b4a1a98380334b1f.flac",
+      "title": "b4a1a98380334b1f",
+      "date": "",
+      "kind": "Audio",
+      "size": 987956,
+      "url": "artifacts/voice-conversation-v2/clips/b4a1a98380334b1f.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/b40f3c1622e1fa6b.flac",
+      "title": "b40f3c1622e1fa6b",
+      "date": "",
+      "kind": "Audio",
+      "size": 812273,
+      "url": "artifacts/voice-conversation-v2/clips/b40f3c1622e1fa6b.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/b3bdd18107d66acb.flac",
+      "title": "b3bdd18107d66acb",
+      "date": "",
+      "kind": "Audio",
+      "size": 893359,
+      "url": "artifacts/voice-conversation-v2/clips/b3bdd18107d66acb.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/b19c6539bad7f093.flac",
+      "title": "b19c6539bad7f093",
+      "date": "",
+      "kind": "Audio",
+      "size": 1193240,
+      "url": "artifacts/voice-conversation-v2/clips/b19c6539bad7f093.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/b054e57e2ec92bea.flac",
+      "title": "b054e57e2ec92bea",
+      "date": "",
+      "kind": "Audio",
+      "size": 1355224,
+      "url": "artifacts/voice-conversation-v2/clips/b054e57e2ec92bea.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/afd37367f02c4f6e.flac",
+      "title": "afd37367f02c4f6e",
+      "date": "",
+      "kind": "Audio",
+      "size": 845116,
+      "url": "artifacts/voice-conversation-v2/clips/afd37367f02c4f6e.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/ab92b8af6d2c7962.flac",
+      "title": "ab92b8af6d2c7962",
+      "date": "",
+      "kind": "Audio",
+      "size": 782589,
+      "url": "artifacts/voice-conversation-v2/clips/ab92b8af6d2c7962.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/aaca810af84c4648.flac",
+      "title": "aaca810af84c4648",
+      "date": "",
+      "kind": "Audio",
+      "size": 1192437,
+      "url": "artifacts/voice-conversation-v2/clips/aaca810af84c4648.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/a84b8e936565c620.flac",
+      "title": "a84b8e936565c620",
+      "date": "",
+      "kind": "Audio",
+      "size": 901618,
+      "url": "artifacts/voice-conversation-v2/clips/a84b8e936565c620.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/a6a63bae94dc431b.flac",
+      "title": "a6a63bae94dc431b",
+      "date": "",
+      "kind": "Audio",
+      "size": 717587,
+      "url": "artifacts/voice-conversation-v2/clips/a6a63bae94dc431b.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/a5e7d6396181b3c7.flac",
+      "title": "a5e7d6396181b3c7",
+      "date": "",
+      "kind": "Audio",
+      "size": 645718,
+      "url": "artifacts/voice-conversation-v2/clips/a5e7d6396181b3c7.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/a4ae66644c17c5c4.flac",
+      "title": "a4ae66644c17c5c4",
+      "date": "",
+      "kind": "Audio",
+      "size": 1327259,
+      "url": "artifacts/voice-conversation-v2/clips/a4ae66644c17c5c4.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/a48c2eac2bf535fe.flac",
+      "title": "a48c2eac2bf535fe",
+      "date": "",
+      "kind": "Audio",
+      "size": 1500804,
+      "url": "artifacts/voice-conversation-v2/clips/a48c2eac2bf535fe.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/a00fc3cdd84ca2ab.flac",
+      "title": "a00fc3cdd84ca2ab",
+      "date": "",
+      "kind": "Audio",
+      "size": 649923,
+      "url": "artifacts/voice-conversation-v2/clips/a00fc3cdd84ca2ab.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/9fde0a5373d7ad9c.flac",
+      "title": "9fde0a5373d7ad9c",
+      "date": "",
+      "kind": "Audio",
+      "size": 668103,
+      "url": "artifacts/voice-conversation-v2/clips/9fde0a5373d7ad9c.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/9f7a191a064051bf.flac",
+      "title": "9f7a191a064051bf",
+      "date": "",
+      "kind": "Audio",
+      "size": 780667,
+      "url": "artifacts/voice-conversation-v2/clips/9f7a191a064051bf.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/94e670b9d7a0d52c.flac",
+      "title": "94e670b9d7a0d52c",
+      "date": "",
+      "kind": "Audio",
+      "size": 613540,
+      "url": "artifacts/voice-conversation-v2/clips/94e670b9d7a0d52c.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/94e03dc0a8f564ec.flac",
+      "title": "94e03dc0a8f564ec",
+      "date": "",
+      "kind": "Audio",
+      "size": 1083950,
+      "url": "artifacts/voice-conversation-v2/clips/94e03dc0a8f564ec.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/949a1688fa795367.flac",
+      "title": "949a1688fa795367",
+      "date": "",
+      "kind": "Audio",
+      "size": 799251,
+      "url": "artifacts/voice-conversation-v2/clips/949a1688fa795367.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/92e4228cde026e9e.flac",
+      "title": "92e4228cde026e9e",
+      "date": "",
+      "kind": "Audio",
+      "size": 840122,
+      "url": "artifacts/voice-conversation-v2/clips/92e4228cde026e9e.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/8fffea6d94dab0ba.flac",
+      "title": "8fffea6d94dab0ba",
+      "date": "",
+      "kind": "Audio",
+      "size": 617135,
+      "url": "artifacts/voice-conversation-v2/clips/8fffea6d94dab0ba.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/8ff79f8b64ecf551.flac",
+      "title": "8ff79f8b64ecf551",
+      "date": "",
+      "kind": "Audio",
+      "size": 1234322,
+      "url": "artifacts/voice-conversation-v2/clips/8ff79f8b64ecf551.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/8fc03dbeaf62a897.flac",
+      "title": "8fc03dbeaf62a897",
+      "date": "",
+      "kind": "Audio",
+      "size": 614783,
+      "url": "artifacts/voice-conversation-v2/clips/8fc03dbeaf62a897.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/8e36004f65d36ab0.flac",
+      "title": "8e36004f65d36ab0",
+      "date": "",
+      "kind": "Audio",
+      "size": 1897578,
+      "url": "artifacts/voice-conversation-v2/clips/8e36004f65d36ab0.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/8dd5eebc7a9d3ce7.flac",
+      "title": "8dd5eebc7a9d3ce7",
+      "date": "",
+      "kind": "Audio",
+      "size": 894286,
+      "url": "artifacts/voice-conversation-v2/clips/8dd5eebc7a9d3ce7.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/8da3703d86324166.flac",
+      "title": "8da3703d86324166",
+      "date": "",
+      "kind": "Audio",
+      "size": 1328232,
+      "url": "artifacts/voice-conversation-v2/clips/8da3703d86324166.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/8ca657a4da9cc42f.flac",
+      "title": "8ca657a4da9cc42f",
+      "date": "",
+      "kind": "Audio",
+      "size": 1552429,
+      "url": "artifacts/voice-conversation-v2/clips/8ca657a4da9cc42f.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/8c4b718b508fe0bb.flac",
+      "title": "8c4b718b508fe0bb",
+      "date": "",
+      "kind": "Audio",
+      "size": 1667145,
+      "url": "artifacts/voice-conversation-v2/clips/8c4b718b508fe0bb.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/8a912d7fc224a0bd.flac",
+      "title": "8a912d7fc224a0bd",
+      "date": "",
+      "kind": "Audio",
+      "size": 1053722,
+      "url": "artifacts/voice-conversation-v2/clips/8a912d7fc224a0bd.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/88c30e1340f9b219.flac",
+      "title": "88c30e1340f9b219",
+      "date": "",
+      "kind": "Audio",
+      "size": 511101,
+      "url": "artifacts/voice-conversation-v2/clips/88c30e1340f9b219.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/868a5781a1b3321d.flac",
+      "title": "868a5781a1b3321d",
+      "date": "",
+      "kind": "Audio",
+      "size": 902195,
+      "url": "artifacts/voice-conversation-v2/clips/868a5781a1b3321d.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/84a4d19d1695d7c3.flac",
+      "title": "84a4d19d1695d7c3",
+      "date": "",
+      "kind": "Audio",
+      "size": 999251,
+      "url": "artifacts/voice-conversation-v2/clips/84a4d19d1695d7c3.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/80f88bbaa60b6f58.flac",
+      "title": "80f88bbaa60b6f58",
+      "date": "",
+      "kind": "Audio",
+      "size": 1059834,
+      "url": "artifacts/voice-conversation-v2/clips/80f88bbaa60b6f58.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/7edfaff3607e79b7.flac",
+      "title": "7edfaff3607e79b7",
+      "date": "",
+      "kind": "Audio",
+      "size": 837424,
+      "url": "artifacts/voice-conversation-v2/clips/7edfaff3607e79b7.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/7cc03f86c308078e.flac",
+      "title": "7cc03f86c308078e",
+      "date": "",
+      "kind": "Audio",
+      "size": 813359,
+      "url": "artifacts/voice-conversation-v2/clips/7cc03f86c308078e.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/79642635a4f7fb58.flac",
+      "title": "79642635a4f7fb58",
+      "date": "",
+      "kind": "Audio",
+      "size": 943244,
+      "url": "artifacts/voice-conversation-v2/clips/79642635a4f7fb58.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/7962d7ec155469ce.flac",
+      "title": "7962d7ec155469ce",
+      "date": "",
+      "kind": "Audio",
+      "size": 1374579,
+      "url": "artifacts/voice-conversation-v2/clips/7962d7ec155469ce.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/7760d193006078ad.flac",
+      "title": "7760d193006078ad",
+      "date": "",
+      "kind": "Audio",
+      "size": 696096,
+      "url": "artifacts/voice-conversation-v2/clips/7760d193006078ad.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/76d861bc96819497.flac",
+      "title": "76d861bc96819497",
+      "date": "",
+      "kind": "Audio",
+      "size": 1339420,
+      "url": "artifacts/voice-conversation-v2/clips/76d861bc96819497.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/75af72a941d399aa.flac",
+      "title": "75af72a941d399aa",
+      "date": "",
+      "kind": "Audio",
+      "size": 736575,
+      "url": "artifacts/voice-conversation-v2/clips/75af72a941d399aa.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/75087364d2353e2e.flac",
+      "title": "75087364d2353e2e",
+      "date": "",
+      "kind": "Audio",
+      "size": 1031605,
+      "url": "artifacts/voice-conversation-v2/clips/75087364d2353e2e.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/73ff3396f28da723.flac",
+      "title": "73ff3396f28da723",
+      "date": "",
+      "kind": "Audio",
+      "size": 982483,
+      "url": "artifacts/voice-conversation-v2/clips/73ff3396f28da723.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/72cbffbd59b8b555.flac",
+      "title": "72cbffbd59b8b555",
+      "date": "",
+      "kind": "Audio",
+      "size": 1878672,
+      "url": "artifacts/voice-conversation-v2/clips/72cbffbd59b8b555.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/7298e0812320b13f.flac",
+      "title": "7298e0812320b13f",
+      "date": "",
+      "kind": "Audio",
+      "size": 1667361,
+      "url": "artifacts/voice-conversation-v2/clips/7298e0812320b13f.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/70aa46fdab58c997.flac",
+      "title": "70aa46fdab58c997",
+      "date": "",
+      "kind": "Audio",
+      "size": 1031328,
+      "url": "artifacts/voice-conversation-v2/clips/70aa46fdab58c997.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/70a432516dcc2268.flac",
+      "title": "70a432516dcc2268",
+      "date": "",
+      "kind": "Audio",
+      "size": 796889,
+      "url": "artifacts/voice-conversation-v2/clips/70a432516dcc2268.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/707683cf78108eb5.flac",
+      "title": "707683cf78108eb5",
+      "date": "",
+      "kind": "Audio",
+      "size": 1163949,
+      "url": "artifacts/voice-conversation-v2/clips/707683cf78108eb5.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/703f436c4356b383.flac",
+      "title": "703f436c4356b383",
+      "date": "",
+      "kind": "Audio",
+      "size": 874505,
+      "url": "artifacts/voice-conversation-v2/clips/703f436c4356b383.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/6f6d9315ddb33299.flac",
+      "title": "6f6d9315ddb33299",
+      "date": "",
+      "kind": "Audio",
+      "size": 961607,
+      "url": "artifacts/voice-conversation-v2/clips/6f6d9315ddb33299.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/6f57c22e548e0929.flac",
+      "title": "6f57c22e548e0929",
+      "date": "",
+      "kind": "Audio",
+      "size": 1205663,
+      "url": "artifacts/voice-conversation-v2/clips/6f57c22e548e0929.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/6c97ad93a4abab36.flac",
+      "title": "6c97ad93a4abab36",
+      "date": "",
+      "kind": "Audio",
+      "size": 851643,
+      "url": "artifacts/voice-conversation-v2/clips/6c97ad93a4abab36.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/6b2ef7bd603f8a88.flac",
+      "title": "6b2ef7bd603f8a88",
+      "date": "",
+      "kind": "Audio",
+      "size": 1577931,
+      "url": "artifacts/voice-conversation-v2/clips/6b2ef7bd603f8a88.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/65d4eb769506fb2a.flac",
+      "title": "65d4eb769506fb2a",
+      "date": "",
+      "kind": "Audio",
+      "size": 1207366,
+      "url": "artifacts/voice-conversation-v2/clips/65d4eb769506fb2a.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/642bdaecf69f9a25.flac",
+      "title": "642bdaecf69f9a25",
+      "date": "",
+      "kind": "Audio",
+      "size": 1472928,
+      "url": "artifacts/voice-conversation-v2/clips/642bdaecf69f9a25.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/636c84bdd6ecad96.flac",
+      "title": "636c84bdd6ecad96",
+      "date": "",
+      "kind": "Audio",
+      "size": 596660,
+      "url": "artifacts/voice-conversation-v2/clips/636c84bdd6ecad96.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/6361e89411b3c0a5.flac",
+      "title": "6361e89411b3c0a5",
+      "date": "",
+      "kind": "Audio",
+      "size": 865232,
+      "url": "artifacts/voice-conversation-v2/clips/6361e89411b3c0a5.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/624405525c76532b.flac",
+      "title": "624405525c76532b",
+      "date": "",
+      "kind": "Audio",
+      "size": 1272324,
+      "url": "artifacts/voice-conversation-v2/clips/624405525c76532b.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/5e727556bab88b07.flac",
+      "title": "5e727556bab88b07",
+      "date": "",
+      "kind": "Audio",
+      "size": 1154716,
+      "url": "artifacts/voice-conversation-v2/clips/5e727556bab88b07.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/5aaa7d50115dc5c3.flac",
+      "title": "5aaa7d50115dc5c3",
+      "date": "",
+      "kind": "Audio",
+      "size": 634155,
+      "url": "artifacts/voice-conversation-v2/clips/5aaa7d50115dc5c3.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/59ee089e158a750f.flac",
+      "title": "59ee089e158a750f",
+      "date": "",
+      "kind": "Audio",
+      "size": 796130,
+      "url": "artifacts/voice-conversation-v2/clips/59ee089e158a750f.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/59d3d4057f508526.flac",
+      "title": "59d3d4057f508526",
+      "date": "",
+      "kind": "Audio",
+      "size": 1386313,
+      "url": "artifacts/voice-conversation-v2/clips/59d3d4057f508526.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/55dca1e256425ee5.flac",
+      "title": "55dca1e256425ee5",
+      "date": "",
+      "kind": "Audio",
+      "size": 1349147,
+      "url": "artifacts/voice-conversation-v2/clips/55dca1e256425ee5.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/54b8f6b2a2354589.flac",
+      "title": "54b8f6b2a2354589",
+      "date": "",
+      "kind": "Audio",
+      "size": 1201563,
+      "url": "artifacts/voice-conversation-v2/clips/54b8f6b2a2354589.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/52f23e8f90693082.flac",
+      "title": "52f23e8f90693082",
+      "date": "",
+      "kind": "Audio",
+      "size": 995690,
+      "url": "artifacts/voice-conversation-v2/clips/52f23e8f90693082.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/4ebb5a864c4766f5.flac",
+      "title": "4ebb5a864c4766f5",
+      "date": "",
+      "kind": "Audio",
+      "size": 1445012,
+      "url": "artifacts/voice-conversation-v2/clips/4ebb5a864c4766f5.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/4d44028599ca92a4.flac",
+      "title": "4d44028599ca92a4",
+      "date": "",
+      "kind": "Audio",
+      "size": 472447,
+      "url": "artifacts/voice-conversation-v2/clips/4d44028599ca92a4.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/4bcb04951a68bbc4.flac",
+      "title": "4bcb04951a68bbc4",
+      "date": "",
+      "kind": "Audio",
+      "size": 1102914,
+      "url": "artifacts/voice-conversation-v2/clips/4bcb04951a68bbc4.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/4a3461ccd90c7ab6.flac",
+      "title": "4a3461ccd90c7ab6",
+      "date": "",
+      "kind": "Audio",
+      "size": 1263677,
+      "url": "artifacts/voice-conversation-v2/clips/4a3461ccd90c7ab6.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/47d3c9a94e14f939.flac",
+      "title": "47d3c9a94e14f939",
+      "date": "",
+      "kind": "Audio",
+      "size": 905082,
+      "url": "artifacts/voice-conversation-v2/clips/47d3c9a94e14f939.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/46fd8420f1de2c54.flac",
+      "title": "46fd8420f1de2c54",
+      "date": "",
+      "kind": "Audio",
+      "size": 1824104,
+      "url": "artifacts/voice-conversation-v2/clips/46fd8420f1de2c54.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/46aee0a22dee0a2a.flac",
+      "title": "46aee0a22dee0a2a",
+      "date": "",
+      "kind": "Audio",
+      "size": 828939,
+      "url": "artifacts/voice-conversation-v2/clips/46aee0a22dee0a2a.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/4594626b2bf825f7.flac",
+      "title": "4594626b2bf825f7",
+      "date": "",
+      "kind": "Audio",
+      "size": 757410,
+      "url": "artifacts/voice-conversation-v2/clips/4594626b2bf825f7.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/451af443b2775998.flac",
+      "title": "451af443b2775998",
+      "date": "",
+      "kind": "Audio",
+      "size": 644384,
+      "url": "artifacts/voice-conversation-v2/clips/451af443b2775998.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/4465b2ea598117cd.flac",
+      "title": "4465b2ea598117cd",
+      "date": "",
+      "kind": "Audio",
+      "size": 1282827,
+      "url": "artifacts/voice-conversation-v2/clips/4465b2ea598117cd.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/432c0f406339cacc.flac",
+      "title": "432c0f406339cacc",
+      "date": "",
+      "kind": "Audio",
+      "size": 984779,
+      "url": "artifacts/voice-conversation-v2/clips/432c0f406339cacc.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/42be8e701b6acf21.flac",
+      "title": "42be8e701b6acf21",
+      "date": "",
+      "kind": "Audio",
+      "size": 800422,
+      "url": "artifacts/voice-conversation-v2/clips/42be8e701b6acf21.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/3d349199eeaf635d.flac",
+      "title": "3d349199eeaf635d",
+      "date": "",
+      "kind": "Audio",
+      "size": 1453313,
+      "url": "artifacts/voice-conversation-v2/clips/3d349199eeaf635d.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/3ad717eea9ab884b.flac",
+      "title": "3ad717eea9ab884b",
+      "date": "",
+      "kind": "Audio",
+      "size": 1979148,
+      "url": "artifacts/voice-conversation-v2/clips/3ad717eea9ab884b.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/396382e8257f58e3.flac",
+      "title": "396382e8257f58e3",
+      "date": "",
+      "kind": "Audio",
+      "size": 711250,
+      "url": "artifacts/voice-conversation-v2/clips/396382e8257f58e3.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/3940b57db1591d4c.flac",
+      "title": "3940b57db1591d4c",
+      "date": "",
+      "kind": "Audio",
+      "size": 889097,
+      "url": "artifacts/voice-conversation-v2/clips/3940b57db1591d4c.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/31308ee4d6922e25.flac",
+      "title": "31308ee4d6922e25",
+      "date": "",
+      "kind": "Audio",
+      "size": 896905,
+      "url": "artifacts/voice-conversation-v2/clips/31308ee4d6922e25.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/310a912ee66314ec.flac",
+      "title": "310a912ee66314ec",
+      "date": "",
+      "kind": "Audio",
+      "size": 1427756,
+      "url": "artifacts/voice-conversation-v2/clips/310a912ee66314ec.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/2f9e18ea2394d1f2.flac",
+      "title": "2f9e18ea2394d1f2",
+      "date": "",
+      "kind": "Audio",
+      "size": 903250,
+      "url": "artifacts/voice-conversation-v2/clips/2f9e18ea2394d1f2.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/2ed2adcee479aa0d.flac",
+      "title": "2ed2adcee479aa0d",
+      "date": "",
+      "kind": "Audio",
+      "size": 1906562,
+      "url": "artifacts/voice-conversation-v2/clips/2ed2adcee479aa0d.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/2c83658696dffe17.flac",
+      "title": "2c83658696dffe17",
+      "date": "",
+      "kind": "Audio",
+      "size": 1017865,
+      "url": "artifacts/voice-conversation-v2/clips/2c83658696dffe17.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/2c6ad481faf9f927.flac",
+      "title": "2c6ad481faf9f927",
+      "date": "",
+      "kind": "Audio",
+      "size": 1348428,
+      "url": "artifacts/voice-conversation-v2/clips/2c6ad481faf9f927.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/2bcfb289ff5e5846.flac",
+      "title": "2bcfb289ff5e5846",
+      "date": "",
+      "kind": "Audio",
+      "size": 1703591,
+      "url": "artifacts/voice-conversation-v2/clips/2bcfb289ff5e5846.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/2bab7b67313c7162.flac",
+      "title": "2bab7b67313c7162",
+      "date": "",
+      "kind": "Audio",
+      "size": 1119901,
+      "url": "artifacts/voice-conversation-v2/clips/2bab7b67313c7162.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/29c736d87b75bbe8.flac",
+      "title": "29c736d87b75bbe8",
+      "date": "",
+      "kind": "Audio",
+      "size": 955954,
+      "url": "artifacts/voice-conversation-v2/clips/29c736d87b75bbe8.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/26f8929ea8516683.flac",
+      "title": "26f8929ea8516683",
+      "date": "",
+      "kind": "Audio",
+      "size": 932990,
+      "url": "artifacts/voice-conversation-v2/clips/26f8929ea8516683.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/2171445f213350e1.flac",
+      "title": "2171445f213350e1",
+      "date": "",
+      "kind": "Audio",
+      "size": 681857,
+      "url": "artifacts/voice-conversation-v2/clips/2171445f213350e1.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/1e9a0a90e160864f.flac",
+      "title": "1e9a0a90e160864f",
+      "date": "",
+      "kind": "Audio",
+      "size": 838320,
+      "url": "artifacts/voice-conversation-v2/clips/1e9a0a90e160864f.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/1dae78a173d1062b.flac",
+      "title": "1dae78a173d1062b",
+      "date": "",
+      "kind": "Audio",
+      "size": 1190697,
+      "url": "artifacts/voice-conversation-v2/clips/1dae78a173d1062b.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/1d5d38959aac2542.flac",
+      "title": "1d5d38959aac2542",
+      "date": "",
+      "kind": "Audio",
+      "size": 1033498,
+      "url": "artifacts/voice-conversation-v2/clips/1d5d38959aac2542.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/11393298ef6dd8dc.flac",
+      "title": "11393298ef6dd8dc",
+      "date": "",
+      "kind": "Audio",
+      "size": 748518,
+      "url": "artifacts/voice-conversation-v2/clips/11393298ef6dd8dc.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/113461dfab68fe02.flac",
+      "title": "113461dfab68fe02",
+      "date": "",
+      "kind": "Audio",
+      "size": 1141381,
+      "url": "artifacts/voice-conversation-v2/clips/113461dfab68fe02.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/10c826af5881ce50.flac",
+      "title": "10c826af5881ce50",
+      "date": "",
+      "kind": "Audio",
+      "size": 1085648,
+      "url": "artifacts/voice-conversation-v2/clips/10c826af5881ce50.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/0e3e1125adda95e9.flac",
+      "title": "0e3e1125adda95e9",
+      "date": "",
+      "kind": "Audio",
+      "size": 831092,
+      "url": "artifacts/voice-conversation-v2/clips/0e3e1125adda95e9.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/0c1f7d435e2d48e0.flac",
+      "title": "0c1f7d435e2d48e0",
+      "date": "",
+      "kind": "Audio",
+      "size": 1480603,
+      "url": "artifacts/voice-conversation-v2/clips/0c1f7d435e2d48e0.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/0baa305de736be58.flac",
+      "title": "0baa305de736be58",
+      "date": "",
+      "kind": "Audio",
+      "size": 1238834,
+      "url": "artifacts/voice-conversation-v2/clips/0baa305de736be58.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/0b5eaf735f2c7439.flac",
+      "title": "0b5eaf735f2c7439",
+      "date": "",
+      "kind": "Audio",
+      "size": 852091,
+      "url": "artifacts/voice-conversation-v2/clips/0b5eaf735f2c7439.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/0a276c5e624b5fec.flac",
+      "title": "0a276c5e624b5fec",
+      "date": "",
+      "kind": "Audio",
+      "size": 1175174,
+      "url": "artifacts/voice-conversation-v2/clips/0a276c5e624b5fec.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/0a13d0856c9e71bc.flac",
+      "title": "0a13d0856c9e71bc",
+      "date": "",
+      "kind": "Audio",
+      "size": 905888,
+      "url": "artifacts/voice-conversation-v2/clips/0a13d0856c9e71bc.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/08ed8ef3ccbd6278.flac",
+      "title": "08ed8ef3ccbd6278",
+      "date": "",
+      "kind": "Audio",
+      "size": 1255658,
+      "url": "artifacts/voice-conversation-v2/clips/08ed8ef3ccbd6278.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/clips/08db3d45cf63b823.flac",
+      "title": "08db3d45cf63b823",
+      "date": "",
+      "kind": "Audio",
+      "size": 1836177,
+      "url": "artifacts/voice-conversation-v2/clips/08db3d45cf63b823.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/caller/manifest.json",
+      "title": "manifest",
+      "date": "",
+      "kind": "Data",
+      "size": 3921,
+      "url": "artifacts/voice-conversation-v2/caller/manifest.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/caller/lost-card-2.wav",
+      "title": "lost card 2",
+      "date": "",
+      "kind": "Audio",
+      "size": 186884,
+      "url": "artifacts/voice-conversation-v2/caller/lost-card-2.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/caller/lost-card-1.wav",
+      "title": "lost card 1",
+      "date": "",
+      "kind": "Audio",
+      "size": 188556,
+      "url": "artifacts/voice-conversation-v2/caller/lost-card-1.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/caller/lost-card-0.wav",
+      "title": "lost card 0",
+      "date": "",
+      "kind": "Audio",
+      "size": 220478,
+      "url": "artifacts/voice-conversation-v2/caller/lost-card-0.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/caller/failed-payment-2.wav",
+      "title": "failed payment 2",
+      "date": "",
+      "kind": "Audio",
+      "size": 199912,
+      "url": "artifacts/voice-conversation-v2/caller/failed-payment-2.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/caller/failed-payment-1.wav",
+      "title": "failed payment 1",
+      "date": "",
+      "kind": "Audio",
+      "size": 172814,
+      "url": "artifacts/voice-conversation-v2/caller/failed-payment-1.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/caller/failed-payment-0.wav",
+      "title": "failed payment 0",
+      "date": "",
+      "kind": "Audio",
+      "size": 217264,
+      "url": "artifacts/voice-conversation-v2/caller/failed-payment-0.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/caller/correction-2.wav",
+      "title": "correction 2",
+      "date": "",
+      "kind": "Audio",
+      "size": 175146,
+      "url": "artifacts/voice-conversation-v2/caller/correction-2.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/caller/correction-1.wav",
+      "title": "correction 1",
+      "date": "",
+      "kind": "Audio",
+      "size": 286526,
+      "url": "artifacts/voice-conversation-v2/caller/correction-1.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/caller/correction-0.wav",
+      "title": "correction 0",
+      "date": "",
+      "kind": "Audio",
+      "size": 225336,
+      "url": "artifacts/voice-conversation-v2/caller/correction-0.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/caller/continuity-2.wav",
+      "title": "continuity 2",
+      "date": "",
+      "kind": "Audio",
+      "size": 174018,
+      "url": "artifacts/voice-conversation-v2/caller/continuity-2.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/caller/continuity-1.wav",
+      "title": "continuity 1",
+      "date": "",
+      "kind": "Audio",
+      "size": 128286,
+      "url": "artifacts/voice-conversation-v2/caller/continuity-1.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/caller/continuity-0.wav",
+      "title": "continuity 0",
+      "date": "",
+      "kind": "Audio",
+      "size": 279798,
+      "url": "artifacts/voice-conversation-v2/caller/continuity-0.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/caller/bereavement-2.wav",
+      "title": "bereavement 2",
+      "date": "",
+      "kind": "Audio",
+      "size": 147828,
+      "url": "artifacts/voice-conversation-v2/caller/bereavement-2.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/caller/bereavement-1.wav",
+      "title": "bereavement 1",
+      "date": "",
+      "kind": "Audio",
+      "size": 178266,
+      "url": "artifacts/voice-conversation-v2/caller/bereavement-1.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/caller/bereavement-0.wav",
+      "title": "bereavement 0",
+      "date": "",
+      "kind": "Audio",
+      "size": 208592,
+      "url": "artifacts/voice-conversation-v2/caller/bereavement-0.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/caller/balance-2.wav",
+      "title": "balance 2",
+      "date": "",
+      "kind": "Audio",
+      "size": 191900,
+      "url": "artifacts/voice-conversation-v2/caller/balance-2.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/caller/balance-1.wav",
+      "title": "balance 1",
+      "date": "",
+      "kind": "Audio",
+      "size": 133832,
+      "url": "artifacts/voice-conversation-v2/caller/balance-1.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/caller/balance-0.wav",
+      "title": "balance 0",
+      "date": "",
+      "kind": "Audio",
+      "size": 102652,
+      "url": "artifacts/voice-conversation-v2/caller/balance-0.wav",
       "group": "//Users"
     },
     {
@@ -4727,6 +6518,15 @@
       "group": "//Users"
     },
     {
+      "path": "artifacts/phase2/openai_live-ac09.json",
+      "title": "openai live ac09",
+      "date": "",
+      "kind": "Data",
+      "size": 658,
+      "url": "artifacts/phase2/openai_live-ac09.json",
+      "group": "//Users"
+    },
+    {
       "path": "artifacts/phase2/openai-ac09.json",
       "title": "openai ac09",
       "date": "",
@@ -4740,8 +6540,17 @@
       "title": "google gemini live ac09",
       "date": "",
       "kind": "Data",
-      "size": 652,
+      "size": 650,
       "url": "artifacts/phase2/google_gemini_live-ac09.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase2/elevenlabs_agents-ac09.json",
+      "title": "elevenlabs agents ac09",
+      "date": "",
+      "kind": "Data",
+      "size": 684,
+      "url": "artifacts/phase2/elevenlabs_agents-ac09.json",
       "group": "//Users"
     },
     {
@@ -4812,8 +6621,17 @@
       "title": "xai capability report",
       "date": "",
       "kind": "Data",
-      "size": 9668,
+      "size": 9825,
       "url": "artifacts/phase0/xai-capability-report.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/openai_live-capability-report.json",
+      "title": "openai live capability report",
+      "date": "",
+      "kind": "Data",
+      "size": 7541,
+      "url": "artifacts/phase0/openai_live-capability-report.json",
       "group": "//Users"
     },
     {
@@ -4821,7 +6639,7 @@
       "title": "openai capability report",
       "date": "",
       "kind": "Data",
-      "size": 7611,
+      "size": 7624,
       "url": "artifacts/phase0/openai-capability-report.json",
       "group": "//Users"
     },
@@ -4830,7 +6648,7 @@
       "title": "nova capability report",
       "date": "",
       "kind": "Data",
-      "size": 9263,
+      "size": 9441,
       "url": "artifacts/phase0/nova-capability-report.json",
       "group": "//Users"
     },
@@ -4839,8 +6657,26 @@
       "title": "google gemini capability report",
       "date": "",
       "kind": "Data",
-      "size": 8771,
+      "size": 9419,
       "url": "artifacts/phase0/google_gemini-capability-report.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/phase0/elevenlabs-capability-report.json",
+      "title": "elevenlabs capability report",
+      "date": "",
+      "kind": "Data",
+      "size": 7747,
+      "url": "artifacts/phase0/elevenlabs-capability-report.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/perf-baseline.json",
+      "title": "perf baseline",
+      "date": "",
+      "kind": "Data",
+      "size": 2838,
+      "url": "artifacts/perf-baseline.json",
       "group": "//Users"
     },
     {
@@ -4994,6 +6830,13 @@
       "description": "Selected assistant speech with audio players and transcripts. Use the evaluation for measured latency.",
       "status": "Listening",
       "date": "2026-10-27"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/rate.html",
+      "title": "Voice conversation \u00b7 blind listening study",
+      "description": "Common against provider-tuned prompts in 144 three-turn conversations, with British female assistant and British male caller voices. Ratings pending.",
+      "status": "Listening",
+      "date": "2026-10-29"
     },
     {
       "path": "artifacts/voice-naturalness-2026-10-25/rate.html",
