@@ -42,7 +42,7 @@ VARIANTS = [  # (label, provider_config_id, voice override)
     ("Amazon Nova Sonic", "nova-sonic-live", None),
     ("xAI Grok Voice", "xai-voice-live", None),
     ("Google Gemini Live", "gemini-live", None),
-    ("ElevenLabs (George)", "elevenlabs-live", None),
+    ("ElevenLabs (Amelia)", "elevenlabs-live", None),
     ("ElevenLabs (second voice)", "elevenlabs-live", "kLhAstPcnnPxqzk6gS5i"),
 ]
 READ_ALOUD = ("You are a voice reading text aloud for a bank phone line. Say exactly the text the user sends, word for "

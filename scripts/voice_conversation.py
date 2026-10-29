@@ -35,10 +35,10 @@ AXES = {"naturalness": "Natural delivery", "appropriateness": "Appropriate tone"
 PROVIDERS = {
     "openai-live": ("OpenAI GPT-Live 1", "marin"),
     "openai-realtime-live": ("OpenAI Realtime", "marin"),
-    "nova-sonic-live": ("Amazon Nova Sonic", "matthew"),
+    "nova-sonic-live": ("Amazon Nova Sonic", "amy"),
     "xai-voice-live": ("xAI Grok Voice", "ara"),
-    "gemini-live": ("Google Gemini Live", None),
-    "elevenlabs-live": ("ElevenLabs Agents", "JBFqnCBsd6RMkjVDRZzb"),
+    "gemini-live": ("Google Gemini Live", "Aoede"),
+    "elevenlabs-live": ("ElevenLabs Agents", "ZF6FPAbjXT4488VcRRnw"),
 }
 SOURCES = {
     "openai-live": "https://developers.openai.com/api/docs/guides/live",
