@@ -347,7 +347,7 @@ class AgentProvisioningTests(unittest.TestCase):
                 agent.setup(live_providers.TOOLS, environ={}, client=Http())
 
     def test_agent_enables_prompt_and_voice_overrides(self):
-        body = agent.agent_body(live_providers.TOOLS, "gemini-2.5-flash")
+        body = agent.agent_body(live_providers.TOOLS, "gemini-3.5-flash")
         override = body["platform_settings"]["overrides"]["conversation_config_override"]
         self.assertTrue(override["agent"]["prompt"]["prompt"])
         self.assertTrue(override["tts"]["voice_id"])
@@ -385,6 +385,30 @@ class LiveProviderRegistrationTests(unittest.TestCase):
             "openai-realtime-live", "nova-sonic-live", "xai-voice-live", "gemini-live", "elevenlabs-live"])
         self.assertEqual(len(request.provider_config_ids), 5)
         self.assertIn("elevenlabs-live", json.dumps(contracts.RunConfig.model_json_schema()))
+
+
+class ConnectedTimeUsageTests(unittest.IsolatedAsyncioTestCase):
+    async def test_close_reports_connected_seconds_once_through_the_usage_sink(self):
+        seen = []
+        async with FakeServer() as srv:
+            a = adapter_for(srv)
+            a.usage_sink = seen.append
+            await a.open_session({"session_id": "s1"})
+            await asyncio.sleep(0.15)
+            await a.close("done")
+            await a.close("again")
+        self.assertEqual(len(seen), 1)
+        self.assertEqual(seen[0].session_id, "s1")
+        self.assertGreaterEqual(seen[0].raw["connected_seconds"], 0.1)
+        self.assertIsNone(seen[0].raw["agent_llm"])  # an explicit agent is not the stored one: its LLM is unknown
+
+    async def test_connected_seconds_is_queued_when_there_is_no_sink(self):
+        async with FakeServer() as srv:
+            a = adapter_for(srv)
+            await a.open_session({})
+            await a.close("done")
+            events = [ev async for ev in a.receive()]
+        self.assertTrue(any(getattr(ev, "type", None) == "usage" and "connected_seconds" in ev.raw for ev in events))
 
 
 if __name__ == "__main__":

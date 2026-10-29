@@ -388,3 +388,54 @@ class LiveUsageTests(unittest.TestCase):
             self.assertTrue(all(r['model'] == 'gpt-6-luna' and r['service'] == 'live_responses' for r in backend))
             self.assertEqual([r['quantity'] for r in backend], ['20', '5'])
             self.assertEqual(recorder.observe(TurnEnd(session_id='s')), [])
+
+
+class ElevenLabsConnectedTimeTests(unittest.TestCase):
+    def test_connected_seconds_are_an_estimate_priced_per_minute_from_the_vendor_table(self):
+        from unittest.mock import patch
+        recorder = UsageRecorder(None, 'run', provider='elevenlabs_agents', model='elevenlabs-agent', clock=lambda: '2026-10-29')
+        with patch.object(recorder, '_append', side_effect=lambda reports: reports):
+            [report] = recorder.observe(Usage(session_id='s', raw={'connected_seconds': 30.0, 'agent_llm': None}))
+        self.assertEqual((report['meter_id'], report['unit'], report['quantity'], report['provenance']),
+                         ('connected_audio_seconds', 'second', '30.0', 'estimated'))
+        self.assertIn('LLM', report['assumptions'][0])
+        table = load_table(ROOT / "artifacts" / "pricing" / "vendor-pricing-2026-10-29.json")
+        _, amount, _, reason = cost.price(report, table)
+        self.assertIsNone(reason)
+        self.assertEqual(Decimal(str(amount)), Decimal("0.04"))
+
+    def test_known_agent_llm_adds_a_separately_priced_estimate_line(self):
+        from unittest.mock import patch
+        recorder = UsageRecorder(None, 'run', provider='elevenlabs_agents', model='elevenlabs-agent', clock=lambda: '2026-10-29')
+        with patch.object(recorder, '_append', side_effect=lambda reports: reports):
+            connection, llm = recorder.observe(Usage(session_id='s', raw={'connected_seconds': 60.0, 'agent_llm': 'gemini-3.5-flash'}))
+        table = load_table(ROOT / "artifacts" / "pricing" / "vendor-pricing-2026-10-29.json")
+        self.assertEqual((llm['service'], llm['model'], llm['meter_id']), ('elevenlabs_agent_llm', 'gemini-3.5-flash', 'agent_llm_estimated_seconds'))
+        self.assertEqual(Decimal(str(cost.price(connection, table)[1])), Decimal("0.08"))
+        self.assertEqual(Decimal(str(cost.price(llm, table)[1])), Decimal("0.0071"))
+
+
+class OpenAILivePricingTests(unittest.TestCase):
+    def test_voice_seconds_and_backend_tokens_price_from_the_2026_10_29_table(self):
+        from unittest.mock import patch
+        recorder = UsageRecorder(None, 'run', provider='openai_live', model='gpt-live-1', clock=lambda: '2026-10-29')
+        with patch.object(recorder, '_append', side_effect=lambda reports: reports):
+            [voice] = recorder.observe(Usage(session_id='s', raw={'voice_usage': {'seconds': 90}, 'cumulative': True}))
+            backend = recorder.observe(Usage(session_id='s', raw={'backend_model_id': 'gpt-6-luna', 'response_id': 'r1',
+                                                                   'backend_usage': {'input_tokens': 1000000, 'output_tokens': 1000000}}))
+        table = load_table(ROOT / "artifacts" / "pricing" / "vendor-pricing-2026-10-29.json")
+        self.assertEqual(Decimal(str(cost.price(voice, table)[1])), Decimal("0.075"))
+        self.assertEqual([Decimal(str(cost.price(r, table)[1])) for r in backend], [Decimal("0.10"), Decimal("0.50")])
+
+
+class XaiTextInputTests(unittest.TestCase):
+    def test_counted_text_inputs_are_an_assumed_unit_estimate_priced_per_item(self):
+        from unittest.mock import patch
+        recorder = UsageRecorder(None, 'run', provider='xai_grok_voice', model='grok-voice-3.0', clock=lambda: '2026-10-29')
+        with patch.object(recorder, '_append', side_effect=lambda reports: reports):
+            [report] = recorder.observe(Usage(session_id='s', raw={'text_inputs': 3}))
+        self.assertEqual((report['meter_id'], report['unit'], report['quantity'], report['provenance']),
+                         ('text_inputs', 'request', '3', 'estimated'))
+        self.assertIn('UNIT_ASSUMED', report['assumptions'][0])
+        table = load_table(ROOT / "artifacts" / "pricing" / "vendor-pricing-2026-10-29.json")
+        self.assertEqual(Decimal(str(cost.price(report, table)[1])), Decimal("0.012"))

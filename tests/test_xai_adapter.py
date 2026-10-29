@@ -89,6 +89,17 @@ class XaiAdapterTests(unittest.IsolatedAsyncioTestCase):
         self.addAsyncCleanup(a.close, "test")
         return a, receipt
 
+    async def test_text_items_are_counted_and_reported_once_at_close(self):
+        seen = []
+        async with FakeServer(noop) as srv:
+            a, _ = await self._open(srv)
+            a.usage_sink = seen.append
+            await a.send_text("one", respond=False)
+            await a.send_text("two")
+            await a.close("done")
+            await a.close("again")
+        self.assertEqual([u.raw for u in seen], [{"text_inputs": 2}])
+
     async def test_session_shape_receipt_and_capabilities(self):
         async with FakeServer(noop, model="grok-voice-3.0") as srv:
             a, receipt = await self._open(srv, model_id="grok-voice-latest")

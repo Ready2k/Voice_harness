@@ -28,6 +28,13 @@ NO_USAGE = "PROVIDER_RETURNED_NO_USAGE"
 HARNESS_MEASURED_ASR = "harness_measured_audio_seconds"
 HARNESS_MEASURED_NOTE = ("HARNESS_MEASURED_NOT_PROVIDER_REPORTED: the provider returned no usage; seconds are the length of "
                          "the audio the harness sent, priced at the per-minute rate")
+HARNESS_MEASURED_CONNECTED = "harness_measured_connected_seconds"
+HARNESS_MEASURED_CONNECTED_NOTE = ("HARNESS_MEASURED_NOT_PROVIDER_REPORTED: ElevenLabs returns no usage events; seconds are the "
+                                   "harness's own timing of the open agent session, priced at the connected-minute rate. The agent's "
+                                   "LLM and any burst or silence adjustment are not included")
+HARNESS_COUNTED_TEXT_INPUTS = "harness_counted_text_inputs"
+HARNESS_COUNTED_TEXT_INPUTS_NOTE = ("UNIT_ASSUMED: xAI lists '$0.004 / text input' without defining the unit; the harness counts each "
+                                    "user text item it sent as one text input, so this is an upper-bound estimate")
 
 
 def _key(report):
@@ -105,6 +112,38 @@ class UsageRecorder:
 
     def _usage(self, event):
         raw = dict(event.raw or {})
+        if self.provider == "elevenlabs_agents" and "connected_seconds" in raw:
+            scope = event.session_id or self._session or "session"
+            seconds = raw["connected_seconds"]
+            quantity = None if seconds is None else format(Decimal(str(seconds)), "f")
+
+            def line(meter, service, model, note):
+                return {
+                    "report_id": f"{scope}:{meter}:1", "component": self.component, "provider": self.provider,
+                    "service": service, "model": model, "region": self.region,
+                    "meter_id": self.meter_map.get(meter, meter),
+                    "billing_scope_id": scope, "scope_type": "session", "report_kind": "incremental", "revision": 1,
+                    "corrects_report_id": None, "covers_scope_ids": [], "provenance": "estimated",
+                    "quantity": quantity, "unit": "second", "cached_quantity": None, "generation_state": "completed",
+                    "usage_date": self._clock(), "interval_start_ms": None, "interval_end_ms": None,
+                    "estimation_method": HARNESS_MEASURED_CONNECTED, "assumptions": [note],
+                    "unknown_reason": None if seconds is not None else NO_USAGE, "evidence_event_ids": []}
+            reports = [line("connected_audio_seconds", self.service, self.model, HARNESS_MEASURED_CONNECTED_NOTE)]
+            if raw.get("agent_llm"):  # the agent's LLM is billed on top; ElevenLabs only publishes a per-minute estimate
+                reports.append(line("agent_llm_estimated_seconds", "elevenlabs_agent_llm", raw["agent_llm"],
+                                    "LLM cost is ElevenLabs' per-minute estimate for this agent, applied to harness-measured connected time"))
+            return self._append(reports)
+        if self.provider == "xai_grok_voice" and "text_inputs" in raw:
+            scope = event.session_id or self._session or "session"
+            return self._append([{
+                "report_id": f"{scope}:text_inputs:1", "component": self.component, "provider": self.provider,
+                "service": self.service, "model": self.model, "region": self.region,
+                "meter_id": self.meter_map.get("text_inputs", "text_inputs"), "billing_scope_id": scope,
+                "scope_type": "session", "report_kind": "incremental", "revision": 1, "corrects_report_id": None,
+                "covers_scope_ids": [], "provenance": "estimated", "quantity": str(int(raw["text_inputs"])), "unit": "request",
+                "cached_quantity": None, "generation_state": "completed", "usage_date": self._clock(),
+                "interval_start_ms": None, "interval_end_ms": None, "estimation_method": HARNESS_COUNTED_TEXT_INPUTS,
+                "assumptions": [HARNESS_COUNTED_TEXT_INPUTS_NOTE], "unknown_reason": None, "evidence_event_ids": []}])
         if self.provider == "openai_live":
             scope = event.session_id or self._session or "session"
             if "voice_usage" in raw:

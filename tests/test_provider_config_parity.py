@@ -52,7 +52,7 @@ class SamplingPolicy(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(live_providers.sampling_binding(provider, {})["overrides_sent"], {})
 
     def test_elevenlabs_agent_body_has_no_temperature(self):
-        prompt = agent.agent_body(live_providers.TOOLS, "gemini-2.5-flash")["conversation_config"]["agent"]["prompt"]
+        prompt = agent.agent_body(live_providers.TOOLS, "gemini-3.5-flash")["conversation_config"]["agent"]["prompt"]
         self.assertNotIn("temperature", prompt)
 
 
@@ -65,8 +65,8 @@ class ElevenLabsAgentState(unittest.TestCase):
             return agent.agent_binding(live_providers.TOOLS, environ={"ELEVENLABS_AGENT_STATE": str(path), **(env or {})})
 
     def test_legacy_agent_is_flagged_stale_with_temperature_zero(self):
-        b = self.binding({"agent_id": "a1", "llm": "gemini-2.5-flash", "tools_fingerprint": agent.fingerprint(live_providers.TOOLS)})
-        self.assertEqual((b["agent_llm"], b["agent_llm_vendor"], b["agent_llm_source"]), ("gemini-2.5-flash", "google", "agent_state"))
+        b = self.binding({"agent_id": "a1", "llm": "gemini-3.5-flash", "tools_fingerprint": agent.fingerprint(live_providers.TOOLS)})
+        self.assertEqual((b["agent_llm"], b["agent_llm_vendor"], b["agent_llm_source"]), ("gemini-3.5-flash", "google", "agent_state"))
         self.assertFalse(b["agent_config_current"])
         self.assertEqual(b["agent_temperature"], 0)
         sampling = live_providers.sampling_binding("elevenlabs-live", {}, b)
@@ -87,7 +87,7 @@ class ElevenLabsAgentState(unittest.TestCase):
         self.assertTrue(live_providers.sampling_binding("elevenlabs-live", {}, b)["conforms"])
 
     def test_foreign_agent_id_is_unknown(self):
-        b = self.binding({"agent_id": "a1", "llm": "gemini-2.5-flash"}, {"ELEVENLABS_AGENT_ID": "other"})
+        b = self.binding({"agent_id": "a1", "llm": "gemini-3.5-flash"}, {"ELEVENLABS_AGENT_ID": "other"})
         self.assertEqual((b["agent_llm"], b["agent_llm_source"], b["agent_temperature"]), (None, "unknown", "unknown"))
         self.assertIsNone(live_providers.sampling_binding("elevenlabs-live", {}, b)["conforms"])
 
@@ -108,10 +108,10 @@ class RunBinding(unittest.TestCase):
 
     def test_parity_binding_for_elevenlabs_carries_agent_llm(self):
         with tempfile.TemporaryDirectory() as d:
-            Path(d, "s.json").write_text(json.dumps({"agent_id": "a1", "llm": "gemini-2.5-flash"}))
+            Path(d, "s.json").write_text(json.dumps({"agent_id": "a1", "llm": "gemini-3.5-flash"}))
             with mock.patch.dict("os.environ", {"ELEVENLABS_AGENT_STATE": f"{d}/s.json"}, clear=True):
                 b = live_providers.parity_binding("elevenlabs-live", {"tools": live_providers.TOOLS}, Backend())
-        self.assertEqual(b["agent_llm"], "gemini-2.5-flash")
+        self.assertEqual(b["agent_llm"], "gemini-3.5-flash")
         self.assertEqual(b["asr"]["relation"], "INDEPENDENT_VENDOR_ASR")
         self.assertEqual(set(b), {"sampling", "output_voice", "asr", "agent_llm", "agent_llm_vendor", "agent_llm_source",
                                   "agent_config_current", "agent_temperature"})

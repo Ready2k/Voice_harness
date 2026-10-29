@@ -34,3 +34,9 @@ Passed for audio_in, audio_out, tool_result_correlation, interruption and error;
 
 ## Usage and cost
 Usage is recorded only as xAI reported it (token details, audio seconds); no prices are recorded and none were invented. The documented $0.08/min in `DOC_EVIDENCE.md` is a doc claim, not applied. `billable_audio_seconds` differs from `output_audio_seconds` in the samples (for example 1 versus 1.28, and 3 versus 20.4 for a speech-cut response), so whether cut-off audio is billed is not established. Paid usage across probes, discovery experiments, AC-09 runs and the smoke run was a few dozen short turns, one of them an uninterrupted long answer of about 2 minutes of audio.
+
+## Text-input cost (2026-10-29)
+
+xAI lists `$0.004 / text input` beside the $0.08/min rate and does not define the unit. The adapter counts each user text item
+(`send_text`) and reports the total at close; the recorder prices it as an estimate flagged `UNIT_ASSUMED`. Tool results and audio
+are not counted. If xAI defines the unit differently, only the counting rule changes.

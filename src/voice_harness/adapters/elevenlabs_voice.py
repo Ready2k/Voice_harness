@@ -46,6 +46,7 @@ from . import (
     TranscriptFinal,
     TurnEnd,
     TurnStart,
+    Usage,
 )
 from .elevenlabs_agent import (
     AGENT_ENV,
@@ -113,6 +114,7 @@ class ElevenLabsVoiceAdapter:
         self._reader: asyncio.Task | None = None
         self._queue: asyncio.Queue = asyncio.Queue()
         self._budget = QueueBudget()
+        self.usage_sink = None  # optional Usage -> None, called directly so close-time usage is not lost with the queue
         self.native_sink = None  # optional (adapter, native_type, payload) -> None; preserves every provider event
         self.session_id: str | None = None
         self.conversation_id: str | None = None
@@ -123,6 +125,8 @@ class ElevenLabsVoiceAdapter:
         self._turn_audio_bytes: dict[str, int] = {}
         self._pending_calls: dict[str, str] = {}  # call id -> tool name
         self._user_item = 0
+        self._agent_llm: str | None = None  # the LLM the run's agent is known to use (override, else the stored agent's)
+        self._opened_at: float | None = None  # monotonic time the agent session became ready
 
     def __repr__(self) -> str:
         return f"ElevenLabsVoiceAdapter(model={self._model!r}, closed={self.closed})"
@@ -203,6 +207,8 @@ class ElevenLabsVoiceAdapter:
         except TimeoutError:
             raise ValueError("PROVIDER_TIMEOUT:conversation_initiation_metadata") from None
         self.conversation_id = meta.get("conversation_id")
+        self._opened_at = time.monotonic()
+        self._agent_llm = config.get("llm") or (None if os.environ.get(AGENT_ENV) or self._agent or config.get("agent_id") else load_state().get("llm"))
         for key in ("agent_output_audio_format", "user_input_audio_format"):
             if meta.get(key) not in (None, AUDIO_FORMAT):
                 raise ValueError(f"PROVIDER_AUDIO_FORMAT:{key}={meta.get(key)}")
@@ -270,6 +276,13 @@ class ElevenLabsVoiceAdapter:
         if self.closed:
             return
         self.closed = True
+        if self._opened_at is not None:
+            # ElevenLabs reports no usage: expose the connected time so the recorder can price it per minute (labelled an estimate)
+            raw = {"connected_seconds": round(time.monotonic() - self._opened_at, 3), "agent_llm": self._agent_llm}
+            if self.usage_sink is not None:
+                self.usage_sink(Usage(session_id=self.session_id, turn_id=self._turn_id, raw=raw))
+            else:
+                self._emit(Usage, raw=raw)
         self._cancel_timer()
         if self._silence is not None:
             self._silence.cancel()

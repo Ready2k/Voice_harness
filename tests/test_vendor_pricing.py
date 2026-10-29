@@ -67,7 +67,7 @@ class VendorPricingTable(unittest.TestCase):
 class NewestTableIsTheDefault(unittest.TestCase):
     def test_serve_live_defaults_to_the_newest_vendor_table(self):
         newest = sorted(PRICING.glob("vendor-pricing-*.json"))[-1].name
-        self.assertEqual(newest, "vendor-pricing-2026-10-24.json")
+        self.assertEqual(newest, "vendor-pricing-2026-10-29.json")
         makefile = Path(__file__).parent.parent / "Makefile"
         if not makefile.exists():
             self.skipTest("the Makefile is not shipped into the test image")
@@ -166,3 +166,14 @@ class GeminiModalitySplit(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class Table20261029(unittest.TestCase):
+    def test_gemini_38_rows_cite_the_vertex_page_and_prices_are_unchanged_from_10_24(self):
+        new = {t.tariff_id: t for t in load_table(PRICING / "vendor-pricing-2026-10-29.json").tariffs}
+        old = {t.tariff_id: t for t in load_table(PRICING / "vendor-pricing-2026-10-24.json").tariffs}
+        self.assertEqual({k: new[k].unit_price for k in old}, {k: v.unit_price for k, v in old.items()})
+        self.assertEqual(new["elevenlabs-agents-minute"].unit_price, "0.08")
+        for tid, t in new.items():
+            if t.model == "gemini-3.8-live":
+                self.assertTrue(any("cloud.google.com" in e for e in t.evidence_ids), tid)

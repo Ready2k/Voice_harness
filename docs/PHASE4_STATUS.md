@@ -335,3 +335,33 @@ scenario rerun, report and validation results are recorded in
 timeout injections; the fault-isolation fix (`5350e4a`) and its rerun are in
 [BENCHMARK_5350E4A_2026-10-19.md](BENCHMARK_5350E4A_2026-10-19.md), which is limited by exhausted
 independent-ASR credits.
+
+## Vendor prices (2026-10-29)
+
+`artifacts/pricing/vendor-pricing-2026-10-29.json` is the 2026-10-24 table with every price unchanged; `make serve-live` and
+`scripts/full_advanced_bakeoff.py` load it by default. Earlier tables are kept for earlier exports. The shipped table
+still has no tariffs.
+
+- Gemini 3.8 Live: the Vertex rates (audio $3.00 / $12.00, text $0.75 / $4.50 per 1M tokens, non-global, session
+  context consumed per turn) are read from Google's Vertex pricing page and equal the Developer API rates, so the
+  "assumed for Vertex" caveat is closed. The page is undated and the quote was relayed by a second AI, so re-read it before relying on it.
+- Nova 2.5 Sonic ($3.00 / $12.00 speech, $0.33 / $2.75 text): confirmed 2026-10-29 against AWS's Bedrock pricing table (pasted by the operator; no region shown, `us-east-1` assumed). 
+- ElevenLabs Agents: $0.08 per connected minute (burst $0.16, not priced), read from the operator's ElevenLabs account
+  pricing page (Starter plan; same on every tier). The table row (`elevenlabs-agents-minute`, meter
+  `connected_audio_seconds`) is applied from the harness's own timing of the open session: the adapter emits no provider
+  usage, so each run records an `estimated` meter (not provider-reported) at close. New runs only; earlier ledgers are unchanged. The agent LLM (now `gemini-3.5-flash`) is a second estimated line from ElevenLabs' LLM Cost Calculator
+  ($0.0071/min for 3.5 Flash; $0.0015 Flash-Lite and $0.0014 2.5 Flash are in the table for retro use), so a connected minute is about $0.087. Whether the agent's LLM (`gemini-2.5-flash` by default) is billed on top is not stated
+  for the Agents row (it is for Realtime v1 Mini/Max, which add token rates), and the silence discount is unconfirmed.
+- Still not established, not priced: the unit of xAI's "$0.004 / text input"; whether cut-off audio is
+  billed; rounding and minimum billing for every provider.
+- OpenAI Live (`gpt-live-1`): $0.05 per minute, billed per second without rounding, from OpenAI's pricing page (read 2026-10-29).
+  The delegated backend `gpt-6-luna` is priced at $0.10 / $0.50 per 1M tokens (short context); tool usage and cut-off
+  audio billing are not stated. Previously unpriced, so earlier OpenAI Live ledgers still show `NO_TARIFF_FOR_METER_DATE`.
+- xAI text input: `$0.004 / text input` is on xAI's pricing and models pages (read 2026-10-29) with no unit. The adapter now counts
+  the user text items it sends and reports them at close; the recorder prices them as a separate `estimated` line
+  (`text_inputs`, flagged `UNIT_ASSUMED`, an upper bound). Voice minutes are unchanged; new runs only.
+- Bedrock Claude judges: AWS's own Bedrock pricing table (US East N. Virginia, pasted by the operator 2026-10-29) confirms the
+  Haiku 4.5 and Sonnet 5.5 rates, so the `us.` rows are no longer derived (Haiku 4.5 $1.10 / $5.50, Sonnet 5.5 $2.20 / $11.00,
+  global $1.00 / $5.00 and $2.00 / $10.00). Haiku 5.5 rows are added (global $0.10 / $0.50, `us.` $0.11 / $0.55; short context).
+  Access was re-checked 2026-10-29 and is still denied (`AccessDeniedException: anthropic.claude-haiku-5-5 is not available for this
+  account`), so the Haiku 5.5 rows are unused and the Haiku 4.5 judge stays the default.

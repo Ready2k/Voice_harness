@@ -291,7 +291,7 @@ class ComponentIndependence(unittest.TestCase):
 
     def test_elevenlabs_agent_llm_is_a_tested_component(self):
         tested = TESTED_MODELS['elevenlabs-live']
-        gemini = self.judge('gemini-2.5-flash', 'google', 'gemini')
+        gemini = self.judge('gemini-3.5-flash', 'google', 'gemini')
         out = assess(tested, [gemini], required_judges=1, material_benchmark=True, order_seed=0, run_session_id='run')
         self.assertEqual(out['judges'][0]['reason_codes'], ['JUDGE_IS_TESTED_MODEL'])
         self.assertEqual(tested_identity(tested)['components'][0]['vendor'], 'google')

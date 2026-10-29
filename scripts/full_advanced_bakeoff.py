@@ -40,7 +40,7 @@ def main():
     # MCP tools run in a child interpreter, which does not inherit this script's sys.path changes.
     os.environ["PYTHONPATH"] = str(ROOT / "src") + os.pathsep + os.environ.get("PYTHONPATH", "")
     os.environ["VOICE_HARNESS_LIVE_ASR"] = "openai"
-    os.environ.setdefault("HARNESS_PRICING_TABLE", str(ROOT / "artifacts/pricing/vendor-pricing-2026-10-24.json"))
+    os.environ.setdefault("HARNESS_PRICING_TABLE", str(ROOT / "artifacts/pricing/vendor-pricing-2026-10-29.json"))
     logging.basicConfig(level=logging.WARNING)
     args.out.mkdir(parents=True, exist_ok=True)
     args.data.mkdir(parents=True, exist_ok=True)

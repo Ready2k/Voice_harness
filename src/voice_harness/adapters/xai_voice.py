@@ -75,6 +75,8 @@ class XaiVoiceAdapter:
         self._url = url or DEFAULT_URL
         self._model = model
         self._ack_timeout = ack_timeout
+        self.text_inputs = 0  # user text items sent: xAI lists '$0.004 / text input' with no unit, so each item is counted
+        self.usage_sink = None  # optional Usage -> None, called directly so close-time usage is not lost with the queue
         self._ws = None
         self._reader: asyncio.Task | None = None
         self._queue: asyncio.Queue = asyncio.Queue()
@@ -218,6 +220,7 @@ class XaiVoiceAdapter:
 
     async def send_text(self, text: str, *, respond: bool = True) -> None:
         """Add a user text item; ``respond=False`` adds context without asking for a reply."""
+        self.text_inputs += 1
         await self._send({"type": "conversation.item.create", "item": {
             "type": "message", "role": "user", "content": [{"type": "input_text", "text": text}]}})
         if respond:
@@ -310,6 +313,11 @@ class XaiVoiceAdapter:
         if self.closed:
             return
         self.closed = True
+        raw = {"text_inputs": self.text_inputs}
+        if self.usage_sink is not None:
+            self.usage_sink(Usage(session_id=self.session_id, raw=raw))
+        else:
+            self._emit(Usage, raw=raw)
         if self._ws is not None:
             with contextlib.suppress(Exception):
                 await self._ws.close()

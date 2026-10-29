@@ -85,7 +85,7 @@ TESTED_MODELS = {
     # The agent LLM is not echoed by the session; each run records it as agent_llm. The component is the provisioned
     # default (ELEVENLABS_AGENT_LLM overrides it at import), so an agent set up with another LLM must set that too.
     "elevenlabs-live": {"provider": "elevenlabs", "model_id": "elevenlabs-agent", "family": "elevenlabs_agents", "components": [
-        {"role": "agent_llm", "model_id": os.environ.get("ELEVENLABS_AGENT_LLM") or "gemini-2.5-flash"}]},
+        {"role": "agent_llm", "model_id": os.environ.get("ELEVENLABS_AGENT_LLM") or "gemini-3.5-flash"}]},
 }
 
 
@@ -455,7 +455,7 @@ async def run_live(engine, run_id, provider_config_id, scenario_id, *, seed=0, c
     tested = TESTED_MODELS[provider_config_id]
     recorder = UsageRecorder(engine.database, run_id, provider=metadata["family"], model=tested["model_id"],
                              region=getattr(adapter, "region", None))
-    if provider_config_id == "openai-live":
+    if provider_config_id in ("openai-live", "elevenlabs-live", "xai-voice-live"):
         adapter.usage_sink = recorder.observe
 
     assessor = IndependentAssessor(engine, select_backend(), retention=ReplyRetention.from_env(evidence))
@@ -536,7 +536,7 @@ async def _run_interactive(engine, run_id, provider_config_id, scenario_id, call
         metadata.update(parity_binding(provider_config_id, config, assessor.backend))
         recorder = UsageRecorder(engine.database, run_id, provider=metadata["family"],
                                  model=TESTED_MODELS[provider_config_id]["model_id"])
-        if provider_config_id == "openai-live":
+        if provider_config_id in ("openai-live", "elevenlabs-live", "xai-voice-live"):
             adapter.usage_sink = recorder.observe
         runner = InteractiveScenarioRunner(
             engine, run_id, adapter, assessor, scenario_id,
@@ -600,7 +600,7 @@ async def run_manual(engine, run_id, config, bridge):
     tested = TESTED_MODELS[provider_config_id]
     recorder = UsageRecorder(engine.database, run_id, provider=metadata["family"], model=tested["model_id"],
                              region=getattr(adapter, "region", None))
-    if provider_config_id == "openai-live":
+    if provider_config_id in ("openai-live", "elevenlabs-live", "xai-voice-live"):
         adapter.usage_sink = recorder.observe
     session = ManualSession(
         engine, run_id, adapter, assessor, config["scenario_id"], bridge=bridge,

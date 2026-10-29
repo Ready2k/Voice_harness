@@ -65,7 +65,7 @@ Updated 27 October 2026 (`PROVIDER_BIAS_REVIEW_2026-10-27.md` findings 4 and 6).
   length the harness measured (`AsrResult.audio_seconds`) at the per-minute rate. That cost line has provenance
   `estimated`, `estimation_method` `harness_measured_audio_seconds` and a `HARNESS_MEASURED_NOT_PROVIDER_REPORTED`
   assumption; provider-reported usage is always preferred, and offline fixtures and failed requests stay unknown.
-  `make serve-live` now loads the 2026-10-24 table by default.
+  `make serve-live` loads the 2026-10-29 table by default (prices unchanged from 2026-10-24).
 
 ## Judge configuration
 

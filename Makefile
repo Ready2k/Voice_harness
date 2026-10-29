@@ -26,7 +26,7 @@ serve-live:
 	@echo "Live API on http://127.0.0.1:8766/client/runs.html (get the token with: make token-host)"
 	@set -a; . ./.env; set +a; \
 	HARNESS_DATA="$(CURDIR)/.local/host-data" HARNESS_PORT=8766 VOICE_HARNESS_LIVE_ASR=openai PYTHONPATH=src \
-	HARNESS_PRICING_TABLE="$${HARNESS_PRICING_TABLE:-$(CURDIR)/artifacts/pricing/vendor-pricing-2026-10-24.json}" \
+	HARNESS_PRICING_TABLE="$${HARNESS_PRICING_TABLE:-$(CURDIR)/artifacts/pricing/vendor-pricing-2026-10-29.json}" \
 	.venv/bin/python -m voice_harness serve
 
 # Same as make token, for the host-run server (make serve-live); start it once so the token file exists.

@@ -6,7 +6,7 @@ records its id and a fingerprint of those tools in ``.local/elevenlabs-agent.jso
 voice are sent per session as overrides, so one agent serves every scenario and prompt profile.
 
 Usage (key from ``ELEVENLABS_API_KEY``; never printed):
-    PYTHONPATH=src python -m voice_harness.adapters.elevenlabs_agent setup [--llm gemini-2.5-flash]
+    PYTHONPATH=src python -m voice_harness.adapters.elevenlabs_agent setup [--llm gemini-3.5-flash]
     PYTHONPATH=src python -m voice_harness.adapters.elevenlabs_agent status
 """
 
@@ -23,7 +23,7 @@ KEY_ENV = "ELEVENLABS_API_KEY"
 AGENT_ENV = "ELEVENLABS_AGENT_ID"
 LLM_ENV = "ELEVENLABS_AGENT_LLM"
 API = "https://api.elevenlabs.io"
-DEFAULT_LLM = "gemini-2.5-flash"
+DEFAULT_LLM = "gemini-3.5-flash"
 DEFAULT_VOICE = "JBFqnCBsd6RMkjVDRZzb"  # ElevenLabs premade voice "George"; overridable per session
 AGENT_NAME = "voice-harness-bakeoff"
 AUDIO_FORMAT = "pcm_24000"  # in and out, so the harness's 24 kHz PCM needs no resampling
