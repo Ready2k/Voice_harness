@@ -19,7 +19,7 @@
     "input_transcription": "grok-transcribe",
     "model_doc": "https://docs.x.ai/developers/models"
   },
-  "operator_terms_attestation": null,
+  "operator_terms_attestation": "2026-10-18, James Cregeen (operator): reviewed the current retention, quota and pricing terms for xAI Grok Voice and Google Gemini Live (Vertex AI) and accepts them for testing with synthetic data only; no real customer data.",
   "rows": [
     {
       "name": "input_codecs_rates",
@@ -238,6 +238,7 @@
     "Pinned grok-voice-3.0 returned grok-voice-3.0; alias grok-voice-latest resolved to grok-voice-3.0 on this date (observed once, not guaranteed) and is never used for runs",
     "The server generates audio faster than real time (roughly 7x in one uninterrupted sample); server_vad speech ends a response early",
     "Barge-in was exercised with one synthetic (macOS say) phrase only",
-    "Terms, retention, quotas and pricing need operator attestation; the existing operator attestation does not cover xAI"
+    "Terms, retention, quotas and pricing need operator attestation; the existing operator attestation does not cover xAI",
+    "Operator terms attestation carried forward unchanged from the earlier report, as the operator asked on 2026-10-29; it was not re-given for this probe"
   ]
 }

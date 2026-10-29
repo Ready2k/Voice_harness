@@ -17,8 +17,8 @@ bake-off). The optional live synthetic-commit test was not run: no live model ha
   AC-09 re-run: all six are `implemented_and_verified` until their reports expire on 2026-11-04/05.
   Interruption is excluded from AC-09 for Nova, Gemini, ElevenLabs and OpenAI Live (no client truncate). The OpenAI Live and
   ElevenLabs probes cite no documentation; their reports carry an operator terms attestation dated 2026-10-29, recorded
-  from the operator's statement in session. The 2026-10-28/29 re-probed OpenAI Realtime, Nova and xAI reports carry none
-  (the rebuilt reports dropped the 16 and 18 Oct attestations; re-attest if you want them restored). The OpenAI Live probe drives the
+  from the operator's statement in session. The re-probed OpenAI Realtime, Nova and xAI reports carry their original 16 and 18 Oct
+  attestations, carried forward unchanged at the operator's request on 2026-10-29 (not re-given for the new probes). The OpenAI Live probe drives the
   harness adapter rather than a raw socket.
 - The catalogue has 40 live scenarios in five groups: 9 happy path, 18 identity protection, 6 vulnerable customers,
   4 fault tolerance, 3 payment actions. 31 declare FACT-01.
@@ -35,8 +35,7 @@ bake-off). The optional live synthetic-commit test was not run: no live model ha
   timeout injections).
 - Test counts below (642 Python, 71 browser at `dbbe37a`) are from 2026-10-19 and have not been refreshed.
 - Bake-off reports show voice cost per run (see "Voice cost in the bake-off"); Nova runs need a re-run to be priced.
-- Carried into Phase 5: variance beyond 3 repetitions, re-probing before reports expire, attestations for the rebuilt OpenAI
-  Realtime, Nova and xAI reports, a live synthetic-commit test, locale-aware caller voice, judge calibration policy approval
+- Carried into Phase 5: variance beyond 3 repetitions, re-probing before reports expire, a live synthetic-commit test, locale-aware caller voice, judge calibration policy approval
   (blocking stays off), tariffs in the shipped pricing table, live runs inside the container (no credentials or `say`
   there), and the per-section "Still open" items below.
 

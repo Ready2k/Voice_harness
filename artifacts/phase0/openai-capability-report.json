@@ -17,7 +17,7 @@
     "turn_detection": null,
     "model_doc": "https://developers.openai.com/api/docs/models/gpt-realtime-2.1"
   },
-  "operator_terms_attestation": null,
+  "operator_terms_attestation": "2026-10-16, James Cregeen (operator): reviewed the current retention, quota and pricing terms for AWS Bedrock (Nova 2.5 Sonic) and OpenAI Realtime and accepts them for Phase 0/1 testing with synthetic data only; no real customer data.",
   "rows": [
     {
       "name": "input_codecs_rates",
@@ -218,6 +218,7 @@
     "Returned model equals the requested ID; docs list a single snapshot, no alias resolution observed",
     "Audio inputs were synthetic silence; text turns drove the conversation",
     "Server VAD, interruption by speech and truncation outcome were not exercised",
-    "Terms, retention, quotas and pricing need operator attestation"
+    "Terms, retention, quotas and pricing need operator attestation",
+    "Operator terms attestation carried forward unchanged from the earlier report, as the operator asked on 2026-10-29; it was not re-given for this probe"
   ]
 }

@@ -23,7 +23,7 @@
     "output": "audio/lpcm 24000 s16le mono, voice matthew",
     "service_card": "https://docs.aws.amazon.com/ai/responsible-ai/nova-2-5-sonic/overview.md"
   },
-  "operator_terms_attestation": null,
+  "operator_terms_attestation": "2026-10-16, James Cregeen (operator): reviewed the current retention, quota and pricing terms for AWS Bedrock (Nova 2.5 Sonic) and OpenAI Realtime and accepts them for Phase 0/1 testing with synthetic data only; no real customer data.",
   "rows": [
     {
       "name": "input_codecs_rates",
@@ -309,6 +309,7 @@
     "Audio inputs were synthetic silence; text turns drove the conversation",
     "Nova requires an open audio input content for the whole prompt",
     "Terms/retention/quotas/pricing not established by probe; need operator attestation",
-    "Bogus toolUseId produces ValidationException, ending the stream"
+    "Bogus toolUseId produces ValidationException, ending the stream",
+    "Operator terms attestation carried forward unchanged from the earlier report, as the operator asked on 2026-10-29; it was not re-given for this probe"
   ]
 }
