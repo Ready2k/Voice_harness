@@ -1,4 +1,11 @@
-# Phase 4 status (in progress)
+# Phase 4 status (complete: gates met 2026-10-29)
+
+Spec §16 gates: AC-09 passes for all six enabled adapters (interruption excluded where there is no client truncate); the
+40-scenario catalogue is complete; AC-16 (model simulator, one live OpenAI chooser call) and AC-20 (all-family
+disposition) are met; AC-15 is covered through the real MCP gateway with scripted adapters; comparison reports exist (fair
+bake-off). The optional live synthetic-commit test was not run: no live model has been driven to propose a commit.
+"Verified" is perishable: capability reports expire after 7 days (these expire 2026-11-04/05), so re-probe with the probes and
+`scripts/run_ac09.py`. Completion is not a certification, and no AI-judge policy is approved.
 
 ## Current position (2026-10-28)
 
@@ -28,10 +35,10 @@
   timeout injections).
 - Test counts below (642 Python, 71 browser at `dbbe37a`) are from 2026-10-19 and have not been refreshed.
 - Bake-off reports show voice cost per run (see "Voice cost in the bake-off"); Nova runs need a re-run to be priced.
-- Still open: variance beyond 3 repetitions, operator terms attestation for the newer providers,
-  locale-aware caller voice, judge
-  calibration policy approval (blocking stays off), live runs inside the container (no credentials or `say` there),
-  and the per-section "Still open" items below.
+- Carried into Phase 5: variance beyond 3 repetitions, re-probing before reports expire, attestations for the rebuilt OpenAI
+  Realtime, Nova and xAI reports, a live synthetic-commit test, locale-aware caller voice, judge calibration policy approval
+  (blocking stays off), tariffs in the shipped pricing table, live runs inside the container (no credentials or `say`
+  there), and the per-section "Still open" items below.
 
 The sections below are a chronological log; earlier counts and open items are superseded where later sections say so.
 

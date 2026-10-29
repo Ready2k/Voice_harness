@@ -69,7 +69,7 @@ Phases follow spec §16 and are gated by acceptance criteria (AC-01…AC-21), no
 | 1 | Deterministic core: orchestrator, ledger, synthetic MCP bank, playback gate, mock provider | Complete |
 | 2 | First adapters and coverage: OpenAI Realtime, Amazon Nova Sonic, AC-09, AC-20 | Complete |
 | 3 | Judges and observability: signing, cost, calibration, review, comparison, independent ASR | Complete |
-| 4 | Breadth and depth: OpenAI GPT-Live, xAI Grok Voice, Gemini Live and ElevenLabs Agents, 40-scenario catalogue, faults, live API runs, manual sessions, bake-offs, telephone pilot | In progress |
+| 4 | Breadth and depth: OpenAI GPT-Live, xAI Grok Voice, Gemini Live and ElevenLabs Agents, 40-scenario catalogue, faults, live API runs, manual sessions, bake-offs, telephone pilot | Complete (gates met 2026-10-29) |
 | 5 | Hardening: security review, load and chaos tests, reproducibility, regression gates | Ongoing |
 
 ### Next
@@ -80,4 +80,4 @@ Phases follow spec §16 and are gated by acceptance criteria (AC-01…AC-21), no
 - Exercise reconnect/resume, direct MCP and audio alignment, which are Unknown for every provider.
 - Run live runs inside the container: the `openai_tts` caller removes the `say` dependency, but credentials and the live profile are not yet in Compose.
 
-See [Phase 4 status](PHASE4_STATUS.md) for what is not yet established.
+See [Phase 4 status](PHASE4_STATUS.md) for what is carried into Phase 5.
