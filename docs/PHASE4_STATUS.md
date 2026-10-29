@@ -6,11 +6,9 @@
   (`gpt-live-1`, backend `gpt-6-luna`), `openai-realtime-live` (`gpt-realtime-2.1`), `nova-sonic-live`
   (`amazon.nova-2-5-sonic`), `xai-voice-live` (`grok-voice-3.0`), `gemini-live` (`gemini-3.8-live`) and
   `elevenlabs-live` (stored agent, LLM recorded per run). Coverage has six families. On 2026-10-29 the OpenAI Realtime,
-  OpenAI Live (`openai_live`, new), xAI, Gemini and ElevenLabs reports were re-probed (reports dated 20261028/29) and AC-09
-  re-run: all five are `implemented_and_verified` until their reports expire on 2026-11-04/05. Nova's report expired
-  2026-10-24 and was not refreshed (the AWS session needs a fresh MFA: `./scripts/aws-session.sh <MFA>`, then `nova_probe.mjs`
-  and `from-nova-observations`, then `make nova-live-container`), so `nova-sonic-live` is `diagnostic_unverified`.
-  Interruption is excluded from AC-09 for Gemini, ElevenLabs and OpenAI Live (no client truncate). The OpenAI Live and
+  OpenAI Live (`openai_live`, new), Nova, xAI, Gemini and ElevenLabs reports were re-probed (reports dated 20261028/29) and
+  AC-09 re-run: all six are `implemented_and_verified` until their reports expire on 2026-11-04/05.
+  Interruption is excluded from AC-09 for Nova, Gemini, ElevenLabs and OpenAI Live (no client truncate). The OpenAI Live and
   ElevenLabs probes cite no documentation and carry no operator terms attestation. The OpenAI Live probe drives the
   harness adapter rather than a raw socket.
 - The catalogue has 40 live scenarios in five groups: 9 happy path, 18 identity protection, 6 vulnerable customers,
@@ -28,7 +26,7 @@
   timeout injections).
 - Test counts below (642 Python, 71 browser at `dbbe37a`) are from 2026-10-19 and have not been refreshed.
 - Bake-off reports show voice cost per run (see "Voice cost in the bake-off"); Nova runs need a re-run to be priced.
-- Still open: variance beyond 3 repetitions, a fresh Nova report and AC-09, operator terms attestation for the newer providers,
+- Still open: variance beyond 3 repetitions, operator terms attestation for the newer providers,
   locale-aware caller voice, judge
   calibration policy approval (blocking stays off), live runs inside the container (no credentials or `say` there),
   and the per-section "Still open" items below.

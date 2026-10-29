@@ -11,7 +11,7 @@
     },
     "tool_result_correlation": {
       "status": "pass",
-      "call_id": "chatcmpl-tool-a5c4fcd4c061d2e6"
+      "call_id": "chatcmpl-tool-b4b296aeb3428c35"
     },
     "interruption": {
       "status": "excluded",
@@ -26,5 +26,5 @@
   },
   "failures": [],
   "passed": true,
-  "capability_report_id": "cap_nova_2_5_20261017"
+  "capability_report_id": "cap_nova_2_5_20261029"
 }
