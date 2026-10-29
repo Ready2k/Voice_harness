@@ -82,7 +82,7 @@ def build_report(obs: dict, report_id: str, attestation: str | None = None) -> C
             "Barge-in was exercised with one synthetic (macOS say) phrase only",
             "No cancel or truncate client message exists, so AC-09 excludes the interruption dimension (detection only)",
             "No row cites documentation: the Vertex Live pages were only partly readable",
-            "Terms, retention, quotas and pricing need operator attestation; the existing operator attestation does not cover Google",
+            "Terms, retention, quotas and pricing are covered only by the operator attestation recorded on the report, if any",
         ),
     )
 
