@@ -1,6 +1,38 @@
 # Research archive
 
+## Customer experience review (draft)
+
+Open `cx-review.html` through a local HTTP server for the executive-facing HTML5 page. It separates eligible task completion, scoped protection checks, spoken facts and scripted listening evidence. Amazon Connect AI Agents, ACXD and proposed Connect configurations are explicitly unbenchmarked. No Connect performance is inferred from direct provider tests.
+
+Refresh the saved page data after adding or updating assessments:
+
+```sh
+python3 scripts/build_cx_review.py
+```
+
+To select different report exports, supply repository-relative paths with repeated `--report` arguments; the first opens by default. The source must contain the existing bake-off `report`, `observations`, `names` and `providers` schema. The generator retains source paths and SHA-256 hashes and takes rates and intervals directly from the assessment. It does not call providers, re-score results, merge experiments or infer a trend. Defaults include the 28 October final re-score and the earlier corrected advanced assessment; these use different setups.
+
+The “What we’ve built” section uses an interactive, explicitly illustrative call replay. Select caller and service behaviour, then play, pause or step through action/speech checks and retained evidence. It is not a retrieved incident or a provider finding. The executive statistics, clickable scorecard and customer-situation bars use the selected assessment, preserve metric definitions and unresolved outcomes, and do not introduce reliability grades or new provider rankings.
+
+Listening uses `site/voice-library.json`, refreshed by the existing catalogue builder. Those recordings remain a separate study. The Pages staging list includes the review and its generated data; deployment still uses the repository's normal workflow.
+
 The repository-root `index.html` is the GitHub Pages landing page. It highlights curated experiments and searches all tracked files in `reports/`, `artifacts/` and `docs/`. Notes open in GitHub's Markdown viewer; web reports, audio and data use relative Pages URLs.
+
+## Executive briefing (draft)
+
+`exec-briefing.html` is the business-facing view: a trust-led story (airlock introduction, call replay, caller moments, scorecard, priorities, listening). It is separate from `cx-review.html`, which remains the evidence explorer.
+
+**The numbers on this page change.** Service, situation, repetition and run counts, every score and the "clear winner" statement are read at load time from the first assessment in `site/cx-review-data.json`. Nothing is fixed in the HTML. We have run many tests and will run more, so figures such as "6 services, 40 situations, 720 calls" describe the current assessment only. The footer prints the assessment title and generation date so a stale page is visible.
+
+After adding or updating an assessment:
+
+1. Run `python3 scripts/build_cx_review.py` to refresh the data.
+2. Re-read the **authored wording**, which the data does not update: the three hero answers, the priorities caveat, the caller persona quotes in `PERSONAS`, the call replay in `renderHow`, and the pillar copy. Check each still matches the new results.
+3. Keep the scorecard thresholds (98% reliable, 93% mostly) and the choice to leave response pause ungraded and unranked unless timing methods become comparable.
+
+`executive-trust.html` is the combined briefing: it joins the technology (architecture diagram, airlock pillars, call replay, fairness) to the results (customer moments, scorecard, priorities, listening) under one trust-led story, and ends with the decision on what to test next in Connect. It is data-driven in the same way, so the same refresh and re-read steps apply, plus the fairness and decision wording (taken from `executive-special.html`) and the architecture diagram.
+
+The replay uses scripted service replies and real caller lines from `scenario_catalogue.py`; it is illustrative, not a recorded run.
 
 ## Publishing
 

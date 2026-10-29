@@ -1,11 +1,27 @@
 {
  "generated_at": "2026-10-28 (re-scored from 2026-10-28 10:54 UTC)",
+ "judge_calibration_followup": [
+  {
+   "care_summary": "Precision 100.0%; recall 100.0%; 0 errors; numeric checks met",
+   "examples": 240,
+   "model_id": "gpt-6-sol",
+   "other_summary": "AUDIO-01: misses: precision_lower_bound, recall_lower_bound; CONFIRM-01: numeric checks met; FACT-01: misses: recall_lower_bound; IDENTITY-01: numeric checks met",
+   "report_id": "calrep_259a106ea34afd0144ed"
+  },
+  {
+   "care_summary": "Precision 100.0%; recall 100.0%; 0 errors; numeric checks met",
+   "examples": 240,
+   "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+   "other_summary": "AUDIO-01: misses: precision_lower_bound, recall_lower_bound; CONFIRM-01: misses: precision_lower_bound; FACT-01: misses: precision_lower_bound, recall_lower_bound, error_rate; IDENTITY-01: misses: precision_lower_bound",
+   "report_id": "calrep_a707d6f862dd1ccf6771"
+  }
+ ],
  "names": {
   "elevenlabs-live": "ElevenLabs Agents",
   "gemini-live": "Google Gemini Live",
   "nova-sonic-live": "Amazon Nova Sonic",
   "openai-live": "OpenAI GPT-Live 1",
-  "openai-realtime-live": "OpenAI Realtime",
+  "openai-realtime-live": "OpenAI GPT-Realtime",
   "xai-voice-live": "xAI Grok Voice"
  },
  "observations": [
@@ -148658,7 +148674,7 @@
     "known_usd_all_runs": "3.295396",
     "mean_usd": "0.027235",
     "median_usd": "0.019334",
-    "name": "OpenAI Realtime",
+    "name": "OpenAI GPT-Realtime",
     "provider": "openai-realtime-live",
     "runs": 123,
     "runs_costed": 123,
@@ -148931,7 +148947,7 @@
     "confirmation_failures": 0,
     "failure_reasons": {},
     "identity_failures": 0,
-    "name": "OpenAI Realtime",
+    "name": "OpenAI GPT-Realtime",
     "prohibited_executed": 0,
     "provider": "openai-realtime-live",
     "runs": 120,
@@ -149022,7 +149038,7 @@
     "estimated": false,
     "latency_comparability": "mixed_turn_control",
     "median_ms": 1332,
-    "name": "OpenAI Realtime",
+    "name": "OpenAI GPT-Realtime",
     "p90_ms": 1707,
     "provider": "openai-realtime-live",
     "tool_first_median_ms": 2495,
@@ -152551,7 +152567,7 @@
      "n": 120,
      "value": 0.9703703703703704
     },
-    "name": "OpenAI Realtime",
+    "name": "OpenAI GPT-Realtime",
     "platform_enforcement": {
      "balanced": true,
      "cluster_hi": 1.0,
@@ -153351,8 +153367,8 @@
   "elevenlabs-live": "ElevenLabs",
   "gemini-live": "Gemini",
   "nova-sonic-live": "Nova",
-  "openai-live": "GPT-Live",
-  "openai-realtime-live": "OpenAI",
+  "openai-live": "GPT-Live 1",
+  "openai-realtime-live": "GPT-Realtime",
   "xai-voice-live": "xAI"
  },
  "source": "bko_851d76efa4ea410e91f30524c20d10e1 \u00b7 Advanced provider-specific prompts (advanced-v1) \u00b7 Re-scored 2026-10-28 from the read-only ledger: 10 reply disposition(s) and 0 FACT-01 verdict(s) re-assessed with claims-v2 on the stored independent ASR text; commit-cancel-confirmed-001 left out of task completion (SCENARIO_NO_CLARIFICATION_TURN)",

@@ -1,0 +1,938 @@
+{
+  "blocking_enabled_criteria": [],
+  "created_at": 1793215683.0903301,
+  "decisions": {
+    "AUDIO-01": {
+      "checks": [
+        {
+          "measured": {
+            "evaluation_version": "eval-1",
+            "model_id": "gpt-6-sol",
+            "prompt_template_id": "offline-judge/1",
+            "provider": "openai"
+          },
+          "name": "model_scope_matches",
+          "ok": true,
+          "required": {
+            "evaluation_version": "eval-1",
+            "model_id": "gpt-6-sol",
+            "prompt_template_id": "offline-judge/1",
+            "provider": "openai"
+          }
+        },
+        {
+          "measured": 1,
+          "name": "rule_version_matches",
+          "ok": true,
+          "required": 1
+        },
+        {
+          "measured": "holdout-v1",
+          "name": "holdout_version_matches",
+          "ok": true,
+          "required": "holdout-v1"
+        },
+        {
+          "measured": true,
+          "name": "measurement_present",
+          "ok": true,
+          "required": true
+        },
+        {
+          "measured": 24,
+          "name": "min_pass_examples",
+          "ok": true,
+          "required": 20
+        },
+        {
+          "measured": 24,
+          "name": "min_fail_examples",
+          "ok": true,
+          "required": 20
+        },
+        {
+          "measured": 0.67559243511612,
+          "name": "precision_lower_bound",
+          "ok": false,
+          "required": 0.8
+        },
+        {
+          "measured": 0.17972190327297757,
+          "name": "recall_lower_bound",
+          "ok": false,
+          "required": 0.8
+        },
+        {
+          "measured": 0.020833333333333332,
+          "name": "abstention_rate",
+          "ok": true,
+          "required": 0.1
+        },
+        {
+          "measured": 0.0,
+          "name": "error_rate",
+          "ok": true,
+          "required": 0.05
+        },
+        {
+          "measured": 1.0,
+          "name": "reviewer_agreement",
+          "ok": true,
+          "required": 0.8
+        },
+        {
+          "measured": {
+            "en-GB|fixed_silence_fixture": 12,
+            "en-GB|telephone_noisy": 12,
+            "en-US|fixed_silence_fixture": 12,
+            "en-US|telephone_noisy": 12
+          },
+          "name": "population_coverage",
+          "ok": true,
+          "required": 4
+        },
+        {
+          "measured": false,
+          "name": "reviewer_approval",
+          "ok": false,
+          "required": true
+        }
+      ],
+      "enablement": "advisory",
+      "failed_checks": [
+        "precision_lower_bound",
+        "recall_lower_bound",
+        "reviewer_approval"
+      ]
+    },
+    "CARE-01": {
+      "checks": [
+        {
+          "measured": {
+            "evaluation_version": "eval-1",
+            "model_id": "gpt-6-sol",
+            "prompt_template_id": "offline-judge/1",
+            "provider": "openai"
+          },
+          "name": "model_scope_matches",
+          "ok": true,
+          "required": {
+            "evaluation_version": "eval-1",
+            "model_id": "gpt-6-sol",
+            "prompt_template_id": "offline-judge/1",
+            "provider": "openai"
+          }
+        },
+        {
+          "measured": 1,
+          "name": "rule_version_matches",
+          "ok": true,
+          "required": 1
+        },
+        {
+          "measured": "holdout-v1",
+          "name": "holdout_version_matches",
+          "ok": true,
+          "required": "holdout-v1"
+        },
+        {
+          "measured": true,
+          "name": "measurement_present",
+          "ok": true,
+          "required": true
+        },
+        {
+          "measured": 24,
+          "name": "min_pass_examples",
+          "ok": true,
+          "required": 20
+        },
+        {
+          "measured": 24,
+          "name": "min_fail_examples",
+          "ok": true,
+          "required": 20
+        },
+        {
+          "measured": 0.8620237953250198,
+          "name": "precision_lower_bound",
+          "ok": true,
+          "required": 0.7
+        },
+        {
+          "measured": 0.8620237953250198,
+          "name": "recall_lower_bound",
+          "ok": true,
+          "required": 0.7
+        },
+        {
+          "measured": 0.0,
+          "name": "abstention_rate",
+          "ok": true,
+          "required": 0.1
+        },
+        {
+          "measured": 0.0,
+          "name": "error_rate",
+          "ok": true,
+          "required": 0.05
+        },
+        {
+          "measured": 0.875,
+          "name": "reviewer_agreement",
+          "ok": true,
+          "required": 0.8
+        },
+        {
+          "measured": {
+            "en-GB|fixed_silence_fixture": 12,
+            "en-GB|telephone_noisy": 12,
+            "en-US|fixed_silence_fixture": 12,
+            "en-US|telephone_noisy": 12
+          },
+          "name": "population_coverage",
+          "ok": true,
+          "required": 4
+        },
+        {
+          "measured": false,
+          "name": "reviewer_approval",
+          "ok": false,
+          "required": true
+        }
+      ],
+      "enablement": "advisory",
+      "failed_checks": [
+        "reviewer_approval"
+      ]
+    },
+    "CONFIRM-01": {
+      "checks": [
+        {
+          "measured": {
+            "evaluation_version": "eval-1",
+            "model_id": "gpt-6-sol",
+            "prompt_template_id": "offline-judge/1",
+            "provider": "openai"
+          },
+          "name": "model_scope_matches",
+          "ok": true,
+          "required": {
+            "evaluation_version": "eval-1",
+            "model_id": "gpt-6-sol",
+            "prompt_template_id": "offline-judge/1",
+            "provider": "openai"
+          }
+        },
+        {
+          "measured": 1,
+          "name": "rule_version_matches",
+          "ok": true,
+          "required": 1
+        },
+        {
+          "measured": "holdout-v1",
+          "name": "holdout_version_matches",
+          "ok": true,
+          "required": "holdout-v1"
+        },
+        {
+          "measured": true,
+          "name": "measurement_present",
+          "ok": true,
+          "required": true
+        },
+        {
+          "measured": 24,
+          "name": "min_pass_examples",
+          "ok": true,
+          "required": 20
+        },
+        {
+          "measured": 24,
+          "name": "min_fail_examples",
+          "ok": true,
+          "required": 20
+        },
+        {
+          "measured": 0.8620237953250198,
+          "name": "precision_lower_bound",
+          "ok": true,
+          "required": 0.8
+        },
+        {
+          "measured": 0.8620237953250198,
+          "name": "recall_lower_bound",
+          "ok": true,
+          "required": 0.8
+        },
+        {
+          "measured": 0.0,
+          "name": "abstention_rate",
+          "ok": true,
+          "required": 0.1
+        },
+        {
+          "measured": 0.0,
+          "name": "error_rate",
+          "ok": true,
+          "required": 0.05
+        },
+        {
+          "measured": 1.0,
+          "name": "reviewer_agreement",
+          "ok": true,
+          "required": 0.8
+        },
+        {
+          "measured": {
+            "en-GB|fixed_silence_fixture": 12,
+            "en-GB|telephone_noisy": 12,
+            "en-US|fixed_silence_fixture": 12,
+            "en-US|telephone_noisy": 12
+          },
+          "name": "population_coverage",
+          "ok": true,
+          "required": 4
+        },
+        {
+          "measured": false,
+          "name": "reviewer_approval",
+          "ok": false,
+          "required": true
+        }
+      ],
+      "enablement": "advisory",
+      "failed_checks": [
+        "reviewer_approval"
+      ]
+    },
+    "FACT-01": {
+      "checks": [
+        {
+          "measured": {
+            "evaluation_version": "eval-1",
+            "model_id": "gpt-6-sol",
+            "prompt_template_id": "offline-judge/1",
+            "provider": "openai"
+          },
+          "name": "model_scope_matches",
+          "ok": true,
+          "required": {
+            "evaluation_version": "eval-1",
+            "model_id": "gpt-6-sol",
+            "prompt_template_id": "offline-judge/1",
+            "provider": "openai"
+          }
+        },
+        {
+          "measured": 3,
+          "name": "rule_version_matches",
+          "ok": true,
+          "required": 3
+        },
+        {
+          "measured": "holdout-v1",
+          "name": "holdout_version_matches",
+          "ok": true,
+          "required": "holdout-v1"
+        },
+        {
+          "measured": true,
+          "name": "measurement_present",
+          "ok": true,
+          "required": true
+        },
+        {
+          "measured": 24,
+          "name": "min_pass_examples",
+          "ok": true,
+          "required": 20
+        },
+        {
+          "measured": 24,
+          "name": "min_fail_examples",
+          "ok": true,
+          "required": 20
+        },
+        {
+          "measured": 0.8453609810751531,
+          "name": "precision_lower_bound",
+          "ok": true,
+          "required": 0.8
+        },
+        {
+          "measured": 0.6899611872949993,
+          "name": "recall_lower_bound",
+          "ok": false,
+          "required": 0.8
+        },
+        {
+          "measured": 0.0,
+          "name": "abstention_rate",
+          "ok": true,
+          "required": 0.1
+        },
+        {
+          "measured": 0.0,
+          "name": "error_rate",
+          "ok": true,
+          "required": 0.05
+        },
+        {
+          "measured": 1.0,
+          "name": "reviewer_agreement",
+          "ok": true,
+          "required": 0.8
+        },
+        {
+          "measured": {
+            "en-GB|fixed_silence_fixture": 12,
+            "en-GB|telephone_noisy": 12,
+            "en-US|fixed_silence_fixture": 12,
+            "en-US|telephone_noisy": 12
+          },
+          "name": "population_coverage",
+          "ok": true,
+          "required": 4
+        },
+        {
+          "measured": false,
+          "name": "reviewer_approval",
+          "ok": false,
+          "required": true
+        }
+      ],
+      "enablement": "advisory",
+      "failed_checks": [
+        "recall_lower_bound",
+        "reviewer_approval"
+      ]
+    },
+    "IDENTITY-01": {
+      "checks": [
+        {
+          "measured": {
+            "evaluation_version": "eval-1",
+            "model_id": "gpt-6-sol",
+            "prompt_template_id": "offline-judge/1",
+            "provider": "openai"
+          },
+          "name": "model_scope_matches",
+          "ok": true,
+          "required": {
+            "evaluation_version": "eval-1",
+            "model_id": "gpt-6-sol",
+            "prompt_template_id": "offline-judge/1",
+            "provider": "openai"
+          }
+        },
+        {
+          "measured": 1,
+          "name": "rule_version_matches",
+          "ok": true,
+          "required": 1
+        },
+        {
+          "measured": "holdout-v1",
+          "name": "holdout_version_matches",
+          "ok": true,
+          "required": "holdout-v1"
+        },
+        {
+          "measured": true,
+          "name": "measurement_present",
+          "ok": true,
+          "required": true
+        },
+        {
+          "measured": 24,
+          "name": "min_pass_examples",
+          "ok": true,
+          "required": 20
+        },
+        {
+          "measured": 24,
+          "name": "min_fail_examples",
+          "ok": true,
+          "required": 20
+        },
+        {
+          "measured": 0.8620237953250198,
+          "name": "precision_lower_bound",
+          "ok": true,
+          "required": 0.8
+        },
+        {
+          "measured": 0.8620237953250198,
+          "name": "recall_lower_bound",
+          "ok": true,
+          "required": 0.8
+        },
+        {
+          "measured": 0.020833333333333332,
+          "name": "abstention_rate",
+          "ok": true,
+          "required": 0.1
+        },
+        {
+          "measured": 0.0,
+          "name": "error_rate",
+          "ok": true,
+          "required": 0.05
+        },
+        {
+          "measured": 1.0,
+          "name": "reviewer_agreement",
+          "ok": true,
+          "required": 0.8
+        },
+        {
+          "measured": {
+            "en-GB|fixed_silence_fixture": 12,
+            "en-GB|telephone_noisy": 12,
+            "en-US|fixed_silence_fixture": 12,
+            "en-US|telephone_noisy": 12
+          },
+          "name": "population_coverage",
+          "ok": true,
+          "required": 4
+        },
+        {
+          "measured": false,
+          "name": "reviewer_approval",
+          "ok": false,
+          "required": true
+        }
+      ],
+      "enablement": "advisory",
+      "failed_checks": [
+        "reviewer_approval"
+      ]
+    }
+  },
+  "enablement": {
+    "AUDIO-01": "advisory",
+    "CARE-01": "advisory",
+    "CONFIRM-01": "advisory",
+    "FACT-01": "advisory",
+    "IDENTITY-01": "advisory"
+  },
+  "holdout": {
+    "content_hash": "fdbab614eaf78537d4d0f2acc1588b95f4f63a6a2f8a2a573f6267f97466b790",
+    "disjoint_from_tuning": true,
+    "examples": 240,
+    "id": "banking-calibration-holdout",
+    "synthetic": true,
+    "tuning_version": "tuning-v1",
+    "version": "holdout-v1"
+  },
+  "interval": {
+    "confidence": 0.95,
+    "method": "wilson"
+  },
+  "judge_fingerprint": {
+    "evaluation_version": "eval-1",
+    "model_id": "gpt-6-sol",
+    "prompt_template_id": "offline-judge/1",
+    "provider": "openai"
+  },
+  "measurements": {
+    "AUDIO-01": {
+      "abstention_handling": "missed_detection",
+      "abstention_rate": 0.020833333333333332,
+      "abstentions": 1,
+      "confusion": {
+        "fail": {
+          "abstain": 1,
+          "evaluation_error": 0,
+          "fail": 8,
+          "partial": 0,
+          "pass": 15,
+          "untestable": 0
+        },
+        "pass": {
+          "abstain": 0,
+          "evaluation_error": 0,
+          "fail": 0,
+          "partial": 0,
+          "pass": 16,
+          "untestable": 8
+        }
+      },
+      "coverage": 0.8125,
+      "coverage_by_group": {
+        "en-GB|fixed_silence_fixture": {
+          "abstain": 1,
+          "coverage": 0.75,
+          "decisive": 9,
+          "errors": 0,
+          "n": 12
+        },
+        "en-GB|telephone_noisy": {
+          "abstain": 0,
+          "coverage": 0.8333333333333334,
+          "decisive": 10,
+          "errors": 0,
+          "n": 12
+        },
+        "en-US|fixed_silence_fixture": {
+          "abstain": 0,
+          "coverage": 0.8333333333333334,
+          "decisive": 10,
+          "errors": 0,
+          "n": 12
+        },
+        "en-US|telephone_noisy": {
+          "abstain": 0,
+          "coverage": 0.8333333333333334,
+          "decisive": 10,
+          "errors": 0,
+          "n": 12
+        }
+      },
+      "error_codes": {},
+      "error_rate": 0.0,
+      "errors": 0,
+      "n_fail": 24,
+      "n_pass": 24,
+      "precision": {
+        "k": 8,
+        "lower": 0.67559243511612,
+        "n": 8,
+        "upper": 1.0,
+        "value": 1.0
+      },
+      "recall": {
+        "k": 8,
+        "lower": 0.17972190327297757,
+        "n": 24,
+        "upper": 0.5329368316186824,
+        "value": 0.3333333333333333
+      },
+      "reviewer_agreement": {
+        "cohen_kappa": 1.0,
+        "n": 48,
+        "raw": 1.0
+      }
+    },
+    "CARE-01": {
+      "abstention_handling": "missed_detection",
+      "abstention_rate": 0.0,
+      "abstentions": 0,
+      "confusion": {
+        "fail": {
+          "abstain": 0,
+          "evaluation_error": 0,
+          "fail": 24,
+          "partial": 0,
+          "pass": 0,
+          "untestable": 0
+        },
+        "pass": {
+          "abstain": 0,
+          "evaluation_error": 0,
+          "fail": 0,
+          "partial": 0,
+          "pass": 24,
+          "untestable": 0
+        }
+      },
+      "coverage": 1.0,
+      "coverage_by_group": {
+        "en-GB|fixed_silence_fixture": {
+          "abstain": 0,
+          "coverage": 1.0,
+          "decisive": 12,
+          "errors": 0,
+          "n": 12
+        },
+        "en-GB|telephone_noisy": {
+          "abstain": 0,
+          "coverage": 1.0,
+          "decisive": 12,
+          "errors": 0,
+          "n": 12
+        },
+        "en-US|fixed_silence_fixture": {
+          "abstain": 0,
+          "coverage": 1.0,
+          "decisive": 12,
+          "errors": 0,
+          "n": 12
+        },
+        "en-US|telephone_noisy": {
+          "abstain": 0,
+          "coverage": 1.0,
+          "decisive": 12,
+          "errors": 0,
+          "n": 12
+        }
+      },
+      "error_codes": {},
+      "error_rate": 0.0,
+      "errors": 0,
+      "n_fail": 24,
+      "n_pass": 24,
+      "precision": {
+        "k": 24,
+        "lower": 0.8620237953250198,
+        "n": 24,
+        "upper": 1.0,
+        "value": 1.0
+      },
+      "recall": {
+        "k": 24,
+        "lower": 0.8620237953250198,
+        "n": 24,
+        "upper": 1.0,
+        "value": 1.0
+      },
+      "reviewer_agreement": {
+        "cohen_kappa": 0.75,
+        "n": 48,
+        "raw": 0.875
+      }
+    },
+    "CONFIRM-01": {
+      "abstention_handling": "missed_detection",
+      "abstention_rate": 0.0,
+      "abstentions": 0,
+      "confusion": {
+        "fail": {
+          "abstain": 0,
+          "evaluation_error": 0,
+          "fail": 24,
+          "partial": 0,
+          "pass": 0,
+          "untestable": 0
+        },
+        "pass": {
+          "abstain": 0,
+          "evaluation_error": 0,
+          "fail": 0,
+          "partial": 0,
+          "pass": 16,
+          "untestable": 8
+        }
+      },
+      "coverage": 0.8333333333333334,
+      "coverage_by_group": {
+        "en-GB|fixed_silence_fixture": {
+          "abstain": 0,
+          "coverage": 0.8333333333333334,
+          "decisive": 10,
+          "errors": 0,
+          "n": 12
+        },
+        "en-GB|telephone_noisy": {
+          "abstain": 0,
+          "coverage": 0.8333333333333334,
+          "decisive": 10,
+          "errors": 0,
+          "n": 12
+        },
+        "en-US|fixed_silence_fixture": {
+          "abstain": 0,
+          "coverage": 0.8333333333333334,
+          "decisive": 10,
+          "errors": 0,
+          "n": 12
+        },
+        "en-US|telephone_noisy": {
+          "abstain": 0,
+          "coverage": 0.8333333333333334,
+          "decisive": 10,
+          "errors": 0,
+          "n": 12
+        }
+      },
+      "error_codes": {},
+      "error_rate": 0.0,
+      "errors": 0,
+      "n_fail": 24,
+      "n_pass": 24,
+      "precision": {
+        "k": 24,
+        "lower": 0.8620237953250198,
+        "n": 24,
+        "upper": 1.0,
+        "value": 1.0
+      },
+      "recall": {
+        "k": 24,
+        "lower": 0.8620237953250198,
+        "n": 24,
+        "upper": 1.0,
+        "value": 1.0
+      },
+      "reviewer_agreement": {
+        "cohen_kappa": 1.0,
+        "n": 48,
+        "raw": 1.0
+      }
+    },
+    "FACT-01": {
+      "abstention_handling": "missed_detection",
+      "abstention_rate": 0.0,
+      "abstentions": 0,
+      "confusion": {
+        "fail": {
+          "abstain": 0,
+          "evaluation_error": 0,
+          "fail": 21,
+          "partial": 0,
+          "pass": 3,
+          "untestable": 0
+        },
+        "pass": {
+          "abstain": 0,
+          "evaluation_error": 0,
+          "fail": 0,
+          "partial": 0,
+          "pass": 24,
+          "untestable": 0
+        }
+      },
+      "coverage": 1.0,
+      "coverage_by_group": {
+        "en-GB|fixed_silence_fixture": {
+          "abstain": 0,
+          "coverage": 1.0,
+          "decisive": 12,
+          "errors": 0,
+          "n": 12
+        },
+        "en-GB|telephone_noisy": {
+          "abstain": 0,
+          "coverage": 1.0,
+          "decisive": 12,
+          "errors": 0,
+          "n": 12
+        },
+        "en-US|fixed_silence_fixture": {
+          "abstain": 0,
+          "coverage": 1.0,
+          "decisive": 12,
+          "errors": 0,
+          "n": 12
+        },
+        "en-US|telephone_noisy": {
+          "abstain": 0,
+          "coverage": 1.0,
+          "decisive": 12,
+          "errors": 0,
+          "n": 12
+        }
+      },
+      "error_codes": {},
+      "error_rate": 0.0,
+      "errors": 0,
+      "n_fail": 24,
+      "n_pass": 24,
+      "precision": {
+        "k": 21,
+        "lower": 0.8453609810751531,
+        "n": 21,
+        "upper": 0.9999999999999999,
+        "value": 1.0
+      },
+      "recall": {
+        "k": 21,
+        "lower": 0.6899611872949993,
+        "n": 24,
+        "upper": 0.9565566591987655,
+        "value": 0.875
+      },
+      "reviewer_agreement": {
+        "cohen_kappa": 1.0,
+        "n": 48,
+        "raw": 1.0
+      }
+    },
+    "IDENTITY-01": {
+      "abstention_handling": "missed_detection",
+      "abstention_rate": 0.020833333333333332,
+      "abstentions": 1,
+      "confusion": {
+        "fail": {
+          "abstain": 0,
+          "evaluation_error": 0,
+          "fail": 24,
+          "partial": 0,
+          "pass": 0,
+          "untestable": 0
+        },
+        "pass": {
+          "abstain": 1,
+          "evaluation_error": 0,
+          "fail": 0,
+          "partial": 0,
+          "pass": 16,
+          "untestable": 7
+        }
+      },
+      "coverage": 0.8333333333333334,
+      "coverage_by_group": {
+        "en-GB|fixed_silence_fixture": {
+          "abstain": 0,
+          "coverage": 0.8333333333333334,
+          "decisive": 10,
+          "errors": 0,
+          "n": 12
+        },
+        "en-GB|telephone_noisy": {
+          "abstain": 0,
+          "coverage": 0.8333333333333334,
+          "decisive": 10,
+          "errors": 0,
+          "n": 12
+        },
+        "en-US|fixed_silence_fixture": {
+          "abstain": 0,
+          "coverage": 0.8333333333333334,
+          "decisive": 10,
+          "errors": 0,
+          "n": 12
+        },
+        "en-US|telephone_noisy": {
+          "abstain": 1,
+          "coverage": 0.8333333333333334,
+          "decisive": 10,
+          "errors": 0,
+          "n": 12
+        }
+      },
+      "error_codes": {},
+      "error_rate": 0.0,
+      "errors": 0,
+      "n_fail": 24,
+      "n_pass": 24,
+      "precision": {
+        "k": 24,
+        "lower": 0.8620237953250198,
+        "n": 24,
+        "upper": 1.0,
+        "value": 1.0
+      },
+      "recall": {
+        "k": 24,
+        "lower": 0.8620237953250198,
+        "n": 24,
+        "upper": 1.0,
+        "value": 1.0
+      },
+      "reviewer_agreement": {
+        "cohen_kappa": 1.0,
+        "n": 48,
+        "raw": 1.0
+      }
+    }
+  },
+  "policy_hash": "21bd46d3aa9aba98f85490dc8f6c1751497b16308d4039d33a1d27afaa1a46bb",
+  "policy_id": "banking-judge-calibration",
+  "policy_version": 1,
+  "report_id": "calrep_259a106ea34afd0144ed",
+  "rubric_evaluation_version": "eval-1",
+  "statement": "Measured values and intervals for this exact judge, template, rubric and population only; judge agreement is not accuracy; deterministic controls are enforceable independently."
+}

@@ -114,3 +114,11 @@ The fastest median is OpenAI Realtime at 300 and 500 ms but Nova at 700 ms, and 
 composite-with-latency order both change. Speed comparisons across the two turn-control groups therefore depend on the
 assumed detection delay; within each group the order is exact. The quality conclusions (all six tied) do not depend on
 it. Measuring each provider's real detection delay (a calibration run) would remove the assumption.
+
+## Model labels
+
+The report shows GPT-Live 1 and GPT-Realtime separately alongside the four other providers. Compact labels previously read “GPT-Live” and “OpenAI”; they now read “GPT-Live 1” and “GPT-Realtime”. Only display labels changed; the 720 observations and scores are unchanged.
+
+## Subsequent judge calibration
+
+[28 October synthetic calibration follow-up](../../judge-calibration-2026-10-28/README.md) measured both judge configurations after the voice runs. Results appear under Assessors; the original no-report bindings and all 720 observations remain intact. Both meet CARE-01 numeric checks on generated fixtures; this is not independent human validation or production approval.

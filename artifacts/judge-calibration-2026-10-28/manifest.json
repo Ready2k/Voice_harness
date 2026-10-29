@@ -1,0 +1,16 @@
+{
+  "source_revision": "ba1fb334c847d0f24b0d6f9fca45f73e187741c8",
+  "historical_observations_unchanged": true,
+  "logical_judge_evaluations": 480,
+  "human_reviewed_labels": false,
+  "files": {
+    "README.md": "4acef0bfb438824545539fc366ea5d09634110e385ca1a7fc5bea43198a9c133",
+    "bedrock-haiku-4-5-policy.json": "5689f0c8dbd4234cba5b53413c7dc90a9e07f3a4a6c2a1cce09945d9cda6a47b",
+    "bedrock-haiku-4-5-responses.json": "879e589456226cd22cac0852f0924afdb000e61e48ab4108fcd7ef2718b1b1a5",
+    "bedrock-haiku-4-5.json": "eb212993790711d2916f993a744557b8be24ac63f75ee4be7e200ab743e7a975",
+    "openai-gpt-6-sol-policy.json": "0570c23ab687288640dfdaef027979c5be121b3e345d822f20c7d1f3b19bf0a9",
+    "openai-gpt-6-sol-responses.json": "1d31849c3ddcb450bdb18e097483637dd18328b6d33dfd01c94986509ed468ab",
+    "openai-gpt-6-sol.json": "5bfadc6c2481574749ec9bc4eca13b45830ab43edfb95cbed6d0eb4a90355152",
+    "runner.py": "ee5ae66f9f9ab3d438ad76eafb84fb205f80872de872d0823b3a74c5cfdb804b"
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "abstention_handling": "missed_detection",
+  "confidence_interval": {
+    "confidence": 0.95,
+    "method": "wilson"
+  },
+  "error_handling": "missed_detection",
+  "holdout_id": "banking-calibration-holdout",
+  "holdout_version": "holdout-v1",
+  "min_examples_per_group": 4,
+  "model_scope": {
+    "evaluation_version": "eval-1",
+    "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+    "prompt_template_id": "offline-judge/1",
+    "provider": "aws_bedrock"
+  },
+  "policy_id": "banking-judge-calibration",
+  "reviewer_approval_required": true,
+  "rule_versions": {
+    "AUDIO-01": 1,
+    "CARE-01": 1,
+    "CONFIRM-01": 1,
+    "FACT-01": 3,
+    "IDENTITY-01": 1
+  },
+  "sample_size_rationale": "24 pass and 24 fail synthetic examples per criterion: a perfect result gives a Wilson 95% lower bound of about 0.86, and 0.80 tolerates at most one miss. The earlier 50+50 / 0.95 figures are exploratory hypotheses only and are not assumed here. Thresholds must be re-derived from intended error costs before any production blocking.",
+  "target_population": {
+    "audio_profiles": [
+      "fixed_silence_fixture",
+      "telephone_noisy"
+    ],
+    "locales": [
+      "en-GB",
+      "en-US"
+    ]
+  },
+  "thresholds": {
+    "AUDIO-01": {
+      "max_abstention_rate": 0.1,
+      "max_error_rate": 0.05,
+      "min_fail_examples": 20,
+      "min_pass_examples": 20,
+      "min_precision_lower_bound": 0.8,
+      "min_recall_lower_bound": 0.8,
+      "min_reviewer_agreement": 0.8
+    },
+    "CARE-01": {
+      "max_abstention_rate": 0.1,
+      "max_error_rate": 0.05,
+      "min_fail_examples": 20,
+      "min_pass_examples": 20,
+      "min_precision_lower_bound": 0.7,
+      "min_recall_lower_bound": 0.7,
+      "min_reviewer_agreement": 0.8
+    },
+    "CONFIRM-01": {
+      "max_abstention_rate": 0.1,
+      "max_error_rate": 0.05,
+      "min_fail_examples": 20,
+      "min_pass_examples": 20,
+      "min_precision_lower_bound": 0.8,
+      "min_recall_lower_bound": 0.8,
+      "min_reviewer_agreement": 0.8
+    },
+    "FACT-01": {
+      "max_abstention_rate": 0.1,
+      "max_error_rate": 0.05,
+      "min_fail_examples": 20,
+      "min_pass_examples": 20,
+      "min_precision_lower_bound": 0.8,
+      "min_recall_lower_bound": 0.8,
+      "min_reviewer_agreement": 0.8
+    },
+    "IDENTITY-01": {
+      "max_abstention_rate": 0.1,
+      "max_error_rate": 0.05,
+      "min_fail_examples": 20,
+      "min_pass_examples": 20,
+      "min_precision_lower_bound": 0.8,
+      "min_recall_lower_bound": 0.8,
+      "min_reviewer_agreement": 0.8
+    }
+  },
+  "version": 1
+}
