@@ -2,7 +2,7 @@
 
 export const PROVIDER_NAMES = {
   "openai-live": "OpenAI GPT-Live 1",
-  "openai-realtime-live": "OpenAI Realtime",
+  "openai-realtime-live": "OpenAI GPT-Realtime",
   "nova-sonic-live": "Amazon Nova Sonic",
   "xai-voice-live": "xAI Grok Voice",
   "gemini-live": "Google Gemini Live",

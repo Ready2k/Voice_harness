@@ -1,9 +1,9 @@
-"""Judge calibration against a versioned human-labelled holdout, and CalibrationPolicy gating.
+"""Judge calibration against a versioned fixture-labelled holdout, and CalibrationPolicy gating.
 
 Positive class is `fail` (the blocking class). Precision/recall carry Wilson intervals; blocking is
 only ever enabled by a satisfied, reviewer-approved CalibrationPolicy bound to the exact judge
 model/template/rubric versions and population measured. Everything else stays advisory.
-Judge-to-judge agreement is never accuracy; only agreement with human labels is measured here.
+Judge-to-judge agreement is never accuracy; this holdout measures agreement with generated expected labels.
 """
 
 from __future__ import annotations

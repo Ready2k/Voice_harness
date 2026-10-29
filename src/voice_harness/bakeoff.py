@@ -62,7 +62,7 @@ MAX_RUNS = 720  # one full 40-scenario catalogue x 3 repetitions for the maximum
 COMPLETION_GATE = 0.95
 GEMINI_AUDIO_BYTES = 2000
 AUDIO_TYPES = {"response.output_audio.delta", "audioOutput", "audio"}
-NAMES = {"openai-live": "OpenAI GPT-Live 1", "openai-realtime-live": "OpenAI Realtime", "nova-sonic-live": "Amazon Nova Sonic",
+NAMES = {"openai-live": "OpenAI GPT-Live 1", "openai-realtime-live": "OpenAI GPT-Realtime", "nova-sonic-live": "Amazon Nova Sonic",
          "xai-voice-live": "xAI Grok Voice", "gemini-live": "Google Gemini Live",
          "elevenlabs-live": "ElevenLabs Agents"}
 

@@ -482,7 +482,7 @@ test("assessors show judge identity where recorded, calibration, and the ASR-ven
   assert.equal(rows[0][1], "18 of 18");
   assert.equal(rows[0][2], "us.anthropic.claude-haiku-4-5-20251001-v1:0 (aws_bedrock) · version us.anthropic.claude-haiku-4-5-20251001-v1:0 · temperature 0");
   assert.equal(rows[0][3], "gpt-4o-mini-transcribe (openai)");
-  assert.equal(rows[0][4], "Holdout holdout-a v2 (80 examples) · approved · CARE-01 agreement 91%, error 6%");
+  assert.equal(rows[0][4], "us.anthropic.claude-haiku-4-5-20251001-v1:0: Holdout holdout-a v2 (80 examples) · approved · CARE-01 agreement 91%, error 6%");
   assert.match(rows[0][5], /ASR that transcribed replies is from the tested provider's own vendor/);
   assert.deepEqual(rows[1].slice(1, 3), ["0 of 18", "None ran"]);
   assert.match(rows[1][5], /No judge ran, so CARE-01/);

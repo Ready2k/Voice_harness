@@ -43,7 +43,7 @@ test("page template gives one title and breadcrumb per page, with Review & holds
 });
 
 test("provider names resolve raw model IDs", () => {
-  for (const id of ["gpt-realtime-2.1", "gpt-realtime-mini"]) assert.equal(providerName(id), "OpenAI Realtime");
+  for (const id of ["gpt-realtime-2.1", "gpt-realtime-mini"]) assert.equal(providerName(id), "OpenAI GPT-Realtime");
   for (const id of ["grok-voice-3.0", "grok-voice-latest", "grok-transcribe", "grok-voice-4"]) assert.equal(providerName(id), "xAI Grok Voice");
   assert.equal(providerName("gemini-3.8-live"), "Google Gemini Live");
   assert.equal(providerName("gemini-live"), "Google Gemini Live");

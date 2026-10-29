@@ -501,7 +501,7 @@ export function assessorRows(assessors, providers) {
     return [provider, `${a.runs_with_judge} of ${a.runs}`,
       judges.length ? judges.map(judgeLabel).join("; ") : "None ran",
       (a.asr_models ?? []).map(m => `${m.model} (${m.vendor}${m.live === false ? ", scripted" : ""})`).join("; ") || DASH,
-      judges.length ? judges.map(j => calibrationText(j.calibration)).join("; ") : DASH,
+      judges.length ? judges.map(j => `${j.model_id}: ${calibrationText(j.calibration)}`).join("; ") : DASH,
       (a.disclosures ?? []).map(disclosureText).join("; ") || DASH];
   });
 }
@@ -823,6 +823,11 @@ export function renderReport(root, data, {heading: showHeading = true, reveal = 
     assessorParts.push(table(["Provider", "Runs with a judge", "Judge models", "Transcription (ASR)", "Judge calibration", "Disclosures"], assessed.map(r => [prov(r[0]), ...r.slice(1)]), [1]));
     if (!judgeTemperatureRecorded(assessors)) assessorParts.push(note("Judge temperature and model version are not recorded in these results."));
   } else assessorParts.push(note("Assessor identity was not recorded for these runs."));
+  if (data.judge_calibration_followup?.length) {
+    assessorParts.push(el("h3", null, "Subsequent synthetic calibration"),
+      note("Measured after these voice runs; the original calibration records above are preserved. Labels and reviewer-label fields are generated fixtures, not independent human reviews. Results apply to this synthetic holdout only; no production blocking is approved."),
+      table(["Judge", "Examples", "CARE-01", "Other criteria", "Report"], data.judge_calibration_followup.map(c => [c.model_id, String(c.examples), c.care_summary, c.other_summary, c.report_id])));
+  }
   views.bakeoff.append(section("Assessors", card(...assessorParts)));
 
   if (R.coverage) views.bakeoff.append(section("Evidence coverage", card(heading(null, "Evidence coverage"),

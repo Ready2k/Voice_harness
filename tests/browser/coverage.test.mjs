@@ -75,7 +75,7 @@ test("readiness merges by config id and never invents readiness", () => {
   assert.deepEqual(summaryOf(m, r), { verified: 1, requested: 4, ready: 1, checked: true, expiring: summaryOf(m, r).expiring });
   assert.equal(summaryOf(m, null).ready, 0);
   assert.equal(m.items[0].configId, "openai-realtime-live");
-  assert.equal(m.items[0].title, "OpenAI Realtime");
+  assert.equal(m.items[0].title, "OpenAI GPT-Realtime");
 });
 
 import { render, renderSummary, probeRow } from "../../apps/web/coverage.mjs";

@@ -1,7 +1,7 @@
-"""Versioned, synthetic, human-labelled calibration holdout (spec section 7).
+"""Versioned, synthetic, fixture-labelled calibration holdout (spec section 7).
 
-Every example is a small synthetic ledger with a human-adjudicated label (pass or fail) and two
-reviewer labels. The holdout is generated deterministically, content-hashed, and kept disjoint
+Every example is a small synthetic ledger with a generated expected label (pass or fail) and two
+simulated reviewer-label fields. These are not independent human annotations. The holdout is generated deterministically, content-hashed, and kept disjoint
 from the prompt-tuning split (different ids and different event content). Fixture audio is silence
 with scripted metadata, so these examples exercise judging mechanics, not ASR.
 """
