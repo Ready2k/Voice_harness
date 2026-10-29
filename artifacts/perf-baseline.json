@@ -1,0 +1,93 @@
+{
+  "benchmark_version": "phase1-reference-v1",
+  "environment": {
+    "cgroup_cpu_max": "800000 100000",
+    "cgroup_memory_max": "1073741824",
+    "cpu_count": 12,
+    "cpu_scope": "harness_process_only",
+    "max_rss_native_units": 85008,
+    "platform": "Linux-7.2.12-orbstack-00394-gbecdd6130068-aarch64-with-glibc2.36",
+    "python": "3.13.16",
+    "rss_unit": "KiB",
+    "storage": "postgresql"
+  },
+  "profiles": {
+    "component/sessions=1/scale=1/instrumented=False": {
+      "count": 1000,
+      "p50_ms": 6.477125,
+      "p95_ms": 9.50375
+    },
+    "component/sessions=1/scale=1/instrumented=True": {
+      "count": 1000,
+      "p50_ms": 5.642709,
+      "p95_ms": 8.5795
+    },
+    "component/sessions=1/scale=4/instrumented=False": {
+      "count": 1000,
+      "p50_ms": 5.520709,
+      "p95_ms": 8.025833
+    },
+    "component/sessions=1/scale=4/instrumented=True": {
+      "count": 1000,
+      "p50_ms": 5.585458,
+      "p95_ms": 8.1275
+    },
+    "component/sessions=10/scale=1/instrumented=False": {
+      "count": 1000,
+      "p50_ms": 7.429709,
+      "p95_ms": 10.184
+    },
+    "component/sessions=10/scale=1/instrumented=True": {
+      "count": 1000,
+      "p50_ms": 7.501416,
+      "p95_ms": 9.700916
+    },
+    "component/sessions=10/scale=4/instrumented=False": {
+      "count": 1000,
+      "p50_ms": 8.090917,
+      "p95_ms": 10.247083
+    },
+    "component/sessions=10/scale=4/instrumented=True": {
+      "count": 1000,
+      "p50_ms": 7.180625,
+      "p95_ms": 10.288917
+    },
+    "component/sessions=5/scale=1/instrumented=False": {
+      "count": 1000,
+      "p50_ms": 8.395209,
+      "p95_ms": 11.574708
+    },
+    "component/sessions=5/scale=1/instrumented=True": {
+      "count": 1000,
+      "p50_ms": 8.168167,
+      "p95_ms": 10.75125
+    },
+    "component/sessions=5/scale=4/instrumented=False": {
+      "count": 1000,
+      "p50_ms": 8.833875,
+      "p95_ms": 12.173291
+    },
+    "component/sessions=5/scale=4/instrumented=True": {
+      "count": 1000,
+      "p50_ms": 7.603458,
+      "p95_ms": 11.166333
+    },
+    "websocket/sessions=1": {
+      "count": 1000,
+      "p50_ms": 6.938125,
+      "p95_ms": 9.554958
+    },
+    "websocket/sessions=10": {
+      "count": 1000,
+      "p50_ms": 2.427416,
+      "p95_ms": 4.553125
+    },
+    "websocket/sessions=5": {
+      "count": 1000,
+      "p50_ms": 3.484875,
+      "p95_ms": 6.473208
+    }
+  },
+  "schema": "perf-baseline-v1",
+  "source_hash": "7d5f84937b36cc8d6d3638d9dc4fb872309e1447d915b603272078745bccbeef"
+}

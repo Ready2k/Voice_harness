@@ -3,7 +3,7 @@ on: [push, pull_request]
 jobs:
   container-tests:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
       - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884  # v10.3.0
@@ -33,6 +33,15 @@ jobs:
       - run: make test
         env:
           SECRET_MODE: "644"
+      - run: make perf-gate
+        env:
+          SECRET_MODE: "644"
+      - if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
+        with:
+          name: perf-run
+          path: .local/perf-run.json
+          if-no-files-found: ignore
       - if: failure()
         run: docker compose logs --tail=100 postgres
       - if: always()
