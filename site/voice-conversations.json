@@ -1,0 +1,435 @@
+{
+  "source": "artifacts/voice-conversation-v2/plan.json",
+  "providers": [
+    "OpenAI GPT-Live 1",
+    "OpenAI Realtime",
+    "Amazon Nova Sonic",
+    "xAI Grok Voice",
+    "Google Gemini Live",
+    "ElevenLabs Agents"
+  ],
+  "scenarios": [
+    {
+      "id": "balance",
+      "title": "Balance and clarification"
+    },
+    {
+      "id": "correction",
+      "title": "Remember a correction"
+    },
+    {
+      "id": "lost-card",
+      "title": "Anxious caller"
+    },
+    {
+      "id": "bereavement",
+      "title": "Sensitive conversation"
+    },
+    {
+      "id": "failed-payment",
+      "title": "Frustration and reassurance"
+    },
+    {
+      "id": "continuity",
+      "title": "Conversation continuity"
+    }
+  ],
+  "clips": [
+    {
+      "id": "a84b8e936565c620",
+      "provider": "OpenAI GPT-Live 1",
+      "scenario": "bereavement",
+      "path": "artifacts/voice-conversation-v2/clips/a84b8e936565c620.flac",
+      "model": "gpt-live-1",
+      "voice": "marin",
+      "prompt_sha256": "96a528488b099e5e569fc6ac6052d3b1ead1a19785ca254a33019020afce8464",
+      "wav_sha256": "b321cf8800ef26a9b66dcf2f205f069b69141424e1474dc9529bd8fcef5f3a31",
+      "flac_sha256": "8beaf176476711cd0fec227965a2acab781af739375890c64633c056dfaecd75"
+    },
+    {
+      "id": "868a5781a1b3321d",
+      "provider": "OpenAI GPT-Live 1",
+      "scenario": "lost-card",
+      "path": "artifacts/voice-conversation-v2/clips/868a5781a1b3321d.flac",
+      "model": "gpt-live-1",
+      "voice": "marin",
+      "prompt_sha256": "96a528488b099e5e569fc6ac6052d3b1ead1a19785ca254a33019020afce8464",
+      "wav_sha256": "62852ddb8dc1aba5737a0c06ff37908dfcf693aa693f1994ce421a241aa00320",
+      "flac_sha256": "bf593d8ea6d15d92612efbcd9ecbebeb0f40682389fc761fa22c6e72a802541b"
+    },
+    {
+      "id": "8fffea6d94dab0ba",
+      "provider": "OpenAI GPT-Live 1",
+      "scenario": "correction",
+      "path": "artifacts/voice-conversation-v2/clips/8fffea6d94dab0ba.flac",
+      "model": "gpt-live-1",
+      "voice": "marin",
+      "prompt_sha256": "96a528488b099e5e569fc6ac6052d3b1ead1a19785ca254a33019020afce8464",
+      "wav_sha256": "101be1bbbe755947c4bc1ffe0249daeb5144941898bfb8c7ef872042c985e405",
+      "flac_sha256": "143a679c75a2600b73b4edc34002d4b5d8e94991718c98017b56c8650366922a"
+    },
+    {
+      "id": "b8fca4f675ca133a",
+      "provider": "OpenAI GPT-Live 1",
+      "scenario": "balance",
+      "path": "artifacts/voice-conversation-v2/clips/b8fca4f675ca133a.flac",
+      "model": "gpt-live-1",
+      "voice": "marin",
+      "prompt_sha256": "96a528488b099e5e569fc6ac6052d3b1ead1a19785ca254a33019020afce8464",
+      "wav_sha256": "23a09e76a90a3c4469d6b0c329a488da759b93b6e13004acb19c4e96e808fc1b",
+      "flac_sha256": "64e3b8c1f47d27b4d230d4b184cbebb1df55691e78452c977dffffa9cf1ed60e"
+    },
+    {
+      "id": "80f88bbaa60b6f58",
+      "provider": "OpenAI GPT-Live 1",
+      "scenario": "failed-payment",
+      "path": "artifacts/voice-conversation-v2/clips/80f88bbaa60b6f58.flac",
+      "model": "gpt-live-1",
+      "voice": "marin",
+      "prompt_sha256": "96a528488b099e5e569fc6ac6052d3b1ead1a19785ca254a33019020afce8464",
+      "wav_sha256": "21639d33f8c76fb1ac0be597b039a30cf708ba9f3b7da09d3f872d82765a73c2",
+      "flac_sha256": "133a662bfd4d2016673d06a82fc806d07f38bf2c2dafcf6461c00b3a818131c9"
+    },
+    {
+      "id": "6c97ad93a4abab36",
+      "provider": "OpenAI GPT-Live 1",
+      "scenario": "continuity",
+      "path": "artifacts/voice-conversation-v2/clips/6c97ad93a4abab36.flac",
+      "model": "gpt-live-1",
+      "voice": "marin",
+      "prompt_sha256": "96a528488b099e5e569fc6ac6052d3b1ead1a19785ca254a33019020afce8464",
+      "wav_sha256": "b50c0966556e95ee28cb55dc3a0d6d8a3607e901dda52b014b40d8cc4ac769de",
+      "flac_sha256": "5a28e418f7fb3410203c74053aca3d230717db805eb5ce09c85bf8e0b8b696ff"
+    },
+    {
+      "id": "e47a7de7106043ed",
+      "provider": "OpenAI Realtime",
+      "scenario": "bereavement",
+      "path": "artifacts/voice-conversation-v2/clips/e47a7de7106043ed.flac",
+      "model": "gpt-realtime-2.1",
+      "voice": "marin",
+      "prompt_sha256": "96a528488b099e5e569fc6ac6052d3b1ead1a19785ca254a33019020afce8464",
+      "wav_sha256": "a6b28ae85daaee91b16c1f8accacee94fbe385fc664d2f80b5e75cbb09daa8c4",
+      "flac_sha256": "a0be24aee1b775e20086694f8310da5e1ccc7a3f1cf1e2b7e154689e37120b17"
+    },
+    {
+      "id": "5e727556bab88b07",
+      "provider": "OpenAI Realtime",
+      "scenario": "correction",
+      "path": "artifacts/voice-conversation-v2/clips/5e727556bab88b07.flac",
+      "model": "gpt-realtime-2.1",
+      "voice": "marin",
+      "prompt_sha256": "96a528488b099e5e569fc6ac6052d3b1ead1a19785ca254a33019020afce8464",
+      "wav_sha256": "42b9a887bd2284043bbd0f1ffec5470017cbd7458521be0a3ce95a2477e58e21",
+      "flac_sha256": "e51d7a6b092105c64a0ca0c44b4aacf10198864a59a41d6fd2914861bb16e71b"
+    },
+    {
+      "id": "f4f4ea67965fc971",
+      "provider": "OpenAI Realtime",
+      "scenario": "balance",
+      "path": "artifacts/voice-conversation-v2/clips/f4f4ea67965fc971.flac",
+      "model": "gpt-realtime-2.1",
+      "voice": "marin",
+      "prompt_sha256": "96a528488b099e5e569fc6ac6052d3b1ead1a19785ca254a33019020afce8464",
+      "wav_sha256": "35757002143473486ba4ee8f546aa177190671956ca3958f6329cde3db06560d",
+      "flac_sha256": "3df188b4fa391c9fdb288a4789d534b8ad35677aaf2f0eab6f066eb1dc8c11ef"
+    },
+    {
+      "id": "84a4d19d1695d7c3",
+      "provider": "OpenAI Realtime",
+      "scenario": "lost-card",
+      "path": "artifacts/voice-conversation-v2/clips/84a4d19d1695d7c3.flac",
+      "model": "gpt-realtime-2.1",
+      "voice": "marin",
+      "prompt_sha256": "96a528488b099e5e569fc6ac6052d3b1ead1a19785ca254a33019020afce8464",
+      "wav_sha256": "31c927cb5076bfdc59a3394530c271e6902bd9030c054bd0709d945af1e87383",
+      "flac_sha256": "e58b3498b416c775205abde05f3d33436ffa7267000c77d7bcf7de5fc7fdeef2"
+    },
+    {
+      "id": "0a276c5e624b5fec",
+      "provider": "OpenAI Realtime",
+      "scenario": "continuity",
+      "path": "artifacts/voice-conversation-v2/clips/0a276c5e624b5fec.flac",
+      "model": "gpt-realtime-2.1",
+      "voice": "marin",
+      "prompt_sha256": "96a528488b099e5e569fc6ac6052d3b1ead1a19785ca254a33019020afce8464",
+      "wav_sha256": "4d9a067f919c5509f240a46d2ca5179360fbe4aabe62f4690592e03d24f5f298",
+      "flac_sha256": "83f5baa6a4b0b91e6c921e977bb16a85e42f465a856a4f056d5e242928a09db9"
+    },
+    {
+      "id": "4465b2ea598117cd",
+      "provider": "OpenAI Realtime",
+      "scenario": "failed-payment",
+      "path": "artifacts/voice-conversation-v2/clips/4465b2ea598117cd.flac",
+      "model": "gpt-realtime-2.1",
+      "voice": "marin",
+      "prompt_sha256": "96a528488b099e5e569fc6ac6052d3b1ead1a19785ca254a33019020afce8464",
+      "wav_sha256": "472f34b1552fad4eec991475c95c582f8ff0210a55ce4f9fe6f7c0d988876de5",
+      "flac_sha256": "87bc1475a99c2dfa6b462fa7a921845c6493fd2fada1f43acbc6a77a311ac63b"
+    },
+    {
+      "id": "9fde0a5373d7ad9c",
+      "provider": "Amazon Nova Sonic",
+      "scenario": "balance",
+      "path": "artifacts/voice-conversation-v2/clips/9fde0a5373d7ad9c.flac",
+      "model": "amazon.nova-2-5-sonic",
+      "voice": "amy",
+      "prompt_sha256": "8a1ad5db92a44d261d726a74c434efa82f60786b35b18116582a272a32e8738e",
+      "wav_sha256": "799d63d5724e9cc39a6d30c977569fc761ee3088eeb7be5c6cf6e5f9310eb3c1",
+      "flac_sha256": "49b79c5339643c1da7205c92aea8205e31507a2c0693db12c6a7708a0821b600"
+    },
+    {
+      "id": "2f9e18ea2394d1f2",
+      "provider": "Amazon Nova Sonic",
+      "scenario": "lost-card",
+      "path": "artifacts/voice-conversation-v2/clips/2f9e18ea2394d1f2.flac",
+      "model": "amazon.nova-2-5-sonic",
+      "voice": "amy",
+      "prompt_sha256": "8a1ad5db92a44d261d726a74c434efa82f60786b35b18116582a272a32e8738e",
+      "wav_sha256": "0c20e2a99a008796d6e49da907ce9227a7fe05d81e08485956a3de09e23ce0d2",
+      "flac_sha256": "08cb946da54851cafcfc489842a1e89c9322f619f590d2a75153349ad50294de"
+    },
+    {
+      "id": "46aee0a22dee0a2a",
+      "provider": "Amazon Nova Sonic",
+      "scenario": "bereavement",
+      "path": "artifacts/voice-conversation-v2/clips/46aee0a22dee0a2a.flac",
+      "model": "amazon.nova-2-5-sonic",
+      "voice": "amy",
+      "prompt_sha256": "8a1ad5db92a44d261d726a74c434efa82f60786b35b18116582a272a32e8738e",
+      "wav_sha256": "f2908b0399f1299511ebf78065dba3a0b5219204b96a1eca2cab81d76d46b8d1",
+      "flac_sha256": "e0ad16c071853efa5279ffae2d990a6f2f141525b1bbb58ec8b809bc23d0856d"
+    },
+    {
+      "id": "94e03dc0a8f564ec",
+      "provider": "Amazon Nova Sonic",
+      "scenario": "failed-payment",
+      "path": "artifacts/voice-conversation-v2/clips/94e03dc0a8f564ec.flac",
+      "model": "amazon.nova-2-5-sonic",
+      "voice": "amy",
+      "prompt_sha256": "8a1ad5db92a44d261d726a74c434efa82f60786b35b18116582a272a32e8738e",
+      "wav_sha256": "c64219d1196e1e35af8b79eb925117e12bf87b55cb988d9739b2cdb1341f24ac",
+      "flac_sha256": "eb1e046fdea5f1aaf515f3267b95a8eb7b8ee4ffdff636bbb096ab0ef6ed7b79"
+    },
+    {
+      "id": "4594626b2bf825f7",
+      "provider": "Amazon Nova Sonic",
+      "scenario": "correction",
+      "path": "artifacts/voice-conversation-v2/clips/4594626b2bf825f7.flac",
+      "model": "amazon.nova-2-5-sonic",
+      "voice": "amy",
+      "prompt_sha256": "8a1ad5db92a44d261d726a74c434efa82f60786b35b18116582a272a32e8738e",
+      "wav_sha256": "58d5a8002b9326fa97ef5d7d7b3a440a9873838be341e9ed981d35e8d84fb622",
+      "flac_sha256": "3e147ed6044d293c2c1d0875fff0f6b443d5324816289cd97bc8d03ea6dd6e94"
+    },
+    {
+      "id": "0e3e1125adda95e9",
+      "provider": "Amazon Nova Sonic",
+      "scenario": "continuity",
+      "path": "artifacts/voice-conversation-v2/clips/0e3e1125adda95e9.flac",
+      "model": "amazon.nova-2-5-sonic",
+      "voice": "amy",
+      "prompt_sha256": "8a1ad5db92a44d261d726a74c434efa82f60786b35b18116582a272a32e8738e",
+      "wav_sha256": "0b97b83073f9f226eb2e91a93cbcaab10b8969f3fe7b2c2c6d997775ce334783",
+      "flac_sha256": "271d354f1ca7c898b0b51370553e4f16c868d3cec9ce26510fa793612ab1df9b"
+    },
+    {
+      "id": "4bcb04951a68bbc4",
+      "provider": "xAI Grok Voice",
+      "scenario": "failed-payment",
+      "path": "artifacts/voice-conversation-v2/clips/4bcb04951a68bbc4.flac",
+      "model": "grok-voice-3.0",
+      "voice": "ara",
+      "prompt_sha256": "d1a552ff6bf87e866b7424c1761b530854efcee9f12dd9bbfbedb97503017958",
+      "wav_sha256": "0ff0202d64942a4a17310a4f9e6e617c19e295a6e997f48095016d0fde1852b9",
+      "flac_sha256": "40729f74473af0b7463ab3a4664c599628aa6b6512508fff96242e8358042075"
+    },
+    {
+      "id": "f2bbefd9f7917404",
+      "provider": "xAI Grok Voice",
+      "scenario": "correction",
+      "path": "artifacts/voice-conversation-v2/clips/f2bbefd9f7917404.flac",
+      "model": "grok-voice-3.0",
+      "voice": "ara",
+      "prompt_sha256": "d1a552ff6bf87e866b7424c1761b530854efcee9f12dd9bbfbedb97503017958",
+      "wav_sha256": "44cd411e15ed8089b90eb61fd6e1684645ad73daf0fb1f50904daf62a68965c5",
+      "flac_sha256": "f0e24db6fb1dc92988df59e18a1fd8998ef479fd5a8a098dc4ade5e62ca70038"
+    },
+    {
+      "id": "b7b814fc29870b76",
+      "provider": "xAI Grok Voice",
+      "scenario": "lost-card",
+      "path": "artifacts/voice-conversation-v2/clips/b7b814fc29870b76.flac",
+      "model": "grok-voice-3.0",
+      "voice": "ara",
+      "prompt_sha256": "d1a552ff6bf87e866b7424c1761b530854efcee9f12dd9bbfbedb97503017958",
+      "wav_sha256": "21d83f475720e3bc0efc77b522aa177417d7a0cf6fa24ebabe7aed7c64ee578a",
+      "flac_sha256": "8d45ac937842eea5c003b625eaf51a18b619483c4d55e6a3b30dc3d0b2c3b9b0"
+    },
+    {
+      "id": "a00fc3cdd84ca2ab",
+      "provider": "xAI Grok Voice",
+      "scenario": "balance",
+      "path": "artifacts/voice-conversation-v2/clips/a00fc3cdd84ca2ab.flac",
+      "model": "grok-voice-3.0",
+      "voice": "ara",
+      "prompt_sha256": "d1a552ff6bf87e866b7424c1761b530854efcee9f12dd9bbfbedb97503017958",
+      "wav_sha256": "081c10fcead83b6a553385b3d51f67771284b3cca4693b68646b428361ee616d",
+      "flac_sha256": "7ec6bb9ee2a90a59583ff88a9f38d60832d113c94287f1665c7e91710d9a574a"
+    },
+    {
+      "id": "1e9a0a90e160864f",
+      "provider": "xAI Grok Voice",
+      "scenario": "continuity",
+      "path": "artifacts/voice-conversation-v2/clips/1e9a0a90e160864f.flac",
+      "model": "grok-voice-3.0",
+      "voice": "ara",
+      "prompt_sha256": "d1a552ff6bf87e866b7424c1761b530854efcee9f12dd9bbfbedb97503017958",
+      "wav_sha256": "f36575ba6abce0781aaa58b1fe9d4dea6497dc1f4c931d70c19a1f64f6a57b2b",
+      "flac_sha256": "3c07cbac96b0e31dbd372fff12efea4f5ae06b00aff354b88169178f086dbe8e"
+    },
+    {
+      "id": "fbd4e0f17fc44e73",
+      "provider": "xAI Grok Voice",
+      "scenario": "bereavement",
+      "path": "artifacts/voice-conversation-v2/clips/fbd4e0f17fc44e73.flac",
+      "model": "grok-voice-3.0",
+      "voice": "ara",
+      "prompt_sha256": "d1a552ff6bf87e866b7424c1761b530854efcee9f12dd9bbfbedb97503017958",
+      "wav_sha256": "d921e719ed760832993a673848fddc7cbce2a82ed4ce0635d5849362e3957275",
+      "flac_sha256": "ee3d208c02eb8605870e71c5c514a209e6eca555221f010656123843a8a3ff3b"
+    },
+    {
+      "id": "29c736d87b75bbe8",
+      "provider": "Google Gemini Live",
+      "scenario": "correction",
+      "path": "artifacts/voice-conversation-v2/clips/29c736d87b75bbe8.flac",
+      "model": "gemini-3.8-live",
+      "voice": "Aoede",
+      "prompt_sha256": "99a3b458b4865aaad97c579cb2b31684deaade023123d99f808f07cbe36d08ae",
+      "wav_sha256": "cbc84a77bdd4ef2507eb8fe5503f55a9d80b1ee113a346a65aa2b3375094dce9",
+      "flac_sha256": "a296b6e354fce2e7fd8e68fa73cda61aadead2c9e618fef425d1cf1e8edcb857"
+    },
+    {
+      "id": "2c83658696dffe17",
+      "provider": "Google Gemini Live",
+      "scenario": "lost-card",
+      "path": "artifacts/voice-conversation-v2/clips/2c83658696dffe17.flac",
+      "model": "gemini-3.8-live",
+      "voice": "Aoede",
+      "prompt_sha256": "99a3b458b4865aaad97c579cb2b31684deaade023123d99f808f07cbe36d08ae",
+      "wav_sha256": "2111b3c824503559f44ab46972a47996dfe7b5e2ccc00b279319c483222fa5ff",
+      "flac_sha256": "7101cab4e07b78f1a82362eb57fc95f70f00ff27a92e4945f2ddc8e993c02574"
+    },
+    {
+      "id": "52f23e8f90693082",
+      "provider": "Google Gemini Live",
+      "scenario": "failed-payment",
+      "path": "artifacts/voice-conversation-v2/clips/52f23e8f90693082.flac",
+      "model": "gemini-3.8-live",
+      "voice": "Aoede",
+      "prompt_sha256": "99a3b458b4865aaad97c579cb2b31684deaade023123d99f808f07cbe36d08ae",
+      "wav_sha256": "ce9320eeb5ee8f9d379dbccf0ff883368d44ed249b92902cd0180e6193d55619",
+      "flac_sha256": "845e0abed4fde86144fc6c9d59a4db1dc794e35f15ab574a6dd3c84f94566dd9"
+    },
+    {
+      "id": "7edfaff3607e79b7",
+      "provider": "Google Gemini Live",
+      "scenario": "bereavement",
+      "path": "artifacts/voice-conversation-v2/clips/7edfaff3607e79b7.flac",
+      "model": "gemini-3.8-live",
+      "voice": "Aoede",
+      "prompt_sha256": "99a3b458b4865aaad97c579cb2b31684deaade023123d99f808f07cbe36d08ae",
+      "wav_sha256": "2474c165d35137a830290398538839627f4a373dc83c6c32acf085fe1f0893b4",
+      "flac_sha256": "0eeaeceb4d8b5055cf15007e84a59c9695c07cd08d2c904dee32305e9c1364e4"
+    },
+    {
+      "id": "26f8929ea8516683",
+      "provider": "Google Gemini Live",
+      "scenario": "continuity",
+      "path": "artifacts/voice-conversation-v2/clips/26f8929ea8516683.flac",
+      "model": "gemini-3.8-live",
+      "voice": "Aoede",
+      "prompt_sha256": "99a3b458b4865aaad97c579cb2b31684deaade023123d99f808f07cbe36d08ae",
+      "wav_sha256": "89a9c1414811d7f7f7298a148b67f39cfc56b88771c58ea7dc3a79416d0e51be",
+      "flac_sha256": "44f0584727f1fc0d85f28c9bae2ac0c0e8a4292a0dc8f4cbc15fec6f5cfb6683"
+    },
+    {
+      "id": "f44501f0aa256d51",
+      "provider": "Google Gemini Live",
+      "scenario": "balance",
+      "path": "artifacts/voice-conversation-v2/clips/f44501f0aa256d51.flac",
+      "model": "gemini-3.8-live",
+      "voice": "Aoede",
+      "prompt_sha256": "99a3b458b4865aaad97c579cb2b31684deaade023123d99f808f07cbe36d08ae",
+      "wav_sha256": "3804e8583635a58d1742bf309022ae63976d76ff15359e0ace00c438da0c6478",
+      "flac_sha256": "05f256eca15e8c8eea6835139968b937528fd45caaf72afd2890cfa8f88626ca"
+    },
+    {
+      "id": "ab92b8af6d2c7962",
+      "provider": "ElevenLabs Agents",
+      "scenario": "balance",
+      "path": "artifacts/voice-conversation-v2/clips/ab92b8af6d2c7962.flac",
+      "model": "elevenlabs-agent",
+      "voice": "Amelia",
+      "prompt_sha256": "30784d536a208a8695fd972e7609190d5458c10e09efe3c4b3831441c0d33419",
+      "wav_sha256": "c4d8d358c4cb503d331c52bc33786f3a28aed8901c20e3156aae8bf4077f254b",
+      "flac_sha256": "73c2149465efa3cbf3a1d714605731495040f7252af9f330e54fe51951c5070a"
+    },
+    {
+      "id": "f7675d14bdf66cc2",
+      "provider": "ElevenLabs Agents",
+      "scenario": "failed-payment",
+      "path": "artifacts/voice-conversation-v2/clips/f7675d14bdf66cc2.flac",
+      "model": "elevenlabs-agent",
+      "voice": "Amelia",
+      "prompt_sha256": "30784d536a208a8695fd972e7609190d5458c10e09efe3c4b3831441c0d33419",
+      "wav_sha256": "8f320b199dabb31a9a73b0443f938de4fadd24ad07c5216db84e0f737fcbd1b9",
+      "flac_sha256": "62435d729595f9a1c64bff63f955e70647d38bb83b3e0e6d4cbda879f841a665"
+    },
+    {
+      "id": "76d861bc96819497",
+      "provider": "ElevenLabs Agents",
+      "scenario": "lost-card",
+      "path": "artifacts/voice-conversation-v2/clips/76d861bc96819497.flac",
+      "model": "elevenlabs-agent",
+      "voice": "Amelia",
+      "prompt_sha256": "30784d536a208a8695fd972e7609190d5458c10e09efe3c4b3831441c0d33419",
+      "wav_sha256": "e7aeb4492660991f5d32bd5e8886a8b6dc8b2d245aff4f6c150ba6a51e0291f6",
+      "flac_sha256": "c869e5e9577978138097ca712b44972c4006bdf92cfddc0fcac007b9eaf2b650"
+    },
+    {
+      "id": "707683cf78108eb5",
+      "provider": "ElevenLabs Agents",
+      "scenario": "correction",
+      "path": "artifacts/voice-conversation-v2/clips/707683cf78108eb5.flac",
+      "model": "elevenlabs-agent",
+      "voice": "Amelia",
+      "prompt_sha256": "30784d536a208a8695fd972e7609190d5458c10e09efe3c4b3831441c0d33419",
+      "wav_sha256": "2a5e4d668f0977e2f69f7538e32f795c8e1168675bdcb206317f8bae126ffc52",
+      "flac_sha256": "54b452367764acad93528c889a298809937401fafee223063ec8808474d39226"
+    },
+    {
+      "id": "73ff3396f28da723",
+      "provider": "ElevenLabs Agents",
+      "scenario": "bereavement",
+      "path": "artifacts/voice-conversation-v2/clips/73ff3396f28da723.flac",
+      "model": "elevenlabs-agent",
+      "voice": "Amelia",
+      "prompt_sha256": "30784d536a208a8695fd972e7609190d5458c10e09efe3c4b3831441c0d33419",
+      "wav_sha256": "6148b963dde1a101934641c6d75487b7aaa54c88688db35484f08315356a1562",
+      "flac_sha256": "76e5b6af828133aefa04ff2e06386e8e72eedde5558e97437961f5d227ab9fd2"
+    },
+    {
+      "id": "bdcabc3c50c03e8e",
+      "provider": "ElevenLabs Agents",
+      "scenario": "continuity",
+      "path": "artifacts/voice-conversation-v2/clips/bdcabc3c50c03e8e.flac",
+      "model": "elevenlabs-agent",
+      "voice": "Amelia",
+      "prompt_sha256": "30784d536a208a8695fd972e7609190d5458c10e09efe3c4b3831441c0d33419",
+      "wav_sha256": "3a6b1e4265f2870237bdcf50a141a966570cc8d9e79f4fa42dd9fb9b3622b33e",
+      "flac_sha256": "1d7d930d2e26c331303c8db73e94ff20ef427f458623798fad1c27450c83bda0"
+    }
+  ]
+}

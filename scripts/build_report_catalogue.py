@@ -54,6 +54,30 @@ def main():
             clips.append(dict(id=clip_id, path=path, source=source, recorded=recorded,
                               sha256=hashlib.sha256((ROOT / path).read_bytes()).hexdigest(), **clip))
     library = dict(sources=sources, lines=lines, providers=list(dict.fromkeys(c['provider'] for c in clips)), clips=clips)
+    conversations = ROOT / 'artifacts/voice-conversation-v2'
+    if (conversations / 'results.json').is_file():
+        plan = json.loads((conversations / 'plan.json').read_text())
+        results = json.loads((conversations / 'results.json').read_text())['jobs']
+        names = {'openai-live': 'OpenAI GPT-Live 1', 'openai-realtime-live': 'OpenAI Realtime', 'nova-sonic-live': 'Amazon Nova Sonic',
+                 'xai-voice-live': 'xAI Grok Voice', 'gemini-live': 'Google Gemini Live', 'elevenlabs-live': 'ElevenLabs Agents'}
+        voices = {'ZF6FPAbjXT4488VcRRnw': 'Amelia'}
+        flac = json.loads((conversations / 'clips/flac-manifest.json').read_text())
+        cells = []
+        for job in plan['jobs']:
+            result = results.get(job['id'])
+            if job['condition'] != 'tuned' or job['repetition'] != 1 or not result or result['state'] != 'completed':
+                continue
+            profile = plan['profiles'][job['provider']]['tuned']
+            clip = f"artifacts/voice-conversation-v2/clips/{job['id']}.flac"
+            cells.append(dict(id=job['id'], provider=names[job['provider']], scenario=job['scenario'], path=clip,
+                              model=result.get('returned_model_id') or profile['model_id'], voice=voices.get(profile['voice'], profile['voice'] or 'provider default'),
+                              prompt_sha256=result['configuration']['prompt_sha256'], wav_sha256=flac[job['id']]['wav_sha256'],
+                              flac_sha256=flac[job['id']]['flac_sha256']))
+        order = list(names.values())
+        cells.sort(key=lambda c: order.index(c['provider']))
+        scenarios = [dict(id=x['id'], title=x['title']) for x in plan['scenarios']]
+        (ROOT / 'site/voice-conversations.json').write_text(json.dumps(dict(
+            source='artifacts/voice-conversation-v2/plan.json', providers=order, scenarios=scenarios, clips=cells), indent=2) + '\n')
     (ROOT / 'site/voice-library.json').write_text(json.dumps(library, indent=2) + '\n')
     (ROOT / 'site/catalogue.json').write_text(json.dumps(payload, indent=2) + '\n')
     if args.output:
@@ -63,7 +87,7 @@ def main():
         if output == ROOT or ROOT in output.parents and output.parts[len(ROOT.parts):len(ROOT.parts)+1] in [('artifacts',), ('reports',), ('docs',), ('site',)]:
             raise SystemExit('Choose a staging directory outside source content')
         output.mkdir(parents=True)
-        for name in files + ['favicon.ico', 'site/voice-harness-mark.svg', 'index.html', 'vision.html', 'how-it-works.html', 'technical-architecture.html', 'test-setup.html', 'site/test-setup.js', 'executive-special.html', 'site/executive-special.css', 'site/executive-special.js', 'voice-library.html', 'executive-trust.html', 'site/style.css', 'site/app.js', 'site/catalogue.json', 'site/voice-library.css', 'site/voice-library.js', 'site/voice-library.json', 'site/cx-review-data.json']:
+        for name in files + ['favicon.ico', 'site/voice-harness-mark.svg', 'index.html', 'vision.html', 'how-it-works.html', 'technical-architecture.html', 'test-setup.html', 'site/test-setup.js', 'executive-special.html', 'site/executive-special.css', 'site/executive-special.js', 'voice-library.html', 'executive-trust.html', 'site/style.css', 'site/app.js', 'site/catalogue.json', 'site/voice-library.css', 'site/voice-library.js', 'site/voice-library.json', 'site/voice-conversations.json', 'site/cx-review-data.json']:
             dest = output / name
             dest.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(ROOT / name, dest)

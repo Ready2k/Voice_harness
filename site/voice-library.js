@@ -13,7 +13,7 @@ function controls() {
 async function play(clip) {
   selected = clip; position = queue.findIndex(c => c.id === clip.id);
   $('now-title').textContent = clip.provider;
-  $('now-detail').textContent = `Prompt ${clip.line + 1} · ${clip.condition === 'phone' ? 'Telephone quality' : 'Clean audio'} · ${clip.recorded} · Clip ${clip.id}`;
+  $('now-detail').textContent = clip.detail || `Prompt ${clip.line + 1} · ${clip.condition === 'phone' ? 'Telephone quality' : 'Clean audio'} · ${clip.recorded} · Clip ${clip.id}`;
   $('source-link').href = clip.path; $('source-link').hidden = false;
   $('playback-status').textContent = '';
   audio.src = clip.path; audio.playbackRate = Number($('speed').value); controls();
@@ -30,7 +30,7 @@ function render() {
   const condition = $('condition').value;
   $('matrix').innerHTML = `<caption>Matched banking scripts by captured provider and voice</caption><thead><tr><th scope="col">Spoken script / prompt</th>${data.providers.map(p => `<th scope="col">${esc(p)}<small>${providerDescription(p)}</small></th>`).join('')}</tr></thead><tbody>${data.lines.map((line,i) => {const available = data.clips.filter(c => c.line === i && c.condition === condition); return `<tr><th scope="row">PROMPT ${String(i+1).padStart(2,'0')}<p>${esc(line)}</p>${available.length ? `<button class="compare-prompt" data-line="${i}">Compare this prompt →</button>` : ''}</th>${data.providers.map(p => {const c = available.find(c => c.provider === p);return `<td>${c ? `<button class="sample" data-id="${c.id}" aria-pressed="${selected?.id === c.id}" aria-label="Play prompt ${i+1}, ${esc(p)}, ${condition}">▶ Play sample<small>${c.seconds.toFixed(1)} seconds · ${c.id}</small></button>` : '<span class="missing">Not recorded</span>'}</td>`;}).join('')}</tr>`;}).join('')}</tbody>`;
   $('library-status').textContent = `${data.clips.filter(c => c.condition === condition).length} available samples`;
-  document.querySelectorAll('.sample').forEach(button => button.addEventListener('click', () => {const clip = data.clips.find(c => c.id === button.dataset.id);setQueue(clip.line);play(clip);}));
+  document.querySelectorAll('#matrix .sample').forEach(button => button.addEventListener('click', () => {const clip = data.clips.find(c => c.id === button.dataset.id);setQueue(clip.line);play(clip);}));
   document.querySelectorAll('.compare-prompt').forEach(button => button.addEventListener('click', () => {setQueue(Number(button.dataset.line));$('autonext').checked = true;play(queue[0]);}));
 }
 $('condition').addEventListener('change', () => {audio.pause();selected=null;queue=[];position=-1;audio.removeAttribute('src');audio.load();$('now-title').textContent='Choose a voice sample';$('now-detail').textContent='Playback stays here while you explore the grid.';$('source-link').hidden=true;$('playback-status').textContent='';render();controls();});
@@ -54,3 +54,15 @@ $('voices-right').addEventListener('click', () => matrixWrap.scrollBy({left: 350
 new ResizeObserver(updateMatrixNavigation).observe(matrixWrap);
 new MutationObserver(updateMatrixNavigation).observe($('matrix'), {childList:true});
 matrixWrap.addEventListener('scroll', updateMatrixNavigation, {passive:true});
+
+fetch('site/voice-conversations.json').then(r => {if(!r.ok) throw new Error('unavailable');return r.json();}).then(manifest => {
+  const clips = manifest.clips.map(c => ({...c, detail: `${manifest.scenarios.find(s => s.id === c.scenario).title} · tuned prompt · voice ${c.voice} · model ${c.model} · caller left, assistant right · Clip ${c.id}`}));
+  const table = $('conversation-matrix');
+  table.innerHTML = `<caption>Tuned-prompt conversations by scenario and provider</caption><thead><tr><th scope="col">Scenario</th>${manifest.providers.map(p => `<th scope="col">${esc(p)}</th>`).join('')}</tr></thead><tbody>${manifest.scenarios.map(s => `<tr><th scope="row">${esc(s.title)}</th>${manifest.providers.map(p => { const c = clips.find(x => x.provider === p && x.scenario === s.id); return c ? `<td><button class="sample" data-convo="${esc(c.id)}" aria-pressed="false">Play<small> ${esc(c.voice)}</small></button></td>` : '<td>—</td>'; }).join('')}</tr>`).join('')}</tbody>`;
+  table.querySelectorAll('.sample').forEach(button => button.addEventListener('click', () => {
+    const clip = clips.find(c => c.id === button.dataset.convo);
+    button.dataset.id = clip.id;
+    queue = clips.filter(c => c.scenario === clip.scenario);
+    play(clip);
+  }));
+}).catch(() => {const t = $('conversation-matrix'); if (t) t.innerHTML = '<caption>Tuned-prompt conversations are unavailable. Use the blind listening study.</caption>';});
