@@ -17,7 +17,7 @@
     "backend_model_id": "gpt-6-luna",
     "turn_detection": "provider endpointing; the harness never sends commit or response.create for audio turns"
   },
-  "operator_terms_attestation": null,
+  "operator_terms_attestation": "2026-10-29, James Cregeen (operator), recorded from the operator's statement in session: reviewed the current retention, quota and pricing terms for OpenAI GPT-Live and ElevenLabs Agents and accepts them for testing with synthetic data only; no real customer data.",
   "rows": [
     {
       "name": "input_codecs_rates",
@@ -217,6 +217,6 @@
     "Voice model gpt-live-1 delegates tool use and reasoning to backend gpt-6-luna; both are under test",
     "Live has no truncate primitive, so AC-09 excludes the interruption dimension (detection only)",
     "No row cites documentation",
-    "Terms, retention, quotas and pricing need operator attestation; none is recorded here"
+    "Terms attestation covers retention, quota and pricing terms only as stated by the operator on 2026-10-29; no provider price is recorded"
   ]
 }

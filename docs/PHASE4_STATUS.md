@@ -9,7 +9,9 @@
   OpenAI Live (`openai_live`, new), Nova, xAI, Gemini and ElevenLabs reports were re-probed (reports dated 20261028/29) and
   AC-09 re-run: all six are `implemented_and_verified` until their reports expire on 2026-11-04/05.
   Interruption is excluded from AC-09 for Nova, Gemini, ElevenLabs and OpenAI Live (no client truncate). The OpenAI Live and
-  ElevenLabs probes cite no documentation and carry no operator terms attestation. The OpenAI Live probe drives the
+  ElevenLabs probes cite no documentation; their reports carry an operator terms attestation dated 2026-10-29, recorded
+  from the operator's statement in session. The 2026-10-28/29 re-probed OpenAI Realtime, Nova and xAI reports carry none
+  (the rebuilt reports dropped the 16 and 18 Oct attestations; re-attest if you want them restored). The OpenAI Live probe drives the
   harness adapter rather than a raw socket.
 - The catalogue has 40 live scenarios in five groups: 9 happy path, 18 identity protection, 6 vulnerable customers,
   4 fault tolerance, 3 payment actions. 31 declare FACT-01.
