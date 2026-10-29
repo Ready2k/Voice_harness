@@ -80,4 +80,4 @@ Phases follow spec §16 and are gated by acceptance criteria (AC-01…AC-21), no
 - Exercise reconnect/resume, direct MCP and audio alignment, which are Unknown for every provider.
 - Run live runs inside the container: the `openai_tts` caller removes the `say` dependency, but credentials and the live profile are not yet in Compose.
 
-See [Phase 4 status](PHASE4_STATUS.md) for what is carried into Phase 5.
+See [Phase 4 status](PHASE4_STATUS.md) for what is carried into Phase 5, and [Phase 5 status](PHASE5_STATUS.md) for the hardening backlog.
