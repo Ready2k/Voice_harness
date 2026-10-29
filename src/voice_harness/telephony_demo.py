@@ -429,7 +429,7 @@ class DelegateDemo:
     async def prepare_phrase(self, name, phrase, slots):
         async with slots:
             cache_key = hashlib.sha256(json.dumps([phrase, self.env.get("VOICE_HARNESS_CALLER_TTS_MODEL", "gpt-4o-mini-tts"),
-                self.env.get("VOICE_HARNESS_CALLER_TTS_VOICE", "alloy"), "pcm24000",
+                self.env.get("VOICE_HARNESS_CALLER_TTS_VOICE", "ash"), "pcm24000",
                 self.env.get("VOICE_HARNESS_CALLER_TTS_INSTRUCTIONS", "")], sort_keys=True).encode()).hexdigest()
             cache = self.speech_cache / (cache_key + ".pcm") if self.speech_cache and name not in self.details else None
             for attempt in range(3):

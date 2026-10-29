@@ -10,7 +10,7 @@ against them. `≠` in the report marks a setting that is not equal across the c
 * **Sampling: `provider_default`.** The harness sends no temperature, top-p or similar override to any provider. A
   common sampling profile may be added later only if every provider in a bake-off supports it; none is defined yet.
   Recorded as `sampling` (`policy`, `overrides_sent`, `output_limits`, `conforms`).
-* **Output voices stay vendor defaults** (not equalised; there is no common voice). Recorded as `output_voice`.
+* **Output voices target British female** (native: Nova `amy`, ElevenLabs Amelia, Gemini Aoede + `en-GB`; OpenAI `marin` and xAI `ara` are female but have no British option, so the accent is not guaranteed). Recorded as `output_voice`.
 * **Independent ASR is unchanged** (OpenAI `gpt-transcribe`). Recorded as `asr` with `relation`
   `SAME_VENDOR_ASR` / `INDEPENDENT_VENDOR_ASR` / `NO_LIVE_ASR`.
 * Turn control, commit delay, input rate, truncation and confirmation delivery were already recorded
@@ -25,7 +25,7 @@ against them. `≠` in the report marks a setting that is not equal across the c
 | Commit delay | 500 ms | n/a | n/a | 500 ms | 500 ms | n/a | **No**: VAD providers hear 1.2 s trailing silence and pay their own endpointing; `commit_delay_ms` |
 | Provider input rate | 24 kHz | 24 kHz | 16 kHz | 24 kHz | 16 kHz | 24 kHz | **No**: `provider_input_rate` |
 | Sampling sent | none | none | none (`maxTokens` 1024 output ceiling) | none | none | none per session; stored agent: see below | Yes after this change; `sampling`, `output_limits` ≠ |
-| Output voice | marin | marin | matthew | ara | provider default | George | **No**: `output_voice`, report caveat |
+| Output voice | marin | marin | amy (en-GB) | ara | Aoede, en-GB | Amelia (en-GB) | **No**: `output_voice`, report caveat |
 | LLM | the speech model | speech model + delegated backend (`backend_model_id`) | the speech model | the speech model | the speech model | agent LLM (default `gemini-2.5-flash`) | **No**: `agent_llm`, `agent_llm_vendor`; report names the LLM |
 | Client truncation | yes | no | no | yes | no | no | **No**: `client_truncation` |
 | Confirmation delivery | context only (user message) | context only (appended instructions) | interactive USER turn | context only (user message) | context only (user turn) | context only (contextual update) | **No**: `confirmation_delivery`, `context_channel` |

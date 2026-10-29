@@ -100,7 +100,7 @@ class GeminiAdapterTests(unittest.IsolatedAsyncioTestCase):
             a, receipt = await self._open(srv)
             setup = srv.received[0]["setup"]
             self.assertEqual(setup["model"], f"projects/proj-1/locations/us-central1/publishers/google/models/{DEFAULT_MODEL}")
-            self.assertEqual(setup["generationConfig"], {"responseModalities": ["AUDIO"]})
+            self.assertEqual(setup["generationConfig"], {"responseModalities": ["AUDIO"], "speechConfig": {"voiceConfig": {"prebuiltVoiceConfig": {"voiceName": "Aoede"}}, "languageCode": "en-GB"}})
             self.assertEqual((setup["inputAudioTranscription"], setup["outputAudioTranscription"]), ({}, {}))
             self.assertEqual(setup["systemInstruction"], {"parts": [{"text": "hi"}]})
             self.assertEqual(setup["tools"], [{"functionDeclarations": [

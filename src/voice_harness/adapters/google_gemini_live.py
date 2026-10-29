@@ -225,9 +225,9 @@ class GeminiLiveAdapter:
             "inputAudioTranscription": {},
             "outputAudioTranscription": {},
         }
-        if config.get("voice"):
-            setup["generationConfig"]["speechConfig"] = {
-                "voiceConfig": {"prebuiltVoiceConfig": {"voiceName": config["voice"]}}}
+        setup["generationConfig"]["speechConfig"] = {
+            "voiceConfig": {"prebuiltVoiceConfig": {"voiceName": config.get("voice", "Aoede")}},
+            "languageCode": config.get("language_code", "en-GB")}
         if config.get("instructions"):
             setup["systemInstruction"] = {"parts": [{"text": config["instructions"]}]}
         if self._manual:

@@ -76,7 +76,7 @@ def build_report(
             "inference": {"maxTokens": 1024, "topP": 0.9, "temperature": 0.2},
             "endpointingSensitivity": "MEDIUM",
             "input": "audio/lpcm 16000 s16le mono",
-            "output": "audio/lpcm 24000 s16le mono, voice matthew",
+            "output": "audio/lpcm 24000 s16le mono, voice amy",
             "service_card": CARD,
         },
         operator_terms_attestation=attestation,

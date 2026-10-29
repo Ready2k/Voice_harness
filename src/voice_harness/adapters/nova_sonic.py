@@ -254,7 +254,7 @@ class NovaSonicAdapter:
             "textOutputConfiguration": {"mediaType": "text/plain"},
             "audioOutputConfiguration": {
                 "mediaType": "audio/lpcm", "sampleRateHertz": OUTPUT_RATE, "sampleSizeBits": 16,
-                "channelCount": 1, "voiceId": config.get("voice", "matthew"),
+                "channelCount": 1, "voiceId": config.get("voice", "amy"),
                 "encoding": "base64", "audioType": "SPEECH"},
         }
         if tools:

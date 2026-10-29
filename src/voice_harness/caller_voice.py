@@ -12,7 +12,8 @@ ENV = "VOICE_HARNESS_CALLER_VOICE"
 LIVE_FLAG = "VOICE_HARNESS_LIVE_ASR"  # same switch as the ASR backend
 OPENAI_TTS_URL = "https://api.openai.com/v1/audio/speech"
 DEFAULT_TTS_MODEL = "gpt-4o-mini-tts"
-DEFAULT_TTS_VOICE = "alloy"
+DEFAULT_TTS_VOICE = "ash"  # male; British accent comes from the TTS instructions
+DEFAULT_TTS_INSTRUCTIONS = "Speak as a British male caller, in a natural British English accent. Read only the supplied words."
 RATE = 24000
 
 
@@ -52,7 +53,7 @@ def describe(environ=None):
         return {"backend": name, "model_id": environ.get("VOICE_HARNESS_CALLER_TTS_MODEL") or DEFAULT_TTS_MODEL,
                 "voice": environ.get("VOICE_HARNESS_CALLER_TTS_VOICE") or DEFAULT_TTS_VOICE, "sample_rate": RATE}
     if name == "macos":
-        return {"backend": name, "model_id": "macos-say", "voice": "system_default", "sample_rate": RATE}
+        return {"backend": name, "model_id": "macos-say", "voice": "Daniel", "sample_rate": RATE}
     return {"backend": None, "model_id": None, "voice": None, "sample_rate": RATE}
 
 
@@ -69,8 +70,7 @@ def openai_tts_pcm(text, environ=None, client=None):
     try:
         client = client or httpx.Client(timeout=60)
         body = {"model": spec["model_id"], "voice": spec["voice"], "input": text, "response_format": "pcm"}
-        if environ.get("VOICE_HARNESS_CALLER_TTS_INSTRUCTIONS"):
-            body["instructions"] = environ["VOICE_HARNESS_CALLER_TTS_INSTRUCTIONS"]
+        body["instructions"] = environ.get("VOICE_HARNESS_CALLER_TTS_INSTRUCTIONS") or DEFAULT_TTS_INSTRUCTIONS
         response = client.post(
             OPENAI_TTS_URL, headers={"Authorization": "Bearer " + environ["OPENAI_API_KEY"]},
             json=body)

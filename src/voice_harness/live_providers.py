@@ -235,11 +235,12 @@ def connection_binding(adapter):
 
 # Configuration parity (docs/PROVIDER_CONFIG_PARITY.md): no provider gets sampling overrides unless a bake-off selects
 # a common profile every provider in it supports (none is defined yet). Output voices stay vendor defaults: recorded,
-# not equalised.
+# not equalised, except the target of British female assistant / British male caller: native where the vendor has it
+# (Nova amy, ElevenLabs Amelia, Gemini en-GB), nearest female voice otherwise (OpenAI marin, xAI ara; no British option).
 SAMPLING_POLICY = "provider_default"
-DEFAULT_VOICES = {"openai-live": "marin", "openai-realtime-live": "marin", "nova-sonic-live": "matthew",
-                  "xai-voice-live": "ara", "gemini-live": None, "elevenlabs-live": "JBFqnCBsd6RMkjVDRZzb"}
-VOICE_NAMES = {"JBFqnCBsd6RMkjVDRZzb": "George"}
+DEFAULT_VOICES = {"openai-live": "marin", "openai-realtime-live": "marin", "nova-sonic-live": "amy",
+                  "xai-voice-live": "ara", "gemini-live": "Aoede", "elevenlabs-live": "ZF6FPAbjXT4488VcRRnw"}
+VOICE_NAMES = {"ZF6FPAbjXT4488VcRRnw": "Amelia"}
 
 
 def sampling_binding(provider_config_id, config, agent=None):

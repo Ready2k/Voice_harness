@@ -94,9 +94,9 @@ class ElevenLabsAgentState(unittest.TestCase):
 
 class RunBinding(unittest.TestCase):
     def test_voices_are_recorded_not_changed(self):
-        self.assertEqual(live_providers.voice_binding("nova-sonic-live", {}), {"id": "matthew", "name": "matthew", "source": "adapter_default"})
-        self.assertEqual(live_providers.voice_binding("gemini-live", {})["source"], "provider_default")
-        self.assertEqual(live_providers.voice_binding("elevenlabs-live", {})["name"], "George")
+        self.assertEqual(live_providers.voice_binding("nova-sonic-live", {}), {"id": "amy", "name": "amy", "source": "adapter_default"})
+        self.assertEqual(live_providers.voice_binding("gemini-live", {})["source"], "adapter_default")
+        self.assertEqual(live_providers.voice_binding("elevenlabs-live", {})["name"], "Amelia")
         self.assertEqual(live_providers.voice_binding("openai-realtime-live", {"voice": "coral"})["source"], "requested")
 
     def test_asr_relation(self):
@@ -172,7 +172,7 @@ class Disclosure(unittest.TestCase):
 
         rows = [{**obs(p, "s0"), **self.obs(p)} for p in ("openai-realtime-live", "nova-sonic-live")]
         disclosed = bakeoff.report(payload(rows))["limits"]["provider_disclosures"]
-        self.assertEqual([r["voice"] for r in disclosed["providers"]], ["marin", "matthew"])
+        self.assertEqual([r["voice"] for r in disclosed["providers"]], ["marin", "amy"])
         self.assertEqual(disclosed["sampling_policy"], "provider_default")
 
     def test_prompt_delta_is_empty_for_shared_profiles(self):

@@ -496,7 +496,7 @@ def _synth_macos(text: str, *, lead_ms: int, trail_ms: int) -> bytes:
         raise RuntimeError("say/afconvert unavailable (macOS only)")
     with tempfile.TemporaryDirectory() as d:
         aiff, wav = f"{d}/u.aiff", f"{d}/u.wav"
-        subprocess.run([say, "-o", aiff, "--", text], check=True, timeout=60)  # noqa: S603  # nosec B603
+        subprocess.run([say, "-v", "Daniel", "-o", aiff, "--", text], check=True, timeout=60)  # noqa: S603  # nosec B603
         subprocess.run([afconvert, "-f", "WAVE", "-d", "LEI16@24000", "-c", "1", aiff, wav], check=True, timeout=60)  # noqa: S603  # nosec B603
         with open(wav, "rb") as f:
             pcm = wav_data(f.read())
