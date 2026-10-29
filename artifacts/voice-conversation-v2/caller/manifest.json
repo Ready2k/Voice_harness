@@ -1,0 +1,83 @@
+{
+  "plan_hash": "bfdae6e9ed3135873e2285f4130d31558bd51ead28b1bb94d38f7100ee4bffbc",
+  "synthesiser": {
+    "backend": "macos",
+    "model_id": "macos-say",
+    "voice": "Daniel",
+    "sample_rate": 24000
+  },
+  "clips": {
+    "balance-0.wav": {
+      "text_sha256": "7cdee807ec2ceb9a578fa1127d272b3670e3cd5914f49b36dc0306075cf4f8aa",
+      "sha256": "353b4f2af5a619706cf240dc90d05973d4e6c07bb9a861ce50a6273cd1d335ea"
+    },
+    "balance-1.wav": {
+      "text_sha256": "fab98157d47fe93b7027a97af6a77f4cfaca7f73085c60ab7812570dd0555839",
+      "sha256": "3d3c47b3833eb8be69687750be54242812dcc20f0ccbfea433144552fedb230d"
+    },
+    "balance-2.wav": {
+      "text_sha256": "5340d79627d64a1e4968f40deb38188db04d9d25b28d5d32318f0e2e67d07c01",
+      "sha256": "68c26e8cd86e853fe8c9b8b7082b50be20bab38c976a1a89e8b57fbf39f101f5"
+    },
+    "correction-0.wav": {
+      "text_sha256": "8d91f307444fa41e3c0aa3753c278919e5aca7138e9d046722c75bae9d5da6f5",
+      "sha256": "561c7d696d0e78eeac575bd3909dcaa4fd56422573bf75cbb9ffc30ab4d3c806"
+    },
+    "correction-1.wav": {
+      "text_sha256": "806d58a31404693e8b2e41a3e59cb6446c57f09d6481330a395561f0d40d4a09",
+      "sha256": "06faf18ea9459f52b5abc250201f46e65facdfb9e4249501fefa5dafaca2888c"
+    },
+    "correction-2.wav": {
+      "text_sha256": "73cdef076fd61260d92be39ea35c78ba13bdce5d128ca6c2f05eb79dae436419",
+      "sha256": "20bdf374382aeefc6da242f8d2a82565731adbe3881fdab87b5d6250f97632a6"
+    },
+    "lost-card-0.wav": {
+      "text_sha256": "e8a4d1254fe7132ea69ef87e30102c3833958e3ca11cd50f060d5a423da71d10",
+      "sha256": "e99547f6769513b06897d7d37ea3c90a4655671ab7397f5c46dff7b9346cb998"
+    },
+    "lost-card-1.wav": {
+      "text_sha256": "4f40f4fa35613a8a99f703cade120142158f04472e6f4f89aae2378da40ab3e5",
+      "sha256": "0958017a92c319398d252dd927d175dc2072f38e3ed2c16980db9b80a9f76430"
+    },
+    "lost-card-2.wav": {
+      "text_sha256": "b194e7763faf28f4a6e22d19b8b70d736ca230c868153ca3d42010ba4df8dd82",
+      "sha256": "07722b64ac94f2e6de8b2798526038de07622f692ab329af3302099194d4a9eb"
+    },
+    "bereavement-0.wav": {
+      "text_sha256": "0c981f2e218a700d903c86d05e31cf7224411508d82b50b048dac4fa6a440f63",
+      "sha256": "cf1be2fa8f2d0e013779899a66d20541bee9418cbc2f36144cbcc06015a15360"
+    },
+    "bereavement-1.wav": {
+      "text_sha256": "efa1b4cd4f1b8593afc83ffab753807f5796a27635fea986cd74706615f380db",
+      "sha256": "b19c249fbf2b262c3401f228bdf56e99404a35fc27d2b04afdc5bf7b450e31d0"
+    },
+    "bereavement-2.wav": {
+      "text_sha256": "68f86d1f92302c8ee0c1d5c40d7f84afc799cb851ca948ffcd98bd2dfaa32f62",
+      "sha256": "d85ab3252e76f5116f8d921c964737e28c9d986d4befa2c4acd528f5f57ad9d0"
+    },
+    "failed-payment-0.wav": {
+      "text_sha256": "1b4fca9f897940e7e9855eb3a1a0b6a01e2aacfcee2e574237ff2e4fd78c2bd4",
+      "sha256": "321a8d2aace01056f71aaa7296c2614de80a1f8b5305e42276b5a0e4f85f8535"
+    },
+    "failed-payment-1.wav": {
+      "text_sha256": "08ce554906437ea586de242f920cb9014b1960c1977e815598ea1f201b0053b8",
+      "sha256": "6cc3dbf8a59fc6c9d60faf624474721a9e9471cfeeacb703f2bce98241b40737"
+    },
+    "failed-payment-2.wav": {
+      "text_sha256": "d6c7677c77c8adeea11083cf3179325db80c8e0eb66d13198101f8f27e2a4284",
+      "sha256": "9c3d95492b10f1b58640d7ed197b4c7309e5c3256ecfd7e3265c66ce58158734"
+    },
+    "continuity-0.wav": {
+      "text_sha256": "177a0a8661e762decd1ba4d69f71d4422d2ebba18e650e5989ae4689ee1bc08a",
+      "sha256": "64e3eb61760938f854794141d62734b622dcaa434b26e1ecb96982bcb725ae89"
+    },
+    "continuity-1.wav": {
+      "text_sha256": "a9a0b73255dd2b74472bad54c3434a192b0694e5df86bf7ce972fde27ea52e3e",
+      "sha256": "323c95b47611bb37cee11ad35bf8c74d72b80436bc7fe9e73b215d1c1902d149"
+    },
+    "continuity-2.wav": {
+      "text_sha256": "ebc39468ebc945afebb83ced0fbb2d91a81d3896568231faa6d572b648255aec",
+      "sha256": "fa9eeb34365fea6a2c33a14254b35d1433a8d5cce734a108a76ec7a78b5dc635"
+    }
+  }
+}

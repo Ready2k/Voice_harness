@@ -85,3 +85,7 @@ The second comparison evaluates spontaneous multi-turn responses, remembered det
 For OpenAI, xAI and Gemini, explicit turns isolate prompting; Nova and ElevenLabs use native VAD. This transport difference is recorded. The test does **not** measure natural endpoint detection equally across providers, live barge-in, hesitation handling or recognising emotion from a human voice. Caller emotion is expressed in the wording; synthetic speech does not validate emotional listening. There are no tool calls, delayed-tool tests or banking actions, and provider-reported transcripts are not independent ASR evidence. Use the existing bake-off for task/safety assessment and the manual microphone page for a subsequent live interaction study. Human-rated scenario accuracy here supplements those checks.
 
 The existing automated read-aloud judge is not applied to conversations: its rubric ignores wording and would score the wrong thing. Human reviewers are the primary assessors for this second option.
+
+## Storing recordings
+
+`scripts/flac_clips.py <folder>` converts a recording's `clips/*.wav` to lossless FLAC (about 29% of the size), verifies each decode against the WAV's PCM, deletes the WAV and points `rate.html` at the `.flac` files; browsers play FLAC directly. `clips/flac-manifest.json` keeps each original WAV's SHA-256 (equal to `audio_sha256` in `results.json`), so `flac -d` reproduces a checkable recording. `voice-conversation-v2` is stored this way; rerun the script after any `refresh`, which rewrites the pages with `.wav` links.
