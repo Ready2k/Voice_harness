@@ -26,7 +26,8 @@ compose.yaml         api, postgres, otel-collector; profiles for tests, browser-
 make up            # api + collector on 127.0.0.1:8765
 make test          # container suite (PostgreSQL) + browser tests: this is what CI runs
 make lint          # ruff + bandit
-make audit         # pip-audit on requirements.lock
+make audit         # pip-audit on requirements.lock, npm audit on scripts/probe
+make image-scan    # trivy on the built api image (opt-in, not in CI)
 make demo          # three mock scenarios through the API, verified bundles under /data/demo
 make benchmark     # component benchmark -> /data/phase1-baseline.json
 make perf-gate     # benchmark compared with artifacts/perf-baseline.json (CI runs this)
@@ -197,6 +198,14 @@ failed-closed row or a failed AC-09 leaves the family unverified. Families: `ope
 - Keep claims at the strength of the evidence: single samples are called single samples.
 - Reviews and judge re-runs by the reviewers are theirs to do; respond with fixes and regressions, and record the
   revision, CI run and test counts as the next baseline.
+
+## Dependency cadence
+
+Python is hash-locked (`requirements.lock`), npm is locked (`scripts/probe/package-lock.json`, installed with `npm ci`), and every image is pinned by digest. Pins do not move on their own, so:
+
+- Every CI run: `make audit` (pip-audit and npm audit). A finding fails the build.
+- Monthly, and before a bake-off or release: `make image-scan`, then look for newer base digests (`docker buildx imagetools inspect mirror.gcr.io/library/python:3.13-slim-bookworm`, same for node, postgres and the collector). Bump the digest, run `make test`, commit.
+- Findings with no Debian fix (status `affected`, `will_not_fix`) are accepted and recorded in `docs/PHASE5_STATUS.md`, not silenced. pip's vendored copies of certifi, urllib3 and msgpack are build-time only; the app uses the locked versions.
 
 ## Where to read next
 

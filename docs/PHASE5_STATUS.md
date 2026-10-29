@@ -27,7 +27,7 @@ Order is a suggestion; the first item unblocks trusting the rest.
 | 5 | Retention tests | retention | done 2026-10-29 | `tests/test_retention_timeline.py` (in `make test`, SQLite and PostgreSQL), driven by a simulated clock: a run-wide hold blocks the 30-day sweep, the expiry notice appears 7 days before expiry, the 7-day grace after expiry holds, then the sweep proceeds; renewal extends protection; audio goes at 7 days while metadata waits 30 (held audio survives to the end of the grace); 150 days of daily sweeps add at most one purge record a month and the chain verifies throughout; NDJSON and reviewer exports of a tombstoned run verify and carry none of the purged text; an export taken before the purge stays valid; the real API scheduler loop performs the sweep. The two gaps found on the way (below) are fixed and covered |
 | 6 | Reproducibility checks | reproducibility | done 2026-10-29 | `tests/test_reproducibility.py` (in `make test`, SQLite and PostgreSQL): the same scenario and seed give the same normalised ledger digest for all three built-in scenarios, a different seed gives a different one, and the digest changes when a decision changes. Raw event hashes can never match between runs (random event, run and session ids, monotonic and wall-clock times are inside the hash chain), so the digest drops those fields and renumbers ids by first appearance, which keeps the causation graph in the comparison. Also dropped, because they are measured or random rather than decided: `latency_ms`, OpenTelemetry trace/span ids, approval `token_id`, and ISO timestamps inside tool results (`as_of`). Mutation check: an unseeded simulator draw fails four tests. The contracts drift check (`tests/test_contracts_in_sync.py`) already runs in the container suite, so it is in CI through `make test` |
 | 7 | Security review | security review | open | Review of auth (operator token), approval-token single use, WebSocket origin, export/download links, secrets handling; findings tracked |
-| 8 | Dependency audit | pinning | open | Vulnerability scan of `requirements.lock`, npm lockfiles and base-image digests; update cadence documented |
+| 8 | Dependency audit | pinning | done 2026-10-29 | `make audit` (pip-audit on `requirements.lock`, now also `npm audit` on `scripts/probe`) reports 0 vulnerabilities; trivy agrees on both lockfiles. New opt-in `make image-scan` (trivy, HIGH/CRITICAL with a fix) found fixable OpenSSL (CVE-2026-84782) in the Python and PostgreSQL bases: digests bumped to python 3.13.18 and a rebuilt postgres 17.11, and `make test` passes on both (1123 tests OK, 9 skipped). Update cadence is in `docs/ENGINEERING.md` (Dependency cadence). Accepted, recorded below |
 | 9 | Optional: WebRTC transport | §13 | deferred | Only after 3 and 4, and only with an equally enforceable playback gate |
 
 ## Retention findings (2026-10-29)
@@ -55,6 +55,15 @@ Up to 12 concurrent sessions (twice the largest bake-off) the harness adds rough
 
 - Mutation check: removing the commit-time outage check in `storage.py` makes the mid-transaction test fail, so the new tests do detect that regression (source restored).
 - Real PostgreSQL stop/start (`make chaos-postgres`, 25 s run, database down for about 6 s): 302 calls acknowledged, ledger verified, each call recorded exactly once, no sequence gaps. One call blocked for 7.8 s inside the connection pool's 10 s wait before storage returned, so a database outage stalls callers for up to the pool timeout rather than failing fast; whether that is acceptable for live sessions is an open decision.
+
+## Dependency audit findings (2026-10-29)
+
+- Fixed: OpenSSL CVE-2026-84782 in the Python and PostgreSQL base images (digest bump). The app's locked Python and npm packages have no known vulnerabilities.
+- Accepted, Python image: pip's own vendored certifi, urllib3, msgpack and setuptools (build-time tool, the app imports the locked copies); Debian packages with no fix (`affected`, `fix_deferred`, `will_not_fix`: util-linux, ncurses, sqlite, zlib and others), which is the state of Debian 12 itself.
+- Accepted, PostgreSQL image: Go standard library inside `gosu`, the entrypoint's privilege-drop helper. The container is internal to Compose and unpublished.
+- Accepted, OTLP collector 0.163.1: one Go stdlib finding (CVE-2026-111943, fixed in Go 1.26.10), internal to Compose; revisit when a collector release ships it.
+- Node image: npm's bundled undici and brace-expansion are flagged, but only `/usr/local/bin/node` is copied into the runtime image; npm is not shipped.
+- Not covered: transitive Python dependencies are only as pinned in the lock (pip-audit runs with `--no-deps` by design), and no automated bump bot is set up.
 
 ## Carried over from Phase 4
 

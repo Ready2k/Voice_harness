@@ -1,7 +1,7 @@
 # Secret file mode: 600 locally; CI runners need 644 so the non-root test container (different uid) can read it.
 SECRET_MODE ?= 600
 
-.PHONY: serve-live token-host token nova-live-container lint audit build test test-db golden recovery infra stop up init benchmark chaos-postgres load-test perf-gate demo
+.PHONY: serve-live token-host token nova-live-container lint audit image-scan build test test-db golden recovery infra stop up init benchmark chaos-postgres load-test perf-gate demo
 
 init:
 	@mkdir -p .local
@@ -47,6 +47,11 @@ lint:
 
 audit:
 	uvx pip-audit -r requirements.lock --no-deps --disable-pip
+	cd scripts/probe && npm audit --omit=dev
+
+# Opt-in (not in CI): needs trivy. Scans the built api image, which covers the pinned Python base and the Node runtime.
+image-scan: build
+	trivy image --severity HIGH,CRITICAL --ignore-unfixed --scanners vuln voice-harness-api:latest
 
 # Tests get their own throwaway database so fixture runs and fake-clock holds never reach the live one.
 test-db: init
