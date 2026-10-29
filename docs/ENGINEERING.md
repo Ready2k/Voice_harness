@@ -120,7 +120,9 @@ speech tools, so live-run tests must not depend on them.
 
 1. **Probe first.** Run the probe to record only observed behaviour (auth, codecs, tool plumbing, transcripts,
    turn signalling, cancel and truncate, usage). Anything not exercised stays `Unknown`. Write the capability
-   report; it expires after 7 days.
+   report; it expires after 7 days. Probes live in `scripts/probe/` (`openai_probe.mjs`, `nova_probe.mjs`, `xai_probe.py`,
+   `google_gemini_probe.py`, `elevenlabs_probe.py`, `openai_live_probe.py`) and each has a report builder invoked by
+   `python -m voice_harness.probe from-<family>-observations`.
 2. **Adapter.** Implement `LiveAdapter` over the closed canonical events, preserving the original provider
    payload. Declare unsupported features rather than emulating them. Pin the versioned model name; never run
    against an alias.
@@ -133,6 +135,28 @@ speech tools, so live-run tests must not depend on them.
    `PHASE4_NOTES_<provider>.md` listing quirks and Unknowns.
 
 Do not record provider prices unless verified, and do not attest provider terms on anyone's behalf.
+
+## Re-verifying before expiry
+
+Coverage is `implemented_and_verified` only while a family's capability report is current (7 days) and a passing AC-09
+result is bound to that report's id. To refresh a family (costs real provider calls; credentials from `.env`, AWS session or
+Google ADC):
+
+```bash
+set -a; . ./.env; set +a; export PYTHONPATH=src
+.venv/bin/python scripts/probe/xai_probe.py                         # or the family's probe from scripts/probe/
+.venv/bin/python -m voice_harness.probe from-xai-observations artifacts/phase0/xai-observations-<ts>.json \
+  --report-id cap_xai_grok_voice_3_0_<yyyymmdd> > artifacts/phase0/xai-capability-report.json
+.venv/bin/python -m voice_harness.probe validate artifacts/phase0/xai-capability-report.json
+.venv/bin/python scripts/run_ac09.py xai_grok_voice                 # writes artifacts/phase2/<family>-ac09.json
+```
+
+Notes: Nova needs a fresh AWS session (`./scripts/aws-session.sh <MFA>`, then `set -a; . .local/aws-session.env`) and
+`--speech-wav` (24 kHz mono PCM16) for its barge-in stage; a provider may emit an interruption before any speech, so keep
+failed attempts and build the report from a run that has the evidence. Rebuilding a report drops its operator terms
+attestation, so carry the existing one over (and say so in `limitations`) or re-give it; never invent one. A report with a
+failed-closed row or a failed AC-09 leaves the family unverified. Families: `openai`, `openai_live`, `aws_nova_sonic`,
+`xai_grok_voice`, `google_gemini_live`, `elevenlabs_agents`.
 
 ## Adding a scenario or criterion
 

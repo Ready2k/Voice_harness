@@ -33,7 +33,8 @@ bake-off). The optional live synthetic-commit test was not run: no live model ha
   isolation verified). It makes no provider recommendation because nine assessments were untestable after
   independent-ASR credits ran out. The earlier `GEMINI_3_8_BENCHMARK_2026-10-19.md` batch is historical (undeclared
   timeout injections).
-- Test counts below (642 Python, 71 browser at `dbbe37a`) are from 2026-10-19 and have not been refreshed.
+- Latest full run (2026-10-29, SQLite, host): 1082 Python tests OK (8 skipped) and 190 browser tests. Compose/PostgreSQL (`make test`) was not re-run.
+  Counts quoted in the older sections below are historical.
 - Bake-off reports show voice cost per run (see "Voice cost in the bake-off"); Nova runs need a re-run to be priced.
 - Carried into Phase 5: variance beyond 3 repetitions, re-probing before reports expire, a live synthetic-commit test, locale-aware caller voice, judge calibration policy approval
   (blocking stays off), tariffs in the shipped pricing table, live runs inside the container (no credentials or `say`
