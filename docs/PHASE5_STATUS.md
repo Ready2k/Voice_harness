@@ -11,7 +11,7 @@ is chosen; Phase 1's component benchmark (`make benchmark`) is the baseline this
 - Done in earlier phases, not re-verified here: hash-locked `requirements.lock` and digest-pinned images; the Phase 1
   lint/security gate; RT-02 metadata tombstoning; basic multi-session load test; component benchmark baseline.
 - Last full run: 1082 Python tests OK (8 skipped) and 190 browser tests, on the host with SQLite. The Compose/PostgreSQL
-  suite (`make test`) has not been re-run for the current commit.
+  suite (`make test`) was green in CI on 2026-10-29 after lint and image fixes (backlog item 1).
 - CI today: `.github/workflows/phase1.yml` and `pages.yml` only. No performance, load, chaos or retention gate.
 
 ## Backlog
@@ -20,7 +20,7 @@ Order is a suggestion; the first item unblocks trusting the rest.
 
 | # | Item | Spec | Status | Done when |
 |---|------|------|--------|-----------|
-| 1 | Re-run `make test` on Compose/PostgreSQL for the current commit | Phase 1 gate | open | Container suite passes; counts recorded here |
+| 1 | Re-run `make test` on Compose/PostgreSQL for the current commit | Phase 1 gate | done 2026-10-29 | CI run 40845575584 (commit of the voice_naturalness image fix): `make lint`, `make audit` and `make test` on Compose/PostgreSQL all passed. Test counts not recorded |
 | 2 | Performance regression gate | regression gates | open | CI compares `make benchmark` output to a stored baseline with a stated tolerance and fails on a miss |
 | 3 | Load test: concurrent sessions | §18 | open | Sessions, CPU, memory, queue depth/bytes, JSON cost, persistence backpressure measured at stepped concurrency; artifact and command in repo |
 | 4 | Chaos tests | chaos | open | DB outage, slow/failed evidence write, collector down, provider disconnect mid-turn: evidence-write failure blocks tool calls and releases, trace-export failure loses no ledger data |
