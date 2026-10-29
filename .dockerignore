@@ -19,6 +19,7 @@
 !scripts/
 !scripts/voice_conversation.py
 !scripts/rescore_bakeoff_report.py
+!scripts/voice_naturalness.py
 !scripts/probe/
 !scripts/probe/package.json
 !scripts/probe/package-lock.json
