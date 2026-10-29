@@ -42,7 +42,7 @@ services:
 
   benchmark:
     <<: *sandbox
-    cpus: 8
+    cpus: ${BENCHMARK_CPUS:-8}  # reference profile is 8; CI runners have 4
     mem_limit: 1g
     profiles: [benchmark]
     build:
