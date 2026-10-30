@@ -55,8 +55,30 @@ token-billed providers.
 provider; this run did not. The exclusion marker is dropped from GPT-Live's cells so it is scored on the same basis as the
 other five.
 
-**Result.** GPT-Live composite 0.894, ahead of xAI 0.892, Gemini 0.890 and GPT-Realtime 0.887; Nova 0.815 and ElevenLabs
-0.814 trail. The verdict is still `tied_on_quality` / no clear winner (leader minus runner-up spans zero), so GPT-Live's
-nominal first place is not a finding. Its edge on the quality-only composite (0.995) comes from perfect task success,
+**Result** (after the 30 October ASR rerun below). Composite: xAI 0.901, Gemini 0.899, GPT-Realtime 0.897, GPT-Live 0.894,
+Nova 0.890, ElevenLabs 0.823. The report ranks on the composite excluding latency, where GPT-Live is nominally first
+(0.995, ahead of xAI 0.995, Gemini 0.993, GPT-Realtime 0.985, Nova 0.975). The verdict is still `tied_on_quality` / no clear
+winner (leader minus runner-up spans zero), so GPT-Live's nominal first place is not a finding. Its edge on the quality-only composite (0.995) comes from perfect task success,
 facts and safe speech; it is slowest of the OpenAI pair on first-audio (median 1.6 s against 1.4 s), and latency remains
 mixed turn control.
+
+## Rerun of ASR-blocked cells (30 October)
+
+Seven scored cells completed on 29 October with an independent-ASR failure (`ASR_HTTP_429`, `assessment.asr_unavailable`
+in the ledger, 21:03-21:04) and so carried an unchecked reply: FACT-01 `untestable` or `review_required` although the run
+finished. `--resume` does not requeue completed runs and reply audio is not retained, so they could not be re-assessed. They
+were rerun once more, as a second attempt that **replaces the first sample** (it is a fresh live run, not a re-check):
+`happy-verify-retry-001` repetition 0 for all five providers, `identity-authority-employee-001` repetition 0 for Nova, and
+`happy-transaction-details-001` repetition 0 for ElevenLabs. The rule was by ledger, for every provider, whatever the first
+outcome (`scripts/rerun_asr_blocked_cells.py`; GPT-Live's carried-over cells are not affected). All seven completed with
+independent ASR and the same judges; pre-flight passed again for the five providers. The earlier attempt and its cost stay
+on the cell (`earlier_costs`).
+
+Effect (five providers; composite before then after): xAI 0.892 then 0.901, Gemini 0.890 then 0.899, GPT-Realtime 0.887 then
+0.897, Nova 0.815 then 0.890, ElevenLabs 0.814 then 0.823. Nova's factual score went 0.643 then 1.0: the earlier dip was the
+unchecked replies, not wrong answers. The verdict stays `tied_on_quality`. ElevenLabs still carries three
+`TRANSCRIPT_UNAVAILABLE` cells (`identity-fault-caller-interrupts-001`, a different fault) and remains low on factual (0.75).
+
+The run used a separate output folder (`prompts.json` here also holds GPT-Live's carried-over record, which the launcher's
+frozen-prompt guard rejects); the five providers' prompts and bindings were checked identical to the frozen ones. The ledger
+before the rerun is backed up outside git. `report-five-provider.json` was replaced by the post-rerun five-provider report.

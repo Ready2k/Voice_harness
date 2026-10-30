@@ -10,7 +10,7 @@
           "data": "artifacts/bakeoff-2026-10-29-standard-5/report.json",
           "title": "Standard-prompt bake-off, six providers (GPT-Live carried over), normalised voices \u2014 29 October 2026",
           "generated": "2026-10-30 (GPT-Live carried over from 2026-10-28)",
-          "sha256": "2a04e78276db13eae7129a80c7af737f40c15ba0acfae90e308618295dcb455d",
+          "sha256": "598bd240dffaa4b7b82ab55d28f3a45056f0712352b6fa4c201adb75bdada7f6",
           "label": "Original assessment",
           "priority": 0,
           "runs": 720,
