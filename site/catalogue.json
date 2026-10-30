@@ -74,6 +74,159 @@
       "group": "//Users"
     },
     {
+      "path": "artifacts/bakeoff-2026-10-29-standard/verified-prompt-bindings.json",
+      "title": "verified prompt bindings",
+      "date": "2026-10-29",
+      "kind": "Data",
+      "size": 49615,
+      "url": "artifacts/bakeoff-2026-10-29-standard/verified-prompt-bindings.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/bakeoff-2026-10-29-standard/status.json",
+      "title": "status",
+      "date": "2026-10-29",
+      "kind": "Data",
+      "size": 30565,
+      "url": "artifacts/bakeoff-2026-10-29-standard/status.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/bakeoff-2026-10-29-standard/report.json",
+      "title": "report",
+      "date": "2026-10-29",
+      "kind": "Data",
+      "size": 137646,
+      "url": "artifacts/bakeoff-2026-10-29-standard/report.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/bakeoff-2026-10-29-standard/report.html",
+      "title": "report",
+      "date": "2026-10-29",
+      "kind": "Web report",
+      "size": 184952,
+      "url": "artifacts/bakeoff-2026-10-29-standard/report.html",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/bakeoff-2026-10-29-standard/prompts.json",
+      "title": "prompts",
+      "date": "2026-10-29",
+      "kind": "Data",
+      "size": 45185,
+      "url": "artifacts/bakeoff-2026-10-29-standard/prompts.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/bakeoff-2026-10-29-standard/payload.json",
+      "title": "payload",
+      "date": "2026-10-29",
+      "kind": "Data",
+      "size": 178904,
+      "url": "artifacts/bakeoff-2026-10-29-standard/payload.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/bakeoff-2026-10-29-standard/launch.json",
+      "title": "launch",
+      "date": "2026-10-29",
+      "kind": "Data",
+      "size": 485,
+      "url": "artifacts/bakeoff-2026-10-29-standard/launch.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/bakeoff-2026-10-29-standard/index.html",
+      "title": "index",
+      "date": "2026-10-29",
+      "kind": "Web report",
+      "size": 694,
+      "url": "artifacts/bakeoff-2026-10-29-standard/index.html",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/bakeoff-2026-10-29-standard-5/verified-prompt-bindings.json",
+      "title": "verified prompt bindings",
+      "date": "2026-10-29",
+      "kind": "Data",
+      "size": 37658,
+      "url": "artifacts/bakeoff-2026-10-29-standard-5/verified-prompt-bindings.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/bakeoff-2026-10-29-standard-5/status.json",
+      "title": "status",
+      "date": "2026-10-29",
+      "kind": "Data",
+      "size": 34877,
+      "url": "artifacts/bakeoff-2026-10-29-standard-5/status.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/bakeoff-2026-10-29-standard-5/run-notes.md",
+      "title": "run notes",
+      "date": "2026-10-29",
+      "kind": "Notes",
+      "size": 2690,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/artifacts/bakeoff-2026-10-29-standard-5/run-notes.md",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/bakeoff-2026-10-29-standard-5/report.json",
+      "title": "report",
+      "date": "2026-10-29",
+      "kind": "Data",
+      "size": 3831585,
+      "url": "artifacts/bakeoff-2026-10-29-standard-5/report.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/bakeoff-2026-10-29-standard-5/report.html",
+      "title": "report",
+      "date": "2026-10-29",
+      "kind": "Web report",
+      "size": 2515063,
+      "url": "artifacts/bakeoff-2026-10-29-standard-5/report.html",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/bakeoff-2026-10-29-standard-5/prompts.json",
+      "title": "prompts",
+      "date": "2026-10-29",
+      "kind": "Data",
+      "size": 37658,
+      "url": "artifacts/bakeoff-2026-10-29-standard-5/prompts.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/bakeoff-2026-10-29-standard-5/payload.json",
+      "title": "payload",
+      "date": "2026-10-29",
+      "kind": "Data",
+      "size": 4303021,
+      "url": "artifacts/bakeoff-2026-10-29-standard-5/payload.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/bakeoff-2026-10-29-standard-5/launch.json",
+      "title": "launch",
+      "date": "2026-10-29",
+      "kind": "Data",
+      "size": 467,
+      "url": "artifacts/bakeoff-2026-10-29-standard-5/launch.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/bakeoff-2026-10-29-standard-5/index.html",
+      "title": "index",
+      "date": "2026-10-29",
+      "kind": "Web report",
+      "size": 699,
+      "url": "artifacts/bakeoff-2026-10-29-standard-5/index.html",
+      "group": "//Users"
+    },
+    {
       "path": "reports/gpt-live-vs-realtime-2026-10-28.md",
       "title": "gpt live vs realtime 2026 10 28",
       "date": "2026-10-28",
@@ -6790,30 +6943,44 @@
   ],
   "features": [
     {
-      "path": "artifacts/fair-bakeoff-2026-10-28/rescored-2026-10-28/report.html",
-      "title": "Fair bake-off \u00b7 final re-score",
-      "description": "Latest assessment of 720 cells: six providers, 40 scenarios, three repetitions. Re-scored evidence; no calls were rerun.",
+      "path": "artifacts/bakeoff-2026-10-29-standard-5/report.html",
+      "title": "Standard-prompt bake-off \u00b7 five providers",
+      "description": "Completed assessment of 600 runs: five providers, 40 scenarios, three repetitions, using standardised prompts. No clear quality winner.",
       "status": "Current",
-      "date": "2026-10-28"
+      "date": "2026-10-29"
     },
     {
       "path": "executive-special.html",
       "title": "Explore the executive briefing",
       "description": "How we engineered the voice harness, how the tests work, and the evidence behind the business decision.",
       "status": "Executive briefing",
+      "date": "2026-10-29"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/rate.html",
+      "title": "Voice conversation \u00b7 blind listening study",
+      "description": "Common against provider-tuned prompts in 144 three-turn conversations, with British female assistant and British male caller voices. Ratings pending.",
+      "status": "Listening",
+      "date": "2026-10-29"
+    },
+    {
+      "path": "artifacts/fair-bakeoff-2026-10-28/rescored-2026-10-28/report.html",
+      "title": "Fair bake-off \u00b7 final re-score",
+      "description": "Earlier 720-cell assessment of six providers. Re-scored evidence; no calls were rerun. Different setup from the latest standard-prompt bake-off.",
+      "status": "Re-scored",
       "date": "2026-10-28"
     },
     {
       "path": "artifacts/fair-bakeoff-2026-10-28/report.html",
       "title": "Fair bake-off \u00b7 original assessment",
-      "description": "Original scoring retained for provenance. Read the final re-score first.",
+      "description": "Original scoring retained for provenance. Use the final re-score when reviewing this earlier experiment.",
       "status": "Original",
       "date": "2026-10-28"
     },
     {
       "path": "artifacts/full-advanced-bakeoff-2026-10-26/rescored-2026-10-27/report.html",
       "title": "Advanced bake-off \u00b7 corrected assessment",
-      "description": "Earlier 600-cell experiment, with corrected latency and task-completion scoring. Different setup from the fair bake-off.",
+      "description": "Earlier 600-cell experiment, with corrected latency and task-completion scoring. Different setup from the latest bake-off.",
       "status": "Re-scored",
       "date": "2026-10-27"
     },
@@ -6830,20 +6997,6 @@
       "description": "Selected assistant speech with audio players and transcripts. Use the evaluation for measured latency.",
       "status": "Listening",
       "date": "2026-10-27"
-    },
-    {
-      "path": "artifacts/voice-conversation-v2/rate.html",
-      "title": "Voice conversation \u00b7 blind listening study",
-      "description": "Common against provider-tuned prompts in 144 three-turn conversations, with British female assistant and British male caller voices. Ratings pending.",
-      "status": "Listening",
-      "date": "2026-10-29"
-    },
-    {
-      "path": "artifacts/voice-naturalness-2026-10-25/rate.html",
-      "title": "Voice naturalness \u00b7 listening study",
-      "description": "Listen to and rate the retained voice samples.",
-      "status": "Listening",
-      "date": "2026-10-25"
     }
   ]
 }

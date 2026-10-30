@@ -1,0 +1,231 @@
+{
+  "studies": [
+    {
+      "id": "75189604e1cb",
+      "source": "bko_eb2a0ad846af4c16a623d3ef1b5d7695",
+      "date": "2026-10-29",
+      "versions": [
+        {
+          "path": "artifacts/bakeoff-2026-10-29-standard-5/report.html",
+          "data": "artifacts/bakeoff-2026-10-29-standard-5/report.json",
+          "title": "Standard-prompt bake-off, five providers, normalised voices \u2014 29 October 2026",
+          "generated": "2026-10-30 07:50 UTC",
+          "sha256": "3d3c455f143e0b3833f093205c4a48ed87ef54e30ecd41bb108a6278042d4484",
+          "label": "Original assessment",
+          "priority": 0,
+          "runs": 600,
+          "planned": 600,
+          "state": "completed"
+        }
+      ]
+    },
+    {
+      "id": "ef77f9b37d80",
+      "source": "bko_6bfcdfaaee80464f80e9adc8caa0572f",
+      "date": "2026-10-29",
+      "versions": [
+        {
+          "path": "artifacts/bakeoff-2026-10-29-standard/report.html",
+          "data": "artifacts/bakeoff-2026-10-29-standard/report.json",
+          "title": "Standard-prompt provider bake-off with normalised voices \u2014 29 October 2026",
+          "generated": "2026-10-29 20:48 UTC",
+          "sha256": "d8e7f8b09a3acdd418cdefc130654bf1ede5bbb0241aca86b61935f21532ede9",
+          "label": "Original assessment",
+          "priority": 0,
+          "runs": 0,
+          "planned": 720,
+          "state": "paused"
+        }
+      ]
+    },
+    {
+      "id": "f1e675bad023",
+      "source": "bko_851d76efa4ea410e91f30524c20d10e1",
+      "date": "2026-10-28",
+      "versions": [
+        {
+          "path": "artifacts/fair-bakeoff-2026-10-28/rescored-2026-10-28/report.html",
+          "data": "artifacts/fair-bakeoff-2026-10-28/rescored-2026-10-28/report.json",
+          "title": "Fair-harness provider bake-off \u2014 28 October 2026 (final re-score: claims-v2, FACT-01 v3)",
+          "generated": "2026-10-28 (re-scored from 2026-10-28 10:54 UTC)",
+          "sha256": "aec19b0c3e0f27365965ef94676686ebe0e19f2481622cbf75d8a198fa481f66",
+          "label": "Re-scored assessment",
+          "priority": 2,
+          "runs": 720,
+          "planned": 720,
+          "state": "completed"
+        },
+        {
+          "path": "artifacts/fair-bakeoff-2026-10-28/report.html",
+          "data": "artifacts/fair-bakeoff-2026-10-28/report.json",
+          "title": "Fair-harness provider bake-off \u2014 28 October 2026",
+          "generated": "2026-10-28 10:54 UTC",
+          "sha256": "826277be5da1a679675c9ec6d2fff1259c1fcaa49e899e0f1d5fae06bb42189e",
+          "label": "Original assessment",
+          "priority": 0,
+          "runs": 720,
+          "planned": 720,
+          "state": "completed"
+        }
+      ]
+    },
+    {
+      "id": "b28a82c118ac",
+      "source": "40 synthetic catalogue scenarios; adapter 11fbaf4; one repetition",
+      "date": "2026-10-27",
+      "versions": [
+        {
+          "path": "reports/gpt-live-1-evaluation-2026-10-27.html",
+          "data": "reports/gpt-live-1-evaluation-2026-10-27.html",
+          "title": "GPT-Live 1 \u00b7 single-model evaluation",
+          "generated": "2026-10-27 23:49 UTC",
+          "sha256": "641ff33320d184d0a580fb7e7a0841a0135eba3dc272016dc6a56d3c82ae0a85",
+          "label": "Original assessment",
+          "priority": 0,
+          "runs": 40,
+          "planned": 40,
+          "state": "completed"
+        }
+      ]
+    },
+    {
+      "id": "453e1efe7bd9",
+      "source": "bko_3c9b22aa1a9e4386a791b966967a87dc",
+      "date": "2026-10-26",
+      "versions": [
+        {
+          "path": "artifacts/full-advanced-bakeoff-2026-10-26/rescored-2026-10-27/report.html",
+          "data": "artifacts/full-advanced-bakeoff-2026-10-26/rescored-2026-10-27/report.json",
+          "title": "Full advanced provider bake-off \u2014 26 October 2026 (re-scored: latency re-anchored, task completion scored)",
+          "generated": "2026-10-27 (re-scored from 2026-10-26 19:55 UTC)",
+          "sha256": "519837ded9e953281ddf0cbd89105aac5564036e2dec052d8bb1b79bb2d4d800",
+          "label": "Re-scored assessment",
+          "priority": 2,
+          "runs": 600,
+          "planned": 600,
+          "state": "completed"
+        },
+        {
+          "path": "artifacts/full-advanced-bakeoff-2026-10-26/report.html",
+          "data": "artifacts/full-advanced-bakeoff-2026-10-26/report.json",
+          "title": "Full advanced provider bake-off \u2014 26 October 2026",
+          "generated": "2026-10-26 19:55 UTC",
+          "sha256": "759b216004667bbf0b69d27337242e65785a943449a818cab4fa33ec34b155c4",
+          "label": "Original assessment",
+          "priority": 0,
+          "runs": 600,
+          "planned": 600,
+          "state": "completed"
+        }
+      ]
+    },
+    {
+      "id": "ff8d824a941e",
+      "source": "matrix-standardised-v2-2026-10-20.json",
+      "date": "2026-10-20",
+      "versions": [
+        {
+          "path": "reports/voice-provider-prompts-standardised-v2-2026-10-20.html",
+          "data": "reports/voice-provider-prompts-standardised-v2-2026-10-20.html",
+          "title": "Standardised v2 prompts \u2014 fixed caller \u2014 first attempts, 20 October 2026",
+          "generated": "2026-10-20 07:51 UTC",
+          "sha256": "3ead4490f9187eb18d1338daef820cd91defb16533c18f7e0c76333df65b26e4",
+          "label": "Original assessment",
+          "priority": 0,
+          "runs": 136,
+          "planned": 136,
+          "state": "completed"
+        }
+      ]
+    },
+    {
+      "id": "1f721e5abda8",
+      "source": "matrix-provider-transport-v1-2026-10-20.json",
+      "date": "2026-10-20",
+      "versions": [
+        {
+          "path": "reports/provider-transport-v1-2026-10-20.html",
+          "data": "reports/provider-transport-v1-2026-10-20.html",
+          "title": "Provider transport tuning \u2014 first attempts, 20 October 2026",
+          "generated": "2026-10-20 12:44 UTC",
+          "sha256": "9d34405a3c1ab2723ec242b70dfb939bbaa82c9bf67d1600a73486c3d76202c1",
+          "label": "Original assessment",
+          "priority": 0,
+          "runs": 136,
+          "planned": 136,
+          "state": "completed"
+        }
+      ]
+    },
+    {
+      "id": "2f4cc9816e73",
+      "source": "matrix-gemini38-2026-10-19.json",
+      "date": "2026-10-19",
+      "versions": [
+        {
+          "path": "reports/voice-provider-benchmark-gemini38-2026-10-19.html",
+          "data": "reports/voice-provider-benchmark-gemini38-2026-10-19.html",
+          "title": "Voice provider benchmark - Gemini 3.8 Live rerun",
+          "generated": "2026-10-19 11:26 UTC",
+          "sha256": "05944b0f8cbb2067912cca5ca054a61032c11047b24759036453702ab80ee76c",
+          "label": "Original assessment",
+          "priority": 0,
+          "runs": 132,
+          "planned": 132,
+          "state": "completed"
+        }
+      ]
+    },
+    {
+      "id": "03654783819f",
+      "source": "matrix-5350e4a-2026-10-19.json",
+      "date": "2026-10-19",
+      "versions": [
+        {
+          "path": "reports/voice-provider-benchmark-5350e4a-2026-10-19-cost.html",
+          "data": "reports/voice-provider-benchmark-5350e4a-2026-10-19-cost.html",
+          "title": "Voice provider benchmark and bake-off (5350e4a, with voice cost)",
+          "generated": "2026-10-19 22:07 UTC",
+          "sha256": "343e84b51d6ef28b421f9190b1823f3c78c6df52baa22fad897d196a33e7024f",
+          "label": "Cost assessment",
+          "priority": 1,
+          "runs": 132,
+          "planned": 132,
+          "state": "completed"
+        },
+        {
+          "path": "reports/voice-provider-benchmark-5350e4a-2026-10-19.html",
+          "data": "reports/voice-provider-benchmark-5350e4a-2026-10-19.html",
+          "title": "Provider benchmark - revision 5350e4a (ASR-limited)",
+          "generated": "2026-10-19 12:12 UTC",
+          "sha256": "0a2df17e3e7653126fd0e244da54da43c7a37fa12a69c581c8c55ee25135ed1a",
+          "label": "Original assessment",
+          "priority": 0,
+          "runs": 132,
+          "planned": 132,
+          "state": "completed"
+        }
+      ]
+    },
+    {
+      "id": "35bbc7240787",
+      "source": "matrix-2026-10-19.json",
+      "date": "2026-10-19",
+      "versions": [
+        {
+          "path": "reports/voice-provider-benchmark-2026-10-19.html",
+          "data": "reports/voice-provider-benchmark-2026-10-19.html",
+          "title": "Voice provider benchmark and bake-off",
+          "generated": "2026-10-19 09:43 UTC",
+          "sha256": "52c588126fe0480ed11a1e97e00d883b5b91a404de9a1e155748bf47a6ad0452",
+          "label": "Original assessment",
+          "priority": 0,
+          "runs": 132,
+          "planned": 132,
+          "state": "completed"
+        }
+      ]
+    }
+  ],
+  "scope": "Tracked HTML assessment exports with structured report-data. Listening studies, raw probes and local ledgers are not scored assessments and are not counted here."
+}

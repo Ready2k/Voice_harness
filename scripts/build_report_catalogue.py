@@ -10,14 +10,14 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 REPO = 'https://github.com/Ready2k/Voice_harness/blob/main/'
 FEATURES = [
-    ('artifacts/fair-bakeoff-2026-10-28/rescored-2026-10-28/report.html', 'Fair bake-off · final re-score', 'Latest assessment of 720 cells: six providers, 40 scenarios, three repetitions. Re-scored evidence; no calls were rerun.', 'Current', '2026-10-28'),
-    ('executive-special.html', 'Explore the executive briefing', 'How we engineered the voice harness, how the tests work, and the evidence behind the business decision.', 'Executive briefing', '2026-10-28'),
-    ('artifacts/fair-bakeoff-2026-10-28/report.html', 'Fair bake-off · original assessment', 'Original scoring retained for provenance. Read the final re-score first.', 'Original', '2026-10-28'),
-    ('artifacts/full-advanced-bakeoff-2026-10-26/rescored-2026-10-27/report.html', 'Advanced bake-off · corrected assessment', 'Earlier 600-cell experiment, with corrected latency and task-completion scoring. Different setup from the fair bake-off.', 'Re-scored', '2026-10-27'),
+    ('artifacts/bakeoff-2026-10-29-standard-5/report.html', 'Standard-prompt bake-off · five providers', 'Completed assessment of 600 runs: five providers, 40 scenarios, three repetitions, using standardised prompts. No clear quality winner.', 'Current', '2026-10-29'),
+    ('executive-special.html', 'Explore the executive briefing', 'How we engineered the voice harness, how the tests work, and the evidence behind the business decision.', 'Executive briefing', '2026-10-29'),
+    ('artifacts/voice-conversation-v2/rate.html', 'Voice conversation · blind listening study', 'Common against provider-tuned prompts in 144 three-turn conversations, with British female assistant and British male caller voices. Ratings pending.', 'Listening', '2026-10-29'),
+    ('artifacts/fair-bakeoff-2026-10-28/rescored-2026-10-28/report.html', 'Fair bake-off · final re-score', 'Earlier 720-cell assessment of six providers. Re-scored evidence; no calls were rerun. Different setup from the latest standard-prompt bake-off.', 'Re-scored', '2026-10-28'),
+    ('artifacts/fair-bakeoff-2026-10-28/report.html', 'Fair bake-off · original assessment', 'Original scoring retained for provenance. Use the final re-score when reviewing this earlier experiment.', 'Original', '2026-10-28'),
+    ('artifacts/full-advanced-bakeoff-2026-10-26/rescored-2026-10-27/report.html', 'Advanced bake-off · corrected assessment', 'Earlier 600-cell experiment, with corrected latency and task-completion scoring. Different setup from the latest bake-off.', 'Re-scored', '2026-10-27'),
     ('reports/gpt-live-1-evaluation-2026-10-27.html', 'GPT-Live 1 · single-model evaluation', 'Forty synthetic scenarios with assurance checks, task completion, latency and scoped costs.', 'Evaluation', '2026-10-27'),
     ('reports/gpt-live-1-listening-2026-10-27.html', 'GPT-Live 1 · listening room', 'Selected assistant speech with audio players and transcripts. Use the evaluation for measured latency.', 'Listening', '2026-10-27'),
-    ('artifacts/voice-conversation-v2/rate.html', 'Voice conversation · blind listening study', 'Common against provider-tuned prompts in 144 three-turn conversations, with British female assistant and British male caller voices. Ratings pending.', 'Listening', '2026-10-29'),
-    ('artifacts/voice-naturalness-2026-10-25/rate.html', 'Voice naturalness · listening study', 'Listen to and rate the retained voice samples.', 'Listening', '2026-10-25'),
 ]
 
 def main():
@@ -95,7 +95,7 @@ def main():
         if output == ROOT or ROOT in output.parents and output.parts[len(ROOT.parts):len(ROOT.parts)+1] in [('artifacts',), ('reports',), ('docs',), ('site',)]:
             raise SystemExit('Choose a staging directory outside source content')
         output.mkdir(parents=True)
-        for name in files + ['favicon.ico', 'site/voice-harness-mark.svg', 'index.html', 'vision.html', 'how-it-works.html', 'technical-architecture.html', 'test-setup.html', 'site/test-setup.js', 'executive-special.html', 'site/executive-special.css', 'site/executive-special.js', 'voice-library.html', 'executive-trust.html', 'site/style.css', 'site/app.js', 'site/catalogue.json', 'site/voice-library.css', 'site/voice-library.js', 'site/voice-library.json', 'site/voice-conversations.json', 'site/cx-review-data.json']:
+        for name in files + ['favicon.ico', 'site/voice-harness-mark.svg', 'index.html', 'vision.html', 'how-it-works.html', 'technical-architecture.html', 'test-setup.html', 'site/test-setup.js', 'business-dashboard.html', 'site/business-dashboard.css', 'site/business-dashboard.mjs', 'site/business-metrics.mjs', 'site/business-dashboard.json', 'executive-special.html', 'site/executive-special.css', 'site/executive-special.js', 'voice-library.html', 'executive-trust.html', 'site/style.css', 'site/app.js', 'site/catalogue.json', 'site/voice-library.css', 'site/voice-library.js', 'site/voice-library.json', 'site/voice-conversations.json', 'site/cx-review-data.json']:
             dest = output / name
             dest.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(ROOT / name, dest)
