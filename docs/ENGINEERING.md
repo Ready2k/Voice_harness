@@ -54,11 +54,17 @@ Tests use `unittest`, not pytest. After regenerating contracts, check `git diff 
 ## Bake-offs
 
 The current way to compare providers is a bake-off (`/client/bakeoff.html`, `bakeoff.py`, `/api/v1/bakeoffs`): the API
-schedules 2-5 providers' live runs, preflights each provider first (`BAKEOFF_SAFEGUARDS.md`), pauses on access or quota
+schedules 2-6 providers' live runs, preflights each provider first (`BAKEOFF_SAFEGUARDS.md`), pauses on access or quota
 failure, and computes the report from the ledgers. Scoring and assessors are described in `BAKEOFF_ASSESSORS.md`;
 provider asymmetries are disclosed on the report (`PROVIDER_CONFIG_PARITY.md`, `PROVIDER_BIAS_REVIEW_2026-10-27.md`).
-Committed output for the 28 Oct run is `artifacts/fair-bakeoff-2026-10-28/`. Re-score with
-`scripts/rescore_bakeoff_report.py`.
+Committed output for the 28 Oct run (6 providers, `advanced-v1` prompts) is `artifacts/fair-bakeoff-2026-10-28/`; re-score with
+`scripts/rescore_bakeoff_report.py`. The latest, 29/30 Oct (5 providers, `standardised-v2`, 600 cells), is
+`artifacts/bakeoff-2026-10-29-standard-5/` with `run-notes.md`. Launch with `scripts/full_advanced_bakeoff.py
+--prompt-profile standardised-v2 --providers ...` (the default profile stays `advanced-v1`); set `HARNESS_AUTO_JUDGES=openai,bedrock`
+**and** `VOICE_HARNESS_LIVE_JUDGES=openai,bedrock` (the second enables the judges), `VOICE_HARNESS_OPENAI_JUDGE_MODEL=gpt-6-sol` and
+`VOICE_HARNESS_LIVE_ASR=openai`, and refresh AWS with `./scripts/aws-session.sh <MFA>`. Do not edit `src/` while one runs. The `gpt-6-sol`
+judge dominates OpenAI spend (about $0.017 a run); `scripts/judge_model_agreement.py` re-judges a finished run with another model and
+compares verdicts. To compare two bake-offs (for example two prompt profiles) use `scripts/compare_prompt_profiles.py`.
 
 ## Live provider benchmark (historical matrix runner)
 

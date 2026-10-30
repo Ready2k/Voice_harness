@@ -5,6 +5,7 @@ import json
 
 ROOT = Path(__file__).resolve().parents[1]
 EXPERIMENTS = [
+    ('bakeoff-2026-10-29-standard-5', '29 October 2026 · Standard-prompt bake-off', '.'),  # report.json sits at the root: no re-score revision
     ('fair-bakeoff-2026-10-28', '28 October 2026 · Fair bake-off', 'rescored-2026-10-28'),
     ('full-advanced-bakeoff-2026-10-26', '26 October 2026 · Advanced bake-off', 'rescored-2026-10-27'),
 ]

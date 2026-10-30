@@ -77,7 +77,7 @@ Phases follow spec §16 and are gated by acceptance criteria (AC-01…AC-21), no
 
 - Keep capability reports current (they expire after 7 days) and repeat the fair bake-off beyond 3 repetitions where variance is still wide.
 - Build a calibration holdout from real live transcripts; the current synthetic holdout is exploratory and no judge policy is approved.
-- Establish tariffs in the shipped table (it holds none; dated partial vendor tables exist under `artifacts/pricing/`) so default cost exports can be known.
+- Establish tariffs in the shipped table (it holds none that are priced; dated partial vendor tables exist under `artifacts/pricing/`) so default cost exports can be known.
 - Exercise reconnect/resume, direct MCP and audio alignment, which are Unknown for every provider.
 - Run live runs inside the container: the `openai_tts` caller removes the `say` dependency, but credentials and the live profile are not yet in Compose.
 

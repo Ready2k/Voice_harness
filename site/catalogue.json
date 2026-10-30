@@ -1,6 +1,15 @@
 {
-  "latest": "2026-10-29",
+  "latest": "2026-10-30",
   "entries": [
+    {
+      "path": "artifacts/pricing/vendor-pricing-2026-10-30.json",
+      "title": "vendor pricing 2026 10 30",
+      "date": "2026-10-30",
+      "kind": "Data",
+      "size": 75136,
+      "url": "artifacts/pricing/vendor-pricing-2026-10-30.json",
+      "group": "//Users"
+    },
     {
       "path": "artifacts/pricing/vendor-pricing-2026-10-29.json",
       "title": "vendor pricing 2026 10 29",
@@ -215,6 +224,15 @@
       "kind": "Data",
       "size": 467,
       "url": "artifacts/bakeoff-2026-10-29-standard-5/launch.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/bakeoff-2026-10-29-standard-5/judge-agreement-luna.json",
+      "title": "judge agreement luna",
+      "date": "2026-10-29",
+      "kind": "Data",
+      "size": 1238,
+      "url": "artifacts/bakeoff-2026-10-29-standard-5/judge-agreement-luna.json",
       "group": "//Users"
     },
     {
@@ -3255,7 +3273,7 @@
       "title": "VISION",
       "date": "",
       "kind": "Notes",
-      "size": 6001,
+      "size": 6017,
       "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/VISION.md",
       "group": "//Users"
     },
@@ -3489,7 +3507,7 @@
       "title": "ENGINEERING",
       "date": "",
       "kind": "Notes",
-      "size": 15006,
+      "size": 15883,
       "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/ENGINEERING.md",
       "group": "//Users"
     },
@@ -3588,7 +3606,7 @@
       "title": "ARCHITECTURE",
       "date": "",
       "kind": "Notes",
-      "size": 12492,
+      "size": 14913,
       "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/ARCHITECTURE.md",
       "group": "//Users"
     },

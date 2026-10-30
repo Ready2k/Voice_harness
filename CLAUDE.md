@@ -36,7 +36,7 @@ Tests use `unittest` (not pytest). `tests/test_release.py` requires PostgreSQL, 
 
 `tests/test_contracts_in_sync.py` fails if the checked-in `contracts/` differ from generator output. After changing pydantic models or API routes, rerun `generate_contracts` and commit the result; the generator is deterministic, so any diff is real drift.
 
-ElevenLabs needs a stored agent: run `PYTHONPATH=src .venv/bin/python -m voice_harness.adapters.elevenlabs_agent setup` (key from `.env`) after changing `live_providers.TOOLS`; see `docs/PHASE4_NOTES_elevenlabs.md`. Bake-offs take 2-5 providers.
+ElevenLabs needs a stored agent: run `PYTHONPATH=src .venv/bin/python -m voice_harness.adapters.elevenlabs_agent setup` (key from `.env`) after changing `live_providers.TOOLS`; see `docs/PHASE4_NOTES_elevenlabs.md`. Bake-offs take 2-6 providers.
 
 Dependencies are pinned in `pyproject.toml` and hash-locked in `requirements.lock`; Python and collector images are pinned by digest — update the lock, not just `pyproject.toml`.
 

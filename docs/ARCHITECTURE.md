@@ -65,19 +65,19 @@ Package: `src/voice_harness/`.
 
 | Layer | Modules | Responsibility |
 |---|---|---|
-| Entry and service | `__main__.py`, `api.py`, `auth.py`, `ratelimit.py`, `shutdown.py` | CLI (`serve`, `demo`, `golden-run`, `recovery-run`, `benchmark`, `verify-bundle`, `signing-keys`), authenticated HTTP/WebSocket, operator and reviewer roles, rate limits |
+| Entry and service | `__main__.py`, `api.py`, `auth.py`, `ratelimit.py`, `shutdown.py` | CLI (`serve`, `demo`, `golden-run`, `recovery-run`, `benchmark`, `load-test`, `verify-bundle`, `signing-keys`), authenticated HTTP/WebSocket, operator and reviewer roles, rate limits |
 | Orchestration | `engine.py`, `execution.py`, `tool_lifecycle.py`, `inbound_queue.py` | Run lifecycle, ordering, cancellation, bounded queues, tool lifecycle and recovery |
 | Enforcement | `guardrail.py`, `policy.py`, `approvals.py`, `playback.py`, `verdicts.py`, `voice_confirmation.py` | Pre-execution and pre-playback decisions, signed single-use approval tokens, playback gate, spoken-consent classifier |
 | Synthetic world | `bank.py`, `mcp_server.py`, `mcp_gateway.py`, `data/` | Accounts, transactions, limits, identity state, fault injection; stdio MCP server and correlated gateway |
 | Providers | `adapters/` (`openai_live`, `openai_realtime`, `nova_sonic`, `xai_voice`, `google_gemini_live`, `elevenlabs_voice` + `elevenlabs_agent`), `mock_provider.py`, `resample.py` | `LiveAdapter` protocol over canonical events; original provider payloads preserved |
-| Scenarios | `scenario_defs.py`, `scenario_catalogue.py`, `scenarios.py`, `live_scenario.py`, `caller_voice.py`, `model_simulator.py`, `simulator.py` | 3 mock built-ins and 40 live catalogue entries in five groups (happy path, identity, vulnerable customers, faults, payments; persona × locale × audio profile, plus faults); synthetic caller speech (macOS `say` or opt-in `openai_tts`); model-driven simulator branch |
-| Live runs | `live_providers.py`, `live_assessment.py`, `asr.py`, `target_prompts.py`, `manual_session.py`, `interactive_caller.py` | Availability checks, `run_live`, capability binding, independent-ASR assessment, per-provider target prompts, human mic/text sessions, live-AI caller pilot |
-| Bake-off | `bakeoff.py`, `bakeoff_stats.py`, `bakeoff_metrics.py`, `bakeoff_disclosure.py`, `bakeoff_export.py`, `provider_balances.py` | API-scheduled multi-provider runs with preflight and pause/resume, gates, Wilson-interval scorecard, McNemar head-to-heads, first-audio latency, disclosed provider asymmetries, one-file HTML export |
+| Scenarios | `scenario_defs.py`, `scenario_catalogue.py`, `scenarios.py`, `live_scenario.py`, `caller_voice.py`, `model_simulator.py`, `simulator.py` | 3 mock built-ins and 40 live catalogue entries in five groups (happy path, identity, vulnerable customers, faults, payments; persona × locale × audio profile, plus faults); synthetic caller speech (macOS `say -v Daniel`, or opt-in `openai_tts` with voice `ash` and British-accent instructions: a British male caller); model-driven simulator branch |
+| Live runs | `live_providers.py`, `live_assessment.py`, `asr.py`, `target_prompts.py`, `manual_session.py`, `interactive_caller.py` | Availability checks, `run_live`, capability binding, independent-ASR assessment, target prompts and their profiles (`standardised-v2` default, `conversational-v1`, vendor-tuned `advanced-v1`, historical `legacy-v1`), human mic/text sessions, live-AI caller pilot |
+| Bake-off | `bakeoff.py`, `bakeoff_stats.py`, `bakeoff_metrics.py`, `bakeoff_disclosure.py`, `bakeoff_export.py`, `provider_balances.py` | API-scheduled runs of 2-6 providers with preflight and pause/resume (credit, quota and provider-failure pauses), gates, Wilson-interval scorecard, McNemar head-to-heads, first-audio latency, disclosed provider asymmetries, one-file HTML export |
 | Telephone pilot | `telephone_api.py`, `telephone_providers.py`, `telephone_setup.py`, `telephony_demo.py`, `delegate_dialogue.py` | Bounded delegate-agent phone pilot. Diagnostic only, not platform verification (see `DELEGATE_PHONE_RUNBOOK.md`) |
-| Judging | `judges/` (`rubric`, `facts`, `oracle`, `calibration`, `holdout`, `review`, `adjudicate`, `backends`, `independence`, …) | Rubric `banking.assurance.v1`, deterministic evaluators, AI judges, calibration, human review |
+| Judging | `judges/` (`rubric`, `facts`, `oracle`, `calibration`, `holdout`, `review`, `adjudicate`, `backends`, `independence`, …) | Rubric `banking.assurance.v1` (eight criteria), deterministic evaluators, AI judges, calibration, human review. Related deterministic checks: `instruction_leak.py`, `verify_claim.py`, `semantic_checks.py`, `tool_claims.py`, `spoken_ids.py`, `reply_retention.py`, `interruption.py`, `provider_failures.py`, `scenario_stop.py`, `audio_activity.py`; review: `review_api.py`, `call_review.py` |
 | Evidence | `events.py`, `event_contracts.py`, `evidence.py`, `exports.py`, `canonical.py`, `signing.py`, `storage.py`, `relational.py`, `retention.py` | Hash-chained ledger, RFC 8785 canonical JSON, Ed25519-signed manifests, retention and tombstones |
 | Capability and coverage | `capability_report.py`, `probe.py`, `coverage.py`, `*_report.py`, `fault_dispositions.py` | Probes produce capability reports; coverage derives per-family state and never ranks |
-| Cost and measurement | `cost*.py`, `pricing.py`, `metrics.py`, `benchmark.py`, `websocket_benchmark.py`, `clock_*.py`, `telemetry.py`, `comparison*.py` | Cost lines (unknown unless priced), component benchmarks, OTLP export, comparison reports |
+| Cost and measurement | `cost*.py`, `pricing.py`, `metrics.py`, `benchmark.py`, `websocket_benchmark.py`, `clock_*.py`, `telemetry.py`, `comparison*.py` | Cost lines (unknown unless priced; voice, ASR and judge calls are all metered, judges through `CostMeteredJudge` in `cost_recorder.py`; `cost_store.py`, `cost_api.py`), component benchmarks and gates (`perf_gate.py`, `load_test.py`, `chaos_postgres.py`), OTLP export, comparison reports (`comparison_api.py`) |
 | Contracts | `contracts.py`, `generate_contracts.py` | Closed pydantic models (unknown properties rejected); regenerates `contracts/` schemas and OpenAPI |
 | Web | `apps/web/` | Coverage (AC-20), runs, scenarios, review, compare, manual, bake-off, balances and telephone pages; PCM scheduler and AudioWorklet playback; strict CSP, `textContent` rendering |
 
@@ -109,18 +109,23 @@ to the approval buffer, and independent ASR plus the assessor decide release. A 
 
 - **Two tracks.** Model behaviour (what the provider did) is separate from platform enforcement (whether the gate
   contained it). A blocked model misstatement is still a model failure.
-- **Deterministic criteria:** IDENTITY-01, FACT-01, CONFIRM-01, AUDIO-01, SCENARIO-PROPOSAL-01. CARE-01 needs a
-  judge. Applicability is declared per scenario. Missing audio is not "not applicable".
+- **Eight criteria.** SCENARIO-PROPOSAL-01, LEAK-01 and VERIFY-CLAIM-01 are deterministic only. IDENTITY-01, FACT-01,
+  CONFIRM-01 and AUDIO-01 are decided deterministically and are also sent to the AI judges for an independent opinion.
+  CARE-01 has judge authority (only the presence of an interaction is checked deterministically). Applicability is
+  declared per scenario. Missing audio is not "not applicable".
 - **FACT-01** compares the *independent ASR* text, not the provider's own transcript, against the tool results and
   reference facts: amounts, and dates and identifiers bound to their entity and field. Unresolved evidence is
   `untestable`, never a pass.
 - **Dispositions:** `pass`, `fail`, `untestable`, `not_applicable`. Supported failures are not masked by evidence
   gaps. Unexercised faults are distinguished from handled faults and cannot alone yield an overall pass.
-- **AI judges** (OpenAI, default `gpt-6-luna`; Bedrock Claude Haiku 4.5) are opt-in, independence-checked against
+- **AI judges** (OpenAI, default `gpt-6-luna` in code, though scored bake-offs set `gpt-6-sol`; Bedrock Claude Haiku 4.5) are opt-in (`VOICE_HARNESS_LIVE_JUDGES` enables a backend, `HARNESS_AUTO_JUDGES` runs it on every live run), independence-checked against
   the tested model (including multi-model providers such as `openai-live`), calibrated on a synthetic holdout, and
   advisory. The 28 Oct calibration (`artifacts/judge-calibration-2026-10-28/`) shows numeric thresholds met for
   some criteria only, differing by judge (e.g. `gpt-6-sol`: CARE-01, CONFIRM-01, IDENTITY-01; Haiku 4.5: CARE-01).
-  The holdout is synthetic, so this is not human validation. No policy is approved and nothing blocks.
+  The holdout is synthetic, so this is not human validation. No policy is approved and nothing blocks. Judge calls are
+  cost-metered per run. On the 29/30 Oct bake-off a `gpt-6-luna` re-judge agreed with `gpt-6-sol` on 87.2% of 1,742 criterion
+  verdicts (IDENTITY-01 71.6%, luna more often `untestable`), so the two are not interchangeable
+  (`artifacts/bakeoff-2026-10-29-standard-5/judge-agreement-luna.json`).
 
 ## 6. Evidence
 
@@ -150,11 +155,17 @@ call, turn start and end, interrupted, usage, error). Unsupported features are d
 | Amazon Nova Sonic | `amazon.nova-2-5-sonic`, us-east-1 | Bedrock bidirectional stream via a Node bridge | Verified (AC-09 pass, interruption excluded) |
 | xAI Grok Voice | `grok-voice-3.0` | WebSocket | Verified (AC-09 5 of 5) |
 | Google Gemini Live | `gemini-3.8-live` | Vertex AI Live WebSocket, ADC | 3.8 live probe and AC-09 pass (client truncation excluded); version unresolved |
-| ElevenLabs Agents | `elevenlabs-agent` (agent LLM recorded per run) | Agents WebSocket, stored agent | Probe `elevenlabs_probe.py`, AC-09 pass with interruption excluded (no client truncate); `PHASE4_NOTES_elevenlabs.md` |
+| ElevenLabs Agents | `elevenlabs-agent` (agent LLM recorded per run; agent default `gemini-3.5-flash`) | Agents WebSocket, stored agent | Probe `elevenlabs_probe.py`, AC-09 pass with interruption excluded (no client truncate); `PHASE4_NOTES_elevenlabs.md` |
 
 Support state is *derived*, never asserted. `implemented_and_verified` needs an adapter, a valid unexpired
 capability report and a passing AC-09 result bound to that report. Provider quirks that shaped the adapters are
 recorded in `PHASE4_NOTES_*.md`.
+
+**Voices.** Output voices are normalised to a British female assistant where the vendor offers one: Nova `amy`, ElevenLabs
+Amelia, Gemini `Aoede` with `languageCode: en-GB`. OpenAI (`marin`) and xAI (`ara`) are female but have no British option,
+so their accent is not guaranteed and the report says so. Fixed callers are British male (macOS `Daniel`, or `openai_tts`
+`ash`), and the live-AI caller defaults to `cedar` with a British-English brief. The recorded voice is `output_voice` in each
+run binding (`live_providers.DEFAULT_VOICES`). See `PROVIDER_CONFIG_PARITY.md`.
 
 ## 8. Deployment
 
@@ -180,7 +191,7 @@ Compose suite. A `pages.yml` workflow publishes the research archive; it is not 
 ## 9. Known limits
 
 - Fixture audio is silence, so mock-provider tests show enforcement mechanics, not audibility or ASR accuracy.
-- Most live results are single samples; the 28 Oct fair bake-off (6 providers × 40 scenarios × 3 repetitions) is the first repeated set. The shipped pricing table has no tariffs, so cost is `unknown` unless `HARNESS_PRICING_TABLE` points at a dated vendor table (`artifacts/pricing/`, partial, primary-source).
+- Most live results are single samples. Repeated sets: the 28 Oct fair bake-off (6 providers × 40 scenarios × 3 repetitions, `advanced-v1`) and the 29/30 Oct bake-off (5 providers, `standardised-v2`; GPT-Live excluded after failing pre-flight under that prompt). They differ in prompts, voices and caller, so they are not like for like. The shipped pricing table has no priced tariffs, so cost is `unknown` unless `HARNESS_PRICING_TABLE` points at a dated vendor table (`artifacts/pricing/`, latest `vendor-pricing-2026-10-30.json`, partial, primary-source). Cache-write premiums on OpenAI judge calls are not metered, so judge cost can read up to about 25% of its input component low.
 - Audio alignment, reconnect/resume and direct MCP are Unknown for every provider.
 - Narrowband and noise are simple synthetic shaping, not measured telephony.
 - Private signing keys live on disk; there is no KMS or HSM.

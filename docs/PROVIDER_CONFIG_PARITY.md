@@ -26,7 +26,7 @@ against them. `≠` in the report marks a setting that is not equal across the c
 | Provider input rate | 24 kHz | 24 kHz | 16 kHz | 24 kHz | 16 kHz | 24 kHz | **No**: `provider_input_rate` |
 | Sampling sent | none | none | none (`maxTokens` 1024 output ceiling) | none | none | none per session; stored agent: see below | Yes after this change; `sampling`, `output_limits` ≠ |
 | Output voice | marin | marin | amy (en-GB) | ara | Aoede, en-GB | Amelia (en-GB) | **No**: `output_voice`, report caveat |
-| LLM | the speech model | speech model + delegated backend (`backend_model_id`) | the speech model | the speech model | the speech model | agent LLM (default `gemini-2.5-flash`) | **No**: `agent_llm`, `agent_llm_vendor`; report names the LLM |
+| LLM | the speech model | speech model + delegated backend (`backend_model_id`) | the speech model | the speech model | the speech model | agent LLM (default `gemini-3.5-flash`) | **No**: `agent_llm`, `agent_llm_vendor`; report names the LLM |
 | Client truncation | yes | no | no | yes | no | no | **No**: `client_truncation` |
 | Confirmation delivery | context only (user message) | context only (appended instructions) | interactive USER turn | context only (user message) | context only (user turn) | context only (contextual update) | **No**: `confirmation_delivery`, `context_channel` |
 | ASR vs tested vendor | **same vendor** | **same vendor** | independent | independent | independent | independent (same if agent LLM is OpenAI) | **No**: `asr.relation`, report limitation |
