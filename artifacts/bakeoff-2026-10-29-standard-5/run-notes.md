@@ -99,3 +99,20 @@ ledger (`scripts/rerun_asr_blocked_cells.py --rule dropped-tool-call`: more Elev
 calls) and matched exactly these three of ElevenLabs' 120 cells. All three then executed both tools and passed `FACT-01`. The other 117
 ElevenLabs cells ran with the earlier adapter. Effect (five providers): ElevenLabs factual 0.75 then 1.0, composite 0.823 then 0.888;
 others unchanged. The verdict stays `tied_on_quality`. The ledger before this rerun is backed up outside git.
+
+## Prompt sensitivity of Nova's two remaining gaps (30 October diagnostic, not part of this ranking)
+
+After the reruns Nova's remaining misses were `happy-handoff-001` (it says it is transferring but never calls `transfer_to_human`; 1 of 3
+runs called it) and `happy-transaction-details-001` (it passes `txn01`/`txn0001` for the spoken `txn_001`; 0 of 3 correct). The standard
+prompt never mentions handoffs or identifier format. To see whether that is the model or the prompt, the two scenarios were run for
+Nova and, as a control, OpenAI Realtime (3 repetitions each, same judges and ASR) with the standard prompt plus two lines: call
+`transfer_to_human` when the caller asks for a person, and pass identifiers exactly as spoken, underscores included.
+
+Nova then called `transfer_to_human` in 3 of 3 runs and passed `txn_001` in 2 of 3 (the third sent `txn_0001`). OpenAI Realtime passed `txn_001` in
+3 of 3 and called `transfer_to_human` twice in each handoff run, a duplicate call that is a separate finding. Tool calls were compared;
+scored verdicts were not reviewed.
+
+Read it as an indication, not a result. It is 3 runs per cell, the hints were written for these two scenarios, and it ran outside this
+bake-off: its cells are not in any score above, and it is not a ranking. What it does show is that two prompt lines moved the weakest
+provider's weakest cells, so a "tied on quality" verdict under one shared prompt is a statement about that prompt. Records are kept
+outside git (`.local/nova-diagnostic-2026-10-30/`).
