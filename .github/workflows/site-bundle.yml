@@ -1,0 +1,30 @@
+name: Publish site bundle
+on:
+  push:
+    tags: ['site-*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to create or update (for example site-2026-10-30)
+        required: true
+permissions:
+  contents: write
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build full and lite bundles
+        run: |
+          python scripts/build_site_bundle.py
+          python scripts/build_site_bundle.py --lite
+      - name: Attach to a GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag || github.ref_name }}
+        run: |
+          gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --title "Evidence site $TAG" --notes "Unzip, run \`python3 serve.py\`. The lite zip leaves out audio."
+          gh release upload "$TAG" dist/voice-harness-site.zip dist/voice-harness-site-lite.zip --clobber

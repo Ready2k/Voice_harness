@@ -1,7 +1,7 @@
 # Secret file mode: 600 locally; CI runners need 644 so the non-root test container (different uid) can read it.
 SECRET_MODE ?= 600
 
-.PHONY: serve-live token-host token nova-live-container lint audit image-scan build test test-db golden recovery infra stop up init benchmark chaos-postgres load-test perf-gate demo
+.PHONY: serve-live token-host token nova-live-container lint audit image-scan build test test-db golden recovery infra stop up init benchmark chaos-postgres load-test perf-gate demo site-bundle site-bundle-lite
 
 init:
 	@mkdir -p .local
@@ -101,3 +101,10 @@ stop:
 nova-live-container:
 	@test -f .local/aws-session.env || { echo "missing .local/aws-session.env: run ./scripts/aws-session.sh <MFA_CODE>" >&2; exit 2; }
 	docker compose run --build --rm nova-live
+
+# Downloadable copy of the evidence site (open with: python3 serve.py). Written to dist/.
+site-bundle:
+	python3 scripts/build_site_bundle.py
+
+site-bundle-lite:
+	python3 scripts/build_site_bundle.py --lite

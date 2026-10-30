@@ -1,0 +1,15 @@
+/* Site colour scheme. Change the values here and every page follows. */
+:root{
+  color-scheme:light;
+  --ink:#172b2b;          /* main text and dark panels */
+  --paper:#f5f5ef;        /* page background */
+  --surface:#fcfcf7;      /* cards and inputs */
+  --tint:#e8eddf;         /* tags, filter bars, hover rows */
+  --line:#d7ddd4;         /* borders and rules */
+  --muted:#61716c;        /* secondary text */
+  --green:#d9f486;        /* highlight on dark panels, primary buttons */
+  --accent:#397763;       /* links and emphasis on light backgrounds */
+  --accent-text:#526e64;  /* quieter accent text */
+  --deep:#173f37;         /* dark green panels */
+  --cream:var(--paper);   /* older pages use this name */
+}
