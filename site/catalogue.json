@@ -177,7 +177,7 @@
       "title": "status",
       "date": "2026-10-29",
       "kind": "Data",
-      "size": 34878,
+      "size": 7413,
       "url": "artifacts/bakeoff-2026-10-29-standard-5/status.json",
       "group": "//Users"
     },
@@ -186,7 +186,7 @@
       "title": "run notes",
       "date": "2026-10-29",
       "kind": "Notes",
-      "size": 7209,
+      "size": 8870,
       "url": "https://github.com/Ready2k/Voice_harness/blob/main/artifacts/bakeoff-2026-10-29-standard-5/run-notes.md",
       "group": "//Users"
     },
@@ -195,7 +195,7 @@
       "title": "report",
       "date": "2026-10-29",
       "kind": "Data",
-      "size": 3917877,
+      "size": 3918575,
       "url": "artifacts/bakeoff-2026-10-29-standard-5/report.json",
       "group": "//Users"
     },
@@ -204,7 +204,7 @@
       "title": "report",
       "date": "2026-10-29",
       "kind": "Web report",
-      "size": 3036691,
+      "size": 3037079,
       "url": "artifacts/bakeoff-2026-10-29-standard-5/report.html",
       "group": "//Users"
     },
@@ -213,7 +213,7 @@
       "title": "report five provider",
       "date": "2026-10-29",
       "kind": "Data",
-      "size": 3832557,
+      "size": 3802944,
       "url": "artifacts/bakeoff-2026-10-29-standard-5/report-five-provider.json",
       "group": "//Users"
     },
@@ -231,7 +231,7 @@
       "title": "payload",
       "date": "2026-10-29",
       "kind": "Data",
-      "size": 4343340,
+      "size": 4354133,
       "url": "artifacts/bakeoff-2026-10-29-standard-5/payload.json",
       "group": "//Users"
     },

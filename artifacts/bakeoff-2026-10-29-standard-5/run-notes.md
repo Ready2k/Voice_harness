@@ -55,10 +55,10 @@ token-billed providers.
 provider; this run did not. The exclusion marker is dropped from GPT-Live's cells so it is scored on the same basis as the
 other five.
 
-**Result** (after the 30 October ASR rerun below). Composite: xAI 0.901, Gemini 0.899, GPT-Realtime 0.897, GPT-Live 0.894,
-Nova 0.890, ElevenLabs 0.823. The report ranks on the composite excluding latency, where GPT-Live is nominally first
-(0.995, ahead of xAI 0.995, Gemini 0.993, GPT-Realtime 0.985, Nova 0.975). The verdict is still `tied_on_quality` / no clear
-winner (leader minus runner-up spans zero), so GPT-Live's nominal first place is not a finding. Its edge on the quality-only composite (0.995) comes from perfect task success,
+**Result** (after the 30 October reruns below). Composite: xAI 0.901, Gemini 0.899, GPT-Realtime 0.897, GPT-Live 0.894,
+Nova 0.890, ElevenLabs 0.888. The report ranks on the composite excluding latency, where ElevenLabs is nominally first
+(0.996, ahead of GPT-Live 0.995, xAI 0.995, Gemini 0.993, GPT-Realtime 0.985, Nova 0.975). The verdict is still
+`tied_on_quality` / no clear winner (leader minus runner-up spans zero), so the nominal first place is not a finding. Its edge on the quality-only composite (0.995) comes from perfect task success,
 facts and safe speech; it is slowest of the OpenAI pair on first-audio (median 1.6 s against 1.4 s), and latency remains
 mixed turn control.
 
@@ -76,9 +76,26 @@ on the cell (`earlier_costs`).
 
 Effect (five providers; composite before then after): xAI 0.892 then 0.901, Gemini 0.890 then 0.899, GPT-Realtime 0.887 then
 0.897, Nova 0.815 then 0.890, ElevenLabs 0.814 then 0.823. Nova's factual score went 0.643 then 1.0: the earlier dip was the
-unchecked replies, not wrong answers. The verdict stays `tied_on_quality`. ElevenLabs still carries three
-`TRANSCRIPT_UNAVAILABLE` cells (`identity-fault-caller-interrupts-001`, a different fault) and remains low on factual (0.75).
+unchecked replies, not wrong answers. The verdict stays `tied_on_quality`. ElevenLabs' three `TRANSCRIPT_UNAVAILABLE` cells
+were a different fault, handled in the next section.
 
 The run used a separate output folder (`prompts.json` here also holds GPT-Live's carried-over record, which the launcher's
 frozen-prompt guard rejects); the five providers' prompts and bindings were checked identical to the frozen ones. The ledger
 before the rerun is backed up outside git. `report-five-provider.json` was replaced by the post-rerun five-provider report.
+
+## Rerun of ElevenLabs cells lost to an adapter fault (30 October)
+
+All three ElevenLabs runs of `identity-fault-caller-interrupts-001` ended without executing the `get_account_summary` call
+ElevenLabs made after the caller's second turn (`FACT-01` `untestable`, `TRANSCRIPT_UNAVAILABLE`, no reply audio). It was not
+ElevenLabs failing: after the harness tries to cut a reply ElevenLabs keeps streaming it, sometimes pausing longer than the
+adapter's 0.7 s idle window (0.74-0.75 s in the failing runs, 0.69 s in one that passed). Closing on the pause ended the response
+twice (again at the server's `interruption`); the runner counts one end per cancelled reply, read the second as an empty reply and
+returned before the answer to the barging turn. Live it failed about 2 runs in 3. Fixed in `elevenlabs_voice.py` (commit 29e4788):
+after `interrupt()` the adapter waits `BARGE_IDLE_S` (3 s of quiet) for the server's interruption. The runner's own fragility to a second
+empty turn end is kept as an expected-failure test (`tests/test_elevenlabs_barge_in.py`).
+
+The three cells were rerun once more with the fixed adapter, as a second attempt that **replaces the first sample**. The rule was by
+ledger (`scripts/rerun_asr_blocked_cells.py --rule dropped-tool-call`: more ElevenLabs `client_tool_call` events than executed tool
+calls) and matched exactly these three of ElevenLabs' 120 cells. All three then executed both tools and passed `FACT-01`. The other 117
+ElevenLabs cells ran with the earlier adapter. Effect (five providers): ElevenLabs factual 0.75 then 1.0, composite 0.823 then 0.888;
+others unchanged. The verdict stays `tied_on_quality`. The ledger before this rerun is backed up outside git.
