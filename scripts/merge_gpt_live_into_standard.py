@@ -52,6 +52,18 @@ def backdated_table():
     return PricingTable(doc)
 
 
+def carry_prompt_records():
+    """Give the standard run GPT-Live's retained 28 October prompt and binding records, so the setup explorer
+    (scripts/build_test_setup.py) can show what the carried cells were run with. Marked ``carried_over``."""
+    source = ROOT / "fair-bakeoff-2026-10-28"
+    for name in ("prompts.json", "verified-prompt-bindings.json"):
+        record = json.loads((source / name).read_text())[PROVIDER]
+        target = STANDARD / name
+        records = json.loads(target.read_text())
+        records[PROVIDER] = {**record, "carried_over": CARRIED}
+        target.write_text(json.dumps(records, indent=2) + "\n")
+
+
 def earlier_attempts():
     """{final run id: run ids of that cell's earlier, failed attempts}, from the stored 28 October payload."""
     cells = json.loads((ROOT / "fair-bakeoff-2026-10-28" / "payload.json").read_text())["cells"]
@@ -74,6 +86,7 @@ def main():
         five.write_text((STANDARD / "report.json").read_text())
     base = json.loads(five.read_text())
     fair = json.loads(FAIR.read_text())
+    carry_prompt_records()
     table, db = backdated_table(), sqlite3.connect(f"file:{LEDGER}?mode=ro", uri=True)
     earlier, carried = earlier_attempts(), []
     for o in fair["observations"]:

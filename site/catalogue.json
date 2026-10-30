@@ -11,6 +11,15 @@
       "group": "//Users"
     },
     {
+      "path": "artifacts/pricing/vendor-pricing-2026-10-30-gpt-live-28oct.json",
+      "title": "vendor pricing 2026 10 30 gpt live 28oct",
+      "date": "2026-10-30",
+      "kind": "Data",
+      "size": 64956,
+      "url": "artifacts/pricing/vendor-pricing-2026-10-30-gpt-live-28oct.json",
+      "group": "//Users"
+    },
+    {
       "path": "artifacts/pricing/vendor-pricing-2026-10-29.json",
       "title": "vendor pricing 2026 10 29",
       "date": "2026-10-29",
@@ -159,7 +168,7 @@
       "title": "verified prompt bindings",
       "date": "2026-10-29",
       "kind": "Data",
-      "size": 37658,
+      "size": 52948,
       "url": "artifacts/bakeoff-2026-10-29-standard-5/verified-prompt-bindings.json",
       "group": "//Users"
     },
@@ -200,11 +209,20 @@
       "group": "//Users"
     },
     {
+      "path": "artifacts/bakeoff-2026-10-29-standard-5/report-five-provider.json",
+      "title": "report five provider",
+      "date": "2026-10-29",
+      "kind": "Data",
+      "size": 3831585,
+      "url": "artifacts/bakeoff-2026-10-29-standard-5/report-five-provider.json",
+      "group": "//Users"
+    },
+    {
       "path": "artifacts/bakeoff-2026-10-29-standard-5/prompts.json",
       "title": "prompts",
       "date": "2026-10-29",
       "kind": "Data",
-      "size": 37658,
+      "size": 46424,
       "url": "artifacts/bakeoff-2026-10-29-standard-5/prompts.json",
       "group": "//Users"
     },
