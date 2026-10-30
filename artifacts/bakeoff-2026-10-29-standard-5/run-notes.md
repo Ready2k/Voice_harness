@@ -113,6 +113,13 @@ Nova then called `transfer_to_human` in 3 of 3 runs and passed `txn_001` in 2 of
 scored verdicts were not reviewed.
 
 Read it as an indication, not a result. It is 3 runs per cell, the hints were written for these two scenarios, and it ran outside this
-bake-off: its cells are not in any score above, and it is not a ranking. What it does show is that two prompt lines moved the weakest
+bake-off: its cells are not in any score above, and it is not a ranking. What it does show is that two targeted prompt lines moved the weakest
 provider's weakest cells, so a "tied on quality" verdict under one shared prompt is a statement about that prompt. Records are kept
 outside git (`.local/nova-diagnostic-2026-10-30/`).
+
+Against the vendor-tuned run (`fair-bakeoff-2026-10-28`, advanced-v1, six providers): composites tuned then standard were ElevenLabs 0.886
+then 0.888, GPT-Live 0.893 then 0.894 (the same carried-over cells), xAI 0.897 then 0.901, Gemini 0.899 then 0.899, Nova 0.889 then 0.890
+and OpenAI Realtime 0.870 then 0.897. The OpenAI Realtime gap is not a clean comparison (its tuned factual score was 0.857; that run predates the ASR
+and adapter reruns). Nova missed the same cells under both prompts (`happy-handoff-001` 2 of 3, `happy-transaction-details-001` 3 of 3), so vendor-style tuning did not address
+them; only the targeted lines did. Gemini missed one handoff (repetition 2) under the standard prompt and none under the tuned one. Broad
+style tuning left the ranking flat; instructions about the specific task moved individual cells.
