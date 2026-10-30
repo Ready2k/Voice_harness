@@ -1,0 +1,11 @@
+# Illustration provenance
+
+Generated with the built-in image generation tool. Text was added as editable PowerPoint objects and the completed pages exported as PNG infographics.
+
+## Business illustration
+
+Use case: infographic-diagram. Create a refined 16:9 landscape executive infographic BACKGROUND illustration only, no text or letters anywhere. Warm ivory background #F6F4EE, dark navy and teal, very restrained gold accents. Clean editorial flat illustration with precise sophisticated linework, lots of whitespace. Layout must leave top 30 percent completely blank for a title and introduction, bottom 30 percent completely blank for annotations and takeaway. In the middle strip from y=32% to y=52%, four evenly spaced small conceptual illustrations centered at x=15%, 38%, 62%, 85%: cloud with waveform (provider voice services), telephone conversation with bank building (banking scenarios), magnifying glass over checklist (evaluation), report sheet beside headphones (results and listening). Delicate horizontal line connecting the four illustrations. Each illustration stays inside its 15% wide by 20% high area. No panels, cards, borders, logos, text, digits, gradients or fake data. Polished corporate editorial quality, not playful.
+
+## Technical illustration
+
+Use case: infographic-diagram. Create a refined 16:9 landscape CIO technical infographic BACKGROUND illustration only, absolutely no text, letters or digits. Very pale cool grey background #F1F5F7 with dark navy, blue and restrained teal line art. Editorial engineering illustration, precise and professional. Leave top 30 percent and bottom 30 percent completely blank for editable labels and annotations added later. In middle strip y=32% to y=52%, four compact evenly spaced illustrations centered at x=15%,38%,62%,85%: cloud endpoints and waveform, server interface with a shield and bank symbol, magnifying glass over waveform and checklist, evidence report with headphones and a small lock. Thin horizontal connecting line between illustrations. Each illustration within a 15% wide and 20% high area. Open flat composition, no panels, no cards, no logos, no gradients, no fake charts. Keep all illustration within the middle strip. Crisp enterprise architecture aesthetic, generous whitespace.

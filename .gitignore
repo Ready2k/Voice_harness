@@ -13,3 +13,4 @@ node_modules/
 .DS_Store
 artifacts/**/.record.lock
 dist/
+.codex-preread-build/
