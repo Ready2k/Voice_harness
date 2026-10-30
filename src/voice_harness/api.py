@@ -487,6 +487,19 @@ def create_app(
         more = cursor + limit < len(items)
         return {"items": page, "next_cursor": cursor + limit if more else None}
 
+    @app.get("/api/v1/scenarios/by-hash/{content_hash}", dependencies=[Depends(auth)])
+    def scenario_by_hash(content_hash: str):
+        """The definition a run's ledger pinned; (id, version) can hold a different one when a version was edited in place."""
+        with database.connection() as db:
+            row = db.execute(
+                "SELECT scenario_id, version, content_hash, definition FROM harness_scenario_by_hash WHERE content_hash=?",
+                (content_hash,),
+            ).fetchone()
+        if row is None:
+            raise HTTPException(404, "SCENARIO_HASH_UNKNOWN")
+        return {"scenario_id": row["scenario_id"], "version": row["version"], "content_hash": row["content_hash"],
+                "definition": database.decoded(row["definition"])}
+
     @app.post("/api/v1/scenarios", status_code=201, dependencies=[Depends(auth)])
     def create_scenario(definition: ScenarioDefinition):
         body = definition.model_dump()

@@ -162,6 +162,20 @@ class KeyStore:
         # The private half of a retired key is destroyed; the public half remains.
         (self.keys / (kid + ".pem")).unlink(missing_ok=True)
 
+    def import_public_key(self, key_id: str, public_key: str, reason: str) -> bool:
+        """Trust another store's key for verification only: recorded as generated then retired, with no private half.
+
+        Returns False when the key is already known."""
+        with self._lock:
+            if key_id in self._state():
+                return False
+            raw = base64.b64decode(public_key)
+            if key_id_for(raw) != key_id:
+                raise SigningError("KEYRING_KEY_ID_MISMATCH")
+            self._append(event="generated", key_id=key_id, algorithm=ALGORITHM, public_key=public_key, reason=reason)
+            self._append(event="retired", key_id=key_id, reason="imported verification-only")
+            return True
+
     def rotate(self, reason: str = "scheduled rotation") -> str:
         with self._lock:
             old = self.active_key_id()

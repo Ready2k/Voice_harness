@@ -47,6 +47,16 @@ def migrate(db, payload_type):
                 (row["scenario_id"], row["version"]),
             )
     db.execute("INSERT INTO harness_migrations VALUES (5) ON CONFLICT DO NOTHING")
+    # Migration 15: a run's ledger pins the scenario by content hash, but (scenario_id, version) holds one
+    # definition and keeps the first writer's. Editing a v1 scenario in place left runs whose hash the
+    # registry cannot return, so definitions are also kept by hash.
+    db.execute(
+        f"CREATE TABLE IF NOT EXISTS harness_scenario_by_hash (content_hash TEXT PRIMARY KEY, scenario_id TEXT NOT NULL, version INTEGER NOT NULL, definition {payload_type} NOT NULL)"
+    )
+    db.execute(
+        "INSERT INTO harness_scenario_by_hash SELECT content_hash, scenario_id, version, definition FROM harness_scenario_definitions WHERE true ON CONFLICT DO NOTHING"
+    )
+    db.execute("INSERT INTO harness_migrations VALUES (15) ON CONFLICT DO NOTHING")
     from . import clock_runtime
 
     clock_runtime.migrate(db)
@@ -137,6 +147,15 @@ def project(transaction, event):
                 definition["id"],
                 definition["version"],
                 definition_hash(definition),
+                database.encoded(definition),
+            ),
+        )
+        insert(
+            "harness_scenario_by_hash",
+            (
+                definition_hash(definition),
+                definition["id"],
+                definition["version"],
                 database.encoded(definition),
             ),
         )
