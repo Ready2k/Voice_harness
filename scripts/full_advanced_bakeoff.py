@@ -36,7 +36,7 @@ def main():
     parser.add_argument("--repetitions", type=int, default=3, choices=range(1, 4))
     parser.add_argument("--resume", action="store_true", help="Recheck and resume a paused bake-off after fixing its cause")
     parser.add_argument("--name", default="Full advanced provider bake-off — 26 October 2026")
-    parser.add_argument("--prompt-profile", default="advanced-v1", choices=["advanced-v1", "standardised-v2", "conversational-v1"],
+    parser.add_argument("--prompt-profile", default="advanced-v1", choices=["advanced-v1", "standardised-v2", "standardised-v3", "conversational-v1"],
                         help="prompt profile for every provider (default keeps the original advanced-v1 behaviour)")
     parser.add_argument("--providers", help="comma-separated provider_config_ids (default: every live provider)")
     args = parser.parse_args()

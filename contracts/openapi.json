@@ -3649,6 +3649,7 @@
             "type": "string",
             "enum": [
               "standardised-v2",
+              "standardised-v3",
               "advanced-v1",
               "conversational-v1"
             ],
@@ -4291,6 +4292,7 @@
             "type": "string",
             "enum": [
               "standardised-v2",
+              "standardised-v3",
               "conversational-v1"
             ],
             "title": "Prompt Profile",
@@ -4589,6 +4591,7 @@
             "type": "string",
             "enum": [
               "standardised-v2",
+              "standardised-v3",
               "legacy-v1",
               "advanced-v1",
               "conversational-v1"

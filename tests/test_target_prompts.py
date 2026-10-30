@@ -13,7 +13,7 @@ from voice_harness.live_providers import (
     _adapter,
     session_metadata,
 )
-from voice_harness.target_prompts import CONVERSATIONAL_STYLE, STANDARDISED_V2, provenance
+from voice_harness.target_prompts import CONVERSATIONAL_STYLE, STANDARDISED_V2, STANDARDISED_V3, provenance
 
 
 class TargetPromptTests(unittest.TestCase):
@@ -49,9 +49,16 @@ class TargetPromptTests(unittest.TestCase):
         self.assertIn("never deny it", CONVERSATIONAL_STYLE)
         self.assertIn("must not state or imply any result", CONVERSATIONAL_STYLE)
 
+    def test_v3_is_v2_plus_only_the_policy_line(self):
+        self.assertTrue(STANDARDISED_V3.startswith(STANDARDISED_V2))
+        added = STANDARDISED_V3[len(STANDARDISED_V2):]
+        self.assertIn("get_policy_text", added)
+        self.assertNotIn("transfer_to_human", STANDARDISED_V3)
+        self.assertNotIn("get_policy_text", STANDARDISED_V2)
+
     def test_all_adapters_receive_the_selected_prompt_and_same_tools(self):
         for provider in LIVE_PROVIDERS:
-            for profile, expected in [("standardised-v2", STANDARDISED_V2), ("legacy-v1", LEGACY_INSTRUCTIONS)]:
+            for profile, expected in [("standardised-v2", STANDARDISED_V2), ("standardised-v3", STANDARDISED_V3), ("legacy-v1", LEGACY_INSTRUCTIONS)]:
                 with self.subTest(provider=provider, profile=profile):
                     _, config = _adapter(provider, profile)
                     sent = config.get("instructions", config.get("system_prompt"))

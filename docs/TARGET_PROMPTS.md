@@ -6,6 +6,10 @@ instruction field with the same tool definitions. Fixed and adaptive callers use
 the selected profile; human microphone sessions currently use `standardised-v2`.
 Choose the agent prompt on the Runs page or set `prompt_profile` in the run API.
 
+`standardised-v3` (30 Oct 2026) is `standardised-v2` plus one policy line telling the model to call `get_policy_text` for
+identity-policy questions (GPT-Live failed pre-flight under v2 without it). Nothing else differs; v2 is unchanged because the
+29/30 Oct report is bound to its hash. Use v3 for the next run so every provider, GPT-Live included, gets the same prompt.
+
 The shared prompt allows brief natural conversation, asks for the security answer
 without inventing a question, hides internal identifiers from speech, and requires
 exact amounts and currencies from successful tool results. It contains no expected

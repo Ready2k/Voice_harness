@@ -35,6 +35,16 @@ Authority:
 """
 
 
+# standardised-v3 (30 Oct 2026) is standardised-v2 plus one policy line, the same wording ADVANCED_STYLE gives. GPT-Live
+# failed pre-flight under v2 because nothing told it to call get_policy_text. Nothing else differs, so v3 results compare
+# with v2 apart from that line. v2 is unchanged: the 29/30 Oct report is bound to its hash.
+STANDARDISED_V3 = STANDARDISED_V2 + """
+Policy:
+- For questions about identity-verification policy, call get_policy_text with policy_id identity and version 1.
+  Answer from that successful result rather than reciting the system instructions. If it fails, explain that you cannot confirm the policy.
+"""
+
+
 ADVANCED_STYLE = """Use one or two short spoken sentences unless the caller asks for detail. Ask at most one question at a time.
 Use everyday words and contractions, without markdown or stage directions. Explain amounts clearly when spoken.
 Adapt to the caller's words: acknowledge distress briefly, then offer a practical next step. Avoid exaggerated sympathy.
@@ -92,6 +102,8 @@ def delivered(provider, text, model_id=None, backend_model_id=None):
 def instructions(profile, provider=None):
     if profile == "standardised-v2":
         return STANDARDISED_V2
+    if profile == "standardised-v3":
+        return STANDARDISED_V3
     if profile == "conversational-v1":
         return STANDARDISED_V2 + CONVERSATIONAL_STYLE
     if profile != "advanced-v1":
@@ -118,7 +130,7 @@ def delta(profile, provider):
     """Lines a provider's instructions add to the profile's common core (advanced-v1: STANDARDISED_V2 + ADVANCED_STYLE),
     so a vendor-tuned comparison shows what each vendor was given beyond what every vendor was given. An adapter
     wrapper (GPT-Live's delegation line, sent to its voice model) is listed first, prefixed ``[adapter]``."""
-    core = {"advanced-v1": STANDARDISED_V2 + ADVANCED_STYLE, "conversational-v1": STANDARDISED_V2 + CONVERSATIONAL_STYLE}.get(profile, STANDARDISED_V2)
+    core = {"advanced-v1": STANDARDISED_V2 + ADVANCED_STYLE, "conversational-v1": STANDARDISED_V2 + CONVERSATIONAL_STYLE}.get(profile, STANDARDISED_V3 if profile == "standardised-v3" else STANDARDISED_V2)
     common = {line.strip() for line in core.splitlines()}
     wrapper = adapter_wrapper(provider)
     return ([f"[adapter] {wrapper}"] if wrapper else []) + [

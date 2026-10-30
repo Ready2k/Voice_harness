@@ -181,6 +181,7 @@ class Disclosure(unittest.TestCase):
             wrapper = [f"[adapter] {target_prompts.LIVE_DELEGATION_WRAPPER.strip()}"] if provider == "openai-live" else []
             self.assertEqual(delta("standardised-v2", provider), wrapper)
             self.assertEqual(delta("conversational-v1", provider), wrapper)
+            self.assertEqual(delta("standardised-v3", provider), wrapper)
             self.assertTrue(delta("advanced-v1", provider))
             self.assertEqual(delta("advanced-v1", provider)[:1], wrapper or delta("advanced-v1", provider)[:1])
 

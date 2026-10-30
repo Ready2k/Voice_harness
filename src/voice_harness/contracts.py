@@ -28,7 +28,7 @@ class RunConfig(Closed):
     # Omitted: the scenario's current definition version. A stated version must be the runnable one.
     scenario_version: Annotated[int, Field(ge=1, le=1000)] = 1
     provider_config_id: Literal["mock-banking-v1", "openai-live", "openai-realtime-live", "nova-sonic-live", "xai-voice-live", "gemini-live", "elevenlabs-live"] = "mock-banking-v1"
-    prompt_profile: Literal["standardised-v2", "legacy-v1", "advanced-v1", "conversational-v1"] = "standardised-v2"
+    prompt_profile: Literal["standardised-v2", "standardised-v3", "legacy-v1", "advanced-v1", "conversational-v1"] = "standardised-v2"
     fixture_seed: int = 42
     policy_profile: Literal["strict-v1", "exploratory-v1"] = "strict-v1"
     input_mode: Literal["fixed_audio"] = "fixed_audio"
@@ -74,7 +74,7 @@ class ManualSessionConfig(Closed):
     path: Literal["happy", "failure"] = "happy"
     # gated: only assessed, approved audio is played. streamed: audio plays as generated, assessed afterwards.
     playback_mode: Literal["gated", "streamed"] = "gated"
-    prompt_profile: Literal["standardised-v2", "conversational-v1"] = "standardised-v2"
+    prompt_profile: Literal["standardised-v2", "standardised-v3", "conversational-v1"] = "standardised-v2"
 
 
 class IdentityArgs(Closed):

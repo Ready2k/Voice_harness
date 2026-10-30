@@ -98,6 +98,7 @@
       "default": "standardised-v2",
       "enum": [
         "standardised-v2",
+        "standardised-v3",
         "legacy-v1",
         "advanced-v1",
         "conversational-v1"
