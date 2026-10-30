@@ -209,6 +209,45 @@ class ElevenLabsAdapterTests(unittest.IsolatedAsyncioTestCase):
         with self.assertRaises(CapabilityUnsupported):
             await a.interrupt(None, 10)
 
+    async def test_a_pause_in_the_cut_reply_after_a_barge_in_attempt_does_not_split_it(self):
+        # 30 Oct 2026: the cut reply pauses longer than the idle window while it keeps streaming; closing on the pause gave the
+        # harness two turn ends for one cancelled response, and it dropped the answer to the barging turn (get_account_summary).
+        async def respond(ws, msg):
+            if msg.get("type") == "user_message":
+                await ws.send(json.dumps(audio(1)))
+                await ws.send(json.dumps({"type": "agent_response", "agent_response_event": {"agent_response": "Hello there."}}))
+                await asyncio.sleep(0.3)  # longer than idle_s (0.1 s), shorter than the barge window
+                await ws.send(json.dumps(audio(1)))
+                await ws.send(json.dumps({"type": "interruption", "interruption_event": {"event_id": 3}}))
+
+        async with FakeServer(respond) as srv:
+            a = adapter_for(srv)
+            await a.open_session({})
+            await a.send_text("go on")
+            first = await collect(a, lambda e: e.type == "audio_out")
+            with self.assertRaises(CapabilityUnsupported):
+                await a.interrupt(None, 10)  # the harness's client barge-in attempt; the server's interruption follows
+            rest = await collect(a, lambda e: e.type == "turn_end")
+            await a.close("done")
+        types = [e.type for e in first + rest]
+        self.assertEqual((types.count("turn_start"), types.count("turn_end"), types.count("interrupted")), (1, 1, 1))
+
+    async def test_a_pause_without_a_barge_in_attempt_still_closes_the_response(self):
+        async def respond(ws, msg):
+            if msg.get("type") == "user_message":
+                await ws.send(json.dumps(audio(1)))
+                await ws.send(json.dumps({"type": "agent_response", "agent_response_event": {"agent_response": "Hello there."}}))
+                await asyncio.sleep(0.3)
+                await ws.send(json.dumps(audio(1)))
+
+        async with FakeServer(respond) as srv:
+            a = adapter_for(srv)
+            await a.open_session({})
+            await a.send_text("go on")
+            events = await collect(a, lambda e: e.type == "turn_end")
+            await a.close("done")
+        self.assertEqual([e.type for e in events].count("turn_end"), 1)  # the pause ended this response; the late chunk is a new turn
+
     async def test_interruption_before_any_agent_audio_is_ignored(self):
         async def respond(ws, msg):
             if msg.get("type") == "user_message":

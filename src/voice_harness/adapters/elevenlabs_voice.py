@@ -67,6 +67,7 @@ DEFAULT_MODEL = "elevenlabs-agent"  # the platform has no single model id: the a
 SAMPLE_RATE = 24000
 IDLE_S = 0.7  # audio silence that ends a response the agent has already answered
 NO_AUDIO_S = 3.0  # an answer that produced no audio at all
+BARGE_IDLE_S = 3.0  # quiet window once the harness has tried to cut the reply: the server's interruption ends it, not a pause
 SILENCE_MAX_S = 6  # longest the adapter keeps feeding silence while it waits for the server to hear the caller stop
 FATAL_CODES = {"invalid_api_key", "authentication_error", "unauthorized", "quota_exceeded", "agent_not_found"}
 _END = object()
@@ -99,13 +100,16 @@ class ElevenLabsVoiceAdapter:
     TOOL_CALL_ENDS_RESPONSE = True
 
     def __init__(self, *, api_key: str | None = None, url: str | None = None, agent: str | None = None,
-                 model: str = DEFAULT_MODEL, open_timeout: float = 15.0, idle_s: float = IDLE_S):
+                 model: str = DEFAULT_MODEL, open_timeout: float = 15.0, idle_s: float = IDLE_S,
+                 barge_idle_s: float = BARGE_IDLE_S):
         self._api_key = api_key if api_key is not None else os.environ.get(KEY_ENV)
         self._agent = agent
         self._url = url or DEFAULT_URL
         self._model = model
         self._open_timeout = open_timeout
         self._idle_s = idle_s
+        self._barge_idle_s = barge_idle_s
+        self._barge_pending = False  # interrupt() was called for the open response; the server's interruption is still due
         self._answered = False  # agent_response or tool call seen for the open turn: only audio silence is awaited
         self._close_timer: asyncio.TimerHandle | None = None
         self._silence: asyncio.Task | None = None
@@ -268,6 +272,10 @@ class ElevenLabsVoiceAdapter:
         return {"call_id": call_id, "cancelled": False, "reason": "GATEWAY_OWNS_EXECUTION"}
 
     async def interrupt(self, item_id: str | None, audio_end_ms: int) -> dict[str, Any]:
+        if self._turn_id is not None:
+            self._barge_pending = True
+            if self._close_timer is not None:
+                self._arm_close(self._idle_s)  # an idle close already pending is pushed out to the barge window
         raise CapabilityUnsupported(
             "ElevenLabs Agents has no cancel or truncate client message: a barge-in is detected by the server "
             "(interruption) and the client must flush its own audio")
@@ -373,10 +381,16 @@ class ElevenLabsVoiceAdapter:
 
     def _arm_close(self, delay: float) -> None:
         self._cancel_timer()
+        if self._barge_pending:
+            # ElevenLabs cannot cancel from the client, so the cut reply keeps streaming, sometimes with a pause longer than the
+            # idle window. Closing on that pause would end the response twice (again at the interruption); the runner counts
+            # one end per cancelled reply and treats the second as an empty reply, dropping the answer to the barging turn.
+            delay = max(delay, self._barge_idle_s)
         self._close_timer = asyncio.get_running_loop().call_later(delay, self._close_turn)
 
     def _close_turn(self) -> None:
         self._cancel_timer()
+        self._barge_pending = False
         self._answered = False
         if self._turn_id is not None:
             self._emit(TurnEnd)
