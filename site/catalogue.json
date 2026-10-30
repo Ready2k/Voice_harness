@@ -177,7 +177,7 @@
       "title": "run notes",
       "date": "2026-10-29",
       "kind": "Notes",
-      "size": 2690,
+      "size": 5118,
       "url": "https://github.com/Ready2k/Voice_harness/blob/main/artifacts/bakeoff-2026-10-29-standard-5/run-notes.md",
       "group": "//Users"
     },
@@ -186,7 +186,7 @@
       "title": "report",
       "date": "2026-10-29",
       "kind": "Data",
-      "size": 3831585,
+      "size": 3918275,
       "url": "artifacts/bakeoff-2026-10-29-standard-5/report.json",
       "group": "//Users"
     },
@@ -195,7 +195,7 @@
       "title": "report",
       "date": "2026-10-29",
       "kind": "Web report",
-      "size": 2515063,
+      "size": 3037627,
       "url": "artifacts/bakeoff-2026-10-29-standard-5/report.html",
       "group": "//Users"
     },
@@ -240,7 +240,7 @@
       "title": "index",
       "date": "2026-10-29",
       "kind": "Web report",
-      "size": 699,
+      "size": 773,
       "url": "artifacts/bakeoff-2026-10-29-standard-5/index.html",
       "group": "//Users"
     },
@@ -3507,7 +3507,7 @@
       "title": "ENGINEERING",
       "date": "",
       "kind": "Notes",
-      "size": 15883,
+      "size": 15996,
       "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/ENGINEERING.md",
       "group": "//Users"
     },
@@ -3606,7 +3606,7 @@
       "title": "ARCHITECTURE",
       "date": "",
       "kind": "Notes",
-      "size": 14913,
+      "size": 15006,
       "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/ARCHITECTURE.md",
       "group": "//Users"
     },
@@ -6962,8 +6962,8 @@
   "features": [
     {
       "path": "artifacts/bakeoff-2026-10-29-standard-5/report.html",
-      "title": "Standard-prompt bake-off \u00b7 five providers",
-      "description": "Completed assessment of 600 runs: five providers, 40 scenarios, three repetitions, using standardised prompts. No clear quality winner.",
+      "title": "Standard-prompt bake-off \u00b7 six providers",
+      "description": "Completed assessment of 720 runs: five providers on standardised prompts plus GPT-Live carried over from 28 October (advanced prompts, not like for like), 40 scenarios, three repetitions. No clear quality winner.",
       "status": "Current",
       "date": "2026-10-29"
     },

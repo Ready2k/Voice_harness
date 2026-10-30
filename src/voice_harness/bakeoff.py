@@ -820,6 +820,7 @@ def report(payload, weights=None, group_balanced=None):
                    "single_repetition": (payload.get("repetitions") or 1) < 2,
                    "latency_estimated_for": [r["provider"] for r in latency if r["estimated"]],
                    "pricing_tables": sorted({o["cost"]["pricing_table"] for o in observed if o.get("cost")}),
+                   "cost_assumptions": sorted({o["cost"]["assumption"] for o in observed if (o.get("cost") or {}).get("assumption")}),
                    "cost_from_separate_runs": sorted({o["provider"] for o in observed
                                                       if (o.get("cost") or {}).get("separate_run")}),
                    "judge_configuration": payload.get("judge_configuration"),

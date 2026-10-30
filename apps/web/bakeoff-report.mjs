@@ -102,6 +102,7 @@ export function costLimit(report) {
   return `Cost compares the provider's voice usage only (independent ASR and judges are the same harness overhead for every provider), priced with ${tables.join(", ") || "the shipped table"}. `
     + (unpriced.length ? `Not every run is priced for ${unpriced.map(c => c.name).join(", ")}; their known amounts are lower bounds, not totals.` : "Every run is priced.")
     + (report.limits.cost_from_separate_runs?.length ? ` For ${report.limits.cost_from_separate_runs.map(p => rows.find(c => c.provider === p)?.name ?? p).join(", ")} the cost comes from a later run of each scenario, not the run whose outcome is shown.` : "")
+    + (report.limits.cost_assumptions?.length ? ` Assumption: ${report.limits.cost_assumptions.join("; ")}.` : "")
     + " List prices only: no discounts, quotas or minimum-billing rules.";
 }
 
@@ -121,7 +122,7 @@ export function disclosureRows(report, names = {}) {
       + (r.sampling_conforms === false ? ": outside policy" : ""),
     list(r.output_limits), list(r.voice), list(r.turn_commit), list(r.commit_delay_ms), list(r.provider_input_rate),
     list(r.client_truncation), list(r.confirmation_delivery), `${list(r.asr)} (${list(r.asr_vendor)})`, String(r.runs_recorded)]);
-  const prompts = d.prompt_profile === "advanced-v1" ? d.providers.map(r => [names[r.provider] ?? r.provider, r.prompt_delta.join(" / ") || "none"]) : [];
+  const prompts = d.prompt_profile === "advanced-v1" || d.prompt_profile === "mixed" ? d.providers.map(r => [names[r.provider] ?? r.provider, (d.prompt_profile === "mixed" ? `${r.prompt_profile}: ` : "") + (r.prompt_delta.join(" / ") || "none")]) : [];
   return {headers, rows, prompts, limitations: d.limitations ?? [], policy: d.sampling_policy};
 }
 
@@ -839,7 +840,7 @@ export function renderReport(root, data, {heading: showHeading = true, reveal = 
   if (parity) {
     const parts = [heading(null, "Provider configuration"), table(parity.headers, parity.rows, [11]),
       note(`Sampling policy: ${words(parity.policy)}; the harness sends no temperature or top-p (a stale ElevenLabs agent may still hold its own). ≠ marks a setting that is not equal across providers: read X-over-Y statements against it.`)];
-    if (parity.prompts.length) parts.push(heading(null, "Vendor-tuned prompt additions (advanced-v1)"), table(["Provider", "Lines beyond the common core"], parity.prompts));
+    if (parity.prompts.length) parts.push(heading(null, R.limits.provider_disclosures.prompt_profile === "mixed" ? "Prompt additions by provider (mixed prompt profiles)" : "Vendor-tuned prompt additions (advanced-v1)"), table(["Provider", "Lines beyond the common core"], parity.prompts));
     views.bakeoff.append(section("Configuration", card(...parts)));
   }
   views.bakeoff.append(section("Caveats", caveats));

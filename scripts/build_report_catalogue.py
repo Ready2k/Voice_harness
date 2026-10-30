@@ -10,7 +10,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 REPO = 'https://github.com/Ready2k/Voice_harness/blob/main/'
 FEATURES = [
-    ('artifacts/bakeoff-2026-10-29-standard-5/report.html', 'Standard-prompt bake-off · five providers', 'Completed assessment of 600 runs: five providers, 40 scenarios, three repetitions, using standardised prompts. No clear quality winner.', 'Current', '2026-10-29'),
+    ('artifacts/bakeoff-2026-10-29-standard-5/report.html', 'Standard-prompt bake-off · six providers', 'Completed assessment of 720 runs: five providers on standardised prompts plus GPT-Live carried over from 28 October (advanced prompts, not like for like), 40 scenarios, three repetitions. No clear quality winner.', 'Current', '2026-10-29'),
     ('executive-special.html', 'Explore the executive briefing', 'How we engineered the voice harness, how the tests work, and the evidence behind the business decision.', 'Executive briefing', '2026-10-29'),
     ('artifacts/voice-conversation-v2/rate.html', 'Voice conversation · blind listening study', 'Common against provider-tuned prompts in 144 three-turn conversations, with British female assistant and British male caller voices. Ratings pending.', 'Listening', '2026-10-29'),
     ('artifacts/fair-bakeoff-2026-10-28/rescored-2026-10-28/report.html', 'Fair bake-off · final re-score', 'Earlier 720-cell assessment of six providers. Re-scored evidence; no calls were rerun. Different setup from the latest standard-prompt bake-off.', 'Re-scored', '2026-10-28'),

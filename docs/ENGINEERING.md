@@ -58,8 +58,8 @@ schedules 2-6 providers' live runs, preflights each provider first (`BAKEOFF_SAF
 failure, and computes the report from the ledgers. Scoring and assessors are described in `BAKEOFF_ASSESSORS.md`;
 provider asymmetries are disclosed on the report (`PROVIDER_CONFIG_PARITY.md`, `PROVIDER_BIAS_REVIEW_2026-10-27.md`).
 Committed output for the 28 Oct run (6 providers, `advanced-v1` prompts) is `artifacts/fair-bakeoff-2026-10-28/`; re-score with
-`scripts/rescore_bakeoff_report.py`. The latest, 29/30 Oct (5 providers, `standardised-v2`, 600 cells), is
-`artifacts/bakeoff-2026-10-29-standard-5/` with `run-notes.md`. Launch with `scripts/full_advanced_bakeoff.py
+`scripts/rescore_bakeoff_report.py`. The latest, 29/30 Oct (5 providers on `standardised-v2`, 600 cells, plus GPT-Live's 120 `advanced-v1` cells carried
+over from 28 Oct by `scripts/merge_gpt_live_into_standard.py`), is `artifacts/bakeoff-2026-10-29-standard-5/` with `run-notes.md`. Launch with `scripts/full_advanced_bakeoff.py
 --prompt-profile standardised-v2 --providers ...` (the default profile stays `advanced-v1`); set `HARNESS_AUTO_JUDGES=openai,bedrock`
 **and** `VOICE_HARNESS_LIVE_JUDGES=openai,bedrock` (the second enables the judges), `VOICE_HARNESS_OPENAI_JUDGE_MODEL=gpt-6-sol` and
 `VOICE_HARNESS_LIVE_ASR=openai`, and refresh AWS with `./scripts/aws-session.sh <MFA>`. Do not edit `src/` while one runs. The `gpt-6-sol`

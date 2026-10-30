@@ -54,8 +54,10 @@ def disclose(providers, observed, prompt_profile="standardised-v2"):
         mine = [o["parity"] for o in observed if o["provider"] == provider and o.get("parity")]
         overrides = sorted({f"{k}={v}" for r in mine for k, v in (r.get("sampling_overrides") or {}).items()})
         temps = _values([r for r in mine if r.get("stored_agent_temperature") is not None], "stored_agent_temperature")
+        profile = _one(_values(mine, "prompt_profile", prompt_profile)) if mine else prompt_profile
+        profile = profile if isinstance(profile, str) else "mixed"
         row = {
-            "provider": provider, "model_id": TESTED_MODELS[provider]["model_id"], "runs_recorded": len(mine),
+            "provider": provider, "prompt_profile": profile, "model_id": TESTED_MODELS[provider]["model_id"], "runs_recorded": len(mine),
             "agent_llm": _one(_values(mine, "agent_llm")) if provider == "elevenlabs-live" else None,
             "agent_llm_vendor": _one(_values(mine, "agent_llm_vendor")) if provider == "elevenlabs-live" else None,
             "sampling_policy": _one(_values(mine, "sampling_policy")), "sampling_overrides": overrides,
@@ -71,12 +73,15 @@ def disclose(providers, observed, prompt_profile="standardised-v2"):
             "confirmation_delivery": _one(sorted({r["confirmation_delivery"] + (f" via {r['context_channel']}" if r.get("context_channel") else "")
                                                  for r in mine if r.get("confirmation_delivery")}) or [None]),
             # standardised and conversational profiles are identical text, so only an adapter wrapper shows there
-            "prompt_delta": delta(prompt_profile, provider) if prompt_profile != "legacy-v1" else [],
+            "prompt_delta": delta(profile, provider) if profile != "legacy-v1" else [],
         }
         rows.append(row)
         per[provider] = row
+    profiles = sorted({r["prompt_profile"] for r in rows})
+    if len(profiles) > 1:
+        prompt_profile = "mixed"
     differs = []
-    for key in ("sampling_overrides", "output_limits", "voice", "turn_commit", "commit_delay_ms", "provider_input_rate",
+    for key in ("prompt_profile", "sampling_overrides", "output_limits", "voice", "turn_commit", "commit_delay_ms", "provider_input_rate",
                 "client_truncation", "confirmation_delivery", "prompt_delta"):
         seen = {repr(per[p][key]) for p in providers if per[p]["runs_recorded"] or key == "prompt_delta"}
         if key == "confirmation_delivery":
@@ -111,7 +116,11 @@ def disclose(providers, observed, prompt_profile="standardised-v2"):
         if any(per[p]["confirmation_delivery"] is not None for p in providers):
             limitations.append("Orchestrator context reaches GPT-Live as appended instructions (it has no runtime user message), "
                                "where other context-only providers receive a user-level message or contextual update.")
-    if prompt_profile == "advanced-v1":
+    if "advanced-v1" in profiles:
         limitations.append("advanced-v1 prompts are vendor-tuned: each provider's prompt_delta lists what it got beyond the common core.")
+    if prompt_profile == "mixed":
+        limitations.append("Providers were run under different prompt profiles (" + ", ".join(
+            f"{r['provider']}: {r['prompt_profile']}" for r in rows if r["prompt_profile"] != profiles[-1]) + "); "
+            "those results are carried over from another run and are not like for like with the rest.")
     return {"sampling_policy": SAMPLING_POLICY, "prompt_profile": prompt_profile, "providers": rows,
             "differs": differs, "limitations": limitations}

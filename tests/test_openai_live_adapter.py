@@ -317,6 +317,16 @@ class Disclosure(unittest.TestCase):
         self.assertTrue(any('gpt-live-delegation-v1' in t for t in out['limitations']))
         self.assertTrue(any('billed by session duration' in t for t in out['limitations']))
 
+    def test_carried_over_profile_is_disclosed_as_mixed(self):
+        live = {'provider': 'openai-live', 'parity': {'prompt_profile': 'advanced-v1'}}
+        realtime = {'provider': 'openai-realtime-live', 'parity': {'prompt_profile': 'standardised-v2'}}
+        out = bakeoff_disclosure.disclose(['openai-live', 'openai-realtime-live'], [live, realtime])
+        self.assertEqual(out['prompt_profile'], 'mixed')
+        self.assertEqual([r['prompt_profile'] for r in out['providers']], ['advanced-v1', 'standardised-v2'])
+        self.assertTrue(any('openai-live: advanced-v1' in t for t in out['limitations']))
+        same = bakeoff_disclosure.disclose(['openai-realtime-live'], [realtime])
+        self.assertEqual(same['prompt_profile'], 'standardised-v2')
+
 
 if __name__ == '__main__':
     unittest.main()

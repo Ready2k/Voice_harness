@@ -8,13 +8,13 @@
         {
           "path": "artifacts/bakeoff-2026-10-29-standard-5/report.html",
           "data": "artifacts/bakeoff-2026-10-29-standard-5/report.json",
-          "title": "Standard-prompt bake-off, five providers, normalised voices \u2014 29 October 2026",
-          "generated": "2026-10-30 07:50 UTC",
-          "sha256": "3d3c455f143e0b3833f093205c4a48ed87ef54e30ecd41bb108a6278042d4484",
+          "title": "Standard-prompt bake-off, six providers (GPT-Live carried over), normalised voices \u2014 29 October 2026",
+          "generated": "2026-10-30 (GPT-Live carried over from 2026-10-28)",
+          "sha256": "2a04e78276db13eae7129a80c7af737f40c15ba0acfae90e308618295dcb455d",
           "label": "Original assessment",
           "priority": 0,
-          "runs": 600,
-          "planned": 600,
+          "runs": 720,
+          "planned": 720,
           "state": "completed"
         }
       ]
