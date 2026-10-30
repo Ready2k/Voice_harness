@@ -1,0 +1,18 @@
+{
+  "bakeoff_id": "bko_6bfcdfaaee80464f80e9adc8caa0572f",
+  "request": {
+    "name": "Standard-prompt provider bake-off with normalised voices \u2014 29 October 2026",
+    "prompt_profile": "standardised-v2",
+    "provider_config_ids": [
+      "openai-live",
+      "openai-realtime-live",
+      "nova-sonic-live",
+      "xai-voice-live",
+      "gemini-live",
+      "elevenlabs-live"
+    ],
+    "repetitions": 3,
+    "group_balanced": true
+  },
+  "created_at": "2026-10-29T20:46:07Z"
+}

@@ -34,6 +34,8 @@ def main():
     parser.add_argument("--repetitions", type=int, default=3, choices=range(1, 4))
     parser.add_argument("--resume", action="store_true", help="Recheck and resume a paused bake-off after fixing its cause")
     parser.add_argument("--name", default="Full advanced provider bake-off — 26 October 2026")
+    parser.add_argument("--prompt-profile", default="advanced-v1", choices=["advanced-v1", "standardised-v2", "conversational-v1"],
+                        help="prompt profile for every provider (default keeps the original advanced-v1 behaviour)")
     parser.add_argument("--providers", help="comma-separated provider_config_ids (default: every live provider)")
     args = parser.parse_args()
     load_environment()
@@ -50,10 +52,10 @@ def main():
     headers = {"Authorization": "Bearer " + (args.data / "operator-token").read_text().strip()}
     run_file = args.out / "launch.json"
     providers = args.providers.split(",") if args.providers else list(bakeoff.NAMES)
-    request = {"name": args.name, "prompt_profile": "advanced-v1",
+    request = {"name": args.name, "prompt_profile": args.prompt_profile,
                "provider_config_ids": providers, "repetitions": args.repetitions,
                "group_balanced": True}
-    prompts = {p: provenance("advanced-v1", instructions("advanced-v1", p), live_providers.TOOLS) for p in providers}
+    prompts = {p: provenance(args.prompt_profile, instructions(args.prompt_profile, p), live_providers.TOOLS) for p in providers}
     prompt_file = args.out / "prompts.json"
     if prompt_file.exists() and json.loads(prompt_file.read_text()) != prompts:
         if run_file.exists():
@@ -110,13 +112,13 @@ def main():
                 if not attempt.get("run_id"):
                     continue
                 config = database.get(attempt["run_id"])["config"]
-                if config["prompt_profile"] != "advanced-v1":
+                if config.get("prompt_profile", "standardised-v2") != args.prompt_profile:
                     raise ValueError("RUN_PROMPT_PROFILE_MISMATCH")
                 for event in database.events(attempt["run_id"]):
                     if event["type"] == "run.live_binding":
                         provider = cell["provider_config_id"]
                         bound = event["content"]["provider"]["target_prompt"]
-                        if bound["profile"] != "advanced-v1" or bound["instructions"] != instructions("advanced-v1", provider):
+                        if bound["profile"] != args.prompt_profile or bound["instructions"] != instructions(args.prompt_profile, provider):
                             raise ValueError("RUN_PROMPT_BINDING_MISMATCH")
                         bindings[provider] = bound
         save_json(args.out / "verified-prompt-bindings.json", bindings)
