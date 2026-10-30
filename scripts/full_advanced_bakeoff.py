@@ -2,6 +2,8 @@
 
 Paid live providers and independent ASR; full banking tools, verification and speech gates remain enabled.
 Local evidence stays under --data; portable observations and reports go to --out. No credentials are exported.
+Point --data at the directory the GUI server serves (HARNESS_DATA, e.g. .local/host-data) so the bake-off appears
+in runs.html and bakeoff.html; a separate --data directory is invisible to that server.
 """
 
 import argparse
@@ -46,7 +48,9 @@ def main():
     logging.basicConfig(level=logging.WARNING)
     args.out.mkdir(parents=True, exist_ok=True)
     args.data.mkdir(parents=True, exist_ok=True)
-    database = Database(str(args.data.resolve() / "bakeoff.sqlite"))
+    # development.sqlite is what `serve` reads; bakeoff.sqlite is kept only so an older isolated --data can still be resumed.
+    legacy = args.data.resolve() / "bakeoff.sqlite"
+    database = Database(str(legacy if legacy.exists() else args.data.resolve() / "development.sqlite"))
     app = create_app(database, args.data.resolve())
     store = bakeoff.BakeoffStore(database)
     headers = {"Authorization": "Bearer " + (args.data / "operator-token").read_text().strip()}
