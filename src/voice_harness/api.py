@@ -39,6 +39,7 @@ from .bakeoff_export import report_data as bakeoff_report_data
 from .clock_runtime import ClockSyncSession, invalidate_prior_connection
 from .contracts import AudioInputPayload, CancelRun, HoldRequest, ManualSessionConfig, RenewHold, RunConfig
 from .cost_api import register_cost_routes
+from .cost_recorder import CostMeteredJudge
 from .coverage import FAMILIES, build_registry, probe_events, summarize
 from .engine import Engine
 from .evidence import Evidence
@@ -250,6 +251,8 @@ def create_app(
         # decides eligibility against the tested model); a judge that cannot start is logged and the criteria
         # that need one stay untestable. Any assessment failure fails the run closed.
         backends, unavailable = live_providers.auto_judges()
+        # Judge calls are billed work: record each call's reported usage (or unknown) against the run's cost.
+        backends = [CostMeteredJudge(backend, database, run_id) for backend in backends]
         for entry in unavailable:
             logging.getLogger("voice_harness.run").warning("auto judge unavailable: %s", entry)
         result = judge_service.assess_run(

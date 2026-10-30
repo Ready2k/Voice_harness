@@ -67,7 +67,7 @@ class VendorPricingTable(unittest.TestCase):
 class NewestTableIsTheDefault(unittest.TestCase):
     def test_serve_live_defaults_to_the_newest_vendor_table(self):
         newest = sorted(PRICING.glob("vendor-pricing-*.json"))[-1].name
-        self.assertEqual(newest, "vendor-pricing-2026-10-29.json")
+        self.assertEqual(newest, "vendor-pricing-2026-10-30.json")
         makefile = Path(__file__).parent.parent / "Makefile"
         if not makefile.exists():
             self.skipTest("the Makefile is not shipped into the test image")
@@ -177,3 +177,13 @@ class Table20261029(unittest.TestCase):
         for tid, t in new.items():
             if t.model == "gemini-3.8-live":
                 self.assertTrue(any("cloud.google.com" in e for e in t.evidence_ids), tid)
+
+
+class Table20261030(unittest.TestCase):
+    def test_sol_judge_rows_added_and_every_earlier_price_is_unchanged(self):
+        new = {t.tariff_id: t for t in load_table(PRICING / "vendor-pricing-2026-10-30.json").tariffs}
+        old = {t.tariff_id: t for t in load_table(PRICING / "vendor-pricing-2026-10-29.json").tariffs}
+        self.assertEqual({k: new[k].unit_price for k in old}, {k: v.unit_price for k, v in old.items()})
+        self.assertEqual((new["openai-judge-sol-in"].unit_price, new["openai-judge-sol-in"].cached_unit_price), ("2.00", "0.20"))
+        self.assertEqual(new["openai-judge-sol-out"].unit_price, "10.00")
+        self.assertEqual({new[t].model for t in ("openai-judge-sol-in", "openai-judge-sol-out")}, {"gpt-6-sol"})

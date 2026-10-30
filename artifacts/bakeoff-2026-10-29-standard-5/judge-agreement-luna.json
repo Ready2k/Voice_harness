@@ -1,0 +1,55 @@
+{
+  "against_other_judges": {
+    "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+      "candidate_agrees_with_other / baseline_agrees_with_other": 1302,
+      "candidate_agrees_with_other / baseline_differs_from_other": 41,
+      "candidate_differs_from_other / baseline_agrees_with_other": 174,
+      "candidate_differs_from_other / baseline_differs_from_other": 225
+    }
+  },
+  "agreement": 0.872,
+  "baseline": "openai-gpt-6-sol",
+  "baseline_to_candidate": {
+    "partial -> pass": 6,
+    "partial -> untestable": 3,
+    "pass -> fail": 1,
+    "pass -> untestable": 176,
+    "untestable -> partial": 2,
+    "untestable -> pass": 35
+  },
+  "by_criterion": {
+    "AUDIO-01": {
+      "agree": 554,
+      "n": 591
+    },
+    "CARE-01": {
+      "agree": 74,
+      "n": 87
+    },
+    "CONFIRM-01": {
+      "agree": 24,
+      "n": 28
+    },
+    "FACT-01": {
+      "agree": 444,
+      "n": 445
+    },
+    "IDENTITY-01": {
+      "agree": 423,
+      "n": 591
+    }
+  },
+  "candidate": "gpt-6-luna",
+  "cost_usd": 0.5504,
+  "criteria_compared": 1742,
+  "errors": {
+    "NO_BASELINE_VERDICTS": 10
+  },
+  "runs_compared": 614,
+  "runs_requested": 624,
+  "tokens": {
+    "cached": 31824,
+    "input": 3179394,
+    "output": 470699
+  }
+}

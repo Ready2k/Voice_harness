@@ -439,3 +439,11 @@ class XaiTextInputTests(unittest.TestCase):
         self.assertIn('UNIT_ASSUMED', report['assumptions'][0])
         table = load_table(ROOT / "artifacts" / "pricing" / "vendor-pricing-2026-10-29.json")
         self.assertEqual(Decimal(str(cost.price(report, table)[1])), Decimal("0.012"))
+
+
+class ServerWiresJudgeMetering(unittest.TestCase):
+    def test_the_auto_judge_path_wraps_every_backend_in_the_cost_meter(self):
+        source = (ROOT / "src" / "voice_harness" / "api.py").read_text()
+        self.assertIn("CostMeteredJudge(backend, database, run_id)", source)
+        self.assertLess(source.index("live_providers.auto_judges()"), source.index("CostMeteredJudge(backend, database, run_id)"))
+        self.assertLess(source.index("CostMeteredJudge(backend, database, run_id)"), source.index("judge_service.assess_run("))
