@@ -125,6 +125,7 @@ class LiveScenarioRunner:
         self.driver = AdapterTurnDriver(engine, run_id, assessor, cost_recorder=cost_recorder)
         self.tool_calls, self._fault_profile, self.interruptions = [], {}, 0
         self.interrupt_results, self._cancelled_ends = [], 0
+        self._interrupted_turns = set()  # provider turn ids the server cut: their later empty turn_end is the cut reply's own
         self.seed_value = seed
         self.pending_caller_pcm = None
         self._native = []  # provider events received since the last flush (type, size, hash; never the payload)
@@ -336,6 +337,9 @@ class LiveScenarioRunner:
             if event.type == "turn_end" and self._cancelled_ends:
                 self._cancelled_ends -= 1  # the interrupted reply's own turn_end, not the new turn's
                 return CONTINUE
+            if event.type == "turn_end" and event.turn_id in self._interrupted_turns:
+                self._interrupted_turns.discard(event.turn_id)  # an empty end after the server's interruption: the cut reply's, not a silent answer
+                return CONTINUE
             if event.type == "turn_end":
                 return {"approval": None, "strict_speech_approval": "no_audio"}
             return CONTINUE
@@ -384,6 +388,8 @@ class LiveScenarioRunner:
                             self._ignore_stale(event, stale)
                             continue
                         self.interruptions += 1
+                        if event.turn_id:
+                            self._interrupted_turns.add(event.turn_id)
                         if self._playback_end is not None:  # the cut reply stops playing now
                             self._playback_end = min(self._playback_end, time.monotonic() * 1000)
                         self._end_response()

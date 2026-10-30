@@ -9,8 +9,8 @@ end reads as an empty reply (``no_audio``), the turn settles and returns with th
 This replays that order, as the adapter normalised it, through the real runner and gateway.
 
 The adapter no longer produces it (``BARGE_IDLE_S``: after a barge-in attempt the server's interruption, not a pause, closes the
-cut reply; see tests/test_elevenlabs_adapter.py), so this is kept as a known limitation of the runner: it still settles on a
-second, empty turn end. It is ``expectedFailure``; if the runner is made robust to it, the test starts passing and flags itself.
+cut reply; see tests/test_elevenlabs_adapter.py). The runner is also robust to it: an empty turn end for a turn the server
+interrupted is that cut reply's own end, so the turn keeps waiting for the real answer.
 """
 
 import asyncio
@@ -94,7 +94,6 @@ class BargeInAnswerIsProcessed(unittest.TestCase):
     def events(self, kind):
         return [e["content"] for e in self.database.events(self.run_id) if e["type"] == kind]
 
-    @unittest.expectedFailure
     def test_the_answer_to_the_barging_turn_is_not_dropped(self):
         adapter = ElevenLabsOrder()
         runner = LiveScenarioRunner(self.engine, self.run_id, adapter, IndependentAssessor(self.engine, ScriptedAsr(queue=[TEXT] * 8)),
