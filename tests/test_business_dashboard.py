@@ -17,7 +17,7 @@ class BusinessDashboardTests(unittest.TestCase):
         result = module.build()
         self.assertEqual(result, json.loads((ROOT / 'site/business-dashboard.json').read_text()))
         self.assertEqual(result['studies'][0]['versions'][0]['path'], module.LATEST)
-        self.assertEqual(result['studies'][0]['versions'][0]['runs'], 600)
+        self.assertEqual(result['studies'][0]['versions'][0]['runs'], 720)  # six providers: 600 standard-prompt cells plus GPT-Live's 120 carried over from 28 Oct
         fair = next(s for s in result['studies'] if s['source'].startswith('bko_851d76'))
         self.assertEqual(len(fair['versions']), 2)
         self.assertIn('rescored', fair['versions'][0]['path'])
