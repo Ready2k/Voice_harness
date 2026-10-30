@@ -32,9 +32,9 @@ def stored_verdicts(events):
 
 
 def rejudge(database, run_id, backend, tested_models):
-    from voice_harness.judges import independence, rubric
+    from voice_harness.judges import rubric
     from voice_harness.judges.offline import run_offline
-    from voice_harness.judges.oracle import build_oracle, identity_leaks
+    from voice_harness.judges.oracle import build_oracle
     from voice_harness.judges.rubric import EvalContext
     from voice_harness.judges.service import _identity, _plain, fixture_for, scenario_for
 

@@ -5,6 +5,7 @@ Reads retained exports only. No live calls, re-scoring or inferred model version
 import hashlib
 import json
 import re
+import shutil
 import subprocess
 from pathlib import Path
 
@@ -15,7 +16,8 @@ PATTERN = re.compile(r'<script[^>]*id="report-data"[^>]*>(.*?)</script>', re.S)
 
 def build(root=ROOT, paths=None):
     if paths is None:
-        paths = subprocess.check_output(['git', 'ls-files', 'artifacts', 'reports'], cwd=root).decode().splitlines()
+        git = shutil.which('git')
+        paths = subprocess.check_output([git, 'ls-files', 'artifacts', 'reports'], cwd=root).decode().splitlines()  # noqa: S603  # nosec B603
     groups = {}
     for name in sorted(paths):
         if not name.endswith('.html'):
