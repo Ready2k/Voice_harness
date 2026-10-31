@@ -14,6 +14,11 @@ class EndpointingSplitTests(unittest.TestCase):
         natives = [native("input_audio_buffer.speech_stopped", 1700), native("input_audio_buffer.speech_stopped", 5000)]
         self.assertEqual(endpointing_split("xai-voice-live", natives, 1000, 9000, 2300), {"endpointing_ms": 700, "response_ms": 600})
 
+    def test_gemini_splits_at_the_activity_end_marker_not_the_start(self):
+        natives = [native("voiceActivity.ACTIVITY_START", 1200), native("voiceActivity.ACTIVITY_END", 1900)]
+        self.assertEqual(endpointing_split("gemini-live", natives, 1000, 9000, 2000), {"endpointing_ms": 900, "response_ms": 100})
+        self.assertIsNone(endpointing_split("gemini-live", [native("voiceActivity", 1900)], 1000, 9000, 2000))
+
     def test_signal_outside_the_turn_window_or_after_the_audio_is_ignored(self):
         late = [native("userSpeechEnd", 9500)]
         self.assertIsNone(endpointing_split("nova-sonic-live", late, 1000, 9000, 2300))

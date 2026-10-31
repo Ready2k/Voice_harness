@@ -9,7 +9,7 @@ What the first run did differently from the plan below:
 - Plain-turn samples are 20 to 40 per provider, short of the 30-per-kind plan for some providers.
 - Calibration (`scripts/vad_calibration.py`, three trials per setting) set OpenAI Realtime and xAI to 700 ms silence and kept Gemini at 600 ms.
   No mid-sentence-pause control was added to the benchmark itself, and one location only.
-- Gemini's E/R split is still unavailable (its `voiceActivity` payload is hash-only in the ledgers). Nova, OpenAI Realtime and xAI have it.
+- Gemini's `voiceActivity` payload is `{type: ACTIVITY_START | ACTIVITY_END, audioOffset}` (probed live, 31 October). The ledger now records the type (`voiceActivity.ACTIVITY_END`), so the split works for new runs; the four pooled sessions predate it. A fifth Gemini-plus-OpenAI-Realtime session (`.local/latency-session-4-gemini-split-2026-10-31`, 54 cells, same settings) supplies Gemini's split: wait for end of speech about 1.06 s on plain and 1.05 s on tool turns, reply start about 0.10 s and 0.76 s. It is shown in the report marked † and is not pooled into the totals. Its medians reproduce the pooled ones (Gemini plain 1,159 against 1,166 ms; tool 1,811 against 1,810). Nova, OpenAI Realtime and xAI have the split from the pooled sessions.
 - Latency is anchored on the end of the caller's voice (synthesiser tail silence trimmed), so it is not comparable with earlier bake-off latency.
 - Judges and independent ASR were off.
 

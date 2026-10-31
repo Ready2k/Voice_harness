@@ -6,6 +6,9 @@
   "2": "latency-session-2-2026-10-31",
   "3": "latency-session-3-2026-10-31"
  },
+ "supplementary_sessions": {
+  "4": "latency-session-4-gemini-split-2026-10-31"
+ },
  "prompt_profile": "standardised-v3",
  "settings": {
   "openai-realtime-live": "server VAD, 700 ms silence",
@@ -27,18 +30,20 @@
   {
    "kind": "plain",
    "provider": "gemini-live",
+   "split_n": 12,
    "n": 24,
    "median": 1166,
    "lo": 1157,
    "hi": 1236,
    "p90": 1633,
    "p95": 1642,
-   "endpointing": null,
-   "response": null
+   "endpointing": 1065,
+   "response": 96
   },
   {
    "kind": "plain",
    "provider": "elevenlabs-live",
+   "split_n": 0,
    "n": 20,
    "median": 1383,
    "lo": 1245,
@@ -51,6 +56,7 @@
   {
    "kind": "plain",
    "provider": "nova-sonic-live",
+   "split_n": 0,
    "n": 40,
    "median": 1442,
    "lo": 1274,
@@ -63,6 +69,7 @@
   {
    "kind": "plain",
    "provider": "openai-live",
+   "split_n": 0,
    "n": 32,
    "median": 1464,
    "lo": 1397,
@@ -75,6 +82,7 @@
   {
    "kind": "plain",
    "provider": "openai-realtime-live",
+   "split_n": 0,
    "n": 35,
    "median": 1654,
    "lo": 1583,
@@ -87,6 +95,7 @@
   {
    "kind": "plain",
    "provider": "xai-voice-live",
+   "split_n": 0,
    "n": 24,
    "median": 2073,
    "lo": 1933,
@@ -99,6 +108,7 @@
   {
    "kind": "tool",
    "provider": "openai-realtime-live",
+   "split_n": 0,
    "n": 49,
    "median": 1437,
    "lo": 1393,
@@ -111,6 +121,7 @@
   {
    "kind": "tool",
    "provider": "openai-live",
+   "split_n": 0,
    "n": 51,
    "median": 1530,
    "lo": 1451,
@@ -123,6 +134,7 @@
   {
    "kind": "tool",
    "provider": "nova-sonic-live",
+   "split_n": 0,
    "n": 44,
    "median": 1740,
    "lo": 1726,
@@ -135,18 +147,20 @@
   {
    "kind": "tool",
    "provider": "gemini-live",
+   "split_n": 21,
    "n": 54,
    "median": 1810,
    "lo": 1786,
    "hi": 1830,
    "p90": 1921,
    "p95": 1991,
-   "endpointing": null,
-   "response": null
+   "endpointing": 1054,
+   "response": 764
   },
   {
    "kind": "tool",
    "provider": "xai-voice-live",
+   "split_n": 0,
    "n": 60,
    "median": 2023,
    "lo": 1984,
@@ -159,6 +173,7 @@
   {
    "kind": "tool",
    "provider": "elevenlabs-live",
+   "split_n": 0,
    "n": 64,
    "median": 2168,
    "lo": 2140,

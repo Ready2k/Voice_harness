@@ -176,6 +176,9 @@ class LiveScenarioRunner:
 
     def _on_native(self, adapter_name, native_type, payload):
         encoded = json.dumps(payload, sort_keys=True, default=str).encode()
+        activity = payload.get("voiceActivity") if isinstance(payload, dict) else None
+        if native_type == "voiceActivity" and isinstance(activity, dict) and isinstance(activity.get("type"), str):
+            native_type = f"voiceActivity.{activity['type']}"  # Gemini: the start/end enum only, so an end marker can be told from a start
         self._native.append({
             "adapter": adapter_name, "native_type": str(native_type)[:120].replace(" ", "_"),
             "payload_sha256": hashlib.sha256(encoded).hexdigest(), "payload_bytes": len(encoded),

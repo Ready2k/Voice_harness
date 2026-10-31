@@ -99,9 +99,11 @@ def task_completed(observation):
     return observation.get("expected_tools_observed")
 
 
-# The native event that says the provider decided the caller finished, per provider. Gemini's ``voiceActivity`` is hash-only in
-# existing ledgers, so it cannot yet be told from a start; ElevenLabs and GPT-Live expose no such signal (total latency only).
+# The native event that says the provider decided the caller finished, per provider. Gemini's ``voiceActivity`` payload is
+# hash-only; since 31 October the recorded type carries its enum (``voiceActivity.ACTIVITY_END``), so older ledgers still cannot
+# be split. ElevenLabs and GPT-Live expose no such signal (total latency only).
 SPEECH_END_SIGNALS = {
+    "gemini-live": {"voiceActivity.ACTIVITY_END"},
     "nova-sonic-live": {"userSpeechEnd"},
     "xai-voice-live": {"input_audio_buffer.speech_stopped"},
     "openai-realtime-live": {"input_audio_buffer.speech_stopped"},

@@ -231,7 +231,7 @@ emulated commit). Method and results: `LATENCY_BENCHMARK_SPEC.md` and the publis
   clip, and makes `request_turn()` a no-op under server VAD (a manual commit in server-VAD mode is a fatal error on OpenAI Realtime).
 - **Anchor.** Caller-felt latency L is the end of the caller's voice to first audio. Where the provider reports its own end-of-speech
   signal, `bakeoff_metrics.endpointing_split` gives E (wait for the signal) and R (signal to first audio). Nova, OpenAI Realtime and xAI
-  expose one; Gemini's `voiceActivity` payload is hash-only in the ledgers, and ElevenLabs and GPT-Live have none.
+  expose one; Gemini's `voiceActivity` payload is hash-only, but since 31 October the ledger records its type (`voiceActivity.ACTIVITY_END`), so only runs after that can be split (the report takes Gemini's split from one supplementary session, marked †); ElevenLabs and GPT-Live have no signal.
 - **Calibration.** `scripts/vad_calibration.py` streams a sentence with a 600 ms mid-sentence pause at 300, 500 and 700 ms silence
   (rough, three trials per setting). Re-run it before changing a silence value.
 - **Sessions.** Run `scripts/full_advanced_bakeoff.py` with `HARNESS_NATIVE_VAD=1`, judges and independent ASR off (latency needs neither), prompt
