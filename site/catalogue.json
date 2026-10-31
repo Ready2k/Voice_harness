@@ -1,6 +1,24 @@
 {
-  "latest": "2026-10-30",
+  "latest": "2026-10-31",
   "entries": [
+    {
+      "path": "reports/latency-benchmark-2026-10-31.html",
+      "title": "latency benchmark 2026 10 31",
+      "date": "2026-10-31",
+      "kind": "Web report",
+      "size": 7638,
+      "url": "reports/latency-benchmark-2026-10-31.html",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/latency-benchmark-2026-10-31/results.json",
+      "title": "results",
+      "date": "2026-10-31",
+      "kind": "Data",
+      "size": 121970,
+      "url": "artifacts/latency-benchmark-2026-10-31/results.json",
+      "group": "//Users"
+    },
     {
       "path": "artifacts/pricing/vendor-pricing-2026-10-30.json",
       "title": "vendor pricing 2026 10 30",
@@ -186,7 +204,7 @@
       "title": "run notes",
       "date": "2026-10-29",
       "kind": "Notes",
-      "size": 8870,
+      "size": 11247,
       "url": "https://github.com/Ready2k/Voice_harness/blob/main/artifacts/bakeoff-2026-10-29-standard-5/run-notes.md",
       "group": "//Users"
     },
@@ -555,7 +573,7 @@
       "title": "run notes",
       "date": "2026-10-28",
       "kind": "Notes",
-      "size": 2781,
+      "size": 3586,
       "url": "https://github.com/Ready2k/Voice_harness/blob/main/artifacts/fair-bakeoff-2026-10-28/run-notes.md",
       "group": "//Users"
     },
@@ -3309,7 +3327,7 @@
       "title": "TARGET PROMPTS",
       "date": "",
       "kind": "Notes",
-      "size": 3421,
+      "size": 3793,
       "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/TARGET_PROMPTS.md",
       "group": "//Users"
     },
@@ -3503,6 +3521,15 @@
       "group": "//Users"
     },
     {
+      "path": "docs/LATENCY_BENCHMARK_SPEC.md",
+      "title": "LATENCY BENCHMARK SPEC",
+      "date": "",
+      "kind": "Notes",
+      "size": 5419,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/LATENCY_BENCHMARK_SPEC.md",
+      "group": "//Users"
+    },
+    {
       "path": "docs/INTERACTIVE_CALLER_SCOPE.md",
       "title": "INTERACTIVE CALLER SCOPE",
       "date": "",
@@ -3525,7 +3552,7 @@
       "title": "ENGINEERING",
       "date": "",
       "kind": "Notes",
-      "size": 15996,
+      "size": 16867,
       "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/ENGINEERING.md",
       "group": "//Users"
     },
@@ -6984,6 +7011,13 @@
       "description": "Completed assessment of 720 runs: five providers on standardised prompts plus GPT-Live carried over from 28 October (advanced prompts, not like for like), 40 scenarios, three repetitions. No clear quality winner.",
       "status": "Current",
       "date": "2026-10-29"
+    },
+    {
+      "path": "reports/latency-benchmark-2026-10-31.html",
+      "title": "Latency benchmark \u00b7 how long a caller waits",
+      "description": "Six providers on their own end-of-speech detection, 497 timed turns over four sessions on 31 October. Latency only: separate from the quality bake-offs and not comparable with their earlier latency figures.",
+      "status": "Latency",
+      "date": "2026-10-31"
     },
     {
       "path": "executive-special.html",

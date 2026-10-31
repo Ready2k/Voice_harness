@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Latency benchmark · 31 October 2026</title>
+<style>
+:root{--bg:#f5f6f8;--card:#fff;--fg:#151a22;--muted:#5b6575;--line:#d9dde4;--warn:#8a5a00;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#11151b;--card:#1a2029;--fg:#e7ebf1;--muted:#9aa5b5;--line:#2c3441;--warn:#f0b94d;color-scheme:dark}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:1080px;margin:0 auto;padding:24px 16px 56px}h1{margin:.2em 0}h2{margin-top:2em}
+section,.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 20px;margin:16px 0;overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:760px}th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+small{display:block;color:var(--muted);font-weight:400}.note{color:var(--warn)}a{color:inherit}p.lead{color:var(--muted);max-width:70ch}
+</style></head><body><main>
+<p><a href="../index.html">← Reports</a></p>
+<h1>Latency benchmark</h1>
+<p class="lead">How long a caller waits for the reply, with every service on its own end-of-speech detection. Four sessions on 31 October 2026,
+497 timed turns, six providers. Latency only: this is a separate measurement from the quality bake-offs and changes none of their results.</p>
+<section><h2 style="margin-top:0">What was measured</h2>
+<p><b>Caller-felt latency</b> is the time from the end of the caller's voice to the first reply audio. Where a service reports its own
+end-of-speech signal it splits into the <b>wait for end of speech</b> (the caller has stopped, the service is still deciding) and the
+<b>reply start</b> after that signal. Gemini, ElevenLabs and GPT-Live expose no usable signal, so only the total is shown for them.</p>
+<p>Earlier bake-offs told three services the turn had ended after an emulated 500 ms, so their latency could not be ranked
+(<code>mixed_turn_control</code>). Here nothing is emulated.</p></section>
+<h2>Plain answers</h2><div class="card"><table><thead><tr><th>Service</th><th>Turns</th><th>Median<small>95% interval</small></th><th>p90</th><th>p95</th><th>Wait for end of speech<small>median</small></th><th>Reply start after that<small>median</small></th></tr></thead><tbody><tr><td>Google Gemini Live<small>automatic activity detection, 600 ms silence</small></td><td>24</td><td><b>1.17 s</b><small>1.16 – 1.24</small></td><td>1.63 s</td><td>1.64 s</td><td>not available</td><td>not available</td></tr><tr><td>ElevenLabs Agents<small>provider turn detection (fixed)</small></td><td>20</td><td><b>1.38 s</b><small>1.25 – 1.88</small></td><td>2.09 s</td><td>2.12 s</td><td>not available</td><td>not available</td></tr><tr><td>Amazon Nova Sonic<small>provider end-of-speech detection (default)</small></td><td>40</td><td><b>1.44 s</b><small>1.27 – 1.66</small></td><td>1.93 s</td><td>1.96 s</td><td>0.93 s</td><td>0.46 s</td></tr><tr><td>OpenAI GPT-Live 1<small>provider turn detection (fixed)</small></td><td>32</td><td><b>1.46 s</b><small>1.40 – 1.59</small></td><td>1.95 s</td><td>2.04 s</td><td>not available</td><td>not available</td></tr><tr><td>OpenAI Realtime<small>server VAD, 700 ms silence</small></td><td>35</td><td><b>1.65 s</b><small>1.58 – 1.92</small></td><td>2.61 s</td><td>4.20 s</td><td>0.93 s</td><td>0.78 s</td></tr><tr><td>xAI Grok Voice<small>server VAD, 700 ms silence</small></td><td>24</td><td><b>2.07 s</b><small>1.93 – 2.14</small></td><td>2.22 s</td><td>2.37 s</td><td>1.15 s</td><td>0.87 s</td></tr></tbody></table></div>
+<h2>Answers that call a tool</h2><div class="card"><table><thead><tr><th>Service</th><th>Turns</th><th>Median<small>95% interval</small></th><th>p90</th><th>p95</th><th>Wait for end of speech<small>median</small></th><th>Reply start after that<small>median</small></th></tr></thead><tbody><tr><td>OpenAI Realtime<small>server VAD, 700 ms silence</small></td><td>49</td><td><b>1.44 s</b><small>1.39 – 1.53</small></td><td>1.71 s</td><td>2.13 s</td><td>0.94 s</td><td>0.49 s</td></tr><tr><td>OpenAI GPT-Live 1<small>provider turn detection (fixed)</small></td><td>51</td><td><b>1.53 s</b><small>1.45 – 1.65</small></td><td>2.27 s</td><td>2.54 s</td><td>not available</td><td>not available</td></tr><tr><td>Amazon Nova Sonic<small>provider end-of-speech detection (default)</small></td><td>44</td><td><b>1.74 s</b><small>1.73 – 1.76</small></td><td>1.79 s</td><td>1.83 s</td><td>0.92 s</td><td>0.80 s</td></tr><tr><td>Google Gemini Live<small>automatic activity detection, 600 ms silence</small></td><td>54</td><td><b>1.81 s</b><small>1.79 – 1.83</small></td><td>1.92 s</td><td>1.99 s</td><td>not available</td><td>not available</td></tr><tr><td>xAI Grok Voice<small>server VAD, 700 ms silence</small></td><td>60</td><td><b>2.02 s</b><small>1.98 – 2.07</small></td><td>2.39 s</td><td>2.50 s</td><td>1.14 s</td><td>0.88 s</td></tr><tr><td>ElevenLabs Agents<small>provider turn detection (fixed)</small></td><td>64</td><td><b>2.17 s</b><small>2.14 – 2.26</small></td><td>2.53 s</td><td>2.61 s</td><td>not available</td><td>not available</td></tr></tbody></table></div>
+<h2>Reading it</h2>
+<section><ul>
+<li><b>Plain answers:</b> Google Gemini Live had the lowest median (1.17 s), clear of the others by interval. xAI Grok Voice was slowest (2.07 s).</li>
+<li><b>Tool answers:</b> OpenAI Realtime had the lowest median (1.44 s), with OpenAI GPT-Live 1 not separable by interval. ElevenLabs Agents was slowest (2.17 s).</li>
+<li>Where two intervals overlap the services are not shown to differ. Plain-answer samples are small (20 to 40 turns per service).</li>
+<li>The wait for end of speech is a large share of the total for the three services that report it, about 0.9 s for Nova Sonic and OpenAI
+Realtime and about 1.15 s for xAI. It is set by the service's own silence rule, not only by its engine speed.</li></ul></section>
+<h2>Method and limits</h2>
+<section><ul>
+<li><b>Sessions:</b> four, at 11:19Z, 11:57Z, 14:20Z and 17:20Z. The first held tool scenarios only and 1b held single-turn plain scenarios only; sessions 2 and 3 held both.
+Tool and plain turns are reported separately.</li>
+<li><b>Prompt:</b> standardised-v3 for every provider. Scripted fixed caller voice, trailing synthesiser silence trimmed so the end of speech is the end of the voice.</li>
+<li><b>Turn detection:</b> OpenAI Realtime and xAI at 700 ms silence, Gemini at 600 ms, picked from a short calibration pass in which 300 ms and 500 ms cut a deliberate 600 ms hesitation off for OpenAI Realtime and xAI (three trials per setting, rough). Nova, ElevenLabs and GPT-Live ran as shipped.</li>
+<li class="note"><b>One location and network</b>, with providers running at the same time from one machine. Providers hosted nearby are favoured.</li>
+<li class="note"><b>Not comparable with earlier bake-off latency:</b> those figures anchored on a marker about 220 ms after the voice stopped. This benchmark anchors on the end of the voice.</li>
+<li>Turns that overlapped the caller are excluded. Judges and independent speech recognition were off; latency needs neither.</li>
+<li>Intervals are bootstrap intervals of the median (fixed seed). Turns within a session are not independent, so intervals are optimistic.</li>
+<li>Data: <a href="../artifacts/latency-benchmark-2026-10-31/results.json">per-turn results</a>. Rebuild with <code>scripts/build_latency_report.py</code>.</li></ul></section>
+</main></body></html>
