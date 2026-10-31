@@ -343,8 +343,8 @@ class Definitions(unittest.TestCase):
 
 class CatalogueDeclarations(unittest.TestCase):
     def test_tags_and_expected_arguments_sit_beside_the_hashed_definition(self):
-        from voice_harness.contracts import TOOLS
         from voice_harness import scenario_catalogue
+        from voice_harness.contracts import TOOLS
 
         # The original catalogue; the opt-in realism scenarios (tests/test_realism.py) carry their own tags and arguments.
         CATALOGUE = {k: e for k, e in scenario_catalogue.CATALOGUE.items() if k not in scenario_catalogue.OPT_IN}

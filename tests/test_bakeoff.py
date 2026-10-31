@@ -61,7 +61,9 @@ class Statistics(unittest.TestCase):
             self.assertAlmostEqual(got, want)
 
     def test_pass_all_repetitions_counts_only_fully_completed_scenarios(self):
-        o = lambda s, r, outcome="pass": obs("nova-sonic-live", s, outcome, repetition=r)
+        def o(s, r, outcome="pass"):
+            return obs("nova-sonic-live", s, outcome, repetition=r)
+
         runs = [o("a", 0), o("a", 1), o("a", 2),                       # consistent
                 o("b", 0), o("b", 1, "fail"), o("b", 2),               # one failure
                 o("c", 0), o("c", 1), o("c", 2, "run_failed"),         # incomplete: excluded

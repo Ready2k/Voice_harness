@@ -10,7 +10,6 @@ from __future__ import annotations
 
 import csv
 import hashlib
-import html
 import io
 import json
 import math

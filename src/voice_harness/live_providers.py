@@ -447,7 +447,6 @@ async def run_live(engine, run_id, provider_config_id, scenario_id, *, seed=0, c
     metadata = session_metadata(provider_config_id, TESTED_MODELS[provider_config_id]["model_id"], receipt,
                                  connection_binding(adapter), prompt_profile=prompt_profile)
     from .caller_voice import describe as describe_caller_voice
-
     from .caller_voice import run_environ
 
     voice_env = run_environ(None, caller)
