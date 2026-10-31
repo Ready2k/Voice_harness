@@ -77,7 +77,7 @@ table.grid{border-collapse:separate;border-spacing:6px;width:100%;min-width:760p
 .next{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
 .next .tag{font-size:12px;font-weight:700;letter-spacing:.1em;color:var(--teal);text-transform:uppercase}
 details{margin-top:24px}summary{cursor:pointer;font-weight:600}
-footer{padding:30px 0 60px;color:var(--mut);font-size:14px}footer a{color:var(--teal)}
+footer{padding:30px 0 60px;color:var(--mut);font-size:14px}footer a{color:var(--teal)}.caveat a{color:inherit;text-decoration:underline;font-weight:600}
 
 /* method */
 
@@ -167,7 +167,7 @@ footer{padding:30px 0 60px;color:var(--mut);font-size:14px}footer a{color:var(--
 </head>
 <body>
 <header class="top"><div class="wrap"><span class="b">◖◗ Trust, tested · Executive briefing</span>
-<a href="#how">Why believe it</a><a href="#fairness">Fairness</a><a href="#moments">Customer moments</a><a href="#scorecard">Scorecard</a><a href="#priorities">Your priorities</a><a href="#listen">Listen</a><a href="#next">Decision</a><a id="nav-evidence" href="artifacts/fair-bakeoff-2026-10-28/rescored-2026-10-28/report.html">Full evidence ↗</a></div></header>
+<a href="#how">Why believe it</a><a href="#fairness">Fairness</a><a href="#moments">Customer moments</a><a href="#scorecard">Scorecard</a><a href="#changes-mind">Changed minds</a><a href="#priorities">Your priorities</a><a href="#listen">Listen</a><a href="#next">Decision</a><a id="nav-evidence" href="artifacts/fair-bakeoff-2026-10-28/rescored-2026-10-28/report.html">Full evidence ↗</a></div></header>
 
 <div class="hero"><div class="wrap">
 <p class="eyebrow">Voice AI · Customer trust briefing</p>
@@ -256,6 +256,14 @@ footer{padding:30px 0 60px;color:var(--mut);font-size:14px}footer a{color:var(--
 <div class="card" id="cellnote" aria-live="polite">Select a cell to see what it means.</div>
 <p class="legend"><b>Reliable</b> 98%+ · <b>Mostly</b> 93–97% · <b>Needs work</b> below 93%. The pause row is information only: timing methods differ between services, so it isn't graded or ranked.</p>
 <div class="caveat"><b>Read this as a shortlist, not a league table.</b> With three repeats per situation, differences of a few points are within test noise. Reliable on this test is not the same as safe to deploy.</div>
+</section>
+
+<section id="changes-mind">
+<p class="eyebrow">What we found · When a caller changes their mind</p>
+<h2>Protection held. Helpfulness did not always.</h2>
+<p class="sub">Real callers correct themselves, say “mm-hmm”, or talk to someone beside them. We added seven situations like that and ran them on all six services, three times each (126 runs).</p>
+<div class="card"><p><b>Protection held.</b> No service acted on the value the caller had taken back, and none cancelled a payment without the caller’s consent.</p><p><b>Helpfulness varied.</b> After a caller corrected the number of transactions to show, GPT-Live 1 never made the right lookup (0 of 6; 13 of 14 when the caller did not correct themselves). GPT-Live 1 and Nova each completed the corrected transaction lookup 4 of 6 times. The other four services completed every try.</p><p><b>Staying quiet is fine.</b> After “mm-hmm”, saying nothing is the right answer. One service did exactly that, and our own test counted it as a failure until we fixed the test.</p></div>
+<div class="caveat"><b>Small and separate.</b> Scripted callers in one synthetic voice, one set of instructions, three to six tries per situation, not part of the scorecard above. Treat it as a pointer to what to test with your own callers, not a ranking. <a href="https://github.com/Ready2k/Voice_harness/blob/main/docs/REALISM_SCENARIOS.md">Scenarios and results ↗</a></div>
 </section>
 
 <section id="priorities">
