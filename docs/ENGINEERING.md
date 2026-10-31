@@ -221,6 +221,25 @@ Python is hash-locked (`requirements.lock`), npm is locked (`scripts/probe/packa
 - Monthly, and before a bake-off or release: `make image-scan`, then look for newer base digests (`docker buildx imagetools inspect mirror.gcr.io/library/python:3.13-slim-bookworm`, same for node, postgres and the collector). Bump the digest, run `make test`, commit.
 - Findings with no Debian fix (status `affected`, `will_not_fix`) are accepted and recorded in `docs/PHASE5_STATUS.md`, not silenced. pip's vendored copies of certifi, urllib3 and msgpack are build-time only; the app uses the locked versions.
 
+## Latency benchmark
+
+Latency is measured apart from the quality bake-offs, whose first-audio figures stay `mixed_turn_control` (explicit-commit providers get an
+emulated commit). Method and results: `LATENCY_BENCHMARK_SPEC.md` and the published report `reports/latency-benchmark-2026-10-31.html`.
+
+- **Native VAD mode.** `HARNESS_NATIVE_VAD=1` (fixed caller only) puts OpenAI Realtime, xAI and Gemini on their own server VAD
+  (`live_providers.NATIVE_VAD`: 700 ms silence, vendor-default threshold), trims the synthesiser's trailing silence from the caller
+  clip, and makes `request_turn()` a no-op under server VAD (a manual commit in server-VAD mode is a fatal error on OpenAI Realtime).
+- **Anchor.** Caller-felt latency L is the end of the caller's voice to first audio. Where the provider reports its own end-of-speech
+  signal, `bakeoff_metrics.endpointing_split` gives E (wait for the signal) and R (signal to first audio). Nova, OpenAI Realtime and xAI
+  expose one; Gemini's `voiceActivity` payload is hash-only in the ledgers, and ElevenLabs and GPT-Live have none.
+- **Calibration.** `scripts/vad_calibration.py` streams a sentence with a 600 ms mid-sentence pause at 300, 500 and 700 ms silence
+  (rough, three trials per setting). Re-run it before changing a silence value.
+- **Sessions.** Run `scripts/full_advanced_bakeoff.py` with `HARNESS_NATIVE_VAD=1`, judges and independent ASR off (latency needs neither), prompt
+  `standardised-v3`, and tool and plain scenarios (a tool scenario calls a tool on every turn, so plain turns need their own scenarios).
+  Several sessions at different times; providers run concurrently from one location, which the report discloses. Never edit `src/` during a session.
+- **Report.** `scripts/build_latency_report.py` reads the session payloads under `.local/` and writes
+  `artifacts/latency-benchmark-*/results.json` and the report page. Figures are not comparable with earlier bake-off latency (those anchored about 220 ms after the voice stopped).
+
 ## Where to read next
 
 | Topic | Document |
@@ -230,6 +249,7 @@ Python is hash-locked (`requirements.lock`), npm is locked (`scripts/probe/packa
 | Provider facts and Unknowns | `phase0/PROVIDER_MATRIX.md`, `phase0/DECISIONS.md`, `phase0/DOC_EVIDENCE.md` |
 | Provider quirks | `PHASE4_NOTES_*.md` |
 | Bake-offs | `BAKEOFF_SAFEGUARDS.md`, `BAKEOFF_ASSESSORS.md`, `ADVANCED_FULL_BAKEOFF.md` |
+| Latency | `LATENCY_BENCHMARK_SPEC.md` |
 | Telephone and caller pilots | `DELEGATE_PHONE_RUNBOOK.md`, `INTERACTIVE_CALLER_SCOPE.md` |
 | Reviews and rechecks | `CODE_SPEC_*.md`, `PHASE_REVIEW_2026-10-18.md` |
 | Reuse from the sibling project | `VOICE_S2S_REUSE_AUDIT.md` |

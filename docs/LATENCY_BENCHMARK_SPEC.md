@@ -1,6 +1,19 @@
 # Latency benchmark: specification (draft, 31 October 2026)
 
-Status: proposal. Nothing here has been run. The quality bake-offs are unchanged.
+Status: first benchmark run on 31 October 2026 (four sessions, 497 timed turns, six providers; report `reports/latency-benchmark-2026-10-31.html`).
+The quality bake-offs are unchanged.
+
+What the first run did differently from the plan below:
+- Four sessions (11:19Z tool scenarios, 11:57Z plain scenarios, 14:20Z and 17:20Z both), not three, with plain and tool turns reported separately.
+  Providers ran concurrently, not interleaved in random order.
+- Plain-turn samples are 20 to 40 per provider, short of the 30-per-kind plan for some providers.
+- Calibration (`scripts/vad_calibration.py`, three trials per setting) set OpenAI Realtime and xAI to 700 ms silence and kept Gemini at 600 ms.
+  No mid-sentence-pause control was added to the benchmark itself, and one location only.
+- Gemini's E/R split is still unavailable (its `voiceActivity` payload is hash-only in the ledgers). Nova, OpenAI Realtime and xAI have it.
+- Latency is anchored on the end of the caller's voice (synthesiser tail silence trimmed), so it is not comparable with earlier bake-off latency.
+- Judges and independent ASR were off.
+
+The text below is the original proposal.
 
 ## Why a separate benchmark
 
