@@ -44,3 +44,10 @@ Official sources accessed 31 October 2026:
 The six-week plan and acceptance framework are illustrative consulting recommendations, not completed work or commitments. A proper pilot needs the actual Connect/ACXD build, actual third-party configuration, matched business data and tools, retained contact evidence, randomised ordering, independent human listening, and total operating costs. Integration access and account/region availability must be confirmed.
 
 Retaining Connect with an external conversational agent is distinct from replacing the contact-centre platform. The deck recommends testing both where useful, rather than treating model selection as sufficient grounds for migration.
+
+## Added 31 October 2026 (v3 deck, slides 13 and 14)
+
+- Slide 13: latency benchmark, `artifacts/latency-benchmark-2026-10-31/results.json` (497 timed turns, six services, each on its own turn detection, standardised-v3 prompt, judges and ASR off). Gemini's wait-for-end-of-speech split comes from one extra session (12 plain, 21 tool turns) and is not pooled. Single location, concurrent providers, small plain-answer samples.
+- Slide 14: seven opt-in changed-mind scenarios (`docs/REALISM_SCENARIOS.md`), six services, 3 to 9 repeats. Small, scripted, one synthetic voice, unpublished, outside the quality scores.
+- Slide 8 and 21: GPT-Live passes preflight on standardised-v3, but a full six-provider run on that prompt has not been done; its main-run row stays carried over.
+- v2 is kept unchanged; v3 supersedes it for presenting.
