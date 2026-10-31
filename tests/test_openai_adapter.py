@@ -107,6 +107,20 @@ class OfflineTests(unittest.IsolatedAsyncioTestCase):
         self.addAsyncCleanup(a.close, "test")
         return a, info
 
+    async def test_request_turn_commits_in_manual_mode_and_is_a_noop_under_server_vad(self):
+        async def noop(ws, ev, srv): pass
+        async with FakeServer(noop) as srv:
+            a, _ = await self._open(srv)
+            await a.request_turn()
+            await asyncio.sleep(0.05)
+        self.assertEqual([r["type"] for r in srv.received[-2:]], ["input_audio_buffer.commit", "response.create"])
+        async with FakeServer(noop) as srv:
+            a, _ = await self._open(srv, turn_detection="server_vad")
+            before = len(srv.received)
+            await a.request_turn()  # the server ends the turn and answers: a manual commit would error on an empty buffer
+            await asyncio.sleep(0.05)
+        self.assertEqual(len(srv.received), before)
+
     async def test_session_update_and_capabilities(self):
         async def noop(ws, ev, srv): pass
         async with FakeServer(noop) as srv:

@@ -75,6 +75,7 @@ class XaiVoiceAdapter:
         self._url = url or DEFAULT_URL
         self._model = model
         self._ack_timeout = ack_timeout
+        self._server_vad = False  # set at open_session: the server ends turns and creates responses itself
         self.text_inputs = 0  # user text items sent: xAI lists '$0.004 / text input' with no unit, so each item is counted
         self.usage_sink = None  # optional Usage -> None, called directly so close-time usage is not lost with the queue
         self._ws = None
@@ -165,9 +166,10 @@ class XaiVoiceAdapter:
             "voice": config.get("voice", "ara"),
             "audio": {"input": {"format": {"type": "audio/pcm", "rate": SAMPLE_RATE}},
                       "output": {"format": {"type": "audio/pcm", "rate": SAMPLE_RATE}}},
-            "turn_detection": self._turn_detection(config.get("turn_detection", "manual")),
+            "turn_detection": (turn_detection := self._turn_detection(config.get("turn_detection", "manual"))),
             "input_audio_transcription": {"model": config.get("transcription_model", "grok-transcribe")},
         }
+        self._server_vad = turn_detection is not None
         if config.get("instructions"):
             session["instructions"] = config["instructions"]
         tools = [{"type": "function", "name": t["name"], "description": t.get("description", ""),
@@ -227,7 +229,9 @@ class XaiVoiceAdapter:
             await self._send({"type": "response.create"})
 
     async def request_turn(self) -> None:
-        """Commit buffered audio (manual turn mode) and ask for a response."""
+        """Commit buffered audio (manual turn mode) and ask for a response. With server VAD the server does both: a no-op."""
+        if self._server_vad:
+            return
         await self._send({"type": "input_audio_buffer.commit"})
         await self._send({"type": "response.create"})
 

@@ -96,6 +96,7 @@ class OpenAIRealtimeAdapter:
         self._url = url or DEFAULT_URL
         self._model = model
         self._ack_timeout = ack_timeout
+        self._server_vad = False  # set at open_session: the server ends turns and creates responses itself
         self._ws = None
         self._reader: asyncio.Task | None = None
         self._queue: asyncio.Queue = asyncio.Queue()
@@ -176,6 +177,7 @@ class OpenAIRealtimeAdapter:
         td = None if vad in (None, "manual") else (
             vad if isinstance(vad, dict)
             else {"type": "server_vad", "interrupt_response": True, "create_response": True})
+        self._server_vad = td is not None
         session: dict[str, Any] = {
             "type": "realtime",
             "model": model,
@@ -241,7 +243,9 @@ class OpenAIRealtimeAdapter:
             await self._create_response()
 
     async def request_turn(self) -> None:
-        """Commit buffered audio (manual turn mode) and ask for a response."""
+        """Commit buffered audio (manual turn mode) and ask for a response. With server VAD the server does both: a no-op."""
+        if self._server_vad:
+            return
         await self._send({"type": "input_audio_buffer.commit"})
         await self._create_response()
 

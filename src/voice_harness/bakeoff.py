@@ -415,9 +415,11 @@ def first_audio_turns(provider, events):
                  if _is_audio(provider, n) and speech_end <= n["received_ms"] < window_end]
         overlapped = any(_is_audio(provider, n) and turn["stream_started_ms"] <= n["received_ms"] < speech_end
                          for n in natives)
+        split = bakeoff_metrics.endpointing_split(provider, natives, speech_end, window_end, audio[0] if audio and not overlapped else None)
         turns.append({
             "turn": index, "overlapped": overlapped,
             "first_audio_ms": (audio[0] - speech_end) if audio and not overlapped else None,
+            "endpointing_ms": split["endpointing_ms"] if split else None, "response_ms": split["response_ms"] if split else None,
             "tool_first": bool(audio) and any(speech_end <= t < audio[0] for t in tool_ms),
             "estimated": provider == "openai-live" or (provider == "gemini-live" and any(n.get("audio_bytes") is None for n in natives)),
             "anchor": anchor, "turn_commit": commit, "commit_delay_ms": delay,

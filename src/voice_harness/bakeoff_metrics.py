@@ -97,6 +97,28 @@ def task_completed(observation):
     return observation.get("expected_tools_observed")
 
 
+# The native event that says the provider decided the caller finished, per provider. Gemini's ``voiceActivity`` is hash-only in
+# existing ledgers, so it cannot yet be told from a start; ElevenLabs and GPT-Live expose no such signal (total latency only).
+SPEECH_END_SIGNALS = {
+    "nova-sonic-live": {"userSpeechEnd"},
+    "xai-voice-live": {"input_audio_buffer.speech_stopped"},
+    "openai-realtime-live": {"input_audio_buffer.speech_stopped"},
+}
+
+
+def endpointing_split(provider, natives, speech_end, window_end, first_audio_ms):
+    """Split caller-felt latency L (end of speech to first audio) into E (to the provider's own end-of-speech signal) and
+    R (from that signal to first audio). ``first_audio_ms`` is the absolute time of first audio. None when the provider
+    exposes no signal in the turn's window or the signal falls after the audio."""
+    kinds = SPEECH_END_SIGNALS.get(provider)
+    if not kinds or first_audio_ms is None:
+        return None
+    signals = sorted(n["received_ms"] for n in natives if n["native_type"] in kinds and speech_end <= n["received_ms"] < window_end)
+    if not signals or signals[0] > first_audio_ms:
+        return None
+    return {"endpointing_ms": signals[0] - speech_end, "response_ms": first_audio_ms - signals[0]}
+
+
 def run_turn_commit(events):
     """The run's turn-control mode as its binding recorded it (``harness_transport.turn_commit``), else None."""
     for e in events:
@@ -192,8 +214,10 @@ def observe_metrics(provider, definition, events, *, is_audio, trail_ms, tags=()
                 basis = "excluded"
         elif audio:
             basis = "overlapped"
+        split = endpointing_split(provider, natives, speech_end, window_end, audio[0] if audio and not overlapped else None)
         turns.append({
-            "turn": index, "anchor": anchor, "turn_commit": commit, "tool_results": len(results), "tool_to_audio_ms": to_audio, "speaking_at_result": speaking,
+            "turn": index, "anchor": anchor, "turn_commit": commit,
+            "endpointing_ms": split["endpointing_ms"] if split else None, "response_ms": split["response_ms"] if split else None, "tool_results": len(results), "tool_to_audio_ms": to_audio, "speaking_at_result": speaking,
             "content_audio_ms": content_ms, "content_basis": basis, "acknowledged": ack,
             "long_gaps": len(gaps), "max_gap_ms": max(gaps) if gaps else None,
             "reply_ms": round(sum(u.get("byte_count", 0) / 2 / (u.get("rate") or 24000) for u in units) * 1000) if units else None,

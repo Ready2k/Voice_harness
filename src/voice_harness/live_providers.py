@@ -367,6 +367,7 @@ def configure_transport(provider_config_id, config, caller_mode):
         raise ValueError("NOT_A_LIVE_PROVIDER")
     if caller_mode not in {"fixed", "live_ai", "human_microphone"}:
         raise ValueError("UNKNOWN_CALLER_MODE")
+    native_vad = os.environ.get("HARNESS_NATIVE_VAD") == "1" and caller_mode == "fixed"
     nova = provider_config_id == "nova-sonic-live"
     provider_vad = nova or provider_config_id in {"elevenlabs-live", "openai-live"}  # no manual commit: the provider owns endpointing
     if provider_config_id in {"elevenlabs-live", "openai-live"}:
@@ -378,12 +379,14 @@ def configure_transport(provider_config_id, config, caller_mode):
         config["endpointing"] = "LOW" if caller_mode == "live_ai" else "MEDIUM"
         detection = "provider_vad"
     else:
-        detection = "server_vad" if caller_mode == "human_microphone" else "manual"
+        # HARNESS_NATIVE_VAD=1 (latency benchmark): a scripted caller is also endpointed by the provider's own server VAD, not told
+        # the turn ended, so first-audio time is what a caller feels. Off by default: the bake-offs keep the emulated commit.
+        detection = "server_vad" if caller_mode == "human_microphone" or native_vad else "manual"
         config["turn_detection"] = detection
         if detection == "server_vad" and provider_config_id in MIC_VAD_PROVIDERS:
             config["turn_detection"] = {"type": "server_vad", **MIC_VAD, **(
                 {"interrupt_response": True, "create_response": True} if provider_config_id == "openai-realtime-live" else {})}
-    if provider_config_id == "gemini-live" and detection == "server_vad" and caller_mode == "human_microphone":
+    if provider_config_id == "gemini-live" and detection == "server_vad" and (caller_mode == "human_microphone" or native_vad):
         # Default end-of-speech detection answered 8-9 s after a short utterance in a room-mic session.
         config["activity_detection"] = {"endOfSpeechSensitivity": "END_SENSITIVITY_HIGH", "silenceDurationMs": 600,
                                         "prefixPaddingMs": 200}

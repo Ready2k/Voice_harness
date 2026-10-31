@@ -1,6 +1,8 @@
 """Input-source profiles preserve native turn semantics and disclose their settings."""
 
+import os
 import unittest
+from unittest import mock
 
 from voice_harness.live_providers import LIVE_PROVIDERS, _adapter, configure_transport
 from voice_harness.live_scenario import TURN_TIMEOUT_S
@@ -30,6 +32,18 @@ class ProviderTransportTests(unittest.TestCase):
                     self.assertEqual(profile["turn_timeout_seconds"], TURN_TIMEOUT_S)
                     self.assertEqual(profile["provider_input_rate"], 16000 if provider in {
                         "gemini-live", "nova-sonic-live"} else 24000)
+
+    def test_native_vad_switch_endpoints_a_scripted_caller_like_a_microphone(self):
+        for provider in ("openai-realtime-live", "xai-voice-live", "gemini-live"):
+            with self.subTest(provider=provider), mock.patch.dict(os.environ, {"HARNESS_NATIVE_VAD": "1"}):
+                _, config = _adapter(provider)
+                profile = configure_transport(provider, config, "fixed")
+                self.assertEqual(profile["turn_commit"], "automatic")
+                self.assertEqual(profile["turn_detection"], "server_vad")
+                self.assertIsNone(profile["commit_delay_ms"])
+        with mock.patch.dict(os.environ, {"HARNESS_NATIVE_VAD": "1"}):  # live_ai callers and the default stay as they were
+            _, config = _adapter("xai-voice-live")
+            self.assertEqual(configure_transport("xai-voice-live", config, "live_ai")["turn_commit"], "explicit")
 
     def test_human_microphone_keeps_automatic_detection(self):
         for provider in LIVE_PROVIDERS:
