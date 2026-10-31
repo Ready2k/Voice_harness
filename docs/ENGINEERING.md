@@ -240,6 +240,15 @@ emulated commit). Method and results: `LATENCY_BENCHMARK_SPEC.md` and the publis
 - **Report.** `scripts/build_latency_report.py` reads the session payloads under `.local/` and writes
   `artifacts/latency-benchmark-*/results.json` and the report page. Figures are not comparable with earlier bake-off latency (those anchored about 220 ms after the voice stopped).
 
+## Realism, consistency and human validation
+
+Added 31 October 2026 after a review against public voice benchmarks. All additions are default-off or additive, so existing runs, hashes and checked-in reports are unchanged.
+
+- **pass^k.** `bakeoff.pass_all_repetitions` reports, per provider, scenarios passed on every repetition with a Wilson interval; incomplete scenarios are excluded and counted. Not part of the composite. The McNemar head-to-heads already use Holm-adjusted p-values.
+- **Opt-in scenarios.** `scenario_catalogue.OPT_IN` holds seven scenarios (self-correction, backchannel, aside, cough). `default_scenario_ids()` excludes them; name them with `--scenarios`. Superseded values are checked through `forbidden_arguments` (`metrics.forbidden_executed`). See `docs/REALISM_SCENARIOS.md`.
+- **Caller voices and line profile.** `caller_voice.PANEL` (non-default profiles force the OpenAI TTS backend, so they need `OPENAI_API_KEY`); `--line-profile telephone_narrowband` applies the narrowband profile to every scenario. It is a 24 to 8 kHz bandwidth emulation with noise, not G.711, and providers still receive 24 kHz audio.
+- **Human validation.** `scripts/human_validation_sample.py` draws a blind, seeded sample; `scripts/human_validation_score.py` reports agreement and kappa against the scorers and judges. See `docs/HUMAN_VALIDATION.md`.
+
 ## Where to read next
 
 | Topic | Document |
