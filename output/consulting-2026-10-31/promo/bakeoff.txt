@@ -1,0 +1,51 @@
+Skip to main content
+◈ Voice Harness
+Runs
+Telephone
+Manual test
+Bake-off
+Compare
+Scenarios
+Review & holds
+Provider coverage
+Balances
+Theme
+Auto
+Light
+Dark
+Connected
+Disconnect
+
+VOICE HARNESS / BAKE-OFF
+
+Low or exhausted credit reported for OpenAI. Check before starting calls. View balances →
+
+Choose a provider with evidence
+
+Run the live scenario catalogue on several providers, then rank them: safety gates first, a weighted scorecard with confidence intervals, head-to-head significance tests, and latency as the tie-break. Every number comes from the runs' ledgers, and the report downloads as one shareable file.
+
+New bake-off
+Bake-offs
+Standard-prompt bake-off, five providers, normalised voices — 29 October 2026
+· Completed · 600/600 runs
+Fair-harness provider bake-off — 28 October 2026
+· Completed · 720/720 runs
+Full advanced provider bake-off — 26 October 2026
+· Completed · 600/600 runs
+Five-provider full bake-off 2026-10-25
+· Completed · 200/200 runs
+xAI fake tool result x10 2026-10-24
+· Completed · 30/30 runs
+Small live test 2026-10-24
+· Completed · 48/48 runs
+two run retest
+· Completed · 272/272 runs
+Bake-off 2026-10-22 10:09
+· Cancelled · 0/136 runs
+Bake-off 2026-10-22 09:08
+· Completed · 272/272 runs
+Live catalogue · 4 providers · 19 Oct 2026
+· Completed · 132/132 runs
+No bake-off selected
+
+Pick one from the list, or launch a new one. While it runs, the report fills in and is marked provisional.

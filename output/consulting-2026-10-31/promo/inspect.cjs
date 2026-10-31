@@ -1,0 +1,3 @@
+const {chromium}=require('/Users/jamescregeen/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const fs=require('fs');
+(async()=>{const b=await chromium.launch({headless:true,executablePath:"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"});const p=await b.newPage({viewport:{width:1600,height:1000}});const token=fs.readFileSync('.local/host-data/operator-token','utf8').trim();await p.addInitScript(t=>sessionStorage.setItem('harness-operator-token',t),token);await p.goto('http://127.0.0.1:8766/client/runs.html');await p.waitForTimeout(3500);console.log((await p.locator('body').innerText()).slice(0,18000));await p.screenshot({path:'output/consulting-2026-10-31/promo/screens/initial.png'});await b.close()})();

@@ -1,0 +1,55 @@
+Skip to main content
+◈ Voice Harness
+Runs
+Telephone
+Manual test
+Bake-off
+Compare
+Scenarios
+Review & holds
+Provider coverage
+Balances
+Theme
+Auto
+Light
+Dark
+Connected
+Disconnect
+
+VOICE HARNESS / REVIEW & HOLDS
+
+Low or exhausted credit reported for OpenAI. Check before starting calls. View balances →
+
+Review & holds
+
+Resolve assurance findings with supporting evidence and manage preservation holds. Holds protect retained artifacts until their recorded expiry; they cannot restore purged evidence.
+
+Findings awaiting review
+Review state
+Open
+Claimed / in review
+Decided
+Severity
+All severities
+Critical
+High
+Medium
+Low
+
+Select a finding to inspect its evidence and record a review.
+
+Load more findings
+Preservation holds
+
+1 active hold; 0 expiring within 7 days or expired. Holds protect retained artifacts until expiry; they cannot restore purged evidence.
+
+Run	Scope	Owner	Expires	Actions
+
+happy-balance-telephone-001
+Google Gemini Live · ddb4c424 Copy
+	Whole run
+All run evidence
+	JamesC	79d 8h left
+18/01/2027, 20:50:40
+	Renew or release
+Add a preservation hold

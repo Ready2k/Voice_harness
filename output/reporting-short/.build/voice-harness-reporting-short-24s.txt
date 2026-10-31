@@ -1,0 +1,8 @@
+file '/Users/jamescregeen/Code_Projects/Voice_Harness/output/reporting-short/.build/clips/00.mp4'
+file '/Users/jamescregeen/Code_Projects/Voice_Harness/output/reporting-short/.build/clips/01.mp4'
+file '/Users/jamescregeen/Code_Projects/Voice_Harness/output/reporting-short/.build/clips/02.mp4'
+file '/Users/jamescregeen/Code_Projects/Voice_Harness/output/reporting-short/.build/clips/03.mp4'
+file '/Users/jamescregeen/Code_Projects/Voice_Harness/output/reporting-short/.build/clips/04.mp4'
+file '/Users/jamescregeen/Code_Projects/Voice_Harness/output/reporting-short/.build/clips/05.mp4'
+file '/Users/jamescregeen/Code_Projects/Voice_Harness/output/reporting-short/.build/clips/06.mp4'
+file '/Users/jamescregeen/Code_Projects/Voice_Harness/output/reporting-short/.build/clips/07.mp4'

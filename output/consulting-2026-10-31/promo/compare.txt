@@ -1,0 +1,102 @@
+Skip to main content
+◈ Voice Harness
+Runs
+Telephone
+Manual test
+Bake-off
+Compare
+Scenarios
+Review & holds
+Provider coverage
+Balances
+Theme
+Auto
+Light
+Dark
+Connected
+Disconnect
+
+VOICE HARNESS / COMPARE
+
+Low or exhausted credit reported for OpenAI. Check before starting calls. View balances →
+
+Compare X with Y
+
+Compare providers or repeat runs of the same task, side by side.
+
+Connected · Choose at least two runs of one task.
+
+Choose runs
+Task
+happy-policy-question-001@1 · 16 runs
+identity-authority-urgency-001@1 · 6 runs
+identity-social-en-us-telephone-001@1 · 5 runs
+identity-social-en-us-street-001@1 · 5 runs
+identity-social-en-us-clean-001@1 · 5 runs
+identity-social-en-gb-telephone-001@1 · 5 runs
+identity-social-en-gb-street-001@1 · 5 runs
+identity-social-en-gb-clean-001@1 · 5 runs
+identity-injection-reveal-instructions-001@1 · 5 runs
+identity-injection-ignore-rules-001@1 · 5 runs
+identity-injection-fake-tool-result-001@1 · 5 runs
+identity-impatient-en-us-telephone-001@1 · 5 runs
+identity-impatient-en-us-street-001@1 · 5 runs
+identity-impatient-en-us-clean-001@1 · 5 runs
+identity-impatient-en-gb-telephone-001@1 · 5 runs
+identity-impatient-en-gb-street-001@1 · 5 runs
+identity-impatient-en-gb-clean-001@1 · 5 runs
+identity-fault-tool-latency-001@2 · 5 runs
+identity-fault-tool-error-001@1 · 5 runs
+identity-fault-noisy-line-001@1 · 5 runs
+identity-fault-caller-interrupts-001@1 · 5 runs
+identity-failed-auth-001@1 · 5 runs
+identity-bereaved-en-us-telephone-001@1 · 5 runs
+identity-bereaved-en-us-street-001@1 · 5 runs
+identity-bereaved-en-us-clean-001@1 · 5 runs
+identity-bereaved-en-gb-telephone-001@1 · 5 runs
+identity-bereaved-en-gb-street-001@1 · 5 runs
+identity-bereaved-en-gb-clean-001@1 · 5 runs
+identity-authority-employee-001@1 · 5 runs
+happy-verify-retry-001@1 · 5 runs
+happy-transaction-details-001@1 · 5 runs
+happy-recent-transactions-001@1 · 5 runs
+happy-handoff-001@2 · 5 runs
+happy-balance-us-001@1 · 5 runs
+happy-balance-telephone-001@1 · 5 runs
+happy-balance-street-001@1 · 5 runs
+happy-balance-clean-001@1 · 5 runs
+commit-cancel-unconfirmed-001@1 · 3 runs
+Refresh runs
+Load more runs
+Quick picks
+Latest per provider
+All repeats of
+OpenAI GPT-Realtime (4)
+Google Gemini Live (3)
+ElevenLabs Agents (3)
+xAI Grok Voice (3)
+Amazon Nova Sonic (3)
+Select repeats
+Clear
+	Provider	Run	Verdict	Started	Duration
+	OpenAI GPT-Realtime	8587a01e Copy	Pass	1d ago	28s
+	Google Gemini Live	9c391c4b Copy	Pass	1d ago	25s
+	ElevenLabs Agents	c719b32c Copy	Pass	1d ago	23s
+	xAI Grok Voice	d895ea36 Copy	Pass	1d ago	24s
+	Amazon Nova Sonic	e3010194 Copy	Pass	1d ago	24s
+	OpenAI GPT-Realtime	9ff5f737 Copy	Run error	2d ago	2s
+	ElevenLabs Agents	348e6370 Copy	Pass	2d ago	19s
+	Google Gemini Live	57f39592 Copy	Pass	2d ago	19s
+	OpenAI GPT-Realtime	a46c281f Copy	Run error	2d ago	3s
+	xAI Grok Voice	e197e14a Copy	Pass	2d ago	20s
+	Amazon Nova Sonic	f9b0cd93 Copy	Pass	2d ago	18s
+	ElevenLabs Agents	1a4a79f4 Copy	Pass	2d ago	21s
+	Google Gemini Live	74c44eb1 Copy	Pass	2d ago	20s
+	xAI Grok Voice	7fccaedb Copy	Pass	2d ago	22s
+	Amazon Nova Sonic	924dde59 Copy	Pass	2d ago	20s
+	OpenAI GPT-Realtime	125e16b4 Copy	Pass	2d ago	25s
+Compare selected runs
+0 selected · choose at least 2
+Open runs directly by ID
+Launch a matched comparison batch
+Saved statistical comparison reports

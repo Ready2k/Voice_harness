@@ -1,0 +1,111 @@
+Skip to main content
+◈ Voice Harness
+Runs
+Telephone
+Manual test
+Bake-off
+Review & holds
+Balances
+Theme
+Auto
+Light
+Dark
+Connected
+Disconnect
+
+VOICE HARNESS / TELEPHONE
+
+Low or exhausted credit reported for OpenAI. Check before starting calls. View balances →
+
+Telephone
+
+Let the delegate call an authorised automated demo line through Twilio. Review the recorded conversation and findings afterwards.
+
+Set up a call
+
+Twilio and ingress configuration available. Provider and speech preflight run before dialling.
+
+Destination number
+Twilio caller number
+
+Caller numbers fetched from Twilio. Destination and routing defaults come from our demo setup.
+
+Refresh Twilio numbers
+Scenario
+Lost wallet · worried caller
+Account / gift card balance
+
+Choose a starting template, then edit the goal, supplied details and fixed responses below.
+
+Responses
+AI agent · generated replies
+Static · fixed spoken phrases
+Agent
+OpenAI GPT-Live 1 · gpt-live-1
+OpenAI Realtime · gpt-realtime-2.1
+Google Gemini · gemini-3.8-live
+Amazon Nova Sonic · amazon.nova-2-5-sonic
+xAI Grok Voice · grok-voice-3.0
+ElevenLabs Agents · elevenlabs-agent
+
+Reply agent: OpenAI GPT-Live 1 · gpt-live-1
+
+Speech delivery
+Gated · approve before playback (default)
+Native S2S · provider voice without speech approval
+
+Gated speech uses shared synthesis after review and independent ASR. Native requires AI replies and streams the selected provider’s own audio without semantic review or independent output ASR; speech may exceed instructions. Tool, destination and bound-detail controls remain active. Routing codes and supplied identifiers still use controlled delivery and may use shared synthesis. Sent audio proves transmission, not audibility.
+
+Goal & supplied details
+What should the caller achieve?
+Situation / background
+Opening sentence (optional)
+Delivery style
+Calm
+Worried
+Details the caller may use
+
+Add card types, brands or other facts. Put account IDs, passcodes and identity answers in their own rows. For each ID or passcode, specify what the service will ask for and whether to speak it or use keypad tones. Each ID or passcode can be submitted once.
+
+Detail type
+Card / brand / fact
+Account ID / identity answer
+Passcode / PIN
+Label (for example, Visa debit card or Account ID)
+Value supplied by you
+When asked for (for example, account number or passcode)
+Send using
+Speak
+Keypad tones
+Remove detail
+Detail type
+Card / brand / fact
+Account ID / identity answer
+Passcode / PIN
+Label (for example, Visa debit card or Account ID)
+Value supplied by you
+When asked for (for example, account number or passcode)
+Send using
+Speak
+Keypad tones
+Remove detail
+Add detail
+
+Account and verification values are withheld from call history and the agent's general prompt. Spoken values pass through speech services and may appear in retained audio and transcripts. Use details authorised for the demo destination.
+
+Test routing ID
+Sub-test ID (optional)
+Submit routing codes
+Keypad tones
+Spoken digits
+Call limit (seconds)
+Response timing
+
+Starting places a chargeable live call after preflight. Demo audio passes through Twilio, the configured tunnel and AI services, and is retained on this server. Use authorised demo destinations and supplied test details.
+
+Start chargeable call
+Calls & recordings
+
+Findings report what the called service said; they are not independently verified. Sent audio records transmission, not physical audibility. Interrupted runs may need reconciliation in Twilio before another attempt.
+
+No telephone calls yet.

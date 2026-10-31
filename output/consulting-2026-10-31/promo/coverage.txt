@@ -1,0 +1,77 @@
+Skip to main content
+◈ Voice Harness
+Runs
+Telephone
+Manual test
+Bake-off
+Compare
+Scenarios
+Review & holds
+Provider coverage
+Balances
+Theme
+Auto
+Light
+Dark
+Connected
+Disconnect
+
+VOICE HARNESS / PROVIDER COVERAGE
+
+Low or exhausted credit reported for OpenAI. Check before starting calls. View balances →
+
+Provider coverage
+
+Every requested provider family is shown, in a fixed order. Only “Implemented and verified” counts as support. There is no ranking.
+
+6 of 6
+FAMILIES VERIFIED
+0 of 6
+READY ON THIS SERVER
+0
+REPORTS EXPIRING SOON
+This server needs first (applies to every provider)
+Set VOICE_HARNESS_LIVE_ASR=openai and OPENAI_API_KEY on the server. Run make serve-live on the host to load them from .env.
+
+Capability verification and current server readiness are separate checks. A verified provider can still need credentials or supporting services before a run can start. Launch an evaluation →
+
+Download coverage report
+Provider	Model · region	Capability verified	Ready on this server	Report expires
+OpenAI GPT-Realtime	
+OpenAI GPT-Realtime
+	✓ Implemented and verified
+Report OpenAI GPT realtime 2.1 (28 Oct 2026)
+View 10 probe events	Needs setup	Expires in 4 days
+OpenAI GPT-Live 1	
+OpenAI GPT-Live 1
+	✓ Implemented and verified
+Report OpenAI Live GPT Live 1 (29 Oct 2026)
+View 9 probe events	Needs setup	Expires in 4 days
+Amazon Nova Sonic	
+Amazon Nova Sonic
+us-east-1
+	✓ Implemented and verified
+Report Nova 2.5 (29 Oct 2026)
+View 74 probe events	Needs setup	Expires in 4 days
+xAI Grok Voice	
+xAI Grok Voice
+	✓ Implemented and verified
+Report xAI Grok Voice 3.0 (28 Oct 2026)
+View 16 probe events	Needs setup
+Set xAI_API_KEY in the server's .env, then restart the server.
+	Expires in 4 days
+Google Gemini Live	
+Google Gemini Live
+us-central1
+	✓ Implemented and verified
+Report Google Gemini 3.8 Live (28 Oct 2026)
+View 11 probe events	Needs setup	Expires in 4 days
+ElevenLabs Agents	
+ElevenLabs Agents
+	✓ Implemented and verified
+Report ElevenLabs Agents (29 Oct 2026)
+View 10 probe events	Needs setup
+Set ELEVENLABS_API_KEY in the server's .env, then restart the server.
+	Expires in 4 days
+
+Coverage reflects capability reports (7-day expiry) and AC-09 conformance results. Scripted fixtures and probes are not production quality measurements.

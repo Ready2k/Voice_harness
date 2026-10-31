@@ -1,0 +1,4 @@
+const {chromium}=require('/Users/jamescregeen/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const fs=require('fs');const out='output/consulting-2026-10-31/promo/';
+(async()=>{const b=await chromium.launch({headless:true,executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'});const p=await b.newPage({viewport:{width:1600,height:1000},bypassCSP:true});const token=fs.readFileSync('.local/host-data/operator-token','utf8').trim();await p.addInitScript(t=>sessionStorage.setItem('harness-operator-token',t),token);async function go(n){await p.goto('http://127.0.0.1:8766/client/'+n+'.html');await p.waitForTimeout(1800)}async function snap(n){await p.waitForTimeout(450);await p.screenshot({path:out+'screens/'+n+'.png'});console.log(n)}
+await go('runs');await p.getByLabel('Colour theme',{exact:true}).selectOption('dark');await snap('dark-theme');await b.close();process.exit(0)})();

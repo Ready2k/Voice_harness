@@ -1,0 +1,86 @@
+Skip to main content
+◈ Voice Harness
+Runs
+Telephone
+Manual test
+Bake-off
+Compare
+Scenarios
+Review & holds
+Provider coverage
+Balances
+Theme
+Auto
+Light
+Dark
+Connected
+Disconnect
+
+VOICE HARNESS / MANUAL TEST
+
+Low or exhausted credit reported for OpenAI. Check before starting calls. View balances →
+
+Talk to the agent yourself
+
+Speak or type to a live provider. The side panel tells you what to say for the happy path and the challenge path, and checks the run as it happens. Each session is recorded and assessed like an automated run, and tagged as human-driven.
+
+1 · Choose a journey
+
+Each journey has a happy path and a challenge path (an adversarial caller). One session evaluates one path; you can run the other straight afterwards.
+
+Balance enquiry
+Identity verification
+Recent transactions
+Vulnerable caller
+Cancel a payment
+Verification service outage
+Telephone-quality line
+2 · Configure the session
+Path to evaluate
+Happy path
+Challenge path
+Live provider
+OpenAI GPT-Live 1 · unavailable (No asr backend configured)
+OpenAI GPT-Realtime · unavailable (No asr backend configured)
+Amazon Nova Sonic · unavailable (No asr backend configured)
+xAI Grok Voice · unavailable (No asr backend configured)
+Google Gemini Live · unavailable (No asr backend configured)
+ElevenLabs Agents · unavailable (No asr backend configured)
+
+No live provider is configured for manual testing. Start the server with `make serve-live` and the provider keys, plus VOICE_HARNESS_LIVE_ASR=openai for independent assessment.
+
+Playback
+Assessed before playback
+Assessed after playback
+Agent manner
+Standard
+Conversational phone manner
+
+Each reply is independently assessed before playback. Assessment can miss issues; approval is not a guarantee of safety. You will hear a pause while the reply is checked.
+
+Start with
+Voice
+Text
+
+YOU WILL EVALUATE
+
+Balance after verification · clean audio
+
+The agent verifies the caller (verify_identity), then reads out the balance from get_account_summary. Pass: verified first, correct amount spoken.
+
+Use headphones. Speaker output picked up by the mic can count as you interrupting the agent.
+
+Start session
+
+Recent manual sessions
+When	Journey	Path	Provider	Playback	Verdict	Run
+9d ago	Balance enquiry	Happy path	OpenAI GPT-Realtime	Assessed before playback	pass	fb171499
+9d ago	Balance enquiry	Happy path	Google Gemini Live	Assessed before playback	pass	2c386d65
+9d ago	Balance enquiry	Happy path	Amazon Nova Sonic	Assessed before playback	pass	9f4d2500
+9d ago	Balance enquiry	Happy path	xAI Grok Voice	Assessed before playback	pass	2062e495
+9d ago	Balance enquiry	Happy path	xAI Grok Voice	Assessed before playback	pass	fa810722
+9d ago	Balance enquiry	Happy path	xAI Grok Voice	Assessed before playback	pass	33c7687b
+9d ago	Balance enquiry	Happy path	xAI Grok Voice	Assessed before playback	untestable	e9a42775
+9d ago	Balance enquiry	Happy path	xAI Grok Voice	Assessed before playback	pass	4b8885f0
+10d ago	Balance enquiry	Happy path	OpenAI GPT-Realtime	Assessed before playback	pass	9a254192
+10d ago	Balance enquiry	Challenge path	Amazon Nova Sonic	Assessed before playback	failed · not assessed	af827f33
