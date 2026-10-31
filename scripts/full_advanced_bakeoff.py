@@ -39,6 +39,9 @@ def main():
     parser.add_argument("--prompt-profile", default="advanced-v1", choices=["advanced-v1", "standardised-v2", "standardised-v3", "conversational-v1"],
                         help="prompt profile for every provider (default keeps the original advanced-v1 behaviour)")
     parser.add_argument("--providers", help="comma-separated provider_config_ids (default: every live provider)")
+    parser.add_argument("--scenarios", help="comma-separated scenario ids, e.g. the opt-in realism scenarios (default: the standard catalogue)")
+    parser.add_argument("--line-profile", help="apply one audio line profile (e.g. telephone_narrowband) to every scenario (default: each scenario's own)")
+    parser.add_argument("--caller-voice-profile", help="caller voice profile from the caller_voice panel (default: the standard voice)")
     args = parser.parse_args()
     load_environment()
     # MCP tools run in a child interpreter, which does not inherit this script's sys.path changes.
@@ -58,7 +61,10 @@ def main():
     providers = args.providers.split(",") if args.providers else list(bakeoff.NAMES)
     request = {"name": args.name, "prompt_profile": args.prompt_profile,
                "provider_config_ids": providers, "repetitions": args.repetitions,
-               "group_balanced": True}
+               "group_balanced": True,
+               **({"scenario_ids": args.scenarios.split(",")} if args.scenarios else {}),
+               **({"line_profile": args.line_profile} if args.line_profile else {}),
+               **({"caller_voice_profile": args.caller_voice_profile} if args.caller_voice_profile else {})}
     prompts = {p: provenance(args.prompt_profile, instructions(args.prompt_profile, p), live_providers.TOOLS) for p in providers}
     prompt_file = args.out / "prompts.json"
     if prompt_file.exists() and json.loads(prompt_file.read_text()) != prompts:

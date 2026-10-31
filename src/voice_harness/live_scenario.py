@@ -110,7 +110,7 @@ CONTINUE = object()  # sentinel: the event does not settle the turn
 class LiveScenarioRunner:
     def __init__(self, engine, run_id, adapter, assessor, scenario_id, *, caller_audio, cost_recorder=None,
                  seed=0, turn_timeout_s=TURN_TIMEOUT_S, interrupt_mode="client", barge_after_tool=False,
-                 before_turn=None, provider_session=None, trail_ms=0):
+                 before_turn=None, provider_session=None, trail_ms=0, line_profile="scenario"):
         entry = catalogue_entry(scenario_id)
         if entry is None:
             raise ValueError("SCENARIO_NOT_IN_CATALOGUE")
@@ -127,6 +127,8 @@ class LiveScenarioRunner:
         self.interrupt_results, self._cancelled_ends = [], 0
         self._interrupted_turns = set()  # provider turn ids the server cut: their later empty turn_end is the cut reply's own
         self.seed_value = seed
+        # A bake-off-wide line override replaces the scenario's own audio profile; "scenario" (the default) keeps it.
+        self.line_profile = line_profile
         self.pending_caller_pcm = None
         self._native = []  # provider events received since the last flush (type, size, hash; never the payload)
         if hasattr(adapter, "native_sink"):
@@ -196,17 +198,20 @@ class LiveScenarioRunner:
             tx.event("orchestrator", "run.live_binding", {
                 "scenario_id": definition["id"], "scenario_hash": self.entry["content_hash"].removeprefix("sha256:"),
                 "adapter": type(self.adapter).__name__, "seed": self.seed_value,
-                "interrupt_mode": self.interrupt_mode, "audio_profile": definition["audio_profile"],
+                "interrupt_mode": self.interrupt_mode, "audio_profile": self.audio_profile(definition),
                 "faults": self.entry["faults"], "limits": dict(self.engine.limits),
                 "harness_mechanics": list(self.entry.get("mechanics", [])), "provider": self.provider_session,
             })
+
+    def audio_profile(self, definition):
+        return definition["audio_profile"] if self.line_profile == "scenario" else self.line_profile
 
     def _record_input(self, index, turn, pcm, started_ms, ended_ms, *, retained=False, timing=None):
         with self.engine.database.transaction(self.run_id) as tx:
             tx.event("orchestrator", "input.caller_audio", {
                 "turn": index, "source_text_sha256": hashlib.sha256(turn["customer"].encode()).hexdigest(),
                 "pcm_sha256": hashlib.sha256(pcm).hexdigest(), "byte_count": len(pcm), "sample_rate": RATE,
-                "audio_retained": retained, "transformations": [self.entry["definition"]["audio_profile"]],
+                "audio_retained": retained, "transformations": [self.audio_profile(self.entry["definition"])],
                 "stream_started_ms": started_ms, "stream_ended_ms": ended_ms,
                 "clock_domain_id": PROCESS_CLOCK_DOMAIN, **(timing or {}),
             })
@@ -299,15 +304,20 @@ class LiveScenarioRunner:
             self.interrupt_results.append({"generation_cancelled": "failed", "error": type(error).__name__})
         self.driver.interrupt()
 
-    async def _await_turn(self, bank, until_audio=False, screen=True):
+    async def _await_turn(self, bank, until_audio=False, screen=True, silent_ok=False):
         """Pump adapter events until a turn_end (or fatal error / timeout); ``until_audio`` stops at the first reply audio.
-        ``screen`` drops stale interruptions (off for a ``caller_interrupts`` target, whose overlap is the fault)."""
+        ``screen`` drops stale interruptions (off for a ``caller_interrupts`` target, whose overlap is the fault).
+        ``silent_ok``: the caller's speech was not addressed to the agent, so a timeout with no reply audio is a silent
+        answer (like an empty turn_end), not a failure; a provider that never signals a silent turn would otherwise time out."""
         errors = []
+        heard_audio = False
         follow_up = False  # a tool result was submitted, so the provider's next response belongs to this same turn
         tool_seen = False  # a tool-using reply speaks again after its result; that long reply is the barge-in target
 
         async def step(event, outcome, *, continues=False):
             """Decide what a fed event means for the turn; returns an outcome dict, or CONTINUE."""
+            nonlocal heard_audio
+            heard_audio = heard_audio or event.type == "audio_out"
             if self.driver.cancel_requested:
                 self.driver.cancel_requested = False
                 await self._cancel_generation()
@@ -434,6 +444,8 @@ class LiveScenarioRunner:
         try:
             outcome = await asyncio.wait_for(pump(), self.turn_timeout_s)
         except TimeoutError:
+            if silent_ok and not heard_audio:
+                return {"approval": None, "strict_speech_approval": "no_audio"}, errors
             # A worker may still be running ASR: fence it, revoke approvals and drop the half-received reply.
             self.driver.abandon("TURN_TIMEOUT")
             return {"approval": None, "strict_speech_approval": "turn_timeout"}, errors
@@ -457,7 +469,7 @@ class LiveScenarioRunner:
         try:
             async with gateway(self.engine, self.run_id, faults={**self.engine.faults, **self._fault_profile}) as bank:
                 for index, turn in enumerate(definition["turns"][: definition["max_turns"]]):
-                    pcm = apply_profile(self.caller_audio(turn["customer"]), definition["audio_profile"],
+                    pcm = apply_profile(self.caller_audio(turn["customer"]), self.audio_profile(definition),
                                         self._faults("background_noise"), self.seed + index)
                     # Trusted tool amounts are allowed for the response they were returned in, not for later turns.
                     self.driver.expected_claims = {k: v for k, v in self.driver.expected_claims.items()
@@ -469,7 +481,9 @@ class LiveScenarioRunner:
                     await self._speak(index, turn, pcm, hold=not barged)
                     # The next turn interrupts: stop at the first reply audio and speak over it.
                     barge = self._faults("caller_interrupts", turn=index + 1)
-                    outcome, errors = await self._await_turn(bank, until_audio=bool(barge), screen=not barged)
+                    outcome, errors = await self._await_turn(
+                        bank, until_audio=bool(barge), screen=not barged,
+                        silent_ok=index > 0 and "non_directed" in self.entry.get("tags", ()))
                     outcomes.append({"turn": index, "strict_speech_approval": outcome["strict_speech_approval"]})
                     turn_errors.extend(errors)
                     self._flush_native()

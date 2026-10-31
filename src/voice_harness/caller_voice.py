@@ -15,6 +15,35 @@ DEFAULT_TTS_MODEL = "gpt-4o-mini-tts"
 DEFAULT_TTS_VOICE = "ash"  # male; British accent comes from the TTS instructions
 DEFAULT_TTS_INSTRUCTIONS = "Speak as a British male caller, in a natural British English accent. Read only the supplied words."
 RATE = 24000
+PROFILE_ENV = "VOICE_HARNESS_CALLER_PROFILE"
+# Caller-voice panel (config only; the OpenAI speech path). "default" is the original voice and sends exactly the original request.
+# A named profile fixes the TTS voice and accent instruction; it is selected per run (CallerConfig.voice_profile) and needs openai_tts.
+PANEL = {
+    "default": None,
+    "scottish_male": ("onyx", "Speak as a Scottish male caller, in a natural Scottish English accent. Read only the supplied words."),
+    "irish_female": ("coral", "Speak as an Irish female caller, in a natural Irish English accent. Read only the supplied words."),
+    "indian_english_female": ("shimmer", "Speak as an Indian female caller, in a natural Indian English accent. Read only the supplied words."),
+    "northern_english_male": ("verse", "Speak as a Northern English male caller, in a natural Yorkshire accent. Read only the supplied words."),
+}
+
+
+def run_environ(environ, caller=None):
+    """``environ`` adjusted for one run's CallerConfig: a non-default ``voice_profile`` selects it and forces the openai_tts
+    backend (the panel is TTS-only); an explicit ``fixed_backend`` is applied as before. Unchanged for a default config."""
+    environ = dict(os.environ if environ is None else environ)
+    caller = caller or {}
+    if caller.get("fixed_backend", "system") != "system":
+        environ[ENV] = caller["fixed_backend"]
+    if caller.get("voice_profile", "default") != "default":
+        environ[PROFILE_ENV], environ[ENV] = caller["voice_profile"], "openai_tts"
+    return environ
+
+
+def profile(environ=None):
+    """(name, voice, instructions) of the selected panel voice, or None for the original voice."""
+    environ = os.environ if environ is None else environ
+    name = (environ.get(PROFILE_ENV) or "default").strip().lower()
+    return None if PANEL.get(name) is None else (name, *PANEL[name])
 
 
 class CallerVoiceUnavailable(RuntimeError):
@@ -29,6 +58,10 @@ def backend(environ=None):
     """(backend, reason): backend is None with a reason code when no synthesiser is usable."""
     environ = os.environ if environ is None else environ
     choice = (environ.get(ENV) or "").strip().lower()
+    if (environ.get(PROFILE_ENV) or "default").strip().lower() not in PANEL:
+        return None, "CALLER_VOICE_UNKNOWN_PROFILE"
+    if profile(environ) and choice != "openai_tts":
+        return None, "CALLER_VOICE_PROFILE_NEEDS_OPENAI_TTS"
     if choice in ("", "macos"):
         if _has_macos():
             return "macos", None
@@ -50,8 +83,10 @@ def describe(environ=None):
     environ = os.environ if environ is None else environ
     name, _ = backend(environ)
     if name == "openai_tts":
+        chosen = profile(environ)
         return {"backend": name, "model_id": environ.get("VOICE_HARNESS_CALLER_TTS_MODEL") or DEFAULT_TTS_MODEL,
-                "voice": environ.get("VOICE_HARNESS_CALLER_TTS_VOICE") or DEFAULT_TTS_VOICE, "sample_rate": RATE}
+                "voice": chosen[1] if chosen else environ.get("VOICE_HARNESS_CALLER_TTS_VOICE") or DEFAULT_TTS_VOICE,
+                "sample_rate": RATE, **({"profile": chosen[0]} if chosen else {})}
     if name == "macos":
         return {"backend": name, "model_id": "macos-say", "voice": "Daniel", "sample_rate": RATE}
     return {"backend": None, "model_id": None, "voice": None, "sample_rate": RATE}
@@ -70,7 +105,9 @@ def openai_tts_pcm(text, environ=None, client=None):
     try:
         client = client or httpx.Client(timeout=60)
         body = {"model": spec["model_id"], "voice": spec["voice"], "input": text, "response_format": "pcm"}
-        body["instructions"] = environ.get("VOICE_HARNESS_CALLER_TTS_INSTRUCTIONS") or DEFAULT_TTS_INSTRUCTIONS
+        chosen = profile(forced)
+        body["instructions"] = (chosen[2] if chosen else environ.get("VOICE_HARNESS_CALLER_TTS_INSTRUCTIONS")
+                                or DEFAULT_TTS_INSTRUCTIONS)
         response = client.post(
             OPENAI_TTS_URL, headers={"Authorization": "Bearer " + environ["OPENAI_API_KEY"]},
             json=body)

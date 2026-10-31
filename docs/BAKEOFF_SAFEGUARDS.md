@@ -383,3 +383,13 @@ claim itself was unchecked.
   46, including happy-path runs where the agent verified the caller correctly.
 - **Known looseness (not changed here).** IDENTITY-01 treats any `verify_identity` call that completes with status `success`
   as verified, including a wrong answer. VERIFY-CLAIM-01 uses the stricter `identity_state` check.
+
+## Consistency (pass^k) and multiple comparisons
+
+- **pass^k.** Each provider's score row carries `pass_all_repetitions`: the share of scenarios that passed on every one of the
+  bake-off's repetitions (3 in the standard run), with the n/N counts and a Wilson interval over scenarios. Only scenarios
+  with all repetitions completed are counted; the rest are excluded and the count is reported (`excluded`, out of
+  `scenarios`). It sits beside the per-run assurance pass rate in the report, is never above it, and is not in the composite
+  or any existing score. Reports saved before this figure existed simply lack it and render as before.
+- **Multiplicity.** The head-to-head McNemar p-values were already Holm-adjusted across all pairs (`p_adjusted`); the
+  `better` verdict and the report Reading use the adjusted value and the raw `p_value` stays visible. Nothing changed there.

@@ -3673,6 +3673,29 @@
             "title": "Group Balanced",
             "default": false
           },
+          "line_profile": {
+            "type": "string",
+            "enum": [
+              "scenario",
+              "clean_studio",
+              "street_noise_10db",
+              "telephone_narrowband"
+            ],
+            "title": "Line Profile",
+            "default": "scenario"
+          },
+          "caller_voice_profile": {
+            "type": "string",
+            "enum": [
+              "default",
+              "scottish_male",
+              "irish_female",
+              "indian_english_female",
+              "northern_english_male"
+            ],
+            "title": "Caller Voice Profile",
+            "default": "default"
+          },
           "runs": {
             "items": {
               "$ref": "#/components/schemas/ImportedRun"
@@ -3913,6 +3936,29 @@
             "minimum": 10.0,
             "title": "Max Duration Seconds",
             "default": 120
+          },
+          "line_profile": {
+            "type": "string",
+            "enum": [
+              "scenario",
+              "clean_studio",
+              "street_noise_10db",
+              "telephone_narrowband"
+            ],
+            "title": "Line Profile",
+            "default": "scenario"
+          },
+          "voice_profile": {
+            "type": "string",
+            "enum": [
+              "default",
+              "scottish_male",
+              "irish_female",
+              "indian_english_female",
+              "northern_english_male"
+            ],
+            "title": "Voice Profile",
+            "default": "default"
           }
         },
         "additionalProperties": false,

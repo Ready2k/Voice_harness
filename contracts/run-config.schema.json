@@ -58,6 +58,29 @@
           "minimum": 10,
           "title": "Max Duration Seconds",
           "type": "integer"
+        },
+        "line_profile": {
+          "default": "scenario",
+          "enum": [
+            "scenario",
+            "clean_studio",
+            "street_noise_10db",
+            "telephone_narrowband"
+          ],
+          "title": "Line Profile",
+          "type": "string"
+        },
+        "voice_profile": {
+          "default": "default",
+          "enum": [
+            "default",
+            "scottish_male",
+            "irish_female",
+            "indian_english_female",
+            "northern_english_male"
+          ],
+          "title": "Voice Profile",
+          "type": "string"
         }
       },
       "title": "CallerConfig",

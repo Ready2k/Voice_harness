@@ -38,12 +38,16 @@ def brief(persona):
     )
 
 
+# Caller-channel options added later: left out of the profile hash while at their defaults, so existing hashes hold.
+_CHANNEL_DEFAULTS = {("line_profile", "scenario"), ("voice_profile", "default")}
+
+
 def configuration(config):
     prompt = brief(config["persona"])
     return {"mode": "live_ai", "provider": "openai", "model_id": MODEL, "voice": config["voice"],
             "persona": config["persona"], "profile_version": PROFILE_VERSION,
             "prompt_sha256": hashlib.sha256(prompt.encode()).hexdigest(),
-            "profile_sha256": hashlib.sha256(canonical_json({"prompt": prompt, **config})).hexdigest(),
+            "profile_sha256": hashlib.sha256(canonical_json({"prompt": prompt, **{k: v for k, v in config.items() if (k, v) not in _CHANNEL_DEFAULTS}})).hexdigest(),
             "max_turns": config["max_turns"], "max_duration_seconds": config["max_duration_seconds"],
             "delivery_mode": "gated", "interruptions": "not_supported_in_pilot",
             "fidelity": "not_independently_assessed", "seed_reproducibility": False}

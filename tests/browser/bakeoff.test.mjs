@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {safetyLabel, unjudgedCaveats, conditionRows, confidenceNote, costIsEmpty, costLimit, costRows, estimateCost, intervalFloor, latencyCap, ms, normaliseWeights, outcomeClass, outcomeLabel, pct, planSize, scenarioDiffers, scenarioGroups, usd, usdEstimate, joinParts, mergeGroups, scoresInRankOrder, verdictText, weightPercents, weightsAreCustom, weightsTotal,
-  CRITERIA, TERMS, assessorRows, calibrationText, disclosureText, ignoredWeightsText, intervalKind, intervalNote, judgeLabel, judgeTemperatureRecorded, metricsSections, pairReading, powerNotes, rateBounds, responsivenessNote, weightShareText, weightShares,
+  CRITERIA, TERMS, assessorRows, calibrationText, disclosureText, ignoredWeightsText, intervalKind, intervalNote, judgeLabel, judgeTemperatureRecorded, metricsSections, pairReading, powerNotes, consistencyRows, rateBounds, responsivenessNote, weightShareText, weightShares,
   csvCell, defaultRepetitions, failingRun, knownSpend, launchConfirmText, observationsCsv, overlapsLeader, providerProgress, rateText} from "../../apps/web/bakeoff-report.mjs";
 
 const NAMES = {a: "Alpha Voice", b: "Beta Voice"};
@@ -434,6 +434,12 @@ test("the head-to-head reading follows the Holm-adjusted p-value and sizes the e
   assert.match(powerNotes([{...pair, runs_needed_80: 30}])[0], /needs about 30 paired runs, which you have\./);
   assert.match(powerNotes([{a: "a", b: "b", n_pairs: 12, runs_needed_80: null, min_detectable_diff_80: null}])[0], /12 paired runs\. No observed gap to size\./);
   assert.deepEqual(powerNotes([{a: "a", b: "b"}]), []);  // an older report has no power figures
+});
+
+test("pass^k consistency rows show n/N, interval, per-run pass rate and exclusions", () => {
+  const row = consistencyRows([{provider: "a", task_success: rate(0.9), pass_all_repetitions: {value: 0.5, k: 5, n: 10, lo: 0.24, hi: 0.76, repetitions: 3, scenarios: 12, excluded: 2}},
+    {provider: "b", task_success: rate(1)}], p => p.toUpperCase());
+  assert.deepEqual(row, [["A", "5/10 scenarios, 50% (24%–76%)", "90%", "2 of 12 scenarios excluded (a repetition missing or not completed)"]]);
 });
 
 test("The unserved-requests note comes from the report's own definitions when it supplies one", () => {

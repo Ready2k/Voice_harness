@@ -55,6 +55,29 @@ class Statistics(unittest.TestCase):
         self.assertAlmostEqual(bakeoff.mcnemar_exact(3, 1), 0.625)
         self.assertLess(bakeoff.mcnemar_exact(10, 0), 0.01)
 
+    def test_holm_known_example(self):
+        # sorted 0.01, 0.03, 0.04 -> 3*0.01, 2*0.03, 1*0.04 -> 0.03, 0.06, 0.06 (monotone), returned in input order
+        for got, want in zip(bakeoff_stats.holm_adjust([0.01, 0.04, 0.03]), [0.03, 0.06, 0.06], strict=True):
+            self.assertAlmostEqual(got, want)
+
+    def test_pass_all_repetitions_counts_only_fully_completed_scenarios(self):
+        o = lambda s, r, outcome="pass": obs("nova-sonic-live", s, outcome, repetition=r)
+        runs = [o("a", 0), o("a", 1), o("a", 2),                       # consistent
+                o("b", 0), o("b", 1, "fail"), o("b", 2),               # one failure
+                o("c", 0), o("c", 1), o("c", 2, "run_failed"),         # incomplete: excluded
+                o("d", 0), o("d", 1)]                                  # missing repetition: excluded
+        r = bakeoff.pass_all_repetitions(runs, 3)
+        self.assertEqual((r["k"], r["n"], r["excluded"], r["scenarios"], r["repetitions"]), (1, 2, 2, 4, 3))
+        self.assertAlmostEqual(r["value"], 0.5)
+        self.assertEqual(bakeoff.pass_all_repetitions([], 3)["value"], None)
+
+    def test_report_carries_pass_all_repetitions_without_changing_the_composite(self):
+        runs = [obs(p, s, repetition=r) for p in ("openai-realtime-live", "nova-sonic-live") for s in ("a", "b") for r in range(3)]
+        report = bakeoff.report(payload(runs, repetitions=3))
+        for row in report["scores"]:
+            self.assertEqual((row["pass_all_repetitions"]["k"], row["pass_all_repetitions"]["n"]), (2, 2))
+            self.assertNotIn("pass_all_repetitions", report["dimensions"])
+
     def test_quantile_interpolates_like_d3(self):
         self.assertEqual(bakeoff.quantile([1, 2, 3, 4], 0.5), 2.5)
         self.assertAlmostEqual(bakeoff.quantile(list(range(11)), 0.9), 9.0)

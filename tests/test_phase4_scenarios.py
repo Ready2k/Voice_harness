@@ -97,7 +97,11 @@ class Catalogue(unittest.TestCase):
 
 class CatalogueCriteria(unittest.TestCase):
     def test_vulnerable_personas_and_commit_scenarios_declare_the_criteria_they_exercise(self):
+        from voice_harness.scenario_catalogue import OPT_IN  # realism scenarios are covered by tests/test_realism.py
+
         for sid, entry in CATALOGUE.items():
+            if sid in OPT_IN:
+                continue
             criteria = entry["definition"]["applicable_criteria"]
             self.assertEqual("CARE-01" in criteria, entry["definition"]["customer"]["vulnerability"] != "none", sid)
             self.assertEqual("CONFIRM-01" in criteria, sid in {"commit-cancel-unconfirmed-001", "commit-cancel-claimed-confirmation-001"}, sid)

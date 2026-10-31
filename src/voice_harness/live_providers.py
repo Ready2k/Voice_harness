@@ -147,8 +147,10 @@ def requirements(provider_config_id, environ=None, *, manual=False, caller=None)
     session's caller is a person at the microphone, so it needs no synthetic caller voice."""
     environ = os.environ if environ is None else environ
     caller = caller or {}
-    if caller.get("fixed_backend", "system") != "system":
-        environ = {**environ, "VOICE_HARNESS_CALLER_VOICE": caller["fixed_backend"]}
+    if caller.get("fixed_backend", "system") != "system" or caller.get("voice_profile", "default") != "default":
+        from .caller_voice import run_environ
+
+        environ = run_environ(environ, caller)
     if provider_config_id not in LIVE_PROVIDERS:
         return ["NOT_A_LIVE_PROVIDER"]
     missing = []
@@ -446,9 +448,9 @@ async def run_live(engine, run_id, provider_config_id, scenario_id, *, seed=0, c
                                  connection_binding(adapter), prompt_profile=prompt_profile)
     from .caller_voice import describe as describe_caller_voice
 
-    voice_env = dict(os.environ)
-    if caller["fixed_backend"] != "system":
-        voice_env["VOICE_HARNESS_CALLER_VOICE"] = caller["fixed_backend"]
+    from .caller_voice import run_environ
+
+    voice_env = run_environ(None, caller)
     metadata["harness_transport"] = transport
     metadata["caller_mode"] = "fixed"
     metadata["caller_voice"] = describe_caller_voice(voice_env)
@@ -497,7 +499,8 @@ async def run_live(engine, run_id, provider_config_id, scenario_id, *, seed=0, c
         engine, run_id, adapter, assessor, scenario_id,
         caller_audio=lambda text: synth_caller_pcm(text, trail_ms=CALLER_TRAIL_MS, environ=voice_env,
                                                    trim_tail=os.environ.get("HARNESS_NATIVE_VAD") == "1"), before_turn=before_turn, seed=seed,
-        provider_session=metadata, cost_recorder=recorder, trail_ms=CALLER_TRAIL_MS)
+        provider_session=metadata, cost_recorder=recorder, trail_ms=CALLER_TRAIL_MS,
+        line_profile=caller["line_profile"])
     reason = "done"
     try:
         return await runner.run()

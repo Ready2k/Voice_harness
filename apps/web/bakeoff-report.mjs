@@ -341,6 +341,15 @@ export function contrastText(c, names) {
     tied: same.length ? `${separated.length ? "Not separated on" : "Not separated on any dimension:"} ${same.join("; ")}.` : null};
 }
 
+/** pass^k consistency lines per provider (scenarios passed on every repetition), or [] when the report predates the figure. */
+export function consistencyRows(scores, short = p => p) {
+  return scores.filter(s => s.pass_all_repetitions).map(s => {
+    const c = s.pass_all_repetitions, ci = c.lo != null ? ` (${pct(c.lo)}–${pct(c.hi)})` : "";
+    const rate = s.task_success?.value;
+    return [short(s.provider), c.n ? `${c.k}/${c.n} scenarios, ${pct(c.value)}${ci}` : "—", pct(rate),
+      c.excluded ? `${c.excluded} of ${c.scenarios} scenarios excluded (a repetition missing or not completed)` : "none excluded"];
+  });
+}
 /** The Reading for one head-to-head: the Holm-adjusted p-value decides significance when the report has it. */
 export function pairReading(pair, complete = true) {
   if (complete === false) return {text: "Incomplete comparison", cls: "bk-muted"};
@@ -740,8 +749,12 @@ export function renderReport(root, data, {heading: showHeading = true, reveal = 
     ...(R.scoring?.group_balanced ? ["Scores give every scenario group equal weight, so a group with many scenarios no longer dominates. The what-if weights panel keeps this setting."] : []),
     ...[ignoredWeightsText(R.scoring)].filter(Boolean),
   ];
+  const consistency = consistencyRows(R.scores, short), reps = R.scores.find(x => x.pass_all_repetitions)?.pass_all_repetitions.repetitions;
   views.bakeoff.append(section("Scorecard", card(heading("Stage 2", "Weighted scorecard"), scoreTable, el("h3", null, "Each dimension with its 95% interval"),
-    ...scoreNotes.map(note), legend(P.map(p => [short(p), color(p)])), intervalBox)));
+    ...scoreNotes.map(note), legend(P.map(p => [short(p), color(p)])), intervalBox,
+    ...(consistency.length && reps > 1 ? [el("h3", null, `Consistency across ${reps} repetitions (pass^${reps})`),
+      table(["Provider", `Scenarios passed on all ${reps} repetitions`, "Assurance pass rate (per run)", "Exclusions"], consistency, [1, 2]),
+      note(`pass^${reps} counts a scenario only if every one of its ${reps} repetitions passed, so it is never above the per-run pass rate. Only scenarios with all repetitions completed are counted; the 95% interval is Wilson over scenarios. It is shown beside the scorecard and is not part of the composite.`)] : []))));
   const hasAdjusted = R.pairs.some(x => x.p_adjusted != null);
   const complete = R.verdict.comparison_complete;
   const readings = R.pairs.map(x => pairReading(x, complete));

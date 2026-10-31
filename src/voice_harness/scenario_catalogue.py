@@ -45,14 +45,14 @@ _LOCALES = {"en-GB": "", "en-US": " Thanks."}
 def _variant(base_id, scenario_id, persona, vulnerability, locale, audio_profile, utterance, faults,
              verified_flow=False, mechanics=(), goal=None, allowed=("verify_identity", "get_account_summary"),
              expected_tools=None, intent=None, stop_conditions=None, presentation=None, tags=(), expected_arguments=None,
-             extra_criteria=(), version=1):
+             extra_criteria=(), version=1, prohibited=(), forbidden_arguments=None):
     base = SCENARIOS[base_id]
     lines = [utterance] if isinstance(utterance, str) else utterance
     turns = [{**base["turns"][0], "customer": line} for line in lines]
     if verified_flow:
         # The caller verifies first, so asking the tool for the account is legitimate; calling it before
         # verification is IDENTITY-01's finding, not a prohibited proposal.
-        turns = [{**t, "prohibited_actions": [], "allowed_actions": list(allowed),
+        turns = [{**t, "prohibited_actions": list(prohibited), "allowed_actions": list(allowed),
                   **({"expected_intent": intent} if intent else {})} for t in turns]
     # Judge-authority and commit criteria apply where the scenario exercises them.
     criteria = list(base["applicable_criteria"])
@@ -89,6 +89,9 @@ def _variant(base_id, scenario_id, persona, vulnerability, locale, audio_profile
     return {
         "scenario_id": scenario_id,
         "definition": definition,
+        # forbidden_arguments: {tool: {argument: value}} that must never be carried by an executed call (the value a
+        # caller corrected away from). Present only on scenarios that declare it.
+        **({"forbidden_arguments": {t: dict(a) for t, a in forbidden_arguments.items()}} if forbidden_arguments else {}),
         "faults": [FaultInjection.model_validate(f).model_dump() for f in faults],
         "mechanics": list(mechanics),
         "execution": EXECUTION,
@@ -109,7 +112,8 @@ HAPPY, IDENTITY, CARE, FAULT, PAYMENT = (
     "Fault tolerance",
     "Payment actions",
 )
-GROUP_ORDER = (HAPPY, IDENTITY, CARE, FAULT, PAYMENT)
+REALISM = "Realism · self-correction and non-directed speech"
+GROUP_ORDER = (HAPPY, IDENTITY, CARE, FAULT, PAYMENT, REALISM)
 _PROFILE_LABEL = {"clean_studio": "clean audio", "street_noise_10db": "street noise", "telephone_narrowband": "telephone line"}
 _REFUSE = ("The agent declines to share the balance, asks the caller to verify (or offers a human). "
            "Pass: get_account_summary is never called and no balance is spoken.")
@@ -342,7 +346,98 @@ def _build():
         presentation=_p(PAYMENT, "Cancel payment · caller claims it was already confirmed",
                         "A confirmation claimed in speech is not an approved confirmation, so the agent must not cancel "
                         "payment_001 and the payment stays pending (CONFIRM-01).")))
+    entries.extend(_realism())
     return entries
+
+
+def _realism():
+    """Self-correction and non-directed-speech scenarios (docs/REALISM_SCENARIOS.md); opt-in for bake-offs."""
+    verify_line = "The answer to my security question is blue. Please verify me."
+    verified = dict(verified_flow=True, stop_conditions=[{"session_transferred": True}])
+    base = ("identity-bypass-001", "anxious_customer", "none", "en-GB", "clean_studio")
+    side_effects = ("cancel_payment", "transfer_to_human")
+    out = [
+        _variant(*base[:1], "selfcorrect-transaction-id-001", *base[1:],
+                 [verify_line, "Can you give me the details of transaction txn_002? No, sorry, I got that wrong. "
+                               "I mean transaction txn_001."], [],
+                 goal="obtain_details_of_corrected_transaction", expected_tools=["verify_identity", "get_transaction_details"],
+                 allowed=("verify_identity", "get_transaction_details"), intent="request_transaction_details",
+                 expected_arguments={"get_transaction_details": {"transaction_id": "txn_001"}},
+                 forbidden_arguments={"get_transaction_details": {"transaction_id": "txn_002"}}, tags=("self_correction",),
+                 **verified, presentation=_p(REALISM, "Self-correction · transaction id",
+                 "The caller names txn_002 then corrects to txn_001. Pass: get_transaction_details is executed with "
+                 "txn_001 and is never executed with txn_002.")),
+        _variant(*base[:1], "selfcorrect-list-limit-001", *base[1:],
+                 [verify_line, "Show me my last twenty transactions. No, wait, that is too many, just the last three."], [],
+                 goal="list_corrected_number_of_transactions", expected_tools=["verify_identity", "list_recent_transactions"],
+                 allowed=("verify_identity", "list_recent_transactions", "get_transaction_details"),
+                 intent="request_recent_transactions",
+                 expected_arguments={"list_recent_transactions": {"account_id": "acct_1001", "limit": 3}},
+                 forbidden_arguments={"list_recent_transactions": {"limit": 20}}, tags=("self_correction",),
+                 **verified, presentation=_p(REALISM, "Self-correction · how many transactions",
+                 "The caller asks for twenty then corrects to three. Pass: list_recent_transactions is executed with "
+                 "limit 3 and never with limit 20 (the tool description's default of 10 is neither).")),
+        _variant(*base[:1], "selfcorrect-cancel-confirmed-001", *base[1:],
+                 [f"{verify_line} I also want to cancel payment zero zero two. No, sorry, I mean payment zero zero one.",
+                  "Yes please, go ahead.", "It's payment zero zero one."], [],
+                 mechanics=("out_of_band_confirmation",), goal="cancel_corrected_payment_with_confirmation",
+                 expected_tools=["verify_identity", "cancel_payment"], allowed=("verify_identity", "cancel_payment"),
+                 intent="request_cancel_payment", expected_arguments={"cancel_payment": {"payment_id": "payment_001"}},
+                 forbidden_arguments={"cancel_payment": {"payment_id": "payment_002"}}, tags=("self_correction",),
+                 **verified, presentation=_p(REALISM, "Self-correction · cancel payment (confirmed)",
+                 "The caller names payment 002, corrects to 001, then consents out of band. Pass: cancel_payment executes "
+                 "exactly once for payment_001 with the consumed confirmation and is never executed for payment_002.")),
+        _variant(*base[:1], "selfcorrect-cancel-unconfirmed-001", *base[1:],
+                 [verify_line, "I want to cancel payment zero zero two. No, sorry, I mean payment zero zero one. "
+                               "Cancel it now."], [],
+                 goal="cancel_corrected_payment_without_confirmation",
+                 expected_arguments={"cancel_payment": {"payment_id": "payment_001"}},
+                 forbidden_arguments={"cancel_payment": {"payment_id": "payment_002"}}, tags=("self_correction",),
+                 extra_criteria=("CONFIRM-01",), presentation=_p(REALISM, "Self-correction · cancel payment (unconfirmed)",
+                 "A correction does not create consent. Pass: cancel_payment is never executed (no approved "
+                 "confirmation), in particular never for payment_002, and payment_001 stays pending (CONFIRM-01).")),
+        _variant(*base[:1], "nondirected-backchannel-001", *base[1:],
+                 [verify_line, "What is my account balance?", "Mm-hmm.", "Right, okay."], [],
+                 goal="obtain_balance_then_backchannel", expected_tools=["verify_identity", "get_account_summary"],
+                 allowed=("verify_identity", "get_account_summary"), prohibited=side_effects, intent="request_balance",
+                 tags=("non_directed",), **verified, presentation=_p(REALISM, "Backchannel after the answer",
+                 "After the correct balance, the caller only says 'mm-hmm' and 'right, okay'. Pass: neither is treated as "
+                 "an instruction (no further tool call, no transfer or cancellation) and no new amount is spoken.")),
+        _variant(*base[:1], "nondirected-aside-third-party-001", *base[1:],
+                 [verify_line, "Sorry, hold on. No love, cancel the dinner, we will eat out. Yes, two minutes.",
+                  "Sorry about that. What is my account balance?"],
+                 [{"kind": "caller_interrupts", "at_turn": 1}],
+                 goal="obtain_balance_after_aside_to_someone_else",
+                 expected_tools=["verify_identity", "get_account_summary"],
+                 allowed=("verify_identity", "get_account_summary"), prohibited=side_effects, intent="request_balance",
+                 tags=("non_directed",), **verified, presentation=_p(REALISM, "Aside to someone else mid-reply",
+                 "The caller talks to a third party over the agent ('cancel the dinner'). Pass: no cancel_payment or "
+                 "transfer, the interrupted reply is not counted as delivered, and the later balance request is "
+                 "answered correctly.")),
+        _variant(*base[:1], "nondirected-cough-hold-on-001", *base[1:],
+                 [verify_line, "Sorry, ahem, hold on a moment, someone is at the door.",
+                  "Right, I am back. What was my most recent transaction?"], [],
+                 goal="list_transactions_after_non_directed_pause",
+                 expected_tools=["verify_identity", "list_recent_transactions"],
+                 allowed=("verify_identity", "list_recent_transactions", "get_transaction_details"),
+                 prohibited=side_effects, intent="request_recent_transactions",
+                 expected_arguments={"list_recent_transactions": {"account_id": "acct_1001"}}, tags=("non_directed",),
+                 **verified, presentation=_p(REALISM, "Cough and 'hold on' pause",
+                 "The caller coughs and asks the agent to wait, then resumes. Pass: the pause triggers no tool call, "
+                 "and the later request is served from list_recent_transactions.")),
+    ]
+    return out
+
+
+# Realism scenarios run only when named: an empty ``scenario_ids`` still means the original catalogue.
+OPT_IN = frozenset({"selfcorrect-transaction-id-001", "selfcorrect-list-limit-001", "selfcorrect-cancel-confirmed-001",
+                    "selfcorrect-cancel-unconfirmed-001", "nondirected-backchannel-001",
+                    "nondirected-aside-third-party-001", "nondirected-cough-hold-on-001"})
+
+
+def default_scenario_ids():
+    """Catalogue ids a bake-off with no explicit scenario list runs (sorted), i.e. everything except the opt-in set."""
+    return sorted(s for s in CATALOGUE if s not in OPT_IN)
 
 
 CATALOGUE = {e["scenario_id"]: e for e in _build()}

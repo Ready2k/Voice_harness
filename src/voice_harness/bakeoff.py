@@ -45,14 +45,14 @@ from typing import Annotated, Literal
 from pydantic import Field, model_validator
 
 from . import bakeoff_disclosure, bakeoff_metrics, bakeoff_stats, cost
-from .contracts import Closed, Identifier
+from .contracts import Closed, Identifier, LineProfile, VoiceProfile
 from .engine import identifier
 from .judges.assessors import assessor_identity, summarise_assessors
 from .judges.review import effective_from_events
 from .live_providers import CALLER_TRAIL_MS, LIVE_PROVIDERS, TESTED_MODELS
 from .pricing import load_table
 from .provider_failures import ACCESS_FAILURES, failure_code, infrastructure_failure
-from .scenario_catalogue import CATALOGUE, catalogue_entry
+from .scenario_catalogue import CATALOGUE, catalogue_entry, default_scenario_ids
 
 MIGRATION_ID = 14
 TERMINAL = {"completed", "failed", "cancelled", "recovery_required"}
@@ -114,6 +114,11 @@ class BakeoffRequest(Closed):
     prompt_profile: Literal["standardised-v2", "standardised-v3", "advanced-v1", "conversational-v1"] = "standardised-v2"
     weights: Weights = Weights()
     group_balanced: bool = False  # give each scenario group equal weight in the rates instead of pooling runs
+    # Whole-bake-off caller-channel options, default off (a run then behaves exactly as before). line_profile replaces every
+    # scenario's own audio profile (e.g. the 8 kHz telephone line for every provider); caller_voice_profile picks a
+    # caller_voice.PANEL voice. Both are recorded in each run's config and binding.
+    line_profile: LineProfile = "scenario"
+    caller_voice_profile: VoiceProfile = "default"
     runs: Annotated[list[ImportedRun], Field(max_length=MAX_RUNS)] = []
 
     @model_validator(mode="after")
@@ -128,10 +133,16 @@ class BakeoffRequest(Closed):
         if not self.runs:
             if not self.provider_config_ids:
                 raise ValueError("PROVIDERS_REQUIRED")
-            total = len(self.scenario_ids or CATALOGUE) * len(self.provider_config_ids) * self.repetitions
+            total = len(self.scenario_ids or default_scenario_ids()) * len(self.provider_config_ids) * self.repetitions
             if total > MAX_RUNS:
                 raise ValueError("BAKEOFF_TOO_LARGE")
         return self
+
+
+def _caller_options(request):
+    """The non-default caller-channel options of a request as a CallerConfig fragment ({} when none)."""
+    return {**({"line_profile": request.line_profile} if request.line_profile != "scenario" else {}),
+            **({"voice_profile": request.caller_voice_profile} if request.caller_voice_profile != "default" else {})}
 
 
 class BakeoffStore:
@@ -166,7 +177,7 @@ class BakeoffStore:
                 raise ValueError("PROVIDERS_REQUIRED")
         else:
             providers = list(request.provider_config_ids)
-            scenarios = request.scenario_ids or sorted(CATALOGUE)
+            scenarios = request.scenario_ids or default_scenario_ids()
             cells = [{"scenario_id": s, "provider_config_id": p, "repetition": r, "attempts": []}
                      for r in range(request.repetitions) for s in scenarios for p in providers]
         payload = {
@@ -177,6 +188,7 @@ class BakeoffStore:
             "providers": providers, "repetitions": request.repetitions if not request.runs else None,
             "prompt_profile": request.prompt_profile,
             "weights": request.weights.model_dump(), "group_balanced": request.group_balanced, "cells": cells,
+            **({"caller": caller} if (caller := _caller_options(request)) else {}),
             **({"judge_configuration": judges} if judges is not None else {}),
         }
         with self.database.connection() as db:
@@ -343,6 +355,8 @@ def tick(store, database, start_run, *, capacity, per_provider=2, clock=time.tim
                 config = {"scenario_id": cell["scenario_id"], "provider_config_id": provider}
                 if payload.get("prompt_profile", "standardised-v2") != "standardised-v2":
                     config["prompt_profile"] = payload["prompt_profile"]
+                if payload.get("caller"):
+                    config["caller"] = dict(payload["caller"])
                 generation = payload.get("preflight", {}).get("generation", 0)
                 key = f"{bakeoff_id}:{'preflight' if checking else 'scored'}:{generation}:{cell['scenario_id']}:{provider}:{cell['repetition']}:{len(cell['attempts'])}"
                 try:
@@ -456,6 +470,9 @@ def observe(database, cell, table=None):
         state = database.get(run_id)
     except KeyError:
         return {**base, "completed": False, "outcome": "run_failed", "failure": "RUN_NOT_FOUND"}
+    line = (state.get("config", {}).get("caller") or {}).get("line_profile", "scenario")
+    if line != "scenario":  # a whole-bake-off line override: report the profile the caller audio really had
+        base["audio_profile"], base["audio_profile_override"] = line, True
     events = database.events(run_id)
     completed = state["state"] == "completed"
     assurance = effective_from_events(events, run_id) if completed else {}
@@ -498,7 +515,8 @@ def observe(database, cell, table=None):
         "confirmation_delivery": binding.get("confirmation_delivery"),
         "parity": bakeoff_disclosure.parity(binding),
         "metrics":bakeoff_metrics.observe_metrics(provider, definition, events, is_audio=_is_audio, trail_ms=CALLER_TRAIL_MS,
-                                                   tags=entry.get("tags", ()), expected_arguments=entry.get("expected_arguments")),
+                                                   tags=entry.get("tags", ()), expected_arguments=entry.get("expected_arguments"),
+                                                   forbidden_arguments=entry.get("forbidden_arguments")),
         "earlier_costs": [voice_cost(a["run_id"], database.events(a["run_id"]), table)
                           for a in cell["attempts"][:-1] if a.get("run_id")],
         "cost": voice_cost(run_id, events, table),  # failed runs are billed too, so they are costed
@@ -545,6 +563,21 @@ def _weighted_rate(parts):
 def _rate(k, n):
     lo, hi = wilson(k, n)
     return {"value": k / n if n else None, "lo": lo, "hi": hi, "k": k, "n": n}
+
+
+def pass_all_repetitions(mine, repetitions):
+    """pass^k consistency: the share of scenarios a provider passes on every one of ``repetitions`` repetitions.
+
+    Only scenarios with all repetitions completed count; the rest are excluded and counted, never scored as passes or
+    failures. Reported beside the pass rate, never part of the composite. Uses the Wilson interval over scenarios."""
+    by_scenario = {}
+    for o in mine:
+        by_scenario.setdefault(o["scenario_id"], {})[o["repetition"]] = o
+    k = repetitions or max((len(runs) for runs in by_scenario.values()), default=0)
+    eligible = [runs for runs in by_scenario.values() if len(runs) >= k and all(o["completed"] for o in runs.values())]
+    consistent = sum(all(o["outcome"] == "pass" for o in runs.values()) for runs in eligible)
+    return {**_rate(consistent, len(eligible)), "repetitions": k, "scenarios": len(by_scenario),
+            "excluded": len(by_scenario) - len(eligible)}
 
 
 def report(payload, weights=None, group_balanced=None):
@@ -608,6 +641,7 @@ def report(payload, weights=None, group_balanced=None):
             "provider": provider, "name": NAMES[provider],
             "task_success": _rate(sum(o["outcome"] == "pass" for o in completed), len(completed)),
             # Assurance split by track, and the pass rate among runs the assessment could actually decide.
+            "pass_all_repetitions": pass_all_repetitions(mine, payload.get("repetitions")),
             "task_success_decided": _rate(sum(o["outcome"] == "pass" for o in completed),
                                           sum(o["outcome"] in {"pass", "fail"} for o in completed)),
             "task_completion": _rate(sum(v is True for v in done), sum(v is not None for v in done)),

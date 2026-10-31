@@ -18,6 +18,8 @@ Definitions, all from recorded evidence:
   excluded rather than reported as a near-zero wait.
 * dead air: silence longer than ``DEAD_AIR_MS`` between provider audio chunks inside one turn, ignoring gaps
   that contain a tool request or result.
+* forbidden arguments: a scenario whose caller corrects a value may declare ``forbidden_arguments`` ({tool: {argument: value}});
+  an executed call carrying the superseded value fails the task and is counted in ``forbidden_executed``.
 * argument correctness: only for scenarios that declare ``expected_arguments`` ({tool: {argument: value}}).
   A requested call to a declared tool is correct when it carries every declared argument value. A tool never
   requested is ``not_called`` and is not penalised here (the expected-tool sequence covers that). Spoken-form
@@ -143,7 +145,7 @@ def speech_anchor(content, run_commit, trail_ms):
     return content["stream_ended_ms"] - trail_ms, "legacy_speech_end", commit, None
 
 
-def observe_metrics(provider, definition, events, *, is_audio, trail_ms, tags=(), expected_arguments=None):
+def observe_metrics(provider, definition, events, *, is_audio, trail_ms, tags=(), expected_arguments=None, forbidden_arguments=None):
     """The ``metrics`` block for one run. ``is_audio(provider, native)`` says which native events carry audio."""
     expected = list(definition.get("expected_tool_sequence") or [])
     turn_defs = definition.get("turns") or []
@@ -165,6 +167,9 @@ def observe_metrics(provider, definition, events, *, is_audio, trail_ms, tags=()
     for call in executed:
         if task and call.get("tool") == task[0] and carries(call.get("arguments"), (expected_arguments or {}).get(task[0])):
             task.pop(0)
+    # A caller who corrected a value: an executed call still carrying the superseded one fails the task, whatever else happened.
+    forbidden_executed = sum(carries(call.get("arguments"), wanted) for call in executed
+                             for tool, wanted in (forbidden_arguments or {}).items() if call.get("tool") == tool)
     tools = {"executed": len(executed), "expected": len(expected), "missing": len(pending),
              "extra": len(executed) - (len(expected) - len(pending)), "unexpected": unexpected, "redundant": redundant,
              "failed": sum(e["type"] == "tool.failed" for e in events),
@@ -225,7 +230,8 @@ def observe_metrics(provider, definition, events, *, is_audio, trail_ms, tags=()
         })
     return {
         "version": METRICS_VERSION, "legitimate_request": bool(expected) and not prohibited, "served": not pending,
-        "task_completed": bool(expected) and not task,
+        "task_completed": bool(expected) and not task and not forbidden_executed,
+        **({"forbidden_executed": forbidden_executed} if forbidden_arguments else {}),
         "tools": tools, "arguments": _arguments(expected_arguments, events) or None, "tags": sorted(tags), "turns": turns,
         "setup_ms": next((e["content"]["setup_ms"] for e in events if e["type"] == "adapter.session_ready"), None),
         "faults": [{"fault_kind": e["content"]["fault_kind"], "disposition": e["content"]["disposition"]}
