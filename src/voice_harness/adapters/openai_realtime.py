@@ -474,10 +474,27 @@ def wav_data(buf: bytes) -> bytes:
     raise ValueError("no data chunk in WAV")
 
 
+def trim_trailing_silence(pcm: bytes, rate: int = SAMPLE_RATE, threshold: int = 300) -> bytes:
+    """Drop quiet 10 ms windows (RMS below ``threshold``) from the end, so a clip ends where the voice ends."""
+    import array
+
+    samples, window = array.array("h"), rate // 100
+    samples.frombytes(pcm[: len(pcm) // 2 * 2])
+    end = len(samples)
+    while end > 0:
+        segment = samples[max(0, end - window) : end]
+        if (sum(x * x for x in segment) / len(segment)) ** 0.5 >= threshold:
+            break
+        end -= window
+    return samples[: max(end, 0)].tobytes()
+
+
 def synth_caller_pcm(text: str = "Stop. Please stop talking, I have a question.", *, lead_ms: int = 200,
-                     trail_ms: int = 1000, environ=None) -> bytes:
+                     trail_ms: int = 1000, environ=None, trim_tail: bool = False) -> bytes:
     """Synthetic caller utterance as 24 kHz s16le mono with silence padding. Backend per
     ``VOICE_HARNESS_CALLER_VOICE`` (macOS say/afconvert by default, or opt-in openai_tts).
+    ``trim_tail`` removes the synthesiser's own trailing silence (about 220 ms from macOS ``say``) before ``trail_ms`` is added, so
+    "end of speech" is where the voice ends; off by default, because existing bake-off latency is anchored without it.
     Raises RuntimeError when no synthesiser is usable."""
     from .. import caller_voice
 
@@ -486,7 +503,11 @@ def synth_caller_pcm(text: str = "Stop. Please stop talking, I have a question."
         raise caller_voice.CallerVoiceUnavailable(reason)
     if name == "openai_tts":
         pcm = caller_voice.openai_tts_pcm(text, environ=environ)
+        pcm = trim_trailing_silence(pcm) if trim_tail else pcm
         return bytes(SAMPLE_RATE * 2 * lead_ms // 1000) + pcm + bytes(SAMPLE_RATE * 2 * trail_ms // 1000)
+    if trim_tail:
+        voiced = trim_trailing_silence(_synth_macos(text, lead_ms=lead_ms, trail_ms=0))
+        return voiced + bytes(SAMPLE_RATE * 2 * trail_ms // 1000)
     return _synth_macos(text, lead_ms=lead_ms, trail_ms=trail_ms)
 
 

@@ -357,6 +357,9 @@ def _adapter(provider_config_id, prompt_profile="standardised-v2"):
 # from opening turns (and cutting the welcome), a short silence window still closes real turns promptly.
 MIC_VAD = {"threshold": 0.8, "silence_duration_ms": 700, "prefix_padding_ms": 300}
 MIC_VAD_PROVIDERS = ("openai-realtime-live", "xai-voice-live")
+# Latency benchmark (HARNESS_NATIVE_VAD=1): vendor-default threshold on clean synthetic audio. 700 ms is the shortest silence that
+# did not cut off a 600 ms hesitation for both providers in scripts/vad_calibration.py (31 Oct: 300 and 500 ms did at least once).
+NATIVE_VAD = {"silence_duration_ms": 700, "prefix_padding_ms": 300}
 # send_text(respond=False) supported: orchestrator context is added without asking for a reply.
 CONTEXT_ONLY = ("openai-live", "openai-realtime-live", "xai-voice-live", "gemini-live", "elevenlabs-live")
 
@@ -384,7 +387,7 @@ def configure_transport(provider_config_id, config, caller_mode):
         detection = "server_vad" if caller_mode == "human_microphone" or native_vad else "manual"
         config["turn_detection"] = detection
         if detection == "server_vad" and provider_config_id in MIC_VAD_PROVIDERS:
-            config["turn_detection"] = {"type": "server_vad", **MIC_VAD, **(
+            config["turn_detection"] = {"type": "server_vad", **(NATIVE_VAD if native_vad else MIC_VAD), **(
                 {"interrupt_response": True, "create_response": True} if provider_config_id == "openai-realtime-live" else {})}
     if provider_config_id == "gemini-live" and detection == "server_vad" and (caller_mode == "human_microphone" or native_vad):
         # Default end-of-speech detection answered 8-9 s after a short utterance in a room-mic session.
@@ -492,7 +495,8 @@ async def run_live(engine, run_id, provider_config_id, scenario_id, *, seed=0, c
 
     runner = LiveScenarioRunner(
         engine, run_id, adapter, assessor, scenario_id,
-        caller_audio=lambda text: synth_caller_pcm(text, trail_ms=CALLER_TRAIL_MS, environ=voice_env), before_turn=before_turn, seed=seed,
+        caller_audio=lambda text: synth_caller_pcm(text, trail_ms=CALLER_TRAIL_MS, environ=voice_env,
+                                                   trim_tail=os.environ.get("HARNESS_NATIVE_VAD") == "1"), before_turn=before_turn, seed=seed,
         provider_session=metadata, cost_recorder=recorder, trail_ms=CALLER_TRAIL_MS)
     reason = "done"
     try:

@@ -41,6 +41,9 @@ class ProviderTransportTests(unittest.TestCase):
                 self.assertEqual(profile["turn_commit"], "automatic")
                 self.assertEqual(profile["turn_detection"], "server_vad")
                 self.assertIsNone(profile["commit_delay_ms"])
+                if provider != "gemini-live":
+                    self.assertEqual(config["turn_detection"]["silence_duration_ms"], 700)
+                    self.assertNotIn("threshold", config["turn_detection"])  # vendor default, not the room-microphone 0.8
         with mock.patch.dict(os.environ, {"HARNESS_NATIVE_VAD": "1"}):  # live_ai callers and the default stay as they were
             _, config = _adapter("xai-voice-live")
             self.assertEqual(configure_transport("xai-voice-live", config, "live_ai")["turn_commit"], "explicit")

@@ -27,5 +27,14 @@ class EndpointingSplitTests(unittest.TestCase):
         self.assertIsNone(endpointing_split("nova-sonic-live", [native("userSpeechEnd", 1500)], 1000, 9000, None))
 
 
+class TrimTests(unittest.TestCase):
+    def test_trailing_silence_is_dropped_and_the_voice_kept(self):
+        from voice_harness.adapters.openai_realtime import trim_trailing_silence
+
+        voice = (b"\xe8\x03" * 24000)  # 1 s of constant amplitude 1000
+        self.assertEqual(trim_trailing_silence(voice + bytes(2 * 24000 // 4)), voice)  # 250 ms of silence removed
+        self.assertEqual(trim_trailing_silence(bytes(4800)), b"")
+
+
 if __name__ == "__main__":
     unittest.main()
