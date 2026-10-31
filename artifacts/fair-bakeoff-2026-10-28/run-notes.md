@@ -27,7 +27,13 @@ All six providers passed pre-scoring checks at launch and at both resumptions. A
 **Known limitations.** Latency is disclosed as not like for like (explicit-commit providers get a common emulated 500 ms
 endpointing; provider-VAD providers pay their own). GPT-Live turn boundaries are a tuned heuristic (no provider
 reply-complete event). Four OpenAI Realtime balance replies remain `AMBIGUOUS_AMOUNT` and their audio is retained for
-human listening (see the re-score README). `commit-cancel-confirmed-001` (v2 in this run) had no clarification turn and
+human listening (see the re-score README). Checked against the ledger on 31 Oct (not by ear): in all four the independent ASR
+heard "one pound, two hundred thirty-four pounds and fifty-six pence" where the model's own text was "1,234 pounds and 56 pence".
+The same ASR heard "thousand" in all 75 balance replies from the other providers, and in 11 of 11 OpenAI Realtime balance replies in the
+29/30 Oct standard-prompt run, but in only 4 of 8 OpenAI Realtime balance replies here. So the omission is most likely in the
+audio (the voice read "1,234" without the thousand) under the `advanced-v1` prompt, not ASR noise. These replies are scored
+ambiguous rather than wrong, so this run's OpenAI Realtime factual rate does not count them against it; another reason its
+tuned-versus-standard gap is not clean. The standard-prompt report is unaffected. `commit-cancel-confirmed-001` (v2 in this run) had no clarification turn and
 is excluded from task completion in the re-score; v3 adds one but has not yet been run live.
 
 Local SQLite evidence, retained audio, signing keys and tokens stay in the git-ignored `.local/fair-bakeoff-2026-10-28`.

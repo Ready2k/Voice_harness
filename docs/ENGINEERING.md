@@ -66,6 +66,14 @@ over from 28 Oct by `scripts/merge_gpt_live_into_standard.py`), is `artifacts/ba
 judge dominates OpenAI spend (about $0.017 a run); `scripts/judge_model_agreement.py` re-judges a finished run with another model and
 compares verdicts. To compare two bake-offs (for example two prompt profiles) use `scripts/compare_prompt_profiles.py`.
 
+**Rerun policy.** A finished bake-off is not rerun wholesale to improve a result. A cell is rerun only when a ledger rule shows the
+sample was lost to a fault outside the model's behaviour, applied to every provider alike: `scripts/rerun_asr_blocked_cells.py`
+`--rule asr-unavailable` (independent ASR was unavailable, so a reply went unchecked) or `--rule dropped-tool-call` (a provider tool
+call the harness never executed). The rule is stated before the rerun and the selection is listed without `--apply` first. A cell
+gets at most `MAX_ATTEMPTS` (2) attempts; the rerun replaces the first sample, and the earlier attempt and its cost stay on the cell.
+Run notes list every rerun cell, the rule, and the fix that preceded it. A result a provider simply got wrong is never rerun.
+A new bake-off, not a rerun, is the way to test a changed prompt, scenario or adapter.
+
 ## Live provider benchmark (historical matrix runner)
 
 The `scripts/provider_matrix.py` flow below predates bake-offs. It ran 33 scenarios against the four providers then
