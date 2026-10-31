@@ -1,0 +1,135 @@
+[
+  [
+    "LOCAL ADMIN TOUR",
+    "Voice Harness",
+    "Configure the test. Inspect what happened. Compare the evidence.",
+    "runs",
+    "Prototype evaluation and assurance workspace"
+  ],
+  [
+    "01 / EVALUATION WORKSPACE",
+    "Every run, in one place",
+    "Filter by scenario, provider, outcome, status and time. Open a run to inspect the evidence.",
+    "runs",
+    "Real local inventory • latest 50 runs, not an overall success rate"
+  ],
+  [
+    "02 / CUSTOMISATION",
+    "Shape each evaluation",
+    "Select the scenario, audio condition and prompt profile. Set a fixture seed and choose audio retention.",
+    "configure",
+    "Provider execution requires configured credentials and independent ASR"
+  ],
+  [
+    "03 / CALLER PILOT",
+    "Tune the caller",
+    "Choose persona and voice. Bound the number of turns and maximum call duration.",
+    "configure-caller",
+    "Live AI caller pilot: clean balance enquiry only; caller fidelity needs review"
+  ],
+  [
+    "04 / SCENARIO LIBRARY",
+    "Define the challenge",
+    "Explore expected behaviour, tool calls and criteria. Filter by customer group, locale and audio condition.",
+    "scenario-detail",
+    "Synthetic banking scenarios • task expectations remain explicit"
+  ],
+  [
+    "05 / VERSIONED DEFINITIONS",
+    "Extend the catalogue",
+    "Download and edit a scenario definition. Validate and store a new version through the import dialog.",
+    "scenario-import",
+    "Import stores a definition; execution also needs a registered runner"
+  ],
+  [
+    "06 / BATCH DESIGN",
+    "Configure a bake-off",
+    "Choose providers, scenario groups, prompt profile and repetitions. The launch flow exposes setup and billing requirements.",
+    "bakeoff-config",
+    "Configuration preview only • no new evaluations launched"
+  ],
+  [
+    "07 / DECISION PRIORITIES",
+    "Explore different weights",
+    "Adjust quality dimensions and inspect how the report responds. Custom weights do not overwrite the stored assessment.",
+    "bakeoff-weights",
+    "An exploratory score does not establish a statistically significant winner"
+  ],
+  [
+    "08 / SHAREABLE RESULTS",
+    "Open the evidence",
+    "Inspect gates and scorecards. Download the report, observations as CSV or JSON, or clone the configuration.",
+    "bakeoff-report",
+    "Local five-provider batch: 600 settled runs • no clear winner"
+  ],
+  [
+    "09 / SIDE-BY-SIDE REVIEW",
+    "Compare the conversation",
+    "Read two runs together, with metric differences, transcript revisions and model versus platform verdicts.",
+    "compare-results",
+    "Recorded runs • differences here do not establish a provider ranking"
+  ],
+  [
+    "10 / FAILURE INSPECTION",
+    "See where a run failed",
+    "Follow the recorded system activity. Inspect denied tools, policy decisions and released audio.",
+    "run-detail",
+    "Example: model fail, platform pass • enforcement and behaviour are separate"
+  ],
+  [
+    "11 / EVIDENCE ACTIONS",
+    "Keep the review traceable",
+    "Rerun or assess an existing run, preserve evidence and export the signed evidence bundle.",
+    "run-actions",
+    "Controls shown only • no assessment, retention or export state changed"
+  ],
+  [
+    "12 / MANUAL TESTING",
+    "Try the journey yourself",
+    "Choose a happy or challenge path. Configure voice or text input and assessment before or after playback.",
+    "manual",
+    "Human-driven sessions use configured live providers and incur usage"
+  ],
+  [
+    "13 / TELEPHONE PILOT",
+    "Customise a demo call",
+    "Edit goals, supplied details and delivery style. Choose generated or fixed responses and gated or native speech.",
+    "telephone-details",
+    "Bounded diagnostic pilot • authorised demo lines • not independent platform verification"
+  ],
+  [
+    "14 / REVIEW AND HOLDS",
+    "Manage findings and evidence",
+    "Review assurance findings and manage preservation holds. Existing retained evidence remains available until the hold expires.",
+    "review-private",
+    "Owner identifier obscured for privacy • holds cannot restore purged evidence"
+  ],
+  [
+    "15 / PROVIDER COVERAGE",
+    "Check readiness first",
+    "Inspect capability evidence and expiry dates. Separate verified support from the current server configuration.",
+    "coverage",
+    "Captured server: six verified families, zero ready • setup gaps remain visible"
+  ],
+  [
+    "16 / SPEND AWARENESS",
+    "Watch credit and usage",
+    "Review provider balances, dated manual readings and warning thresholds before another evaluation.",
+    "balances",
+    "Saved balances are historical observations; provider reporting may lag"
+  ],
+  [
+    "17 / LOCAL EXPERIENCE",
+    "Make the workspace yours",
+    "Use light, dark or automatic theme. Move between evaluations, reports and operational controls in the local browser.",
+    "dark-theme",
+    "Local UI and evidence • configured cloud services still process live calls"
+  ],
+  [
+    "NEXT / VALIDATION",
+    "Prototype today.\nEvidence for the next decision.",
+    "Apply the same journeys to your actual Connect or third-party configuration, then validate the end-to-end customer experience.",
+    "run-detail",
+    "Current direct-provider tests do not benchmark Amazon Connect or ACXD"
+  ]
+]

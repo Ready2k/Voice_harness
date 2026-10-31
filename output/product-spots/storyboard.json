@@ -1,0 +1,64 @@
+[
+  {
+    "tag": "VOICE HARNESS",
+    "title": "Your next\nvoice AI decision.",
+    "sub": "Make it evidence-led.",
+    "dark": true
+  },
+  {
+    "tag": "BEYOND THE DEMO",
+    "title": "What happens\nunder pressure?",
+    "sub": "Put the conversation to the test.",
+    "screen": "scenario-detail"
+  },
+  {
+    "tag": "MAKE IT YOUR TEST",
+    "title": "Change the caller.\nChange the challenge.",
+    "sub": "Personas. Voices. Scenarios. Controls.",
+    "screen": "configure-caller"
+  },
+  {
+    "tag": "EXPLORE THE EDGE CASES",
+    "title": "40 scenarios.\nFive challenge groups.",
+    "sub": "Identity. Vulnerability. Faults. Payments. Happy paths.",
+    "screen": "scenarios"
+  },
+  {
+    "tag": "COMPARE CONFIGURATIONS",
+    "title": "Run the\ncomparison.",
+    "sub": "Shared scenarios. Repeated tests.",
+    "screen": "bakeoff-weights"
+  },
+  {
+    "tag": "RECORDED PROTOTYPE RESULTS",
+    "title": "600 scored tests.\nFive providers.",
+    "sub": "One shared banking prompt. No clear quality winner.",
+    "note": "29–30 October 2026 cohort. Synthetic scenarios. Not a Connect benchmark.",
+    "dark": true
+  },
+  {
+    "tag": "FOLLOW THE ACTION",
+    "title": "See what the\nagent actually did.",
+    "sub": "Tool calls. Decisions. Conversation evidence.",
+    "screen": "run-detail"
+  },
+  {
+    "tag": "KNOW THE DIFFERENCE",
+    "title": "Agent behaviour.\nPlatform enforcement.",
+    "sub": "Separate verdicts. A clearer investigation.",
+    "screen": "run-detail"
+  },
+  {
+    "tag": "BRING BUSINESS AND TECH TOGETHER",
+    "title": "Evidence your team\ncan inspect.",
+    "sub": "Compare conversations. Review findings. Export evidence.",
+    "screen": "compare-results"
+  },
+  {
+    "tag": "VOICE HARNESS",
+    "title": "Choose your next pilot\nwith evidence.",
+    "sub": "Explore the local prototype.",
+    "note": "Live tests use configured cloud services. Current tests do not benchmark Connect or ACXD.",
+    "dark": true
+  }
+]

@@ -1,0 +1,52 @@
+[
+  {
+    "tag": "VOICE HARNESS / REPORTING",
+    "title": "Big questions.\nVisible evidence.",
+    "sub": "From the boardroom to the run.",
+    "dark": true
+  },
+  {
+    "tag": "THE EXECUTIVE BRIEFING",
+    "title": "Start with\ntrust.",
+    "sub": "Put customer outcomes at the centre.",
+    "screen": "executive-trust"
+  },
+  {
+    "tag": "THE BUSINESS DASHBOARD",
+    "title": "See the\ntrade-offs.",
+    "sub": "Compare outcomes. Explore the differences.",
+    "screen": "compare"
+  },
+  {
+    "tag": "THE RUN LEDGER",
+    "title": "Go beyond\nthe score.",
+    "sub": "Inspect individual runs. Export your selection.",
+    "screen": "ledger"
+  },
+  {
+    "tag": "TEST SETUP",
+    "title": "Open the\nblack box.",
+    "sub": "Exact instructions. Settings. Assessment details.",
+    "screen": "test-setup"
+  },
+  {
+    "tag": "THE LISTENING LIBRARY",
+    "title": "Hear the\ndifference.",
+    "sub": "Explore recorded voices and conversations.",
+    "screen": "voice-library",
+    "note": "Listening datasets are separate studies; coverage varies by assessment."
+  },
+  {
+    "tag": "THE RESEARCH ARCHIVE",
+    "title": "Follow the\nevidence.",
+    "sub": "Reports. Re-scores. Retained history.",
+    "screen": "index"
+  },
+  {
+    "tag": "BUSINESS CLARITY. TECHNICAL DEPTH.",
+    "title": "Turn test results\ninto better questions.",
+    "sub": "Explore the Voice Harness reporting prototype.",
+    "dark": true,
+    "note": "Synthetic evaluation evidence. Results depend on test setup. Connect / ACXD remain unbenchmarked."
+  }
+]
