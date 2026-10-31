@@ -330,6 +330,24 @@ class AsrAndJudges(Base):
         self.assertEqual(section["completeness"], "partial")
 
 
+    def test_judge_input_notes_cache_write_tokens_the_tariff_does_not_price(self):
+        class Fake(JudgeBackend):
+            def __init__(self):
+                self.config = JudgeConfig("fj", "fixture_judge", "fixture_judge", "m1", "fam")
+
+            def complete(self, request):
+                self.last_usage = {"input_tokens": 1000, "output_tokens": 5, "cached_tokens": 0, "cache_write_tokens": 900}
+                return "{}"
+
+        class Req:
+            kind, user_payload = "k", "{}"
+
+        CostMeteredJudge(Fake(), self.database, self.run, clock=lambda: DATE).complete(Req)
+        notes = [a for e in self.database.events(self.run) for a in e["content"].get("assumptions", [])]
+        self.assertEqual(len(notes), 1)
+        self.assertIn("900 input tokens were billed at the vendor's cache-write rate", notes[0])
+
+
 class DriverEndToEnd(Base):
     def make(self, backend):
         recorder = UsageRecorder(self.database, self.run, provider="fixture_oa", service="rt", clock=lambda: DATE)

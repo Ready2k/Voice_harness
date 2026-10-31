@@ -346,7 +346,8 @@ class JudgeSampling(Base):
         backend, bodies = self.complete([Reply(body=self.OK)])
         self.assertEqual(bodies[0]["temperature"], JUDGE_TEMPERATURE)
         self.assertEqual(backend.last_call, {"temperature": 0.0, "temperature_fallback": False,
-                                             "model_version": "gpt-test-2026-01-01"})
+                                             "model_version": "gpt-test-2026-01-01", "prompt_cache": "explicit"})
+        self.assertEqual(bodies[0]["prompt_cache_options"], {"mode": "explicit"})
 
     def test_a_model_that_rejects_temperature_is_retried_without_it(self):
         rejected = Reply(400, text="Unsupported parameter: 'temperature' is not supported with this model.")

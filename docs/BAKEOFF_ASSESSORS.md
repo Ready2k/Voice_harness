@@ -95,11 +95,15 @@ Updated 27 October 2026 (`PROVIDER_BIAS_REVIEW_2026-10-27.md` findings 4 and 6).
 Measured on one day of runs (189 judged calls, about 1M input tokens each side). A judge changes no scored number: only CARE-01
 (non-mandatory, outside the assurance verdict and the composite) is judge-decided, and one cross-family judge satisfies policy.
 
-- **`gpt-6-sol`** bills all input as cache writes (1.25x the input rate on GPT-5.6 and later; caching is on by default) even though
-  nothing is ever read from the cache: the judge system prompt is about 120 tokens, under the 1,024-token prefix minimum. The
-  dashboard's "cache writes" line is therefore ordinary input billed at the write rate, a premium of about 25% (about $0.48 of the
-  day's $2.38 on input). `prompt_cache_options.mode: "explicit"` with no breakpoints should avoid it, but the chat-completions endpoint
-  has not been confirmed to accept it. The cost recorder captures cached reads only, not write tokens, so judge cost is understated by about 25%.
+- **`gpt-6-sol`** bills judge input as cache writes at 1.25x the input rate (GPT-5.6 and later; caching is on by default) once a
+  prompt passes the 1,024-token minimum. Our judge prompts average about 5,250 tokens (the system prompt is short; the case payload
+  is not), so every call is billed as a write although a judge prompt is never reused and nothing is ever read from the cache. The
+  dashboard's "cache writes" line is ordinary input at the write rate, a premium of about 25% (about $0.48 of the day's $2.38 on input).
+  Confirmed 31 October with live probes: chat completions accepts `prompt_cache_options: {"mode": "explicit"}`, and on a 2,573-token
+  prompt `cache_write_tokens` fell from 2,570 to 0 (prompts under 1,024 tokens show no writes either way). `OpenAIBackend` now sends it
+  (retried once without it on a 400 that names it, recorded in `last_call["prompt_cache"]`). Runs before this change were billed with
+  writes, and the cost recorder did not capture write tokens, so their judge cost is understated by about 25%; the recorder now adds a note to the
+  judge input report when write tokens are present (the tariff does not price them).
 - **Bedrock Claude Haiku 4.5** (calibrated, cross-family): about $0.011 per call against about $0.0175 for `gpt-6-sol`, and the cost is on the
   AWS account rather than the OpenAI credit. Running with `HARNESS_AUTO_JUDGES=bedrock` and `VOICE_HARNESS_LIVE_JUDGES=bedrock` is
   sufficient for policy, at the price of a single judge per cell (no second opinion on CARE-01; `material_benchmark` should not be set).

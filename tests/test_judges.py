@@ -564,6 +564,44 @@ class Backends(unittest.TestCase):
             OpenAIBackend(environ=env, client=Client(Response(500))).complete(request)
         self.assertEqual(raised.exception.code, "JUDGE_HTTP_500")
 
+    def test_openai_backend_asks_for_explicit_caching_and_falls_back(self):
+        sent = []
+
+        class Response:
+            def __init__(self, status, body):
+                self.status_code, self._body, self.text = status, body, json.dumps(body)
+
+            def json(self):
+                return self._body
+
+        class Client:
+            def __init__(self, replies):
+                self.replies = list(replies)
+
+            def post(self, url, **kwargs):
+                sent.append(dict(kwargs["json"]))
+                return self.replies.pop(0)
+
+        ok = Response(200, {"choices": [{"message": {"content": "{}"}}],
+                            "usage": {"prompt_tokens": 2000, "completion_tokens": 5,
+                                      "prompt_tokens_details": {"cached_tokens": 0, "cache_write_tokens": 0}}})
+        env = {"VOICE_HARNESS_LIVE_JUDGES": "openai", "OPENAI_API_KEY": "sk-test-not-real"}
+        oracle = build_oracle([], scenario=None, fixture={}, policy_version="p", criteria=["IDENTITY-01"])
+        backend = OpenAIBackend("gpt-test", environ=env, client=Client([ok]))
+        request = make_request("offline", oracle.payload, backend.config)
+        backend.complete(request)
+        self.assertEqual(sent[0]["prompt_cache_options"], {"mode": "explicit"})
+        self.assertEqual(backend.last_call["prompt_cache"], "explicit")
+        self.assertEqual(backend.last_usage["cache_write_tokens"], 0)
+
+        sent.clear()
+        refusal = Response(400, {"error": {"message": "Unknown parameter: prompt_cache_options"}})
+        backend = OpenAIBackend("gpt-test", environ=env, client=Client([refusal, ok]))
+        backend.complete(request)
+        self.assertIn("prompt_cache_options", sent[0])
+        self.assertNotIn("prompt_cache_options", sent[1])
+        self.assertEqual(backend.last_call["prompt_cache"], "default")
+
     def test_oracle_refuses_non_synthetic_runs(self):
         with self.assertRaises(ValueError):
             build_oracle([], scenario=None, fixture={}, policy_version="p", criteria=[], run_profile="production")

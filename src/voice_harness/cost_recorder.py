@@ -243,6 +243,7 @@ class UsageRecorder:
     def record_judge(self, config, usage, scope_id, *, failed=False):
         """Judge usage (``input_tokens``/``output_tokens``/``cached_tokens``) as the backend returned it, else unknown."""
         date, reports = self._clock(), []
+        writes = int((usage or {}).get("cache_write_tokens") or 0)
         for meter, key, cached in (("judge_input_tokens", "input_tokens", (usage or {}).get("cached_tokens")),
                                    ("judge_output_tokens", "output_tokens", None)):
             quantity = None if not usage or usage.get(key) is None else str(int(usage[key]))
@@ -255,7 +256,9 @@ class UsageRecorder:
                 "covers_scope_ids": [], "provenance": "provider_reported_usage", "quantity": quantity,
                 "unit": "token", "cached_quantity": None if cached is None or quantity is None else str(int(cached)),
                 "generation_state": "completed", "usage_date": date, "interval_start_ms": None,
-                "interval_end_ms": None, "estimation_method": None, "assumptions": [],
+                "interval_end_ms": None, "estimation_method": None,
+                "assumptions": [f"{writes} input tokens were billed at the vendor's cache-write rate, which the tariff does not price: "
+                                "the cost is understated"] if meter == "judge_input_tokens" and writes else [],
                 "unknown_reason": reason, "evidence_event_ids": []})
         return self._append(reports)
 

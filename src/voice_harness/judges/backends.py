@@ -198,8 +198,11 @@ class OpenAIBackend(JudgeBackend):
             ],
             "response_format": {"type": "json_object"},
             "temperature": JUDGE_TEMPERATURE,
+            # Explicit caching with no breakpoints: a judge prompt is never reused, and the default would bill all of it as cache writes.
+            "prompt_cache_options": {"mode": "explicit"},
         }
-        self.last_call = {"temperature": JUDGE_TEMPERATURE, "temperature_fallback": False, "model_version": None}
+        self.last_call = {"temperature": JUDGE_TEMPERATURE, "temperature_fallback": False, "model_version": None,
+                          "prompt_cache": "explicit"}
         try:
             post = (self.client or httpx).post
 
@@ -212,6 +215,11 @@ class OpenAIBackend(JudgeBackend):
                 # The model does not accept a temperature: retry once without it and record that it was not sent.
                 body.pop("temperature")
                 self.last_call.update(temperature=None, temperature_fallback=True)
+                response = send(body)
+            if response.status_code == 400 and "prompt_cache" in response.text.lower():
+                # An endpoint or model that does not know the option: retry once without it and record that it was not sent.
+                body.pop("prompt_cache_options")
+                self.last_call["prompt_cache"] = "default"
                 response = send(body)
         except httpx.TimeoutException as exc:
             raise JudgeTimeout() from exc
@@ -227,7 +235,8 @@ class OpenAIBackend(JudgeBackend):
             if usage.get("prompt_tokens") is not None:
                 self.last_usage = {"input_tokens": usage.get("prompt_tokens"),
                                    "output_tokens": usage.get("completion_tokens"),
-                                   "cached_tokens": (usage.get("prompt_tokens_details") or {}).get("cached_tokens")}
+                                   "cached_tokens": (usage.get("prompt_tokens_details") or {}).get("cached_tokens"),
+                                   "cache_write_tokens": (usage.get("prompt_tokens_details") or {}).get("cache_write_tokens")}
             return payload["choices"][0]["message"]["content"]
         except (KeyError, IndexError, ValueError) as exc:
             raise JudgeInvalidOutput("JUDGE_RESPONSE_SHAPE") from exc
