@@ -1,15 +1,15 @@
 {
   "schemaVersion": "presentation-finalization.v1",
-  "finalSha256": "997a59e21006fdb50d2a67d763bb9a8c7fd99072679af94d094e914cd402c0e0",
-  "byteCount": 300823,
+  "finalSha256": "85d9256d7ecbfd4d2e50856e1f270342a9658cd7ed837dd5bed4fb8e386ce31d",
+  "byteCount": 304846,
   "packageIntegrity": {
     "chart_count": 0,
     "claim_boundary": "Structural package checks only; no slide text, notes, formulas, chart values, or native PowerPoint execution were inspected.",
     "finding_count": 0,
     "findings": [],
-    "notes_parts_skipped": 22,
-    "relationship_part_count": 54,
-    "slide_count": 22,
+    "notes_parts_skipped": 23,
+    "relationship_part_count": 56,
+    "slide_count": 23,
     "status": "pass",
     "exitCode": 0,
     "findingCount": 0,
@@ -19,18 +19,18 @@
     "finding_count": 0,
     "findings": [],
     "font_policy": {
-      "checked_text_script_count": 416,
+      "checked_text_script_count": 444,
       "native_font_rendering_verified": false,
       "observed_font_families": [
         "Arial"
       ],
       "observed_font_use_counts": {
-        "Arial": 416
+        "Arial": 444
       },
       "passed": true,
       "performed": true
     },
-    "slide_count": 22,
+    "slide_count": 23,
     "slide_size_in": [
       13.3333,
       7.5
@@ -62,7 +62,7 @@
         "kind": "native_table_overflow",
         "overflow_in": 0.4092,
         "rows": 5,
-        "slide": 16,
+        "slide": 17,
         "table_id": "6"
       },
       {
@@ -78,7 +78,7 @@
         "kind": "native_table_overflow",
         "overflow_in": 0.9226,
         "rows": 5,
-        "slide": 18,
+        "slide": 19,
         "table_id": "6"
       },
       {
@@ -92,20 +92,20 @@
         "kind": "native_table_overflow",
         "overflow_in": 0.1953,
         "rows": 5,
-        "slide": 19,
+        "slide": 20,
         "table_id": "6"
       }
     ],
     "exitCode": 0,
     "findingCount": 0,
     "fontPolicy": {
-      "checked_text_script_count": 416,
+      "checked_text_script_count": 444,
       "native_font_rendering_verified": false,
       "observed_font_families": [
         "Arial"
       ],
       "observed_font_use_counts": {
-        "Arial": 416
+        "Arial": 444
       },
       "passed": true,
       "performed": true
@@ -119,13 +119,13 @@
     "scriptFonts": {},
     "referenceSha256": null,
     "referenceFontsVerifiedInEncodedText": false,
-    "checked_text_script_count": 416,
+    "checked_text_script_count": 444,
     "native_font_rendering_verified": false,
     "observed_font_families": [
       "Arial"
     ],
     "observed_font_use_counts": {
-      "Arial": 416
+      "Arial": 444
     },
     "passed": true,
     "performed": true
@@ -133,8 +133,8 @@
   "firstPartyImport": {
     "performed": true,
     "passed": true,
-    "slideCount": 22,
-    "sha256": "997a59e21006fdb50d2a67d763bb9a8c7fd99072679af94d094e914cd402c0e0",
+    "slideCount": 23,
+    "sha256": "85d9256d7ecbfd4d2e50856e1f270342a9658cd7ed837dd5bed4fb8e386ce31d",
     "runtimeNodeModules": "/Users/jamescregeen/Code_Projects/Voice_Harness/output/consulting-2026-10-31/.build/node_modules",
     "nodeExecutable": "/opt/homebrew/Cellar/node/24.9.0/bin/node"
   },
@@ -146,7 +146,7 @@
     "eligible_table_count": 0,
     "finding_count": 0,
     "findings": [],
-    "native_table_count": 11,
+    "native_table_count": 12,
     "passed": true,
     "schema_version": "presentation-native-table-arithmetic.v1",
     "skipped_tables": [
@@ -192,21 +192,26 @@
       },
       {
         "reason": "no_numeric_amounts",
-        "slide": 16,
+        "slide": 15,
         "table": 1
       },
       {
         "reason": "no_numeric_amounts",
-        "slide": 18,
+        "slide": 17,
         "table": 1
       },
       {
         "reason": "no_numeric_amounts",
         "slide": 19,
         "table": 1
+      },
+      {
+        "reason": "no_numeric_amounts",
+        "slide": 20,
+        "table": 1
       }
     ],
-    "slide_count": 22,
+    "slide_count": 23,
     "warning_count": 0,
     "warnings": []
   },
@@ -218,9 +223,9 @@
     "native_chart_count": 0,
     "native_powerpoint_verified": false,
     "passed": true,
-    "presentation_sha256": "997a59e21006fdb50d2a67d763bb9a8c7fd99072679af94d094e914cd402c0e0",
+    "presentation_sha256": "85d9256d7ecbfd4d2e50856e1f270342a9658cd7ed837dd5bed4fb8e386ce31d",
     "schema_version": "presentation-native-chart-titles.v1",
-    "slide_count": 22,
+    "slide_count": 23,
     "source_text_emitted": false,
     "unresolved_linked_title_count": 0
   },
@@ -246,11 +251,13 @@
     "--require-native-table-slide",
     "13",
     "--require-native-table-slide",
-    "16",
+    "15",
     "--require-native-table-slide",
-    "18",
+    "17",
     "--require-native-table-slide",
     "19",
+    "--require-native-table-slide",
+    "20",
     "--cover-role",
     "none",
     "--approved-font-family",
