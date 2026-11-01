@@ -89,3 +89,29 @@ The existing automated read-aloud judge is not applied to conversations: its rub
 ## Storing recordings
 
 `scripts/flac_clips.py <folder>` converts a recording's `clips/*.wav` to lossless FLAC (about 29% of the size), verifies each decode against the WAV's PCM, deletes the WAV and points `rate.html` at the `.flac` files; browsers play FLAC directly. `clips/flac-manifest.json` keeps each original WAV's SHA-256 (equal to `audio_sha256` in `results.json`), so `flac -d` reproduces a checkable recording. `voice-conversation-v2` is stored this way; rerun the script after any `refresh`, which rewrites the pages with `.wav` links.
+
+## Quick business review (v2)
+
+[Quick business review](../artifacts/voice-conversation-v2/review.html) shows all 144 recordings with provider/model identities, grouped by scenario. Default: common prompt, first repeat, all six configurations. Both prompts and both repeats remain accessible. Transcripts are embedded so the page also works from a local file. Optional scores and notes are stored in the browser and exported in a separate, explicitly non-blind format; do not feed these exports to the blind-rating report command.
+
+Rebuild the page from the frozen plan and results with `python3 scripts/build_conversation_review.py`. Edit `scripts/templates/conversation-review.html`, then regenerate. The existing blind page and frozen evidence are unchanged.
+
+### Assisted customer assessment (1 November 2026)
+
+[The completed transcript assessment](../artifacts/voice-conversation-v2/assessment/index.html) scores all 144 recordings across six dimensions, with an exact source quote and rationale for each. [CSV scores](../artifacts/voice-conversation-v2/assessment/scores.csv) and [full JSON evidence](../artifacts/voice-conversation-v2/assessment/scores.json) are available. All 432 assistant turns have provider-reported transcripts. A transcript review can assess clarity of wording, professionalism, helpfulness, appropriate empathy, scenario accuracy, and continuity. Audio clarity, pace, pronunciation, warmth and naturalness require an audio-capable review and should be reported separately. Provider transcripts may differ from delivered speech.
+
+For each conversation, use anchored 1–5 scores (1 poor, 3 adequate, 5 excellent), cite the relevant turn and exact supporting words, and flag wrong facts, unsupported promises or claims of completed actions separately. Do not allow politeness to compensate for a factual failure. Treat missing or uncertain evidence as unassessed, not zero. Remove provider/model labels before judging where practical; reveal them for the report.
+
+Compare providers within each scenario and prompt condition, retaining both repeat scores and their range. Report common-versus-tuned differences separately. With only two repeats per condition, describe observed strengths and weaknesses without declaring statistical superiority. A customer-facing report should show a scenario shortlist, reasons, evidence links, factual-risk flags, and questions for human audio review. Customer-specific priorities can then weight the criteria; do not silently assume that a single overall average represents every customer.
+
+
+The first assessment is a single in-session Codex qualitative review, not a blinded panel or an audio assessment. Source transcripts were read with sample IDs, but provider context was already known. Each score is authored in `assessment/assessments.psv`; `scripts/build_conversation_assessment.py` validates quote provenance, full coverage, matching repeat counts and identical-transcript consistency before generating the report. It does not assign scores algorithmically. Read the report's rubric and limits before using its shortlists. In particular, suspected transcript-boundary issues need audio verification and may alter the ordering.
+
+To rebuild after editing assessment records:
+
+```sh
+python3 scripts/build_conversation_assessment.py
+python3 scripts/build_conversation_review.py
+```
+
+The quick review page shows AI scores and flags separately from the user's optional ratings. It rejects stale assessment source hashes. The blind rating page, frozen plan, transcripts and recordings are not modified.

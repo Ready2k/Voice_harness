@@ -110,3 +110,7 @@ See [configuration, diagnostic limitations and the live smoke test](docs/OPENAI_
 ## Published research archive
 
 The [GitHub Pages hub](https://ready2k.github.io/Voice_harness/) brings together the latest assessments, earlier experiments, listening pages and supporting artifacts. See [site/README.md](site/README.md) for publishing and catalogue maintenance.
+
+For a scenario-led, provider-visible review of all 144 recordings, open [Quick business review](artifacts/voice-conversation-v2/review.html). Filter by prompt and repeat, read transcripts, listen, and download optional ratings. Rebuild with `python3 scripts/build_conversation_review.py`.
+
+The [AI transcript assessment](artifacts/voice-conversation-v2/assessment/index.html) scores all 144 conversations, with scenario shortlists, prompt comparisons, source quotes and risk flags. Voice delivery remains unscored; apparent transcript-boundary problems require audio verification.

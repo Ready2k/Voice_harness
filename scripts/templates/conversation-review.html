@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quick conversation review · Voice Harness</title>
+<style>
+:root{color-scheme:light;--ink:#182f38;--muted:#536970;--line:#ccd9d8;--accent:#09685e}*{box-sizing:border-box}body{margin:0;background:#f4f7f5;color:var(--ink);font:16px/1.55 system-ui,sans-serif}header,main,footer{max-width:1320px;margin:auto;padding:24px 32px}header{display:flex;justify-content:space-between;gap:16px;border-bottom:1px solid var(--line)}a{color:var(--accent)}h1{font-size:clamp(32px,4vw,52px);line-height:1.08;letter-spacing:-.04em;margin:12px 0}h2{line-height:1.2}h3{margin:0 0 8px;font-size:21px}.eyebrow{text-transform:uppercase;font-size:12px;font-weight:750;letter-spacing:.13em;color:var(--accent)}.lede{max-width:780px;color:var(--muted);font-size:18px}.stats{font-size:14px;color:var(--muted)}.layout{display:grid;grid-template-columns:245px 1fr;gap:26px;margin-top:28px}nav button{display:block;width:100%;text-align:left;margin:0 0 8px;background:white}button,select,textarea{font:inherit;border:1px solid var(--line);border-radius:8px;padding:10px;color:var(--ink);background:white}button{cursor:pointer}button:hover,button[aria-pressed=true]{border-color:var(--accent);background:#dfefea}button:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid #bd701d;outline-offset:3px}.filters{display:flex;flex-wrap:wrap;gap:16px;padding:16px;background:#e8efeb;border-radius:12px}label{font-size:13px;font-weight:650}label select{display:block;margin-top:4px;max-width:100%}.brief{margin:22px 0}.brief h2{margin-bottom:8px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{background:white;border:1px solid var(--line);border-radius:14px;padding:20px;min-width:0}.meta{font-size:13px;color:var(--muted);overflow-wrap:anywhere}.tag{font-size:12px;border-radius:20px;background:#e8efeb;padding:4px 9px;display:inline-block;margin-bottom:12px}audio{width:100%;margin:16px 0 8px}summary{cursor:pointer;color:var(--accent);font-weight:650;margin:12px 0}.turn{border-left:3px solid var(--line);padding-left:12px;font-size:14px}.scores{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}textarea{width:100%;margin-top:6px;min-height:72px}.actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:20px}.note{font-size:13px;color:var(--muted)}#message{font-size:14px}footer{border-top:1px solid var(--line);margin-top:28px}.error{color:#982f1c} @media(max-width:900px){.layout{grid-template-columns:1fr}nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}nav button{margin:0}}@media(max-width:620px){header,main,footer{padding:20px}.grid{grid-template-columns:1fr}header{display:block}.filters label{width:100%}.filters select{width:100%}}
+</style></head><body>
+<header><strong>Voice Harness / Listening room</strong><a href="../../voice-library.html">Full voice library ↗</a></header>
+<main><p class="eyebrow">Business review · Provider identities visible</p><h1>One scenario.<br>Compare every provider.</h1>
+<p class="lede">Short on time? Choose a scenario, read the replies, then listen to the providers you want to compare. Model and voice are shown on every sample.</p>
+<p class="stats" id="stats"></p>
+<p id="ai-report" class="filters" hidden></p>
+<div class="layout"><aside><h2>Scenarios</h2><nav id="scenarios" aria-label="Choose scenario"></nav><p class="note">Start with the common prompt and repeat 1 for a quick comparison. Check the tuned prompt and repeat 2 before drawing a conclusion.</p><a href="rate.html">Blind rating study ↗</a></aside>
+<section aria-label="Provider comparison"><div class="filters">
+<label>Prompt<select id="condition"><option value="common">Common prompt</option><option value="tuned">Provider-tuned prompt</option><option value="all">Both prompts</option></select></label>
+<label>Recording<select id="repetition"><option value="1">Repeat 1</option><option value="2">Repeat 2</option><option value="all">Both repeats</option></select></label>
+<label>Provider / model<select id="provider"><option value="all">All providers / models</option></select></label>
+</div><div class="brief"><h2 id="scenario-title"></h2><p id="review"></p><details><summary>Caller script and review context</summary><ol id="caller"></ol><p class="note">The caller is already verified. Balance: £1,250.40. The failed £42 payment took no money. A freeze is temporary and reversible; replacement is separate. Bereavement support is available. No tools or banking actions are available, so the assistant must not claim to have performed one.</p></details></div>
+<p id="showing" role="status"></p><div class="grid" id="cards"></div>
+<div class="actions"><button id="download">Download my review</button><span id="progress" role="status"></span></div><p id="message" role="status"></p>
+<p class="note">Optional ratings: 1 = poor, 3 = adequate, 5 = excellent. “Not assessed” stays unscored. Notes are saved in this browser when storage is available. These visible-provider reviews are separate from blind-study ratings.</p>
+</section></div>
+<details><summary>What these recordings can tell you</summary><p>These are scripted three-turn exchanges with synthetic callers and simulated playback timing. Caller audio is on the left channel and assistant audio on the right; use both channels. They do not test live interruption handling or completed banking actions.</p><p>Transcripts are provider-reported, not independently verified against the audio. Use them to assess wording; listen to assess voice clarity and delivery. The tuned prompts are starting configurations, not proven optimal. Two repeats per condition provide limited evidence of consistency.</p><p>AI assessments, when shown, judge wording and behaviour from transcripts only. They are separate from your own ratings, and do not assess voice delivery. Model names reflect the recording metadata; ElevenLabs’ agent identifier does not identify its underlying language model.</p><p><a href="plan.json">Frozen test plan</a> · <a href="results.json">Recording evidence</a></p></details>
+</main><footer>Recorded comparison · Evidence first, customer judgement second.</footer>
+<script id="review-data" type="application/json">__REVIEW_DATA__</script>
+<script>
+'use strict';
+const DATA=JSON.parse(document.getElementById('review-data').textContent);
+const $=id=>document.getElementById(id);
+const axes={clarity:'Clarity',professionalism:'Professionalism',helpfulness:'Helpfulness',accuracy:'Scenario accuracy',empathy:'Appropriate empathy',continuity:'Conversation continuity'};
+const key='business-conversation-review-v1-'+DATA.plan_hash;
+let ratings={},scenario=DATA.scenarios[0].id;
+try{const saved=JSON.parse(localStorage.getItem(key)||'{}');if(saved&&typeof saved==='object'&&!Array.isArray(saved))ratings=saved;}catch{$('message').textContent='Browser storage is unavailable. Download your review to keep it.';}
+function el(tag,text,cls){const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;}
+function progress(){$('progress').textContent=DATA.clips.filter(c=>Object.values(axes).length===Object.keys(axes).filter(a=>ratings[c.id]?.[a]).length).length+' / '+DATA.clips.length+' fully rated';}
+function save(id,field,value){ratings[id]??={};if(value)ratings[id][field]=value;else delete ratings[id][field];try{localStorage.setItem(key,JSON.stringify(ratings));}catch{$('message').textContent='Could not save in this browser. Download your review before leaving.';}progress();}
+$('stats').textContent=`${DATA.clips.length} recordings · ${DATA.scenarios.length} scenarios · ${Object.keys(DATA.providers).length} provider/model configurations · 2 prompts × 2 repeats · Recorded ${DATA.recorded}`;
+if(DATA.assessment){const a=el('a','Read the AI assessment · all 144 conversations');a.href=DATA.assessment.path;$('ai-report').hidden=false;$('ai-report').append(a,el('span','Transcript scores, evidence, scenario shortlists and risk flags. Audio delivery is unscored.'));}
+for(const [id,name] of Object.entries(DATA.providers)){const o=el('option',name);o.value=id;$('provider').append(o);}
+for(const s of DATA.scenarios){const b=el('button',s.title);b.type='button';b.dataset.scenario=s.id;b.onclick=()=>{scenario=s.id;render();};$('scenarios').append(b);}
+function render(){
+ document.querySelectorAll('audio').forEach(a=>a.pause());
+ const s=DATA.scenarios.find(s=>s.id===scenario);
+ $('scenario-title').textContent=s.title;$('review').textContent='What good looks like: '+s.review;
+ $('caller').replaceChildren(...s.turns.map(t=>el('li',t)));
+ document.querySelectorAll('[data-scenario]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.scenario===scenario)));
+ const order=Object.keys(DATA.providers);
+ const clips=DATA.clips.filter(c=>c.scenario===scenario&&($('condition').value==='all'||c.condition===$('condition').value)&&($('repetition').value==='all'||String(c.repetition)===$('repetition').value)&&($('provider').value==='all'||c.provider===$('provider').value)).sort((a,b)=>order.indexOf(a.provider)-order.indexOf(b.provider)||a.condition.localeCompare(b.condition)||a.repetition-b.repetition);
+ $('showing').textContent=`Showing ${clips.length} recordings for ${s.title}.`;
+ $('cards').replaceChildren();
+ for(const c of clips){
+  const card=el('article',undefined,'card');card.append(el('span',`${c.condition==='common'?'Common':'Tuned'} prompt · Repeat ${c.repetition}`,'tag'),el('h3',c.provider_name),el('div',`${c.model_source} model: ${c.model}`,'meta'),el('div',`Voice: ${c.voice==='ZF6FPAbjXT4488VcRRnw'?'Amelia':c.voice}`,'meta'));
+  if(c.assessment){
+   const a=c.assessment,details=el('details');
+   details.append(el('summary',`AI transcript assessment: ${a.mean.toFixed(2)} / 5`));
+   details.append(el('p',Object.entries(a.scores).map(([axis,v])=>`${axis==='clarity'?'Wording clarity':axes[axis]}: ${v}/5`).join(' · '),'note'));
+   details.append(el('p',a.assessment));
+   for(const e of a.evidence)details.append(el('blockquote',`Turn ${e.turn}: “${e.quote}”`));
+   details.append(el('p',`Confidence: ${a.confidence}. Audio delivery unscored.`,'note'));
+   const evidence=el('a','Full assessment & scoring method ↗');evidence.href=`assessment/index.html#sample-${c.id}`;details.append(evidence);card.append(details);
+   for(const f of a.flags)card.append(el('p',`${f.severity.toUpperCase()}: ${f.label}`,f.severity==='high'?'error':'note'));
+  }
+  const audio=el('audio');audio.controls=true;audio.preload='none';audio.src=c.path;audio.setAttribute('aria-label',`${c.provider_name}, ${s.title}, ${c.condition}, repeat ${c.repetition}`);
+  audio.onplay=()=>document.querySelectorAll('audio').forEach(a=>{if(a!==audio)a.pause();});
+  const error=el('p','','error');error.setAttribute('role','status');audio.onerror=()=>{error.textContent='This recording could not be loaded. Try the source file below.';};
+  const source=el('a','Open recording ↗');source.href=c.path;source.className='note';card.append(audio,error,source);
+  const transcript=el('details');transcript.append(el('summary','Read the three-turn transcript'));
+  c.turns.forEach((t,i)=>{const turn=el('div',undefined,'turn');turn.append(el('p','Caller: '+s.turns[i]),el('p','Assistant: '+(t.transcript||'Transcript unavailable')));transcript.append(turn);});card.append(transcript);
+  const review=el('details');review.append(el('summary','Quick rating & notes'));const scores=el('div',undefined,'scores');
+  for(const [axis,title] of Object.entries(axes)){const label=el('label',title),select=el('select');for(const v of ['',1,2,3,4,5]){const o=el('option',v?String(v):'Not assessed');o.value=v;select.append(o);}select.value=ratings[c.id]?.[axis]||'';select.onchange=()=>save(c.id,axis,Number(select.value));label.append(select);scores.append(label);}review.append(scores);
+  const label=el('label','Evidence or customer fit'),notes=el('textarea');notes.placeholder='What worked, what was missing, or an exact phrase to revisit…';notes.value=ratings[c.id]?.notes||'';notes.oninput=()=>save(c.id,'notes',notes.value);label.append(notes);review.append(label);card.append(review);$('cards').append(card);
+ }progress();
+}
+for(const id of ['condition','repetition','provider'])$(id).onchange=render;
+$('download').onclick=()=>{const reviews=DATA.clips.filter(c=>ratings[c.id]&&Object.keys(ratings[c.id]).length).map(c=>({id:c.id,provider:c.provider,model:c.model,scenario:c.scenario,condition:c.condition,repetition:c.repetition,...ratings[c.id]}));const url=URL.createObjectURL(new Blob([JSON.stringify({format:'business-conversation-review-v1',blind:false,plan_hash:DATA.plan_hash,exported_at:new Date().toISOString(),reviews},null,2)],{type:'application/json'}));const a=el('a');a.href=url;a.download='business-conversation-review.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);$('message').textContent=`Exported ${reviews.length} reviewed recordings.`;};
+render();
+</script></body></html>
