@@ -46,3 +46,12 @@ counts as non-clean, the existing clean-versus-noisy comparison in the report ha
 What `telephone_narrowband` does: 24 kHz to 8 kHz by zero-order hold (no low-pass filter, so aliasing artefacts rather than a clean 300 to 3400 Hz band),
 plus noise at 30 dB SNR. It is not G.711: no mu-law or A-law companding. The signal is still sent to every provider as 24 kHz PCM, so it is a
 bandwidth emulation, not a real telephone codec path (compare `telephony_demo.py` for that).
+
+## Follow-up run, 1 November 2026 (five providers, Nova pending)
+
+Unpublished, standardised-v3, judges off, ASR `openai`; data in `.local/followup-2026-10-31/`. GPT-Live, OpenAI Realtime, xAI, Gemini and ElevenLabs only: Nova needs a fresh AWS session and is not yet run.
+
+- **`commit-cancel-confirmed-001` (v3), 3 repeats each:** 15 of 15 completed both expected tools with the correct `payment_001`. Nothing was left out of task completion.
+- **`happy-handoff-001` after the runner fix (3 repeats each):** OpenAI Realtime, xAI, Gemini and ElevenLabs called `transfer_to_human` exactly once in all 12 runs (OpenAI Realtime used to call it twice in two of three runs). GPT-Live never transferred: 0 of 3 here and 0 of 6 more in the accent and telephone runs (0 of 9). Its replies offer to help with the account or to "look at transfer options", and it still does not transfer when the caller asks a second time. Genuine behaviour, not a harness fault. The carried-over GPT-Live row in the 29/30 Oct report came from a different prompt and may not reflect this.
+- **Accent panel and telephone profile** (4 scenarios, one repeat each, five providers; a default-voice baseline alongside): no degradation under `telephone_narrowband`. Across the four accent voices there were three transaction-lookup misses, none of them reproduced by the other voices: xAI wrong identifier (Irish, Northern English), ElevenLabs no call (Irish), GPT-Live no call (Indian English). With one repeat per cell this is a signal to repeat, not a ranking. GPT-Live also missed `happy-recent-transactions-001` once in the default-voice baseline, so a miss is not specific to accents.
+- Runner fix: after a successful `transfer_to_human` the runner does not speak the remaining caller turns (recorded as `stopped_by: session_transferred`). The scenario definition and hash are unchanged.

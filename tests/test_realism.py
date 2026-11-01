@@ -203,5 +203,22 @@ class LineProfile(unittest.TestCase):
         self.assertEqual({c["scenario_id"] for c in phone["cells"]}, set(SELF))
 
 
+class TransferEndsTheCallTests(unittest.TestCase):
+    """happy-handoff-001 has a second caller turn for a model that asks first; after a transfer it must not be spoken."""
+
+    def runner(self, calls):
+        from voice_harness.live_scenario import LiveScenarioRunner
+
+        runner = object.__new__(LiveScenarioRunner)
+        runner.tool_calls = calls
+        return runner
+
+    def test_only_a_successful_transfer_ends_the_session(self):
+        self.assertTrue(self.runner([{"name": "transfer_to_human", "status": "success"}])._transferred())
+        self.assertFalse(self.runner([{"name": "transfer_to_human", "status": "error"}])._transferred())
+        self.assertFalse(self.runner([{"name": "get_policy_text", "status": "success"}])._transferred())
+        self.assertFalse(self.runner([])._transferred())
+
+
 if __name__ == "__main__":
     unittest.main()

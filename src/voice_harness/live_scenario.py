@@ -124,6 +124,7 @@ class LiveScenarioRunner:
         self.interrupt_mode = interrupt_mode  # "client": runner calls interrupt(); "vad": caller speech overlaps, provider VAD cuts in
         self.driver = AdapterTurnDriver(engine, run_id, assessor, cost_recorder=cost_recorder)
         self.tool_calls, self._fault_profile, self.interruptions = [], {}, 0
+        self.stopped_by = None
         self.interrupt_results, self._cancelled_ends = [], 0
         self._interrupted_turns = set()  # provider turn ids the server cut: their later empty turn_end is the cut reply's own
         self.seed_value = seed
@@ -297,6 +298,9 @@ class LiveScenarioRunner:
             "error_code": result.get("error_code"), "fault_injected": injected,
             "elapsed_ms": round((time.monotonic() - started) * 1000), "delivery": receipt,
         })
+
+    def _transferred(self):
+        return any(c["name"] == "transfer_to_human" and c["status"] == "success" for c in self.tool_calls)
 
     async def _cancel_generation(self):
         """Overflow or similar: stop the provider generating a reply nobody can release."""
@@ -472,6 +476,9 @@ class LiveScenarioRunner:
         try:
             async with gateway(self.engine, self.run_id, faults={**self.engine.faults, **self._fault_profile}) as bank:
                 for index, turn in enumerate(definition["turns"][: definition["max_turns"]]):
+                    if index > 0 and self._transferred():
+                        self.stopped_by = "session_transferred"  # a caller does not keep talking after being put through
+                        break
                     pcm = apply_profile(self.caller_audio(turn["customer"]), self.audio_profile(definition),
                                         self._faults("background_noise"), self.seed + index)
                     # Trusted tool amounts are allowed for the response they were returned in, not for later turns.
@@ -499,6 +506,6 @@ class LiveScenarioRunner:
         return {
             "scenario_id": definition["id"], "run_id": self.run_id,
             "scenario_hash": self.entry["content_hash"], "turns": outcomes,
-            "tool_calls": self.tool_calls, "adapter_errors": turn_errors, "interruptions": self.interruptions, "interrupt_results": self.interrupt_results,
+            "stopped_by": self.stopped_by, "tool_calls": self.tool_calls, "adapter_errors": turn_errors, "interruptions": self.interruptions, "interrupt_results": self.interrupt_results,
             "faults_declared": self.entry["faults"], "usage_lines": len(usage or []),
         }

@@ -118,3 +118,5 @@ All other scenarios with a sequence reach it from their scripted turns; the iden
 sequence by design.
 - Other spoken identifiers in the fixtures (`challenge_001`, `acct_1001`, `policy_id: identity`) were sent correctly by
   every provider in this run, so they were not changed.
+
+**1 November 2026:** the duplicate `transfer_to_human` in `happy-handoff-001` was an artefact of speaking the second caller turn after a transfer had already happened. The runner now stops speaking caller turns after a successful transfer (`stopped_by: session_transferred`); the definition and hash are unchanged, so earlier runs stay valid. Verified live: one transfer in 12 of 12 runs for four providers.
