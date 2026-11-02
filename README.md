@@ -114,3 +114,7 @@ The [GitHub Pages hub](https://ready2k.github.io/Voice_harness/) brings together
 For a scenario-led, provider-visible review of all 144 recordings, open [Quick business review](artifacts/voice-conversation-v2/review.html). Filter by prompt and repeat, read transcripts, listen, and download optional ratings. Rebuild with `python3 scripts/build_conversation_review.py`.
 
 The [AI transcript assessment](artifacts/voice-conversation-v2/assessment/index.html) scores all 144 conversations, with scenario shortlists, prompt comparisons, source quotes and risk flags. Voice delivery remains unscored; apparent transcript-boundary problems require audio verification.
+
+[Regional caller understanding](artifacts/regional-caller-2026-11-01/index.html) adds a separate exploratory task-completion panel: 96 regional cases, 24 default-voice baseline cases and 20 supplemental Gemini controls, with recovered assistant response excerpts. Original caller audio was not retained.
+
+New test runs retain caller and received assistant audio by default, including partial replies on handled timeouts. Full audio archives do not expire automatically; existing runs are unchanged. The regional context page also has 24 clearly labelled reconstructed caller clips, distinct from the missing original input recordings.

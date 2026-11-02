@@ -106,6 +106,7 @@ class Evidence:
         self.root.mkdir(parents=True, exist_ok=True)
 
     def put(self, run_id, data: bytes, kind="audio", ttl=7 * 86400):
+        """Store evidence; ttl=None is an explicit non-expiring archive, never shortened by a later write."""
         sha = hashlib.sha256(data).hexdigest()
         directory = self.root / run_id
         directory.mkdir(exist_ok=True)
@@ -123,7 +124,8 @@ class Evidence:
                 "kind": kind,
                 "size": len(data),
                 "available": True,
-                "expires_at": self.clock() + ttl,
+                "expires_at": (None if ttl is None or (sha in tx.state["artifacts"] and
+                    tx.state["artifacts"][sha].get("expires_at") is None) else self.clock() + ttl),
             }
             tx.event(
                 "orchestrator",
@@ -480,6 +482,7 @@ class Evidence:
             for sha, artifact in tx.state["artifacts"].items():
                 if (
                     artifact["available"]
+                    and artifact["expires_at"] is not None
                     and artifact["expires_at"] <= now
                     and not protected(sha)
                 ):
@@ -569,7 +572,9 @@ class Evidence:
                         "audio_opt_in": bool(config.get("retain_audio")),
                         "metadata_purge": "tombstoned_after_30d_unless_held",
                         "metadata_tombstones": tombstone_records(events),
-                        "audio_purge": "tombstoned_after_ttl_unless_held",
+                        "audio_purge": "finite_ttl_artifacts_expire; null_expiry_archives_require_explicit_removal",
+                        "non_expiring_artifact_hashes": [a["sha256"] for a in tx.state["artifacts"].values()
+                                                         if a["available"] and a.get("expires_at") is None],
                         # Disputed/sampled provider replies are kept for review whatever audio_opt_in says.
                         "provider_reply_audio": reply_summary(events),
                     },

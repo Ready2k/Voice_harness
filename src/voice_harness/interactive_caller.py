@@ -109,7 +109,7 @@ class RealtimeCaller:
 
 class InteractiveScenarioRunner(LiveScenarioRunner):
     def __init__(self, *args, caller, caller_config, evidence=None, duration_budget=None, **kwargs):
-        super().__init__(*args, caller_audio=None, trail_ms=CALLER_TRAIL_MS, **kwargs)
+        super().__init__(*args, caller_audio=None, trail_ms=CALLER_TRAIL_MS, evidence=evidence, **kwargs)
         self.caller, self.caller_config, self.evidence = caller, caller_config, evidence
         self.duration_budget = duration_budget if duration_budget is not None else caller_config["max_duration_seconds"]
         self._released = []
@@ -122,7 +122,7 @@ class InteractiveScenarioRunner(LiveScenarioRunner):
     def retain(self, pcm):
         retained = bool(self.evidence and self.engine.database.get(self.run_id)["config"].get("retain_audio"))
         if retained:
-            self.evidence.put(self.run_id, pcm, "audio")
+            self.evidence.put(self.run_id, pcm, "caller_audio", ttl=None)
         return retained
 
     def ordered_releases(self):

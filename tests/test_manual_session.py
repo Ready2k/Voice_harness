@@ -297,7 +297,9 @@ class ManualSessions(unittest.TestCase):
         events = self.events(run)
         audio = [e["content"] for e in events if e["type"] == "input.manual_audio"]
         self.assertEqual(len(audio), 1)
-        self.assertEqual((audio[0]["turn"], audio[0]["byte_count"], audio[0]["audio_retained"]), (0, 9600, False))
+        self.assertEqual((audio[0]["turn"], audio[0]["byte_count"], audio[0]["audio_retained"]), (0, 9600, True))
+        retained = self.app.state.evidence.root / run / audio[0]["pcm_sha256"]
+        self.assertEqual(retained.stat().st_size, 9600)
         self.assertTrue(all(size == 960 for size in adapter.audio))
         actions = [e["content"]["action"] for e in events if e["type"] == "manual.control"]
         self.assertEqual(actions, ["pause", "mute"])

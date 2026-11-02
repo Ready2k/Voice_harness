@@ -63,7 +63,8 @@ class Timeline(unittest.TestCase):
         self.run = self.new_run()
 
     def new_run(self):
-        run = self.engine.create(RunConfig().model_dump())
+        # These timelines exercise finite-TTL objects added explicitly by each test.
+        run = self.engine.create(RunConfig(retain_audio=False).model_dump())
         run_scenario(self.engine, run, self.evidence)
         with self.database.transaction(run) as tx:
             tx.state["state"] = "completed"

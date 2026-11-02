@@ -229,7 +229,7 @@ def create_app(
         bridge = manual_bridges.get(run_id)
         if bridge is None:
             raise RuntimeError("MANUAL_SESSION_NOT_ATTACHED")
-        summary = asyncio.run(live_task(run_id, config, live_providers.run_manual(manual_engine, run_id, config, bridge)))
+        summary = asyncio.run(live_task(run_id, config, live_providers.run_manual(manual_engine, run_id, config, bridge, evidence=evidence)))
         if summary is None:
             return
         bridge.emit({"type": "status", "stage": "evaluating"})

@@ -40,7 +40,7 @@ class RunConfig(Closed):
     policy_profile: Literal["strict-v1", "exploratory-v1"] = "strict-v1"
     input_mode: Literal["fixed_audio"] = "fixed_audio"
     repetitions: Annotated[int, Field(ge=1, le=20)] = 1
-    retain_audio: bool = False
+    retain_audio: bool = True
     client_mode: Literal["software_fixture", "websocket"] = "software_fixture"
     caller: CallerConfig = Field(default_factory=CallerConfig)
 
