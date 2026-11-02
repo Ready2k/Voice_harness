@@ -21,6 +21,8 @@
 !scripts/rescore_bakeoff_report.py
 !scripts/voice_naturalness.py
 !scripts/compare_prompt_profiles.py
+!scripts/build_regional_context.py
+!scripts/build_conversation_assessment.py
 !scripts/probe/
 !scripts/probe/package.json
 !scripts/probe/package-lock.json

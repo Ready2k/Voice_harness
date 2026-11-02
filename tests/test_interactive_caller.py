@@ -166,7 +166,10 @@ class InteractiveCallerTests(unittest.TestCase):
         self.assertEqual(len([e for e in events if e["type"] == "playback.ack"]), 2)
         usage = [e["content"] for e in events if e["type"] == "cost.usage_reported" and e["content"]["component"] == "caller"]
         self.assertEqual(sum(int(u["quantity"]) for u in usage), 30)
-        self.assertEqual(len(self.evidence.bundle(self.run_id)["artifacts"]), 2)
+        kinds = [x["kind"] for x in self.evidence.bundle(self.run_id)["artifacts"]]
+        self.assertEqual(kinds.count("caller_audio"), 2)
+        self.assertEqual(kinds.count("audio_capture_index"), len(kinds) - 2)
+        self.assertGreaterEqual(kinds.count("audio_capture_index"), 2)
 
     def test_blocked_agent_reply_never_reaches_caller(self):
         async def exercise():
