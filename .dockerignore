@@ -16,6 +16,13 @@
 !artifacts/phase2/**
 !artifacts/pricing/
 !artifacts/pricing/**
+!artifacts/regional-caller-2026-11-01/
+!artifacts/regional-caller-2026-11-01/**
+!artifacts/voice-conversation-v2/
+!artifacts/voice-conversation-v2/plan.json
+!artifacts/voice-conversation-v2/results.json
+!artifacts/voice-conversation-v2/assessment/
+!artifacts/voice-conversation-v2/assessment/assessments.psv
 !scripts/
 !scripts/voice_conversation.py
 !scripts/rescore_bakeoff_report.py

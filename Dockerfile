@@ -34,6 +34,9 @@ COPY --chown=harness:harness scripts/compare_prompt_profiles.py ./scripts/compar
 COPY --chown=harness:harness scripts/build_regional_context.py ./scripts/build_regional_context.py
 COPY --chown=harness:harness scripts/build_conversation_assessment.py ./scripts/build_conversation_assessment.py
 COPY --chown=harness:harness scenarios/ ./scenarios/
+COPY --chown=harness:harness artifacts/regional-caller-2026-11-01/ ./artifacts/regional-caller-2026-11-01/
+COPY --chown=harness:harness artifacts/voice-conversation-v2/plan.json artifacts/voice-conversation-v2/results.json ./artifacts/voice-conversation-v2/
+COPY --chown=harness:harness artifacts/voice-conversation-v2/assessment/assessments.psv ./artifacts/voice-conversation-v2/assessment/
 ENV HARNESS_REQUIRE_NOVA_RUNTIME=1
 COPY --chown=harness:harness artifacts/phase0/ ./artifacts/phase0/
 CMD ["python", "-m", "unittest", "discover", "-s", "tests", "-v"]
