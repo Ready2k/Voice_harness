@@ -28,7 +28,7 @@ with wave.open(str(root/'pulse.wav'),'wb') as w:
  w.setnchannels(1);w.setsampwidth(2);w.setframerate(sr);w.writeframes((audio*32767).astype('<i2').tobytes())
 def enc(p):
  out=root/'clips'/f'{p.stem}.mp4'
- subprocess.run(['ffmpeg','-v','error','-y','-loop','1','-i',str(p),'-vf',"zoompan=z='min(zoom+0.00035,1.031)':x='iw/2-iw/zoom/2':y='ih/2-ih/zoom/2':d=90:s=1920x1080:fps=30,fade=t=in:st=0:d=0.08,format=yuv420p",'-t','3','-c:v','libx264','-preset','fast','-crf','19','-threads','2',str(out)],check=True)
+ subprocess.run(['ffmpeg','-v','error','-y','-loop','1','-i',str(p),'-vf',"scale=7680:4320:flags=lanczos,zoompan=z='min(zoom+0.00035,1.031)':x='iw/2-iw/zoom/2':y='ih/2-ih/zoom/2':d=90:s=1920x1080:fps=30,fade=t=in:st=0:d=0.08,format=yuv420p",'-t','3','-c:v','libx264','-preset','fast','-crf','19','-threads','2',str(out)],check=True)
 with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool:list(pool.map(enc,sorted((root/'frames').glob('*.png'))))
 for name,ids,length in [('voice-harness-product-spot-30s',range(10),30),('voice-harness-product-spot-15s',[0,2,5,6,9],15)]:
  listing=root/(name+'.txt');listing.write_text('\n'.join("file '"+str(root/'clips'/f'{i:02}.mp4')+"'" for i in ids))
