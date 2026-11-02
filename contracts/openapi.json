@@ -4675,7 +4675,7 @@
           "retain_audio": {
             "type": "boolean",
             "title": "Retain Audio",
-            "default": false
+            "default": true
           },
           "client_mode": {
             "type": "string",

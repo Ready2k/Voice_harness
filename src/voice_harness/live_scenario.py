@@ -110,12 +110,15 @@ CONTINUE = object()  # sentinel: the event does not settle the turn
 class LiveScenarioRunner:
     def __init__(self, engine, run_id, adapter, assessor, scenario_id, *, caller_audio, cost_recorder=None,
                  seed=0, turn_timeout_s=TURN_TIMEOUT_S, interrupt_mode="client", barge_after_tool=False,
-                 before_turn=None, provider_session=None, trail_ms=0, line_profile="scenario"):
+                 before_turn=None, provider_session=None, trail_ms=0, line_profile="scenario", evidence=None):
         entry = catalogue_entry(scenario_id)
         if entry is None:
             raise ValueError("SCENARIO_NOT_IN_CATALOGUE")
         self.engine, self.run_id, self.adapter, self.entry = engine, run_id, adapter, entry
         self.caller_audio, self.seed, self.turn_timeout_s = caller_audio, seed, turn_timeout_s
+        self.evidence = evidence
+        self.retain_audio = bool(evidence and engine.database.get(run_id)["config"].get("retain_audio"))
+        self._received_audio = []
         self.provider_session = provider_session  # requested/returned session metadata, recorded in the binding
         transport = (provider_session or {}).get("harness_transport") or {}
         self.turn_commit, self.trail_ms = transport.get("turn_commit"), trail_ms  # trail_ms: silence ending each clip
@@ -143,6 +146,8 @@ class LiveScenarioRunner:
 
     def _note_audio(self, event):
         """Reply audio plays back to back at real time from receipt; audio of a retired response is never heard."""
+        if self.retain_audio:
+            self._received_audio.append((event.sample_rate, bytes(event.pcm)))
         item = getattr(event, "item_id", None)
         if item and item in getattr(self.driver, "_dead_responses", ()):
             return
@@ -151,6 +156,26 @@ class LiveScenarioRunner:
         self._response_open, self._stale_end = True, ()
         if item:
             self._open_items.add(item)
+
+    def _flush_received_audio(self):
+        """Archive every received frame, including interrupted/unassessed output, after turn intake."""
+        if not self._received_audio:
+            return
+        pending, self._received_audio = self._received_audio, []
+        parts = []
+        for rate, pcm in pending:
+            if parts and parts[-1][0] == rate:
+                parts[-1][1].extend(pcm)
+            else:
+                parts.append((rate, bytearray(pcm)))
+        clips = []
+        for rate, pcm in parts:
+            sha = self.evidence.put(self.run_id, bytes(pcm), "provider_received_audio", ttl=None)
+            clips.append({"sha256": sha, "sample_rate": rate, "channels": 1,
+                          "codec": "pcm_s16le", "bytes": len(pcm)})
+        index = {"turn": self._turn_index, "role": "assistant", "clips": clips,
+                 "scope": "received audio; may include interrupted or unreleased output; not proof of playback"}
+        self.evidence.put(self.run_id, json.dumps(index, sort_keys=True).encode(), "audio_capture_index", ttl=None)
 
     def _end_response(self):
         self._ended_items |= self._open_items
@@ -230,6 +255,13 @@ class LiveScenarioRunner:
         after the end of speech; the rest of the trailing silence is not sent, since Gemini reopens an activity on
         later audio and manual OpenAI/xAI buffers ignore it. Provider-VAD providers hear the whole clip and pay their
         own endpointing. Either way first audio is measured from ``speech_ended_ms``."""
+        if self.retain_audio:
+            sha = self.evidence.put(self.run_id, pcm, "caller_audio", ttl=None)
+            index_record = {"turn": index, "role": "caller", "text": turn["customer"],
+                            "sha256": sha, "sample_rate": RATE, "channels": 1, "codec": "pcm_s16le",
+                            "scope": "prepared caller audio; input.caller_audio records how many bytes were streamed"}
+            self.evidence.put(self.run_id, json.dumps(index_record, sort_keys=True).encode(), "audio_capture_index", ttl=None)
+            retained = True
         self._turn_index, reply_end, waited = index, self._playback_end, 0
         wait = "barge_in" if not hold else "first_turn" if not index else "no_reply_audio" if reply_end is None else "after_reply"
         if wait == "after_reply" and self.turn_gap_ms is not None and (
@@ -456,6 +488,8 @@ class LiveScenarioRunner:
             # A worker may still be running ASR: fence it, revoke approvals and drop the half-received reply.
             self.driver.abandon("TURN_TIMEOUT")
             return {"approval": None, "strict_speech_approval": "turn_timeout"}, errors
+        finally:
+            self._flush_received_audio()
         if outcome is None:  # fatal provider error, or the event stream ended before a turn_end
             self.driver.abandon("PROVIDER_FAILURE")
             fatal = any(e["fatal"] for e in errors)

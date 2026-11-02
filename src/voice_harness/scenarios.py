@@ -121,7 +121,7 @@ async def _run_scenario(engine: Engine, run_id, evidence):
     )
     unit = engine.hold_audio(run_id, pcm, transcript=transcript)
     if config.get("retain_audio", True):
-        evidence.put(run_id, pcm)
+        evidence.put(run_id, pcm, ttl=None)
     token = engine.approve_audio(run_id, unit, scripted_safe=not unsafe)
     if token and config.get("client_mode", "software_fixture") == "software_fixture":
         released = engine.release_audio(run_id, token)

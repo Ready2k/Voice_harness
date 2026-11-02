@@ -157,7 +157,7 @@
       "type": "integer"
     },
     "retain_audio": {
-      "default": false,
+      "default": true,
       "title": "Retain Audio",
       "type": "boolean"
     },

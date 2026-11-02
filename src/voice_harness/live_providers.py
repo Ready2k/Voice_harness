@@ -499,7 +499,7 @@ async def run_live(engine, run_id, provider_config_id, scenario_id, *, seed=0, c
         caller_audio=lambda text: synth_caller_pcm(text, trail_ms=CALLER_TRAIL_MS, environ=voice_env,
                                                    trim_tail=os.environ.get("HARNESS_NATIVE_VAD") == "1"), before_turn=before_turn, seed=seed,
         provider_session=metadata, cost_recorder=recorder, trail_ms=CALLER_TRAIL_MS,
-        line_profile=caller["line_profile"])
+        line_profile=caller["line_profile"], evidence=evidence)
     reason = "done"
     try:
         return await runner.run()
@@ -585,7 +585,7 @@ async def _run_interactive(engine, run_id, provider_config_id, scenario_id, call
                 await asyncio.wait_for(session.close(reason), 5)
 
 
-async def run_manual(engine, run_id, config, bridge):
+async def run_manual(engine, run_id, config, bridge, evidence=None):
     """Open the provider session and serve a manual (human-driven) session over ``bridge``; returns the summary."""
     from .cost_recorder import UsageRecorder
     from .manual_session import ManualSession
@@ -616,7 +616,7 @@ async def run_manual(engine, run_id, config, bridge):
         engine, run_id, adapter, assessor, config["scenario_id"], bridge=bridge,
         playback_mode=config["playback_mode"], journey_id=config.get("journey_id"), path=config.get("path", "happy"),
         provider_session=metadata, cost_recorder=recorder, seed=config["fixture_seed"],
-        context_only=provider_config_id in CONTEXT_ONLY)
+        context_only=provider_config_id in CONTEXT_ONLY, evidence=evidence)
     reason = "done"
     try:
         return await session.run()

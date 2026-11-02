@@ -23,6 +23,7 @@ from __future__ import annotations
 import asyncio
 import base64
 import hashlib
+import json
 import threading
 import time
 from contextlib import suppress
@@ -178,11 +179,11 @@ class ManualSession(LiveScenarioRunner):
 
     def __init__(self, engine, run_id, adapter, assessor, scenario_id, *, bridge, playback_mode="gated",
                  journey_id=None, path="happy", provider_session=None, cost_recorder=None, context_only=True,
-                 max_session_s=MAX_SESSION_S, seed=0, clock=time.monotonic):
+                 max_session_s=MAX_SESSION_S, seed=0, clock=time.monotonic, evidence=None):
         if playback_mode not in PLAYBACK_MODES:
             raise ValueError("INVALID_PLAYBACK_MODE")
         super().__init__(engine, run_id, adapter, assessor, scenario_id, caller_audio=None, seed=seed,
-                         interrupt_mode="vad", provider_session=provider_session, cost_recorder=cost_recorder)
+                         interrupt_mode="vad", provider_session=provider_session, cost_recorder=cost_recorder, evidence=evidence)
         self.bridge, self.playback_mode, self.journey_id, self.path = bridge, playback_mode, journey_id, path
         self.context_only, self.max_session_s, self.clock = context_only, max_session_s, clock
         if playback_mode == "gated":
@@ -192,6 +193,7 @@ class ManualSession(LiveScenarioRunner):
         self.turn = 0  # completed caller turns (speech segments and typed messages)
         self.voice_turns = self.text_turns = 0
         self.outcomes, self.errors, self.fatal = [], [], False
+        self._manual_audio = bytearray()
         self._remainder = b""
         self._retries = 0
         self._welcome_until = None  # provider VAD would cut the welcome on mic noise, so audio waits for it to end
@@ -243,6 +245,8 @@ class ManualSession(LiveScenarioRunner):
             frame = apply_profile(buffered[start:start + FRAME_SAMPLES * 2], profile,
                                   self._faults("background_noise"), self.seed + self._frames)
             self._frames += 1
+            if self.retain_audio:
+                self._manual_audio.extend(frame)
             if self._speech is not None:
                 self._speech.append(frame)
                 if sum(map(len, self._speech)) >= MAX_UTTERANCE_BYTES:
@@ -257,6 +261,16 @@ class ManualSession(LiveScenarioRunner):
         if self._speech is None:
             self._speech, self._speech_started = [], self._now_ms()
 
+    def _flush_manual_input(self):
+        if not self._manual_audio:
+            return
+        pcm = bytes(self._manual_audio)
+        self._manual_audio.clear()
+        sha = self.evidence.put(self.run_id, pcm, "caller_audio", ttl=None)
+        index = {"turn": self.turn, "role": "caller", "sha256": sha, "sample_rate": RATE,
+                 "channels": 1, "codec": "pcm_s16le", "scope": "accepted microphone frames, including non-speech"}
+        self.evidence.put(self.run_id, json.dumps(index, sort_keys=True).encode(), "audio_capture_index", ttl=None)
+
     async def _speech_end(self):
         if self._speech is None:
             return
@@ -264,9 +278,13 @@ class ManualSession(LiveScenarioRunner):
         self._speech = self._speech_started = None
         if not pcm:
             return
+        retained = self.retain_audio
+        if retained:
+            self.evidence.put(self.run_id, pcm, "caller_audio", ttl=None)
+        self._flush_manual_input()
         self._record("input.manual_audio", {
             "turn": self.turn, "pcm_sha256": _sha(pcm), "byte_count": len(pcm), "sample_rate": RATE,
-            "audio_retained": False, "transformations": [self.entry["definition"]["audio_profile"]],
+            "audio_retained": retained, "transformations": [self.entry["definition"]["audio_profile"]],
             "segmentation": "client_energy_vad", "stream_started_ms": started, "stream_ended_ms": self._now_ms(),
             "clock_domain_id": PROCESS_CLOCK_DOMAIN,
         })
@@ -440,10 +458,14 @@ class ManualSession(LiveScenarioRunner):
                 self.driver.cancel_requested = False
                 await self._cancel_generation()
             kind = event.type
+            if kind == "audio_out":
+                self._turn_index = self.turn
+                self._note_audio(event)
             if kind == "tool_call":
                 await self._tool(bank, event)
                 continue
             if kind == "turn_end":
+                self._flush_received_audio()
                 self._welcome_until = None
                 job, _ = self.driver.begin(event)
                 if self.playback_mode == "streamed":
@@ -565,6 +587,8 @@ class ManualSession(LiveScenarioRunner):
             for task in tasks:
                 task.cancel()
             await asyncio.gather(*tasks, return_exceptions=True)
+            self._flush_received_audio()
+            self._flush_manual_input()
             self._flush_native()
             usage = self.driver.close()
             ended = {

@@ -23,7 +23,7 @@
 <label>Scenario<select id="batch-scenario" required></select></label><div id="batch-providers"></div>
 <label>First fixture seed<input id="batch-seed" type="number" step="1" value="42" required></label>
 <label>Runs per configuration<input id="batch-count" type="number" min="1" max="5" value="1" required></label>
-<label class="check"><input id="batch-retain" type="checkbox">Retain audio evidence</label>
+<label class="check"><input id="batch-retain" type="checkbox" checked>Retain audio evidence</label>
 <p class="muted">Each configuration receives the same sequence of fixture seeds, strict-v1 policy and fixed-audio mode. Maximum 8 runs per batch. Provider generation can still vary. Live calls may incur charges.</p>
 <button id="batch-launch" class="primary" type="submit">Launch matched runs</button><button id="batch-retry" type="button" hidden>Retry unfinished launches</button>
 <div id="batch-progress" role="status" aria-live="polite"></div>
