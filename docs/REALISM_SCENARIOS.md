@@ -31,6 +31,8 @@ treats the speech as an instruction and recovers, not true full-duplex overlap h
 
 ## Caller-voice panel
 
+Accent and speaker descriptions in these run notes identify instructions supplied to the synthesiser. The original caller audio was not retained or independently rated for accent or perceived gender. For example, the Irish condition used coral with an Irish delivery instruction, and the Indian English condition used shimmer with an Indian English delivery instruction. The results support task-completion comparisons by configuration only.
+
 `CallerConfig.voice_profile` (default `default`) selects a profile from `caller_voice.PANEL`: `scottish_male` (onyx), `irish_female` (coral),
 `indian_english_female` (shimmer), `northern_english_male` (verse), each with an accent instruction. A non-default profile forces the `openai_tts`
 backend (it needs `VOICE_HARNESS_LIVE_ASR=openai` and `OPENAI_API_KEY`) and is recorded as `profile` in the run's `caller_voice` binding. `default`

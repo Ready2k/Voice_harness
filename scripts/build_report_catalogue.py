@@ -10,7 +10,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 REPO = 'https://github.com/Ready2k/Voice_harness/blob/main/'
 FEATURES = [
-    ('artifacts/regional-caller-2026-11-01/index.html', 'Regional caller understanding · exploratory panel', 'Four synthetic regional caller profiles, six providers and default-voice baselines. Task results with recovered assistant excerpts; original caller audio unavailable.', 'Caller context', '2026-11-01'),
+    ('artifacts/regional-caller-2026-11-01/index.html', 'Caller voice settings · exploratory task outcomes', 'Four prompted TTS voice settings, six providers and default-voice baselines. Original accents unverified. Task results with recovered assistant excerpts; original caller audio unavailable.', 'Caller context', '2026-11-01'),
     ('artifacts/bakeoff-2026-10-29-standard-5/report.html', 'Standard-prompt bake-off · six providers', 'Completed assessment of 720 runs: five providers on standardised prompts plus GPT-Live carried over from 28 October (advanced prompts, not like for like), 40 scenarios, three repetitions. No clear quality winner.', 'Current', '2026-10-29'),
     ('reports/latency-benchmark-2026-10-31.html', 'Latency benchmark · how long a caller waits', 'Six providers on their own end-of-speech detection, 497 timed turns over four sessions on 31 October. Latency only: separate from the quality bake-offs and not comparable with their earlier latency figures.', 'Latency', '2026-10-31'),
     ('executive-special.html', 'Explore the executive briefing', 'How we engineered the voice harness, how the tests work, and the evidence behind the business decision.', 'Executive briefing', '2026-10-29'),

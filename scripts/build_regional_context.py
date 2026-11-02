@@ -15,9 +15,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / '.local/followup-2026-10-31'
 OUT = ROOT / 'artifacts/regional-caller-2026-11-01'
-PROFILES = {'default': 'Default-voice baseline', 'scottish_male': 'Scottish male',
-            'irish_female': 'Irish female', 'northern_english_male': 'Northern English male',
-            'indian_english_female': 'Indian English female'}
+PROFILES = {'default': 'Default-voice baseline', 'scottish_male': 'onyx · Scottish accent requested',
+            'irish_female': 'coral · Irish accent requested', 'northern_english_male': 'verse · Yorkshire accent requested',
+            'indian_english_female': 'shimmer · Indian English accent requested'}
 NAMES = {'openai-live': 'OpenAI GPT-Live', 'openai-realtime-live': 'OpenAI Realtime',
          'nova-sonic-live': 'Amazon Nova Sonic', 'xai-voice-live': 'xAI Grok Voice',
          'gemini-live': 'Google Gemini Live', 'elevenlabs-live': 'ElevenLabs Agents'}
@@ -145,12 +145,12 @@ def build():
         runs_with_reply_audio=sum(r['audio_available'] for r in records),
         reply_excerpts=sum(c['audio_available'] for r in records for c in r['clips']), caller_recordings=0),
         limitations=[
-            'Exploratory synthetic caller panel: one scored repeat per accent/scenario/provider in the primary comparison. Not a validated accent ranking or human-caller study.',
+            'Each primary cell has one scored observation for a voice and instruction setting. The accent and perceived gender of the original caller speech were never verified.',
             'Regional profiles use instructed OpenAI TTS voices; the default-voice baseline can differ in TTS backend and voice. Accent, speaker identity and synthesis are confounded, so differences cannot be attributed to accent alone.',
             'Caller recordings were not retained. Playback contains recovered assistant response excerpts only: no original regional caller audio, full-call timeline, silence gaps or proof of physical playback. Excerpts may be incomplete.',
             'Scores use retained task_completed metrics, not the assurance outcome flag. No new AI judge or listening score was applied. Task misses can reflect tool use or other behaviour rather than speech misunderstanding.',
             'Five-provider batches and later Nova batches were separate sessions. Gemini appears again as a control in the Nova batches; these 20 cases are shown separately and excluded from primary counts.',
-            'The displayed result is the final scored observation per cell. One primary Gemini Indian-English balance case timed out (TURN_TIMEOUT) before a successful retry; both attempts are disclosed, but only the final observation contributes to task counts.',
+            'The displayed result is the final scored observation per cell. One primary Gemini balance case using shimmer with the Indian English instruction timed out (TURN_TIMEOUT) before a successful retry; both attempts are disclosed, but only the final observation contributes to task counts.',
             'Preflight runs and earlier credit-blocked Nova accent attempts are excluded. Only scored cells from completed batches are included; source batch identities and payload hashes are preserved.',
             'This full-tool, standardised-v3 experiment differs from the no-tool 144-conversation study. Do not merge its results into the conversation-quality averages.',
             'Raw local databases, credentials and session metadata are not exported. PCM was recovered from saved approval units, hash-verified and losslessly encoded; generated audio is not evidence the caller heard it.',
