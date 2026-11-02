@@ -17,14 +17,21 @@ const lat = [['Google Gemini Live', 1166, 1065], ['ElevenLabs Agents', 1383, nul
 const scenes = [
  {dark: 1, tag: 'VOICE HARNESS · TECHNICAL OVERVIEW', h: 'How do you test a voice agent that talks and acts?', sub: 'Architecture, controls, evidence, fairness, results and limits.',
   body: `<svg class="wave" viewBox="0 0 832 400" width="832" height="400"><g fill="${MINT}" opacity=".85">${wave}</g></svg>`},
- {tag: 'WHY TEXT-ONLY TESTING MISSES IT', h: 'Speech and actions share one stream.',
-  body: `<div class="lanes">
-    <div class="lane"><div class="ln">Audio to caller</div><div class="lt"><i class="b1"></i></div></div>
-    <div class="lane"><div class="ln">Tool call</div><div class="lt"><i class="mk"></i></div></div>
-    <div class="lane"><div class="ln">Transcript</div><div class="lt"><i class="b2"></i></div></div>
-    <div class="gap">▲ the customer can hear it before anyone reads the transcript</div></div>
-   <div class="pills">${['interruption', 'truncation', 'tool handling', 'usage reporting', 'transcripts'].map(x => pill('Services differ: ' + x)).join('')}</div>
-   <p class="lead">So capabilities need evidence, not vendor claims.</p>`},
+ {tag: 'WHY TEXT-ONLY TESTING MISSES IT', h: 'The customer hears it before a test can read it.',
+  body: `<div class="tl">
+    <div class="tl-axis"><span>time →</span></div>
+    <div class="tl-row"><div class="tl-name">What the customer hears<small>audio stream</small></div><div class="tl-track">
+      <div class="seg s1" style="left:2%;width:30%">“Sure, I can help with that.”</div>
+      <div class="seg s2" style="left:34%;width:36%">“I’ve cancelled your payment.”</div></div></div>
+    <div class="tl-row"><div class="tl-name">What the service does<small>tool call, same stream</small></div><div class="tl-track">
+      <div class="seg tool" style="left:50%;width:30%">cancel_payment( … )</div></div></div>
+    <div class="tl-row"><div class="tl-name">What a text-only test sees<small>transcript, after the fact</small></div><div class="tl-track">
+      <div class="seg tx" style="left:72%;width:26%">“…cancelled your payment.”</div></div></div>
+    <div class="tl-ov"><div class="gapband" style="left:44%;width:28%"><span>unchecked gap</span></div><div class="vline" style="left:44%"></div><div class="vline" style="left:72%"></div>
+     <div class="vlab" style="left:44%">Customer hears “cancelled”</div><div class="vlab" style="left:72%">Transcript first available</div></div>
+   </div>
+   <div class="gapbox">Unchecked speech and actions reach the customer in this gap. Only a harness that controls audio release and tool execution can test it.</div>
+   <div class="difs"><b>Services also differ on:</b> ${['interruption', 'truncation', 'tool handling', 'usage reporting', 'transcripts'].map(x => `<span>${x}</span>`).join('')}<em>So capabilities need evidence, not vendor claims.</em></div>`},
  {tag: 'THE HARNESS', h: 'A controlled world around the service under test.',
   body: `<div class="arch">
     <div class="r">${node('Scenario runner', 'synthetic caller · 20 ms chunks', 'soft')}${darr}${node('Provider adapter', 'closed events · native payload hashes', 'soft')}${darr}${node('Voice service', 'system under test · external', 'hot dashed')}</div>
@@ -71,9 +78,10 @@ const scenes = [
    <div class="fixes" style="width:520px"><div class="fx"><b>120</b> paired runs per pair (40 scenarios × 3)</div><div class="fx"><b>0 of 10</b> pairs separable after Holm correction</div><div class="fx"><b>≈300–500</b> runs needed to confirm a 2-point gap (80% power)</div></div></div>`,
   note: 'Intervals: bootstrap resampling whole scenarios, the same draw for every provider. Power: McNemar on the assurance pass rate.'},
  {tag: 'LATENCY', h: 'Much of the wait is deciding the caller is done.',
-  body: `<div class="cap">Median first audio, plain answers. Dark part: time the service spent deciding the caller had finished.</div><div class="latrows">` +
-   lat.map(([n, t, e]) => `<div class="lrow"><div class="name">${n}</div><div class="ltrack"><div class="lt1" style="width:${(t / 2200 * 100).toFixed(1)}%">${e ? `<div class="lt2" style="width:${(e / t * 100).toFixed(1)}%"></div>` : ''}</div></div><div class="val">${(t / 1000).toFixed(2)} s</div></div>`).join('') + `</div>`,
-  note: '497 timed turns, each service on its own end-of-speech detection. One location, concurrent providers, small plain-turn samples: no speed ranking. ElevenLabs and GPT-Live do not report the split; the Gemini split comes from a supplementary session.'},
+  body: `<div class="llegend"><span><i class="k1"></i> Waiting to decide the caller finished</span><span><i class="k2"></i> Everything after: thinking + first audio</span><span><i class="k3"></i> Split not reported</span></div>
+   <div class="cap">Median time from the caller finishing to first audio, plain answers</div><div class="latrows">` +
+   lat.map(([n, t, e]) => `<div class="lrow"><div class="name">${n}</div><div class="ltrack"><div class="lt1 ${e ? '' : 'nosplit'}" style="width:${(t / 2200 * 100).toFixed(1)}%">${e ? `<div class="lt2" style="width:${(e / t * 100).toFixed(1)}%"><span>wait ${(e / 1000).toFixed(2)} s</span></div><span class="rest">reply</span>` : '<span class="rest">split not reported</span>'}</div></div><div class="val">${(t / 1000).toFixed(2)} s</div></div>`).join('') + `</div>`,
+  note: '497 timed turns, each service on its own end-of-speech detection. One location, concurrent providers, small plain-turn samples: no speed ranking. Wait and total are separate medians, so they do not add exactly. The Gemini split comes from a supplementary session.'},
  {tag: 'LIMITS', h: 'Where the evidence stops.',
   body: `<div class="lim">${[['One scripted caller voice', 'no accents or interruptions in the main results'], ['Small samples', '40 scenarios × 3 repetitions; intervals overlap'], ['One transcriber', 'drives fact and safe-speech checks; same vendor as one tested service'], ['Judges not calibrated', 'identities masked, but reply style can still give a service away'], ['Not like for like', 'turn control, voices and Nova confirmations differ; GPT-Live carried over'], ['No baseline yet', 'Amazon Connect and internal platforms unmeasured; live runs host-run']].map(([t, d]) => `<div class="lc"><b>${t}</b><span>${d}</span></div>`).join('')}</div>`},
  {dark: 1, tag: 'NEXT', h: 'Same contract, new baselines.',
@@ -136,6 +144,17 @@ h1{margin:0 0 34px;font-weight:900;letter-spacing:-3px;line-height:1.04;font-siz
 .road4{display:flex;align-items:stretch;gap:10px;margin-top:20px}.road4 .step{padding:30px 26px}.road4 .step h4{font-size:32px}.road4 .step p{font-size:25px}.road4 .chev{font-size:70px}
 .pillx.solid{background:${TEAL};color:#fff}.card.dashedc{border:2px dashed #ADC4C9}.chain.stk{flex-direction:column;align-items:stretch;gap:6px}.blockc.big{font-size:28px;padding:22px 24px;text-align:left}.chain em.dn{text-align:center;font-size:26px}.fx b{color:${TEAL};font-size:34px;margin-right:8px}
 .iv{display:flex;flex-direction:column;gap:18px;margin-bottom:30px}.irow{display:flex;align-items:center;gap:26px}.irow .name{width:340px;font-size:30px;font-weight:bold;text-align:right}.itrack{flex:1;position:relative;height:46px;background:linear-gradient(#ADC4C9,#ADC4C9) center/100% 2px no-repeat}.ibar{position:absolute;top:13px;height:20px;background:#7FBFB0;border-radius:10px}.idot{position:absolute;top:5px;width:36px;height:36px;margin-left:-18px;border-radius:50%;background:${TEAL};border:4px solid #EDF4EE}.irow .val{width:150px;font-size:36px;font-weight:900}.irow.axis{margin-top:-6px}.irow.axis .itrack{height:30px;background:none}.irow.axis span{position:absolute;transform:translateX(-50%);font-size:24px;color:${MUTED}}
+
+.tl{position:relative;margin-top:6px}.tl-axis{text-align:right;font-size:24px;color:${MUTED};margin:0 0 6px;padding-right:6px}.tl-row{display:flex;align-items:center;gap:24px;margin-bottom:26px}.tl-name{width:430px;font-size:30px;font-weight:bold;text-align:right;line-height:1.15}.tl-name small{display:block;font-size:22px;color:${MUTED};font-weight:normal}
+.tl-track{flex:1;position:relative;height:84px;background:#E1F3EA;border-radius:12px}.seg{position:absolute;top:10px;height:64px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:bold;white-space:nowrap}
+.seg.s1{background:${TEAL};color:#fff}.seg.s2{background:${TEAL};color:#fff;outline:4px solid #20C997}.seg.tool{background:#C0392B;color:#fff;font-family:monospace;font-size:26px}.seg.tx{background:#7FBFB0;color:${INK}}
+.vline{position:absolute;top:34px;bottom:-4px;width:0;border-left:4px dashed ${INK}}.vlab{position:absolute;top:0;font-size:24px;font-weight:bold;transform:translateX(-50%);color:${INK}}
+.gapbox{border-left:8px solid #C0392B;background:#fff;border-radius:0 12px 12px 0;padding:20px 28px;font-size:30px;line-height:1.35;font-weight:bold;margin:14px 0 22px}
+.difs{font-size:28px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}.difs span{border:2px solid ${TEAL};border-radius:30px;padding:8px 20px;font-weight:bold}.difs em{font-style:normal;font-weight:900;font-size:34px;flex-basis:100%;margin-top:10px}
+.llegend{display:flex;flex-wrap:wrap;gap:34px;font-size:26px;margin:4px 0 22px}.llegend span{display:flex;align-items:center;gap:12px}.llegend i{display:inline-block;width:46px;height:26px;border-radius:5px}.k1{background:${TEAL}}.k2{background:#7FBFB0}.k3{background:repeating-linear-gradient(135deg,#ADC4C9,#ADC4C9 6px,#E1EAE6 6px,#E1EAE6 12px)}
+.lt1{position:relative;display:flex;align-items:center}.lt2{height:54px;background:${TEAL};display:flex;align-items:center;justify-content:center;color:#fff;font-size:24px;font-weight:bold;white-space:nowrap;overflow:hidden}.lt1 .rest{flex:1;text-align:center;font-size:24px;font-weight:bold;color:${INK}}.lt1.nosplit{background:repeating-linear-gradient(135deg,#ADC4C9,#ADC4C9 8px,#E1EAE6 8px,#E1EAE6 16px)}
+.tl-ov{position:absolute;left:454px;right:0;top:0;bottom:0;pointer-events:none}.tl-ov .vline{top:28px;bottom:6px}.tl-ov .vlab{top:-6px}.gapband{position:absolute;top:34px;bottom:10px;background:rgba(192,57,43,.13)}.gapband span{position:absolute;left:0;right:0;bottom:4px;text-align:center;font-size:22px;font-weight:bold;color:#C0392B}
+.latrows{gap:12px!important}.ltrack{height:48px!important}.lt1,.lt2{height:48px!important}.llegend{margin:0 0 14px!important;gap:30px!important;font-size:24px!important}
 `;
 (async () => {
   const b = await chromium.launch({headless: true, executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'});
