@@ -11,13 +11,14 @@ import os
 import sqlite3
 import subprocess
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'src'))
-from voice_harness import caller_voice
-from voice_conversation import load_environment
+from voice_conversation import load_environment  # noqa: E402
+
+from voice_harness import caller_voice  # noqa: E402
 
 OUT = ROOT / 'artifacts/regional-caller-2026-11-01'
 LOCAL = ROOT / '.local/followup-2026-10-31'
@@ -83,14 +84,14 @@ def main():
         env = {**os.environ, caller_voice.ENV: 'openai_tts', caller_voice.PROFILE_ENV: spec['profile'],
                caller_voice.LIVE_FLAG: 'openai', 'VOICE_HARNESS_CALLER_TTS_MODEL': spec['model']}
         pcm = caller_voice.openai_tts_pcm(spec['text'], environ=env)
-        subprocess.run(['flac', '--silent', '--force', '--force-raw-format', '--endian=little', '--sign=signed',
+        subprocess.run(['flac', '--silent', '--force', '--force-raw-format', '--endian=little', '--sign=signed',  # noqa: S603, S607  # nosec B603 B607
                         '--channels=1', '--bps=16', '--sample-rate=24000', '-o', str(path), '-'], input=pcm, check=True, capture_output=True)
-        decoded = subprocess.run(['flac','--silent','--decode','--stdout','--force-raw-format','--endian=little','--sign=signed',str(path)],capture_output=True,check=True).stdout
+        decoded = subprocess.run(['flac','--silent','--decode','--stdout','--force-raw-format','--endian=little','--sign=signed',str(path)],capture_output=True,check=True).stdout  # noqa: S603, S607  # nosec B603 B607
         if decoded != pcm:
             raise ValueError('Reconstructed clip failed lossless verification')
         manifest['clips'][key] = dict(**spec, path='caller/'+path.name, pcm_sha256=digest(pcm),
             flac_sha256=digest(path.read_bytes()), seconds=round(len(pcm)/48000,3),
-            generated_at=datetime.now(timezone.utc).isoformat(), reconstructed=True)
+            generated_at=datetime.now(UTC).isoformat(), reconstructed=True)
         manifest_path.write_text(json.dumps(manifest,indent=2,ensure_ascii=False)+'\n')
         print(f'Generated {len(manifest["clips"])}/{len(specs)}: {spec["profile"]}', flush=True)
     manifest_path.write_text(json.dumps(manifest,indent=2,ensure_ascii=False)+'\n')

@@ -58,10 +58,10 @@ def write_clip(unit):
     pcm = verified_pcm(unit)
     path = OUT / 'clips' / (unit['audio_sha256'] + '.flac')
     if not path.exists():
-        subprocess.run(['flac', '--silent', '--force', '--force-raw-format', '--endian=little',
+        subprocess.run(['flac', '--silent', '--force', '--force-raw-format', '--endian=little',  # noqa: S603, S607  # nosec B603 B607
                         '--sign=signed', '--channels=1', '--bps=16', '--sample-rate=24000', '-o', str(path), '-'],
                        input=pcm, check=True, capture_output=True)
-    decoded = subprocess.run(['flac', '--silent', '--decode', '--stdout', '--force-raw-format',
+    decoded = subprocess.run(['flac', '--silent', '--decode', '--stdout', '--force-raw-format',  # noqa: S603, S607  # nosec B603 B607
                               '--endian=little', '--sign=signed', str(path)], check=True, capture_output=True).stdout
     if decoded != pcm:
         raise ValueError('FLAC decode differs from source PCM')

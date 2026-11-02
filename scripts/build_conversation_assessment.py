@@ -87,7 +87,7 @@ def build():
         flags = [dict(code=code, severity=FLAGS[code][0], label=FLAGS[code][1])
                  for code in row['flag'].split(';') if code]
         profile = plan['profiles'][job['provider']][job['condition']]
-        scores = dict(zip(AXES, map(int, values)))
+        scores = dict(zip(AXES, map(int, values), strict=False))
         reviews.append(dict(**job, provider_name=NAMES[job['provider']],
                             model=result.get('returned_model_id') or profile['model_id'],
                             model_source='returned' if result.get('returned_model_id') else 'requested',
@@ -169,7 +169,7 @@ def make_report(data, plan, results):
     for s in plan['scenarios']:
         out.append(f'<section id="{s["id"]}"><h2>{esc(s["title"])}</h2><p>{esc(s["review"])}</p>')
         for c in ['common','tuned']:
-            out.append(f'<h3>{c.title()} prompt</h3><p class="muted">Each row covers both repeats. C = wording clarity; P = professionalism; H = helpfulness; A = accuracy; E = empathy; F = continuity. Range is the two conversation means.</p><div class="scroll"><table><thead><tr><th>Provider</th><th>Mean / range</th>' + ''.join(f'<th title="{esc(v)}">{letter}</th>' for letter,v in zip('CPHAEF',AXES.values())) + '<th>Risk / verification</th><th>Evidence</th></tr></thead><tbody>')
+            out.append(f'<h3>{c.title()} prompt</h3><p class="muted">Each row covers both repeats. C = wording clarity; P = professionalism; H = helpfulness; A = accuracy; E = empathy; F = continuity. Range is the two conversation means.</p><div class="scroll"><table><thead><tr><th>Provider</th><th>Mean / range</th>' + ''.join(f'<th title="{esc(v)}">{letter}</th>' for letter,v in zip('CPHAEF',AXES.values(), strict=False)) + '<th>Risk / verification</th><th>Evidence</th></tr></thead><tbody>')
             group = sorted([x for x in data['summary'] if x['scenario']==s['id'] and x['condition']==c], key=lambda x:(-x['mean'],x['provider']))
             for x in group:
                 subset = sorted([r for r in data['reviews'] if r['scenario']==s['id'] and r['condition']==c and r['provider']==x['provider']],key=lambda r:r['repetition'])
