@@ -22,3 +22,7 @@ output/**/promo/frames/
 output/**/promo/clips-narrated/
 output/**/promo/clips-narrated.txt
 output/**/promo/narration/voice.wav
+output/business-overview/clips/
+output/business-overview/clips.txt
+output/business-overview/frames/
+output/business-overview/narration/voice.wav
