@@ -32,14 +32,18 @@ const scenes = [
    <div class="hero"><strong>0</strong><span>prohibited actions executed</span></div></div>`,
   note: 'Services and controls working together. It does not mean every check passed: failed and unresolved checks are reported.'},
  {tag: 'FINDING 2 · GETTING THE JOB DONE', h: 'Completing the request varied.',
-  body: `<div class="cap">Each square is one eligible request. Filled means completed.</div><div class="sqrows">` + [['xAI Grok Voice', 36], ['ElevenLabs Agents', 36], ['Google Gemini Live', 35], ['OpenAI GPT-Realtime', 34], ['Amazon Nova Sonic', 29]].map(([n, v]) => `<div class="srow"><div class="name">${n}</div>${squares(v, 36)}<div class="val">${v}<small>/36</small></div></div>`).join('') + `</div>`,
+  body: `<div class="cap">Each square is one eligible request. Filled means completed.</div><div class="sqrows">` + [['xAI Grok Voice', 36], ['ElevenLabs Agents', 36], ['Google Gemini Live', 35], ['OpenAI GPT-Realtime', 35], ['Amazon Nova Sonic', 29]].map(([n, v]) => `<div class="srow"><div class="name">${n}</div>${squares(v, 36)}<div class="val">${v}<small>/36</small></div></div>`).join('') + `</div>`,
   note: 'Completion checks the expected tool sequence and arguments, not just what was said.'},
- {tag: 'FINDING 3 · QUALITY AND FACTS', h: 'Top scores are too close to call.',
-  body: `<div class="split"><div class="venn"><div class="c c1"><strong>98.44%</strong><span>xAI Grok Voice</span></div><div class="c c2"><strong>98.22%</strong><span>Google Gemini Live</span></div><div class="vt">cannot be separated</div></div>
-   <div class="facts"><div class="fh">Spoken facts passed</div>${[['Gemini', '20/21'], ['xAI', '19/20'], ['GPT-Realtime', '17/18'], ['Nova', '16/18'], ['ElevenLabs', '17/21']].map(([n, v]) => `<div class="fp"><span>${n}</span><b>${v}</b></div>`).join('')}</div></div>`,
-  note: 'Weighted quality score, excluding latency. The uncertainty analysis could not separate a winner.'},
+ {tag: 'FINDING 3 · QUALITY AND FACTS', h: 'Quality scores are too close to call.',
+  body: `<div class="cap">Quality score (excludes latency) with 95% interval</div><div class="iv">` +
+   [['ElevenLabs Agents', 99.61, 98.68, 100], ['xAI Grok Voice', 99.49, 98.47, 100], ['Google Gemini Live', 99.27, 98.36, 99.95], ['OpenAI GPT-Realtime', 98.53, 97.06, 100], ['Amazon Nova Sonic', 97.55, 94.36, 99.67]]
+   .map(([n, v, lo, hi]) => { const p = x => ((x - 94) / 6 * 100).toFixed(2); return `<div class="irow"><div class="name">${n}</div><div class="itrack"><div class="ibar" style="left:${p(lo)}%;width:${(p(hi) - p(lo)).toFixed(2)}%"></div><div class="idot" style="left:${p(v)}%"></div></div><div class="val">${(v + 0.0001).toFixed(1)}%</div></div>`; }).join('') +
+   `<div class="irow axis"><div class="name"></div><div class="itrack">${[94, 96, 98, 100].map(x => `<span style="left:${((x - 94) / 6 * 100)}%">${x}%</span>`).join('')}</div><div class="val"></div></div></div>
+   <div class="verdict">Intervals overlap: no clear overall winner</div>
+   <p class="facts">Spoken facts: every decided check passed (17 to 21 per service).</p>`,
+  note: 'Weighted quality score with a bootstrap interval over scenarios; no pair is separable after correction.'},
  {tag: 'FINDING 4 · COST', h: 'Cost varied the most: about an eight-times spread.',
-  body: `<div class="split"><div style="flex:1"><div class="cap">Median voice cost per priced run</div>` + bars([['Google Gemini Live', 0.0042], ['Amazon Nova Sonic', 0.0052], ['ElevenLabs Agents', 0.0183], ['OpenAI GPT-Realtime', 0.0200], ['xAI Grok Voice', 0.0333]], 0.0333, v => '$' + v.toFixed(4)) + `</div>
+  body: `<div class="split"><div style="flex:1"><div class="cap">Median voice cost per priced run</div>` + bars([['Google Gemini Live', 0.0042], ['Amazon Nova Sonic', 0.0052], ['OpenAI GPT-Realtime', 0.0200], ['ElevenLabs Agents', 0.0208], ['xAI Grok Voice', 0.0333]], 0.0333, v => '$' + v.toFixed(4)) + `</div>
    <div class="mult"><strong>≈8×</strong><span>cheapest to dearest, for results that scored close together</span></div></div>`,
   note: 'Voice usage only, including retries. Pricing coverage is partial for GPT-Realtime, Gemini and ElevenLabs.'},
  {tag: 'FINDING 5 · HANDING OVER TO A PERSON', h: 'Asking for a human is not a given.',
@@ -97,6 +101,7 @@ h1{margin:0 0 34px;font-weight:900;letter-spacing:-3px;line-height:1.04;font-siz
 .sixth{margin:16px 0 0 356px;border:2px dashed #ADC4C9;border-radius:14px;padding:16px 26px;font-size:26px;line-height:1.35;color:${MUTED};max-width:1180px}.sixth b{color:${INK}}
 .side{width:470px;flex:none}.side .big2{white-space:nowrap;font-size:96px;font-weight:900;letter-spacing:-4px;color:${TEAL};line-height:1}.side p{font-size:28px;color:${MUTED};margin:8px 0 26px}.warnbox{border:2px dashed #C0392B;border-radius:12px;padding:18px 22px;font-size:26px;line-height:1.35}
 .sq.wide{gap:10px}.sq.wide i{width:56px}
+.iv{display:flex;flex-direction:column;gap:18px;margin-bottom:30px}.irow{display:flex;align-items:center;gap:26px}.irow .name{width:340px;font-size:30px;font-weight:bold;text-align:right}.itrack{flex:1;position:relative;height:46px;background:linear-gradient(#ADC4C9,#ADC4C9) center/100% 2px no-repeat}.ibar{position:absolute;top:13px;height:20px;background:#7FBFB0;border-radius:10px}.idot{position:absolute;top:5px;width:36px;height:36px;margin-left:-18px;border-radius:50%;background:${TEAL};border:4px solid #EDF4EE}.irow .val{width:150px;font-size:36px;font-weight:900}.irow.axis{margin-top:-6px}.irow.axis .itrack{height:30px;background:none}.irow.axis span{position:absolute;transform:translateX(-50%);font-size:24px;color:${MUTED}}
 `;
 (async () => {
   const b = await chromium.launch({headless: true, executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'});
