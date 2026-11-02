@@ -47,7 +47,7 @@ Python package `src/voice_harness/` (CLI entry: `__main__.py` with `serve`, `gol
 - **`engine.py`** (largest module): trusted orchestration, synthetic banking tools, and immutable PCM approval units. Uses `approvals.py` (token signing), `policy.py`, `tool_lifecycle.py`, `verdicts.py`.
 - **`contracts.py`**: pydantic models for tools/results/approval tokens; schemas reject unexpected properties. `generate_contracts.py` emits JSON Schemas and OpenAPI into `contracts/` — rerun it after changing models or API routes.
 - **`storage.py` / `relational.py`**: transactional per-run namespaces and append-only canonical evidence ledger; psycopg pool for PostgreSQL, SQLite fallback. Event models in `events.py`.
-- **`evidence.py`**: hash-chained ledger, export manifests (event count, final ledger hash, artifact hashes) and `verify_bundle`. Manifests are unsigned; signing is a Phase 3 gate.
+- **`evidence.py`**: hash-chained ledger, export manifests (event count, final ledger hash, artifact hashes) and `verify_bundle`. Manifests are Ed25519-signed over the RFC 8785 canonical bytes (`signing.py`, AC-08) when a signer is configured, which the API does by default; otherwise they declare `unsigned_local`. Offline verification needs a trusted key ring obtained out of band.
 - **`api.py`**: authenticated FastAPI (HTTP + WebSocket); operator token generated at `/data/operator-token`.
 - **`mcp_server.py` / `mcp_gateway.py`**: stdio MCP surface and correlated tool-call gateway.
 - **`playback.py`**: PCM playback gate bound to session/hash/range/epoch. Browser side lives in `apps/web/` (`scheduler.mjs`, `playback-worklet.js`, `client.mjs`).

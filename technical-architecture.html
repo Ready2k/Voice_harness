@@ -66,7 +66,7 @@ body.engineering-page{background:#f7f9fb}.engineering-page header{position:stati
 <rect x="820" y="240" width="330" height="90" rx="7"/>
 <text class="map-title" x="836" y="269">LiveAdapter protocol</text>
 <text class="map-note" x="836" y="293">adapters/ · event_contracts.py</text>
-<text class="map-note" x="836" y="312">Canonical events + original payloads</text>
+<text class="map-note" x="836" y="312">Canonical events + native payload hashes</text>
 </g>
 <path class="map-link " d="M420 285 H330" marker-end="url(#map-arrow)"/>
 <text class="map-edge-label" x="345" y="272">control</text>
@@ -193,7 +193,7 @@ body.engineering-page{background:#f7f9fb}.engineering-page header{position:stati
 <section class="engineering-section" id="contracts"><h2>02 / Boundary contracts</h2>
 <div class="contract-table-wrap" tabindex="0" role="region" aria-label="Boundary contracts; horizontally scrollable"><table class="contract-table"><thead><tr><th scope="col">Boundary</th><th scope="col">Payload / contract</th><th scope="col">Invariant</th></tr></thead><tbody>
 <tr><th scope="row">API → run lifecycle</th><td><code>POST /api/v1/runs</code>; scenario and provider binding; queued → probing → running → evaluating → completed.</td><td>Cancellation and failure are distinct outcomes. Cancellation emits no completed event, assessment or assurance.</td></tr>
-<tr><th scope="row">Provider → adapter → driver</th><td><code>LiveAdapter</code> events: audio, transcripts, tool calls, turn boundaries, interruption, usage and errors.</td><td>Closed event contracts reject unknown fields; original provider payloads remain available. Unsupported capabilities are declared.</td></tr>
+<tr><th scope="row">Provider → adapter → driver</th><td><code>LiveAdapter</code> events: audio, transcripts, tool calls, turn boundaries, interruption, usage and errors.</td><td>Closed event contracts reject unknown fields; native provider payloads are recorded as a hash, size and explicit omission reason (HASH_ONLY_PAYLOAD_NOT_STORED); the payload itself is not stored. Unsupported capabilities are declared.</td></tr>
 <tr><th scope="row">Guardrail → MCP gateway</th><td>Tool proposal, identity state and confirmation / approval state; correlated requests and results.</td><td>Protected calls must pass checks before execution. Confirmations and approval tokens are single-use and consumed transactionally; bank state is isolated per run.</td></tr>
 <tr><th scope="row">Held audio → release</th><td><code>ApprovalUnit</code> binds PCM hash, sample range and epochs. <code>ReleaseToken</code> binds unit, hash, client session, epochs and expiry.</td><td>Pending audio cannot bypass the gate. Stale or mismatched approvals cannot authorise a release. Each release is recorded.</td></tr>
 <tr><th scope="row">ASR / assessment → policy</th><td>Independent transcription compared with tool results and reference facts; optional AI judge findings.</td><td>AI signals are advisory under the current policy. A blocked misstatement remains a model failure; missing evidence can be <code>untestable</code>.</td></tr>

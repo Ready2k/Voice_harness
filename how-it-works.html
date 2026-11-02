@@ -59,7 +59,7 @@
 <rect x="820" y="240" width="330" height="90" rx="7"/>
 <text class="map-title" x="836" y="269">Provider adapter</text>
 <text class="map-note" x="836" y="293">Provider transport ↔ common events</text>
-<text class="map-note" x="836" y="312">Preserves original payloads</text>
+<text class="map-note" x="836" y="312">Hashes native payloads</text>
 </g>
 <path class="map-link " d="M420 285 H330" marker-end="url(#map-arrow)"/>
 <text class="map-edge-label" x="345" y="272">control</text>
@@ -199,7 +199,7 @@
     <div class="section-heading"><p class="kicker">02 / RUN LIFECYCLE</p><h2>From request<br><em>to recorded outcome.</em></h2><p>A live run binds a scenario and provider configuration, opens a session, then records both the interaction and its assessment.</p></div>
     <div class="tech-flow" aria-label="Run lifecycle"><div><span>01</span><strong>queued</strong><small>POST /api/v1/runs</small></div><div><span>02</span><strong>probing</strong><small>Availability and capability binding</small></div><div><span>03</span><strong>running</strong><small>Provider session and turns</small></div><div><span>04</span><strong>evaluating</strong><small>Assess retained evidence</small></div><div><span>05</span><strong>completed</strong><small>Assessment and assurance recorded</small></div></div>
     <p class="tech-caption">Timeouts, adapter errors and judging errors can fail a run; queued, probing and running states can be cancelled. Cancellation emits no completed event, assessment or assurance. The ledger remains the source of truth.</p>
-    <div class="tech-grid"><article><span>SCENARIO INPUT</span><h3>Speech into the adapter</h3><p><code>LiveScenarioRunner</code> synthesises the caller and sends audio in 20 ms chunks. The adapter translates between provider-specific transport and the harness event contract.</p></article><article><span>TURN HANDLING</span><h3>Events into controlled paths</h3><p><code>AdapterTurnDriver</code> routes tool calls through the guardrail and MCP gateway, and audio through the approval buffer and playback gate.</p></article><article><span>PROVIDER BOUNDARY</span><h3>Canonical events</h3><p><code>LiveAdapter</code> emits closed events for audio, transcripts, tool calls, turn boundaries, interruption, usage and errors; original provider payloads are retained.</p></article></div>
+    <div class="tech-grid"><article><span>SCENARIO INPUT</span><h3>Speech into the adapter</h3><p><code>LiveScenarioRunner</code> synthesises the caller and sends audio in 20 ms chunks. The adapter translates between provider-specific transport and the harness event contract.</p></article><article><span>TURN HANDLING</span><h3>Events into controlled paths</h3><p><code>AdapterTurnDriver</code> routes tool calls through the guardrail and MCP gateway, and audio through the approval buffer and playback gate.</p></article><article><span>PROVIDER BOUNDARY</span><h3>Canonical events</h3><p><code>LiveAdapter</code> emits closed events for audio, transcripts, tool calls, turn boundaries, interruption, usage and errors. Native provider payloads are recorded as a hash, size and explicit omission reason; the payload itself is not stored.</p></article></div>
   </section>
   <section class="tech-section tech-tint" id="controls">
     <div class="section-heading"><p class="kicker">03 / ENFORCEMENT PATHS</p><h2>Two paths.<br><em>Two control boundaries.</em></h2><p>Tool execution and audio playback are separate decisions. These paths show where the harness applies its controls.</p></div>
