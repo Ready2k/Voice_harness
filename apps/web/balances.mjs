@@ -6,13 +6,14 @@ export function balanceView(item, now = Date.now() / 1000) {
   const stale = live && (!Number.isFinite(item.checked_at) || now - item.checked_at > (item.stale_after_seconds ?? 300));
   const manual = !live && Number.isFinite(item.manual_balance);
   const value = live ? item.balance : manual ? item.manual_balance : null;
-  const currency = live ? item.currency : item.manual_currency;
-  const comparable = value !== null && currency === item.threshold_currency;
+  const unit = item.unit ?? null;
+  const currency = unit ?? (live ? item.currency : item.manual_currency);
+  const comparable = value !== null && (unit !== null || currency === item.threshold_currency);
   const low = comparable && (spend ? value >= item.threshold : value <= item.threshold);
   const empty = !spend && value !== null && value <= 0;
   const mismatch = value !== null && !comparable;
   return {
-    value, currency, live, manual, stale,
+    value, currency, unit, live, manual, stale,
     tone: empty ? 'bad' : low || !live || stale || mismatch ? 'warn' : 'ok',
     label: stale ? 'Reading out of date' : manual ? (empty ? 'Saved balance exhausted' : low ? 'Saved balance low' : 'Saved balance · not live')
       : !live ? (item.status === 'setup_required' ? 'Setup needed' : spend ? 'Spend unavailable' : 'Balance unavailable')
@@ -27,6 +28,7 @@ export function balanceView(item, now = Date.now() / 1000) {
 
 export function money(value, currency) {
   if (!Number.isFinite(value)) return 'Unavailable';
+  if (currency === 'credits') return new Intl.NumberFormat().format(Math.round(value)) + ' credits';
   try { return new Intl.NumberFormat(undefined, {style:'currency', currency, currencyDisplay:'code'}).format(value); }
   catch { return `${value.toFixed(2)} ${currency}`; }
 }
@@ -53,14 +55,16 @@ export function renderBalanceCard(item, save) {
   const stamp = el('p', 'muted');
   const message = el('p', 'balance-message');
   const billing = el('a', '', 'Open provider billing ↗'); billing.href = item.billing_url; billing.target = '_blank'; billing.rel = 'noopener noreferrer';
-  const details = el('details', 'balance-settings'); details.append(el('summary', '', 'Alert threshold'+(item.kind === 'spend' ? '' : ' & saved balance')));
+  const details = el('details', 'balance-settings'); details.append(el('summary', '', 'Alert threshold'+(item.kind === 'spend' || item.unit ? '' : ' & saved balance')));
   const form = el('form');
   const threshold = field(form, item.kind === 'spend' ? 'Warn at or above' : 'Warn at or below', 'number', item.threshold); threshold.min='0'; threshold.max='1000000000000'; threshold.step='0.01'; threshold.required=true;
   const currencyLabel=el('label','','Currency'); const currency=el('select');
   for(const code of ['USD','GBP','EUR']){const option=el('option','',code);option.value=code;currency.append(option);} currency.value=item.threshold_currency;
-  currencyLabel.append(currency); form.append(currencyLabel);
+  currencyLabel.append(currency); if(!item.unit) form.append(currencyLabel);
   let manual=null, record=null;
-  if(item.kind !== 'spend'){
+  if(item.unit){
+    form.append(el('p','muted','Alert is in credits. Remaining credits come from your plan allowance and are read live; they cannot be saved manually.'));
+  } else if(item.kind !== 'spend'){
     manual=field(form, 'Balance from billing (optional)', 'number', item.manual_balance); manual.step='0.01'; manual.min='-1000000000000';manual.max='1000000000000';
     const recordLabel=el('label','balance-check'); record=el('input');record.type='checkbox';recordLabel.append(record,el('span','','Record this balance as checked now (blank clears it)'));form.append(recordLabel);
     manual.addEventListener('input',()=>{record.checked=true;});
@@ -82,6 +86,6 @@ export function renderBalanceCard(item, save) {
     value.textContent=money(view.value,view.currency);source.textContent=view.source;
     stamp.textContent=view.observedAt ? (view.live && next.kind === 'spend' ? `Checked ${new Date(view.observedAt*1000).toLocaleString()} · billing period from ${next.period_start ?? 'this month'}` : 'Observed '+new Date(view.observedAt*1000).toLocaleString()) : 'No balance observation yet';
     message.textContent=next.message;
-    if(view.value!==null && view.currency!==next.threshold_currency)message.textContent+=' Alert currency differs from this balance; update the threshold currency.';
+    if(view.value!==null && !view.unit && view.currency!==next.threshold_currency)message.textContent+=' Alert currency differs from this balance; update the threshold currency.';
   }};
 }

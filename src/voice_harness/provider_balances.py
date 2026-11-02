@@ -24,6 +24,8 @@ PROVIDERS = {
                "The documented OpenAI Costs API reports spend, not remaining prepaid credit. Check billing and optionally save a dated balance below."),
     "xai": ("xAI", "Grok Voice · prepaid credit", "https://console.x.ai/",
             "Live prepaid credit needs a separate xAI Management API key and team ID on the server. An account admin must grant access to Management Keys before issuing it in xAI Console → Settings → Management Keys. The voice API key cannot read billing."),
+    "elevenlabs": ("ElevenLabs", "Agents · subscription credits", "https://elevenlabs.io/app/subscription",
+                   "Live credits need ELEVENLABS_API_KEY on the server with the User (read) permission enabled. Remaining credits are the plan allowance minus credits used this billing period; pay-as-you-go overage is not included."),
     "google": ("Google Cloud", "Postpay account · Gemini Live on Vertex AI", "https://console.cloud.google.com/billing",
                "This Google Cloud billing account is Postpay, like AWS. The amount due is accrued spend, not credit remaining. To read it automatically, enable Cloud Billing export to BigQuery and connect the exported table; that integration is not configured yet."),
     "aws": ("AWS", "Estimated account spend · current month", "https://console.aws.amazon.com/billing/home",
@@ -62,15 +64,33 @@ async def xai_balance(env):
     if not key or not team:
         return {"status": "setup_required", "message": PROVIDERS["xai"][3]}
     async with httpx.AsyncClient(timeout=10, follow_redirects=False) as client:
+        # /prepaid/balance only totals purchases (usage is never deducted), so it overstates credit.
+        # The current-cycle invoice preview carries opening credit and usage; both are negative cents.
         response = await client.get(
-            "https://management-api.x.ai/v1/billing/teams/" + quote(team, safe="") + "/prepaid/balance",
+            "https://management-api.x.ai/v1/billing/teams/" + quote(team, safe="") + "/postpaid/invoice/preview",
             headers={"Authorization": "Bearer " + key},
         )
         response.raise_for_status()
-        # xAI's ledger uses negative cents for purchased/remaining credit; do not abs() debt.
-        balance = -amount(response.json()["total"]["val"]) / 100
+        invoice = response.json()["coreInvoice"]
+        balance = -(amount(invoice["prepaidCredits"]["val"]) - amount(invoice["prepaidCreditsUsed"]["val"])) / 100
     return {"status": "live", "balance": float(balance), "currency": "USD",
             "message": "Prepaid credit only. Postpaid limits and promotional credits may affect whether calls can continue."}
+
+
+async def elevenlabs_balance(env):
+    key = env.get("ELEVENLABS_API_KEY", "").strip()
+    if not key:
+        return {"status": "setup_required", "message": PROVIDERS["elevenlabs"][3]}
+    async with httpx.AsyncClient(timeout=10, follow_redirects=False) as client:
+        response = await client.get("https://api.elevenlabs.io/v1/user/subscription", headers={"xi-api-key": key})
+        response.raise_for_status()
+        body = response.json()
+    limit, used = amount(body["character_limit"]), amount(body["character_count"])
+    reset = body.get("next_character_count_reset_unix")
+    message = "Credits remaining in the current billing period (plan allowance minus used)."
+    if isinstance(reset, int) and not isinstance(reset, bool) and reset > 0:
+        message += " Resets " + dt.datetime.fromtimestamp(reset, dt.UTC).strftime("%Y-%m-%d") + "."
+    return {"status": "live", "balance": float(limit - used), "currency": "credits", "unit": "credits", "message": message}
 
 
 def aws_balance(env):
@@ -218,6 +238,8 @@ class BalanceService:
         try:
             if provider == "xai":
                 result = await xai_balance(os.environ)
+            elif provider == "elevenlabs":
+                result = await elevenlabs_balance(os.environ)
             elif provider == "google":
                 result = await asyncio.to_thread(google_balance, dict(os.environ))
             else:
@@ -225,8 +247,8 @@ class BalanceService:
         except httpx.HTTPStatusError as exc:
             if provider == "google" and exc.response.status_code in (401, 403):
                 message = "Google denied BigQuery access. Grant the dashboard identity BigQuery Job User on the project and BigQuery Data Viewer on the export dataset."
-            elif provider == "xai" and exc.response.status_code in (401, 403):
-                message = "Billing access was denied. Check the management key, team and billing read permission."
+            elif provider in ("xai", "elevenlabs") and exc.response.status_code in (401, 403):
+                message = "Billing access was denied. Check the API or management key and its billing/user read permission."
             else:
                 message = "The provider could not return a balance. Try again later or open billing."
             result = {"status": "unavailable", "message": message}
@@ -239,7 +261,7 @@ class BalanceService:
         async with self.lock:
             now = time.time()
             expired = []
-            for provider in ("xai", "aws", "google"):
+            for provider in ("xai", "elevenlabs", "aws", "google"):
                 if provider not in self.cache:
                     expired.append(provider)
                     continue
@@ -261,6 +283,7 @@ class BalanceService:
                           "threshold": saved.get("threshold", 10), "threshold_currency": saved.get("currency", "USD"),
                           "threshold_kind": "above" if provider in ("aws", "google") else "below",
                           "stale_after_seconds": AWS_TTL if provider in ("aws", "google") else STALE_AFTER,
+                          "unit": "credits" if provider == "elevenlabs" else None,
                           "manual_balance": None if provider == "aws" else saved.get("manual_balance"), "manual_currency": saved.get("currency", "USD"),
                           "recorded_at": saved.get("recorded_at")})
         return {"items": items, "generated_at": time.time(), "refresh_after_seconds": TTL, "aws_refresh_after_seconds": AWS_TTL, "stale_after_seconds": STALE_AFTER}

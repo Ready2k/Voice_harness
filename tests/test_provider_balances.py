@@ -15,6 +15,7 @@ from voice_harness.provider_balances import (
     BalanceService,
     BalanceSettings,
     aws_balance,
+    elevenlabs_balance,
     google_balance,
     xai_balance,
 )
@@ -24,23 +25,33 @@ from voice_harness.storage import Database
 class Balances(unittest.IsolatedAsyncioTestCase):
     async def test_xai_sign_currency_and_no_inference_key_fallback(self):
         self.assertEqual((await xai_balance({'xAI_API_KEY': 'inference'}))['status'], 'setup_required')
-        for raw, expected in [('-2317', 23.17), ('0', 0), ('500', -5)]:
+        for raw, expected in [(('-1221', '-66'), 11.55), (('0', '0'), 0), (('500', '0'), -5)]:
             request = httpx.Request('GET', 'https://management-api.x.ai/')
-            with patch('httpx.AsyncClient.get', new=AsyncMock(return_value=httpx.Response(200, json={'total': {'val': raw}}, request=request))) as get:
+            with patch('httpx.AsyncClient.get', new=AsyncMock(return_value=httpx.Response(200, json={'coreInvoice': {'prepaidCredits': {'val': raw[0]}, 'prepaidCreditsUsed': {'val': raw[1]}}}, request=request))) as get:
                 result = await xai_balance({'XAI_MANAGEMENT_API_KEY': 'secret', 'XAI_TEAM_ID': 'team/unsafe'})
             self.assertEqual(result['balance'], expected)
             self.assertEqual(result['currency'], 'USD')
             self.assertIn('team%2Funsafe', get.call_args.args[0])
             self.assertNotIn('secret', json.dumps(result))
 
+    async def test_elevenlabs_credits_remaining_and_setup(self):
+        self.assertEqual((await elevenlabs_balance({}))['status'], 'setup_required')
+        request = httpx.Request('GET', 'https://api.elevenlabs.io/')
+        body = {'character_limit': 100000, 'character_count': 25000, 'next_character_count_reset_unix': 1798761600}
+        with patch('httpx.AsyncClient.get', new=AsyncMock(return_value=httpx.Response(200, json=body, request=request))) as get:
+            result = await elevenlabs_balance({'ELEVENLABS_API_KEY': 'secret'})
+        self.assertEqual((result['status'], result['balance'], result['unit']), ('live', 75000, 'credits'))
+        self.assertEqual(get.call_args.kwargs['headers'], {'xi-api-key': 'secret'})
+        self.assertNotIn('secret', json.dumps(result))
+
     async def test_partial_failure_and_coalesced_refresh(self):
         with tempfile.TemporaryDirectory() as directory:
             service = BalanceService(Database(str(Path(directory) / 't.sqlite')))
-            with patch('voice_harness.provider_balances.xai_balance', new=AsyncMock(side_effect=httpx.ReadTimeout('SECRET')) ) as xai, patch('voice_harness.provider_balances.aws_balance', return_value={'status': 'live', 'balance': 0, 'currency': 'USD'}):
+            with patch('voice_harness.provider_balances.xai_balance', new=AsyncMock(side_effect=httpx.ReadTimeout('SECRET')) ) as xai, patch('voice_harness.provider_balances.aws_balance', return_value={'status': 'live', 'balance': 0, 'currency': 'USD'}), patch('voice_harness.provider_balances.elevenlabs_balance', new=AsyncMock(return_value={'status': 'setup_required'})):
                 results = await asyncio.gather(service.snapshot(), service.snapshot())
                 self.assertEqual(xai.await_count, 1)
             self.assertEqual(results[0]['items'][1]['status'], 'unavailable')
-            self.assertEqual(results[0]['items'][3]['balance'], 0)
+            self.assertEqual(next(i for i in results[0]['items'] if i['id'] == 'aws')['balance'], 0)
             self.assertNotIn('SECRET', json.dumps(results))
             self.assertIsNone(results[0]['items'][0]['balance'])
 
@@ -49,7 +60,7 @@ class Balances(unittest.IsolatedAsyncioTestCase):
             service = BalanceService(Database(str(Path(directory) / 't.sqlite')))
             request = httpx.Request('GET', 'https://management-api.x.ai/')
             for raw in ('NaN', 'Infinity', 'nope', None, True):
-                with patch.dict('os.environ', {'XAI_MANAGEMENT_API_KEY':'secret', 'XAI_TEAM_ID':'t'}), patch('httpx.AsyncClient.get', new=AsyncMock(return_value=httpx.Response(200, json={'total': {'val':raw}}, request=request))):
+                with patch.dict('os.environ', {'XAI_MANAGEMENT_API_KEY':'secret', 'XAI_TEAM_ID':'t'}), patch('httpx.AsyncClient.get', new=AsyncMock(return_value=httpx.Response(200, json={'coreInvoice': {'prepaidCredits': {'val':raw}, 'prepaidCreditsUsed': {'val':'0'}}}, request=request))):
                     _, reading = await service._query('xai')
                 self.assertEqual(reading['status'], 'unavailable')
                 self.assertNotIn('balance', reading)

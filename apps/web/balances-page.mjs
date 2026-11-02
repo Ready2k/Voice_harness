@@ -20,7 +20,7 @@ function draw(data){
   }
   const counts=balanceSummary(data.items);
   summary.replaceChildren();
-  for(const [n,label] of [[counts.live,'of 4 live readings'],[counts.low,'at or beyond alert threshold'],[4-counts.live,'without a current live reading']]){
+  for(const [n,label] of [[counts.live,'of '+data.items.length+' live readings'],[counts.low,'at or beyond alert threshold'],[data.items.length-counts.live,'without a current live reading']]){
     const tile=el('div','tile');tile.append(el('strong','',String(n)),el('span','',label));summary.append(tile);
   }
 }
