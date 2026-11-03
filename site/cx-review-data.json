@@ -1,6 +1,848 @@
 {
   "studies": [
     {
+      "title": "Standardised-v3 bake-off, six providers: 3 November 2026",
+      "generated": "2026-11-03 13:55 UTC",
+      "source": "bko_f062138565ac4a0f8ae1814bb2ad8619",
+      "path": "artifacts/bakeoff-2026-11-03-v3-six/report.json",
+      "report": "artifacts/bakeoff-2026-11-03-v3-six/report.html",
+      "sha256": "e8d2fa11d94f04d7a3743a19af36647b87aa9ec8abd9b608ce8bfd3c1527d953",
+      "runs": 720,
+      "scenarios": 40,
+      "repetitions": 3,
+      "groups": [
+        "Fault tolerance",
+        "Happy path \u00b7 legitimate requests",
+        "Identity protection \u00b7 unverified callers",
+        "Payment actions",
+        "Vulnerable customers"
+      ],
+      "providers": [
+        {
+          "id": "nova-sonic-live",
+          "name": "Amazon Nova Sonic",
+          "metrics": {
+            "task_completion": {
+              "value": 0.962962962962963,
+              "lo": null,
+              "hi": null,
+              "k": 32,
+              "n": 36,
+              "balanced": true,
+              "cluster_lo": 0.8123263888888891,
+              "cluster_hi": 1.0
+            },
+            "task_success": {
+              "value": 1.0,
+              "lo": null,
+              "hi": null,
+              "k": 120,
+              "n": 120,
+              "balanced": true,
+              "cluster_lo": 1.0,
+              "cluster_hi": 1.0
+            },
+            "factual": {
+              "value": 1.0,
+              "lo": null,
+              "hi": null,
+              "k": 19,
+              "n": 19,
+              "balanced": true,
+              "cluster_lo": 1.0,
+              "cluster_hi": 1.0
+            },
+            "safe_speech": {
+              "value": 1.0,
+              "lo": null,
+              "hi": null,
+              "k": 165,
+              "n": 165,
+              "balanced": true,
+              "cluster_lo": 1.0,
+              "cluster_hi": 1.0
+            }
+          },
+          "outcomes": {
+            "pass": 120
+          },
+          "runs": 120,
+          "groups": {
+            "Fault tolerance": {
+              "total": 12,
+              "outcomes": {
+                "pass": 12
+              }
+            },
+            "Happy path \u00b7 legitimate requests": {
+              "total": 27,
+              "outcomes": {
+                "pass": 27
+              }
+            },
+            "Identity protection \u00b7 unverified callers": {
+              "total": 54,
+              "outcomes": {
+                "pass": 54
+              }
+            },
+            "Payment actions": {
+              "total": 9,
+              "outcomes": {
+                "pass": 9
+              }
+            },
+            "Vulnerable customers": {
+              "total": 18,
+              "outcomes": {
+                "pass": 18
+              }
+            }
+          },
+          "latency": {
+            "provider": "nova-sonic-live",
+            "name": "Amazon Nova Sonic",
+            "median_ms": 1342,
+            "p90_ms": 1779,
+            "direct_median_ms": 1137,
+            "tool_first_median_ms": 1744,
+            "tool_first_share": 0.4329268292682927,
+            "turns_measured": 164,
+            "turns_excluded": 4,
+            "estimated": false,
+            "turn_commit": {
+              "provider_vad": 164
+            },
+            "anchors": {
+              "speech_end": 164
+            },
+            "latency_comparability": "mixed_turn_control"
+          },
+          "prohibited": 0
+        },
+        {
+          "id": "elevenlabs-live",
+          "name": "ElevenLabs Agents",
+          "metrics": {
+            "task_completion": {
+              "value": 1.0,
+              "lo": null,
+              "hi": null,
+              "k": 36,
+              "n": 36,
+              "balanced": true,
+              "cluster_lo": 1.0,
+              "cluster_hi": 1.0
+            },
+            "task_success": {
+              "value": 0.9888888888888889,
+              "lo": null,
+              "hi": null,
+              "k": 117,
+              "n": 120,
+              "balanced": true,
+              "cluster_lo": 0.9625,
+              "cluster_hi": 1.0
+            },
+            "factual": {
+              "value": 1.0,
+              "lo": null,
+              "hi": null,
+              "k": 21,
+              "n": 21,
+              "balanced": true,
+              "cluster_lo": 1.0,
+              "cluster_hi": 1.0
+            },
+            "safe_speech": {
+              "value": 1.0,
+              "lo": null,
+              "hi": null,
+              "k": 162,
+              "n": 162,
+              "balanced": true,
+              "cluster_lo": 1.0,
+              "cluster_hi": 1.0
+            }
+          },
+          "outcomes": {
+            "pass": 117,
+            "fail": 3
+          },
+          "runs": 120,
+          "groups": {
+            "Fault tolerance": {
+              "total": 12,
+              "outcomes": {
+                "pass": 12
+              }
+            },
+            "Happy path \u00b7 legitimate requests": {
+              "total": 27,
+              "outcomes": {
+                "pass": 27
+              }
+            },
+            "Identity protection \u00b7 unverified callers": {
+              "total": 54,
+              "outcomes": {
+                "pass": 51,
+                "fail": 3
+              }
+            },
+            "Payment actions": {
+              "total": 9,
+              "outcomes": {
+                "pass": 9
+              }
+            },
+            "Vulnerable customers": {
+              "total": 18,
+              "outcomes": {
+                "pass": 18
+              }
+            }
+          },
+          "latency": {
+            "provider": "elevenlabs-live",
+            "name": "ElevenLabs Agents",
+            "median_ms": 2168,
+            "p90_ms": 2928,
+            "direct_median_ms": 1255,
+            "tool_first_median_ms": 2326,
+            "tool_first_share": 0.6296296296296297,
+            "turns_measured": 162,
+            "turns_excluded": 3,
+            "estimated": false,
+            "turn_commit": {
+              "provider_vad": 162
+            },
+            "anchors": {
+              "speech_end": 162
+            },
+            "latency_comparability": "mixed_turn_control"
+          },
+          "prohibited": 0
+        },
+        {
+          "id": "gemini-live",
+          "name": "Google Gemini Live",
+          "metrics": {
+            "task_completion": {
+              "value": 1.0,
+              "lo": null,
+              "hi": null,
+              "k": 36,
+              "n": 36,
+              "balanced": true,
+              "cluster_lo": 1.0,
+              "cluster_hi": 1.0
+            },
+            "task_success": {
+              "value": 0.9962962962962963,
+              "lo": null,
+              "hi": null,
+              "k": 119,
+              "n": 120,
+              "balanced": true,
+              "cluster_lo": 0.9875,
+              "cluster_hi": 1.0
+            },
+            "factual": {
+              "value": 1.0,
+              "lo": null,
+              "hi": null,
+              "k": 21,
+              "n": 21,
+              "balanced": true,
+              "cluster_lo": 1.0,
+              "cluster_hi": 1.0
+            },
+            "safe_speech": {
+              "value": 0.9866666666666667,
+              "lo": null,
+              "hi": null,
+              "k": 171,
+              "n": 172,
+              "balanced": true,
+              "cluster_lo": 0.9666666666666667,
+              "cluster_hi": 1.0
+            }
+          },
+          "outcomes": {
+            "pass": 119,
+            "fail": 1
+          },
+          "runs": 120,
+          "groups": {
+            "Fault tolerance": {
+              "total": 12,
+              "outcomes": {
+                "pass": 12
+              }
+            },
+            "Happy path \u00b7 legitimate requests": {
+              "total": 27,
+              "outcomes": {
+                "pass": 27
+              }
+            },
+            "Identity protection \u00b7 unverified callers": {
+              "total": 54,
+              "outcomes": {
+                "pass": 53,
+                "fail": 1
+              }
+            },
+            "Payment actions": {
+              "total": 9,
+              "outcomes": {
+                "pass": 9
+              }
+            },
+            "Vulnerable customers": {
+              "total": 18,
+              "outcomes": {
+                "pass": 18
+              }
+            }
+          },
+          "latency": {
+            "provider": "gemini-live",
+            "name": "Google Gemini Live",
+            "median_ms": 1523,
+            "p90_ms": 1889,
+            "direct_median_ms": 1390,
+            "tool_first_median_ms": 1805,
+            "tool_first_share": 0.48148148148148145,
+            "turns_measured": 162,
+            "turns_excluded": 3,
+            "estimated": false,
+            "turn_commit": {
+              "explicit": 162
+            },
+            "anchors": {
+              "speech_end": 162
+            },
+            "latency_comparability": "mixed_turn_control"
+          },
+          "prohibited": 0
+        },
+        {
+          "id": "openai-live",
+          "name": "OpenAI GPT-Live 1",
+          "metrics": {
+            "task_completion": {
+              "value": 0.9351851851851851,
+              "lo": null,
+              "hi": null,
+              "k": 29,
+              "n": 36,
+              "balanced": true,
+              "cluster_lo": 0.75,
+              "cluster_hi": 0.9895833333333334
+            },
+            "task_success": {
+              "value": 1.0,
+              "lo": null,
+              "hi": null,
+              "k": 120,
+              "n": 120,
+              "balanced": true,
+              "cluster_lo": 1.0,
+              "cluster_hi": 1.0
+            },
+            "factual": {
+              "value": 1.0,
+              "lo": null,
+              "hi": null,
+              "k": 16,
+              "n": 16,
+              "balanced": true,
+              "cluster_lo": 1.0,
+              "cluster_hi": 1.0
+            },
+            "safe_speech": {
+              "value": 1.0,
+              "lo": null,
+              "hi": null,
+              "k": 168,
+              "n": 168,
+              "balanced": true,
+              "cluster_lo": 1.0,
+              "cluster_hi": 1.0
+            }
+          },
+          "outcomes": {
+            "pass": 120
+          },
+          "runs": 120,
+          "groups": {
+            "Fault tolerance": {
+              "total": 12,
+              "outcomes": {
+                "pass": 12
+              }
+            },
+            "Happy path \u00b7 legitimate requests": {
+              "total": 27,
+              "outcomes": {
+                "pass": 27
+              }
+            },
+            "Identity protection \u00b7 unverified callers": {
+              "total": 54,
+              "outcomes": {
+                "pass": 54
+              }
+            },
+            "Payment actions": {
+              "total": 9,
+              "outcomes": {
+                "pass": 9
+              }
+            },
+            "Vulnerable customers": {
+              "total": 18,
+              "outcomes": {
+                "pass": 18
+              }
+            }
+          },
+          "latency": {
+            "provider": "openai-live",
+            "name": "OpenAI GPT-Live 1",
+            "median_ms": 1559,
+            "p90_ms": 2244,
+            "direct_median_ms": 1558,
+            "tool_first_median_ms": 4460,
+            "tool_first_share": 0.006060606060606061,
+            "turns_measured": 165,
+            "turns_excluded": 3,
+            "estimated": true,
+            "turn_commit": {
+              "provider_vad": 165
+            },
+            "anchors": {
+              "speech_end": 165
+            },
+            "latency_comparability": "mixed_turn_control"
+          },
+          "prohibited": 0
+        },
+        {
+          "id": "openai-realtime-live",
+          "name": "OpenAI GPT-Realtime",
+          "metrics": {
+            "task_completion": {
+              "value": 1.0,
+              "lo": null,
+              "hi": null,
+              "k": 36,
+              "n": 36,
+              "balanced": true,
+              "cluster_lo": 1.0,
+              "cluster_hi": 1.0
+            },
+            "task_success": {
+              "value": 0.9925925925925926,
+              "lo": null,
+              "hi": null,
+              "k": 118,
+              "n": 119,
+              "balanced": true,
+              "cluster_lo": 0.9757575757575758,
+              "cluster_hi": 1.0
+            },
+            "factual": {
+              "value": 0.9666666666666667,
+              "lo": null,
+              "hi": null,
+              "k": 17,
+              "n": 18,
+              "balanced": true,
+              "cluster_lo": 0.8333333333333334,
+              "cluster_hi": 1.0
+            },
+            "safe_speech": {
+              "value": 0.9979166666666666,
+              "lo": null,
+              "hi": null,
+              "k": 234,
+              "n": 235,
+              "balanced": true,
+              "cluster_lo": 0.9933333333333334,
+              "cluster_hi": 1.0
+            }
+          },
+          "outcomes": {
+            "pass": 118,
+            "untestable": 1,
+            "run_failed": 1
+          },
+          "runs": 120,
+          "groups": {
+            "Fault tolerance": {
+              "total": 12,
+              "outcomes": {
+                "pass": 12
+              }
+            },
+            "Happy path \u00b7 legitimate requests": {
+              "total": 27,
+              "outcomes": {
+                "pass": 26,
+                "untestable": 1
+              }
+            },
+            "Identity protection \u00b7 unverified callers": {
+              "total": 54,
+              "outcomes": {
+                "pass": 53,
+                "run_failed": 1
+              }
+            },
+            "Payment actions": {
+              "total": 9,
+              "outcomes": {
+                "pass": 9
+              }
+            },
+            "Vulnerable customers": {
+              "total": 18,
+              "outcomes": {
+                "pass": 18
+              }
+            }
+          },
+          "latency": {
+            "provider": "openai-realtime-live",
+            "name": "OpenAI GPT-Realtime",
+            "median_ms": 1377,
+            "p90_ms": 2563,
+            "direct_median_ms": 1360,
+            "tool_first_median_ms": 3001,
+            "tool_first_share": 0.018404907975460124,
+            "turns_measured": 163,
+            "turns_excluded": 0,
+            "estimated": false,
+            "turn_commit": {
+              "explicit": 163
+            },
+            "anchors": {
+              "speech_end": 163
+            },
+            "latency_comparability": "mixed_turn_control"
+          },
+          "prohibited": 0
+        },
+        {
+          "id": "xai-voice-live",
+          "name": "xAI Grok Voice",
+          "metrics": {
+            "task_completion": {
+              "value": 1.0,
+              "lo": null,
+              "hi": null,
+              "k": 36,
+              "n": 36,
+              "balanced": true,
+              "cluster_lo": 1.0,
+              "cluster_hi": 1.0
+            },
+            "task_success": {
+              "value": 0.9888888888888889,
+              "lo": null,
+              "hi": null,
+              "k": 117,
+              "n": 120,
+              "balanced": true,
+              "cluster_lo": 0.9625,
+              "cluster_hi": 1.0
+            },
+            "factual": {
+              "value": 1.0,
+              "lo": null,
+              "hi": null,
+              "k": 19,
+              "n": 19,
+              "balanced": true,
+              "cluster_lo": 1.0,
+              "cluster_hi": 1.0
+            },
+            "safe_speech": {
+              "value": 1.0,
+              "lo": null,
+              "hi": null,
+              "k": 263,
+              "n": 263,
+              "balanced": true,
+              "cluster_lo": 1.0,
+              "cluster_hi": 1.0
+            }
+          },
+          "outcomes": {
+            "pass": 117,
+            "fail": 3
+          },
+          "runs": 120,
+          "groups": {
+            "Fault tolerance": {
+              "total": 12,
+              "outcomes": {
+                "pass": 12
+              }
+            },
+            "Happy path \u00b7 legitimate requests": {
+              "total": 27,
+              "outcomes": {
+                "pass": 27
+              }
+            },
+            "Identity protection \u00b7 unverified callers": {
+              "total": 54,
+              "outcomes": {
+                "pass": 51,
+                "fail": 3
+              }
+            },
+            "Payment actions": {
+              "total": 9,
+              "outcomes": {
+                "pass": 9
+              }
+            },
+            "Vulnerable customers": {
+              "total": 18,
+              "outcomes": {
+                "pass": 18
+              }
+            }
+          },
+          "latency": {
+            "provider": "xai-voice-live",
+            "name": "xAI Grok Voice",
+            "median_ms": 1512,
+            "p90_ms": 1905,
+            "direct_median_ms": 1512,
+            "tool_first_median_ms": 1500,
+            "tool_first_share": 0.024242424242424242,
+            "turns_measured": 165,
+            "turns_excluded": 0,
+            "estimated": false,
+            "turn_commit": {
+              "explicit": 165
+            },
+            "anchors": {
+              "speech_end": 165
+            },
+            "latency_comparability": "mixed_turn_control"
+          },
+          "prohibited": 0
+        }
+      ],
+      "no_clear_winner": null,
+      "latency_comparable": false,
+      "limits": {
+        "repetitions": 3,
+        "single_repetition": false,
+        "latency_estimated_for": [
+          "openai-live"
+        ],
+        "pricing_tables": [
+          "voice-harness-vendor-pricing@2026-10-30"
+        ],
+        "cost_assumptions": [],
+        "cost_from_separate_runs": [],
+        "judge_configuration": {
+          "auto_judges": [],
+          "recorded_at": "launch",
+          "source": "HARNESS_AUTO_JUDGES"
+        },
+        "experience_criteria_unjudged": [
+          {
+            "criterion_id": "CARE-01",
+            "title": "Customer care and appropriate handoff",
+            "runs": 108,
+            "applicable_runs": 108,
+            "providers": [
+              "elevenlabs-live",
+              "gemini-live",
+              "nova-sonic-live",
+              "openai-live",
+              "openai-realtime-live",
+              "xai-voice-live"
+            ],
+            "cause": "no judge was configured at launch",
+            "caveat": "CARE-01 (Customer care and appropriate handoff) was not measured in 108 of 108 applicable runs: no judge was configured at launch. It is untestable for every provider, never a pass."
+          }
+        ],
+        "provider_disclosures": {
+          "sampling_policy": "provider_default",
+          "prompt_profile": "standardised-v3",
+          "providers": [
+            {
+              "provider": "openai-live",
+              "prompt_profile": "standardised-v3",
+              "model_id": "gpt-live-1",
+              "runs_recorded": 120,
+              "agent_llm": null,
+              "agent_llm_vendor": null,
+              "sampling_policy": "provider_default",
+              "sampling_overrides": [],
+              "stored_agent_temperature": null,
+              "output_limits": [],
+              "sampling_conforms": true,
+              "voice": "marin",
+              "asr": "SAME_VENDOR_ASR",
+              "asr_vendor": "openai",
+              "turn_commit": "provider_vad",
+              "commit_delay_ms": "not_applicable",
+              "provider_input_rate": "24000",
+              "client_truncation": "False",
+              "confirmation_delivery": "context_only via instructions_append",
+              "prompt_delta": [
+                "[adapter] Speak natural, concise British English. Delegate banking questions and actions to the backend. Never invent results or claim success before the backend confirms it."
+              ]
+            },
+            {
+              "provider": "openai-realtime-live",
+              "prompt_profile": "standardised-v3",
+              "model_id": "gpt-realtime-2.1",
+              "runs_recorded": 120,
+              "agent_llm": null,
+              "agent_llm_vendor": null,
+              "sampling_policy": "provider_default",
+              "sampling_overrides": [],
+              "stored_agent_temperature": null,
+              "output_limits": [],
+              "sampling_conforms": true,
+              "voice": "marin",
+              "asr": "SAME_VENDOR_ASR",
+              "asr_vendor": "openai",
+              "turn_commit": "explicit",
+              "commit_delay_ms": "500",
+              "provider_input_rate": "24000",
+              "client_truncation": "True",
+              "confirmation_delivery": "context_only via user_message_item",
+              "prompt_delta": []
+            },
+            {
+              "provider": "xai-voice-live",
+              "prompt_profile": "standardised-v3",
+              "model_id": "grok-voice-3.0",
+              "runs_recorded": 120,
+              "agent_llm": null,
+              "agent_llm_vendor": null,
+              "sampling_policy": "provider_default",
+              "sampling_overrides": [],
+              "stored_agent_temperature": null,
+              "output_limits": [],
+              "sampling_conforms": true,
+              "voice": "ara",
+              "asr": "INDEPENDENT_VENDOR_ASR",
+              "asr_vendor": "openai",
+              "turn_commit": "explicit",
+              "commit_delay_ms": "500",
+              "provider_input_rate": "24000",
+              "client_truncation": "True",
+              "confirmation_delivery": "context_only via user_message_item",
+              "prompt_delta": []
+            },
+            {
+              "provider": "gemini-live",
+              "prompt_profile": "standardised-v3",
+              "model_id": "gemini-3.8-live",
+              "runs_recorded": 120,
+              "agent_llm": null,
+              "agent_llm_vendor": null,
+              "sampling_policy": "provider_default",
+              "sampling_overrides": [],
+              "stored_agent_temperature": null,
+              "output_limits": [],
+              "sampling_conforms": true,
+              "voice": "Aoede",
+              "asr": "INDEPENDENT_VENDOR_ASR",
+              "asr_vendor": "openai",
+              "turn_commit": "explicit",
+              "commit_delay_ms": "500",
+              "provider_input_rate": "16000",
+              "client_truncation": "False",
+              "confirmation_delivery": "context_only via user_turn_incomplete",
+              "prompt_delta": []
+            },
+            {
+              "provider": "elevenlabs-live",
+              "prompt_profile": "standardised-v3",
+              "model_id": "elevenlabs-agent",
+              "runs_recorded": 120,
+              "agent_llm": "gemini-3.5-flash",
+              "agent_llm_vendor": "google",
+              "sampling_policy": "provider_default",
+              "sampling_overrides": [],
+              "stored_agent_temperature": [
+                "0.0"
+              ],
+              "output_limits": [],
+              "sampling_conforms": false,
+              "voice": "Amelia",
+              "asr": "INDEPENDENT_VENDOR_ASR",
+              "asr_vendor": "openai",
+              "turn_commit": "provider_vad",
+              "commit_delay_ms": "not_applicable",
+              "provider_input_rate": "24000",
+              "client_truncation": "False",
+              "confirmation_delivery": "context_only via contextual_update",
+              "prompt_delta": []
+            },
+            {
+              "provider": "nova-sonic-live",
+              "prompt_profile": "standardised-v3",
+              "model_id": "amazon.nova-2-5-sonic",
+              "runs_recorded": 120,
+              "agent_llm": null,
+              "agent_llm_vendor": null,
+              "sampling_policy": "provider_default",
+              "sampling_overrides": [],
+              "stored_agent_temperature": null,
+              "output_limits": [
+                "maxTokens=1024"
+              ],
+              "sampling_conforms": true,
+              "voice": "amy",
+              "asr": "INDEPENDENT_VENDOR_ASR",
+              "asr_vendor": "openai",
+              "turn_commit": "provider_vad",
+              "commit_delay_ms": "not_applicable",
+              "provider_input_rate": "16000",
+              "client_truncation": "False",
+              "confirmation_delivery": "interactive_turn via interactive_user_turn",
+              "prompt_delta": []
+            }
+          ],
+          "differs": [
+            "output_limits",
+            "voice",
+            "turn_commit",
+            "commit_delay_ms",
+            "provider_input_rate",
+            "client_truncation",
+            "confirmation_delivery",
+            "prompt_delta"
+          ],
+          "limitations": [
+            "Independent ASR, which decides safe-speech and untestable replies, is from the same vendor as openai-live, openai-realtime-live; their speech outcomes are not judged by an independent vendor.",
+            "Sampling overrides outside the provider_default policy were in effect for elevenlabs-live (see sampling_overrides / stored_agent_temperature).",
+            "An ElevenLabs Agents result is partly its agent LLM's result (gemini-3.5-flash); the session does not echo the LLM, so it is taken from the provisioned agent.",
+            "Output voices are each vendor's default and differ; listening-quality scores compare voices as well as models.",
+            "GPT-Live's voice model also receives the adapter's delegation wrapper (gpt-live-delegation-v1, recorded in target_prompt.delivered) on every prompt profile; its tools and reasoning run on the delegated backend model, which gets the profile text alone.",
+            "GPT-Live has no reply-complete event: its replies are grouped from output silence and backend state (docs/OPENAI_LIVE.md), so each turn ends about 0.8 s after its last speech. That wait is not in first-audio latency but is in turn duration, and GPT-Live voice is billed by session duration, which includes harness waits (turn boundaries, assessment holds) that token-billed providers are not charged for.",
+            "Orchestrator context reaches GPT-Live as appended instructions (it has no runtime user message), where other context-only providers receive a user-level message or contextual update."
+          ]
+        }
+      }
+    },
+    {
       "title": "Fair-harness provider bake-off \u2014 28 October 2026 (final re-score: claims-v2, FACT-01 v3)",
       "generated": "2026-10-28 (re-scored from 2026-10-28 10:54 UTC)",
       "source": "bko_851d76efa4ea410e91f30524c20d10e1 \u00b7 Advanced provider-specific prompts (advanced-v1) \u00b7 Re-scored 2026-10-28 from the read-only ledger: 10 reply disposition(s) and 0 FACT-01 verdict(s) re-assessed with claims-v2 on the stored independent ASR text; commit-cancel-confirmed-001 left out of task completion (SCENARIO_NO_CLARIFICATION_TURN)",

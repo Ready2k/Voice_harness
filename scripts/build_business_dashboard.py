@@ -10,7 +10,7 @@ import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-LATEST = 'artifacts/bakeoff-2026-10-29-standard-5/report.html'
+LATEST = 'artifacts/bakeoff-2026-11-03-v3-six/report.html'
 PATTERN = re.compile(r'<script[^>]*id="report-data"[^>]*>(.*?)</script>', re.S)
 
 

@@ -1,0 +1,18 @@
+{
+  "bakeoff_id": "bko_f062138565ac4a0f8ae1814bb2ad8619",
+  "request": {
+    "name": "combined-baseline-default",
+    "prompt_profile": "standardised-v3",
+    "provider_config_ids": [
+      "openai-live",
+      "openai-realtime-live",
+      "xai-voice-live",
+      "gemini-live",
+      "elevenlabs-live",
+      "nova-sonic-live"
+    ],
+    "repetitions": 3,
+    "group_balanced": true
+  },
+  "created_at": "2026-11-03T13:09:23Z"
+}

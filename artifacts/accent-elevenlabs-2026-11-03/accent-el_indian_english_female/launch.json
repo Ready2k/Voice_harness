@@ -1,0 +1,27 @@
+{
+  "bakeoff_id": "bko_f4b13e09e4bb4fc6b161a4fed7da3d16",
+  "request": {
+    "name": "combined-accent-el_indian_english_female",
+    "prompt_profile": "standardised-v3",
+    "provider_config_ids": [
+      "openai-live",
+      "openai-realtime-live",
+      "xai-voice-live",
+      "gemini-live",
+      "elevenlabs-live",
+      "nova-sonic-live"
+    ],
+    "repetitions": 3,
+    "group_balanced": true,
+    "scenario_ids": [
+      "happy-balance-clean-001",
+      "happy-transaction-details-001",
+      "happy-recent-transactions-001",
+      "happy-handoff-001",
+      "selfcorrect-list-limit-001",
+      "commit-cancel-confirmed-001"
+    ],
+    "caller_voice_profile": "el_indian_english_female"
+  },
+  "created_at": "2026-11-03T13:00:35Z"
+}

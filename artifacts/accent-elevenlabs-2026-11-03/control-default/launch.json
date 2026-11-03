@@ -1,0 +1,26 @@
+{
+  "bakeoff_id": "bko_97c58a3f8849413186e247a3bc68585c",
+  "request": {
+    "name": "combined-control-default",
+    "prompt_profile": "standardised-v3",
+    "provider_config_ids": [
+      "openai-live",
+      "openai-realtime-live",
+      "xai-voice-live",
+      "gemini-live",
+      "elevenlabs-live",
+      "nova-sonic-live"
+    ],
+    "repetitions": 3,
+    "group_balanced": true,
+    "scenario_ids": [
+      "happy-balance-clean-001",
+      "happy-transaction-details-001",
+      "happy-recent-transactions-001",
+      "happy-handoff-001",
+      "selfcorrect-list-limit-001",
+      "commit-cancel-confirmed-001"
+    ]
+  },
+  "created_at": "2026-11-03T12:09:25Z"
+}

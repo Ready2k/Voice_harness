@@ -1,6 +1,25 @@
 {
   "studies": [
     {
+      "id": "5f99db9e35b3",
+      "source": "bko_f062138565ac4a0f8ae1814bb2ad8619",
+      "date": "2026-11-03",
+      "versions": [
+        {
+          "path": "artifacts/bakeoff-2026-11-03-v3-six/report.html",
+          "data": "artifacts/bakeoff-2026-11-03-v3-six/report.json",
+          "title": "Standardised-v3 bake-off, six providers \u2014 3 November 2026",
+          "generated": "2026-11-03 13:55 UTC",
+          "sha256": "e8d2fa11d94f04d7a3743a19af36647b87aa9ec8abd9b608ce8bfd3c1527d953",
+          "label": "Original assessment",
+          "priority": 0,
+          "runs": 720,
+          "planned": 720,
+          "state": "completed"
+        }
+      ]
+    },
+    {
       "id": "75189604e1cb",
       "source": "bko_eb2a0ad846af4c16a623d3ef1b5d7695",
       "date": "2026-10-29",

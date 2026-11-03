@@ -15,6 +15,9 @@ DEFAULTS = [
     'artifacts/full-advanced-bakeoff-2026-10-26/rescored-2026-10-27/report.json',
 ]
 
+# The bake-off name is the run's label, not a title. Keyed by report path.
+TITLES = {'artifacts/bakeoff-2026-11-03-v3-six/report.json': 'Standardised-v3 bake-off, six providers: 3 November 2026'}
+
 
 def build(paths):
     studies = []
@@ -41,7 +44,7 @@ def build(paths):
                                   outcomes=dict(Counter(o['outcome'] for o in rows)),
                                   runs=len(rows), groups=group_data, latency=latency,
                                   prohibited=sum(o.get('prohibited_executed', 0) for o in rows)))
-        studies.append(dict(title=data['title'], generated=data['generated_at'], source=data['source'],
+        studies.append(dict(title=TITLES.get(relative, data['title']), generated=data['generated_at'], source=data['source'],
                             path=relative, report=str(Path(relative).with_suffix('.html')),
                             sha256=hashlib.sha256(path.read_bytes()).hexdigest(),
                             runs=len(observations), scenarios=len({o['scenario_id'] for o in observations}),

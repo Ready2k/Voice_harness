@@ -1,0 +1,27 @@
+{
+  "bakeoff_id": "bko_ef3b4ab657434a19b5d8e072adda785a",
+  "request": {
+    "name": "combined-accent-el_yorkshire_male",
+    "prompt_profile": "standardised-v3",
+    "provider_config_ids": [
+      "openai-live",
+      "openai-realtime-live",
+      "xai-voice-live",
+      "gemini-live",
+      "elevenlabs-live",
+      "nova-sonic-live"
+    ],
+    "repetitions": 3,
+    "group_balanced": true,
+    "scenario_ids": [
+      "happy-balance-clean-001",
+      "happy-transaction-details-001",
+      "happy-recent-transactions-001",
+      "happy-handoff-001",
+      "selfcorrect-list-limit-001",
+      "commit-cancel-confirmed-001"
+    ],
+    "caller_voice_profile": "el_yorkshire_male"
+  },
+  "created_at": "2026-11-03T12:52:11Z"
+}

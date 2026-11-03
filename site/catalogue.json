@@ -1,12 +1,3387 @@
 {
-  "latest": "2026-10-31",
+  "latest": "2026-11-03",
   "entries": [
+    {
+      "path": "artifacts/bakeoff-2026-11-03-v3-six/verified-prompt-bindings.json",
+      "title": "verified prompt bindings",
+      "date": "2026-11-03",
+      "kind": "Data",
+      "size": 51735,
+      "url": "artifacts/bakeoff-2026-11-03-v3-six/verified-prompt-bindings.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/bakeoff-2026-11-03-v3-six/status.json",
+      "title": "status",
+      "date": "2026-11-03",
+      "kind": "Data",
+      "size": 31781,
+      "url": "artifacts/bakeoff-2026-11-03-v3-six/status.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/bakeoff-2026-11-03-v3-six/run-notes.md",
+      "title": "run notes",
+      "date": "2026-11-03",
+      "kind": "Notes",
+      "size": 2324,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/artifacts/bakeoff-2026-11-03-v3-six/run-notes.md",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/bakeoff-2026-11-03-v3-six/report.json",
+      "title": "report",
+      "date": "2026-11-03",
+      "kind": "Data",
+      "size": 3549539,
+      "url": "artifacts/bakeoff-2026-11-03-v3-six/report.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/bakeoff-2026-11-03-v3-six/report.html",
+      "title": "report",
+      "date": "2026-11-03",
+      "kind": "Web report",
+      "size": 2395076,
+      "url": "artifacts/bakeoff-2026-11-03-v3-six/report.html",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/bakeoff-2026-11-03-v3-six/prompts.json",
+      "title": "prompts",
+      "date": "2026-11-03",
+      "kind": "Data",
+      "size": 46775,
+      "url": "artifacts/bakeoff-2026-11-03-v3-six/prompts.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/bakeoff-2026-11-03-v3-six/payload.json",
+      "title": "payload",
+      "date": "2026-11-03",
+      "kind": "Data",
+      "size": 3885631,
+      "url": "artifacts/bakeoff-2026-11-03-v3-six/payload.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/bakeoff-2026-11-03-v3-six/launch.json",
+      "title": "launch",
+      "date": "2026-11-03",
+      "kind": "Data",
+      "size": 431,
+      "url": "artifacts/bakeoff-2026-11-03-v3-six/launch.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/bakeoff-2026-11-03-v3-six/index.html",
+      "title": "index",
+      "date": "2026-11-03",
+      "kind": "Web report",
+      "size": 699,
+      "url": "artifacts/bakeoff-2026-11-03-v3-six/index.html",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/accent-elevenlabs-2026-11-03/run-notes.md",
+      "title": "run notes",
+      "date": "2026-11-03",
+      "kind": "Notes",
+      "size": 1282,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/artifacts/accent-elevenlabs-2026-11-03/run-notes.md",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/accent-elevenlabs-2026-11-03/index.html",
+      "title": "index",
+      "date": "2026-11-03",
+      "kind": "Web report",
+      "size": 6169,
+      "url": "artifacts/accent-elevenlabs-2026-11-03/index.html",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/accent-elevenlabs-2026-11-03/control-default/status.json",
+      "title": "status",
+      "date": "2026-11-03",
+      "kind": "Data",
+      "size": 31782,
+      "url": "artifacts/accent-elevenlabs-2026-11-03/control-default/status.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/accent-elevenlabs-2026-11-03/control-default/report.json",
+      "title": "report",
+      "date": "2026-11-03",
+      "kind": "Data",
+      "size": 735633,
+      "url": "artifacts/accent-elevenlabs-2026-11-03/control-default/report.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/accent-elevenlabs-2026-11-03/control-default/prompts.json",
+      "title": "prompts",
+      "date": "2026-11-03",
+      "kind": "Data",
+      "size": 46775,
+      "url": "artifacts/accent-elevenlabs-2026-11-03/control-default/prompts.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/accent-elevenlabs-2026-11-03/control-default/payload.json",
+      "title": "payload",
+      "date": "2026-11-03",
+      "kind": "Data",
+      "size": 678594,
+      "url": "artifacts/accent-elevenlabs-2026-11-03/control-default/payload.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/accent-elevenlabs-2026-11-03/control-default/launch.json",
+      "title": "launch",
+      "date": "2026-11-03",
+      "kind": "Data",
+      "size": 669,
+      "url": "artifacts/accent-elevenlabs-2026-11-03/control-default/launch.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/accent-elevenlabs-2026-11-03/accent-el_yorkshire_male/status.json",
+      "title": "status",
+      "date": "2026-11-03",
+      "kind": "Data",
+      "size": 32254,
+      "url": "artifacts/accent-elevenlabs-2026-11-03/accent-el_yorkshire_male/status.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/accent-elevenlabs-2026-11-03/accent-el_yorkshire_male/report.json",
+      "title": "report",
+      "date": "2026-11-03",
+      "kind": "Data",
+      "size": 739140,
+      "url": "artifacts/accent-elevenlabs-2026-11-03/accent-el_yorkshire_male/report.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/accent-elevenlabs-2026-11-03/accent-el_yorkshire_male/prompts.json",
+      "title": "prompts",
+      "date": "2026-11-03",
+      "kind": "Data",
+      "size": 46775,
+      "url": "artifacts/accent-elevenlabs-2026-11-03/accent-el_yorkshire_male/prompts.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/accent-elevenlabs-2026-11-03/accent-el_yorkshire_male/payload.json",
+      "title": "payload",
+      "date": "2026-11-03",
+      "kind": "Data",
+      "size": 679675,
+      "url": "artifacts/accent-elevenlabs-2026-11-03/accent-el_yorkshire_male/payload.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/accent-elevenlabs-2026-11-03/accent-el_yorkshire_male/launch.json",
+      "title": "launch",
+      "date": "2026-11-03",
+      "kind": "Data",
+      "size": 727,
+      "url": "artifacts/accent-elevenlabs-2026-11-03/accent-el_yorkshire_male/launch.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/accent-elevenlabs-2026-11-03/accent-el_scottish_male/status.json",
+      "title": "status",
+      "date": "2026-11-03",
+      "kind": "Data",
+      "size": 33277,
+      "url": "artifacts/accent-elevenlabs-2026-11-03/accent-el_scottish_male/status.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/accent-elevenlabs-2026-11-03/accent-el_scottish_male/report.json",
+      "title": "report",
+      "date": "2026-11-03",
+      "kind": "Data",
+      "size": 740038,
+      "url": "artifacts/accent-elevenlabs-2026-11-03/accent-el_scottish_male/report.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/accent-elevenlabs-2026-11-03/accent-el_scottish_male/prompts.json",
+      "title": "prompts",
+      "date": "2026-11-03",
+      "kind": "Data",
+      "size": 46775,
+      "url": "artifacts/accent-elevenlabs-2026-11-03/accent-el_scottish_male/prompts.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/accent-elevenlabs-2026-11-03/accent-el_scottish_male/payload.json",
+      "title": "payload",
+      "date": "2026-11-03",
+      "kind": "Data",
+      "size": 680856,
+      "url": "artifacts/accent-elevenlabs-2026-11-03/accent-el_scottish_male/payload.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/accent-elevenlabs-2026-11-03/accent-el_scottish_male/launch.json",
+      "title": "launch",
+      "date": "2026-11-03",
+      "kind": "Data",
+      "size": 725,
+      "url": "artifacts/accent-elevenlabs-2026-11-03/accent-el_scottish_male/launch.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/accent-elevenlabs-2026-11-03/accent-el_irish_female/status.json",
+      "title": "status",
+      "date": "2026-11-03",
+      "kind": "Data",
+      "size": 31785,
+      "url": "artifacts/accent-elevenlabs-2026-11-03/accent-el_irish_female/status.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/accent-elevenlabs-2026-11-03/accent-el_irish_female/report.json",
+      "title": "report",
+      "date": "2026-11-03",
+      "kind": "Data",
+      "size": 736269,
+      "url": "artifacts/accent-elevenlabs-2026-11-03/accent-el_irish_female/report.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/accent-elevenlabs-2026-11-03/accent-el_irish_female/prompts.json",
+      "title": "prompts",
+      "date": "2026-11-03",
+      "kind": "Data",
+      "size": 46775,
+      "url": "artifacts/accent-elevenlabs-2026-11-03/accent-el_irish_female/prompts.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/accent-elevenlabs-2026-11-03/accent-el_irish_female/payload.json",
+      "title": "payload",
+      "date": "2026-11-03",
+      "kind": "Data",
+      "size": 713763,
+      "url": "artifacts/accent-elevenlabs-2026-11-03/accent-el_irish_female/payload.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/accent-elevenlabs-2026-11-03/accent-el_irish_female/launch.json",
+      "title": "launch",
+      "date": "2026-11-03",
+      "kind": "Data",
+      "size": 723,
+      "url": "artifacts/accent-elevenlabs-2026-11-03/accent-el_irish_female/launch.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/accent-elevenlabs-2026-11-03/accent-el_indian_english_female/status.json",
+      "title": "status",
+      "date": "2026-11-03",
+      "kind": "Data",
+      "size": 32800,
+      "url": "artifacts/accent-elevenlabs-2026-11-03/accent-el_indian_english_female/status.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/accent-elevenlabs-2026-11-03/accent-el_indian_english_female/report.json",
+      "title": "report",
+      "date": "2026-11-03",
+      "kind": "Data",
+      "size": 739019,
+      "url": "artifacts/accent-elevenlabs-2026-11-03/accent-el_indian_english_female/report.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/accent-elevenlabs-2026-11-03/accent-el_indian_english_female/prompts.json",
+      "title": "prompts",
+      "date": "2026-11-03",
+      "kind": "Data",
+      "size": 46775,
+      "url": "artifacts/accent-elevenlabs-2026-11-03/accent-el_indian_english_female/prompts.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/accent-elevenlabs-2026-11-03/accent-el_indian_english_female/payload.json",
+      "title": "payload",
+      "date": "2026-11-03",
+      "kind": "Data",
+      "size": 680538,
+      "url": "artifacts/accent-elevenlabs-2026-11-03/accent-el_indian_english_female/payload.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/accent-elevenlabs-2026-11-03/accent-el_indian_english_female/launch.json",
+      "title": "launch",
+      "date": "2026-11-03",
+      "kind": "Data",
+      "size": 741,
+      "url": "artifacts/accent-elevenlabs-2026-11-03/accent-el_indian_english_female/launch.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/index.html",
+      "title": "index",
+      "date": "2026-11-01",
+      "kind": "Web report",
+      "size": 427782,
+      "url": "artifacts/regional-caller-2026-11-01/index.html",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/data.json",
+      "title": "data",
+      "date": "2026-11-01",
+      "kind": "Data",
+      "size": 518250,
+      "url": "artifacts/regional-caller-2026-11-01/data.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/ffe24d95e7d48beeff7aa09f37b48cca33365d3c9eda6f9c167f3564fac00c5c.flac",
+      "title": "ffe24d95e7d48beeff7aa09f37b48cca33365d3c9eda6f9c167f3564fac00c5c",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 124597,
+      "url": "artifacts/regional-caller-2026-11-01/clips/ffe24d95e7d48beeff7aa09f37b48cca33365d3c9eda6f9c167f3564fac00c5c.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/fd79bfe3aa33e98e7114e234d5dbf74428e58a05c4b83a72f97d9a8aee7ad786.flac",
+      "title": "fd79bfe3aa33e98e7114e234d5dbf74428e58a05c4b83a72f97d9a8aee7ad786",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 225704,
+      "url": "artifacts/regional-caller-2026-11-01/clips/fd79bfe3aa33e98e7114e234d5dbf74428e58a05c4b83a72f97d9a8aee7ad786.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/fd22728cb0ac26933336334dbda79398ee4dc3818ad65a514254e8d354d4d65b.flac",
+      "title": "fd22728cb0ac26933336334dbda79398ee4dc3818ad65a514254e8d354d4d65b",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 35470,
+      "url": "artifacts/regional-caller-2026-11-01/clips/fd22728cb0ac26933336334dbda79398ee4dc3818ad65a514254e8d354d4d65b.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/fb6c8baaeb4f5283ee6e706815147d652f0fee779a087ce8de3e43e0a3e9e4f5.flac",
+      "title": "fb6c8baaeb4f5283ee6e706815147d652f0fee779a087ce8de3e43e0a3e9e4f5",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 268411,
+      "url": "artifacts/regional-caller-2026-11-01/clips/fb6c8baaeb4f5283ee6e706815147d652f0fee779a087ce8de3e43e0a3e9e4f5.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/fa84a6312cc37f948689d12da0bb8935773f0dab56e90441632d00d8dd717ac0.flac",
+      "title": "fa84a6312cc37f948689d12da0bb8935773f0dab56e90441632d00d8dd717ac0",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 256558,
+      "url": "artifacts/regional-caller-2026-11-01/clips/fa84a6312cc37f948689d12da0bb8935773f0dab56e90441632d00d8dd717ac0.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/fa575c767dedc355e10d87c5baab643d911b695267e2b55501d9b6c05dfdda11.flac",
+      "title": "fa575c767dedc355e10d87c5baab643d911b695267e2b55501d9b6c05dfdda11",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 244441,
+      "url": "artifacts/regional-caller-2026-11-01/clips/fa575c767dedc355e10d87c5baab643d911b695267e2b55501d9b6c05dfdda11.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/f9220df48978e319bc8b6a789210d3ef872dc99ea4a921d6e89eba82311382b8.flac",
+      "title": "f9220df48978e319bc8b6a789210d3ef872dc99ea4a921d6e89eba82311382b8",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 416478,
+      "url": "artifacts/regional-caller-2026-11-01/clips/f9220df48978e319bc8b6a789210d3ef872dc99ea4a921d6e89eba82311382b8.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/f918a17dfa474d12164b34fb70cde485154a57ccb78b11aeb56d38fd67691403.flac",
+      "title": "f918a17dfa474d12164b34fb70cde485154a57ccb78b11aeb56d38fd67691403",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 168039,
+      "url": "artifacts/regional-caller-2026-11-01/clips/f918a17dfa474d12164b34fb70cde485154a57ccb78b11aeb56d38fd67691403.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/f8a29f53699ed526aa919fd3c512d14a70a25cd15047d875755033172e8fc4ca.flac",
+      "title": "f8a29f53699ed526aa919fd3c512d14a70a25cd15047d875755033172e8fc4ca",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 227297,
+      "url": "artifacts/regional-caller-2026-11-01/clips/f8a29f53699ed526aa919fd3c512d14a70a25cd15047d875755033172e8fc4ca.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/f814bb429569074332529555aeb445ba5a78bdbd9ecdbc602d8a3626d2d94dd5.flac",
+      "title": "f814bb429569074332529555aeb445ba5a78bdbd9ecdbc602d8a3626d2d94dd5",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 43024,
+      "url": "artifacts/regional-caller-2026-11-01/clips/f814bb429569074332529555aeb445ba5a78bdbd9ecdbc602d8a3626d2d94dd5.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/f6bc8fd0c87a1ae814bb04c2ca0691b7dda92a25fa680fc8e1fefe4468cf6c27.flac",
+      "title": "f6bc8fd0c87a1ae814bb04c2ca0691b7dda92a25fa680fc8e1fefe4468cf6c27",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 287418,
+      "url": "artifacts/regional-caller-2026-11-01/clips/f6bc8fd0c87a1ae814bb04c2ca0691b7dda92a25fa680fc8e1fefe4468cf6c27.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/f6b178cc997a7fff21c74513cd898c4d5096bb1674f2f56c7e538af92c00bacf.flac",
+      "title": "f6b178cc997a7fff21c74513cd898c4d5096bb1674f2f56c7e538af92c00bacf",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 144259,
+      "url": "artifacts/regional-caller-2026-11-01/clips/f6b178cc997a7fff21c74513cd898c4d5096bb1674f2f56c7e538af92c00bacf.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/f5fd64dd32a2b61b167364f320e909f921a8b40c82c3147e80aa4f472aee65ba.flac",
+      "title": "f5fd64dd32a2b61b167364f320e909f921a8b40c82c3147e80aa4f472aee65ba",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 99856,
+      "url": "artifacts/regional-caller-2026-11-01/clips/f5fd64dd32a2b61b167364f320e909f921a8b40c82c3147e80aa4f472aee65ba.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/f5dd23157360c7f970bdee034346f0257dd89610fdb2724221da12b66d3d3498.flac",
+      "title": "f5dd23157360c7f970bdee034346f0257dd89610fdb2724221da12b66d3d3498",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 145559,
+      "url": "artifacts/regional-caller-2026-11-01/clips/f5dd23157360c7f970bdee034346f0257dd89610fdb2724221da12b66d3d3498.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/f5320f4473d7c8aada62b46db61198ede5f8ef6199fecd4a2f3c4e687775701d.flac",
+      "title": "f5320f4473d7c8aada62b46db61198ede5f8ef6199fecd4a2f3c4e687775701d",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 186285,
+      "url": "artifacts/regional-caller-2026-11-01/clips/f5320f4473d7c8aada62b46db61198ede5f8ef6199fecd4a2f3c4e687775701d.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/f48037b8a9cc26e8407d43b310973b96daf719a077ea8db16b8f995fddbe9af4.flac",
+      "title": "f48037b8a9cc26e8407d43b310973b96daf719a077ea8db16b8f995fddbe9af4",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 209180,
+      "url": "artifacts/regional-caller-2026-11-01/clips/f48037b8a9cc26e8407d43b310973b96daf719a077ea8db16b8f995fddbe9af4.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/f4349fe0327c09b211d97ebcd03407b945e63a033f3a083de99cb80860917980.flac",
+      "title": "f4349fe0327c09b211d97ebcd03407b945e63a033f3a083de99cb80860917980",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 158335,
+      "url": "artifacts/regional-caller-2026-11-01/clips/f4349fe0327c09b211d97ebcd03407b945e63a033f3a083de99cb80860917980.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/f3dbb5ff394d05e540dba71bbc02f7651b3c3107f4789c4463456a143c620ae0.flac",
+      "title": "f3dbb5ff394d05e540dba71bbc02f7651b3c3107f4789c4463456a143c620ae0",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 58896,
+      "url": "artifacts/regional-caller-2026-11-01/clips/f3dbb5ff394d05e540dba71bbc02f7651b3c3107f4789c4463456a143c620ae0.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/f3033906d3d266a5153d70123c7e2a4cef47853b26cc19eb79cd85b50f245549.flac",
+      "title": "f3033906d3d266a5153d70123c7e2a4cef47853b26cc19eb79cd85b50f245549",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 34297,
+      "url": "artifacts/regional-caller-2026-11-01/clips/f3033906d3d266a5153d70123c7e2a4cef47853b26cc19eb79cd85b50f245549.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/f21c89091f46a18e3102d505c55ef47138787d0fbb6310a190a14a8eb808e762.flac",
+      "title": "f21c89091f46a18e3102d505c55ef47138787d0fbb6310a190a14a8eb808e762",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 99463,
+      "url": "artifacts/regional-caller-2026-11-01/clips/f21c89091f46a18e3102d505c55ef47138787d0fbb6310a190a14a8eb808e762.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/efaf80affffbac78b1a448141a8b687a1d48378fb15ecbf45373d8ec1b1b1b97.flac",
+      "title": "efaf80affffbac78b1a448141a8b687a1d48378fb15ecbf45373d8ec1b1b1b97",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 202284,
+      "url": "artifacts/regional-caller-2026-11-01/clips/efaf80affffbac78b1a448141a8b687a1d48378fb15ecbf45373d8ec1b1b1b97.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/eecc9160442aed3f44a67939862b00d23fc9d74537ed31b928d1bd451dadc3b5.flac",
+      "title": "eecc9160442aed3f44a67939862b00d23fc9d74537ed31b928d1bd451dadc3b5",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 198125,
+      "url": "artifacts/regional-caller-2026-11-01/clips/eecc9160442aed3f44a67939862b00d23fc9d74537ed31b928d1bd451dadc3b5.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/ede67cbf8f5e4bee2b40819cb9246af790146a70dfbd7c06275284c6daeecc61.flac",
+      "title": "ede67cbf8f5e4bee2b40819cb9246af790146a70dfbd7c06275284c6daeecc61",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 117308,
+      "url": "artifacts/regional-caller-2026-11-01/clips/ede67cbf8f5e4bee2b40819cb9246af790146a70dfbd7c06275284c6daeecc61.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/ede41c09c8424da15e74a13397710cacf60547e9869667f4dfa2eb23f51b4704.flac",
+      "title": "ede41c09c8424da15e74a13397710cacf60547e9869667f4dfa2eb23f51b4704",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 185730,
+      "url": "artifacts/regional-caller-2026-11-01/clips/ede41c09c8424da15e74a13397710cacf60547e9869667f4dfa2eb23f51b4704.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/ed560edf50179ea02cfc06af7a022771d9179a1feaa129f38c0032239d53341a.flac",
+      "title": "ed560edf50179ea02cfc06af7a022771d9179a1feaa129f38c0032239d53341a",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 35046,
+      "url": "artifacts/regional-caller-2026-11-01/clips/ed560edf50179ea02cfc06af7a022771d9179a1feaa129f38c0032239d53341a.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/ecd02e6303eb869ae3a59f68cabc6a14aece0059a8cdc3a23ee4842c7aad1c9f.flac",
+      "title": "ecd02e6303eb869ae3a59f68cabc6a14aece0059a8cdc3a23ee4842c7aad1c9f",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 105068,
+      "url": "artifacts/regional-caller-2026-11-01/clips/ecd02e6303eb869ae3a59f68cabc6a14aece0059a8cdc3a23ee4842c7aad1c9f.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/ecc071d401310da28f0a817d43a70cefbc2aaaa3a1311e314db3202e48f0507f.flac",
+      "title": "ecc071d401310da28f0a817d43a70cefbc2aaaa3a1311e314db3202e48f0507f",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 187514,
+      "url": "artifacts/regional-caller-2026-11-01/clips/ecc071d401310da28f0a817d43a70cefbc2aaaa3a1311e314db3202e48f0507f.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/ebb275e6ecb37d2d8230620418683744e9a569102921715ba9469a27db58cf28.flac",
+      "title": "ebb275e6ecb37d2d8230620418683744e9a569102921715ba9469a27db58cf28",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 147612,
+      "url": "artifacts/regional-caller-2026-11-01/clips/ebb275e6ecb37d2d8230620418683744e9a569102921715ba9469a27db58cf28.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/eac59b7d6fe203dbb482e02f651b9f2433d4d8e1294dd88b91ef5c59c566f783.flac",
+      "title": "eac59b7d6fe203dbb482e02f651b9f2433d4d8e1294dd88b91ef5c59c566f783",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 123132,
+      "url": "artifacts/regional-caller-2026-11-01/clips/eac59b7d6fe203dbb482e02f651b9f2433d4d8e1294dd88b91ef5c59c566f783.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/ea8b87fab90dd9841ec2c3eb49eafe5508c0e3b9d9ec974e3e63bda493c40f89.flac",
+      "title": "ea8b87fab90dd9841ec2c3eb49eafe5508c0e3b9d9ec974e3e63bda493c40f89",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 127956,
+      "url": "artifacts/regional-caller-2026-11-01/clips/ea8b87fab90dd9841ec2c3eb49eafe5508c0e3b9d9ec974e3e63bda493c40f89.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/e9121d4451e1165acba0a410295efef5238692d55a7173ceeb00a6e450d53513.flac",
+      "title": "e9121d4451e1165acba0a410295efef5238692d55a7173ceeb00a6e450d53513",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 118034,
+      "url": "artifacts/regional-caller-2026-11-01/clips/e9121d4451e1165acba0a410295efef5238692d55a7173ceeb00a6e450d53513.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/e8dfd4aac34517441e89a52c8da3dad24a4cc1cf40a076ebac83ef2fcbf9d0a1.flac",
+      "title": "e8dfd4aac34517441e89a52c8da3dad24a4cc1cf40a076ebac83ef2fcbf9d0a1",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 197392,
+      "url": "artifacts/regional-caller-2026-11-01/clips/e8dfd4aac34517441e89a52c8da3dad24a4cc1cf40a076ebac83ef2fcbf9d0a1.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/e72f459da9fc9786c34824fc78bcb35d8671300b271129071d8b434aaa57b79e.flac",
+      "title": "e72f459da9fc9786c34824fc78bcb35d8671300b271129071d8b434aaa57b79e",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 46359,
+      "url": "artifacts/regional-caller-2026-11-01/clips/e72f459da9fc9786c34824fc78bcb35d8671300b271129071d8b434aaa57b79e.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/e6b12da208b36eb4e45d6c1533035335b4e597faf245d9c6fcd52328b07ad7c6.flac",
+      "title": "e6b12da208b36eb4e45d6c1533035335b4e597faf245d9c6fcd52328b07ad7c6",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 215021,
+      "url": "artifacts/regional-caller-2026-11-01/clips/e6b12da208b36eb4e45d6c1533035335b4e597faf245d9c6fcd52328b07ad7c6.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/e5f054817f449bfa097e5c2828b16a9e8848051e25be11e9cab4f0cc1d5d6721.flac",
+      "title": "e5f054817f449bfa097e5c2828b16a9e8848051e25be11e9cab4f0cc1d5d6721",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 98213,
+      "url": "artifacts/regional-caller-2026-11-01/clips/e5f054817f449bfa097e5c2828b16a9e8848051e25be11e9cab4f0cc1d5d6721.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/e40a4e8d555b570b3761f08005d7d62cb55bf53afa33e290c5c9ad9f222d6248.flac",
+      "title": "e40a4e8d555b570b3761f08005d7d62cb55bf53afa33e290c5c9ad9f222d6248",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 45869,
+      "url": "artifacts/regional-caller-2026-11-01/clips/e40a4e8d555b570b3761f08005d7d62cb55bf53afa33e290c5c9ad9f222d6248.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/e3de1f4753415292f70067c5f2e2d89e07570f5307db5819c0765fa72cf94861.flac",
+      "title": "e3de1f4753415292f70067c5f2e2d89e07570f5307db5819c0765fa72cf94861",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 35164,
+      "url": "artifacts/regional-caller-2026-11-01/clips/e3de1f4753415292f70067c5f2e2d89e07570f5307db5819c0765fa72cf94861.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/e37b3f2bb7642f6aa4896cb5384738b927384c830b80ec1da6ccf1e4a217cff8.flac",
+      "title": "e37b3f2bb7642f6aa4896cb5384738b927384c830b80ec1da6ccf1e4a217cff8",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 104597,
+      "url": "artifacts/regional-caller-2026-11-01/clips/e37b3f2bb7642f6aa4896cb5384738b927384c830b80ec1da6ccf1e4a217cff8.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/e302c13843adffc9a95687827339159b1f30a6b62aa9de461364edb2f82b5375.flac",
+      "title": "e302c13843adffc9a95687827339159b1f30a6b62aa9de461364edb2f82b5375",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 158039,
+      "url": "artifacts/regional-caller-2026-11-01/clips/e302c13843adffc9a95687827339159b1f30a6b62aa9de461364edb2f82b5375.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/e22a0e4db517e1dac3ace29169257f50d4f94594da1854f95ac15e0392889998.flac",
+      "title": "e22a0e4db517e1dac3ace29169257f50d4f94594da1854f95ac15e0392889998",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 112937,
+      "url": "artifacts/regional-caller-2026-11-01/clips/e22a0e4db517e1dac3ace29169257f50d4f94594da1854f95ac15e0392889998.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/e19d6cc11bd515020f69cfbe876c47942cefcd184108dc8df77b5396628add3e.flac",
+      "title": "e19d6cc11bd515020f69cfbe876c47942cefcd184108dc8df77b5396628add3e",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 165854,
+      "url": "artifacts/regional-caller-2026-11-01/clips/e19d6cc11bd515020f69cfbe876c47942cefcd184108dc8df77b5396628add3e.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/e19427af28cae2d51b51b491b71e11629ef81afc048e980f4a529aa246bd9838.flac",
+      "title": "e19427af28cae2d51b51b491b71e11629ef81afc048e980f4a529aa246bd9838",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 125630,
+      "url": "artifacts/regional-caller-2026-11-01/clips/e19427af28cae2d51b51b491b71e11629ef81afc048e980f4a529aa246bd9838.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/e0b8bea78667e74761a6ec6998e2c08d4452509aaf865ac62b625748756eb2f5.flac",
+      "title": "e0b8bea78667e74761a6ec6998e2c08d4452509aaf865ac62b625748756eb2f5",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 272819,
+      "url": "artifacts/regional-caller-2026-11-01/clips/e0b8bea78667e74761a6ec6998e2c08d4452509aaf865ac62b625748756eb2f5.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/df5c88b60f881591621125ad5b9271271fdce14317137daaee2e6ccba507f607.flac",
+      "title": "df5c88b60f881591621125ad5b9271271fdce14317137daaee2e6ccba507f607",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 191757,
+      "url": "artifacts/regional-caller-2026-11-01/clips/df5c88b60f881591621125ad5b9271271fdce14317137daaee2e6ccba507f607.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/df38e0ea9208c7040b5b7e7e9a69ee6f9a3cd8b92295082e5f23c892cdc66afa.flac",
+      "title": "df38e0ea9208c7040b5b7e7e9a69ee6f9a3cd8b92295082e5f23c892cdc66afa",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 148578,
+      "url": "artifacts/regional-caller-2026-11-01/clips/df38e0ea9208c7040b5b7e7e9a69ee6f9a3cd8b92295082e5f23c892cdc66afa.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/ded429a976a1a36e118d905ccd79d452812249482a36395780b24c83ff88bac6.flac",
+      "title": "ded429a976a1a36e118d905ccd79d452812249482a36395780b24c83ff88bac6",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 169587,
+      "url": "artifacts/regional-caller-2026-11-01/clips/ded429a976a1a36e118d905ccd79d452812249482a36395780b24c83ff88bac6.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/dae690b3b1c2e500732750c0540336452fffabaa18fd4517b7ddb506ff922f36.flac",
+      "title": "dae690b3b1c2e500732750c0540336452fffabaa18fd4517b7ddb506ff922f36",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 183251,
+      "url": "artifacts/regional-caller-2026-11-01/clips/dae690b3b1c2e500732750c0540336452fffabaa18fd4517b7ddb506ff922f36.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/d958b2f7b5d27cc4b06ec54555cdf49268cd009fdff3d337d8a3e99d152a05f7.flac",
+      "title": "d958b2f7b5d27cc4b06ec54555cdf49268cd009fdff3d337d8a3e99d152a05f7",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 28519,
+      "url": "artifacts/regional-caller-2026-11-01/clips/d958b2f7b5d27cc4b06ec54555cdf49268cd009fdff3d337d8a3e99d152a05f7.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/d6a03a783d7f5b686718052242df1968910801c34b183fff47593325b1679390.flac",
+      "title": "d6a03a783d7f5b686718052242df1968910801c34b183fff47593325b1679390",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 172076,
+      "url": "artifacts/regional-caller-2026-11-01/clips/d6a03a783d7f5b686718052242df1968910801c34b183fff47593325b1679390.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/d5750818a3e60c2246ad25a89918264b29ce837dc4aa336030cc905d01777af7.flac",
+      "title": "d5750818a3e60c2246ad25a89918264b29ce837dc4aa336030cc905d01777af7",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 195544,
+      "url": "artifacts/regional-caller-2026-11-01/clips/d5750818a3e60c2246ad25a89918264b29ce837dc4aa336030cc905d01777af7.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/d4f5855ca6675cffe62805b85351f4a19e5ec43b1cb1ad4aa6c201b028753274.flac",
+      "title": "d4f5855ca6675cffe62805b85351f4a19e5ec43b1cb1ad4aa6c201b028753274",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 267856,
+      "url": "artifacts/regional-caller-2026-11-01/clips/d4f5855ca6675cffe62805b85351f4a19e5ec43b1cb1ad4aa6c201b028753274.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/d4cd663abac99c227d398938eef02691dd7787dee8848e28dbde86ecd0ce75f6.flac",
+      "title": "d4cd663abac99c227d398938eef02691dd7787dee8848e28dbde86ecd0ce75f6",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 176199,
+      "url": "artifacts/regional-caller-2026-11-01/clips/d4cd663abac99c227d398938eef02691dd7787dee8848e28dbde86ecd0ce75f6.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/d39d143dcdd9350dbcec070e4ab5cd072c5c998800ea8c2d1e8ca1a6d9da54e9.flac",
+      "title": "d39d143dcdd9350dbcec070e4ab5cd072c5c998800ea8c2d1e8ca1a6d9da54e9",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 178049,
+      "url": "artifacts/regional-caller-2026-11-01/clips/d39d143dcdd9350dbcec070e4ab5cd072c5c998800ea8c2d1e8ca1a6d9da54e9.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/d315a2340cb6e57db20f2669647a4c4aca02b1e3c0c4c33b14a1fe7cba5e73bf.flac",
+      "title": "d315a2340cb6e57db20f2669647a4c4aca02b1e3c0c4c33b14a1fe7cba5e73bf",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 154763,
+      "url": "artifacts/regional-caller-2026-11-01/clips/d315a2340cb6e57db20f2669647a4c4aca02b1e3c0c4c33b14a1fe7cba5e73bf.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/d26696aa1b7bdefc1fd91a1c844fc7c2506a13ef0812d6237616e7846a8a8743.flac",
+      "title": "d26696aa1b7bdefc1fd91a1c844fc7c2506a13ef0812d6237616e7846a8a8743",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 179629,
+      "url": "artifacts/regional-caller-2026-11-01/clips/d26696aa1b7bdefc1fd91a1c844fc7c2506a13ef0812d6237616e7846a8a8743.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/d252ee7e5a4e5320708b4a6b3a7c23ba9028418099ffa623c9af45fd5fc57a9f.flac",
+      "title": "d252ee7e5a4e5320708b4a6b3a7c23ba9028418099ffa623c9af45fd5fc57a9f",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 90011,
+      "url": "artifacts/regional-caller-2026-11-01/clips/d252ee7e5a4e5320708b4a6b3a7c23ba9028418099ffa623c9af45fd5fc57a9f.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/d1bde951d1fb54e88396f9176703cf51c66eb15510ee4fc4c0e72d90dfb8936c.flac",
+      "title": "d1bde951d1fb54e88396f9176703cf51c66eb15510ee4fc4c0e72d90dfb8936c",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 159994,
+      "url": "artifacts/regional-caller-2026-11-01/clips/d1bde951d1fb54e88396f9176703cf51c66eb15510ee4fc4c0e72d90dfb8936c.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/cf812253f479ba0024aee390d1f0bd9189506aedc27af2d71cb4c62372e894ce.flac",
+      "title": "cf812253f479ba0024aee390d1f0bd9189506aedc27af2d71cb4c62372e894ce",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 112499,
+      "url": "artifacts/regional-caller-2026-11-01/clips/cf812253f479ba0024aee390d1f0bd9189506aedc27af2d71cb4c62372e894ce.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/cef52e322da57b35d3755a79b706bc349c8e0eb574d3b6a25efaa7ccaf49bfc0.flac",
+      "title": "cef52e322da57b35d3755a79b706bc349c8e0eb574d3b6a25efaa7ccaf49bfc0",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 218004,
+      "url": "artifacts/regional-caller-2026-11-01/clips/cef52e322da57b35d3755a79b706bc349c8e0eb574d3b6a25efaa7ccaf49bfc0.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/ce950961cb861e9ef72293ff764ed606c488709b7730a147dc9987d05b2ccfca.flac",
+      "title": "ce950961cb861e9ef72293ff764ed606c488709b7730a147dc9987d05b2ccfca",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 283277,
+      "url": "artifacts/regional-caller-2026-11-01/clips/ce950961cb861e9ef72293ff764ed606c488709b7730a147dc9987d05b2ccfca.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/ce5d2f2bd0793b033cc265a90564f48c050b2d98c91cde756ca99ffbc46db910.flac",
+      "title": "ce5d2f2bd0793b033cc265a90564f48c050b2d98c91cde756ca99ffbc46db910",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 156796,
+      "url": "artifacts/regional-caller-2026-11-01/clips/ce5d2f2bd0793b033cc265a90564f48c050b2d98c91cde756ca99ffbc46db910.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/cd675989582459cd6cc9d8c8980cfce5893fe029914a0444ae75c0747da72d4d.flac",
+      "title": "cd675989582459cd6cc9d8c8980cfce5893fe029914a0444ae75c0747da72d4d",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 70849,
+      "url": "artifacts/regional-caller-2026-11-01/clips/cd675989582459cd6cc9d8c8980cfce5893fe029914a0444ae75c0747da72d4d.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/cd448aab74c9e9dad74e9b54d9548de784b19f13650e2968f2a1b5dcd0094fd7.flac",
+      "title": "cd448aab74c9e9dad74e9b54d9548de784b19f13650e2968f2a1b5dcd0094fd7",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 141956,
+      "url": "artifacts/regional-caller-2026-11-01/clips/cd448aab74c9e9dad74e9b54d9548de784b19f13650e2968f2a1b5dcd0094fd7.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/cc6d4d0164dca532abb4fb63c22d1c8e2865b7f49799647df1e779f05d9aa821.flac",
+      "title": "cc6d4d0164dca532abb4fb63c22d1c8e2865b7f49799647df1e779f05d9aa821",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 247921,
+      "url": "artifacts/regional-caller-2026-11-01/clips/cc6d4d0164dca532abb4fb63c22d1c8e2865b7f49799647df1e779f05d9aa821.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/cc2bad4622adf3598722712882d5cc3f8ced3c20d8c2b7030cba120b29bf9324.flac",
+      "title": "cc2bad4622adf3598722712882d5cc3f8ced3c20d8c2b7030cba120b29bf9324",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 153198,
+      "url": "artifacts/regional-caller-2026-11-01/clips/cc2bad4622adf3598722712882d5cc3f8ced3c20d8c2b7030cba120b29bf9324.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/cc2696d0f590ce916aeb15c02ba0acdb0f949ec4d41c0314091dc9243cb671b8.flac",
+      "title": "cc2696d0f590ce916aeb15c02ba0acdb0f949ec4d41c0314091dc9243cb671b8",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 160881,
+      "url": "artifacts/regional-caller-2026-11-01/clips/cc2696d0f590ce916aeb15c02ba0acdb0f949ec4d41c0314091dc9243cb671b8.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/cbdfeb7d7e72e27806b5be0f425f66a00d65970cd3e8f1a7ddfb24478b7ba807.flac",
+      "title": "cbdfeb7d7e72e27806b5be0f425f66a00d65970cd3e8f1a7ddfb24478b7ba807",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 37057,
+      "url": "artifacts/regional-caller-2026-11-01/clips/cbdfeb7d7e72e27806b5be0f425f66a00d65970cd3e8f1a7ddfb24478b7ba807.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/cbd320bc8cfcfd8e0e01dfd9e823a6fe70d63fb176576f8f48dc235bc349355e.flac",
+      "title": "cbd320bc8cfcfd8e0e01dfd9e823a6fe70d63fb176576f8f48dc235bc349355e",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 208020,
+      "url": "artifacts/regional-caller-2026-11-01/clips/cbd320bc8cfcfd8e0e01dfd9e823a6fe70d63fb176576f8f48dc235bc349355e.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/c9e0b1598dabdbeaf1097cee9e4d2a95382decb1613b29ef2c155d69683cefd2.flac",
+      "title": "c9e0b1598dabdbeaf1097cee9e4d2a95382decb1613b29ef2c155d69683cefd2",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 182911,
+      "url": "artifacts/regional-caller-2026-11-01/clips/c9e0b1598dabdbeaf1097cee9e4d2a95382decb1613b29ef2c155d69683cefd2.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/c8e22d201ed0f80fe2c7ebfb156d317edf486e3e5be49e39800ec2d43492a957.flac",
+      "title": "c8e22d201ed0f80fe2c7ebfb156d317edf486e3e5be49e39800ec2d43492a957",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 167878,
+      "url": "artifacts/regional-caller-2026-11-01/clips/c8e22d201ed0f80fe2c7ebfb156d317edf486e3e5be49e39800ec2d43492a957.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/c8dc5ad768a51913688814d2658bab6982565f2899d147477aa0027b77cf7241.flac",
+      "title": "c8dc5ad768a51913688814d2658bab6982565f2899d147477aa0027b77cf7241",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 116077,
+      "url": "artifacts/regional-caller-2026-11-01/clips/c8dc5ad768a51913688814d2658bab6982565f2899d147477aa0027b77cf7241.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/c77e7d25334ffc44accda03a426a43c41106a0b2977dc6e06425e6a6a2835722.flac",
+      "title": "c77e7d25334ffc44accda03a426a43c41106a0b2977dc6e06425e6a6a2835722",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 57137,
+      "url": "artifacts/regional-caller-2026-11-01/clips/c77e7d25334ffc44accda03a426a43c41106a0b2977dc6e06425e6a6a2835722.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/c75b707905a0a1596478d829bf5df909fe7bb6cc5426b32c382aaaba87da792c.flac",
+      "title": "c75b707905a0a1596478d829bf5df909fe7bb6cc5426b32c382aaaba87da792c",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 198921,
+      "url": "artifacts/regional-caller-2026-11-01/clips/c75b707905a0a1596478d829bf5df909fe7bb6cc5426b32c382aaaba87da792c.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/c6fa6e716f473fb4bc8e839d035dcf701d9fde080421900d488a664d1624cdbd.flac",
+      "title": "c6fa6e716f473fb4bc8e839d035dcf701d9fde080421900d488a664d1624cdbd",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 159014,
+      "url": "artifacts/regional-caller-2026-11-01/clips/c6fa6e716f473fb4bc8e839d035dcf701d9fde080421900d488a664d1624cdbd.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/c6d270e6b19dd45500f2d770a1342acdc8f1dd07d315f3c3366aa671a09c962c.flac",
+      "title": "c6d270e6b19dd45500f2d770a1342acdc8f1dd07d315f3c3366aa671a09c962c",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 129251,
+      "url": "artifacts/regional-caller-2026-11-01/clips/c6d270e6b19dd45500f2d770a1342acdc8f1dd07d315f3c3366aa671a09c962c.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/c605a9998d89827e1d024675bf2b769cc56bce4d656a21d862e919460a15dd25.flac",
+      "title": "c605a9998d89827e1d024675bf2b769cc56bce4d656a21d862e919460a15dd25",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 119877,
+      "url": "artifacts/regional-caller-2026-11-01/clips/c605a9998d89827e1d024675bf2b769cc56bce4d656a21d862e919460a15dd25.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/c526c6deb3787eda06409338d73d359ded3931c73a7477de2f75f1cb9c34019f.flac",
+      "title": "c526c6deb3787eda06409338d73d359ded3931c73a7477de2f75f1cb9c34019f",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 76049,
+      "url": "artifacts/regional-caller-2026-11-01/clips/c526c6deb3787eda06409338d73d359ded3931c73a7477de2f75f1cb9c34019f.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/c490e9c86d62885895b4e592e0b2901ee261156a2ba977c14ca07dcbffd4cedc.flac",
+      "title": "c490e9c86d62885895b4e592e0b2901ee261156a2ba977c14ca07dcbffd4cedc",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 239303,
+      "url": "artifacts/regional-caller-2026-11-01/clips/c490e9c86d62885895b4e592e0b2901ee261156a2ba977c14ca07dcbffd4cedc.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/c3ba600d882520333552f5b20c2054f882cda65b355248d1ee94a11f827619d3.flac",
+      "title": "c3ba600d882520333552f5b20c2054f882cda65b355248d1ee94a11f827619d3",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 74174,
+      "url": "artifacts/regional-caller-2026-11-01/clips/c3ba600d882520333552f5b20c2054f882cda65b355248d1ee94a11f827619d3.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/c300cdb7b6ff15ee7c65a6b852bfbc9970c5607dbf4c3dadcd5247f3b6328069.flac",
+      "title": "c300cdb7b6ff15ee7c65a6b852bfbc9970c5607dbf4c3dadcd5247f3b6328069",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 227498,
+      "url": "artifacts/regional-caller-2026-11-01/clips/c300cdb7b6ff15ee7c65a6b852bfbc9970c5607dbf4c3dadcd5247f3b6328069.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/c2c9c4f26dd8c637efdb2bbb62399ecacc081da59d2eb9a1f988f94213a52b40.flac",
+      "title": "c2c9c4f26dd8c637efdb2bbb62399ecacc081da59d2eb9a1f988f94213a52b40",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 103818,
+      "url": "artifacts/regional-caller-2026-11-01/clips/c2c9c4f26dd8c637efdb2bbb62399ecacc081da59d2eb9a1f988f94213a52b40.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/c1c70719de957567a5ad4d84b037b845a22785fc831246772132c1018be81b3b.flac",
+      "title": "c1c70719de957567a5ad4d84b037b845a22785fc831246772132c1018be81b3b",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 219413,
+      "url": "artifacts/regional-caller-2026-11-01/clips/c1c70719de957567a5ad4d84b037b845a22785fc831246772132c1018be81b3b.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/c1b244650fce952e3253d58cfdcda34fd8e3cb9852a24d7b74afd628d2a1f6a5.flac",
+      "title": "c1b244650fce952e3253d58cfdcda34fd8e3cb9852a24d7b74afd628d2a1f6a5",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 189501,
+      "url": "artifacts/regional-caller-2026-11-01/clips/c1b244650fce952e3253d58cfdcda34fd8e3cb9852a24d7b74afd628d2a1f6a5.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/c06529657163fa0fe1d25fb0d645b7fe234b09eb3d519f5603f75b15c5a4f860.flac",
+      "title": "c06529657163fa0fe1d25fb0d645b7fe234b09eb3d519f5603f75b15c5a4f860",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 93866,
+      "url": "artifacts/regional-caller-2026-11-01/clips/c06529657163fa0fe1d25fb0d645b7fe234b09eb3d519f5603f75b15c5a4f860.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/c0558e67e7e6b54561d0f44a927b3b648c6c52fe891e75f225f49f621904e70d.flac",
+      "title": "c0558e67e7e6b54561d0f44a927b3b648c6c52fe891e75f225f49f621904e70d",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 204256,
+      "url": "artifacts/regional-caller-2026-11-01/clips/c0558e67e7e6b54561d0f44a927b3b648c6c52fe891e75f225f49f621904e70d.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/bd23fb652af2b6df3093c8d52f814be374f087fca108b068a36a9ebd362433dd.flac",
+      "title": "bd23fb652af2b6df3093c8d52f814be374f087fca108b068a36a9ebd362433dd",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 34163,
+      "url": "artifacts/regional-caller-2026-11-01/clips/bd23fb652af2b6df3093c8d52f814be374f087fca108b068a36a9ebd362433dd.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/bcf632a3472bc5c833f8cc03682e2894d9c0e857b7fe84cc115d9dddec549235.flac",
+      "title": "bcf632a3472bc5c833f8cc03682e2894d9c0e857b7fe84cc115d9dddec549235",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 258931,
+      "url": "artifacts/regional-caller-2026-11-01/clips/bcf632a3472bc5c833f8cc03682e2894d9c0e857b7fe84cc115d9dddec549235.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/bcf25db7cec1551671f5ba0f5f7fc7b76cbfbf47611e287d497a1803863747c1.flac",
+      "title": "bcf25db7cec1551671f5ba0f5f7fc7b76cbfbf47611e287d497a1803863747c1",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 78894,
+      "url": "artifacts/regional-caller-2026-11-01/clips/bcf25db7cec1551671f5ba0f5f7fc7b76cbfbf47611e287d497a1803863747c1.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/bb87bd73cb938d6d7aef13465f2884c2f0d2e45b83df3b64f41e9c5dc8b9ee89.flac",
+      "title": "bb87bd73cb938d6d7aef13465f2884c2f0d2e45b83df3b64f41e9c5dc8b9ee89",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 85019,
+      "url": "artifacts/regional-caller-2026-11-01/clips/bb87bd73cb938d6d7aef13465f2884c2f0d2e45b83df3b64f41e9c5dc8b9ee89.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/bb81bc138f4b1379c7ac1dc2e75b68f0ecb0d30f38366687669749caa72dbf37.flac",
+      "title": "bb81bc138f4b1379c7ac1dc2e75b68f0ecb0d30f38366687669749caa72dbf37",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 149961,
+      "url": "artifacts/regional-caller-2026-11-01/clips/bb81bc138f4b1379c7ac1dc2e75b68f0ecb0d30f38366687669749caa72dbf37.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/bb40712d8f6a09c80acc094c8bc165091c195f7061553852070ffc43c376f281.flac",
+      "title": "bb40712d8f6a09c80acc094c8bc165091c195f7061553852070ffc43c376f281",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 221040,
+      "url": "artifacts/regional-caller-2026-11-01/clips/bb40712d8f6a09c80acc094c8bc165091c195f7061553852070ffc43c376f281.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/bb380fc82e9da76a9fa007caf4f879e690881847c1092a26310fa3fcb77aca30.flac",
+      "title": "bb380fc82e9da76a9fa007caf4f879e690881847c1092a26310fa3fcb77aca30",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 28935,
+      "url": "artifacts/regional-caller-2026-11-01/clips/bb380fc82e9da76a9fa007caf4f879e690881847c1092a26310fa3fcb77aca30.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/bafe18643368282ee7c68f67e4beb452e7ba2d159432ba0b87421f44599c34d2.flac",
+      "title": "bafe18643368282ee7c68f67e4beb452e7ba2d159432ba0b87421f44599c34d2",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 151563,
+      "url": "artifacts/regional-caller-2026-11-01/clips/bafe18643368282ee7c68f67e4beb452e7ba2d159432ba0b87421f44599c34d2.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/ba206c5f2adc00bfd65405509424dee68a3310c6085792e31de491da2354f147.flac",
+      "title": "ba206c5f2adc00bfd65405509424dee68a3310c6085792e31de491da2354f147",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 199602,
+      "url": "artifacts/regional-caller-2026-11-01/clips/ba206c5f2adc00bfd65405509424dee68a3310c6085792e31de491da2354f147.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/b87eae8d46d7595c12fef9dbd449024ac9ed51458561aede414b10e8bb6d7529.flac",
+      "title": "b87eae8d46d7595c12fef9dbd449024ac9ed51458561aede414b10e8bb6d7529",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 64745,
+      "url": "artifacts/regional-caller-2026-11-01/clips/b87eae8d46d7595c12fef9dbd449024ac9ed51458561aede414b10e8bb6d7529.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/b83d82af11f19b603c4d8f3438711a3fad2d8b0de3db1224c6e005d7939bbc13.flac",
+      "title": "b83d82af11f19b603c4d8f3438711a3fad2d8b0de3db1224c6e005d7939bbc13",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 35994,
+      "url": "artifacts/regional-caller-2026-11-01/clips/b83d82af11f19b603c4d8f3438711a3fad2d8b0de3db1224c6e005d7939bbc13.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/b7e0c27bf4bcd93cadbcd27e55d2095692543e01fb1aa5dbe6d8a0116f05e91a.flac",
+      "title": "b7e0c27bf4bcd93cadbcd27e55d2095692543e01fb1aa5dbe6d8a0116f05e91a",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 267690,
+      "url": "artifacts/regional-caller-2026-11-01/clips/b7e0c27bf4bcd93cadbcd27e55d2095692543e01fb1aa5dbe6d8a0116f05e91a.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/b7d296db6a914b9ed5510ea22602d850d18dfd2c2041320fac28d90898f9f6ff.flac",
+      "title": "b7d296db6a914b9ed5510ea22602d850d18dfd2c2041320fac28d90898f9f6ff",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 77939,
+      "url": "artifacts/regional-caller-2026-11-01/clips/b7d296db6a914b9ed5510ea22602d850d18dfd2c2041320fac28d90898f9f6ff.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/b67036c3ba0a01338eb9efed124dd7095b13ed131add7db2e0c1b93c41f0eb72.flac",
+      "title": "b67036c3ba0a01338eb9efed124dd7095b13ed131add7db2e0c1b93c41f0eb72",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 65434,
+      "url": "artifacts/regional-caller-2026-11-01/clips/b67036c3ba0a01338eb9efed124dd7095b13ed131add7db2e0c1b93c41f0eb72.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/b63ced0a6c4d37d18ca49e586c148a90b34861a058511ef0c8a1b12405f30a62.flac",
+      "title": "b63ced0a6c4d37d18ca49e586c148a90b34861a058511ef0c8a1b12405f30a62",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 34424,
+      "url": "artifacts/regional-caller-2026-11-01/clips/b63ced0a6c4d37d18ca49e586c148a90b34861a058511ef0c8a1b12405f30a62.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/b482d84a803a600f9b27b6c74bc2f3592a100b502747503f93b23bfc678ef8db.flac",
+      "title": "b482d84a803a600f9b27b6c74bc2f3592a100b502747503f93b23bfc678ef8db",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 127911,
+      "url": "artifacts/regional-caller-2026-11-01/clips/b482d84a803a600f9b27b6c74bc2f3592a100b502747503f93b23bfc678ef8db.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/b3499f8466506160d66be84c2e51d5f73e6737f3705ec86df0b25be2c2bdf9dc.flac",
+      "title": "b3499f8466506160d66be84c2e51d5f73e6737f3705ec86df0b25be2c2bdf9dc",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 107493,
+      "url": "artifacts/regional-caller-2026-11-01/clips/b3499f8466506160d66be84c2e51d5f73e6737f3705ec86df0b25be2c2bdf9dc.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/b3001d47fa7d97a04693aa4d0f6761c9418cfbe0ee1c75adbf592d327bae4e5f.flac",
+      "title": "b3001d47fa7d97a04693aa4d0f6761c9418cfbe0ee1c75adbf592d327bae4e5f",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 147639,
+      "url": "artifacts/regional-caller-2026-11-01/clips/b3001d47fa7d97a04693aa4d0f6761c9418cfbe0ee1c75adbf592d327bae4e5f.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/b190fe19fe776ba6af3e3c2385b3e61d908160a3bfa88f03670d29dcb7d81ba3.flac",
+      "title": "b190fe19fe776ba6af3e3c2385b3e61d908160a3bfa88f03670d29dcb7d81ba3",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 58446,
+      "url": "artifacts/regional-caller-2026-11-01/clips/b190fe19fe776ba6af3e3c2385b3e61d908160a3bfa88f03670d29dcb7d81ba3.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/ad97df41624275a79d823fcdd30b59dd6f1479dd4a0a768defef74e706cb1e48.flac",
+      "title": "ad97df41624275a79d823fcdd30b59dd6f1479dd4a0a768defef74e706cb1e48",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 331933,
+      "url": "artifacts/regional-caller-2026-11-01/clips/ad97df41624275a79d823fcdd30b59dd6f1479dd4a0a768defef74e706cb1e48.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/ac1b5bcea4045fa7fdd5cc67520192079854441c6aa35c0579cb1d0ba41833c6.flac",
+      "title": "ac1b5bcea4045fa7fdd5cc67520192079854441c6aa35c0579cb1d0ba41833c6",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 138698,
+      "url": "artifacts/regional-caller-2026-11-01/clips/ac1b5bcea4045fa7fdd5cc67520192079854441c6aa35c0579cb1d0ba41833c6.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/ab9a13a6b14100ae121ba4c3cf9179432faa170d9ff67512582a32ecd581a5e1.flac",
+      "title": "ab9a13a6b14100ae121ba4c3cf9179432faa170d9ff67512582a32ecd581a5e1",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 138185,
+      "url": "artifacts/regional-caller-2026-11-01/clips/ab9a13a6b14100ae121ba4c3cf9179432faa170d9ff67512582a32ecd581a5e1.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/aab7693c75344a4a671caaf36aea04ed04d66c29e2afc24ee697da80e498e644.flac",
+      "title": "aab7693c75344a4a671caaf36aea04ed04d66c29e2afc24ee697da80e498e644",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 142436,
+      "url": "artifacts/regional-caller-2026-11-01/clips/aab7693c75344a4a671caaf36aea04ed04d66c29e2afc24ee697da80e498e644.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/a9556488df158c95cd50fcd57f9a2a7c5023aa9b26c6af88330fb2ba4520c17e.flac",
+      "title": "a9556488df158c95cd50fcd57f9a2a7c5023aa9b26c6af88330fb2ba4520c17e",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 237912,
+      "url": "artifacts/regional-caller-2026-11-01/clips/a9556488df158c95cd50fcd57f9a2a7c5023aa9b26c6af88330fb2ba4520c17e.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/a92af14c4d76f85c65126f5280023d162fc1060ec6bebe084550c51f2745602a.flac",
+      "title": "a92af14c4d76f85c65126f5280023d162fc1060ec6bebe084550c51f2745602a",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 187302,
+      "url": "artifacts/regional-caller-2026-11-01/clips/a92af14c4d76f85c65126f5280023d162fc1060ec6bebe084550c51f2745602a.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/a8c6b0e0c78a3c8619b6245b80fc7108cbd4267afd1f5c5b4614c51dad54960b.flac",
+      "title": "a8c6b0e0c78a3c8619b6245b80fc7108cbd4267afd1f5c5b4614c51dad54960b",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 113812,
+      "url": "artifacts/regional-caller-2026-11-01/clips/a8c6b0e0c78a3c8619b6245b80fc7108cbd4267afd1f5c5b4614c51dad54960b.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/a878533186ef825ef444fbd1759ee8c8e40673c6f9a49c8fe2fe1207a22e943f.flac",
+      "title": "a878533186ef825ef444fbd1759ee8c8e40673c6f9a49c8fe2fe1207a22e943f",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 100326,
+      "url": "artifacts/regional-caller-2026-11-01/clips/a878533186ef825ef444fbd1759ee8c8e40673c6f9a49c8fe2fe1207a22e943f.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/a461e33c91f87d6b706e5ead6935c7de7dc85575b9d1673166a7b7392ce78ec4.flac",
+      "title": "a461e33c91f87d6b706e5ead6935c7de7dc85575b9d1673166a7b7392ce78ec4",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 139800,
+      "url": "artifacts/regional-caller-2026-11-01/clips/a461e33c91f87d6b706e5ead6935c7de7dc85575b9d1673166a7b7392ce78ec4.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/a210a052f18b0b3105255295b7fb214b6db6feb147a377ec9aa9c64e7c52912b.flac",
+      "title": "a210a052f18b0b3105255295b7fb214b6db6feb147a377ec9aa9c64e7c52912b",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 203766,
+      "url": "artifacts/regional-caller-2026-11-01/clips/a210a052f18b0b3105255295b7fb214b6db6feb147a377ec9aa9c64e7c52912b.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/a04beab2a06dc4b263fa7896e4f7752472345e5eee6a30ede14e1ab100c04901.flac",
+      "title": "a04beab2a06dc4b263fa7896e4f7752472345e5eee6a30ede14e1ab100c04901",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 158524,
+      "url": "artifacts/regional-caller-2026-11-01/clips/a04beab2a06dc4b263fa7896e4f7752472345e5eee6a30ede14e1ab100c04901.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/a03cfe734b29ba072985628bf4b449e94df97105925f8657d598563539dd4419.flac",
+      "title": "a03cfe734b29ba072985628bf4b449e94df97105925f8657d598563539dd4419",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 69800,
+      "url": "artifacts/regional-caller-2026-11-01/clips/a03cfe734b29ba072985628bf4b449e94df97105925f8657d598563539dd4419.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/9fbdb4aeabed9d98dc079c778d0843d439eb0b4c40696df2aca2f6613ef7aa74.flac",
+      "title": "9fbdb4aeabed9d98dc079c778d0843d439eb0b4c40696df2aca2f6613ef7aa74",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 157425,
+      "url": "artifacts/regional-caller-2026-11-01/clips/9fbdb4aeabed9d98dc079c778d0843d439eb0b4c40696df2aca2f6613ef7aa74.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/9f0b1f5cd6eb5f1e2fa25a614d50d1b69d136655cedfbbced800b0bf85a90145.flac",
+      "title": "9f0b1f5cd6eb5f1e2fa25a614d50d1b69d136655cedfbbced800b0bf85a90145",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 77365,
+      "url": "artifacts/regional-caller-2026-11-01/clips/9f0b1f5cd6eb5f1e2fa25a614d50d1b69d136655cedfbbced800b0bf85a90145.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/9d163b19fe9f460ed5a6b2a4e5ff5f4526d027041ff11065eb972fb1642efc40.flac",
+      "title": "9d163b19fe9f460ed5a6b2a4e5ff5f4526d027041ff11065eb972fb1642efc40",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 190643,
+      "url": "artifacts/regional-caller-2026-11-01/clips/9d163b19fe9f460ed5a6b2a4e5ff5f4526d027041ff11065eb972fb1642efc40.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/9d061d342c3d6ae2abc796bdbf059350a3ec622dca400a9c06ce756a414ad410.flac",
+      "title": "9d061d342c3d6ae2abc796bdbf059350a3ec622dca400a9c06ce756a414ad410",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 74903,
+      "url": "artifacts/regional-caller-2026-11-01/clips/9d061d342c3d6ae2abc796bdbf059350a3ec622dca400a9c06ce756a414ad410.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/9c8473c8a212e35ccf002c401d5be569d96adbe9e7ae6510cbe321c53a6ff8f6.flac",
+      "title": "9c8473c8a212e35ccf002c401d5be569d96adbe9e7ae6510cbe321c53a6ff8f6",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 93236,
+      "url": "artifacts/regional-caller-2026-11-01/clips/9c8473c8a212e35ccf002c401d5be569d96adbe9e7ae6510cbe321c53a6ff8f6.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/9b4379db452aabb62ff1f1ce24b733bf13ddcc0dac84fb0bca8f5d4063c23ef8.flac",
+      "title": "9b4379db452aabb62ff1f1ce24b733bf13ddcc0dac84fb0bca8f5d4063c23ef8",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 67634,
+      "url": "artifacts/regional-caller-2026-11-01/clips/9b4379db452aabb62ff1f1ce24b733bf13ddcc0dac84fb0bca8f5d4063c23ef8.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/9b2b50e428c1bd83a99e55016a7cae512c58b9b37e38ccf8708e142926b98d0d.flac",
+      "title": "9b2b50e428c1bd83a99e55016a7cae512c58b9b37e38ccf8708e142926b98d0d",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 110126,
+      "url": "artifacts/regional-caller-2026-11-01/clips/9b2b50e428c1bd83a99e55016a7cae512c58b9b37e38ccf8708e142926b98d0d.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/9a7b3279f7c3d15fc2da0a3b9b7db26b1c76cf2978445af44583b85adc2f001a.flac",
+      "title": "9a7b3279f7c3d15fc2da0a3b9b7db26b1c76cf2978445af44583b85adc2f001a",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 213176,
+      "url": "artifacts/regional-caller-2026-11-01/clips/9a7b3279f7c3d15fc2da0a3b9b7db26b1c76cf2978445af44583b85adc2f001a.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/99fb4a365a913256a0e89c5ec5a48ef3279ac8b7c635f5a63c25fee03130d34a.flac",
+      "title": "99fb4a365a913256a0e89c5ec5a48ef3279ac8b7c635f5a63c25fee03130d34a",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 199628,
+      "url": "artifacts/regional-caller-2026-11-01/clips/99fb4a365a913256a0e89c5ec5a48ef3279ac8b7c635f5a63c25fee03130d34a.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/97ae2fbac426953eac9c994da75693495121607eda99a8f3b48ccc4e77418701.flac",
+      "title": "97ae2fbac426953eac9c994da75693495121607eda99a8f3b48ccc4e77418701",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 149768,
+      "url": "artifacts/regional-caller-2026-11-01/clips/97ae2fbac426953eac9c994da75693495121607eda99a8f3b48ccc4e77418701.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/97414fdc6fe7ea9d294085d77610ca651c33f24fe25cba09f7dfe3c1b165bffe.flac",
+      "title": "97414fdc6fe7ea9d294085d77610ca651c33f24fe25cba09f7dfe3c1b165bffe",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 134538,
+      "url": "artifacts/regional-caller-2026-11-01/clips/97414fdc6fe7ea9d294085d77610ca651c33f24fe25cba09f7dfe3c1b165bffe.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/9688bb611187d07ec98e001f29793f8db593558a63469203e6991a7e53d371b3.flac",
+      "title": "9688bb611187d07ec98e001f29793f8db593558a63469203e6991a7e53d371b3",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 247573,
+      "url": "artifacts/regional-caller-2026-11-01/clips/9688bb611187d07ec98e001f29793f8db593558a63469203e6991a7e53d371b3.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/95bbb4c48868a41b5d3da5e0b616c9a434812b39f0949170cb504b25f73cfe49.flac",
+      "title": "95bbb4c48868a41b5d3da5e0b616c9a434812b39f0949170cb504b25f73cfe49",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 35039,
+      "url": "artifacts/regional-caller-2026-11-01/clips/95bbb4c48868a41b5d3da5e0b616c9a434812b39f0949170cb504b25f73cfe49.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/954fe2737701ae3fe1838be458bba8461ed6e01c0c75baa10f7e532f13bf8996.flac",
+      "title": "954fe2737701ae3fe1838be458bba8461ed6e01c0c75baa10f7e532f13bf8996",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 75135,
+      "url": "artifacts/regional-caller-2026-11-01/clips/954fe2737701ae3fe1838be458bba8461ed6e01c0c75baa10f7e532f13bf8996.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/949ace30fbfa51c881167a4d3d482e6c42ac52ff0d09c6c6c8af54ffdea8e780.flac",
+      "title": "949ace30fbfa51c881167a4d3d482e6c42ac52ff0d09c6c6c8af54ffdea8e780",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 110501,
+      "url": "artifacts/regional-caller-2026-11-01/clips/949ace30fbfa51c881167a4d3d482e6c42ac52ff0d09c6c6c8af54ffdea8e780.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/93e6562ad244b6764f574c71d5ecc99d8cda9cf39f1bc2b901560b14d08bd224.flac",
+      "title": "93e6562ad244b6764f574c71d5ecc99d8cda9cf39f1bc2b901560b14d08bd224",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 156420,
+      "url": "artifacts/regional-caller-2026-11-01/clips/93e6562ad244b6764f574c71d5ecc99d8cda9cf39f1bc2b901560b14d08bd224.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/923dc3cb8c0986396cded64a16adecf84dae4d987ca59ea7c3d07e78ce658ec5.flac",
+      "title": "923dc3cb8c0986396cded64a16adecf84dae4d987ca59ea7c3d07e78ce658ec5",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 151492,
+      "url": "artifacts/regional-caller-2026-11-01/clips/923dc3cb8c0986396cded64a16adecf84dae4d987ca59ea7c3d07e78ce658ec5.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/91a02e54298c69d66e38a594eb1ac080250ec7c793118c8111604bae29f014db.flac",
+      "title": "91a02e54298c69d66e38a594eb1ac080250ec7c793118c8111604bae29f014db",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 169663,
+      "url": "artifacts/regional-caller-2026-11-01/clips/91a02e54298c69d66e38a594eb1ac080250ec7c793118c8111604bae29f014db.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/907453d560569b215d277aacaa98a0a6b504ae0a461c982de1b3dcdb22eb80c7.flac",
+      "title": "907453d560569b215d277aacaa98a0a6b504ae0a461c982de1b3dcdb22eb80c7",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 174093,
+      "url": "artifacts/regional-caller-2026-11-01/clips/907453d560569b215d277aacaa98a0a6b504ae0a461c982de1b3dcdb22eb80c7.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/90206fcf725644175f6aa027d750e9969d00af5a6446e3e5c3f028e07bd36820.flac",
+      "title": "90206fcf725644175f6aa027d750e9969d00af5a6446e3e5c3f028e07bd36820",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 115163,
+      "url": "artifacts/regional-caller-2026-11-01/clips/90206fcf725644175f6aa027d750e9969d00af5a6446e3e5c3f028e07bd36820.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/901e72d8995ee42fe28ebe536d80c849f9df287c9b239253e0399cc5003e723c.flac",
+      "title": "901e72d8995ee42fe28ebe536d80c849f9df287c9b239253e0399cc5003e723c",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 28508,
+      "url": "artifacts/regional-caller-2026-11-01/clips/901e72d8995ee42fe28ebe536d80c849f9df287c9b239253e0399cc5003e723c.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/8d3587bff0891f80e8f1e17cb537b16f9a0bd2a1642b0d9852c788fbb9ba90f6.flac",
+      "title": "8d3587bff0891f80e8f1e17cb537b16f9a0bd2a1642b0d9852c788fbb9ba90f6",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 163200,
+      "url": "artifacts/regional-caller-2026-11-01/clips/8d3587bff0891f80e8f1e17cb537b16f9a0bd2a1642b0d9852c788fbb9ba90f6.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/8b9f87f5c78a077326c8a02184f3608794dc037e455c206afe0f8bc176811226.flac",
+      "title": "8b9f87f5c78a077326c8a02184f3608794dc037e455c206afe0f8bc176811226",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 139460,
+      "url": "artifacts/regional-caller-2026-11-01/clips/8b9f87f5c78a077326c8a02184f3608794dc037e455c206afe0f8bc176811226.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/8b1b7a3156b113544f9b42580e463e0c444c5323a1819b41f2984431998dfccc.flac",
+      "title": "8b1b7a3156b113544f9b42580e463e0c444c5323a1819b41f2984431998dfccc",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 116496,
+      "url": "artifacts/regional-caller-2026-11-01/clips/8b1b7a3156b113544f9b42580e463e0c444c5323a1819b41f2984431998dfccc.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/8a9efcf28407dcb478a01fee56a6197b4b847c5ec0ebc8ea943e960d4d9b0163.flac",
+      "title": "8a9efcf28407dcb478a01fee56a6197b4b847c5ec0ebc8ea943e960d4d9b0163",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 39139,
+      "url": "artifacts/regional-caller-2026-11-01/clips/8a9efcf28407dcb478a01fee56a6197b4b847c5ec0ebc8ea943e960d4d9b0163.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/89e0a667d4826a688ebc41522979781e31f65645e5d875258c15bee8de5ad082.flac",
+      "title": "89e0a667d4826a688ebc41522979781e31f65645e5d875258c15bee8de5ad082",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 33567,
+      "url": "artifacts/regional-caller-2026-11-01/clips/89e0a667d4826a688ebc41522979781e31f65645e5d875258c15bee8de5ad082.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/889b9bc7b0063aace48d5b50d36cea82d8a1a8fe93a90112e5ec40b630d24423.flac",
+      "title": "889b9bc7b0063aace48d5b50d36cea82d8a1a8fe93a90112e5ec40b630d24423",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 251320,
+      "url": "artifacts/regional-caller-2026-11-01/clips/889b9bc7b0063aace48d5b50d36cea82d8a1a8fe93a90112e5ec40b630d24423.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/886a81e2beb5e31afcc41cbae22e663aaad5ea6ec4b30e6bc7ecccb32ce82c3c.flac",
+      "title": "886a81e2beb5e31afcc41cbae22e663aaad5ea6ec4b30e6bc7ecccb32ce82c3c",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 106987,
+      "url": "artifacts/regional-caller-2026-11-01/clips/886a81e2beb5e31afcc41cbae22e663aaad5ea6ec4b30e6bc7ecccb32ce82c3c.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/88568dbcef8037d30c9b8bb2f37d77ea9375cd586cbaa4f6b6c6c070eaf0a49a.flac",
+      "title": "88568dbcef8037d30c9b8bb2f37d77ea9375cd586cbaa4f6b6c6c070eaf0a49a",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 191203,
+      "url": "artifacts/regional-caller-2026-11-01/clips/88568dbcef8037d30c9b8bb2f37d77ea9375cd586cbaa4f6b6c6c070eaf0a49a.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/87e6428086c1e0bc005e3faef733810f497d6ac68e9fb4ec34714b621e80b9ff.flac",
+      "title": "87e6428086c1e0bc005e3faef733810f497d6ac68e9fb4ec34714b621e80b9ff",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 225635,
+      "url": "artifacts/regional-caller-2026-11-01/clips/87e6428086c1e0bc005e3faef733810f497d6ac68e9fb4ec34714b621e80b9ff.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/8717cc28500a8082d80d611ed3fbaca68dbcd231b68db44e7f59f04dd41a35fb.flac",
+      "title": "8717cc28500a8082d80d611ed3fbaca68dbcd231b68db44e7f59f04dd41a35fb",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 77226,
+      "url": "artifacts/regional-caller-2026-11-01/clips/8717cc28500a8082d80d611ed3fbaca68dbcd231b68db44e7f59f04dd41a35fb.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/8691de1cbac015e13400eb4def456bd4e81144efe8881185491e1e26f6e83123.flac",
+      "title": "8691de1cbac015e13400eb4def456bd4e81144efe8881185491e1e26f6e83123",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 27993,
+      "url": "artifacts/regional-caller-2026-11-01/clips/8691de1cbac015e13400eb4def456bd4e81144efe8881185491e1e26f6e83123.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/867d6cd3a0e2738936879df79e7c2e789aa482995c8450dc94f6d5ee4aa298c3.flac",
+      "title": "867d6cd3a0e2738936879df79e7c2e789aa482995c8450dc94f6d5ee4aa298c3",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 183241,
+      "url": "artifacts/regional-caller-2026-11-01/clips/867d6cd3a0e2738936879df79e7c2e789aa482995c8450dc94f6d5ee4aa298c3.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/863318b2713506f911a8cd1143e80d74e5eb34013509c9fda2b874254f5812d3.flac",
+      "title": "863318b2713506f911a8cd1143e80d74e5eb34013509c9fda2b874254f5812d3",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 270748,
+      "url": "artifacts/regional-caller-2026-11-01/clips/863318b2713506f911a8cd1143e80d74e5eb34013509c9fda2b874254f5812d3.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/86250cff3a08e78b20eb2339705af27b7a56b77e44996e733472e24b2602b00c.flac",
+      "title": "86250cff3a08e78b20eb2339705af27b7a56b77e44996e733472e24b2602b00c",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 127205,
+      "url": "artifacts/regional-caller-2026-11-01/clips/86250cff3a08e78b20eb2339705af27b7a56b77e44996e733472e24b2602b00c.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/8374164669a06b37815f63a0506d373a95f40a1d7601f1c9837bb8b750a32676.flac",
+      "title": "8374164669a06b37815f63a0506d373a95f40a1d7601f1c9837bb8b750a32676",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 71725,
+      "url": "artifacts/regional-caller-2026-11-01/clips/8374164669a06b37815f63a0506d373a95f40a1d7601f1c9837bb8b750a32676.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/8357605b94e5ea5a5cd37bfdabd9d955db00925653dcfc017405c63cf787b8ba.flac",
+      "title": "8357605b94e5ea5a5cd37bfdabd9d955db00925653dcfc017405c63cf787b8ba",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 107753,
+      "url": "artifacts/regional-caller-2026-11-01/clips/8357605b94e5ea5a5cd37bfdabd9d955db00925653dcfc017405c63cf787b8ba.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/82c1eecec7ac50f1bd4a9cf5f9a3e31674099a9424256ec676d3376fed561c47.flac",
+      "title": "82c1eecec7ac50f1bd4a9cf5f9a3e31674099a9424256ec676d3376fed561c47",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 121560,
+      "url": "artifacts/regional-caller-2026-11-01/clips/82c1eecec7ac50f1bd4a9cf5f9a3e31674099a9424256ec676d3376fed561c47.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/8285f0c17691fc2da5dfc2db46671277afc9144346f700688384369307d68772.flac",
+      "title": "8285f0c17691fc2da5dfc2db46671277afc9144346f700688384369307d68772",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 112752,
+      "url": "artifacts/regional-caller-2026-11-01/clips/8285f0c17691fc2da5dfc2db46671277afc9144346f700688384369307d68772.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/81e4ab093f9b30de365345e119308c34fe51e169e90b3290a0cdc4c7d75ee84e.flac",
+      "title": "81e4ab093f9b30de365345e119308c34fe51e169e90b3290a0cdc4c7d75ee84e",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 241814,
+      "url": "artifacts/regional-caller-2026-11-01/clips/81e4ab093f9b30de365345e119308c34fe51e169e90b3290a0cdc4c7d75ee84e.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/80c49ef0c8dbf58bdc7c3856b8ed0fc3c372a88df41687b71c458bdac8d8fccc.flac",
+      "title": "80c49ef0c8dbf58bdc7c3856b8ed0fc3c372a88df41687b71c458bdac8d8fccc",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 124966,
+      "url": "artifacts/regional-caller-2026-11-01/clips/80c49ef0c8dbf58bdc7c3856b8ed0fc3c372a88df41687b71c458bdac8d8fccc.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/8054ae63043e9dce2cdef6f4015dd5e74de4c14388ad9a49e5b5c91444860782.flac",
+      "title": "8054ae63043e9dce2cdef6f4015dd5e74de4c14388ad9a49e5b5c91444860782",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 229539,
+      "url": "artifacts/regional-caller-2026-11-01/clips/8054ae63043e9dce2cdef6f4015dd5e74de4c14388ad9a49e5b5c91444860782.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/7fa88a9323b7b48e0337ebcb0a275c773f68d48481f6885d88f2375667412f59.flac",
+      "title": "7fa88a9323b7b48e0337ebcb0a275c773f68d48481f6885d88f2375667412f59",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 185603,
+      "url": "artifacts/regional-caller-2026-11-01/clips/7fa88a9323b7b48e0337ebcb0a275c773f68d48481f6885d88f2375667412f59.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/7f955dc221f7d84c48152b69a03486d8b96d5983777b0fbe889e8db586ddbc42.flac",
+      "title": "7f955dc221f7d84c48152b69a03486d8b96d5983777b0fbe889e8db586ddbc42",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 115424,
+      "url": "artifacts/regional-caller-2026-11-01/clips/7f955dc221f7d84c48152b69a03486d8b96d5983777b0fbe889e8db586ddbc42.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/7f5f81f35e0cbe67de53a0f99eb94b511e0401d0fa9fc717330574433439a7f6.flac",
+      "title": "7f5f81f35e0cbe67de53a0f99eb94b511e0401d0fa9fc717330574433439a7f6",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 205320,
+      "url": "artifacts/regional-caller-2026-11-01/clips/7f5f81f35e0cbe67de53a0f99eb94b511e0401d0fa9fc717330574433439a7f6.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/7f3df53719bc3afc97343389fd4a2429f0584ae6042b629d7e0df6b282954fe5.flac",
+      "title": "7f3df53719bc3afc97343389fd4a2429f0584ae6042b629d7e0df6b282954fe5",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 137934,
+      "url": "artifacts/regional-caller-2026-11-01/clips/7f3df53719bc3afc97343389fd4a2429f0584ae6042b629d7e0df6b282954fe5.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/7d819d1fd88d1f73625da5ddbe287063c2d31e97a462b207f655223a78fc7a69.flac",
+      "title": "7d819d1fd88d1f73625da5ddbe287063c2d31e97a462b207f655223a78fc7a69",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 106836,
+      "url": "artifacts/regional-caller-2026-11-01/clips/7d819d1fd88d1f73625da5ddbe287063c2d31e97a462b207f655223a78fc7a69.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/7c3438f623c50b736e516a68016dc730c1ec0b573bdc07d2c24d01052c4c5e93.flac",
+      "title": "7c3438f623c50b736e516a68016dc730c1ec0b573bdc07d2c24d01052c4c5e93",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 179344,
+      "url": "artifacts/regional-caller-2026-11-01/clips/7c3438f623c50b736e516a68016dc730c1ec0b573bdc07d2c24d01052c4c5e93.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/7b53d388ff57eec6077c3498a1d27fb798e37884a89e61b3de75f2601fadc1be.flac",
+      "title": "7b53d388ff57eec6077c3498a1d27fb798e37884a89e61b3de75f2601fadc1be",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 178371,
+      "url": "artifacts/regional-caller-2026-11-01/clips/7b53d388ff57eec6077c3498a1d27fb798e37884a89e61b3de75f2601fadc1be.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/7aca03977651289c44b1b95e2bc5ca4ea8c451ce59da2e4a3f1150bc8f929ee0.flac",
+      "title": "7aca03977651289c44b1b95e2bc5ca4ea8c451ce59da2e4a3f1150bc8f929ee0",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 44520,
+      "url": "artifacts/regional-caller-2026-11-01/clips/7aca03977651289c44b1b95e2bc5ca4ea8c451ce59da2e4a3f1150bc8f929ee0.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/7a14366fde5479b0ca9620a5317c8aace7a2061cd49a86e4a24cb7c73294415d.flac",
+      "title": "7a14366fde5479b0ca9620a5317c8aace7a2061cd49a86e4a24cb7c73294415d",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 416993,
+      "url": "artifacts/regional-caller-2026-11-01/clips/7a14366fde5479b0ca9620a5317c8aace7a2061cd49a86e4a24cb7c73294415d.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/7a06c4a6df960594777ef93816daff6a0a3ca816823477d15638df32a10d0854.flac",
+      "title": "7a06c4a6df960594777ef93816daff6a0a3ca816823477d15638df32a10d0854",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 71442,
+      "url": "artifacts/regional-caller-2026-11-01/clips/7a06c4a6df960594777ef93816daff6a0a3ca816823477d15638df32a10d0854.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/79bb5df26ff7ae4acf6b0580014d1f29b41fea569f2e42a20c24c148b0d59e25.flac",
+      "title": "79bb5df26ff7ae4acf6b0580014d1f29b41fea569f2e42a20c24c148b0d59e25",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 111934,
+      "url": "artifacts/regional-caller-2026-11-01/clips/79bb5df26ff7ae4acf6b0580014d1f29b41fea569f2e42a20c24c148b0d59e25.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/79a8659b42fd8a88a1a029182db2d6f35cad122e3e1a0feb188d019a7ca81d9f.flac",
+      "title": "79a8659b42fd8a88a1a029182db2d6f35cad122e3e1a0feb188d019a7ca81d9f",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 118180,
+      "url": "artifacts/regional-caller-2026-11-01/clips/79a8659b42fd8a88a1a029182db2d6f35cad122e3e1a0feb188d019a7ca81d9f.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/794ea7d16e3ff9333fd44d5f20599e654275697367c5716354750e2a98ec9da6.flac",
+      "title": "794ea7d16e3ff9333fd44d5f20599e654275697367c5716354750e2a98ec9da6",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 131358,
+      "url": "artifacts/regional-caller-2026-11-01/clips/794ea7d16e3ff9333fd44d5f20599e654275697367c5716354750e2a98ec9da6.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/77c73fed770a5edb954680ad54b65e5ae8d7038e3894d19427babbd32eecfa96.flac",
+      "title": "77c73fed770a5edb954680ad54b65e5ae8d7038e3894d19427babbd32eecfa96",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 69494,
+      "url": "artifacts/regional-caller-2026-11-01/clips/77c73fed770a5edb954680ad54b65e5ae8d7038e3894d19427babbd32eecfa96.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/7780f5821aa0f063a29c974ee0a1d1db457abc1b3e5b405666d5d00f8236eed5.flac",
+      "title": "7780f5821aa0f063a29c974ee0a1d1db457abc1b3e5b405666d5d00f8236eed5",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 133577,
+      "url": "artifacts/regional-caller-2026-11-01/clips/7780f5821aa0f063a29c974ee0a1d1db457abc1b3e5b405666d5d00f8236eed5.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/76621b56e260123859badd8d8514fa33365496afd3efb4923678302a518954aa.flac",
+      "title": "76621b56e260123859badd8d8514fa33365496afd3efb4923678302a518954aa",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 239142,
+      "url": "artifacts/regional-caller-2026-11-01/clips/76621b56e260123859badd8d8514fa33365496afd3efb4923678302a518954aa.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/75c1bf6ccdf7e1b6ce1763c871150536d5f0e8b0ee23a6497c92d3c063b56ce0.flac",
+      "title": "75c1bf6ccdf7e1b6ce1763c871150536d5f0e8b0ee23a6497c92d3c063b56ce0",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 145155,
+      "url": "artifacts/regional-caller-2026-11-01/clips/75c1bf6ccdf7e1b6ce1763c871150536d5f0e8b0ee23a6497c92d3c063b56ce0.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/747b9e511511bdfd89e6bd3d5074b790683e9e4960d569a6aa51b2a03b7b1162.flac",
+      "title": "747b9e511511bdfd89e6bd3d5074b790683e9e4960d569a6aa51b2a03b7b1162",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 156011,
+      "url": "artifacts/regional-caller-2026-11-01/clips/747b9e511511bdfd89e6bd3d5074b790683e9e4960d569a6aa51b2a03b7b1162.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/7442e44220f4980bde1751632957222d565c38b8b8e698fc245ac2517a3de14b.flac",
+      "title": "7442e44220f4980bde1751632957222d565c38b8b8e698fc245ac2517a3de14b",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 102331,
+      "url": "artifacts/regional-caller-2026-11-01/clips/7442e44220f4980bde1751632957222d565c38b8b8e698fc245ac2517a3de14b.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/73cc48e68c522e9f04f6a1f031637a4ba240c7e7f03899ca3bb2011d93cfcdae.flac",
+      "title": "73cc48e68c522e9f04f6a1f031637a4ba240c7e7f03899ca3bb2011d93cfcdae",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 223066,
+      "url": "artifacts/regional-caller-2026-11-01/clips/73cc48e68c522e9f04f6a1f031637a4ba240c7e7f03899ca3bb2011d93cfcdae.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/72d867894f2eb4531ab27adbe519d15df89dacaf126556d3b5edaae034b09823.flac",
+      "title": "72d867894f2eb4531ab27adbe519d15df89dacaf126556d3b5edaae034b09823",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 103635,
+      "url": "artifacts/regional-caller-2026-11-01/clips/72d867894f2eb4531ab27adbe519d15df89dacaf126556d3b5edaae034b09823.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/72d83a72110fafd701d68ebe32deeac47f5f2041707565268ac0dd47bb90e305.flac",
+      "title": "72d83a72110fafd701d68ebe32deeac47f5f2041707565268ac0dd47bb90e305",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 158871,
+      "url": "artifacts/regional-caller-2026-11-01/clips/72d83a72110fafd701d68ebe32deeac47f5f2041707565268ac0dd47bb90e305.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/7298a2b7ea4d3737f78ae85d1856f06e9a4190c618df88fd0a36df6121280d21.flac",
+      "title": "7298a2b7ea4d3737f78ae85d1856f06e9a4190c618df88fd0a36df6121280d21",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 175763,
+      "url": "artifacts/regional-caller-2026-11-01/clips/7298a2b7ea4d3737f78ae85d1856f06e9a4190c618df88fd0a36df6121280d21.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/7083460be50e7efc1effe1107614913adfb6285bf444f4ccc262a01664b95e77.flac",
+      "title": "7083460be50e7efc1effe1107614913adfb6285bf444f4ccc262a01664b95e77",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 34642,
+      "url": "artifacts/regional-caller-2026-11-01/clips/7083460be50e7efc1effe1107614913adfb6285bf444f4ccc262a01664b95e77.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/6fb88691f97be429318c1951e2cbaca366397e3490a952685dd480420efdb016.flac",
+      "title": "6fb88691f97be429318c1951e2cbaca366397e3490a952685dd480420efdb016",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 145374,
+      "url": "artifacts/regional-caller-2026-11-01/clips/6fb88691f97be429318c1951e2cbaca366397e3490a952685dd480420efdb016.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/6f644869d511e9f856920887d78f18d905d7617c8ed9b6582553545ae160bd87.flac",
+      "title": "6f644869d511e9f856920887d78f18d905d7617c8ed9b6582553545ae160bd87",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 243265,
+      "url": "artifacts/regional-caller-2026-11-01/clips/6f644869d511e9f856920887d78f18d905d7617c8ed9b6582553545ae160bd87.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/6e347cded0d782025e34b9192d9afada65e83c0ef1328a0e64b8421780a827b1.flac",
+      "title": "6e347cded0d782025e34b9192d9afada65e83c0ef1328a0e64b8421780a827b1",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 41359,
+      "url": "artifacts/regional-caller-2026-11-01/clips/6e347cded0d782025e34b9192d9afada65e83c0ef1328a0e64b8421780a827b1.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/6db81cd9032714750e49c36e2434b9ccd328eeb56f5d029e6d4046f91f516c48.flac",
+      "title": "6db81cd9032714750e49c36e2434b9ccd328eeb56f5d029e6d4046f91f516c48",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 194874,
+      "url": "artifacts/regional-caller-2026-11-01/clips/6db81cd9032714750e49c36e2434b9ccd328eeb56f5d029e6d4046f91f516c48.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/6d087710087e4c3d837829c537f37ee3103fe8816de0076b47aa1d6ba98d1fa6.flac",
+      "title": "6d087710087e4c3d837829c537f37ee3103fe8816de0076b47aa1d6ba98d1fa6",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 28212,
+      "url": "artifacts/regional-caller-2026-11-01/clips/6d087710087e4c3d837829c537f37ee3103fe8816de0076b47aa1d6ba98d1fa6.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/6c05b33537c7804082125925940abcfca6f310b6f105792b40bef3b7c92ee68b.flac",
+      "title": "6c05b33537c7804082125925940abcfca6f310b6f105792b40bef3b7c92ee68b",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 245008,
+      "url": "artifacts/regional-caller-2026-11-01/clips/6c05b33537c7804082125925940abcfca6f310b6f105792b40bef3b7c92ee68b.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/6bd149074ed25070d725943ac39489299ec2136f0c60456cf79b8ad19d41e461.flac",
+      "title": "6bd149074ed25070d725943ac39489299ec2136f0c60456cf79b8ad19d41e461",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 165862,
+      "url": "artifacts/regional-caller-2026-11-01/clips/6bd149074ed25070d725943ac39489299ec2136f0c60456cf79b8ad19d41e461.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/6b77ff24047885252bcf4a89cab1a720039348ba4c6abac17aa5c46038b0e042.flac",
+      "title": "6b77ff24047885252bcf4a89cab1a720039348ba4c6abac17aa5c46038b0e042",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 102092,
+      "url": "artifacts/regional-caller-2026-11-01/clips/6b77ff24047885252bcf4a89cab1a720039348ba4c6abac17aa5c46038b0e042.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/6a76bd06ae3b78b19af7d2c32d5675a64f8d1a7ea136585a4e94a6caa6f6f6fa.flac",
+      "title": "6a76bd06ae3b78b19af7d2c32d5675a64f8d1a7ea136585a4e94a6caa6f6f6fa",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 98902,
+      "url": "artifacts/regional-caller-2026-11-01/clips/6a76bd06ae3b78b19af7d2c32d5675a64f8d1a7ea136585a4e94a6caa6f6f6fa.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/6a251bf1ff31bff5b0479e0af666537d66cc043c05cf19bd97bc333fac447528.flac",
+      "title": "6a251bf1ff31bff5b0479e0af666537d66cc043c05cf19bd97bc333fac447528",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 75906,
+      "url": "artifacts/regional-caller-2026-11-01/clips/6a251bf1ff31bff5b0479e0af666537d66cc043c05cf19bd97bc333fac447528.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/6a1007efc8452232e04afa5bbf581d365c04321791781c7a177be2e72c7dcc83.flac",
+      "title": "6a1007efc8452232e04afa5bbf581d365c04321791781c7a177be2e72c7dcc83",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 98555,
+      "url": "artifacts/regional-caller-2026-11-01/clips/6a1007efc8452232e04afa5bbf581d365c04321791781c7a177be2e72c7dcc83.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/694b0330c62c265eb4db99b83f5c68671bb50ce1f4397d163e8c839f393b1fd3.flac",
+      "title": "694b0330c62c265eb4db99b83f5c68671bb50ce1f4397d163e8c839f393b1fd3",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 140899,
+      "url": "artifacts/regional-caller-2026-11-01/clips/694b0330c62c265eb4db99b83f5c68671bb50ce1f4397d163e8c839f393b1fd3.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/69416b68aacf6e296b32b00a203ef18e22ddd3bba53f82bfd95abb064da2598c.flac",
+      "title": "69416b68aacf6e296b32b00a203ef18e22ddd3bba53f82bfd95abb064da2598c",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 208984,
+      "url": "artifacts/regional-caller-2026-11-01/clips/69416b68aacf6e296b32b00a203ef18e22ddd3bba53f82bfd95abb064da2598c.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/66b343b57a576e3615868f086d3bc4ae8ed506a7d85b057ba162cfd3ea8562dc.flac",
+      "title": "66b343b57a576e3615868f086d3bc4ae8ed506a7d85b057ba162cfd3ea8562dc",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 248844,
+      "url": "artifacts/regional-caller-2026-11-01/clips/66b343b57a576e3615868f086d3bc4ae8ed506a7d85b057ba162cfd3ea8562dc.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/665292cebad6bd22d0b508321644f1a7ff3438afd8372684b7b76707926c1e05.flac",
+      "title": "665292cebad6bd22d0b508321644f1a7ff3438afd8372684b7b76707926c1e05",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 236349,
+      "url": "artifacts/regional-caller-2026-11-01/clips/665292cebad6bd22d0b508321644f1a7ff3438afd8372684b7b76707926c1e05.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/645addd8fc91701e2d8d149587dc6a74de6100b479dcc08b9b235546d023ef28.flac",
+      "title": "645addd8fc91701e2d8d149587dc6a74de6100b479dcc08b9b235546d023ef28",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 111925,
+      "url": "artifacts/regional-caller-2026-11-01/clips/645addd8fc91701e2d8d149587dc6a74de6100b479dcc08b9b235546d023ef28.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/643fc91ea8fb400e5effd407672a1f318735bb7f38121b5baf345953126cca12.flac",
+      "title": "643fc91ea8fb400e5effd407672a1f318735bb7f38121b5baf345953126cca12",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 190495,
+      "url": "artifacts/regional-caller-2026-11-01/clips/643fc91ea8fb400e5effd407672a1f318735bb7f38121b5baf345953126cca12.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/61a78a9823815e686c11c2cfa6d048ad8691acb63037305f6d0c4273455effb4.flac",
+      "title": "61a78a9823815e686c11c2cfa6d048ad8691acb63037305f6d0c4273455effb4",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 180148,
+      "url": "artifacts/regional-caller-2026-11-01/clips/61a78a9823815e686c11c2cfa6d048ad8691acb63037305f6d0c4273455effb4.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/617daba05e1d500e32bd3ffa3debba53594991c849e665f183438e3d31943aa0.flac",
+      "title": "617daba05e1d500e32bd3ffa3debba53594991c849e665f183438e3d31943aa0",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 56298,
+      "url": "artifacts/regional-caller-2026-11-01/clips/617daba05e1d500e32bd3ffa3debba53594991c849e665f183438e3d31943aa0.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/60d8f23e0aa80f603af827aeebe7f4d765ad1faad5c371e65f6ab48616c6dbe0.flac",
+      "title": "60d8f23e0aa80f603af827aeebe7f4d765ad1faad5c371e65f6ab48616c6dbe0",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 208203,
+      "url": "artifacts/regional-caller-2026-11-01/clips/60d8f23e0aa80f603af827aeebe7f4d765ad1faad5c371e65f6ab48616c6dbe0.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/6084064c64b5a29812e40476c37176c2143eb3d061cc083087a2ac204b4885bb.flac",
+      "title": "6084064c64b5a29812e40476c37176c2143eb3d061cc083087a2ac204b4885bb",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 73912,
+      "url": "artifacts/regional-caller-2026-11-01/clips/6084064c64b5a29812e40476c37176c2143eb3d061cc083087a2ac204b4885bb.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/6046c5b06c9df3fce5a9225b1ae3e0c15630eaad2b50c9eb17760d4c0b88daec.flac",
+      "title": "6046c5b06c9df3fce5a9225b1ae3e0c15630eaad2b50c9eb17760d4c0b88daec",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 196233,
+      "url": "artifacts/regional-caller-2026-11-01/clips/6046c5b06c9df3fce5a9225b1ae3e0c15630eaad2b50c9eb17760d4c0b88daec.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/5f7409c09d700aa266d181f9157bd3fa009755eab26e12ce4525515ce4f27978.flac",
+      "title": "5f7409c09d700aa266d181f9157bd3fa009755eab26e12ce4525515ce4f27978",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 156613,
+      "url": "artifacts/regional-caller-2026-11-01/clips/5f7409c09d700aa266d181f9157bd3fa009755eab26e12ce4525515ce4f27978.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/5f26075e3999df08affbf40c0462ee0d1fd553c9afc64003b19dd77e018e214d.flac",
+      "title": "5f26075e3999df08affbf40c0462ee0d1fd553c9afc64003b19dd77e018e214d",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 70378,
+      "url": "artifacts/regional-caller-2026-11-01/clips/5f26075e3999df08affbf40c0462ee0d1fd553c9afc64003b19dd77e018e214d.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/5df4b0d284c3c389895e7394b8519c0a3b57bc6757216205a7315d82b29ae74e.flac",
+      "title": "5df4b0d284c3c389895e7394b8519c0a3b57bc6757216205a7315d82b29ae74e",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 76469,
+      "url": "artifacts/regional-caller-2026-11-01/clips/5df4b0d284c3c389895e7394b8519c0a3b57bc6757216205a7315d82b29ae74e.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/5dd30296bc5bbd6d47d8ebc35216eece846443acfb9714738e6f654fa4df11ca.flac",
+      "title": "5dd30296bc5bbd6d47d8ebc35216eece846443acfb9714738e6f654fa4df11ca",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 270193,
+      "url": "artifacts/regional-caller-2026-11-01/clips/5dd30296bc5bbd6d47d8ebc35216eece846443acfb9714738e6f654fa4df11ca.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/5cb4cfcf8b299b8d54441b45e840a1811cd3bd199064f9d9eef2704b2069b9b5.flac",
+      "title": "5cb4cfcf8b299b8d54441b45e840a1811cd3bd199064f9d9eef2704b2069b9b5",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 28355,
+      "url": "artifacts/regional-caller-2026-11-01/clips/5cb4cfcf8b299b8d54441b45e840a1811cd3bd199064f9d9eef2704b2069b9b5.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/5c3ec92bb178ca71702c6ced3dbc90e1f34119c259d0932790ba46126a1cab94.flac",
+      "title": "5c3ec92bb178ca71702c6ced3dbc90e1f34119c259d0932790ba46126a1cab94",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 131000,
+      "url": "artifacts/regional-caller-2026-11-01/clips/5c3ec92bb178ca71702c6ced3dbc90e1f34119c259d0932790ba46126a1cab94.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/5b8230f9642f9e9364c1cb0aa0ec1ee37a4f8947703ec529d10d3ad05b21011d.flac",
+      "title": "5b8230f9642f9e9364c1cb0aa0ec1ee37a4f8947703ec529d10d3ad05b21011d",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 234117,
+      "url": "artifacts/regional-caller-2026-11-01/clips/5b8230f9642f9e9364c1cb0aa0ec1ee37a4f8947703ec529d10d3ad05b21011d.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/5b5e0857fa3809b2c626eb65be42bfab071b1e0df587a854ed3045a75903cc28.flac",
+      "title": "5b5e0857fa3809b2c626eb65be42bfab071b1e0df587a854ed3045a75903cc28",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 95476,
+      "url": "artifacts/regional-caller-2026-11-01/clips/5b5e0857fa3809b2c626eb65be42bfab071b1e0df587a854ed3045a75903cc28.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/56d47b401f91941345accd38f16b8702080724669d8d1a1e6bb1f44c199f90c5.flac",
+      "title": "56d47b401f91941345accd38f16b8702080724669d8d1a1e6bb1f44c199f90c5",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 168860,
+      "url": "artifacts/regional-caller-2026-11-01/clips/56d47b401f91941345accd38f16b8702080724669d8d1a1e6bb1f44c199f90c5.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/566f2aa904f09bc25e6819b1c64133f2535b6d50619d6d8cda91e7754aa9834b.flac",
+      "title": "566f2aa904f09bc25e6819b1c64133f2535b6d50619d6d8cda91e7754aa9834b",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 214199,
+      "url": "artifacts/regional-caller-2026-11-01/clips/566f2aa904f09bc25e6819b1c64133f2535b6d50619d6d8cda91e7754aa9834b.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/5645cc30100bd55a3bb652a541e53031c6a504af00310122c99145e8672e8879.flac",
+      "title": "5645cc30100bd55a3bb652a541e53031c6a504af00310122c99145e8672e8879",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 35880,
+      "url": "artifacts/regional-caller-2026-11-01/clips/5645cc30100bd55a3bb652a541e53031c6a504af00310122c99145e8672e8879.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/55c7cfef13d90ef90ffdeacb201da751eb39f866496e972a69c2325ff651fcdd.flac",
+      "title": "55c7cfef13d90ef90ffdeacb201da751eb39f866496e972a69c2325ff651fcdd",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 150422,
+      "url": "artifacts/regional-caller-2026-11-01/clips/55c7cfef13d90ef90ffdeacb201da751eb39f866496e972a69c2325ff651fcdd.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/5558f075dd3f3c5decfbad685f219938c52dee291bc16c36c9bb298319ddbcb4.flac",
+      "title": "5558f075dd3f3c5decfbad685f219938c52dee291bc16c36c9bb298319ddbcb4",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 102974,
+      "url": "artifacts/regional-caller-2026-11-01/clips/5558f075dd3f3c5decfbad685f219938c52dee291bc16c36c9bb298319ddbcb4.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/550827cada366c4e17d13e8cdc2927c21c394f9d6eca62b1768287d026f6eb37.flac",
+      "title": "550827cada366c4e17d13e8cdc2927c21c394f9d6eca62b1768287d026f6eb37",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 75363,
+      "url": "artifacts/regional-caller-2026-11-01/clips/550827cada366c4e17d13e8cdc2927c21c394f9d6eca62b1768287d026f6eb37.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/54bb4372b227cca522b9fd3aad6fd2e8197202b684831fc144a24abf23d0fefc.flac",
+      "title": "54bb4372b227cca522b9fd3aad6fd2e8197202b684831fc144a24abf23d0fefc",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 120373,
+      "url": "artifacts/regional-caller-2026-11-01/clips/54bb4372b227cca522b9fd3aad6fd2e8197202b684831fc144a24abf23d0fefc.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/543ca91c6c34d95c470fac07fe328ab27768e8939d1d9a940feda657c725a7f5.flac",
+      "title": "543ca91c6c34d95c470fac07fe328ab27768e8939d1d9a940feda657c725a7f5",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 130561,
+      "url": "artifacts/regional-caller-2026-11-01/clips/543ca91c6c34d95c470fac07fe328ab27768e8939d1d9a940feda657c725a7f5.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/53a8f821e2c3d8ab64bf0470781f6bb49098bfc7b341380d7431d697e660ef09.flac",
+      "title": "53a8f821e2c3d8ab64bf0470781f6bb49098bfc7b341380d7431d697e660ef09",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 131447,
+      "url": "artifacts/regional-caller-2026-11-01/clips/53a8f821e2c3d8ab64bf0470781f6bb49098bfc7b341380d7431d697e660ef09.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/521cf297d34b871d4c55ef59c0bc49cea26363b4c38a10f136ce631c603643d2.flac",
+      "title": "521cf297d34b871d4c55ef59c0bc49cea26363b4c38a10f136ce631c603643d2",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 112324,
+      "url": "artifacts/regional-caller-2026-11-01/clips/521cf297d34b871d4c55ef59c0bc49cea26363b4c38a10f136ce631c603643d2.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/51af43246bf106bc0bdf8868c66ef685d1a2ba58f3856e7aaa5b8710870169e7.flac",
+      "title": "51af43246bf106bc0bdf8868c66ef685d1a2ba58f3856e7aaa5b8710870169e7",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 234244,
+      "url": "artifacts/regional-caller-2026-11-01/clips/51af43246bf106bc0bdf8868c66ef685d1a2ba58f3856e7aaa5b8710870169e7.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/5140c0b1862e6b994ad4d650e29e9f4d6bed0f7f706f4513e3a5069b1e3672f5.flac",
+      "title": "5140c0b1862e6b994ad4d650e29e9f4d6bed0f7f706f4513e3a5069b1e3672f5",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 98759,
+      "url": "artifacts/regional-caller-2026-11-01/clips/5140c0b1862e6b994ad4d650e29e9f4d6bed0f7f706f4513e3a5069b1e3672f5.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/50bdad521cc761497137fc5df2df023b8dbc3dafd8d9fa271d9fbd5541e66f39.flac",
+      "title": "50bdad521cc761497137fc5df2df023b8dbc3dafd8d9fa271d9fbd5541e66f39",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 120874,
+      "url": "artifacts/regional-caller-2026-11-01/clips/50bdad521cc761497137fc5df2df023b8dbc3dafd8d9fa271d9fbd5541e66f39.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/4fe7d69c191602acc162e951db1e3eb10857d9cdffb271e4e67cbcf1f3ba21bc.flac",
+      "title": "4fe7d69c191602acc162e951db1e3eb10857d9cdffb271e4e67cbcf1f3ba21bc",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 115006,
+      "url": "artifacts/regional-caller-2026-11-01/clips/4fe7d69c191602acc162e951db1e3eb10857d9cdffb271e4e67cbcf1f3ba21bc.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/4fabfbd7ca1fc66f7d3988e8840fa447e56f11b775a89f1a52bf92ceaf426217.flac",
+      "title": "4fabfbd7ca1fc66f7d3988e8840fa447e56f11b775a89f1a52bf92ceaf426217",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 141676,
+      "url": "artifacts/regional-caller-2026-11-01/clips/4fabfbd7ca1fc66f7d3988e8840fa447e56f11b775a89f1a52bf92ceaf426217.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/4f95ed1cbb5382cc71e5268bf360871ca5cc04de73e4e7063d021e93c674b9ce.flac",
+      "title": "4f95ed1cbb5382cc71e5268bf360871ca5cc04de73e4e7063d021e93c674b9ce",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 72729,
+      "url": "artifacts/regional-caller-2026-11-01/clips/4f95ed1cbb5382cc71e5268bf360871ca5cc04de73e4e7063d021e93c674b9ce.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/4f1b529a188735d400255c38c285e49ec7f0d9ded5eed3d72f3f80ea88ea3393.flac",
+      "title": "4f1b529a188735d400255c38c285e49ec7f0d9ded5eed3d72f3f80ea88ea3393",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 127860,
+      "url": "artifacts/regional-caller-2026-11-01/clips/4f1b529a188735d400255c38c285e49ec7f0d9ded5eed3d72f3f80ea88ea3393.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/4e6de05c61284dece2fae6b857068355b0db2bac78f0f8d51ef5636436158cad.flac",
+      "title": "4e6de05c61284dece2fae6b857068355b0db2bac78f0f8d51ef5636436158cad",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 66816,
+      "url": "artifacts/regional-caller-2026-11-01/clips/4e6de05c61284dece2fae6b857068355b0db2bac78f0f8d51ef5636436158cad.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/4e181640e404d4f5f2a94c82e74f1620cae2156c68b5d82c0cdfb8a0363c4e15.flac",
+      "title": "4e181640e404d4f5f2a94c82e74f1620cae2156c68b5d82c0cdfb8a0363c4e15",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 136883,
+      "url": "artifacts/regional-caller-2026-11-01/clips/4e181640e404d4f5f2a94c82e74f1620cae2156c68b5d82c0cdfb8a0363c4e15.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/4d89525bb2c87819dab177ac81382cb247e6d23551fa4e5666e097bcc7863d47.flac",
+      "title": "4d89525bb2c87819dab177ac81382cb247e6d23551fa4e5666e097bcc7863d47",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 220144,
+      "url": "artifacts/regional-caller-2026-11-01/clips/4d89525bb2c87819dab177ac81382cb247e6d23551fa4e5666e097bcc7863d47.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/4d7cd2f30229738406379fae467f8593f6536dbac0a8e300096d7dc93215108e.flac",
+      "title": "4d7cd2f30229738406379fae467f8593f6536dbac0a8e300096d7dc93215108e",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 357136,
+      "url": "artifacts/regional-caller-2026-11-01/clips/4d7cd2f30229738406379fae467f8593f6536dbac0a8e300096d7dc93215108e.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/4d14b2a3903b4a875ff81d3f342bfcbed5bfc6c2205956d4f7187f2f5f464fd3.flac",
+      "title": "4d14b2a3903b4a875ff81d3f342bfcbed5bfc6c2205956d4f7187f2f5f464fd3",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 114081,
+      "url": "artifacts/regional-caller-2026-11-01/clips/4d14b2a3903b4a875ff81d3f342bfcbed5bfc6c2205956d4f7187f2f5f464fd3.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/4bea5194d3a80d62ad8e30ef218c81fb4c6df4165a9312ed9f07975512b0115c.flac",
+      "title": "4bea5194d3a80d62ad8e30ef218c81fb4c6df4165a9312ed9f07975512b0115c",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 182078,
+      "url": "artifacts/regional-caller-2026-11-01/clips/4bea5194d3a80d62ad8e30ef218c81fb4c6df4165a9312ed9f07975512b0115c.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/4920e5ea0a8d05514bbac9517a0d284f90eb4c363c3bb402ede1b68be0812880.flac",
+      "title": "4920e5ea0a8d05514bbac9517a0d284f90eb4c363c3bb402ede1b68be0812880",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 219505,
+      "url": "artifacts/regional-caller-2026-11-01/clips/4920e5ea0a8d05514bbac9517a0d284f90eb4c363c3bb402ede1b68be0812880.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/47f3ee8ef8ad98427fbbb3e847fd65d0eddbcce5a5db5fd9b7ea8c3a30467eca.flac",
+      "title": "47f3ee8ef8ad98427fbbb3e847fd65d0eddbcce5a5db5fd9b7ea8c3a30467eca",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 204543,
+      "url": "artifacts/regional-caller-2026-11-01/clips/47f3ee8ef8ad98427fbbb3e847fd65d0eddbcce5a5db5fd9b7ea8c3a30467eca.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/47ca47a1532bafc93d32b4778ae9b997bfbd3174afb0bef9b7ab64c26498e8e6.flac",
+      "title": "47ca47a1532bafc93d32b4778ae9b997bfbd3174afb0bef9b7ab64c26498e8e6",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 63542,
+      "url": "artifacts/regional-caller-2026-11-01/clips/47ca47a1532bafc93d32b4778ae9b997bfbd3174afb0bef9b7ab64c26498e8e6.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/476e60b6892a09d0a1044a647fc7fd2353193a5eac21e063a5136979ee475849.flac",
+      "title": "476e60b6892a09d0a1044a647fc7fd2353193a5eac21e063a5136979ee475849",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 177271,
+      "url": "artifacts/regional-caller-2026-11-01/clips/476e60b6892a09d0a1044a647fc7fd2353193a5eac21e063a5136979ee475849.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/4430f4b92f78cf2cfa2bf4067a6a25934e5a9d6bf3af37cfb7febf1c8a1719f5.flac",
+      "title": "4430f4b92f78cf2cfa2bf4067a6a25934e5a9d6bf3af37cfb7febf1c8a1719f5",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 125079,
+      "url": "artifacts/regional-caller-2026-11-01/clips/4430f4b92f78cf2cfa2bf4067a6a25934e5a9d6bf3af37cfb7febf1c8a1719f5.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/43f29b96c7a955460887c444e5284dea1bc0eeb72a94e0ed41451ca779b37f0a.flac",
+      "title": "43f29b96c7a955460887c444e5284dea1bc0eeb72a94e0ed41451ca779b37f0a",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 102730,
+      "url": "artifacts/regional-caller-2026-11-01/clips/43f29b96c7a955460887c444e5284dea1bc0eeb72a94e0ed41451ca779b37f0a.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/43aba8f54f83eed3c5933ab149e25f0e07f1a5ae6a8762e292cec632bc403b46.flac",
+      "title": "43aba8f54f83eed3c5933ab149e25f0e07f1a5ae6a8762e292cec632bc403b46",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 138154,
+      "url": "artifacts/regional-caller-2026-11-01/clips/43aba8f54f83eed3c5933ab149e25f0e07f1a5ae6a8762e292cec632bc403b46.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/41dcbdbe568baf18abd9a0b893847cd909d2d7e76d28ccbe15f7b99cb2a59ef8.flac",
+      "title": "41dcbdbe568baf18abd9a0b893847cd909d2d7e76d28ccbe15f7b99cb2a59ef8",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 361119,
+      "url": "artifacts/regional-caller-2026-11-01/clips/41dcbdbe568baf18abd9a0b893847cd909d2d7e76d28ccbe15f7b99cb2a59ef8.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/416e8b22b8e926ed13fa0325aebc57f1d19f180f7918a2152034a3bb9156e85e.flac",
+      "title": "416e8b22b8e926ed13fa0325aebc57f1d19f180f7918a2152034a3bb9156e85e",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 84203,
+      "url": "artifacts/regional-caller-2026-11-01/clips/416e8b22b8e926ed13fa0325aebc57f1d19f180f7918a2152034a3bb9156e85e.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/412c57eb879289d7a7b6efb6290c3c3eec48f36e0c254532f5b7d19cfe808f43.flac",
+      "title": "412c57eb879289d7a7b6efb6290c3c3eec48f36e0c254532f5b7d19cfe808f43",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 95002,
+      "url": "artifacts/regional-caller-2026-11-01/clips/412c57eb879289d7a7b6efb6290c3c3eec48f36e0c254532f5b7d19cfe808f43.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/40bf19a902e01db1c7b9c2bccbca53a05cfe8adc8e94fcc54edb2ac18fced805.flac",
+      "title": "40bf19a902e01db1c7b9c2bccbca53a05cfe8adc8e94fcc54edb2ac18fced805",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 34408,
+      "url": "artifacts/regional-caller-2026-11-01/clips/40bf19a902e01db1c7b9c2bccbca53a05cfe8adc8e94fcc54edb2ac18fced805.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/4057146932eeca124f8c4cfd070e03573795eeea82201078535822437b73a059.flac",
+      "title": "4057146932eeca124f8c4cfd070e03573795eeea82201078535822437b73a059",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 158043,
+      "url": "artifacts/regional-caller-2026-11-01/clips/4057146932eeca124f8c4cfd070e03573795eeea82201078535822437b73a059.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/400804a42525cc1c99cfecc7cae25c0f0c1feb01a947a6d298bbe09a0f486008.flac",
+      "title": "400804a42525cc1c99cfecc7cae25c0f0c1feb01a947a6d298bbe09a0f486008",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 34164,
+      "url": "artifacts/regional-caller-2026-11-01/clips/400804a42525cc1c99cfecc7cae25c0f0c1feb01a947a6d298bbe09a0f486008.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/3e1208c49c306a0e40cba60127f502bb956382acb62b80548417f989bf29caa6.flac",
+      "title": "3e1208c49c306a0e40cba60127f502bb956382acb62b80548417f989bf29caa6",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 74794,
+      "url": "artifacts/regional-caller-2026-11-01/clips/3e1208c49c306a0e40cba60127f502bb956382acb62b80548417f989bf29caa6.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/3d55a013871189d0dfe51ff778dffd6e2a7ddcbee0a321f77f6593ab27d760ff.flac",
+      "title": "3d55a013871189d0dfe51ff778dffd6e2a7ddcbee0a321f77f6593ab27d760ff",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 165648,
+      "url": "artifacts/regional-caller-2026-11-01/clips/3d55a013871189d0dfe51ff778dffd6e2a7ddcbee0a321f77f6593ab27d760ff.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/3bb93a3a9cba0127c2844c403fb45330277c898ad64a99393f1391b80abb4d24.flac",
+      "title": "3bb93a3a9cba0127c2844c403fb45330277c898ad64a99393f1391b80abb4d24",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 150676,
+      "url": "artifacts/regional-caller-2026-11-01/clips/3bb93a3a9cba0127c2844c403fb45330277c898ad64a99393f1391b80abb4d24.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/38f3ad9797fb14baeb8cffca81b35dd6fc277a45f20f8a592a90c236a2665ce3.flac",
+      "title": "38f3ad9797fb14baeb8cffca81b35dd6fc277a45f20f8a592a90c236a2665ce3",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 34605,
+      "url": "artifacts/regional-caller-2026-11-01/clips/38f3ad9797fb14baeb8cffca81b35dd6fc277a45f20f8a592a90c236a2665ce3.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/389c2b51e51fb7a9bc76720296ca4b6f3f3361d07eb582e4fa7c2a16d74d192b.flac",
+      "title": "389c2b51e51fb7a9bc76720296ca4b6f3f3361d07eb582e4fa7c2a16d74d192b",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 102390,
+      "url": "artifacts/regional-caller-2026-11-01/clips/389c2b51e51fb7a9bc76720296ca4b6f3f3361d07eb582e4fa7c2a16d74d192b.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/3656f5b3707bac9fdc56f27308b5d5b1dc4c3eaa9c2a317cec4f983fd458315c.flac",
+      "title": "3656f5b3707bac9fdc56f27308b5d5b1dc4c3eaa9c2a317cec4f983fd458315c",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 71891,
+      "url": "artifacts/regional-caller-2026-11-01/clips/3656f5b3707bac9fdc56f27308b5d5b1dc4c3eaa9c2a317cec4f983fd458315c.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/35c1ce9cb52c556f1515a2dd035ce26e2480b7487ec55135f764bff6cb2d65d2.flac",
+      "title": "35c1ce9cb52c556f1515a2dd035ce26e2480b7487ec55135f764bff6cb2d65d2",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 126127,
+      "url": "artifacts/regional-caller-2026-11-01/clips/35c1ce9cb52c556f1515a2dd035ce26e2480b7487ec55135f764bff6cb2d65d2.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/334d137287d0510b5e63cf5e614aa71be2e83633a5af3d59d4577a14b2d81a07.flac",
+      "title": "334d137287d0510b5e63cf5e614aa71be2e83633a5af3d59d4577a14b2d81a07",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 202944,
+      "url": "artifacts/regional-caller-2026-11-01/clips/334d137287d0510b5e63cf5e614aa71be2e83633a5af3d59d4577a14b2d81a07.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/3335104ba14e9257a683e009d722eda2edebc5c393e52423bffeb44474b1d66d.flac",
+      "title": "3335104ba14e9257a683e009d722eda2edebc5c393e52423bffeb44474b1d66d",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 157710,
+      "url": "artifacts/regional-caller-2026-11-01/clips/3335104ba14e9257a683e009d722eda2edebc5c393e52423bffeb44474b1d66d.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/32ef5d7f32c0d7cccbf92158257639c623b63b4abc72990460bb7ca84f36b7b8.flac",
+      "title": "32ef5d7f32c0d7cccbf92158257639c623b63b4abc72990460bb7ca84f36b7b8",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 135968,
+      "url": "artifacts/regional-caller-2026-11-01/clips/32ef5d7f32c0d7cccbf92158257639c623b63b4abc72990460bb7ca84f36b7b8.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/32cccf4fae7ba77c07535efa09224578c52037e06b5c61dab9e0800ec5bd7d63.flac",
+      "title": "32cccf4fae7ba77c07535efa09224578c52037e06b5c61dab9e0800ec5bd7d63",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 196101,
+      "url": "artifacts/regional-caller-2026-11-01/clips/32cccf4fae7ba77c07535efa09224578c52037e06b5c61dab9e0800ec5bd7d63.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/2f8742d38fc8bf788385b976aa4a615098e1ad7ba8d9eb4dab55b32bb150bc9d.flac",
+      "title": "2f8742d38fc8bf788385b976aa4a615098e1ad7ba8d9eb4dab55b32bb150bc9d",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 174987,
+      "url": "artifacts/regional-caller-2026-11-01/clips/2f8742d38fc8bf788385b976aa4a615098e1ad7ba8d9eb4dab55b32bb150bc9d.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/2e13c4fb4b37277b6155d36f23d9f85394010b8230009eb3bb5c194ce337c5a4.flac",
+      "title": "2e13c4fb4b37277b6155d36f23d9f85394010b8230009eb3bb5c194ce337c5a4",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 158304,
+      "url": "artifacts/regional-caller-2026-11-01/clips/2e13c4fb4b37277b6155d36f23d9f85394010b8230009eb3bb5c194ce337c5a4.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/2cdf6aefd94431c6178bf6e360f17406144844c5f347e3748e799032c3b99288.flac",
+      "title": "2cdf6aefd94431c6178bf6e360f17406144844c5f347e3748e799032c3b99288",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 191017,
+      "url": "artifacts/regional-caller-2026-11-01/clips/2cdf6aefd94431c6178bf6e360f17406144844c5f347e3748e799032c3b99288.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/2c7920fac5a891a9f62014b3a99e3ac075b5569e20f1f32d32fea9c8c74d041b.flac",
+      "title": "2c7920fac5a891a9f62014b3a99e3ac075b5569e20f1f32d32fea9c8c74d041b",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 154565,
+      "url": "artifacts/regional-caller-2026-11-01/clips/2c7920fac5a891a9f62014b3a99e3ac075b5569e20f1f32d32fea9c8c74d041b.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/2c141be4c1b482f1f5dda6a8c851b427df7894fd53d5eb615b27e1dfc0c2dea4.flac",
+      "title": "2c141be4c1b482f1f5dda6a8c851b427df7894fd53d5eb615b27e1dfc0c2dea4",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 133931,
+      "url": "artifacts/regional-caller-2026-11-01/clips/2c141be4c1b482f1f5dda6a8c851b427df7894fd53d5eb615b27e1dfc0c2dea4.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/2a0ffb20b105243a09d9820525662ed8c1b1dc9041602a6fddcaccaeb1b32662.flac",
+      "title": "2a0ffb20b105243a09d9820525662ed8c1b1dc9041602a6fddcaccaeb1b32662",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 239625,
+      "url": "artifacts/regional-caller-2026-11-01/clips/2a0ffb20b105243a09d9820525662ed8c1b1dc9041602a6fddcaccaeb1b32662.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/28f56f8eb71b6e06da83bdc9529489ea881acfb8dc953e6af71e6cb4e9ca3c35.flac",
+      "title": "28f56f8eb71b6e06da83bdc9529489ea881acfb8dc953e6af71e6cb4e9ca3c35",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 209377,
+      "url": "artifacts/regional-caller-2026-11-01/clips/28f56f8eb71b6e06da83bdc9529489ea881acfb8dc953e6af71e6cb4e9ca3c35.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/28b156b47015ac740d46ba1f58445da7cd66fa1eca1d01de6c5306d06bfadb9c.flac",
+      "title": "28b156b47015ac740d46ba1f58445da7cd66fa1eca1d01de6c5306d06bfadb9c",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 300819,
+      "url": "artifacts/regional-caller-2026-11-01/clips/28b156b47015ac740d46ba1f58445da7cd66fa1eca1d01de6c5306d06bfadb9c.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/27b20adc5974c341ce1501f22ca6545f55942a47434b9fd41fb9f797a94e6012.flac",
+      "title": "27b20adc5974c341ce1501f22ca6545f55942a47434b9fd41fb9f797a94e6012",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 217513,
+      "url": "artifacts/regional-caller-2026-11-01/clips/27b20adc5974c341ce1501f22ca6545f55942a47434b9fd41fb9f797a94e6012.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/266f67f06fb5ad4522c9c3504ce865c26601ee47190a41755ad7adb71eb26209.flac",
+      "title": "266f67f06fb5ad4522c9c3504ce865c26601ee47190a41755ad7adb71eb26209",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 43222,
+      "url": "artifacts/regional-caller-2026-11-01/clips/266f67f06fb5ad4522c9c3504ce865c26601ee47190a41755ad7adb71eb26209.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/239c83e2750d23e6b74552da29aea766a678fca91240c455c04e436f9ab97dca.flac",
+      "title": "239c83e2750d23e6b74552da29aea766a678fca91240c455c04e436f9ab97dca",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 239084,
+      "url": "artifacts/regional-caller-2026-11-01/clips/239c83e2750d23e6b74552da29aea766a678fca91240c455c04e436f9ab97dca.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/23593e66cdb14538361910a8eac0260d97be699580aa376c1ccf030f851b8bec.flac",
+      "title": "23593e66cdb14538361910a8eac0260d97be699580aa376c1ccf030f851b8bec",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 183802,
+      "url": "artifacts/regional-caller-2026-11-01/clips/23593e66cdb14538361910a8eac0260d97be699580aa376c1ccf030f851b8bec.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/2328d5f8ee903e2ef0ed99f5b3c2ab713cf9308fc917158e5d1f9f3fd9abe3e2.flac",
+      "title": "2328d5f8ee903e2ef0ed99f5b3c2ab713cf9308fc917158e5d1f9f3fd9abe3e2",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 85081,
+      "url": "artifacts/regional-caller-2026-11-01/clips/2328d5f8ee903e2ef0ed99f5b3c2ab713cf9308fc917158e5d1f9f3fd9abe3e2.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/22e66981324405ac37363a628d9f9f8383a942b4a8c7a5d22acf13ffa478c7fe.flac",
+      "title": "22e66981324405ac37363a628d9f9f8383a942b4a8c7a5d22acf13ffa478c7fe",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 150035,
+      "url": "artifacts/regional-caller-2026-11-01/clips/22e66981324405ac37363a628d9f9f8383a942b4a8c7a5d22acf13ffa478c7fe.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/21f99d322c9e0b206c126be3e84a68b5d05bab6de49e5f609fa17263856a19ad.flac",
+      "title": "21f99d322c9e0b206c126be3e84a68b5d05bab6de49e5f609fa17263856a19ad",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 223494,
+      "url": "artifacts/regional-caller-2026-11-01/clips/21f99d322c9e0b206c126be3e84a68b5d05bab6de49e5f609fa17263856a19ad.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/20e190aceb2486cd27a65937172dc5998739dfa0a0fa01a72c65523d50a3e983.flac",
+      "title": "20e190aceb2486cd27a65937172dc5998739dfa0a0fa01a72c65523d50a3e983",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 125224,
+      "url": "artifacts/regional-caller-2026-11-01/clips/20e190aceb2486cd27a65937172dc5998739dfa0a0fa01a72c65523d50a3e983.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/1f7f129a13f92d7a0164a25a214ebe361aaf5ba577697e9c5c80c1cdea848d8c.flac",
+      "title": "1f7f129a13f92d7a0164a25a214ebe361aaf5ba577697e9c5c80c1cdea848d8c",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 131396,
+      "url": "artifacts/regional-caller-2026-11-01/clips/1f7f129a13f92d7a0164a25a214ebe361aaf5ba577697e9c5c80c1cdea848d8c.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/1f4f6e6f7403b805c0a7f3c1583916a3746d5bfb99b2c4d1f068c82c565ae5b9.flac",
+      "title": "1f4f6e6f7403b805c0a7f3c1583916a3746d5bfb99b2c4d1f068c82c565ae5b9",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 156836,
+      "url": "artifacts/regional-caller-2026-11-01/clips/1f4f6e6f7403b805c0a7f3c1583916a3746d5bfb99b2c4d1f068c82c565ae5b9.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/1d24394d7e0b0cbf48d9f4fa7acde951671d259d86ce60c89af9d3d88e5eb9fe.flac",
+      "title": "1d24394d7e0b0cbf48d9f4fa7acde951671d259d86ce60c89af9d3d88e5eb9fe",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 93207,
+      "url": "artifacts/regional-caller-2026-11-01/clips/1d24394d7e0b0cbf48d9f4fa7acde951671d259d86ce60c89af9d3d88e5eb9fe.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/1be929c2321e9caebb2c293e84301f6344199520f2c6b27910fa7a2126ffa517.flac",
+      "title": "1be929c2321e9caebb2c293e84301f6344199520f2c6b27910fa7a2126ffa517",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 156482,
+      "url": "artifacts/regional-caller-2026-11-01/clips/1be929c2321e9caebb2c293e84301f6344199520f2c6b27910fa7a2126ffa517.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/1ae19655ccf14ba93a708f9bc2dfbc05bb75e245069c2df85b26b6905029119d.flac",
+      "title": "1ae19655ccf14ba93a708f9bc2dfbc05bb75e245069c2df85b26b6905029119d",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 157521,
+      "url": "artifacts/regional-caller-2026-11-01/clips/1ae19655ccf14ba93a708f9bc2dfbc05bb75e245069c2df85b26b6905029119d.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/1a74e9c0b91c9f9f61c4886f87c3c8c22dcd246532dcd807f5d2e93985607605.flac",
+      "title": "1a74e9c0b91c9f9f61c4886f87c3c8c22dcd246532dcd807f5d2e93985607605",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 169885,
+      "url": "artifacts/regional-caller-2026-11-01/clips/1a74e9c0b91c9f9f61c4886f87c3c8c22dcd246532dcd807f5d2e93985607605.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/18a27282f86e93626fa0e290eaa2b0ee8410ea7fa189eb8a6d2306c334d3cbdc.flac",
+      "title": "18a27282f86e93626fa0e290eaa2b0ee8410ea7fa189eb8a6d2306c334d3cbdc",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 48131,
+      "url": "artifacts/regional-caller-2026-11-01/clips/18a27282f86e93626fa0e290eaa2b0ee8410ea7fa189eb8a6d2306c334d3cbdc.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/179823293e348df08c203d6bf84c6a024d0f9fae964bc960089c909da73d0645.flac",
+      "title": "179823293e348df08c203d6bf84c6a024d0f9fae964bc960089c909da73d0645",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 105033,
+      "url": "artifacts/regional-caller-2026-11-01/clips/179823293e348df08c203d6bf84c6a024d0f9fae964bc960089c909da73d0645.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/16f88a47dd37c663fdc77734576577f5d6298d4638aee5790280d5abdecd337b.flac",
+      "title": "16f88a47dd37c663fdc77734576577f5d6298d4638aee5790280d5abdecd337b",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 92310,
+      "url": "artifacts/regional-caller-2026-11-01/clips/16f88a47dd37c663fdc77734576577f5d6298d4638aee5790280d5abdecd337b.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/1579c3f34b3653a67aaf8abc2e56559ad44592b13ee93165084993282633f80d.flac",
+      "title": "1579c3f34b3653a67aaf8abc2e56559ad44592b13ee93165084993282633f80d",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 33379,
+      "url": "artifacts/regional-caller-2026-11-01/clips/1579c3f34b3653a67aaf8abc2e56559ad44592b13ee93165084993282633f80d.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/146839dd606100ca17b31e318765ea311a978bc9778db7c16125bacb248e22e8.flac",
+      "title": "146839dd606100ca17b31e318765ea311a978bc9778db7c16125bacb248e22e8",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 140099,
+      "url": "artifacts/regional-caller-2026-11-01/clips/146839dd606100ca17b31e318765ea311a978bc9778db7c16125bacb248e22e8.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/141fd6dab6e55a09824b3bc544c37b1a50e7b6cea2d083e59ab0b7ec19808b49.flac",
+      "title": "141fd6dab6e55a09824b3bc544c37b1a50e7b6cea2d083e59ab0b7ec19808b49",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 137378,
+      "url": "artifacts/regional-caller-2026-11-01/clips/141fd6dab6e55a09824b3bc544c37b1a50e7b6cea2d083e59ab0b7ec19808b49.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/13953b51ca6c3f29b4ba7d656f03cad35dcbdf563cbb94e82d2683fef60be7aa.flac",
+      "title": "13953b51ca6c3f29b4ba7d656f03cad35dcbdf563cbb94e82d2683fef60be7aa",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 157501,
+      "url": "artifacts/regional-caller-2026-11-01/clips/13953b51ca6c3f29b4ba7d656f03cad35dcbdf563cbb94e82d2683fef60be7aa.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/1333ec48291afe98563f82c7230bec2617f3019f78b9a827f7347e455f3f527e.flac",
+      "title": "1333ec48291afe98563f82c7230bec2617f3019f78b9a827f7347e455f3f527e",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 141078,
+      "url": "artifacts/regional-caller-2026-11-01/clips/1333ec48291afe98563f82c7230bec2617f3019f78b9a827f7347e455f3f527e.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/11f5fb25c507b8e4c1fbc46f1fdc363b9e54c2e88c402a563808d0c1fb3f5a7a.flac",
+      "title": "11f5fb25c507b8e4c1fbc46f1fdc363b9e54c2e88c402a563808d0c1fb3f5a7a",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 164246,
+      "url": "artifacts/regional-caller-2026-11-01/clips/11f5fb25c507b8e4c1fbc46f1fdc363b9e54c2e88c402a563808d0c1fb3f5a7a.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/11340471dd3f6526577f234bc875b88d0c4940408e14df00ee799a8882849488.flac",
+      "title": "11340471dd3f6526577f234bc875b88d0c4940408e14df00ee799a8882849488",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 86841,
+      "url": "artifacts/regional-caller-2026-11-01/clips/11340471dd3f6526577f234bc875b88d0c4940408e14df00ee799a8882849488.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/112407008e0f495fa71a6b36aef89f57dcf544fb321207c7e36e8e64c518ea9b.flac",
+      "title": "112407008e0f495fa71a6b36aef89f57dcf544fb321207c7e36e8e64c518ea9b",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 48001,
+      "url": "artifacts/regional-caller-2026-11-01/clips/112407008e0f495fa71a6b36aef89f57dcf544fb321207c7e36e8e64c518ea9b.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/10aeec8d024de3d7f1d8ddf1f37c5236023a297ac20edb977bb7874ad2bf8cf8.flac",
+      "title": "10aeec8d024de3d7f1d8ddf1f37c5236023a297ac20edb977bb7874ad2bf8cf8",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 104656,
+      "url": "artifacts/regional-caller-2026-11-01/clips/10aeec8d024de3d7f1d8ddf1f37c5236023a297ac20edb977bb7874ad2bf8cf8.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/1028d1a4f964fb80f3cbcff7697acf1fdb405efa93bcfce7e08fc2c18818bf77.flac",
+      "title": "1028d1a4f964fb80f3cbcff7697acf1fdb405efa93bcfce7e08fc2c18818bf77",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 140566,
+      "url": "artifacts/regional-caller-2026-11-01/clips/1028d1a4f964fb80f3cbcff7697acf1fdb405efa93bcfce7e08fc2c18818bf77.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/0f10fed15e4ea66eec479e78249b0db7c1047478221f57c10b1f6ec72fab37a4.flac",
+      "title": "0f10fed15e4ea66eec479e78249b0db7c1047478221f57c10b1f6ec72fab37a4",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 216544,
+      "url": "artifacts/regional-caller-2026-11-01/clips/0f10fed15e4ea66eec479e78249b0db7c1047478221f57c10b1f6ec72fab37a4.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/0eae72be23697d791053b2f925f6f3859b066f69b4e03f26a5867e5d711ca6b4.flac",
+      "title": "0eae72be23697d791053b2f925f6f3859b066f69b4e03f26a5867e5d711ca6b4",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 215835,
+      "url": "artifacts/regional-caller-2026-11-01/clips/0eae72be23697d791053b2f925f6f3859b066f69b4e03f26a5867e5d711ca6b4.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/0b718f11dfa6f01dfa445ab0da4719da19d45cd24fb78aa1d271d67afb7efab5.flac",
+      "title": "0b718f11dfa6f01dfa445ab0da4719da19d45cd24fb78aa1d271d67afb7efab5",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 125318,
+      "url": "artifacts/regional-caller-2026-11-01/clips/0b718f11dfa6f01dfa445ab0da4719da19d45cd24fb78aa1d271d67afb7efab5.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/08c33e3712d286a0f3ce4223ffe1c6d22817a7ecccca2c2a9f2796fe8ba860fe.flac",
+      "title": "08c33e3712d286a0f3ce4223ffe1c6d22817a7ecccca2c2a9f2796fe8ba860fe",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 211074,
+      "url": "artifacts/regional-caller-2026-11-01/clips/08c33e3712d286a0f3ce4223ffe1c6d22817a7ecccca2c2a9f2796fe8ba860fe.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/0889ff0a5c0ee4079fd9945d83bb974778e22fb6af8d967cdd836e2900e04faa.flac",
+      "title": "0889ff0a5c0ee4079fd9945d83bb974778e22fb6af8d967cdd836e2900e04faa",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 103709,
+      "url": "artifacts/regional-caller-2026-11-01/clips/0889ff0a5c0ee4079fd9945d83bb974778e22fb6af8d967cdd836e2900e04faa.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/0884c2f690e930c2095d5dc3ddfcd3ad8c13151ad36b7ccf53dd6add511835d9.flac",
+      "title": "0884c2f690e930c2095d5dc3ddfcd3ad8c13151ad36b7ccf53dd6add511835d9",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 107201,
+      "url": "artifacts/regional-caller-2026-11-01/clips/0884c2f690e930c2095d5dc3ddfcd3ad8c13151ad36b7ccf53dd6add511835d9.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/0843beb8be1fa1d2d4b3cdfdb5810d2c591f9fc147b085f611b792e645c37802.flac",
+      "title": "0843beb8be1fa1d2d4b3cdfdb5810d2c591f9fc147b085f611b792e645c37802",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 143009,
+      "url": "artifacts/regional-caller-2026-11-01/clips/0843beb8be1fa1d2d4b3cdfdb5810d2c591f9fc147b085f611b792e645c37802.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/07bcc34254fc5ae5a7af7bf32fb3cce94b639a18aa49e66062e079c90fc07513.flac",
+      "title": "07bcc34254fc5ae5a7af7bf32fb3cce94b639a18aa49e66062e079c90fc07513",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 198246,
+      "url": "artifacts/regional-caller-2026-11-01/clips/07bcc34254fc5ae5a7af7bf32fb3cce94b639a18aa49e66062e079c90fc07513.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/05fe7c143c1f07778ea765e287f4fddd54db9b69f95fe8b0bca263bb1b4e2f11.flac",
+      "title": "05fe7c143c1f07778ea765e287f4fddd54db9b69f95fe8b0bca263bb1b4e2f11",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 211140,
+      "url": "artifacts/regional-caller-2026-11-01/clips/05fe7c143c1f07778ea765e287f4fddd54db9b69f95fe8b0bca263bb1b4e2f11.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/05be0f8703254717dd0f4d5c424d99f0138b2331a11b386cbbbec9e3e98472aa.flac",
+      "title": "05be0f8703254717dd0f4d5c424d99f0138b2331a11b386cbbbec9e3e98472aa",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 74621,
+      "url": "artifacts/regional-caller-2026-11-01/clips/05be0f8703254717dd0f4d5c424d99f0138b2331a11b386cbbbec9e3e98472aa.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/0589a51eebc2b6b24741c57359da754efbc977859a55aeec0db3ee581c38a35b.flac",
+      "title": "0589a51eebc2b6b24741c57359da754efbc977859a55aeec0db3ee581c38a35b",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 188418,
+      "url": "artifacts/regional-caller-2026-11-01/clips/0589a51eebc2b6b24741c57359da754efbc977859a55aeec0db3ee581c38a35b.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/052010ab5e906f4f48c21aed29963c17bd7a370afebfb38c9836568290d3c9eb.flac",
+      "title": "052010ab5e906f4f48c21aed29963c17bd7a370afebfb38c9836568290d3c9eb",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 185554,
+      "url": "artifacts/regional-caller-2026-11-01/clips/052010ab5e906f4f48c21aed29963c17bd7a370afebfb38c9836568290d3c9eb.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/0491fbedbfe75f55694e490fff559264b19b190e79fa96bdde90080f5f420ae5.flac",
+      "title": "0491fbedbfe75f55694e490fff559264b19b190e79fa96bdde90080f5f420ae5",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 205096,
+      "url": "artifacts/regional-caller-2026-11-01/clips/0491fbedbfe75f55694e490fff559264b19b190e79fa96bdde90080f5f420ae5.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/043197d1e45550630769d74977c03a5e1419ecc3d784cbea5082da397bbbd35c.flac",
+      "title": "043197d1e45550630769d74977c03a5e1419ecc3d784cbea5082da397bbbd35c",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 206409,
+      "url": "artifacts/regional-caller-2026-11-01/clips/043197d1e45550630769d74977c03a5e1419ecc3d784cbea5082da397bbbd35c.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/03f2301edfbd61cd672a75f1152fdc29fd16402d573d5627513fe801602bd1c3.flac",
+      "title": "03f2301edfbd61cd672a75f1152fdc29fd16402d573d5627513fe801602bd1c3",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 222156,
+      "url": "artifacts/regional-caller-2026-11-01/clips/03f2301edfbd61cd672a75f1152fdc29fd16402d573d5627513fe801602bd1c3.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/02f3c97b15315858638a18357ffb31d986aea1bff8d32145b4acc0e843b550d3.flac",
+      "title": "02f3c97b15315858638a18357ffb31d986aea1bff8d32145b4acc0e843b550d3",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 277329,
+      "url": "artifacts/regional-caller-2026-11-01/clips/02f3c97b15315858638a18357ffb31d986aea1bff8d32145b4acc0e843b550d3.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/022f96c56a0fa9c2baff77412c3d428e6c7f0da1b3ac1a98af2c3dd34dc53fef.flac",
+      "title": "022f96c56a0fa9c2baff77412c3d428e6c7f0da1b3ac1a98af2c3dd34dc53fef",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 152334,
+      "url": "artifacts/regional-caller-2026-11-01/clips/022f96c56a0fa9c2baff77412c3d428e6c7f0da1b3ac1a98af2c3dd34dc53fef.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/clips/01e4039febf770e4d0579e9a88a1f157f23046e4d5e687c70e375ee6ef479d24.flac",
+      "title": "01e4039febf770e4d0579e9a88a1f157f23046e4d5e687c70e375ee6ef479d24",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 93537,
+      "url": "artifacts/regional-caller-2026-11-01/clips/01e4039febf770e4d0579e9a88a1f157f23046e4d5e687c70e375ee6ef479d24.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/caller/reconstruction.json",
+      "title": "reconstruction",
+      "date": "2026-11-01",
+      "kind": "Data",
+      "size": 91431,
+      "url": "artifacts/regional-caller-2026-11-01/caller/reconstruction.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/caller/f3d49ed02ac15014afb3bb7c54635851d4f495ddca804bf839e3cd621d1044a5.flac",
+      "title": "f3d49ed02ac15014afb3bb7c54635851d4f495ddca804bf839e3cd621d1044a5",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 81097,
+      "url": "artifacts/regional-caller-2026-11-01/caller/f3d49ed02ac15014afb3bb7c54635851d4f495ddca804bf839e3cd621d1044a5.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/caller/f1dc9cf4d430ed93a4bd854b018d3b2fc5ddbf5b59622eaf86d0a26a50f5ffad.flac",
+      "title": "f1dc9cf4d430ed93a4bd854b018d3b2fc5ddbf5b59622eaf86d0a26a50f5ffad",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 86655,
+      "url": "artifacts/regional-caller-2026-11-01/caller/f1dc9cf4d430ed93a4bd854b018d3b2fc5ddbf5b59622eaf86d0a26a50f5ffad.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/caller/ec2dd4b32b807c9470642e71620bf9ec0baa40b936d55b1c9cad4caca326aae9.flac",
+      "title": "ec2dd4b32b807c9470642e71620bf9ec0baa40b936d55b1c9cad4caca326aae9",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 86560,
+      "url": "artifacts/regional-caller-2026-11-01/caller/ec2dd4b32b807c9470642e71620bf9ec0baa40b936d55b1c9cad4caca326aae9.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/caller/e70911b265e9e3772bdc1a205cc0cb08c1ee94dc7c3a9fca81839e2d6bb8c4be.flac",
+      "title": "e70911b265e9e3772bdc1a205cc0cb08c1ee94dc7c3a9fca81839e2d6bb8c4be",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 135917,
+      "url": "artifacts/regional-caller-2026-11-01/caller/e70911b265e9e3772bdc1a205cc0cb08c1ee94dc7c3a9fca81839e2d6bb8c4be.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/caller/e6408415d84073a002095034ba75222b2731ed6df06e30548f702ef439b539a8.flac",
+      "title": "e6408415d84073a002095034ba75222b2731ed6df06e30548f702ef439b539a8",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 88907,
+      "url": "artifacts/regional-caller-2026-11-01/caller/e6408415d84073a002095034ba75222b2731ed6df06e30548f702ef439b539a8.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/caller/e31db42aef619b83c76bd96b4d022624af83ee99dd055544fac1d0306bae2285.flac",
+      "title": "e31db42aef619b83c76bd96b4d022624af83ee99dd055544fac1d0306bae2285",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 137990,
+      "url": "artifacts/regional-caller-2026-11-01/caller/e31db42aef619b83c76bd96b4d022624af83ee99dd055544fac1d0306bae2285.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/caller/c4aff79fcbc3059ef5748a2d1d7dd571424811cb5375fb249f9f485dfabe4472.flac",
+      "title": "c4aff79fcbc3059ef5748a2d1d7dd571424811cb5375fb249f9f485dfabe4472",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 73936,
+      "url": "artifacts/regional-caller-2026-11-01/caller/c4aff79fcbc3059ef5748a2d1d7dd571424811cb5375fb249f9f485dfabe4472.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/caller/c435e6f592e126756025ce439fb1ff6ed6745b8538b9796146326eff7ae3b821.flac",
+      "title": "c435e6f592e126756025ce439fb1ff6ed6745b8538b9796146326eff7ae3b821",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 136146,
+      "url": "artifacts/regional-caller-2026-11-01/caller/c435e6f592e126756025ce439fb1ff6ed6745b8538b9796146326eff7ae3b821.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/caller/c0464978db253e8773818771eb14e56d5ce27b0368a6407d4b3e13251f262283.flac",
+      "title": "c0464978db253e8773818771eb14e56d5ce27b0368a6407d4b3e13251f262283",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 142682,
+      "url": "artifacts/regional-caller-2026-11-01/caller/c0464978db253e8773818771eb14e56d5ce27b0368a6407d4b3e13251f262283.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/caller/bc826eeb79388c67c7066d2b9540415229959937b2a0c67ccf9cb97b5c626c68.flac",
+      "title": "bc826eeb79388c67c7066d2b9540415229959937b2a0c67ccf9cb97b5c626c68",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 122414,
+      "url": "artifacts/regional-caller-2026-11-01/caller/bc826eeb79388c67c7066d2b9540415229959937b2a0c67ccf9cb97b5c626c68.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/caller/b97d7cce613ce13419537a16ce7a057fa116ddf3958c1ec46d08eb96f17b6861.flac",
+      "title": "b97d7cce613ce13419537a16ce7a057fa116ddf3958c1ec46d08eb96f17b6861",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 67638,
+      "url": "artifacts/regional-caller-2026-11-01/caller/b97d7cce613ce13419537a16ce7a057fa116ddf3958c1ec46d08eb96f17b6861.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/caller/b25b62d97628656ff3f6f5a52628fee94ae25effbc5cdae3d2653000c305721f.flac",
+      "title": "b25b62d97628656ff3f6f5a52628fee94ae25effbc5cdae3d2653000c305721f",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 74017,
+      "url": "artifacts/regional-caller-2026-11-01/caller/b25b62d97628656ff3f6f5a52628fee94ae25effbc5cdae3d2653000c305721f.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/caller/a5cbd4fc6de6083f8648623269453229070d8581c73a6f9f6435f183e95328c1.flac",
+      "title": "a5cbd4fc6de6083f8648623269453229070d8581c73a6f9f6435f183e95328c1",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 71852,
+      "url": "artifacts/regional-caller-2026-11-01/caller/a5cbd4fc6de6083f8648623269453229070d8581c73a6f9f6435f183e95328c1.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/caller/87873701e6ac1e9ecc4e027814af12680f244472d1f561b67ef9ddd1ea574d4f.flac",
+      "title": "87873701e6ac1e9ecc4e027814af12680f244472d1f561b67ef9ddd1ea574d4f",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 117142,
+      "url": "artifacts/regional-caller-2026-11-01/caller/87873701e6ac1e9ecc4e027814af12680f244472d1f561b67ef9ddd1ea574d4f.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/caller/74109327ed539b67fc36ba351de5894e0bc516d9f5f0b0d1dc01843a38dd58df.flac",
+      "title": "74109327ed539b67fc36ba351de5894e0bc516d9f5f0b0d1dc01843a38dd58df",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 80441,
+      "url": "artifacts/regional-caller-2026-11-01/caller/74109327ed539b67fc36ba351de5894e0bc516d9f5f0b0d1dc01843a38dd58df.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/caller/6dc2f00e7761fe6a167c6cdebb65e077bca70e70c3c0278e9253bb0635c2d8d8.flac",
+      "title": "6dc2f00e7761fe6a167c6cdebb65e077bca70e70c3c0278e9253bb0635c2d8d8",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 125973,
+      "url": "artifacts/regional-caller-2026-11-01/caller/6dc2f00e7761fe6a167c6cdebb65e077bca70e70c3c0278e9253bb0635c2d8d8.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/caller/6a9abd975db84297002d88fb8ff76ffe3f8a6134201e4d1b7db97255e38fbba9.flac",
+      "title": "6a9abd975db84297002d88fb8ff76ffe3f8a6134201e4d1b7db97255e38fbba9",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 79540,
+      "url": "artifacts/regional-caller-2026-11-01/caller/6a9abd975db84297002d88fb8ff76ffe3f8a6134201e4d1b7db97255e38fbba9.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/caller/55d1ea36d06681d51672ebd0403a7ed1198ad0a8b494154ba1c2ac4cdee87818.flac",
+      "title": "55d1ea36d06681d51672ebd0403a7ed1198ad0a8b494154ba1c2ac4cdee87818",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 72993,
+      "url": "artifacts/regional-caller-2026-11-01/caller/55d1ea36d06681d51672ebd0403a7ed1198ad0a8b494154ba1c2ac4cdee87818.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/caller/435b9791f11f28b076847ce6ac0494309a0c0372893d24733617810acb5e42e8.flac",
+      "title": "435b9791f11f28b076847ce6ac0494309a0c0372893d24733617810acb5e42e8",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 105604,
+      "url": "artifacts/regional-caller-2026-11-01/caller/435b9791f11f28b076847ce6ac0494309a0c0372893d24733617810acb5e42e8.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/caller/428dd7d0d27a1dac183a7a6d606218fbd01b67b89d47b54cb113f91f641d626f.flac",
+      "title": "428dd7d0d27a1dac183a7a6d606218fbd01b67b89d47b54cb113f91f641d626f",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 69995,
+      "url": "artifacts/regional-caller-2026-11-01/caller/428dd7d0d27a1dac183a7a6d606218fbd01b67b89d47b54cb113f91f641d626f.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/caller/2af236c9bb2bb9359f2d93a2235026ba712879b0f15302f3947bcfd1de9da9f0.flac",
+      "title": "2af236c9bb2bb9359f2d93a2235026ba712879b0f15302f3947bcfd1de9da9f0",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 96244,
+      "url": "artifacts/regional-caller-2026-11-01/caller/2af236c9bb2bb9359f2d93a2235026ba712879b0f15302f3947bcfd1de9da9f0.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/caller/2a2eace0412332546f7352cfd882f988d7ee6388a6cfda24483447e1de114509.flac",
+      "title": "2a2eace0412332546f7352cfd882f988d7ee6388a6cfda24483447e1de114509",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 78948,
+      "url": "artifacts/regional-caller-2026-11-01/caller/2a2eace0412332546f7352cfd882f988d7ee6388a6cfda24483447e1de114509.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/caller/111f74517bd10f09bd3104129ab718dedb7cf6135a26f487f8d1d7974c5d26ab.flac",
+      "title": "111f74517bd10f09bd3104129ab718dedb7cf6135a26f487f8d1d7974c5d26ab",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 71543,
+      "url": "artifacts/regional-caller-2026-11-01/caller/111f74517bd10f09bd3104129ab718dedb7cf6135a26f487f8d1d7974c5d26ab.flac",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/caller/049819f86cdcec406de2be1636902c43292294b93b928c3ea75b82cd0efa0f83.flac",
+      "title": "049819f86cdcec406de2be1636902c43292294b93b928c3ea75b82cd0efa0f83",
+      "date": "2026-11-01",
+      "kind": "Audio",
+      "size": 117863,
+      "url": "artifacts/regional-caller-2026-11-01/caller/049819f86cdcec406de2be1636902c43292294b93b928c3ea75b82cd0efa0f83.flac",
+      "group": "//Users"
+    },
     {
       "path": "reports/latency-benchmark-2026-10-31.html",
       "title": "latency benchmark 2026 10 31",
       "date": "2026-10-31",
       "kind": "Web report",
-      "size": 7638,
+      "size": 7991,
       "url": "reports/latency-benchmark-2026-10-31.html",
       "group": "//Users"
     },
@@ -15,7 +3390,7 @@
       "title": "results",
       "date": "2026-10-31",
       "kind": "Data",
-      "size": 121970,
+      "size": 122257,
       "url": "artifacts/latency-benchmark-2026-10-31/results.json",
       "group": "//Users"
     },
@@ -699,7 +4074,7 @@
       "title": "SCENARIO VALIDITY AUDIT 2026 10 27",
       "date": "2026-10-27",
       "kind": "Notes",
-      "size": 10395,
+      "size": 10804,
       "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/SCENARIO_VALIDITY_AUDIT_2026-10-27.md",
       "group": "//Users"
     },
@@ -3300,7 +6675,7 @@
       "title": "VOICE CONVERSATION COMPARISON",
       "date": "",
       "kind": "Notes",
-      "size": 10813,
+      "size": 14383,
       "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/VOICE_CONVERSATION_COMPARISON.md",
       "group": "//Users"
     },
@@ -3329,6 +6704,15 @@
       "kind": "Notes",
       "size": 3793,
       "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/TARGET_PROMPTS.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/REALISM_SCENARIOS.md",
+      "title": "REALISM SCENARIOS",
+      "date": "",
+      "kind": "Notes",
+      "size": 14022,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/REALISM_SCENARIOS.md",
       "group": "//Users"
     },
     {
@@ -3525,7 +6909,7 @@
       "title": "LATENCY BENCHMARK SPEC",
       "date": "",
       "kind": "Notes",
-      "size": 5419,
+      "size": 7101,
       "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/LATENCY_BENCHMARK_SPEC.md",
       "group": "//Users"
     },
@@ -3536,6 +6920,15 @@
       "kind": "Notes",
       "size": 15915,
       "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/INTERACTIVE_CALLER_SCOPE.md",
+      "group": "//Users"
+    },
+    {
+      "path": "docs/HUMAN_VALIDATION.md",
+      "title": "HUMAN VALIDATION",
+      "date": "",
+      "kind": "Notes",
+      "size": 3904,
+      "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/HUMAN_VALIDATION.md",
       "group": "//Users"
     },
     {
@@ -3552,7 +6945,7 @@
       "title": "ENGINEERING",
       "date": "",
       "kind": "Notes",
-      "size": 16867,
+      "size": 20455,
       "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/ENGINEERING.md",
       "group": "//Users"
     },
@@ -3633,7 +7026,7 @@
       "title": "BAKEOFF SAFEGUARDS",
       "date": "",
       "kind": "Notes",
-      "size": 37022,
+      "size": 37908,
       "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/BAKEOFF_SAFEGUARDS.md",
       "group": "//Users"
     },
@@ -3642,7 +7035,7 @@
       "title": "BAKEOFF ASSESSORS",
       "date": "",
       "kind": "Notes",
-      "size": 9170,
+      "size": 11142,
       "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/BAKEOFF_ASSESSORS.md",
       "group": "//Users"
     },
@@ -3651,7 +7044,7 @@
       "title": "ARCHITECTURE",
       "date": "",
       "kind": "Notes",
-      "size": 15006,
+      "size": 15055,
       "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/ARCHITECTURE.md",
       "group": "//Users"
     },
@@ -3662,6 +7055,15 @@
       "kind": "Notes",
       "size": 5440,
       "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/ADVANCED_FULL_BAKEOFF.md",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/review.html",
+      "title": "review",
+      "date": "",
+      "kind": "Web report",
+      "size": 313274,
+      "url": "artifacts/voice-conversation-v2/review.html",
       "group": "//Users"
     },
     {
@@ -5174,6 +8576,42 @@
       "kind": "Audio",
       "size": 102652,
       "url": "artifacts/voice-conversation-v2/caller/balance-0.wav",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/assessment/scores.json",
+      "title": "scores",
+      "date": "",
+      "kind": "Data",
+      "size": 193756,
+      "url": "artifacts/voice-conversation-v2/assessment/scores.json",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/assessment/scores.csv",
+      "title": "scores",
+      "date": "",
+      "kind": "Other",
+      "size": 45285,
+      "url": "artifacts/voice-conversation-v2/assessment/scores.csv",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/assessment/index.html",
+      "title": "index",
+      "date": "",
+      "kind": "Web report",
+      "size": 321743,
+      "url": "artifacts/voice-conversation-v2/assessment/index.html",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/assessment/assessments.psv",
+      "title": "assessments",
+      "date": "",
+      "kind": "Other",
+      "size": 32327,
+      "url": "artifacts/voice-conversation-v2/assessment/assessments.psv",
       "group": "//Users"
     },
     {
@@ -7006,10 +10444,31 @@
   ],
   "features": [
     {
-      "path": "artifacts/bakeoff-2026-10-29-standard-5/report.html",
-      "title": "Standard-prompt bake-off \u00b7 six providers",
-      "description": "Completed assessment of 720 runs: five providers on standardised prompts plus GPT-Live carried over from 28 October (advanced prompts, not like for like), 40 scenarios, three repetitions. No clear quality winner.",
+      "path": "artifacts/regional-caller-2026-11-01/index.html",
+      "title": "Caller voice settings \u00b7 exploratory task outcomes",
+      "description": "Four prompted TTS voice settings, six providers and default-voice baselines. Original accents unverified. Task results with recovered assistant excerpts; original caller audio unavailable.",
+      "status": "Caller context",
+      "date": "2026-11-01"
+    },
+    {
+      "path": "artifacts/bakeoff-2026-11-03-v3-six/report.html",
+      "title": "Standardised-v3 bake-off \u00b7 six providers",
+      "description": "Completed assessment of 720 runs: six providers on the same standardised-v3 prompt, 40 scenarios, three repetitions, judges off. No clear quality winner; GPT-Realtime has one failed run so its overall score is not computed.",
       "status": "Current",
+      "date": "2026-11-03"
+    },
+    {
+      "path": "artifacts/accent-elevenlabs-2026-11-03/index.html",
+      "title": "Accent panel \u00b7 ElevenLabs caller voices",
+      "description": "Six tasks, six providers, three repeats in a default voice and four ElevenLabs library voices (540 conversations). Exploratory; library accent tags are unverified and the default voice uses a different speech engine.",
+      "status": "Exploratory",
+      "date": "2026-11-03"
+    },
+    {
+      "path": "artifacts/bakeoff-2026-10-29-standard-5/report.html",
+      "title": "Standard-prompt bake-off \u00b7 five providers plus carry-over",
+      "description": "Completed assessment of 720 runs: five providers on standardised prompts plus GPT-Live carried over from 28 October (advanced prompts, not like for like), 40 scenarios, three repetitions. No clear quality winner.",
+      "status": "Previous",
       "date": "2026-10-29"
     },
     {
@@ -7024,6 +10483,20 @@
       "title": "Explore the executive briefing",
       "description": "How we engineered the voice harness, how the tests work, and the evidence behind the business decision.",
       "status": "Executive briefing",
+      "date": "2026-10-29"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/assessment/index.html",
+      "title": "Voice conversation \u00b7 AI transcript assessment",
+      "description": "All 144 conversations scored for wording and behaviour, with scenario shortlists, source quotes and risk flags. Audio delivery unscored.",
+      "status": "AI review",
+      "date": "2026-11-01"
+    },
+    {
+      "path": "artifacts/voice-conversation-v2/review.html",
+      "title": "Voice conversation \u00b7 quick business review",
+      "description": "Provider and model identities visible, with six scenarios, all 144 recordings, transcripts and downloadable ratings.",
+      "status": "Listening",
       "date": "2026-10-29"
     },
     {
