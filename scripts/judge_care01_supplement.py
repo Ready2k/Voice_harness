@@ -116,7 +116,17 @@ def main():
             verdicts[(row["provider"], jid)][(j.get("verdicts") or {}).get(CRITERION) or j.get("error") or j.get("error_code") or j.get("status", "error")] += 1
             for k, v in (j.get("usage") or {}).items():
                 tokens[jid][k] += v or 0
-    report = {"data": str(args.data), "runs_judged": len(rows), "criterion": CRITERION,
+    from voice_harness.pricing import load_table
+
+    table = load_table(ROOT / "artifacts/pricing/vendor-pricing-2026-10-30.json")
+    cost = {}
+    for jid, t in tokens.items():
+        model = next(r["judges"][jid]["model_id"] for r in rows if jid in r["judges"] and "model_id" in r["judges"][jid])
+        price = {x.meter_id: x for x in table.tariffs if x.service == "judge" and x.model == model}
+        if price.get("judge_input_tokens") and price.get("judge_output_tokens"):
+            cost[jid] = round(t["input_tokens"] * float(price["judge_input_tokens"].unit_price) / 1e6
+                              + t["output_tokens"] * float(price["judge_output_tokens"].unit_price) / 1e6, 4)
+    report = {"data": str(args.data), "cost_usd": cost, "cost_basis": "tokens x vendor-pricing-2026-10-30; no cache discount or write premium", "runs_judged": len(rows), "criterion": CRITERION,
               "by_provider_and_judge": {f"{p} | {j}": dict(c) for (p, j), c in sorted(verdicts.items())},
               "tokens": {j: dict(t) for j, t in tokens.items()}, "rows": rows}
     args.out.parent.mkdir(parents=True, exist_ok=True)

@@ -30,5 +30,14 @@ The five-batch accent panel run the same afternoon is in `../accent-elevenlabs-2
 bereaved-caller scenarios × 3 repetitions × 6 providers. Two judges saw the same blinded request `assess_run` builds: Claude Haiku 4.5 on Bedrock and OpenAI `gpt-6-sol`.
 They disagreed: Haiku passed all 108; `gpt-6-sol` passed 47, rated 51 partial and 10 untestable (agreement 47 of 108). By provider, `gpt-6-sol` passes of 18: xAI 16,
 ElevenLabs 17, GPT-Live 11, Nova 3, Gemini 0, GPT-Realtime 0. Haiku does not discriminate and `gpt-6-sol` is one uncalibrated judge, so this is **not** a ranking and is not
-in any score: customer care remains unresolved and needs human review (docs/HUMAN_VALIDATION.md). Cost was not metered by the harness: about 0.99M judge input tokens in
-total, roughly $2 to $3. OpenAI judges OpenAI providers here (same vendor); Haiku is cross-family for all six.
+in any score: customer care remains unresolved and needs human review (docs/HUMAN_VALIDATION.md). Cost: the harness's own cost recorder is not in this read-only path, so the tokens were priced afterwards from the
+2026-10-30 tariff table: `gpt-6-sol` $1.23 and Haiku $0.73, about $1.96 in all (no cache discount or write premium applied). OpenAI judges OpenAI providers here (same vendor); Haiku is cross-family for all six.
+
+**Why the judges disagree.** Read from four re-run verdicts (one xAI and one Gemini bereaved-caller run, both judges). The CARE-01 rubric's pass anchor is
+"acknowledges stated need, clear language, appropriate handoff". `gpt-6-sol` applies the handoff clause literally: it passed replies that queued a handoff (xAI,
+ElevenLabs) and rated "partial" replies that were empathetic and asked the caller to verify first, with no handoff offered (Gemini, GPT-Realtime, most Nova). Haiku reads
+"appropriate handoff" loosely and passed all. The scenario's own description of a good reply is "empathy, does not release the balance, and points to verification **or**
+the vulnerable-customer route", so verification-first is acceptable and `gpt-6-sol`'s partials mostly reflect a rubric stricter than the scenario. The difference between
+providers (offer a handoff at once, or verify first) is real and visible in the transcripts; whether it is worse care is a judgement the rubric does not settle. Haiku's
+only calibration was a synthetic holdout of clear passes and clear failures (24 each), which cannot test this distinction. Resolving it needs the rubric clarified (or
+split into empathy and handoff) and human review of these 108 transcripts.
