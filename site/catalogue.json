@@ -24,7 +24,7 @@
       "title": "run notes",
       "date": "2026-11-03",
       "kind": "Notes",
-      "size": 2324,
+      "size": 3425,
       "url": "https://github.com/Ready2k/Voice_harness/blob/main/artifacts/bakeoff-2026-11-03-v3-six/run-notes.md",
       "group": "//Users"
     },
@@ -80,6 +80,15 @@
       "kind": "Web report",
       "size": 699,
       "url": "artifacts/bakeoff-2026-11-03-v3-six/index.html",
+      "group": "//Users"
+    },
+    {
+      "path": "artifacts/bakeoff-2026-11-03-v3-six/care01-supplement.json",
+      "title": "care01 supplement",
+      "date": "2026-11-03",
+      "kind": "Data",
+      "size": 113972,
+      "url": "artifacts/bakeoff-2026-11-03-v3-six/care01-supplement.json",
       "group": "//Users"
     },
     {
@@ -6711,7 +6720,7 @@
       "title": "REALISM SCENARIOS",
       "date": "",
       "kind": "Notes",
-      "size": 14022,
+      "size": 16713,
       "url": "https://github.com/Ready2k/Voice_harness/blob/main/docs/REALISM_SCENARIOS.md",
       "group": "//Users"
     },

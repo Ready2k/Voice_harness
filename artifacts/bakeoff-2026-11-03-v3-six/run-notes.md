@@ -24,3 +24,11 @@ latency benchmark (31 October) for speed claims.
 The five-batch accent panel run the same afternoon is in `../accent-elevenlabs-2026-11-03/`.
 
 **Title.** The bake-off was launched under the run label `combined-baseline-default`; the title shown in `report.json` and `report.html` was changed to the descriptive one. `payload.json` and `launch.json` keep the original label; no data changed.
+
+**CARE-01 supplement (added after the run; `care01-supplement.json`, `scripts/judge_care01_supplement.py`).** The run itself had no judges. Afterwards CARE-01
+(customer care and handoff) was judged read-only from the retained ledgers, without writing to the evidence database or the report. It applies to 108 runs: the six
+bereaved-caller scenarios × 3 repetitions × 6 providers. Two judges saw the same blinded request `assess_run` builds: Claude Haiku 4.5 on Bedrock and OpenAI `gpt-6-sol`.
+They disagreed: Haiku passed all 108; `gpt-6-sol` passed 47, rated 51 partial and 10 untestable (agreement 47 of 108). By provider, `gpt-6-sol` passes of 18: xAI 16,
+ElevenLabs 17, GPT-Live 11, Nova 3, Gemini 0, GPT-Realtime 0. Haiku does not discriminate and `gpt-6-sol` is one uncalibrated judge, so this is **not** a ranking and is not
+in any score: customer care remains unresolved and needs human review (docs/HUMAN_VALIDATION.md). Cost was not metered by the harness: about 0.99M judge input tokens in
+total, roughly $2 to $3. OpenAI judges OpenAI providers here (same vendor); Haiku is cross-family for all six.

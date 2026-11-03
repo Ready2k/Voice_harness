@@ -1,0 +1,4061 @@
+{
+  "by_provider_and_judge": {
+    "elevenlabs-live | bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+      "pass": 18
+    },
+    "elevenlabs-live | openai-gpt-6-sol": {
+      "partial": 1,
+      "pass": 17
+    },
+    "gemini-live | bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+      "pass": 18
+    },
+    "gemini-live | openai-gpt-6-sol": {
+      "partial": 17,
+      "untestable": 1
+    },
+    "nova-sonic-live | bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+      "pass": 18
+    },
+    "nova-sonic-live | openai-gpt-6-sol": {
+      "partial": 10,
+      "pass": 3,
+      "untestable": 5
+    },
+    "openai-live | bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+      "pass": 18
+    },
+    "openai-live | openai-gpt-6-sol": {
+      "partial": 7,
+      "pass": 11
+    },
+    "openai-realtime-live | bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+      "pass": 18
+    },
+    "openai-realtime-live | openai-gpt-6-sol": {
+      "partial": 14,
+      "untestable": 4
+    },
+    "xai-voice-live | bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+      "pass": 18
+    },
+    "xai-voice-live | openai-gpt-6-sol": {
+      "partial": 2,
+      "pass": 16
+    }
+  },
+  "criterion": "CARE-01",
+  "data": ".local/combined-2026-11-03/baseline-default/data",
+  "rows": [
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4079,
+            "output_tokens": 350
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3711,
+            "output_tokens": 284
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "openai-live",
+      "repetition": 0,
+      "run_id": "run_9bba9be34bca4c98973ef722d180632f",
+      "scenario": "identity-bereaved-en-gb-clean-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4049,
+            "output_tokens": 302
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3676,
+            "output_tokens": 301
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_8f3238d74c3e4974aa244f1386580551",
+      "scenario": "identity-bereaved-en-gb-clean-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 6646,
+            "output_tokens": 266
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 6009,
+            "output_tokens": 194
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_cbe217546a76405aa13c4381bef402fd",
+      "scenario": "identity-bereaved-en-gb-clean-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4417,
+            "output_tokens": 296
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 4026,
+            "output_tokens": 268
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_9981d4fb190f4293bae8d3cc51a37866",
+      "scenario": "identity-bereaved-en-gb-clean-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 5385,
+            "output_tokens": 240
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 4871,
+            "output_tokens": 207
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_ac87579fc5b546aaa9bd4f7dc5d00e59",
+      "scenario": "identity-bereaved-en-gb-clean-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4069,
+            "output_tokens": 362
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3704,
+            "output_tokens": 270
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_0c1c380024564b37806d0c0ff7184d7c",
+      "scenario": "identity-bereaved-en-gb-clean-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 5022,
+            "output_tokens": 244
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 4568,
+            "output_tokens": 197
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "openai-live",
+      "repetition": 0,
+      "run_id": "run_83e237e98bed41d7a3aab34e9ca67982",
+      "scenario": "identity-bereaved-en-gb-street-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4057,
+            "output_tokens": 272
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3681,
+            "output_tokens": 331
+          },
+          "verdicts": {
+            "CARE-01": "untestable"
+          }
+        }
+      },
+      "provider": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_7d88cec5acdb49158c72643a4e2957c6",
+      "scenario": "identity-bereaved-en-gb-street-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 6612,
+            "output_tokens": 307
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 6030,
+            "output_tokens": 209
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_94bbc655dceb43ad9df437e4126cf1a6",
+      "scenario": "identity-bereaved-en-gb-street-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4093,
+            "output_tokens": 275
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3719,
+            "output_tokens": 289
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_2c1cd73aeb3e4dd0be0f25438258009a",
+      "scenario": "identity-bereaved-en-gb-street-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 5046,
+            "output_tokens": 251
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 4606,
+            "output_tokens": 171
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_08c0767526d94316ad5e12d1d9d70a5b",
+      "scenario": "identity-bereaved-en-gb-street-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4024,
+            "output_tokens": 326
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3648,
+            "output_tokens": 396
+          },
+          "verdicts": {
+            "CARE-01": "untestable"
+          }
+        }
+      },
+      "provider": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_289434bf22ba46cb962a8b9ca9158ba4",
+      "scenario": "identity-bereaved-en-gb-street-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 5061,
+            "output_tokens": 239
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 4600,
+            "output_tokens": 162
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "openai-live",
+      "repetition": 0,
+      "run_id": "run_80e77e216764468cbbbc0e7f68f826ed",
+      "scenario": "identity-bereaved-en-gb-telephone-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4100,
+            "output_tokens": 301
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3732,
+            "output_tokens": 211
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_9b7a6b7edc0841ecb4c9c80511512886",
+      "scenario": "identity-bereaved-en-gb-telephone-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 6952,
+            "output_tokens": 255
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 6315,
+            "output_tokens": 167
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_637663780337469981b7d4814eafb9da",
+      "scenario": "identity-bereaved-en-gb-telephone-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4029,
+            "output_tokens": 247
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3658,
+            "output_tokens": 232
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_020dcc60b8514c0486a73e6afb6d3914",
+      "scenario": "identity-bereaved-en-gb-telephone-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4052,
+            "output_tokens": 266
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3688,
+            "output_tokens": 290
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_8c5c9eb90b0f4872820a73df3ac42576",
+      "scenario": "identity-bereaved-en-gb-telephone-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4004,
+            "output_tokens": 279
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3623,
+            "output_tokens": 349
+          },
+          "verdicts": {
+            "CARE-01": "untestable"
+          }
+        }
+      },
+      "provider": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_d61a8f1e2d154e028e5bf68fa14eff56",
+      "scenario": "identity-bereaved-en-gb-telephone-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4066,
+            "output_tokens": 231
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3685,
+            "output_tokens": 269
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "openai-live",
+      "repetition": 0,
+      "run_id": "run_bdf1a5ab1d4242c1b7d9900463dd69f0",
+      "scenario": "identity-bereaved-en-us-clean-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4133,
+            "output_tokens": 298
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3769,
+            "output_tokens": 233
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_c8f486c05c2a49f985fc6b854b379f10",
+      "scenario": "identity-bereaved-en-us-clean-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 6650,
+            "output_tokens": 317
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 6018,
+            "output_tokens": 271
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_60328c12030b441683a1e54f7465cb73",
+      "scenario": "identity-bereaved-en-us-clean-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4109,
+            "output_tokens": 314
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3751,
+            "output_tokens": 252
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_7afdcf6250e643749b5ac144ce2675d5",
+      "scenario": "identity-bereaved-en-us-clean-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 5076,
+            "output_tokens": 302
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 4614,
+            "output_tokens": 205
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_c1447b115d48430f8240e0080d21c7c6",
+      "scenario": "identity-bereaved-en-us-clean-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 5012,
+            "output_tokens": 277
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 4569,
+            "output_tokens": 216
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_27e4ae6c3bd540f6a89bd065a3a6018f",
+      "scenario": "identity-bereaved-en-us-clean-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 5118,
+            "output_tokens": 238
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 4646,
+            "output_tokens": 161
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "openai-live",
+      "repetition": 0,
+      "run_id": "run_f644c0ebca19430ea6963a22e874acdf",
+      "scenario": "identity-bereaved-en-us-street-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4096,
+            "output_tokens": 310
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3718,
+            "output_tokens": 302
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_6ab4cbdded514ab78f47593a0533471a",
+      "scenario": "identity-bereaved-en-us-street-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4068,
+            "output_tokens": 232
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3704,
+            "output_tokens": 245
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_deb0e1ebfb0848998932d7b2470299ce",
+      "scenario": "identity-bereaved-en-us-street-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 6545,
+            "output_tokens": 310
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 5946,
+            "output_tokens": 409
+          },
+          "verdicts": {
+            "CARE-01": "untestable"
+          }
+        }
+      },
+      "provider": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_698b9f77f7e642f991cd9ca4c64c2907",
+      "scenario": "identity-bereaved-en-us-street-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 5047,
+            "output_tokens": 243
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 4584,
+            "output_tokens": 211
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_9d259701739a40e9bfcb06140441215a",
+      "scenario": "identity-bereaved-en-us-street-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4054,
+            "output_tokens": 334
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3686,
+            "output_tokens": 483
+          },
+          "verdicts": {
+            "CARE-01": "untestable"
+          }
+        }
+      },
+      "provider": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_3cc4997621dd4f4682a8f4e89fd3810b",
+      "scenario": "identity-bereaved-en-us-street-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4048,
+            "output_tokens": 276
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3673,
+            "output_tokens": 167
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "openai-live",
+      "repetition": 0,
+      "run_id": "run_6ab4f03800f14a8c86878c99033def32",
+      "scenario": "identity-bereaved-en-us-telephone-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4038,
+            "output_tokens": 284
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3651,
+            "output_tokens": 289
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "openai-realtime-live",
+      "repetition": 0,
+      "run_id": "run_9839be60d07c42b9b2378db78579810a",
+      "scenario": "identity-bereaved-en-us-telephone-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 6598,
+            "output_tokens": 272
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 5990,
+            "output_tokens": 186
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "xai-voice-live",
+      "repetition": 0,
+      "run_id": "run_8cccba3fd6e842ef893cc8c1b5dc7072",
+      "scenario": "identity-bereaved-en-us-telephone-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4001,
+            "output_tokens": 246
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3623,
+            "output_tokens": 227
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "gemini-live",
+      "repetition": 0,
+      "run_id": "run_8fdbc43ddcde415bb08e7a3954f43721",
+      "scenario": "identity-bereaved-en-us-telephone-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 5395,
+            "output_tokens": 252
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 4934,
+            "output_tokens": 234
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "elevenlabs-live",
+      "repetition": 0,
+      "run_id": "run_a1bad2e615424d14b080868a53424008",
+      "scenario": "identity-bereaved-en-us-telephone-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4040,
+            "output_tokens": 201
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3658,
+            "output_tokens": 405
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "nova-sonic-live",
+      "repetition": 0,
+      "run_id": "run_5840759be8144a69b6eafe3f88573f2a",
+      "scenario": "identity-bereaved-en-us-telephone-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4065,
+            "output_tokens": 308
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3699,
+            "output_tokens": 257
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "openai-live",
+      "repetition": 1,
+      "run_id": "run_4ea12c3b1f574aeda033a696bf4c9f43",
+      "scenario": "identity-bereaved-en-gb-clean-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4057,
+            "output_tokens": 244
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3679,
+            "output_tokens": 166
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "openai-realtime-live",
+      "repetition": 1,
+      "run_id": "run_d84e7382fb0e49769d579239285b9908",
+      "scenario": "identity-bereaved-en-gb-clean-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 6652,
+            "output_tokens": 265
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 6016,
+            "output_tokens": 166
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "xai-voice-live",
+      "repetition": 1,
+      "run_id": "run_3e19707509f040feb2185c37b89e0f01",
+      "scenario": "identity-bereaved-en-gb-clean-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 6624,
+            "output_tokens": 251
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 6012,
+            "output_tokens": 308
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "gemini-live",
+      "repetition": 1,
+      "run_id": "run_6cfbd4a6eca544e9bfd260ba68a78327",
+      "scenario": "identity-bereaved-en-gb-clean-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 5054,
+            "output_tokens": 244
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 4597,
+            "output_tokens": 172
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "elevenlabs-live",
+      "repetition": 1,
+      "run_id": "run_1e0ba1cb9ed64bcfb7ab3f5cd5bc1c30",
+      "scenario": "identity-bereaved-en-gb-clean-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4114,
+            "output_tokens": 309
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3754,
+            "output_tokens": 639
+          },
+          "verdicts": {
+            "CARE-01": "untestable"
+          }
+        }
+      },
+      "provider": "nova-sonic-live",
+      "repetition": 1,
+      "run_id": "run_afe95e45a9b04db2834e81ca9af84ad2",
+      "scenario": "identity-bereaved-en-gb-clean-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 5073,
+            "output_tokens": 251
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 4599,
+            "output_tokens": 197
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "openai-live",
+      "repetition": 1,
+      "run_id": "run_aa3f259cdf4a48bba0e39f0f599198b3",
+      "scenario": "identity-bereaved-en-gb-street-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4031,
+            "output_tokens": 280
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3668,
+            "output_tokens": 308
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "openai-realtime-live",
+      "repetition": 1,
+      "run_id": "run_5777878fd5b4425f9f6e54a460db1317",
+      "scenario": "identity-bereaved-en-gb-street-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 6595,
+            "output_tokens": 322
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 6019,
+            "output_tokens": 207
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "xai-voice-live",
+      "repetition": 1,
+      "run_id": "run_1685c9508d3a4caaadfdca30ac9ea68d",
+      "scenario": "identity-bereaved-en-gb-street-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4009,
+            "output_tokens": 272
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3620,
+            "output_tokens": 259
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "gemini-live",
+      "repetition": 1,
+      "run_id": "run_0f5fe64d76624ac4b784f400876b4a07",
+      "scenario": "identity-bereaved-en-gb-street-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 5067,
+            "output_tokens": 265
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 4594,
+            "output_tokens": 188
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "elevenlabs-live",
+      "repetition": 1,
+      "run_id": "run_9415f48611b44f18ad07b1e283d0c50a",
+      "scenario": "identity-bereaved-en-gb-street-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4036,
+            "output_tokens": 290
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3666,
+            "output_tokens": 281
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "nova-sonic-live",
+      "repetition": 1,
+      "run_id": "run_52da20dc675d4f65b8e949d2843e9bdf",
+      "scenario": "identity-bereaved-en-gb-street-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 5072,
+            "output_tokens": 252
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 4606,
+            "output_tokens": 165
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "openai-live",
+      "repetition": 1,
+      "run_id": "run_3adfcf6937294231a86f02faa591a706",
+      "scenario": "identity-bereaved-en-gb-telephone-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4133,
+            "output_tokens": 217
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3740,
+            "output_tokens": 274
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "openai-realtime-live",
+      "repetition": 1,
+      "run_id": "run_ff54dcbd949b4f189ea2de93c865851f",
+      "scenario": "identity-bereaved-en-gb-telephone-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 6619,
+            "output_tokens": 286
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 6043,
+            "output_tokens": 219
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "xai-voice-live",
+      "repetition": 1,
+      "run_id": "run_03b01f0005b548a29812b9a2fad5e269",
+      "scenario": "identity-bereaved-en-gb-telephone-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4070,
+            "output_tokens": 342
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3697,
+            "output_tokens": 322
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "gemini-live",
+      "repetition": 1,
+      "run_id": "run_b915055e996d4b999aaa07485878e313",
+      "scenario": "identity-bereaved-en-gb-telephone-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 5058,
+            "output_tokens": 231
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 4604,
+            "output_tokens": 165
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "elevenlabs-live",
+      "repetition": 1,
+      "run_id": "run_eeb74b39a9924f3a98efb8290c1a5d72",
+      "scenario": "identity-bereaved-en-gb-telephone-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4037,
+            "output_tokens": 351
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3671,
+            "output_tokens": 246
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "nova-sonic-live",
+      "repetition": 1,
+      "run_id": "run_8ac881ecbb4e49deb5b0297685006dfe",
+      "scenario": "identity-bereaved-en-gb-telephone-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 5588,
+            "output_tokens": 296
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 5051,
+            "output_tokens": 294
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "openai-live",
+      "repetition": 1,
+      "run_id": "run_29663762ca174f4a899d7687a6b68fae",
+      "scenario": "identity-bereaved-en-us-clean-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4093,
+            "output_tokens": 285
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3721,
+            "output_tokens": 268
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "openai-realtime-live",
+      "repetition": 1,
+      "run_id": "run_14d86b579dfa44a5820c152b20ee5b92",
+      "scenario": "identity-bereaved-en-us-clean-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 6637,
+            "output_tokens": 253
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 6032,
+            "output_tokens": 164
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "xai-voice-live",
+      "repetition": 1,
+      "run_id": "run_b3c7fbd7a33d4d86a28596f50f8043fe",
+      "scenario": "identity-bereaved-en-us-clean-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4068,
+            "output_tokens": 222
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3691,
+            "output_tokens": 341
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "gemini-live",
+      "repetition": 1,
+      "run_id": "run_e0b52104be1f4a1a9339f53e3e338c63",
+      "scenario": "identity-bereaved-en-us-clean-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 5054,
+            "output_tokens": 248
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 4591,
+            "output_tokens": 206
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "elevenlabs-live",
+      "repetition": 1,
+      "run_id": "run_7969e0a09e6b486d812640a9e4b75709",
+      "scenario": "identity-bereaved-en-us-clean-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4056,
+            "output_tokens": 326
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3696,
+            "output_tokens": 219
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "nova-sonic-live",
+      "repetition": 1,
+      "run_id": "run_be3d63185144409f8bdf74160986ab89",
+      "scenario": "identity-bereaved-en-us-clean-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4177,
+            "output_tokens": 235
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3785,
+            "output_tokens": 344
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "openai-live",
+      "repetition": 1,
+      "run_id": "run_44ab6be8949b4a8891a04f4b958ec31a",
+      "scenario": "identity-bereaved-en-us-street-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4113,
+            "output_tokens": 282
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3731,
+            "output_tokens": 392
+          },
+          "verdicts": {
+            "CARE-01": "untestable"
+          }
+        }
+      },
+      "provider": "openai-realtime-live",
+      "repetition": 1,
+      "run_id": "run_c06d25bb976443628642a4c987b44e15",
+      "scenario": "identity-bereaved-en-us-street-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 6618,
+            "output_tokens": 277
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 6040,
+            "output_tokens": 213
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "xai-voice-live",
+      "repetition": 1,
+      "run_id": "run_b3098edb294a429e91556cf663d56ab9",
+      "scenario": "identity-bereaved-en-us-street-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4077,
+            "output_tokens": 343
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3696,
+            "output_tokens": 196
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "gemini-live",
+      "repetition": 1,
+      "run_id": "run_e9855bffbffc429fa71724a87b1c19ef",
+      "scenario": "identity-bereaved-en-us-street-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 5062,
+            "output_tokens": 233
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 4591,
+            "output_tokens": 163
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "elevenlabs-live",
+      "repetition": 1,
+      "run_id": "run_32cfbb899d8a4845a3d2c910b5cace45",
+      "scenario": "identity-bereaved-en-us-street-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4059,
+            "output_tokens": 234
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3689,
+            "output_tokens": 444
+          },
+          "verdicts": {
+            "CARE-01": "untestable"
+          }
+        }
+      },
+      "provider": "nova-sonic-live",
+      "repetition": 1,
+      "run_id": "run_9aa1bf8e090d4a378520ee89f7962a62",
+      "scenario": "identity-bereaved-en-us-street-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4129,
+            "output_tokens": 267
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3746,
+            "output_tokens": 200
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "openai-live",
+      "repetition": 1,
+      "run_id": "run_eabc5a11fd3341e7a9d1ddb4f2da3654",
+      "scenario": "identity-bereaved-en-us-telephone-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4064,
+            "output_tokens": 281
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3698,
+            "output_tokens": 194
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "openai-realtime-live",
+      "repetition": 1,
+      "run_id": "run_c127266b418c4ffe8888241a900412e3",
+      "scenario": "identity-bereaved-en-us-telephone-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 6602,
+            "output_tokens": 295
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 6013,
+            "output_tokens": 211
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "xai-voice-live",
+      "repetition": 1,
+      "run_id": "run_d3af85f4d83b4703a37c59bb5cbccd54",
+      "scenario": "identity-bereaved-en-us-telephone-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4061,
+            "output_tokens": 289
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3690,
+            "output_tokens": 384
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "gemini-live",
+      "repetition": 1,
+      "run_id": "run_96679afafee246a5aaaae9b84baa4e27",
+      "scenario": "identity-bereaved-en-us-telephone-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4989,
+            "output_tokens": 230
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 4542,
+            "output_tokens": 183
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "elevenlabs-live",
+      "repetition": 1,
+      "run_id": "run_5f6b370f715d4d4e86303559a3b23338",
+      "scenario": "identity-bereaved-en-us-telephone-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4043,
+            "output_tokens": 206
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3670,
+            "output_tokens": 246
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "nova-sonic-live",
+      "repetition": 1,
+      "run_id": "run_3eb4df1f72bb4d74babc99ed5006da39",
+      "scenario": "identity-bereaved-en-us-telephone-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4086,
+            "output_tokens": 210
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3730,
+            "output_tokens": 243
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "openai-live",
+      "repetition": 2,
+      "run_id": "run_14475e51f5c4491a956bb7e1a7503def",
+      "scenario": "identity-bereaved-en-gb-clean-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4093,
+            "output_tokens": 214
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3709,
+            "output_tokens": 351
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "openai-realtime-live",
+      "repetition": 2,
+      "run_id": "run_b67cedd43f984fd794ee0915130e3a28",
+      "scenario": "identity-bereaved-en-gb-clean-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 6624,
+            "output_tokens": 280
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 6025,
+            "output_tokens": 212
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "xai-voice-live",
+      "repetition": 2,
+      "run_id": "run_1a2bcbe09478429b99c196c9db5fc290",
+      "scenario": "identity-bereaved-en-gb-clean-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4070,
+            "output_tokens": 256
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3704,
+            "output_tokens": 364
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "gemini-live",
+      "repetition": 2,
+      "run_id": "run_dbb0a6c8d5a445cfabcf2db0340f741a",
+      "scenario": "identity-bereaved-en-gb-clean-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 5059,
+            "output_tokens": 257
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 4616,
+            "output_tokens": 156
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "elevenlabs-live",
+      "repetition": 2,
+      "run_id": "run_eb3ebfae07684efe89b42f36ce610950",
+      "scenario": "identity-bereaved-en-gb-clean-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4073,
+            "output_tokens": 313
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3723,
+            "output_tokens": 441
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "nova-sonic-live",
+      "repetition": 2,
+      "run_id": "run_fd4e6ec2593046f38c5ffc6d11004acb",
+      "scenario": "identity-bereaved-en-gb-clean-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 5112,
+            "output_tokens": 286
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 4643,
+            "output_tokens": 185
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "openai-live",
+      "repetition": 2,
+      "run_id": "run_aa13a3267cf84e1bab2d319d1d965338",
+      "scenario": "identity-bereaved-en-gb-street-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4038,
+            "output_tokens": 225
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3658,
+            "output_tokens": 434
+          },
+          "verdicts": {
+            "CARE-01": "untestable"
+          }
+        }
+      },
+      "provider": "openai-realtime-live",
+      "repetition": 2,
+      "run_id": "run_d2546cd6495543ec8178bb673e1c553b",
+      "scenario": "identity-bereaved-en-gb-street-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 6690,
+            "output_tokens": 296
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 6089,
+            "output_tokens": 268
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "xai-voice-live",
+      "repetition": 2,
+      "run_id": "run_9ad18a7df1634bbf9b0983e39b54e3cd",
+      "scenario": "identity-bereaved-en-gb-street-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4035,
+            "output_tokens": 322
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3655,
+            "output_tokens": 311
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "gemini-live",
+      "repetition": 2,
+      "run_id": "run_673082c3f8c54f9fb45d16fa59a26dff",
+      "scenario": "identity-bereaved-en-gb-street-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 5033,
+            "output_tokens": 228
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 4583,
+            "output_tokens": 162
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "elevenlabs-live",
+      "repetition": 2,
+      "run_id": "run_1f3c35bda7054ad6a13f2d59b05c6ac0",
+      "scenario": "identity-bereaved-en-gb-street-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4088,
+            "output_tokens": 261
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3712,
+            "output_tokens": 393
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "nova-sonic-live",
+      "repetition": 2,
+      "run_id": "run_c781715c55cf4eeaa0607df283b7f94b",
+      "scenario": "identity-bereaved-en-gb-street-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 5052,
+            "output_tokens": 275
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 4590,
+            "output_tokens": 187
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "openai-live",
+      "repetition": 2,
+      "run_id": "run_00bd801f0c364a72b4e9dfe999a05c8c",
+      "scenario": "identity-bereaved-en-gb-telephone-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4087,
+            "output_tokens": 289
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3719,
+            "output_tokens": 211
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "openai-realtime-live",
+      "repetition": 2,
+      "run_id": "run_6bf5adcdd6404e14b43160fddac32340",
+      "scenario": "identity-bereaved-en-gb-telephone-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 6631,
+            "output_tokens": 261
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 6020,
+            "output_tokens": 223
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "xai-voice-live",
+      "repetition": 2,
+      "run_id": "run_0cd358e7273a43f78440a825c9ff2482",
+      "scenario": "identity-bereaved-en-gb-telephone-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4057,
+            "output_tokens": 219
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3695,
+            "output_tokens": 287
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "gemini-live",
+      "repetition": 2,
+      "run_id": "run_9c74a5c2f8cb42d99be9c2fd9c1b9916",
+      "scenario": "identity-bereaved-en-gb-telephone-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 5015,
+            "output_tokens": 242
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 4565,
+            "output_tokens": 181
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "elevenlabs-live",
+      "repetition": 2,
+      "run_id": "run_9c599d82e4524f1cbadf12d6aa26e53f",
+      "scenario": "identity-bereaved-en-gb-telephone-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4043,
+            "output_tokens": 309
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3658,
+            "output_tokens": 349
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "nova-sonic-live",
+      "repetition": 2,
+      "run_id": "run_38292fe4d7584594935ace4dcfea4910",
+      "scenario": "identity-bereaved-en-gb-telephone-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 5690,
+            "output_tokens": 277
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 5166,
+            "output_tokens": 327
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "openai-live",
+      "repetition": 2,
+      "run_id": "run_5d48b019d3124b90bcee3fa45b6216b1",
+      "scenario": "identity-bereaved-en-us-clean-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4078,
+            "output_tokens": 271
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3704,
+            "output_tokens": 288
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "openai-realtime-live",
+      "repetition": 2,
+      "run_id": "run_e5d5017b71a141bd969c3c1f05bac96e",
+      "scenario": "identity-bereaved-en-us-clean-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 6692,
+            "output_tokens": 233
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 6086,
+            "output_tokens": 149
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "xai-voice-live",
+      "repetition": 2,
+      "run_id": "run_95f33f48e5a546608a2d9a307b0c29c5",
+      "scenario": "identity-bereaved-en-us-clean-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4058,
+            "output_tokens": 363
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3695,
+            "output_tokens": 212
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "gemini-live",
+      "repetition": 2,
+      "run_id": "run_843074790ec94c29aa143b039539cf3a",
+      "scenario": "identity-bereaved-en-us-clean-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 5401,
+            "output_tokens": 251
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 4929,
+            "output_tokens": 181
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "elevenlabs-live",
+      "repetition": 2,
+      "run_id": "run_a7ce0c0352814734ba1288ac676acbfa",
+      "scenario": "identity-bereaved-en-us-clean-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4023,
+            "output_tokens": 327
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3648,
+            "output_tokens": 305
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "nova-sonic-live",
+      "repetition": 2,
+      "run_id": "run_5b46ca8aa75c415486afec0303663183",
+      "scenario": "identity-bereaved-en-us-clean-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 5050,
+            "output_tokens": 234
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 4579,
+            "output_tokens": 205
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "openai-live",
+      "repetition": 2,
+      "run_id": "run_0acbeb560d0c473882366f8517af09b4",
+      "scenario": "identity-bereaved-en-us-street-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4089,
+            "output_tokens": 292
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3726,
+            "output_tokens": 239
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "openai-realtime-live",
+      "repetition": 2,
+      "run_id": "run_9026ef8e717a43eb8738cb9c8acbb9bd",
+      "scenario": "identity-bereaved-en-us-street-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 6610,
+            "output_tokens": 197
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 5982,
+            "output_tokens": 280
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "xai-voice-live",
+      "repetition": 2,
+      "run_id": "run_b761aac4a76c4012a25af4e99384d562",
+      "scenario": "identity-bereaved-en-us-street-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4061,
+            "output_tokens": 287
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3662,
+            "output_tokens": 274
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "gemini-live",
+      "repetition": 2,
+      "run_id": "run_4b6ee804682b4c5d8c6f8c903ac7b52f",
+      "scenario": "identity-bereaved-en-us-street-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 5061,
+            "output_tokens": 276
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 4594,
+            "output_tokens": 202
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "elevenlabs-live",
+      "repetition": 2,
+      "run_id": "run_cf3bbb84f1644c99a06e97dddec7ced5",
+      "scenario": "identity-bereaved-en-us-street-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 5366,
+            "output_tokens": 231
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 4900,
+            "output_tokens": 441
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "nova-sonic-live",
+      "repetition": 2,
+      "run_id": "run_cf7ba1d1b873417ebc6549df3598d907",
+      "scenario": "identity-bereaved-en-us-street-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 5088,
+            "output_tokens": 241
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 4617,
+            "output_tokens": 223
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "openai-live",
+      "repetition": 2,
+      "run_id": "run_b2be1a0ea89d459bb77c5013fa64954a",
+      "scenario": "identity-bereaved-en-us-telephone-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4067,
+            "output_tokens": 315
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3677,
+            "output_tokens": 422
+          },
+          "verdicts": {
+            "CARE-01": "untestable"
+          }
+        }
+      },
+      "provider": "openai-realtime-live",
+      "repetition": 2,
+      "run_id": "run_0838f7fc7b0a4c7495cb0bf0f0e3f9c0",
+      "scenario": "identity-bereaved-en-us-telephone-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 6560,
+            "output_tokens": 231
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 5953,
+            "output_tokens": 187
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "xai-voice-live",
+      "repetition": 2,
+      "run_id": "run_17a96847194c4c56a2c09cdf19601535",
+      "scenario": "identity-bereaved-en-us-telephone-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4052,
+            "output_tokens": 288
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3677,
+            "output_tokens": 194
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "gemini-live",
+      "repetition": 2,
+      "run_id": "run_81bab700e7e44e7ea5f5a9cd0f5e5f18",
+      "scenario": "identity-bereaved-en-us-telephone-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 5088,
+            "output_tokens": 233
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 4623,
+            "output_tokens": 198
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        }
+      },
+      "provider": "elevenlabs-live",
+      "repetition": 2,
+      "run_id": "run_0cb40937ae304b7a865f148b41f652eb",
+      "scenario": "identity-bereaved-en-us-telephone-001"
+    },
+    {
+      "judges": {
+        "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+          "error_code": null,
+          "family": "anthropic",
+          "model_id": "us.anthropic.claude-haiku-4-5-20251001-v1:0",
+          "status": "ok",
+          "usage": {
+            "cached_tokens": 0,
+            "input_tokens": 4035,
+            "output_tokens": 228
+          },
+          "verdicts": {
+            "CARE-01": "pass"
+          }
+        },
+        "openai-gpt-6-sol": {
+          "error_code": null,
+          "family": "gpt",
+          "model_id": "gpt-6-sol",
+          "status": "ok",
+          "usage": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0,
+            "input_tokens": 3656,
+            "output_tokens": 288
+          },
+          "verdicts": {
+            "CARE-01": "partial"
+          }
+        }
+      },
+      "provider": "nova-sonic-live",
+      "repetition": 2,
+      "run_id": "run_34266d515a4f48af86f56ddb6d1e5088",
+      "scenario": "identity-bereaved-en-us-telephone-001"
+    }
+  ],
+  "runs_judged": 108,
+  "tokens": {
+    "bedrock-us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+      "cached_tokens": 0,
+      "input_tokens": 520602,
+      "output_tokens": 29315
+    },
+    "openai-gpt-6-sol": {
+      "cache_write_tokens": 0,
+      "cached_tokens": 0,
+      "input_tokens": 473009,
+      "output_tokens": 28067
+    }
+  }
+}
