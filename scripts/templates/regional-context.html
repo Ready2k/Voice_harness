@@ -57,6 +57,15 @@ function render(){
   card.append(el('p',`${r.model_source} model: ${r.model||'Not recorded'}`,'muted'));
   const baseline=DATA.records.find(b=>b.cohort===r.cohort&&b.profile==='default'&&b.provider===r.provider&&b.scenario===r.scenario);
   if(r.profile!=='default'&&baseline){card.append(el('p','Default-voice baseline: '+(baseline.task_completed?'completed.':'not completed. '+baseline.task_note),'muted'));const b=el('button','Inspect matching baseline');b.onclick=()=>{$('profile').value='default';$('provider').value=r.provider;$('scenario').value=r.scenario;render();};card.append(b);}
+  const pilot=DATA.caller_pilot?.[r.profile];
+  if(pilot&&r.scenario==='happy-transaction-details-001'){
+   const section=el('section');
+   section.append(el('h3','Approved caller · '+pilot.name),el('p','Reviewer approved this clip for the next provider test. The task result on this card belongs to the earlier caller recording; the ElevenLabs retest is pending.','muted'),el('p',pilot.text));
+   const audio=el('audio');audio.controls=true;audio.preload='none';audio.src=pilot.path;
+   audio.setAttribute('aria-label',pilot.name+' approved transaction reference');
+   audio.onplay=()=>document.querySelectorAll('audio').forEach(other=>{if(other!==audio)other.pause();});
+   section.append(audio);card.append(section);
+  }
   const reconstructed=DATA.reconstruction?.bindings[r.run_id];
   if(reconstructed){const caller=el('details');caller.append(el('summary','Reconstructed caller · new illustrative audio'),el('p',DATA.reconstruction.disclosure,'muted'));for(const binding of reconstructed){const clip=DATA.reconstruction.clips[binding.clip_id];if(!clip)continue;caller.append(el('strong',`Caller turn ${binding.turn+1} · reconstructed`),el('p',clip.text),el('p','Synthesis instruction: '+clip.instructions,'muted'));const a=el('audio');a.controls=true;a.preload='none';a.src=clip.path;a.setAttribute('aria-label',`${DATA.profiles[r.profile]} reconstructed caller turn ${binding.turn+1}`);a.onplay=()=>document.querySelectorAll('audio').forEach(other=>{if(other!==a)other.pause();});caller.append(a,el('p',`${clip.model} / ${clip.voice} · Generated ${clip.generated_at}`,'muted'));}card.append(caller);}
   const details=el('details');details.append(el('summary',r.audio_available?`Read replies & play ${r.clips.filter(c=>c.audio_available).length} recovered excerpts`:'Read saved replies · audio unavailable'));

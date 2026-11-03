@@ -1,0 +1,35 @@
+{
+  "request": {
+    "text": "Can you give me the details of transaction tee, ex, en, zero, zero, one?",
+    "model_id": "eleven_multilingual_v2"
+  },
+  "expected_lookup": "txn_001",
+  "clips": [
+    {
+      "caller": 3,
+      "name": "Ashley",
+      "file": "ashley.wav",
+      "voice_id": "jIIwKmgS6dN9eWEJEvMJ",
+      "original_pcm_sha256": "6108c8542163d256858b2a8554a7c1e05727bec0c8fffa90e9274b9165e64f37",
+      "pcm_sha256": "6fefc4290abe657b52ccc6e33cb813b26c8e66114434b5b804ecfbb6b3c18832",
+      "review_status": "identifier_approved",
+      "character_cost": "29",
+      "generated_at": "2026-11-02T18:58:23.647753+00:00",
+      "review_note": "User confirmed these work on 2 November 2026. This approves identifier intelligibility. Accent authenticity remains unassessed.",
+      "provider_test_status": "pending"
+    },
+    {
+      "caller": 4,
+      "name": "Vanishree",
+      "file": "vanishree.wav",
+      "voice_id": "EQajdcMa8fccc3KCqwGO",
+      "original_pcm_sha256": "bb7157722cef71e4a0b73766059fcb45a3247a3b4d85fa52ef90a670c6578f17",
+      "pcm_sha256": "78d02ceec3abf855205129e2a0d00414ef80c48a34db18f1e946034e7f572915",
+      "review_status": "identifier_approved",
+      "character_cost": "29",
+      "generated_at": "2026-11-02T18:58:24.116084+00:00",
+      "review_note": "User confirmed these work on 2 November 2026. This approves identifier intelligibility. Accent authenticity remains unassessed.",
+      "provider_test_status": "pending"
+    }
+  ]
+}

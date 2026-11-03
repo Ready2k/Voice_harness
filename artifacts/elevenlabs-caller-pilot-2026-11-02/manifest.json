@@ -1,0 +1,75 @@
+{
+  "scenario": "happy-transaction-details-001",
+  "request": {
+    "text": "Can you give me the details of transaction txn_001?",
+    "model_id": "eleven_multilingual_v2"
+  },
+  "clips": [
+    {
+      "name": "Graeme",
+      "listing": "Graeme - Professional Scottish Male",
+      "library_accent": "scottish",
+      "library_voice_id": "OnQdvQKEr4UNRtg1mSrF",
+      "used_voice_id": "OnQdvQKEr4UNRtg1mSrF",
+      "review_status": "approved_for_use",
+      "file": "graeme.wav",
+      "seconds": 4.040291666666667,
+      "pcm_sha256": "475904f3da3a297c2a46a04140b50ee1a5fe41c65ea762a3e99aa8983868de5f",
+      "wav_sha256": "dd9091896ddfd25559086df79b6925dd5d3bf13ec7bea989b811abd028923d27",
+      "character_cost": "20",
+      "generated_at": "2026-11-02T18:50:16.113002+00:00",
+      "provider_test_status": "pending",
+      "review_note": "User confirmed Caller 1 and Caller 2 passed and can be used on 3 November 2026."
+    },
+    {
+      "name": "Jordan",
+      "listing": "Jordan - Young Irish Woman",
+      "library_accent": "irish",
+      "library_voice_id": "cMnMwhoOlFYOQDBWBwU1",
+      "used_voice_id": "cMnMwhoOlFYOQDBWBwU1",
+      "review_status": "approved_for_use",
+      "file": "jordan.wav",
+      "seconds": 3.1579166666666665,
+      "pcm_sha256": "d87dc2d2f948b632d6baf1f60981d1c64b0b40aee9a97200183196dd15c3a0d5",
+      "wav_sha256": "dc2013252e27c21d45d4c7468d931d514140ca3476e05a2b7fa9f99558b98191",
+      "character_cost": "20",
+      "generated_at": "2026-11-02T18:50:29.801155+00:00",
+      "provider_test_status": "pending",
+      "review_note": "User confirmed Caller 1 and Caller 2 passed and can be used on 3 November 2026."
+    },
+    {
+      "name": "Ashley",
+      "listing": "Ashley - Bright, Yorkshire, British Male",
+      "library_accent": "yorkshire",
+      "library_voice_id": "jIIwKmgS6dN9eWEJEvMJ",
+      "used_voice_id": "jIIwKmgS6dN9eWEJEvMJ",
+      "review_status": "hold",
+      "file": "ashley.wav",
+      "seconds": 3.9938333333333333,
+      "pcm_sha256": "6108c8542163d256858b2a8554a7c1e05727bec0c8fffa90e9274b9165e64f37",
+      "wav_sha256": "522029e404fa9bb9ae319a29ac8084776b10bb3dda27efe4fd6a457cdd8975d8",
+      "character_cost": "20",
+      "generated_at": "2026-11-02T18:50:45.161251+00:00",
+      "identifier_clarity": "hard to understand",
+      "listening_note": "Listener feedback: hard to understand the reference.",
+      "accent_review": "unreviewed"
+    },
+    {
+      "name": "Vanishree",
+      "listing": "Vanishree - Best Casual Indian English",
+      "library_accent": "indian",
+      "library_voice_id": "EQajdcMa8fccc3KCqwGO",
+      "used_voice_id": "EQajdcMa8fccc3KCqwGO",
+      "review_status": "hold",
+      "file": "vanishree.wav",
+      "seconds": 3.8080833333333333,
+      "pcm_sha256": "bb7157722cef71e4a0b73766059fcb45a3247a3b4d85fa52ef90a670c6578f17",
+      "wav_sha256": "89ccec6fd144b1842a01a964e7db844e1cc67f650203c03b60e2811d7029f418",
+      "character_cost": "20",
+      "generated_at": "2026-11-02T18:50:58.251265+00:00",
+      "identifier_clarity": "hard to understand",
+      "listening_note": "Listener feedback: hard to understand the reference.",
+      "accent_review": "unreviewed"
+    }
+  ]
+}

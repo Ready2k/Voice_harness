@@ -12939,5 +12939,39 @@
       ]
     },
     "expected_clips": 24
+  },
+  "caller_pilot": {
+    "scottish_male": {
+      "name": "Graeme",
+      "path": "../elevenlabs-caller-pilot-2026-11-02/graeme.wav",
+      "text": "Can you give me the details of transaction txn_001?",
+      "pcm_sha256": "475904f3da3a297c2a46a04140b50ee1a5fe41c65ea762a3e99aa8983868de5f",
+      "review_status": "approved_for_use",
+      "provider_test_status": "pending"
+    },
+    "irish_female": {
+      "name": "Jordan",
+      "path": "../elevenlabs-caller-pilot-2026-11-02/jordan.wav",
+      "text": "Can you give me the details of transaction txn_001?",
+      "pcm_sha256": "d87dc2d2f948b632d6baf1f60981d1c64b0b40aee9a97200183196dd15c3a0d5",
+      "review_status": "approved_for_use",
+      "provider_test_status": "pending"
+    },
+    "northern_english_male": {
+      "name": "Ashley",
+      "path": "../elevenlabs-caller-pilot-2026-11-02/take-2/ashley.wav",
+      "text": "Can you give me the details of transaction tee, ex, en, zero, zero, one?",
+      "pcm_sha256": "6fefc4290abe657b52ccc6e33cb813b26c8e66114434b5b804ecfbb6b3c18832",
+      "review_status": "identifier_approved",
+      "provider_test_status": "pending"
+    },
+    "indian_english_female": {
+      "name": "Vanishree",
+      "path": "../elevenlabs-caller-pilot-2026-11-02/take-2/vanishree.wav",
+      "text": "Can you give me the details of transaction tee, ex, en, zero, zero, one?",
+      "pcm_sha256": "78d02ceec3abf855205129e2a0d00414ef80c48a34db18f1e946034e7f572915",
+      "review_status": "identifier_approved",
+      "provider_test_status": "pending"
+    }
   }
 }

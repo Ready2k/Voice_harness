@@ -9,6 +9,7 @@ import hashlib
 import json
 import sqlite3
 import subprocess
+import wave
 from collections import Counter
 from pathlib import Path
 
@@ -161,7 +162,6 @@ def build():
         for clip in data['reconstruction']['clips'].values():
             if hashlib.sha256((OUT / clip['path']).read_bytes()).hexdigest() != clip['flac_sha256']:
                 raise ValueError('Reconstructed caller file integrity mismatch')
-    (OUT / 'data.json').write_text(json.dumps(data, indent=2, ensure_ascii=False) + '\n')
     render(data)
     print(json.dumps(data['coverage']))
     for p in NAMES:
@@ -169,6 +169,27 @@ def build():
 
 
 def render(data):
+    pilot_root = ROOT / 'artifacts/elevenlabs-caller-pilot-2026-11-02'
+    if (pilot_root / 'manifest.json').is_file() and (pilot_root / 'take-2/manifest.json').is_file():
+        original = json.loads((pilot_root / 'manifest.json').read_text())
+        corrected = json.loads((pilot_root / 'take-2/manifest.json').read_text())
+        profiles = {'Graeme': 'scottish_male', 'Jordan': 'irish_female',
+                    'Ashley': 'northern_english_male', 'Vanishree': 'indian_english_female'}
+        selected = {}
+        for clip in original['clips'][:2] + corrected['clips']:
+            folder = 'take-2/' if 'caller' in clip else ''
+            path = pilot_root / folder / clip['file']
+            with wave.open(str(path), 'rb') as audio:
+                pcm = audio.readframes(audio.getnframes())
+            if hashlib.sha256(pcm).hexdigest() != clip['pcm_sha256']:
+                raise ValueError('Pilot audio integrity mismatch')
+            selected[profiles[clip['name']]] = dict(
+                name=clip['name'], path='../elevenlabs-caller-pilot-2026-11-02/'+folder+clip['file'],
+                text=(corrected if folder else original)['request']['text'],
+                pcm_sha256=clip['pcm_sha256'], review_status=clip['review_status'],
+                provider_test_status='pending')
+        data['caller_pilot'] = selected
+    (OUT / 'data.json').write_text(json.dumps(data, indent=2, ensure_ascii=False) + '\n')
     template = (ROOT / 'scripts/templates/regional-context.html').read_text()
     (OUT / 'index.html').write_text(template.replace('__REGIONAL_DATA__', json.dumps(data, ensure_ascii=False).replace('<', '\\u003c')))
 
