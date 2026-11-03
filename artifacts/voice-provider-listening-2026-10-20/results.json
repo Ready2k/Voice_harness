@@ -37,7 +37,7 @@
         "text": "Your current balance is \u00a31,234.56."
       }
     ],
-    "audio_file": "openai-realtime-live.wav",
+    "audio_file": "openai-realtime-live.flac",
     "assessment_issues": [],
     "audio_seconds": 35.2,
     "audio_note": "Recorded turns joined with short gaps; generation and assessment waits excluded.",
@@ -85,7 +85,7 @@
         "text": "Your current balance is \u00a31,234.56. Is there anything else you'd like to do?"
       }
     ],
-    "audio_file": "xai-voice-live.wav",
+    "audio_file": "xai-voice-live.flac",
     "assessment_issues": [],
     "audio_seconds": 31.2,
     "audio_note": "Recorded turns joined with short gaps; generation and assessment waits excluded.",
@@ -125,7 +125,7 @@
         "text": "You are verified, and your current account balance is \u00a31,234.56."
       }
     ],
-    "audio_file": "gemini-live.wav",
+    "audio_file": "gemini-live.flac",
     "assessment_issues": [],
     "audio_seconds": 27.5,
     "audio_note": "Recorded turns joined with short gaps; generation and assessment waits excluded.",
@@ -185,7 +185,7 @@
         "text": "Great, thanks for confirming me. Could you tell me my current account balance, please? I\u2019m a little on edge, so just the number is fine."
       }
     ],
-    "audio_file": "nova-sonic-live.wav",
+    "audio_file": "nova-sonic-live.flac",
     "assessment_issues": [
       "UNSUPPORTED_CURRENCY"
     ],

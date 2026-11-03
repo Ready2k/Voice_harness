@@ -29,7 +29,7 @@ The five-batch accent panel run the same afternoon is in `../accent-elevenlabs-2
 (customer care and handoff) was judged read-only from the retained ledgers, without writing to the evidence database or the report. It applies to 108 runs: the six
 bereaved-caller scenarios × 3 repetitions × 6 providers. Two judges saw the same blinded request `assess_run` builds: Claude Haiku 4.5 on Bedrock and OpenAI `gpt-6-sol`.
 They disagreed: Haiku passed all 108; `gpt-6-sol` passed 47, rated 51 partial and 10 untestable (agreement 47 of 108). By provider, `gpt-6-sol` passes of 18: xAI 16,
-ElevenLabs 17, GPT-Live 11, Nova 3, Gemini 0, GPT-Realtime 0. Haiku does not discriminate and `gpt-6-sol` is one uncalibrated judge, so this is **not** a ranking and is not
+ElevenLabs 17, GPT-Live 11, Nova 3, Gemini 0, GPT-Realtime 0. Haiku does not discriminate and `gpt-6-sol` is one judge calibrated only on a synthetic holdout, so this is **not** a ranking and is not
 in any score: customer care remains unresolved and needs human review (docs/HUMAN_VALIDATION.md). Cost: the harness's own cost recorder is not in this read-only path, so the tokens were priced afterwards from the
 2026-10-30 tariff table: `gpt-6-sol` $1.23 and Haiku $0.73, about $1.96 in all (no cache discount or write premium applied). OpenAI judges OpenAI providers here (same vendor); Haiku is cross-family for all six.
 

@@ -69,7 +69,7 @@ const scenes = [
  {tag: 'RESULTS', h: 'No prohibited actions. Different outcomes elsewhere.',
   body: `<div class="kpis"><div class="kpi"><strong>0</strong><span>prohibited actions in 720 runs</span></div><div class="kpi"><strong>29–36</strong><span>of 36 eligible requests completed</span></div><div class="kpi"><strong>113/114</strong><span>spoken-fact checks passed (one untestable, none wrong)</span></div><div class="kpi"><strong>≈8×</strong><span>median voice cost spread</span></div></div>
    <div class="tie">Quality: read the next slide</div>`,
-  note: 'Six services, 40 situations, 3 repetitions, 3 November standardised-v3 prompt, no carry-over, no judges. One GPT-Realtime run failed (audio limit), so it has no overall score. Cost: voice usage only.'},
+  note: 'Six services, 40 situations, 3 repetitions, 3 November standardised-v3 prompt, no carry-over, no judges. One GPT-Realtime run failed (audio limit), so it has no overall score. Cost: voice usage only; GPT-Live is billed by session time.'},
  {tag: 'QUALITY AND STATISTICS', h: 'A tie, not a ranking.',
   body: `<div class="split"><div style="flex:1.5"><div class="cap">Quality score (excludes latency) with 95% interval. GPT-Realtime: not scored, one run failed</div><div class="iv">` +
    [['Google Gemini Live', 99.63, 99.24, 100], ['xAI Grok Voice', 99.61, 98.68, 100], ['ElevenLabs Agents', 99.61, 98.68, 100], ['Amazon Nova Sonic', 99.346, 96.69, 100], ['OpenAI GPT-Live', 98.86, 95.59, 99.82]]

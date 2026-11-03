@@ -2,6 +2,8 @@
 
 import asyncio
 import json
+import shutil
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -50,6 +52,18 @@ class Comparison(unittest.TestCase):
         self.addCleanup(self.temp.cleanup)
         self.out = Path(self.temp.name)
         self.plan = vc.setup(self.out, repetitions=1)
+
+    @unittest.skipUnless(shutil.which("flac"), "FLAC encoder required")
+    def test_archived_caller_cache_resumes_without_synthesising(self):
+        pcm = b"\x01\x00" * 240
+        with patch("voice_harness.adapters.openai_realtime.synth_caller_pcm", return_value=pcm):
+            expected = vc.caller_audio(self.out, self.plan)
+        for wav in (self.out / "caller").glob("*.wav"):
+            subprocess.run(["flac", "-s", "-o", str(wav.with_suffix(".flac")), str(wav)], check=True)
+            wav.unlink()
+        with patch("voice_harness.adapters.openai_realtime.synth_caller_pcm",
+                   side_effect=AssertionError("Archived cache must not trigger paid synthesis")):
+            self.assertEqual(vc.caller_audio(self.out, self.plan), expected)
 
     def test_plan_balances_conditions_and_freezes_configuration(self):
         self.assertEqual(len(self.plan["jobs"]), len(vc.PROVIDERS) * len(vc.SCENARIOS) * 2)

@@ -21,7 +21,7 @@ const scenes = [
  {tag: 'WHAT WE TESTED', h: 'Six services. Forty situations. 720 runs.',
   body: `<div class="matrix">${V.map(v => dotBlock(v)).join('')}</div>
    <div class="legend"><span><i class="k"></i> one recorded run</span><span>across: 40 customer situations</span><span>down: 3 repetitions each</span></div>
-   <div class="sixth"><b>One run failed:</b> a GPT-Realtime reply ran past the audio limit and the safety gate stopped it. It was not rerun. All six services used the same standardised prompt.</div>`,
+   <div class="sixth"><b>One run failed:</b> a GPT-Realtime reply ran past the audio limit and the safety gate stopped it. It was not rerun. All six used the same standardised prompt (GPT-Live also has an adapter wrapper).</div>`,
   note: 'OpenAI, Google, xAI, ElevenLabs and Amazon: selected external prototype services, tested outside of work. Synthetic customers and a simulated bank.'},
  {tag: 'WHY THE COMPARISON HOLDS UP', h: 'Same situations. Same bank. Same scoring.',
   body: `<div class="flow">${node('Simulated customer', 'scripted situation', 'soft')}${arrow}${node('Voice service', 'the system under test', 'hot')}${arrow}${node('Policy gate', 'holds speech and tool calls', 'gate')}${arrow}${node('Simulated bank', 'sandboxed tools, no real money', 'soft')}</div>

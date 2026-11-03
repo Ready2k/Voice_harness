@@ -24,7 +24,7 @@
       "title": "run notes",
       "date": "2026-11-03",
       "kind": "Notes",
-      "size": 4807,
+      "size": 4833,
       "url": "https://github.com/Ready2k/Voice_harness/blob/main/artifacts/bakeoff-2026-11-03-v3-six/run-notes.md",
       "group": "//Users"
     },
@@ -4196,30 +4196,30 @@
       "group": "//Users"
     },
     {
-      "path": "artifacts/gpt-live-evaluation-2026-10-27/identity-bereaved-en-gb-clean-001.wav",
+      "path": "artifacts/gpt-live-evaluation-2026-10-27/identity-bereaved-en-gb-clean-001.flac",
       "title": "identity bereaved en gb clean 001",
       "date": "2026-10-27",
       "kind": "Audio",
       "size": 484844,
-      "url": "artifacts/gpt-live-evaluation-2026-10-27/identity-bereaved-en-gb-clean-001.wav",
+      "url": "artifacts/gpt-live-evaluation-2026-10-27/identity-bereaved-en-gb-clean-001.flac",
       "group": "//Users"
     },
     {
-      "path": "artifacts/gpt-live-evaluation-2026-10-27/happy-recent-transactions-001.wav",
+      "path": "artifacts/gpt-live-evaluation-2026-10-27/happy-recent-transactions-001.flac",
       "title": "happy recent transactions 001",
       "date": "2026-10-27",
       "kind": "Audio",
       "size": 681644,
-      "url": "artifacts/gpt-live-evaluation-2026-10-27/happy-recent-transactions-001.wav",
+      "url": "artifacts/gpt-live-evaluation-2026-10-27/happy-recent-transactions-001.flac",
       "group": "//Users"
     },
     {
-      "path": "artifacts/gpt-live-evaluation-2026-10-27/happy-balance-clean-001.wav",
+      "path": "artifacts/gpt-live-evaluation-2026-10-27/happy-balance-clean-001.flac",
       "title": "happy balance clean 001",
       "date": "2026-10-27",
       "kind": "Audio",
       "size": 1089644,
-      "url": "artifacts/gpt-live-evaluation-2026-10-27/happy-balance-clean-001.wav",
+      "url": "artifacts/gpt-live-evaluation-2026-10-27/happy-balance-clean-001.flac",
       "group": "//Users"
     },
     {
@@ -5699,12 +5699,12 @@
       "group": "//Users"
     },
     {
-      "path": "artifacts/voice-provider-listening-v2-nova-fix-2026-10-20/nova-sonic-live.wav",
+      "path": "artifacts/voice-provider-listening-v2-nova-fix-2026-10-20/nova-sonic-live.flac",
       "title": "nova sonic live",
       "date": "2026-10-20",
       "kind": "Audio",
       "size": 1763084,
-      "url": "artifacts/voice-provider-listening-v2-nova-fix-2026-10-20/nova-sonic-live.wav",
+      "url": "artifacts/voice-provider-listening-v2-nova-fix-2026-10-20/nova-sonic-live.flac",
       "group": "//Users"
     },
     {
@@ -5717,12 +5717,12 @@
       "group": "//Users"
     },
     {
-      "path": "artifacts/voice-provider-listening-v2-2026-10-20/xai-voice-live.wav",
+      "path": "artifacts/voice-provider-listening-v2-2026-10-20/xai-voice-live.flac",
       "title": "xai voice live",
       "date": "2026-10-20",
       "kind": "Audio",
       "size": 1548524,
-      "url": "artifacts/voice-provider-listening-v2-2026-10-20/xai-voice-live.wav",
+      "url": "artifacts/voice-provider-listening-v2-2026-10-20/xai-voice-live.flac",
       "group": "//Users"
     },
     {
@@ -5744,21 +5744,21 @@
       "group": "//Users"
     },
     {
-      "path": "artifacts/voice-provider-listening-v2-2026-10-20/openai-realtime-live.wav",
+      "path": "artifacts/voice-provider-listening-v2-2026-10-20/openai-realtime-live.flac",
       "title": "openai realtime live",
       "date": "2026-10-20",
       "kind": "Audio",
       "size": 2030444,
-      "url": "artifacts/voice-provider-listening-v2-2026-10-20/openai-realtime-live.wav",
+      "url": "artifacts/voice-provider-listening-v2-2026-10-20/openai-realtime-live.flac",
       "group": "//Users"
     },
     {
-      "path": "artifacts/voice-provider-listening-v2-2026-10-20/nova-sonic-live.wav",
+      "path": "artifacts/voice-provider-listening-v2-2026-10-20/nova-sonic-live.flac",
       "title": "nova sonic live",
       "date": "2026-10-20",
       "kind": "Audio",
       "size": 1493324,
-      "url": "artifacts/voice-provider-listening-v2-2026-10-20/nova-sonic-live.wav",
+      "url": "artifacts/voice-provider-listening-v2-2026-10-20/nova-sonic-live.flac",
       "group": "//Users"
     },
     {
@@ -5771,12 +5771,12 @@
       "group": "//Users"
     },
     {
-      "path": "artifacts/voice-provider-listening-v2-2026-10-20/gemini-live.wav",
+      "path": "artifacts/voice-provider-listening-v2-2026-10-20/gemini-live.flac",
       "title": "gemini live",
       "date": "2026-10-20",
       "kind": "Audio",
       "size": 1843246,
-      "url": "artifacts/voice-provider-listening-v2-2026-10-20/gemini-live.wav",
+      "url": "artifacts/voice-provider-listening-v2-2026-10-20/gemini-live.flac",
       "group": "//Users"
     },
     {
@@ -5789,12 +5789,12 @@
       "group": "//Users"
     },
     {
-      "path": "artifacts/voice-provider-listening-2026-10-20/xai-voice-live.wav",
+      "path": "artifacts/voice-provider-listening-2026-10-20/xai-voice-live.flac",
       "title": "xai voice live",
       "date": "2026-10-20",
       "kind": "Audio",
       "size": 1500044,
-      "url": "artifacts/voice-provider-listening-2026-10-20/xai-voice-live.wav",
+      "url": "artifacts/voice-provider-listening-2026-10-20/xai-voice-live.flac",
       "group": "//Users"
     },
     {
@@ -5807,21 +5807,21 @@
       "group": "//Users"
     },
     {
-      "path": "artifacts/voice-provider-listening-2026-10-20/openai-realtime-live.wav",
+      "path": "artifacts/voice-provider-listening-2026-10-20/openai-realtime-live.flac",
       "title": "openai realtime live",
       "date": "2026-10-20",
       "kind": "Audio",
       "size": 1689644,
-      "url": "artifacts/voice-provider-listening-2026-10-20/openai-realtime-live.wav",
+      "url": "artifacts/voice-provider-listening-2026-10-20/openai-realtime-live.flac",
       "group": "//Users"
     },
     {
-      "path": "artifacts/voice-provider-listening-2026-10-20/nova-sonic-live.wav",
+      "path": "artifacts/voice-provider-listening-2026-10-20/nova-sonic-live.flac",
       "title": "nova sonic live",
       "date": "2026-10-20",
       "kind": "Audio",
       "size": 2729804,
-      "url": "artifacts/voice-provider-listening-2026-10-20/nova-sonic-live.wav",
+      "url": "artifacts/voice-provider-listening-2026-10-20/nova-sonic-live.flac",
       "group": "//Users"
     },
     {
@@ -5834,12 +5834,12 @@
       "group": "//Users"
     },
     {
-      "path": "artifacts/voice-provider-listening-2026-10-20/gemini-live.wav",
+      "path": "artifacts/voice-provider-listening-2026-10-20/gemini-live.flac",
       "title": "gemini live",
       "date": "2026-10-20",
       "kind": "Audio",
       "size": 1319086,
-      "url": "artifacts/voice-provider-listening-2026-10-20/gemini-live.wav",
+      "url": "artifacts/voice-provider-listening-2026-10-20/gemini-live.flac",
       "group": "//Users"
     },
     {
@@ -5978,21 +5978,21 @@
       "group": "//Users"
     },
     {
-      "path": "artifacts/interactive-caller-demo-cedar-2026-10-20.wav",
+      "path": "artifacts/interactive-caller-demo-cedar-2026-10-20.flac",
       "title": "interactive caller demo cedar 2026 10 20",
       "date": "2026-10-20",
       "kind": "Audio",
       "size": 1713644,
-      "url": "artifacts/interactive-caller-demo-cedar-2026-10-20.wav",
+      "url": "artifacts/interactive-caller-demo-cedar-2026-10-20.flac",
       "group": "//Users"
     },
     {
-      "path": "artifacts/interactive-caller-demo-2026-10-20.wav",
+      "path": "artifacts/interactive-caller-demo-2026-10-20.flac",
       "title": "interactive caller demo 2026 10 20",
       "date": "2026-10-20",
       "kind": "Audio",
       "size": 1507244,
-      "url": "artifacts/interactive-caller-demo-2026-10-20.wav",
+      "url": "artifacts/interactive-caller-demo-2026-10-20.flac",
       "group": "//Users"
     },
     {
@@ -6005,30 +6005,30 @@
       "group": "//Users"
     },
     {
-      "path": "artifacts/gemini-turn-diagnostic-2026-10-20/explicit-45s.wav",
+      "path": "artifacts/gemini-turn-diagnostic-2026-10-20/explicit-45s.flac",
       "title": "explicit 45s",
       "date": "2026-10-20",
       "kind": "Audio",
       "size": 1079146,
-      "url": "artifacts/gemini-turn-diagnostic-2026-10-20/explicit-45s.wav",
+      "url": "artifacts/gemini-turn-diagnostic-2026-10-20/explicit-45s.flac",
       "group": "//Users"
     },
     {
-      "path": "artifacts/gemini-turn-diagnostic-2026-10-20/automatic-45s.wav",
+      "path": "artifacts/gemini-turn-diagnostic-2026-10-20/automatic-45s.flac",
       "title": "automatic 45s",
       "date": "2026-10-20",
       "kind": "Audio",
       "size": 719144,
-      "url": "artifacts/gemini-turn-diagnostic-2026-10-20/automatic-45s.wav",
+      "url": "artifacts/gemini-turn-diagnostic-2026-10-20/automatic-45s.flac",
       "group": "//Users"
     },
     {
-      "path": "artifacts/gemini-turn-diagnostic-2026-10-20/automatic-120s.wav",
+      "path": "artifacts/gemini-turn-diagnostic-2026-10-20/automatic-120s.flac",
       "title": "automatic 120s",
       "date": "2026-10-20",
       "kind": "Audio",
       "size": 750824,
-      "url": "artifacts/gemini-turn-diagnostic-2026-10-20/automatic-120s.wav",
+      "url": "artifacts/gemini-turn-diagnostic-2026-10-20/automatic-120s.flac",
       "group": "//Users"
     },
     {
@@ -6068,12 +6068,12 @@
       "group": "//Users"
     },
     {
-      "path": "artifacts/gemini-street-listening-2026-10-20/gemini-street-generated.wav",
+      "path": "artifacts/gemini-street-listening-2026-10-20/gemini-street-generated.flac",
       "title": "gemini street generated",
       "date": "2026-10-20",
       "kind": "Audio",
       "size": 746984,
-      "url": "artifacts/gemini-street-listening-2026-10-20/gemini-street-generated.wav",
+      "url": "artifacts/gemini-street-listening-2026-10-20/gemini-street-generated.flac",
       "group": "//Users"
     },
     {
@@ -8426,165 +8426,165 @@
       "group": "//Users"
     },
     {
-      "path": "artifacts/voice-conversation-v2/caller/lost-card-2.wav",
+      "path": "artifacts/voice-conversation-v2/caller/lost-card-2.flac",
       "title": "lost card 2",
       "date": "",
       "kind": "Audio",
       "size": 186884,
-      "url": "artifacts/voice-conversation-v2/caller/lost-card-2.wav",
+      "url": "artifacts/voice-conversation-v2/caller/lost-card-2.flac",
       "group": "//Users"
     },
     {
-      "path": "artifacts/voice-conversation-v2/caller/lost-card-1.wav",
+      "path": "artifacts/voice-conversation-v2/caller/lost-card-1.flac",
       "title": "lost card 1",
       "date": "",
       "kind": "Audio",
       "size": 188556,
-      "url": "artifacts/voice-conversation-v2/caller/lost-card-1.wav",
+      "url": "artifacts/voice-conversation-v2/caller/lost-card-1.flac",
       "group": "//Users"
     },
     {
-      "path": "artifacts/voice-conversation-v2/caller/lost-card-0.wav",
+      "path": "artifacts/voice-conversation-v2/caller/lost-card-0.flac",
       "title": "lost card 0",
       "date": "",
       "kind": "Audio",
       "size": 220478,
-      "url": "artifacts/voice-conversation-v2/caller/lost-card-0.wav",
+      "url": "artifacts/voice-conversation-v2/caller/lost-card-0.flac",
       "group": "//Users"
     },
     {
-      "path": "artifacts/voice-conversation-v2/caller/failed-payment-2.wav",
+      "path": "artifacts/voice-conversation-v2/caller/failed-payment-2.flac",
       "title": "failed payment 2",
       "date": "",
       "kind": "Audio",
       "size": 199912,
-      "url": "artifacts/voice-conversation-v2/caller/failed-payment-2.wav",
+      "url": "artifacts/voice-conversation-v2/caller/failed-payment-2.flac",
       "group": "//Users"
     },
     {
-      "path": "artifacts/voice-conversation-v2/caller/failed-payment-1.wav",
+      "path": "artifacts/voice-conversation-v2/caller/failed-payment-1.flac",
       "title": "failed payment 1",
       "date": "",
       "kind": "Audio",
       "size": 172814,
-      "url": "artifacts/voice-conversation-v2/caller/failed-payment-1.wav",
+      "url": "artifacts/voice-conversation-v2/caller/failed-payment-1.flac",
       "group": "//Users"
     },
     {
-      "path": "artifacts/voice-conversation-v2/caller/failed-payment-0.wav",
+      "path": "artifacts/voice-conversation-v2/caller/failed-payment-0.flac",
       "title": "failed payment 0",
       "date": "",
       "kind": "Audio",
       "size": 217264,
-      "url": "artifacts/voice-conversation-v2/caller/failed-payment-0.wav",
+      "url": "artifacts/voice-conversation-v2/caller/failed-payment-0.flac",
       "group": "//Users"
     },
     {
-      "path": "artifacts/voice-conversation-v2/caller/correction-2.wav",
+      "path": "artifacts/voice-conversation-v2/caller/correction-2.flac",
       "title": "correction 2",
       "date": "",
       "kind": "Audio",
       "size": 175146,
-      "url": "artifacts/voice-conversation-v2/caller/correction-2.wav",
+      "url": "artifacts/voice-conversation-v2/caller/correction-2.flac",
       "group": "//Users"
     },
     {
-      "path": "artifacts/voice-conversation-v2/caller/correction-1.wav",
+      "path": "artifacts/voice-conversation-v2/caller/correction-1.flac",
       "title": "correction 1",
       "date": "",
       "kind": "Audio",
       "size": 286526,
-      "url": "artifacts/voice-conversation-v2/caller/correction-1.wav",
+      "url": "artifacts/voice-conversation-v2/caller/correction-1.flac",
       "group": "//Users"
     },
     {
-      "path": "artifacts/voice-conversation-v2/caller/correction-0.wav",
+      "path": "artifacts/voice-conversation-v2/caller/correction-0.flac",
       "title": "correction 0",
       "date": "",
       "kind": "Audio",
       "size": 225336,
-      "url": "artifacts/voice-conversation-v2/caller/correction-0.wav",
+      "url": "artifacts/voice-conversation-v2/caller/correction-0.flac",
       "group": "//Users"
     },
     {
-      "path": "artifacts/voice-conversation-v2/caller/continuity-2.wav",
+      "path": "artifacts/voice-conversation-v2/caller/continuity-2.flac",
       "title": "continuity 2",
       "date": "",
       "kind": "Audio",
       "size": 174018,
-      "url": "artifacts/voice-conversation-v2/caller/continuity-2.wav",
+      "url": "artifacts/voice-conversation-v2/caller/continuity-2.flac",
       "group": "//Users"
     },
     {
-      "path": "artifacts/voice-conversation-v2/caller/continuity-1.wav",
+      "path": "artifacts/voice-conversation-v2/caller/continuity-1.flac",
       "title": "continuity 1",
       "date": "",
       "kind": "Audio",
       "size": 128286,
-      "url": "artifacts/voice-conversation-v2/caller/continuity-1.wav",
+      "url": "artifacts/voice-conversation-v2/caller/continuity-1.flac",
       "group": "//Users"
     },
     {
-      "path": "artifacts/voice-conversation-v2/caller/continuity-0.wav",
+      "path": "artifacts/voice-conversation-v2/caller/continuity-0.flac",
       "title": "continuity 0",
       "date": "",
       "kind": "Audio",
       "size": 279798,
-      "url": "artifacts/voice-conversation-v2/caller/continuity-0.wav",
+      "url": "artifacts/voice-conversation-v2/caller/continuity-0.flac",
       "group": "//Users"
     },
     {
-      "path": "artifacts/voice-conversation-v2/caller/bereavement-2.wav",
+      "path": "artifacts/voice-conversation-v2/caller/bereavement-2.flac",
       "title": "bereavement 2",
       "date": "",
       "kind": "Audio",
       "size": 147828,
-      "url": "artifacts/voice-conversation-v2/caller/bereavement-2.wav",
+      "url": "artifacts/voice-conversation-v2/caller/bereavement-2.flac",
       "group": "//Users"
     },
     {
-      "path": "artifacts/voice-conversation-v2/caller/bereavement-1.wav",
+      "path": "artifacts/voice-conversation-v2/caller/bereavement-1.flac",
       "title": "bereavement 1",
       "date": "",
       "kind": "Audio",
       "size": 178266,
-      "url": "artifacts/voice-conversation-v2/caller/bereavement-1.wav",
+      "url": "artifacts/voice-conversation-v2/caller/bereavement-1.flac",
       "group": "//Users"
     },
     {
-      "path": "artifacts/voice-conversation-v2/caller/bereavement-0.wav",
+      "path": "artifacts/voice-conversation-v2/caller/bereavement-0.flac",
       "title": "bereavement 0",
       "date": "",
       "kind": "Audio",
       "size": 208592,
-      "url": "artifacts/voice-conversation-v2/caller/bereavement-0.wav",
+      "url": "artifacts/voice-conversation-v2/caller/bereavement-0.flac",
       "group": "//Users"
     },
     {
-      "path": "artifacts/voice-conversation-v2/caller/balance-2.wav",
+      "path": "artifacts/voice-conversation-v2/caller/balance-2.flac",
       "title": "balance 2",
       "date": "",
       "kind": "Audio",
       "size": 191900,
-      "url": "artifacts/voice-conversation-v2/caller/balance-2.wav",
+      "url": "artifacts/voice-conversation-v2/caller/balance-2.flac",
       "group": "//Users"
     },
     {
-      "path": "artifacts/voice-conversation-v2/caller/balance-1.wav",
+      "path": "artifacts/voice-conversation-v2/caller/balance-1.flac",
       "title": "balance 1",
       "date": "",
       "kind": "Audio",
       "size": 133832,
-      "url": "artifacts/voice-conversation-v2/caller/balance-1.wav",
+      "url": "artifacts/voice-conversation-v2/caller/balance-1.flac",
       "group": "//Users"
     },
     {
-      "path": "artifacts/voice-conversation-v2/caller/balance-0.wav",
+      "path": "artifacts/voice-conversation-v2/caller/balance-0.flac",
       "title": "balance 0",
       "date": "",
       "kind": "Audio",
       "size": 102652,
-      "url": "artifacts/voice-conversation-v2/caller/balance-0.wav",
+      "url": "artifacts/voice-conversation-v2/caller/balance-0.flac",
       "group": "//Users"
     },
     {

@@ -70,7 +70,7 @@
         }
       }
     ],
-    "audio_file": "automatic-45s.wav",
+    "audio_file": "automatic-45s.flac",
     "audio_note": "Released replies only, with short joining gaps. Actual response/timeout waits omitted."
   },
   {
@@ -178,7 +178,7 @@
         }
       }
     ],
-    "audio_file": "explicit-45s.wav",
+    "audio_file": "explicit-45s.flac",
     "audio_note": "Released replies only, with short joining gaps. Actual response/timeout waits omitted."
   },
   {
@@ -252,7 +252,7 @@
         }
       }
     ],
-    "audio_file": "automatic-120s.wav",
+    "audio_file": "automatic-120s.flac",
     "audio_note": "Released replies only, with short joining gaps. Actual response/timeout waits omitted."
   }
 ]
