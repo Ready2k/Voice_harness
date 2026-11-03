@@ -1,0 +1,290 @@
+{
+  "artifacts/gemini-street-listening-2026-10-20/gemini-street-generated.wav": {
+    "flac": "artifacts/gemini-street-listening-2026-10-20/gemini-street-generated.flac",
+    "flac_bytes": 476840,
+    "flac_sha256": "c11396f6b376c751d952f738745a7fb80ba1bd8f3f8fb6496ed0343bb4be525a",
+    "pcm_sha256": "b0fc3837678d0ff3b3784e7bb809a1d042c6c0f06295157ebf0fa39d17e9d21a",
+    "wav_bytes": 746984,
+    "wav_sha256": "bb0c8803678a31667714a0532767ee8b17817e8c0663ff66b7a934212e289d5e"
+  },
+  "artifacts/gemini-turn-diagnostic-2026-10-20/automatic-120s.wav": {
+    "flac": "artifacts/gemini-turn-diagnostic-2026-10-20/automatic-120s.flac",
+    "flac_bytes": 481934,
+    "flac_sha256": "123b3d7c7c10035db709f1574123f28f89bc2e49ab4f0485255cd56bc6629d45",
+    "pcm_sha256": "647a6bb9cb214d6b9ae34ea364bb0cf1278e282e19dfbe29267f7b336eb089d5",
+    "wav_bytes": 750824,
+    "wav_sha256": "b330f0d084f513b95fce9d6dde125870efeb99e2aab8edda42acf2489b85a256"
+  },
+  "artifacts/gemini-turn-diagnostic-2026-10-20/automatic-45s.wav": {
+    "flac": "artifacts/gemini-turn-diagnostic-2026-10-20/automatic-45s.flac",
+    "flac_bytes": 456276,
+    "flac_sha256": "68908f122cc85b67affe5ecee6a2676dfa442af7d0a0df5d94ee5135f21b5d4a",
+    "pcm_sha256": "4dac95bb4af08fb191701540641b6aa736b324b3845d51352777f3577b2a9245",
+    "wav_bytes": 719144,
+    "wav_sha256": "90dda87991acf7aae96dc6656f9cff0df7309e2a070499d461f45767e3a20895"
+  },
+  "artifacts/gemini-turn-diagnostic-2026-10-20/explicit-45s.wav": {
+    "flac": "artifacts/gemini-turn-diagnostic-2026-10-20/explicit-45s.flac",
+    "flac_bytes": 648127,
+    "flac_sha256": "b1ea011577142bd9915023316637e67e7943874e8af437b85b0137fb438342af",
+    "pcm_sha256": "75e6a9ef832b9f41735465ea4c3a35cc576bfe773c92c38342553b6b5fd699ba",
+    "wav_bytes": 1079146,
+    "wav_sha256": "24132a38d3c3fe972da455bd131b80c63782828390f72653b756e6957c089ad5"
+  },
+  "artifacts/gpt-live-evaluation-2026-10-27/happy-balance-clean-001.wav": {
+    "flac": "artifacts/gpt-live-evaluation-2026-10-27/happy-balance-clean-001.flac",
+    "flac_bytes": 290814,
+    "flac_sha256": "ed95ae8f26274bb3f0ab933021058ba96cf05e3ed72fb28a89634766e9387f41",
+    "pcm_sha256": "dbea6aa708a55d90f370afca33f9ebc484c0cc27f55bb3d92291c6581fcf09aa",
+    "wav_bytes": 1089644,
+    "wav_sha256": "324ce97028daa6c1b3978f4b1a48a36f2bd9a55c8d64f19265118a7f47c0dcad"
+  },
+  "artifacts/gpt-live-evaluation-2026-10-27/happy-recent-transactions-001.wav": {
+    "flac": "artifacts/gpt-live-evaluation-2026-10-27/happy-recent-transactions-001.flac",
+    "flac_bytes": 251849,
+    "flac_sha256": "0c34a7f2d419ae34c4f7159060fa4570a2bddd089d3940b52c0bf7340d3f9166",
+    "pcm_sha256": "9cc0cf6e5ca4abdf4f6d72ae5d52e9a1cb7ac3aa6ed54cc5b6bfef1b1b9a889e",
+    "wav_bytes": 681644,
+    "wav_sha256": "45f3f15c6b03eb8079e330a1a858c7e8ab942645e140240cc34701968c2a7995"
+  },
+  "artifacts/gpt-live-evaluation-2026-10-27/identity-bereaved-en-gb-clean-001.wav": {
+    "flac": "artifacts/gpt-live-evaluation-2026-10-27/identity-bereaved-en-gb-clean-001.flac",
+    "flac_bytes": 225549,
+    "flac_sha256": "9c839573507f835a1b8fde15302d2161497cee2a77ba95ec85ec1836ddbf93fb",
+    "pcm_sha256": "a55d91826580e42b5f4f60504a674fdb0b8780246798e9ec80aeea1ef4ea6364",
+    "wav_bytes": 484844,
+    "wav_sha256": "9cdf27d0b091762017dab159e1e00cdba9dd18538f9d97b11a2ae59497f994ce"
+  },
+  "artifacts/interactive-caller-demo-2026-10-20.wav": {
+    "flac": "artifacts/interactive-caller-demo-2026-10-20.flac",
+    "flac_bytes": 691540,
+    "flac_sha256": "14b6bdfc24ae37e00e27a60f72b4c9bba6776c3905a3f1ab2f6faa922b30d50b",
+    "pcm_sha256": "0e70fdb5a0d953ca438a6c3acf9fa1a83ca5532c9ba6102667f939a3130fdee9",
+    "wav_bytes": 1507244,
+    "wav_sha256": "84ff89ae21bba431a7504f85234c602295a86bf1856a4608eada870f95cd95c6"
+  },
+  "artifacts/interactive-caller-demo-cedar-2026-10-20.wav": {
+    "flac": "artifacts/interactive-caller-demo-cedar-2026-10-20.flac",
+    "flac_bytes": 765592,
+    "flac_sha256": "6e38d2b38e054e5ab2087b650f9ca3cf77e959f98ba5bdc32c0ca274a8326500",
+    "pcm_sha256": "828dac453ecd3bf9f52a4751595ddd6f8e341f1029fc0b53536ba0c6ce1b3992",
+    "wav_bytes": 1713644,
+    "wav_sha256": "284a964fa1845acb675bd2d34aef2dedd220bc03a2486bbb4af98456aa282d7f"
+  },
+  "artifacts/voice-conversation-v2/caller/balance-0.wav": {
+    "flac": "artifacts/voice-conversation-v2/caller/balance-0.flac",
+    "flac_bytes": 65052,
+    "flac_sha256": "6c6c0246ac635875c41e582974a49695160129458a75b2de8c2550f9f38ec084",
+    "pcm_sha256": "353b4f2af5a619706cf240dc90d05973d4e6c07bb9a861ce50a6273cd1d335ea",
+    "wav_bytes": 102652,
+    "wav_sha256": "81de9d72714ad0ee5ae4ba87b7561fc6dcf6a823fddaf1e6ce408f6d31001c81"
+  },
+  "artifacts/voice-conversation-v2/caller/balance-1.wav": {
+    "flac": "artifacts/voice-conversation-v2/caller/balance-1.flac",
+    "flac_bytes": 81290,
+    "flac_sha256": "88614b2310f5705cb9a8c08d683f3b948e7a14d65a192a9bfa67267c9c1d3f1a",
+    "pcm_sha256": "3d3c47b3833eb8be69687750be54242812dcc20f0ccbfea433144552fedb230d",
+    "wav_bytes": 133832,
+    "wav_sha256": "4327e84eb65e991e1d3e881d67cfc33f3852899d2b34660a602353fa28cbbe35"
+  },
+  "artifacts/voice-conversation-v2/caller/balance-2.wav": {
+    "flac": "artifacts/voice-conversation-v2/caller/balance-2.flac",
+    "flac_bytes": 113196,
+    "flac_sha256": "41b500eae2e762cdccec7ae70d5056ba2a6099715fca7b5d5bfd4a79b8dfe774",
+    "pcm_sha256": "68c26e8cd86e853fe8c9b8b7082b50be20bab38c976a1a89e8b57fbf39f101f5",
+    "wav_bytes": 191900,
+    "wav_sha256": "9ef6db85aafff366a8c131b5a6e54e5f51d41b80fbfdfc6e1e2d2902d69166ad"
+  },
+  "artifacts/voice-conversation-v2/caller/bereavement-0.wav": {
+    "flac": "artifacts/voice-conversation-v2/caller/bereavement-0.flac",
+    "flac_bytes": 128391,
+    "flac_sha256": "8c09e59dd29fc74253a49458ee60fe30a0fb9c72ab63568d34ce219919fbd003",
+    "pcm_sha256": "cf1be2fa8f2d0e013779899a66d20541bee9418cbc2f36144cbcc06015a15360",
+    "wav_bytes": 208592,
+    "wav_sha256": "7e0cb5887b72ab91bff561f9e6ffe39f391d4cf9016b82190b9120697924c7b2"
+  },
+  "artifacts/voice-conversation-v2/caller/bereavement-1.wav": {
+    "flac": "artifacts/voice-conversation-v2/caller/bereavement-1.flac",
+    "flac_bytes": 104176,
+    "flac_sha256": "d71cc3f5e062daa78dd48a9092e2c18c92313c462d6c1d952a5ab21514b2d62a",
+    "pcm_sha256": "b19c249fbf2b262c3401f228bdf56e99404a35fc27d2b04afdc5bf7b450e31d0",
+    "wav_bytes": 178266,
+    "wav_sha256": "33bad54b2cb3fe186502f1763390d223e7a2731c1019a2a1577afba7bbb02be5"
+  },
+  "artifacts/voice-conversation-v2/caller/bereavement-2.wav": {
+    "flac": "artifacts/voice-conversation-v2/caller/bereavement-2.flac",
+    "flac_bytes": 95464,
+    "flac_sha256": "5181d83c030dccdd1f5e51551a238aa4d6b897085403b1c9de0b5a1ac52849b5",
+    "pcm_sha256": "d85ab3252e76f5116f8d921c964737e28c9d986d4befa2c4acd528f5f57ad9d0",
+    "wav_bytes": 147828,
+    "wav_sha256": "72f76aeab2ab14bc97823032801d42c9a5d1112bf7fc9f6e1500ee5cec1328b5"
+  },
+  "artifacts/voice-conversation-v2/caller/continuity-0.wav": {
+    "flac": "artifacts/voice-conversation-v2/caller/continuity-0.flac",
+    "flac_bytes": 161388,
+    "flac_sha256": "81610931c13249afa5edd6d193a38ceb67d32d19eb1daca4b13447c193359d8b",
+    "pcm_sha256": "64e3eb61760938f854794141d62734b622dcaa434b26e1ecb96982bcb725ae89",
+    "wav_bytes": 279798,
+    "wav_sha256": "d714ecf7500b9ca32e41694ff8121ae0597de827b2eab956f89376efc892e24e"
+  },
+  "artifacts/voice-conversation-v2/caller/continuity-1.wav": {
+    "flac": "artifacts/voice-conversation-v2/caller/continuity-1.flac",
+    "flac_bytes": 82858,
+    "flac_sha256": "8be319bb44de8ad2dd26bfaddd8c01e9689f2c427cfb2f4feb9a6c8f22c406e1",
+    "pcm_sha256": "323c95b47611bb37cee11ad35bf8c74d72b80436bc7fe9e73b215d1c1902d149",
+    "wav_bytes": 128286,
+    "wav_sha256": "17570fe3826d26ea3d5dd2944ce1be5707e729279af62bc92335dd0ead733246"
+  },
+  "artifacts/voice-conversation-v2/caller/continuity-2.wav": {
+    "flac": "artifacts/voice-conversation-v2/caller/continuity-2.flac",
+    "flac_bytes": 98648,
+    "flac_sha256": "1b60275087750d8f34a94a2b0b486e2e3b01f36010e3daa584108863717cf008",
+    "pcm_sha256": "fa9eeb34365fea6a2c33a14254b35d1433a8d5cce734a108a76ec7a78b5dc635",
+    "wav_bytes": 174018,
+    "wav_sha256": "fd03efda7caac41dcef2c0f82fcb81655a4b5aabe58e49739945ac111700310a"
+  },
+  "artifacts/voice-conversation-v2/caller/correction-0.wav": {
+    "flac": "artifacts/voice-conversation-v2/caller/correction-0.flac",
+    "flac_bytes": 137012,
+    "flac_sha256": "ca1efb65dcbe01398268e4dc57026a75167debd0aa0612501fbcc1697c6d8048",
+    "pcm_sha256": "561c7d696d0e78eeac575bd3909dcaa4fd56422573bf75cbb9ffc30ab4d3c806",
+    "wav_bytes": 225336,
+    "wav_sha256": "f0cc9dbf66a4b99a9e1e3e46f9b4b716c25bdb40ab5c90f6563b2b519e065350"
+  },
+  "artifacts/voice-conversation-v2/caller/correction-1.wav": {
+    "flac": "artifacts/voice-conversation-v2/caller/correction-1.flac",
+    "flac_bytes": 155660,
+    "flac_sha256": "ee2e711078a8dda7968ebe418cea865fa9824b5aea3ecf9bc9f2e63019a77980",
+    "pcm_sha256": "06faf18ea9459f52b5abc250201f46e65facdfb9e4249501fefa5dafaca2888c",
+    "wav_bytes": 286526,
+    "wav_sha256": "cbcaaac56dd7571ffc6207cf28ddc800f66d46c8e4ccdbac2642fcb96ec2d013"
+  },
+  "artifacts/voice-conversation-v2/caller/correction-2.wav": {
+    "flac": "artifacts/voice-conversation-v2/caller/correction-2.flac",
+    "flac_bytes": 103737,
+    "flac_sha256": "6c1da1a5c1c4bddf1eabd9c909e188264f45e341d4054ec2a1993b5222c50cc5",
+    "pcm_sha256": "20bdf374382aeefc6da242f8d2a82565731adbe3881fdab87b5d6250f97632a6",
+    "wav_bytes": 175146,
+    "wav_sha256": "d63c7cba38e11db37b724f33bd307faba818ad36565ebd02deb9137071e44541"
+  },
+  "artifacts/voice-conversation-v2/caller/failed-payment-0.wav": {
+    "flac": "artifacts/voice-conversation-v2/caller/failed-payment-0.flac",
+    "flac_bytes": 128748,
+    "flac_sha256": "0c46a406ac90fa2eba9da3a296c277f77c7040fc03f520efc515113c8d220e97",
+    "pcm_sha256": "321a8d2aace01056f71aaa7296c2614de80a1f8b5305e42276b5a0e4f85f8535",
+    "wav_bytes": 217264,
+    "wav_sha256": "2d5ae02a46851e28decfde8399158e9f75f2c0b6fad7c63dbfbad77b3d20270f"
+  },
+  "artifacts/voice-conversation-v2/caller/failed-payment-1.wav": {
+    "flac": "artifacts/voice-conversation-v2/caller/failed-payment-1.flac",
+    "flac_bytes": 107474,
+    "flac_sha256": "6e3227f773c78a00c822d93b5b8b8eb9ae4b1c33d73447d9bbe944760d079eca",
+    "pcm_sha256": "6cc3dbf8a59fc6c9d60faf624474721a9e9471cfeeacb703f2bce98241b40737",
+    "wav_bytes": 172814,
+    "wav_sha256": "806b3171f2918630f5db0f39069bcfbbf8d16147126643ce01c775591aa67d5d"
+  },
+  "artifacts/voice-conversation-v2/caller/failed-payment-2.wav": {
+    "flac": "artifacts/voice-conversation-v2/caller/failed-payment-2.flac",
+    "flac_bytes": 113890,
+    "flac_sha256": "efccfdc91f6aba13407f6ee37e80a7f03e456289938db1ee42eb758f62a7f58e",
+    "pcm_sha256": "9c3d95492b10f1b58640d7ed197b4c7309e5c3256ecfd7e3265c66ce58158734",
+    "wav_bytes": 199912,
+    "wav_sha256": "be4bc1d8d394b1f65840389397f153cee72596a6ecea676119bc452a5ed6f596"
+  },
+  "artifacts/voice-conversation-v2/caller/lost-card-0.wav": {
+    "flac": "artifacts/voice-conversation-v2/caller/lost-card-0.flac",
+    "flac_bytes": 131690,
+    "flac_sha256": "865fc2447cb2662b936981758ceea7643c98ac97ce46c25a94f57989b6c21453",
+    "pcm_sha256": "e99547f6769513b06897d7d37ea3c90a4655671ab7397f5c46dff7b9346cb998",
+    "wav_bytes": 220478,
+    "wav_sha256": "3a71560522d44a6edbb7456e3cb9d18941cc5642c3fff51d4bb41e6beecff774"
+  },
+  "artifacts/voice-conversation-v2/caller/lost-card-1.wav": {
+    "flac": "artifacts/voice-conversation-v2/caller/lost-card-1.flac",
+    "flac_bytes": 115162,
+    "flac_sha256": "59da3143c51fa751c17fb6a421178fa7965d8b27a5010ba1126365f574b0cde6",
+    "pcm_sha256": "0958017a92c319398d252dd927d175dc2072f38e3ed2c16980db9b80a9f76430",
+    "wav_bytes": 188556,
+    "wav_sha256": "46b8e439d2b382ab5a67ca4554a165ff4aabbe04325888d32fb2a8a5af8b1099"
+  },
+  "artifacts/voice-conversation-v2/caller/lost-card-2.wav": {
+    "flac": "artifacts/voice-conversation-v2/caller/lost-card-2.flac",
+    "flac_bytes": 111670,
+    "flac_sha256": "0b69c4bd55809bd87d53808b366751f113e35f1eb4cf36def4b849b0a3b05bab",
+    "pcm_sha256": "07722b64ac94f2e6de8b2798526038de07622f692ab329af3302099194d4a9eb",
+    "wav_bytes": 186884,
+    "wav_sha256": "b8c9d911c4d348bba268ee6bf80c4f513fe5cdd109ed08edda33a2057040a572"
+  },
+  "artifacts/voice-provider-listening-2026-10-20/gemini-live.wav": {
+    "flac": "artifacts/voice-provider-listening-2026-10-20/gemini-live.flac",
+    "flac_bytes": 600182,
+    "flac_sha256": "250f243ac2a86937bba0d9ab76a8fe5b1e9b873eaf2cc1501706910523fbbece",
+    "pcm_sha256": "6a7d27a49c59d7689aaf26d6e12d29f1a8d47c6cf735bb731b8dabffd53816c5",
+    "wav_bytes": 1319086,
+    "wav_sha256": "e923d9b09273faeeae02ea6b86668e5ff5c4bc3c2b50b071fa65f2ba021630f4"
+  },
+  "artifacts/voice-provider-listening-2026-10-20/nova-sonic-live.wav": {
+    "flac": "artifacts/voice-provider-listening-2026-10-20/nova-sonic-live.flac",
+    "flac_bytes": 1103688,
+    "flac_sha256": "ddf3e08f84bfaf4967751fdb9f9f5e4b2e8addff8e2aa2cd93c32d86085a7f9d",
+    "pcm_sha256": "a7c3917e253b3b0d3ed5a51c83bf51d15b8d27ad47b74e9f8fc65825d26c5462",
+    "wav_bytes": 2729804,
+    "wav_sha256": "79ebf62b4a7ecc6c43b8e75ac55169cabec0c429ff688b98602b4419de7c82ba"
+  },
+  "artifacts/voice-provider-listening-2026-10-20/openai-realtime-live.wav": {
+    "flac": "artifacts/voice-provider-listening-2026-10-20/openai-realtime-live.flac",
+    "flac_bytes": 746941,
+    "flac_sha256": "e728768b5ce14440f9a9d49faaaf51af1b83ab17c6d47617a459b194e51c4e6e",
+    "pcm_sha256": "51f3793cfb8e427ed008f0031b3362bd2bb7e88fa63130c4e477a517360eaf1d",
+    "wav_bytes": 1689644,
+    "wav_sha256": "1a93be0ed0cae876333fe9b168b8e99c2982935727ba01fd912ab67c4736e35b"
+  },
+  "artifacts/voice-provider-listening-2026-10-20/xai-voice-live.wav": {
+    "flac": "artifacts/voice-provider-listening-2026-10-20/xai-voice-live.flac",
+    "flac_bytes": 611854,
+    "flac_sha256": "4b379de47ec5046d6c5563a914ab9ae1c455cc5ebd001e2c6161adc40f0b47fd",
+    "pcm_sha256": "4d1695723343894aaa9918958f9e6b7f7ea424db27790732b80d3a33caf2de6d",
+    "wav_bytes": 1500044,
+    "wav_sha256": "b69b084c545be7ef83c71b1fcf0d356c6487588dd258411653b8f45041c9d6dd"
+  },
+  "artifacts/voice-provider-listening-v2-2026-10-20/gemini-live.wav": {
+    "flac": "artifacts/voice-provider-listening-v2-2026-10-20/gemini-live.flac",
+    "flac_bytes": 817847,
+    "flac_sha256": "e144b44dc83d67f299d077c98713b0725f00379e658181dc7da1e29fe2731b87",
+    "pcm_sha256": "c2c86578350137647f28ab05a6868831e99bc44704d8a2534bbdfafdcc6d6498",
+    "wav_bytes": 1843246,
+    "wav_sha256": "d902996cdb53cd8411bee79bb8ab4c1d7f7c22128cffb91af6251b9820f9661d"
+  },
+  "artifacts/voice-provider-listening-v2-2026-10-20/nova-sonic-live.wav": {
+    "flac": "artifacts/voice-provider-listening-v2-2026-10-20/nova-sonic-live.flac",
+    "flac_bytes": 614501,
+    "flac_sha256": "17e23012095b9a8a3129ef9c4d408bc9db91a363e77ab0a156595a0aa4bff131",
+    "pcm_sha256": "5154d81ea646b7f118f8213ca0ad56c845640e16c1a6e45270d280e80c6314fd",
+    "wav_bytes": 1493324,
+    "wav_sha256": "524dad46f09a4b61d0d142b386ac8ec13fa818fd2d567da994540ec8366b3f84"
+  },
+  "artifacts/voice-provider-listening-v2-2026-10-20/openai-realtime-live.wav": {
+    "flac": "artifacts/voice-provider-listening-v2-2026-10-20/openai-realtime-live.flac",
+    "flac_bytes": 924100,
+    "flac_sha256": "d51036bbcee061a2aadc78e75ee54fa6f080785c3a7a0a44b1c8b49d858df898",
+    "pcm_sha256": "819093b7feaab53d6cdb4cb15a41a001faa4645488bd45af65e567fd2f2cc032",
+    "wav_bytes": 2030444,
+    "wav_sha256": "7d410d10d27b89ad5ba26c355db9b398595a310aafa118ecb43e6d0f346b818c"
+  },
+  "artifacts/voice-provider-listening-v2-2026-10-20/xai-voice-live.wav": {
+    "flac": "artifacts/voice-provider-listening-v2-2026-10-20/xai-voice-live.flac",
+    "flac_bytes": 613004,
+    "flac_sha256": "778d4272e09376dfc7a2f8fe63e94b2ef14afe07efe691aff88996c52b5b5236",
+    "pcm_sha256": "9868a3a1c4ebe0d57de97459f72c384552a5cd920aa8cfcc54f0444e6e2a5e92",
+    "wav_bytes": 1548524,
+    "wav_sha256": "7e9ed137867ce86495904b57cc238d34d9df50054d2a17a4b227e04916dae734"
+  },
+  "artifacts/voice-provider-listening-v2-nova-fix-2026-10-20/nova-sonic-live.wav": {
+    "flac": "artifacts/voice-provider-listening-v2-nova-fix-2026-10-20/nova-sonic-live.flac",
+    "flac_bytes": 753993,
+    "flac_sha256": "0d161e83428e3860b186dbe73a760bb95f11e4d7a9db7850235960fafbf7ed84",
+    "pcm_sha256": "e41e73cbdbd08bf15eaf9454d5082a71bee3f439538f6b55466001b3a1aade49",
+    "wav_bytes": 1763084,
+    "wav_sha256": "40420f6a0644c6d008da7b98fc61c1536bf48b259b8c29bbccc0197a90f43cbd"
+  }
+}

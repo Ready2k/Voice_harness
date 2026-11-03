@@ -56,6 +56,6 @@
     "customer": "cedar",
     "agent": "marin"
   },
-  "audio_export": "/Users/jamescregeen/Code_Projects/Voice_Harness/artifacts/interactive-caller-demo-cedar-2026-10-20.wav",
+  "audio_export": "/Users/jamescregeen/Code_Projects/Voice_Harness/artifacts/interactive-caller-demo-cedar-2026-10-20.flac",
   "audio_export_note": "Recorded turns joined with short gaps; generation and assessment waits excluded."
 }

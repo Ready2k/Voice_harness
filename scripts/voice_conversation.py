@@ -14,11 +14,13 @@ import asyncio
 import contextlib
 import hashlib
 import html
+import io
 import json
 import os
 import random
 import secrets
 import statistics
+import subprocess
 import sys
 import time
 import wave
@@ -193,7 +195,12 @@ def wav_write(path, pcm, channels=1):
 
 
 def wav_read(path):
-    with wave.open(str(path), "rb") as stream:
+    if not path.exists() and path.with_suffix(".flac").exists():
+        data = subprocess.check_output(["flac", "-s", "-d", "-c", str(path.with_suffix(".flac"))])  # noqa: S603, S607  # nosec B603 B607
+        source = io.BytesIO(data)
+    else:
+        source = str(path)
+    with wave.open(source, "rb") as stream:
         if (stream.getnchannels(), stream.getsampwidth(), stream.getframerate()) != (1, 2, RATE):
             raise ValueError("CALLER_AUDIO_FORMAT")
         return stream.readframes(stream.getnframes())

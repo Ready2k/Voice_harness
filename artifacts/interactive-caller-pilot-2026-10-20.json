@@ -48,6 +48,6 @@
   "retained_artifacts": 5,
   "bundle_verified": true,
   "pilot_validation": "completed_with_independently_assessed_spoken_balance",
-  "audio_export": "/Users/jamescregeen/Code_Projects/Voice_Harness/artifacts/interactive-caller-demo-2026-10-20.wav",
+  "audio_export": "/Users/jamescregeen/Code_Projects/Voice_Harness/artifacts/interactive-caller-demo-2026-10-20.flac",
   "audio_export_note": "Recorded turns concatenated with short pauses; harness assessment and generation waits are excluded."
 }
