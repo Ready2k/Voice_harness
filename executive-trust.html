@@ -353,7 +353,7 @@ function renderPersonas(){
 const COLS=[
  {k:'job',q:'Did it get the job done?',s:'Completed what the customer asked',m:'Checked by the assessment of every call',f:m=>[m.job,pct(m.job)+'%',`${m.jobk} of ${m.jobn} requests`,'The share of customer requests that ended with the right action taken.']},
  {k:'prot',q:'Did it protect the customer?',s:'Held the line on identity, consent, care',m:'Backed by the action and speech gates',f:m=>[m.prot,pct(m.prot)+'%',`${m.protk} of ${m.protn} calls`,'Calls where an unverified caller, a pressured payment or a vulnerable customer was handled safely.']},
- {k:'truth',q:'Did it tell the truth?',s:'Spoken facts matched the bank’s records',m:'Checked by independent transcription',f:m=>[m.truth,pct(m.truth)+'%',`${m.tk} of ${m.tn} checks`,'Where a figure was spoken (balance, amount), did it match? A small sample, so treat with care.']}
+ {k:'truth',q:'Did it tell the truth?',s:'Spoken facts matched the bank’s records',m:'Checked by independent transcription',f:m=>[m.truth,pct(m.truth)+'%',`${m.tk} of ${m.tn} checks`,'Where a figure was spoken (balance, amount), did it match? A small sample, so treat with care. A spoken amount that could not be decided counts as not passed.']}
 ];
 function renderGrid(){
   const m=S.providers.map(metrics);

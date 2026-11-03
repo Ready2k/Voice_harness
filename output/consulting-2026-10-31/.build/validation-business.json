@@ -1,7 +1,7 @@
 {
   "schemaVersion": "presentation-finalization.v1",
-  "finalSha256": "18180567e033e795e87441edd1d5ad1b451f262741dd0ad949480ea748de462c",
-  "byteCount": 58192,
+  "finalSha256": "c89227a6d9c17b7d3782517ccb7de2fc183533b64e59a44075e069b0fe770c3d",
+  "byteCount": 58341,
   "packageIntegrity": {
     "chart_count": 0,
     "claim_boundary": "Structural package checks only; no slide text, notes, formulas, chart values, or native PowerPoint execution were inspected.",
@@ -19,13 +19,13 @@
     "finding_count": 0,
     "findings": [],
     "font_policy": {
-      "checked_text_script_count": 164,
+      "checked_text_script_count": 183,
       "native_font_rendering_verified": false,
       "observed_font_families": [
         "Arial"
       ],
       "observed_font_use_counts": {
-        "Arial": 164
+        "Arial": 183
       },
       "passed": true,
       "performed": true
@@ -35,18 +35,33 @@
       13.3333,
       7.5
     ],
-    "warning_count": 0,
-    "warnings": [],
+    "warning_count": 1,
+    "warnings": [
+      {
+        "available_bottom_in": 6.1979,
+        "columns": 2,
+        "declared_bottom_in": 6.25,
+        "estimated_native_bottom_in": 6.25,
+        "footer_object_ids": [
+          "7"
+        ],
+        "kind": "native_table_overflow",
+        "overflow_in": 0.0521,
+        "rows": 7,
+        "slide": 7,
+        "table_id": "6"
+      }
+    ],
     "exitCode": 0,
     "findingCount": 0,
     "fontPolicy": {
-      "checked_text_script_count": 164,
+      "checked_text_script_count": 183,
       "native_font_rendering_verified": false,
       "observed_font_families": [
         "Arial"
       ],
       "observed_font_use_counts": {
-        "Arial": 164
+        "Arial": 183
       },
       "passed": true,
       "performed": true
@@ -60,13 +75,13 @@
     "scriptFonts": {},
     "referenceSha256": null,
     "referenceFontsVerifiedInEncodedText": false,
-    "checked_text_script_count": 164,
+    "checked_text_script_count": 183,
     "native_font_rendering_verified": false,
     "observed_font_families": [
       "Arial"
     ],
     "observed_font_use_counts": {
-      "Arial": 164
+      "Arial": 183
     },
     "passed": true,
     "performed": true
@@ -75,8 +90,8 @@
     "performed": true,
     "passed": true,
     "slideCount": 11,
-    "sha256": "18180567e033e795e87441edd1d5ad1b451f262741dd0ad949480ea748de462c",
-    "runtimeNodeModules": "",
+    "sha256": "c89227a6d9c17b7d3782517ccb7de2fc183533b64e59a44075e069b0fe770c3d",
+    "runtimeNodeModules": "/Users/jamescregeen/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules",
     "nodeExecutable": "/opt/homebrew/Cellar/node/24.9.0/bin/node"
   },
   "nativeTableArithmetic": {
@@ -134,7 +149,7 @@
     "native_chart_count": 0,
     "native_powerpoint_verified": false,
     "passed": true,
-    "presentation_sha256": "18180567e033e795e87441edd1d5ad1b451f262741dd0ad949480ea748de462c",
+    "presentation_sha256": "c89227a6d9c17b7d3782517ccb7de2fc183533b64e59a44075e069b0fe770c3d",
     "schema_version": "presentation-native-chart-titles.v1",
     "slide_count": 11,
     "source_text_emitted": false,

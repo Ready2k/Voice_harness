@@ -24,7 +24,7 @@
       "title": "run notes",
       "date": "2026-11-03",
       "kind": "Notes",
-      "size": 3425,
+      "size": 4807,
       "url": "https://github.com/Ready2k/Voice_harness/blob/main/artifacts/bakeoff-2026-11-03-v3-six/run-notes.md",
       "group": "//Users"
     },
@@ -87,7 +87,7 @@
       "title": "care01 supplement",
       "date": "2026-11-03",
       "kind": "Data",
-      "size": 113972,
+      "size": 114181,
       "url": "artifacts/bakeoff-2026-11-03-v3-six/care01-supplement.json",
       "group": "//Users"
     },
@@ -10453,16 +10453,9 @@
   ],
   "features": [
     {
-      "path": "artifacts/regional-caller-2026-11-01/index.html",
-      "title": "Caller voice settings \u00b7 exploratory task outcomes",
-      "description": "Four prompted TTS voice settings, six providers and default-voice baselines. Original accents unverified. Task results with recovered assistant excerpts; original caller audio unavailable.",
-      "status": "Caller context",
-      "date": "2026-11-01"
-    },
-    {
       "path": "artifacts/bakeoff-2026-11-03-v3-six/report.html",
       "title": "Standardised-v3 bake-off \u00b7 six providers",
-      "description": "Completed assessment of 720 runs: six providers on the same standardised-v3 prompt, 40 scenarios, three repetitions, judges off. No clear quality winner; GPT-Realtime has one failed run so its overall score is not computed.",
+      "description": "720 cells: six providers on one standardised-v3 prompt, 40 scenarios, three repetitions, no carried-over results. No prohibited action ran and there is no clear quality winner: five scored services sit between 98.9% and 99.6% with overlapping intervals, and one GPT-Realtime run failed at the 20 second audio limit (not rerun), so it has no overall score. Task completion was 36/36 for Gemini, xAI, ElevenLabs and GPT-Realtime, 32/36 for Nova and 29/36 for GPT-Live; 113 of 114 spoken-fact checks passed (one untestable, none wrong), and median voice cost per priced run ranged from about $0.004 to $0.032. No judges ran, so customer care CARE-01 is unresolved.",
       "status": "Current",
       "date": "2026-11-03"
     },
@@ -10472,6 +10465,13 @@
       "description": "Six tasks, six providers, three repeats in a default voice and four ElevenLabs library voices (540 conversations). Exploratory; library accent tags are unverified and the default voice uses a different speech engine.",
       "status": "Exploratory",
       "date": "2026-11-03"
+    },
+    {
+      "path": "artifacts/regional-caller-2026-11-01/index.html",
+      "title": "Caller voice settings \u00b7 exploratory task outcomes",
+      "description": "Four prompted TTS voice settings, six providers and default-voice baselines. Original accents unverified. Task results with recovered assistant excerpts; original caller audio unavailable.",
+      "status": "Caller context",
+      "date": "2026-11-01"
     },
     {
       "path": "artifacts/bakeoff-2026-10-29-standard-5/report.html",

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "presentation-finalization.v1",
-  "finalSha256": "a316e83549182f424b88bdd4c7a5b39e51ce7b7232e71732cf8ebbd8d64c40ec",
-  "byteCount": 320824,
+  "finalSha256": "4901108daeb30a6a6faba622822f9345c67a263419538d4cad92fe24088e881b",
+  "byteCount": 320872,
   "packageIntegrity": {
     "chart_count": 0,
     "claim_boundary": "Structural package checks only; no slide text, notes, formulas, chart values, or native PowerPoint execution were inspected.",
@@ -83,14 +83,14 @@
         "available_bottom_in": 6.4583,
         "columns": 3,
         "declared_bottom_in": 6.3542,
-        "estimated_native_bottom_in": 7.167,
+        "estimated_native_bottom_in": 7.7655,
         "footer_object_ids": [
           "4",
           "5",
           "7"
         ],
         "kind": "native_table_overflow",
-        "overflow_in": 0.7086,
+        "overflow_in": 1.3071,
         "rows": 5,
         "slide": 14,
         "table_id": "6"
@@ -178,7 +178,7 @@
     "performed": true,
     "passed": true,
     "slideCount": 27,
-    "sha256": "a316e83549182f424b88bdd4c7a5b39e51ce7b7232e71732cf8ebbd8d64c40ec",
+    "sha256": "4901108daeb30a6a6faba622822f9345c67a263419538d4cad92fe24088e881b",
     "runtimeNodeModules": "/Users/jamescregeen/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules",
     "nodeExecutable": "/opt/homebrew/Cellar/node/24.9.0/bin/node"
   },
@@ -282,7 +282,7 @@
     "native_chart_count": 0,
     "native_powerpoint_verified": false,
     "passed": true,
-    "presentation_sha256": "a316e83549182f424b88bdd4c7a5b39e51ce7b7232e71732cf8ebbd8d64c40ec",
+    "presentation_sha256": "4901108daeb30a6a6faba622822f9345c67a263419538d4cad92fe24088e881b",
     "schema_version": "presentation-native-chart-titles.v1",
     "slide_count": 27,
     "source_text_emitted": false,

@@ -1,4 +1,4 @@
-// Renders the 10 business-overview slides to frames/NN.png (1920x1080). Playwright + local Chrome.
+// Renders the 11 business-overview slides to frames/NN.png (1920x1080). Playwright + local Chrome.
 const fs = require('fs'), path = require('path');
 const {chromium} = require('/Users/jamescregeen/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
 const root = __dirname; fs.mkdirSync(path.join(root, 'frames'), {recursive: true});
@@ -36,30 +36,30 @@ const scenes = [
   note: 'Completion checks the expected tool sequence and arguments, not just what was said.'},
  {tag: 'FINDING 3 · QUALITY AND FACTS', h: 'Quality scores are too close to call.',
   body: `<div class="cap">Quality score (excludes latency) with 95% interval</div><div class="iv">` +
-   [['Google Gemini Live', 99.63, 99.24, 100], ['xAI Grok Voice', 99.61, 98.68, 100], ['ElevenLabs Agents', 99.61, 98.68, 100], ['Amazon Nova Sonic', 99.35, 96.69, 100], ['OpenAI GPT-Live', 98.86, 95.59, 99.82]]
+   [['Google Gemini Live', 99.63, 99.24, 100], ['xAI Grok Voice', 99.61, 98.68, 100], ['ElevenLabs Agents', 99.61, 98.68, 100], ['Amazon Nova Sonic', 99.346, 96.69, 100], ['OpenAI GPT-Live', 98.86, 95.59, 99.82]]
    .map(([n, v, lo, hi]) => { const p = x => ((x - 94) / 6 * 100).toFixed(2); return `<div class="irow"><div class="name">${n}</div><div class="itrack"><div class="ibar" style="left:${p(lo)}%;width:${(p(hi) - p(lo)).toFixed(2)}%"></div><div class="idot" style="left:${p(v)}%"></div></div><div class="val">${(v + 0.0001).toFixed(1)}%</div></div>`; }).join('') +
    `<div class="irow axis"><div class="name"></div><div class="itrack">${[94, 96, 98, 100].map(x => `<span style="left:${((x - 94) / 6 * 100)}%">${x}%</span>`).join('')}</div><div class="val"></div></div></div>
    <div class="verdict">Intervals overlap: no clear overall winner</div>
-   <p class="facts">Spoken facts: 113 of 114 decided checks passed. GPT-Realtime has no quality score: one run failed.</p>`,
+   <p class="facts">Spoken facts: 113 of 114 passed; the other was untestable, none wrong. GPT-Realtime has no quality score: one run failed.</p>`,
   note: 'Weighted quality score with a bootstrap interval over scenarios; no pair is separable after correction.'},
  {tag: 'FINDING 4 · COST', h: 'Cost varied the most: about an eight-times spread.',
   body: `<div class="split"><div style="flex:1"><div class="cap">Median voice cost per priced run</div>` + bars([['Google Gemini Live', 0.0041], ['Amazon Nova Sonic', 0.0053], ['OpenAI GPT-Live', 0.0183], ['ElevenLabs Agents', 0.0193], ['OpenAI GPT-Realtime', 0.0196], ['xAI Grok Voice', 0.0320]], 0.0320, v => '$' + v.toFixed(4)) + `</div>
    <div class="mult"><strong>≈8×</strong><span>cheapest to dearest, for results that scored close together</span></div></div>`,
-  note: 'Voice usage only, including retries. GPT-Live pricing is partial: one run returned no usage.'},
+  note: 'Voice usage only, including retries. GPT-Live pricing is partial: one run returned no usage. GPT-Live is billed by session time.'},
  {tag: 'FINDING 5 · HANDING OVER TO A PERSON', h: 'Asking for a human is not a given.',
   body: `<div class="split"><div style="flex:1"><div class="cap">Caller asks for a person, then asks again. Each square is one attempt; filled means transferred.</div><div class="sqrows">` +
    [['xAI Grok Voice', 18], ['ElevenLabs Agents', 18], ['OpenAI GPT-Realtime', 18], ['Google Gemini Live', 17], ['Amazon Nova Sonic', 11], ['OpenAI GPT-Live', 0]].map(([n, v]) => `<div class="srow"><div class="name">${n}</div>${squares(v, 18)}<div class="val">${v}<small>/18</small></div></div>`).join('') + `</div></div>
-   <div class="side"><div class="fh">Confirmed cancellation</div><div class="big2">18 / 18</div><p>for each of five services</p><div class="warnbox"><b>Nova:</b> 17 of 18. Its earlier failure to cancel (0 of 3) did not reproduce.</div></div></div>`,
-  note: 'Small follow-up runs (18 per service), outside the scores. GPT-Live offered to help with the account instead of transferring.'},
+   <div class="side"><div class="fh">Confirmed cancellation</div><div class="big2">18 / 18</div><p>for each of five services</p><div class="warnbox"><b>Nova:</b> 17 of 18 (1 Nov follow-up: 0 of 3).</div></div></div>`,
+  note: 'Eighteen runs per service: 3 in the scored baseline, 15 from same-day caller-voice panels (not in the scores). GPT-Live offered to help with the account instead of transferring.'},
  {tag: 'TWO LESSONS', h: 'What surprised us.',
   body: `<div class="cards two"><div class="card"><b>Sounds successful is not done</b>
-    <div class="bubble">“All done. Your payment has been cancelled.”</div><div class="rec"><span class="x">✕</span> Bank record: no cancellation executed</div><p>So we check the action, not just the words.</p></div>
-   <div class="card"><b>Broad tuning did not change the ranking</b>
-    <div class="ranks"><div><small>Standard prompt</small>${rank('')}</div><div class="same">≈</div><div><small>Tuned prompts</small>${rank('')}</div></div>
-    <p>Targeted lines did fix specific failures: Nova's handover to a person went from <span class="pip">●○○</span> to <span class="pip">●●●</span> in a small diagnostic.</p></div></div>`},
+    <div class="bubble">“All done. Your payment has been cancelled.”</div><div class="rec"><span class="x">✕</span> Bank record: no cancellation executed</div><p>Illustrative example. So we check the action, not just the words.</p></div>
+   <div class="card"><b>Earlier runs: broad tuning did not change the ranking</b>
+    <div class="ranks"><div><small>Standard prompt (29 Oct)</small>${rank('')}</div><div class="same">≈</div><div><small>Tuned prompts (28 Oct)</small>${rank('')}</div></div>
+    <p>Targeted lines did fix specific failures: Nova's handover to a person went from <span class="pip">●○○</span> to <span class="pip">●●●</span> in a small three-run diagnostic (30 Oct). Bars illustrative.</p></div></div>`},
  {tag: 'WHAT THIS DOES NOT TELL YOU', h: 'Read the results for what they are.',
-  body: `<div class="two-col"><div class="col yes"><h3>What the evidence covers</h3><ul><li>Six prototype configurations</li><li>40 synthetic banking situations</li><li>Clear scripted callers</li><li>Safety, completion, facts and cost</li></ul></div>
-   <div class="col no"><h3>Not yet measured</h3><ul><li>Real customers, noise, verified accents</li><li>Customer care (two judges disagreed)</li><li>Amazon Connect</li><li>Internal agentic platforms</li><li>Customer outcomes or certification</li></ul></div></div>`},
+  body: `<div class="two-col"><div class="col yes"><h3>What the evidence covers</h3><ul><li>Six prototype configurations</li><li>40 synthetic banking situations</li><li>Scripted synthetic callers, with simulated street noise and phone-line audio</li><li>Safety, completion, facts and cost</li></ul></div>
+   <div class="col no"><h3>Not yet measured</h3><ul><li>Real customers, real-world noise, verified accents</li><li>Customer care (not judged; a later two-judge check disagreed)</li><li>Amazon Connect</li><li>Internal agentic platforms</li><li>Customer outcomes or certification</li></ul></div></div>`},
  {dark: 1, tag: 'SO WHAT', h: 'Baseline what we run today.',
   body: `<div class="road"><div class="step"><b>1</b><h4>Bring the harness into the work environment</h4><p>Run it against what we already use.</p></div><div class="chev">›</div>
    <div class="step"><b>2</b><h4>Choose the journey</h4><p>Where a miss or an unsafe action would hurt most. Define what good means.</p></div><div class="chev">›</div>
@@ -69,7 +69,7 @@ const scenes = [
 const css = d => `*{box-sizing:border-box}body{margin:0;width:1920px;height:1080px;position:relative;overflow:hidden;background:${d ? INK : PAPER};color:${d ? PAPER : INK};font-family:Arial,Helvetica,sans-serif}
 .brand{position:absolute;left:80px;top:54px;font-weight:800;font-size:28px;letter-spacing:2px}.status{position:absolute;right:80px;top:54px;font-size:22px;letter-spacing:3px;color:${d ? MINT : TEAL}}
 .wrap{position:absolute;left:80px;right:80px;top:170px}.tag{font-size:24px;letter-spacing:3px;font-weight:bold;color:${d ? MINT : TEAL};margin-bottom:26px}
-h1{margin:0 0 34px;font-weight:900;letter-spacing:-3px;line-height:1.04;font-size:${d ? 96 : 72}px;max-width:1700px}.sub{font-size:40px;line-height:1.3;max-width:1400px;color:${d ? '#ADC4C9' : INK}}
+h1{margin:0 0 34px;font-weight:900;letter-spacing:-3px;line-height:1.04;font-size:${d ? 96 : 72}px;max-width:1700px}.sub{font-size:40px;line-height:1.3;max-width:1700px;color:${d ? '#ADC4C9' : INK}}
 .stats{display:flex;gap:90px;margin:20px 0 50px}.stat strong{display:block;font-size:150px;line-height:1;letter-spacing:-5px;color:${TEAL}}.stat span{font-size:30px;color:${MUTED}}.stats.two .stat strong{font-size:130px}
 .chips{display:flex;flex-wrap:wrap;gap:16px}.chips span{border:2px solid ${TEAL};border-radius:40px;padding:14px 28px;font-size:28px;font-weight:bold}
 .cards{display:flex;gap:36px;margin-top:20px}.card{flex:1;background:#fff;border:1px solid #ADC4C9;border-radius:16px;padding:44px 40px;min-height:380px}.card b{display:block;font-size:40px;line-height:1.15;margin-bottom:22px}.card p{margin:0;font-size:31px;line-height:1.4;color:${MUTED}}
