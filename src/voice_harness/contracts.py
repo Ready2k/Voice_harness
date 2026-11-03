@@ -15,12 +15,13 @@ class Closed(BaseModel):
 
 # Caller-channel options (config only). "scenario" keeps each scenario's own audio profile; "default" is the original voice.
 LineProfile = Literal["scenario", "clean_studio", "street_noise_10db", "telephone_narrowband"]
-VoiceProfile = Literal["default", "scottish_male", "irish_female", "indian_english_female", "northern_english_male"]
+VoiceProfile = Literal["default", "scottish_male", "irish_female", "indian_english_female", "northern_english_male",
+                    "el_scottish_male", "el_irish_female", "el_yorkshire_male", "el_indian_english_female"]
 
 
 class CallerConfig(Closed):
     mode: Literal["fixed", "live_ai"] = "fixed"
-    fixed_backend: Literal["system", "macos", "openai_tts"] = "system"
+    fixed_backend: Literal["system", "macos", "openai_tts", "elevenlabs_tts"] = "system"
     voice: Literal["marin", "cedar", "alloy", "coral", "sage"] = "cedar"
     persona: Literal["calm", "anxious", "frustrated"] = "calm"
     max_turns: Annotated[int, Field(ge=1, le=12)] = 6

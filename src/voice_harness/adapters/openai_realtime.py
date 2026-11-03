@@ -501,8 +501,8 @@ def synth_caller_pcm(text: str = "Stop. Please stop talking, I have a question."
     name, reason = caller_voice.backend(environ)
     if name is None:
         raise caller_voice.CallerVoiceUnavailable(reason)
-    if name == "openai_tts":
-        pcm = caller_voice.openai_tts_pcm(text, environ=environ)
+    if name in ("openai_tts", "elevenlabs_tts"):
+        pcm = (caller_voice.elevenlabs_tts_pcm if name == "elevenlabs_tts" else caller_voice.openai_tts_pcm)(text, environ=environ)
         pcm = trim_trailing_silence(pcm) if trim_tail else pcm
         return bytes(SAMPLE_RATE * 2 * lead_ms // 1000) + pcm + bytes(SAMPLE_RATE * 2 * trail_ms // 1000)
     if trim_tail:

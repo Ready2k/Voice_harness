@@ -449,7 +449,7 @@ def create_app(
                                            for mode in ("fixed", "live_ai")
                                            for reasons in [live_providers.requirements(provider_config_id, caller={"mode": mode})]},
                           "fixed_backends": {backend: {"available": not reasons, "reasons": reasons}
-                                             for backend in ("system", "macos", "openai_tts")
+                                             for backend in ("system", "macos", "openai_tts", "elevenlabs_tts")
                                              for reasons in [live_providers.requirements(provider_config_id, caller={"fixed_backend": backend})]}})
         backends, unavailable = live_providers.auto_judges()
         judges = [{"backend": b.config.provider, "model_id": b.config.model_id, "available": True} for b in backends]

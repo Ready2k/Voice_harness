@@ -3691,7 +3691,11 @@
               "scottish_male",
               "irish_female",
               "indian_english_female",
-              "northern_english_male"
+              "northern_english_male",
+              "el_scottish_male",
+              "el_irish_female",
+              "el_yorkshire_male",
+              "el_indian_english_female"
             ],
             "title": "Caller Voice Profile",
             "default": "default"
@@ -3896,7 +3900,8 @@
             "enum": [
               "system",
               "macos",
-              "openai_tts"
+              "openai_tts",
+              "elevenlabs_tts"
             ],
             "title": "Fixed Backend",
             "default": "system"
@@ -3955,7 +3960,11 @@
               "scottish_male",
               "irish_female",
               "indian_english_female",
-              "northern_english_male"
+              "northern_english_male",
+              "el_scottish_male",
+              "el_irish_female",
+              "el_yorkshire_male",
+              "el_indian_english_female"
             ],
             "title": "Voice Profile",
             "default": "default"

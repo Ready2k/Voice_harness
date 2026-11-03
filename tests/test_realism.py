@@ -149,7 +149,45 @@ class VoicePanel(unittest.TestCase):
             self.assertEqual(caller_voice.describe(env)["profile"], name)
             voices.add(body["voice"])
         self.assertEqual(len(voices), 4)
-        self.assertEqual(set(caller_voice.PANEL), set(CallerConfig.model_fields["voice_profile"].annotation.__args__))
+        self.assertEqual(set(caller_voice.PANEL) | set(caller_voice.ELEVENLABS_PANEL),
+                         set(CallerConfig.model_fields["voice_profile"].annotation.__args__))
+
+    def test_elevenlabs_profiles_select_voice_and_send_script_verbatim(self):
+        env_base = {"ELEVENLABS_API_KEY": "k"}
+        for name, (voice_id, _listing, accent) in caller_voice.ELEVENLABS_PANEL.items():
+            env = caller_voice.run_environ(env_base, {"voice_profile": name})
+            self.assertEqual(caller_voice.backend(env), ("elevenlabs_tts", None))
+            client = mock.Mock()
+            client.post.return_value = mock.Mock(status_code=200, content=b"\x01\x00" * 10)
+            caller_voice.elevenlabs_tts_pcm("transaction txn_001", env, client)
+            args, kwargs = client.post.call_args
+            self.assertTrue(args[0].endswith(voice_id))
+            self.assertEqual(kwargs["json"], {"text": "transaction txn_001", "model_id": "eleven_multilingual_v2"})
+            self.assertEqual(kwargs["params"], {"output_format": "pcm_24000"})
+            self.assertEqual(caller_voice.describe(env)["library_accent"], accent)
+
+    def test_elevenlabs_cache_reuses_one_take(self):
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as tmp:
+            env = caller_voice.run_environ({"ELEVENLABS_API_KEY": "k", caller_voice.ELEVENLABS_CACHE_ENV: tmp},
+                                           {"voice_profile": "el_irish_female"})
+            client = mock.Mock()
+            client.post.return_value = mock.Mock(status_code=200, content=b"\x01\x00" * 10)
+            first = caller_voice.elevenlabs_tts_pcm("hello", env, client)
+            client.post.return_value = mock.Mock(status_code=200, content=b"\x02\x00" * 10)
+            self.assertEqual(caller_voice.elevenlabs_tts_pcm("hello", env, client), first)
+            self.assertEqual(client.post.call_count, 1)
+            caller_voice.elevenlabs_tts_pcm("goodbye", env, client)
+            self.assertEqual(client.post.call_count, 2)
+
+    def test_elevenlabs_profile_fails_closed(self):
+        self.assertEqual(caller_voice.backend({caller_voice.PROFILE_ENV: "el_irish_female"}),
+                         (None, "CALLER_VOICE_PROFILE_NEEDS_ELEVENLABS_TTS"))
+        env = caller_voice.run_environ({}, {"voice_profile": "el_irish_female"})
+        self.assertEqual(caller_voice.backend(env), (None, "CALLER_VOICE_ELEVENLABS_NOT_CONFIGURED"))
+        self.assertEqual(caller_voice.backend({caller_voice.ENV: "elevenlabs_tts", "ELEVENLABS_API_KEY": "k"}),
+                         (None, "CALLER_VOICE_ELEVENLABS_NEEDS_PROFILE"))
 
     def test_profile_needs_tts_and_fails_closed(self):
         self.assertEqual(caller_voice.backend({caller_voice.PROFILE_ENV: "irish_female"}),
