@@ -7,8 +7,8 @@ const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 const bars = (rows, max, fmt) => `<div class="bars">${rows.map(([n, v]) =>
   `<div class="row"><div class="name">${esc(n)}</div><div class="track"><div class="bar" style="width:${(v / max * 100).toFixed(1)}%"></div></div><div class="val">${fmt(v)}</div></div>`).join('')}</div>`;
 const big = (n, l) => `<div class="stat"><strong>${esc(n)}</strong><span>${esc(l)}</span></div>`;
-const V = ['xAI Grok Voice', 'ElevenLabs Agents', 'Google Gemini Live', 'OpenAI GPT-Realtime', 'Amazon Nova Sonic'];
-// 600 runs: one column per situation (40), one row per repetition (3), one block per service.
+const V = ['xAI Grok Voice', 'ElevenLabs Agents', 'Google Gemini Live', 'OpenAI GPT-Realtime', 'Amazon Nova Sonic', 'OpenAI GPT-Live'];
+// 720 runs: one column per situation (40), one row per repetition (3), one block per service.
 const dotBlock = (label, cls = '') => `<div class="blk">${label ? `<div class="bl">${esc(label)}</div>` : ''}<div class="dots ${cls}">${'<i></i>'.repeat(120)}</div></div>`;
 const squares = (n, of) => `<div class="sq${of <= 9 ? " wide" : ""}">${Array.from({length: of}, (_, i) => `<i class="${i < n ? 'on' : ''}"></i>`).join('')}</div>`;
 const node = (t, s, cls = '') => `<div class="node ${cls}"><b>${esc(t)}</b><span>${esc(s)}</span></div>`;
@@ -18,39 +18,39 @@ const rank = (cls) => `<div class="rank ${cls}">${[100, 88, 76, 62, 48].map(w =>
 const scenes = [
  {dark: 1, tag: 'VOICE AI · BUSINESS OVERVIEW', h: 'Is voice AI ready to talk to customers?', sub: 'How would you know it is safe, helpful and worth the cost? Here is what we found.', big: true,
   body: `<svg class="wave" viewBox="0 0 832 400" width="832" height="400"><g fill="${MINT}" opacity=".85">${wave}</g></svg>`},
- {tag: 'WHAT WE TESTED', h: 'Five services. Forty situations. Six hundred runs.',
+ {tag: 'WHAT WE TESTED', h: 'Six services. Forty situations. 720 runs.',
   body: `<div class="matrix">${V.map(v => dotBlock(v)).join('')}</div>
    <div class="legend"><span><i class="k"></i> one recorded run</span><span>across: 40 customer situations</span><span>down: 3 repetitions each</span></div>
-   <div class="sixth"><b>OpenAI GPT-Live</b> tested in follow-up scenarios only. Its main-run results use an earlier prompt, so it is not in this comparison.</div>`,
+   <div class="sixth"><b>One run failed:</b> a GPT-Realtime reply ran past the audio limit and the safety gate stopped it. It was not rerun. All six services used the same standardised prompt.</div>`,
   note: 'OpenAI, Google, xAI, ElevenLabs and Amazon: selected external prototype services, tested outside of work. Synthetic customers and a simulated bank.'},
  {tag: 'WHY THE COMPARISON HOLDS UP', h: 'Same situations. Same bank. Same scoring.',
   body: `<div class="flow">${node('Simulated customer', 'scripted situation', 'soft')}${arrow}${node('Voice service', 'the system under test', 'hot')}${arrow}${node('Policy gate', 'holds speech and tool calls', 'gate')}${arrow}${node('Simulated bank', 'sandboxed tools, no real money', 'soft')}</div>
    <div class="ledger"><div class="chain">${['run start', 'tool call', 'audio released', 'verdict', 'export'].map((x, i) => `<div class="blockc">${x}</div>${i < 4 ? '<em>⟶</em>' : ''}`).join('')}</div>
    <div class="lcap"><b>Tamper-evident evidence ledger.</b> Every step is chained and the export can be verified offline. <b>Missing evidence counts against the result.</b></div></div>`},
- {tag: 'FINDING 1 · PROTECTION', h: 'No prohibited actions in 600 runs.',
-  body: `<div class="split"><div class="matrix tight">${dotBlock('', 'ok')}${dotBlock('', 'ok')}${dotBlock('', 'ok')}${dotBlock('', 'ok')}${dotBlock('', 'ok')}</div>
+ {tag: 'FINDING 1 · PROTECTION', h: 'No prohibited actions in 720 runs.',
+  body: `<div class="split"><div class="matrix tight">${dotBlock('', 'ok')}${dotBlock('', 'ok')}${dotBlock('', 'ok')}${dotBlock('', 'ok')}${dotBlock('', 'ok')}${dotBlock('', 'ok')}</div>
    <div class="hero"><strong>0</strong><span>prohibited actions executed</span></div></div>`,
   note: 'Services and controls working together. It does not mean every check passed: failed and unresolved checks are reported.'},
  {tag: 'FINDING 2 · GETTING THE JOB DONE', h: 'Completing the request varied.',
-  body: `<div class="cap">Each square is one eligible request. Filled means completed.</div><div class="sqrows">` + [['xAI Grok Voice', 36], ['ElevenLabs Agents', 36], ['Google Gemini Live', 35], ['OpenAI GPT-Realtime', 35], ['Amazon Nova Sonic', 29]].map(([n, v]) => `<div class="srow"><div class="name">${n}</div>${squares(v, 36)}<div class="val">${v}<small>/36</small></div></div>`).join('') + `</div>`,
+  body: `<div class="cap">Each square is one eligible request. Filled means completed.</div><div class="sqrows">` + [['xAI Grok Voice', 36], ['ElevenLabs Agents', 36], ['Google Gemini Live', 36], ['OpenAI GPT-Realtime', 36], ['Amazon Nova Sonic', 32], ['OpenAI GPT-Live', 29]].map(([n, v]) => `<div class="srow"><div class="name">${n}</div>${squares(v, 36)}<div class="val">${v}<small>/36</small></div></div>`).join('') + `</div>`,
   note: 'Completion checks the expected tool sequence and arguments, not just what was said.'},
  {tag: 'FINDING 3 · QUALITY AND FACTS', h: 'Quality scores are too close to call.',
   body: `<div class="cap">Quality score (excludes latency) with 95% interval</div><div class="iv">` +
-   [['ElevenLabs Agents', 99.61, 98.68, 100], ['xAI Grok Voice', 99.49, 98.47, 100], ['Google Gemini Live', 99.27, 98.36, 99.95], ['OpenAI GPT-Realtime', 98.53, 97.06, 100], ['Amazon Nova Sonic', 97.55, 94.36, 99.67]]
+   [['Google Gemini Live', 99.63, 99.24, 100], ['xAI Grok Voice', 99.61, 98.68, 100], ['ElevenLabs Agents', 99.61, 98.68, 100], ['Amazon Nova Sonic', 99.35, 96.69, 100], ['OpenAI GPT-Live', 98.86, 95.59, 99.82]]
    .map(([n, v, lo, hi]) => { const p = x => ((x - 94) / 6 * 100).toFixed(2); return `<div class="irow"><div class="name">${n}</div><div class="itrack"><div class="ibar" style="left:${p(lo)}%;width:${(p(hi) - p(lo)).toFixed(2)}%"></div><div class="idot" style="left:${p(v)}%"></div></div><div class="val">${(v + 0.0001).toFixed(1)}%</div></div>`; }).join('') +
    `<div class="irow axis"><div class="name"></div><div class="itrack">${[94, 96, 98, 100].map(x => `<span style="left:${((x - 94) / 6 * 100)}%">${x}%</span>`).join('')}</div><div class="val"></div></div></div>
    <div class="verdict">Intervals overlap: no clear overall winner</div>
-   <p class="facts">Spoken facts: every decided check passed (17 to 21 per service).</p>`,
+   <p class="facts">Spoken facts: 113 of 114 decided checks passed. GPT-Realtime has no quality score: one run failed.</p>`,
   note: 'Weighted quality score with a bootstrap interval over scenarios; no pair is separable after correction.'},
  {tag: 'FINDING 4 · COST', h: 'Cost varied the most: about an eight-times spread.',
-  body: `<div class="split"><div style="flex:1"><div class="cap">Median voice cost per priced run</div>` + bars([['Google Gemini Live', 0.0042], ['Amazon Nova Sonic', 0.0052], ['OpenAI GPT-Realtime', 0.0200], ['ElevenLabs Agents', 0.0208], ['xAI Grok Voice', 0.0333]], 0.0333, v => '$' + v.toFixed(4)) + `</div>
+  body: `<div class="split"><div style="flex:1"><div class="cap">Median voice cost per priced run</div>` + bars([['Google Gemini Live', 0.0041], ['Amazon Nova Sonic', 0.0053], ['OpenAI GPT-Live', 0.0183], ['ElevenLabs Agents', 0.0193], ['OpenAI GPT-Realtime', 0.0196], ['xAI Grok Voice', 0.0320]], 0.0320, v => '$' + v.toFixed(4)) + `</div>
    <div class="mult"><strong>≈8×</strong><span>cheapest to dearest, for results that scored close together</span></div></div>`,
-  note: 'Voice usage only, including retries. Pricing coverage is partial for GPT-Realtime, Gemini and ElevenLabs.'},
+  note: 'Voice usage only, including retries. GPT-Live pricing is partial: one run returned no usage.'},
  {tag: 'FINDING 5 · HANDING OVER TO A PERSON', h: 'Asking for a human is not a given.',
   body: `<div class="split"><div style="flex:1"><div class="cap">Caller asks for a person, then asks again. Each square is one attempt; filled means transferred.</div><div class="sqrows">` +
-   [['xAI Grok Voice', 9], ['ElevenLabs Agents', 9], ['Google Gemini Live', 9], ['OpenAI GPT-Realtime', 9], ['Amazon Nova Sonic', 5], ['OpenAI GPT-Live', 0]].map(([n, v]) => `<div class="srow"><div class="name">${n}</div>${squares(v, 9)}<div class="val">${v}<small>/9</small></div></div>`).join('') + `</div></div>
-   <div class="side"><div class="fh">Confirmed cancellation</div><div class="big2">15 / 15</div><p>for each of five services</p><div class="warnbox"><b>Nova:</b> verified the caller but did not cancel in 3 of 3 tries. Cause not established.</div></div></div>`,
-  note: 'Small follow-up runs, outside the scores. GPT-Live offered to help with the account instead of transferring.'},
+   [['xAI Grok Voice', 18], ['ElevenLabs Agents', 18], ['OpenAI GPT-Realtime', 18], ['Google Gemini Live', 17], ['Amazon Nova Sonic', 11], ['OpenAI GPT-Live', 0]].map(([n, v]) => `<div class="srow"><div class="name">${n}</div>${squares(v, 18)}<div class="val">${v}<small>/18</small></div></div>`).join('') + `</div></div>
+   <div class="side"><div class="fh">Confirmed cancellation</div><div class="big2">18 / 18</div><p>for each of five services</p><div class="warnbox"><b>Nova:</b> 17 of 18. Its earlier failure to cancel (0 of 3) did not reproduce.</div></div></div>`,
+  note: 'Small follow-up runs (18 per service), outside the scores. GPT-Live offered to help with the account instead of transferring.'},
  {tag: 'TWO LESSONS', h: 'What surprised us.',
   body: `<div class="cards two"><div class="card"><b>Sounds successful is not done</b>
     <div class="bubble">“All done. Your payment has been cancelled.”</div><div class="rec"><span class="x">✕</span> Bank record: no cancellation executed</div><p>So we check the action, not just the words.</p></div>
@@ -58,8 +58,8 @@ const scenes = [
     <div class="ranks"><div><small>Standard prompt</small>${rank('')}</div><div class="same">≈</div><div><small>Tuned prompts</small>${rank('')}</div></div>
     <p>Targeted lines did fix specific failures: Nova's handover to a person went from <span class="pip">●○○</span> to <span class="pip">●●●</span> in a small diagnostic.</p></div></div>`},
  {tag: 'WHAT THIS DOES NOT TELL YOU', h: 'Read the results for what they are.',
-  body: `<div class="two-col"><div class="col yes"><h3>What the evidence covers</h3><ul><li>Five prototype configurations</li><li>40 synthetic banking situations</li><li>Clear scripted callers</li><li>Safety, completion, facts and cost</li></ul></div>
-   <div class="col no"><h3>Not yet measured</h3><ul><li>Real customers, accents and noise</li><li>Amazon Connect</li><li>Internal agentic platforms</li><li>Customer outcomes or certification</li></ul></div></div>`},
+  body: `<div class="two-col"><div class="col yes"><h3>What the evidence covers</h3><ul><li>Six prototype configurations</li><li>40 synthetic banking situations</li><li>Clear scripted callers</li><li>Safety, completion, facts and cost</li></ul></div>
+   <div class="col no"><h3>Not yet measured</h3><ul><li>Real customers, noise, verified accents</li><li>Customer care (two judges disagreed)</li><li>Amazon Connect</li><li>Internal agentic platforms</li><li>Customer outcomes or certification</li></ul></div></div>`},
  {dark: 1, tag: 'SO WHAT', h: 'Baseline what we run today.',
   body: `<div class="road"><div class="step"><b>1</b><h4>Bring the harness into the work environment</h4><p>Run it against what we already use.</p></div><div class="chev">›</div>
    <div class="step"><b>2</b><h4>Choose the journey</h4><p>Where a miss or an unsafe action would hurt most. Define what good means.</p></div><div class="chev">›</div>
@@ -81,8 +81,8 @@ h1{margin:0 0 34px;font-weight:900;letter-spacing:-3px;line-height:1.04;font-siz
 .steps li:before{content:counter(s);position:absolute;left:0;top:-4px;width:64px;height:64px;border-radius:50%;background:${MINT};color:${INK};font-weight:900;font-size:36px;text-align:center;line-height:64px}
 .note{position:absolute;left:80px;right:80px;bottom:100px;font-size:26px;line-height:1.4;color:${d ? '#ADC4C9' : MUTED}}.foot{position:absolute;left:80px;bottom:44px;font-size:18px;color:${d ? '#ADC4C9' : MUTED}}.progress{position:absolute;left:0;bottom:0;height:9px;background:#20C997}
 .wave{position:fixed;right:80px;bottom:130px}
-.matrix{display:flex;flex-direction:column;gap:22px;margin-top:6px}.matrix.tight{gap:14px}.blk{display:flex;align-items:center;gap:26px}.bl{width:330px;text-align:right;font-size:28px;font-weight:bold}
-.dots{display:grid;grid-template-columns:repeat(40,18px);gap:5px}.dots i{width:18px;height:18px;border-radius:50%;background:${TEAL}}.dots.ok i{background:${TEAL}}.matrix.tight .dots{grid-template-columns:repeat(40,16px)}.matrix.tight .dots i{width:16px;height:16px}
+.matrix{display:flex;flex-direction:column;gap:16px;margin-top:6px}.matrix.tight{gap:14px}.blk{display:flex;align-items:center;gap:26px}.bl{width:330px;text-align:right;font-size:28px;font-weight:bold}
+.dots{display:grid;grid-template-columns:repeat(40,14px);gap:4px}.dots i{width:14px;height:14px;border-radius:50%;background:${TEAL}}.dots.ok i{background:${TEAL}}.matrix.tight .dots{grid-template-columns:repeat(40,16px)}.matrix.tight .dots i{width:16px;height:16px}
 .legend{display:flex;gap:50px;font-size:24px;color:${MUTED};margin:26px 0 0 356px}.legend .k{display:inline-block;width:16px;height:16px;border-radius:50%;background:${TEAL};vertical-align:-2px;margin-right:8px}
 .flow{display:flex;align-items:center;gap:6px;margin:30px 0 56px}.node{flex:1;background:#fff;border:2px solid #ADC4C9;border-radius:18px;padding:34px 24px;text-align:center;min-height:170px}.node b{display:block;font-size:34px;margin-bottom:12px}.node span{font-size:24px;color:${MUTED};line-height:1.3;display:block}
 .node.hot{border-color:${TEAL};background:${TEAL};color:#fff}.node.hot span{color:#D8F5EC}.node.gate{border:3px dashed ${TEAL};background:#E1F3EA}.arr{width:60px;flex:none}
